@@ -5,25 +5,26 @@ import com.example.ClinicaDefinitiva.Enum.Tipo_sangre;
 import com.example.ClinicaDefinitiva.persistence.dto.HorarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.ReadUsuarioDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 
 
 import java.time.LocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReadOdontologoDto {
-    private final long id;
-    private final String dni;
-    private final String nombre;
-    private final String apellido;
-    private final String telefono;
-    private final String direcion;
-    private final LocalDate fecha_nacimiento;
+    private  long id;
+    private  String dni;
+    private  String nombre;
+    private  String apellido;
+    private  String telefono;
+    private  String direcion;
+    private  LocalDate fecha_nacimiento;
 
-    private final Especialidades especialidad;
+    private  Especialidades especialidad;
 
-    private final ReadUsuarioDto readUsuarioDto;
-    private final HorarioDto horarioDto;
-    private final Tipo_sangre tipoSangre;
+    private  ReadUsuarioDto readUsuarioDto;
+    private  HorarioDto horarioDto;
+    private  Tipo_sangre tipoSangre;
 
 
 
@@ -38,6 +39,50 @@ public class ReadOdontologoDto {
         this.nombre = nombre;
         this.readUsuarioDto = readUsuarioDto;
         this.telefono = telefono;
+        this.tipoSangre = tipoSangre;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public void setDirecion(String direcion) {
+        this.direcion = direcion;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public void setEspecialidad(Especialidades especialidad) {
+        this.especialidad = especialidad;
+    }
+
+    public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
+        this.fecha_nacimiento = fecha_nacimiento;
+    }
+
+    public void setHorarioDto(HorarioDto horarioDto) {
+        this.horarioDto = horarioDto;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setReadUsuarioDto(ReadUsuarioDto readUsuarioDto) {
+        this.readUsuarioDto = readUsuarioDto;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setTipoSangre(Tipo_sangre tipoSangre) {
         this.tipoSangre = tipoSangre;
     }
 

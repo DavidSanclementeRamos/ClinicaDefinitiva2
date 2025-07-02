@@ -16,7 +16,7 @@ import java.util.Date;
 public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_usuario;
+    private long id;
     private String nombreUsuario;
     private String correoEletronico;
     private String contrasena;
@@ -31,13 +31,13 @@ public class Usuario implements Serializable {
 
     }
     public Usuario(String correoEletronico, String contrasena, Estado estado
-            , Date fechaDeCreacion, long id_usuario, String imagenPerfil
+            , Date fechaDeCreacion, long id, String imagenPerfil
             , String nombreUsuario, Roles rol, Date ultimaFechaDeCoexion) {
         this.correoEletronico = correoEletronico;
         this.contrasena = contrasena;
         this.estado = estado;
         this.fechaDeCreacion = fechaDeCreacion;
-        this.id_usuario = id_usuario;
+        this.id = id;
         this.imagenPerfil = imagenPerfil;
         this.nombreUsuario = nombreUsuario;
         this.rol = rol;
@@ -76,12 +76,12 @@ public class Usuario implements Serializable {
         this.fechaDeCreacion = fechaDeCreacion;
     }
 
-    public long getId_usuario() {
-        return id_usuario;
+    public long getId() {
+        return id;
     }
 
-    public void setId_usuario(long id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNombreUsuario() {

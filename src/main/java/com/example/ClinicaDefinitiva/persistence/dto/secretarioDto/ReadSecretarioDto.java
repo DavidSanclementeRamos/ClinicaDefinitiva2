@@ -36,6 +36,42 @@ public class ReadSecretarioDto {
         this.telefono = telefono;
     }
 
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public void setDirecion(String direcion) {
+        this.direcion = direcion;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
+        this.fecha_nacimiento = fecha_nacimiento;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setReadUsuarioDto(ReadUsuarioDto readUsuarioDto) {
+        this.readUsuarioDto = readUsuarioDto;
+    }
+
+    public void setSector(Sector sector) {
+        this.sector = sector;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
     public String getApellido() {
         return apellido;
     }

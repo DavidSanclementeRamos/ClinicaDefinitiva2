@@ -25,9 +25,8 @@ public class CreatePacienteDto {
     @NotNull(message = "La fecha de nacimiento no puede ser nula")
     private LocalDate fecha_nacimiento;
     private boolean tiene_Os;
-    //private Enum tipo_Sangre;
     private boolean tieneResponsable;
-   // private long idTurno;
+    private long idTurno;
     private long idUsuario;
     private long idResponsable;
     private Tipo_sangre tipoSangre;

@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-
 public class Horario implements Serializable {
 
     @Id
@@ -19,7 +19,7 @@ public class Horario implements Serializable {
     private LocalTime horaInicio;
     private LocalTime horaFin;
     private boolean estado;
-
+    private LocalDate fecha;
     @OneToMany(mappedBy = "horario")
     private List<Turno> turnos; // Horario conoce los turnos asignados a ese bloque
 
@@ -30,7 +30,7 @@ public class Horario implements Serializable {
 
     public Horario(){}
 
-    public Horario(DayOfWeek diaSemana, boolean estado, LocalTime horaFin, LocalTime horaInicio, Long id, List<Turno> turnos, Odontologo unOdontologo) {
+    public Horario(DayOfWeek diaSemana, boolean estado, LocalTime horaFin, LocalTime horaInicio, Long id, List<Turno> turnos, Odontologo unOdontologo, LocalDate fecha) {
         this.diaSemana = diaSemana;
         this.estado = estado;
         this.horaFin = horaFin;
@@ -38,6 +38,14 @@ public class Horario implements Serializable {
         this.id = id;
         this.turnos = turnos;
         this.unOdontologo = unOdontologo;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
     }
 
     public Odontologo getUnOdontologo() {

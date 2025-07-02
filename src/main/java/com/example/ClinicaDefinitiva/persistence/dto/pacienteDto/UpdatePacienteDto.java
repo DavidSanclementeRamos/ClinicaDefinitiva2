@@ -13,9 +13,7 @@ public class UpdatePacienteDto {
     @NotNull(message = "La direción no puede ser nulo")
     private String direcion;
     private boolean tiene_Os;
-   // private long idTurno;
-   // private long idUsuario;
-   // private long idResponsable;
+
 
 
     public UpdatePacienteDto(){

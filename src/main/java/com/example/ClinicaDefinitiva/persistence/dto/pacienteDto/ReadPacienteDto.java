@@ -9,29 +9,30 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 //@Getter
-//@Builder
+//@Bui
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReadPacienteDto {
-    private final long id;
-    private final String dni;
-    private final String nombre;
-    private final String apellido;
-    private final String telefono;
-    private final String direcion;
-    private final LocalDate fecha_nacimiento;
-    private final boolean tiene_Os;
-    private final CreateEndReadResponsableDto readResponsableDto;
-    private final boolean tieneResponsable;
-    private final TurnoDto turnoDto;
-    private final Tipo_sangre tipoSangre;
-    private final ReadUsuarioDto readUsuarioDto;
+    private  long id;
+    private  String dni;
+    private  String nombre;
+    private  String apellido;
+    private  String telefono;
+    private  String direcion;
+    private  LocalDate fecha_nacimiento;
+    private  boolean tiene_Os;
+    private  CreateEndReadResponsableDto readResponsableDto;
+    private  boolean tieneResponsable;
+    private  List<TurnoDto> turnoDto;
+    private  Tipo_sangre tipoSangre;
+    private  ReadUsuarioDto readUsuarioDto;
 
 
     public ReadPacienteDto(String apellido, long id, String nombre, boolean tieneResponsable
             , CreateEndReadResponsableDto readResponsableDto, String telefono
-            ,  boolean tiene_Os, TurnoDto turnoDto, ReadUsuarioDto readUsuarioDto
+            ,  boolean tiene_Os, List<TurnoDto> turnoDto, ReadUsuarioDto readUsuarioDto
             , String direcion, String dni, LocalDate fecha_nacimiento,Tipo_sangre tipoSangre) {
         this.apellido = apellido;
         this.id = id;
@@ -47,6 +48,58 @@ public class ReadPacienteDto {
         this.fecha_nacimiento = fecha_nacimiento;
         this.readUsuarioDto = readUsuarioDto;
 
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public void setDirecion(String direcion) {
+        this.direcion = direcion;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
+        this.fecha_nacimiento = fecha_nacimiento;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setReadResponsableDto(CreateEndReadResponsableDto readResponsableDto) {
+        this.readResponsableDto = readResponsableDto;
+    }
+
+    public void setReadUsuarioDto(ReadUsuarioDto readUsuarioDto) {
+        this.readUsuarioDto = readUsuarioDto;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setTiene_Os(boolean tiene_Os) {
+        this.tiene_Os = tiene_Os;
+    }
+
+    public void setTieneResponsable(boolean tieneResponsable) {
+        this.tieneResponsable = tieneResponsable;
+    }
+
+    public void setTipoSangre(Tipo_sangre tipoSangre) {
+        this.tipoSangre = tipoSangre;
+    }
+
+    public void setTurnoDto(List<TurnoDto> turnoDto) {
+        this.turnoDto = turnoDto;
     }
 
     public String getApellido() {
@@ -97,7 +150,7 @@ public class ReadPacienteDto {
         return readUsuarioDto;
     }
 
-    public TurnoDto getTurnoDto() {
+    public List<TurnoDto> getTurnoDto() {
         return turnoDto;
     }
 

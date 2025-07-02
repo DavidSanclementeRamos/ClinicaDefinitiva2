@@ -33,15 +33,7 @@ public class CambioResponsableDto {
     @NotNull(message = "La fecha de nacimiento no puede ser nula")
     private LocalDate fecha_nacimiento;
     @NotNull(message = "El dni no puede ser nulo")
-    //@Pattern(regexp = "[0-9]+", message = "Debe contener solo numeros")
-   /// private Long dniMenor;
-    //@NotNull(message = "El dni no puede ser nulo")
-    //@Pattern(regexp = "[0-9]+", message = "Debe contener solo numeros")
-    //private Long dnidAntiguoResponsable;
-   // @NotNull(message = " No puede ser nulo")
-   // private LocalDateTime fechaCambio;
-    //@NotNull(message = " No puede ser nulo")
-    //private String motivoCambio;
+
     private Tipo_sangre tipoSangre;
     private TipoResponsable tipoResponsable;
     private long pacienteId;

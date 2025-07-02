@@ -34,6 +34,38 @@ public class ReadUsuarioDto {
         this.ultimaFechaDeCoexion = ultimaFechaDeCoexion;
     }
 
+    public void setCorreoEletronico(String correoEletronico) {
+        this.correoEletronico = correoEletronico;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+    public void setFechaDeCreacion(Date fechaDeCreacion) {
+        this.fechaDeCreacion = fechaDeCreacion;
+    }
+
+    public void setId_usuario(long id_usuario) {
+        this.id_usuario = id_usuario;
+    }
+
+    public void setImagenPerfil(String imagenPerfil) {
+        this.imagenPerfil = imagenPerfil;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public void setRol(Roles rol) {
+        this.rol = rol;
+    }
+
+    public void setUltimaFechaDeCoexion(Date ultimaFechaDeCoexion) {
+        this.ultimaFechaDeCoexion = ultimaFechaDeCoexion;
+    }
+
     public String getCorreoEletronico() {
         return correoEletronico;
     }

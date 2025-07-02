@@ -29,21 +29,22 @@ public class CreateSecretarioDto {
     private LocalDate fecha_nacimiento;
     @NotNull(message = " No puede ser nulo")
     private Sector sector;
-    private long secretarioId;
+    private long idUsuario;
+
 
     public CreateSecretarioDto(){
 
     }
-    public CreateSecretarioDto(String apellido, String direcion, String dni
-            , LocalDate fecha_nacimiento, String nombre, Sector sector, String telefono, long secretarioId) {
+
+    public CreateSecretarioDto(String apellido, String direcion, String dni, LocalDate fecha_nacimiento, long idUsuario, String nombre, Sector sector, String telefono) {
         this.apellido = apellido;
         this.direcion = direcion;
         this.dni = dni;
         this.fecha_nacimiento = fecha_nacimiento;
+        this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.sector = sector;
         this.telefono = telefono;
-        this.secretarioId = secretarioId;
     }
 
     public void setApellido(String apellido) {
@@ -74,12 +75,12 @@ public class CreateSecretarioDto {
         return nombre;
     }
 
-    public long getSecretarioId() {
-        return secretarioId;
+    public long getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setSecretarioId(long secretarioId) {
-        this.secretarioId = secretarioId;
+    public void setIdUsuario(long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public Sector getSector() {

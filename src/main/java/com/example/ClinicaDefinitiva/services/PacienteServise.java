@@ -3,18 +3,28 @@ package com.example.ClinicaDefinitiva.services;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.CreatePacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.ReadPacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.UpdatePacienteDto;
+import com.example.ClinicaDefinitiva.persistence.entity.Paciente;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface PacienteServise {
 
-   ReadPacienteDto findId(long idPaciente);
+   Optional<ReadPacienteDto> findId(long idPaciente);
 
-   List<ReadPacienteDto> findAll();
+   Page<ReadPacienteDto> findAll(Pageable pageable);
 
-   List<ReadPacienteDto> findByResponsableId(long responsableId);
+   List<ReadPacienteDto> findByNombreContainingIgnoreCase(String nombre);
 
-   List<ReadPacienteDto> findByTurnoId(long turnoId);
+   Optional<ReadPacienteDto> findByDocumento(String documento);
+
+   Optional<ReadPacienteDto> findByUsuario_Id(long idUsuario);
+
+   List<ReadPacienteDto> findConTurnosParaFecha(LocalDate fecha);
 
    ReadPacienteDto save(CreatePacienteDto createPacienteDto);
 

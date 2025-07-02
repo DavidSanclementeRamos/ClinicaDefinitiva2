@@ -1,22 +1,27 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 
+import com.example.ClinicaDefinitiva.Enum.Roles;
 import com.example.ClinicaDefinitiva.exceptions.UsuarioNotfountException;
 import com.example.ClinicaDefinitiva.mapper.UsuarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.CreateUsuarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.ReadUsuarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.UpdateUsuarioDto;
+
 import com.example.ClinicaDefinitiva.persistence.entity.Usuario;
 import com.example.ClinicaDefinitiva.repository.UsuarioRepository;
 import com.example.ClinicaDefinitiva.services.UsuarioService;
-import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
-//@RequiredArgsConstructor
 public class UsuarioImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
@@ -36,22 +41,31 @@ public class UsuarioImpl implements UsuarioService {
     }
 
     @Override
-    public List<ReadUsuarioDto> findAll() {
+    public Page<ReadUsuarioDto> findAll(Pageable pageable) {
 
-        return usuarioRepository.findAll().stream()
+        Page<Usuario> paginaEntity = usuarioRepository.findAll(pageable);
+        return paginaEntity.map(usuarioMapper::readUsuarioDto);
+
+    }
+
+    @Override
+    public Optional<ReadUsuarioDto> findByEmail(String email) {
+        return usuarioRepository.findByCorreoEletronico(email)
+                .map(usuarioMapper::readUsuarioDto);
+    }
+
+    @Override
+    public List<ReadUsuarioDto> findByRol(Roles rol) {
+        return usuarioRepository.findByRol(rol).stream()
                 .map(usuarioMapper::readUsuarioDto)
                 .collect(Collectors.toList());
-
     }
 
-    @Override
-    public List<ReadUsuarioDto> findByCorreo(String correo) {
-        return null;
-    }
 
     @Override
-    public List<ReadUsuarioDto> findByNombreUsuario(String nombreUsuario) {
-        return null;
+    public Optional<ReadUsuarioDto> findByNombreUsuario(String nombreUsuario) {
+        return usuarioRepository.findByNombreUsuario(nombreUsuario)
+                .map(usuarioMapper::readUsuarioDto);
     }
 
     @Override

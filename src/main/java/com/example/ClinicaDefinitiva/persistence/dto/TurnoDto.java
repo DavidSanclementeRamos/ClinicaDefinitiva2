@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.persistence.dto;
 
 
 import com.example.ClinicaDefinitiva.Enum.Afeccion;
+import com.example.ClinicaDefinitiva.Enum.Estado;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.ReadPacienteDto;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,29 +14,38 @@ public class TurnoDto {
 
     private long id;
     @NotNull(message = " No puede ser nulo")
-    private LocalDate fecha_turno;
+    private LocalDate fechaTurno;
     @NotNull(message = " No puede ser nulo")
     private LocalTime hora_turno;
     @NotNull(message = " No puede ser nulo")
     private Afeccion afeccion;
-    private ReadPacienteDto readPacienteDto;
     private long idPaciente;
     private long horarioId;
     private long odontologo;
+    private Estado estado;
 
-    public TurnoDto(){
+    public TurnoDto() {
 
     }
-    public TurnoDto(Afeccion afeccion, LocalDate fecha_turno, LocalTime hora_turno
-            , long idPaciente, ReadPacienteDto readPacienteDto, long id,long horarioId, long odontologo) {
+
+    public TurnoDto(Afeccion afeccion, LocalDate fechaTurno, LocalTime hora_turno
+            , long idPaciente , long id, long horarioId, long odontologo, Estado estado) {
         this.afeccion = afeccion;
-        this.fecha_turno = fecha_turno;
+        this.fechaTurno = fechaTurno;
         this.hora_turno = hora_turno;
         this.idPaciente = idPaciente;
-        this.readPacienteDto = readPacienteDto;
-        this.id= id;
-        this.horarioId =  horarioId;
+        this.id = id;
+        this.horarioId = horarioId;
         this.odontologo = odontologo;
+        this.estado = estado;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
     public long getOdontologo() {
@@ -46,7 +56,7 @@ public class TurnoDto {
         this.odontologo = odontologo;
     }
 
-    public long getHorarioId( ) {
+    public long getHorarioId() {
         return horarioId;
     }
 
@@ -62,9 +72,6 @@ public class TurnoDto {
         this.afeccion = afeccion;
     }
 
-    public LocalDate getFecha_turno() {
-        return fecha_turno;
-    }
 
     public long getId() {
         return id;
@@ -82,10 +89,13 @@ public class TurnoDto {
         this.idPaciente = idPaciente;
     }
 
-    public void setFecha_turno(LocalDate fecha_turno) {
-        this.fecha_turno = fecha_turno;
+    public LocalDate getFechaTurno() {
+        return fechaTurno;
     }
 
+    public void setFechaTurno(LocalDate fechaTurno) {
+        this.fechaTurno = fechaTurno;
+    }
 
     public LocalTime getHora_turno() {
         return hora_turno;
@@ -95,11 +105,4 @@ public class TurnoDto {
         this.hora_turno = hora_turno;
     }
 
-    public ReadPacienteDto getReadPacienteDto() {
-        return readPacienteDto;
-    }
-
-    public void setReadPacienteDto(ReadPacienteDto readPacienteDto) {
-        this.readPacienteDto = readPacienteDto;
-    }
 }

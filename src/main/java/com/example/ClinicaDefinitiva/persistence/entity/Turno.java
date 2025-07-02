@@ -2,6 +2,7 @@ package com.example.ClinicaDefinitiva.persistence.entity;
 
 
 import com.example.ClinicaDefinitiva.Enum.Afeccion;
+import com.example.ClinicaDefinitiva.Enum.Estado;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,18 +12,17 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-
 public class Turno implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_turno;
+    private long id;
     @Column(nullable = false)
-    private LocalDate fecha_turno;
-    private LocalTime hora_turno;
+    private LocalDate fechaTurno;
+    private LocalTime horaTurno;
 
     @ManyToOne
     @JoinColumn(name = "id_odontologo") // Clave foránea en la entidad dependiente
-    private Odontologo odontonlogo;
+    private Odontologo odontologo;
 
     @ManyToOne
     @JoinColumn(name = "id_paciente") // Clave foránea en la entidad dependiente
@@ -32,19 +32,21 @@ public class Turno implements Serializable {
     @ManyToOne
     @JoinColumn(name = "horario_id")
     private Horario horario;
+    private Estado estado;
 
     public Turno(){
 
     }
 
-    public Turno(Afeccion afeccion, LocalDate fecha_turno, LocalTime hora_turno, Long id_turno, Odontologo odontonlogo, Paciente paciente,Horario horario) {
+    public Turno(Afeccion afeccion, LocalDate fechaTurno, LocalTime horaTurno, Long id, Odontologo odontologo, Paciente paciente,Horario horario,Estado estado) {
         this.afeccion = afeccion;
-        this.fecha_turno = fecha_turno;
-        this.hora_turno = hora_turno;
-        this.id_turno = id_turno;
-        this.odontonlogo = odontonlogo;
+        this.fechaTurno = fechaTurno;
+        this.horaTurno = horaTurno;
+        this.id = id;
+        this.odontologo = odontologo;
         this.paciente = paciente;
         this.horario = horario;
+        this.estado = estado;
     }
 
     public Afeccion getAfeccion() {
@@ -63,37 +65,54 @@ public class Turno implements Serializable {
         this.afeccion = afeccion;
     }
 
-    public LocalDate getFecha_turno() {
-        return fecha_turno;
+    public LocalDate getFechaTurno() {
+        return fechaTurno;
     }
 
-    public void setFecha_turno(LocalDate fecha_turno) {
-        this.fecha_turno = fecha_turno;
+    public Estado getEstado() {
+        return estado;
     }
 
-    public LocalTime getHora_turno() {
-        return hora_turno;
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
-    public void setHora_turno(LocalTime hora_turno) {
-        this.hora_turno = hora_turno;
+    public Odontologo getOdontologo() {
+        return odontologo;
+    }
+
+    public void setOdontologo(Odontologo odontologo) {
+        this.odontologo = odontologo;
+    }
+
+    public void setFechaTurno(LocalDate fechaTurno) {
+        this.fechaTurno = fechaTurno;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public LocalTime getHoraTurno() {
+        return horaTurno;
+    }
+
+    public void setHoraTurno(LocalTime horaTurno) {
+        this.horaTurno = horaTurno;
     }
 
     public Long getId_turno() {
-        return id_turno;
+        return id;
     }
 
     public void setId_turno(Long id_turno) {
-        this.id_turno = id_turno;
+        this.id = id_turno;
     }
 
-    public Odontologo getOdontonlogo() {
-        return odontonlogo;
-    }
-
-    public void setOdontonlogo(Odontologo odontonlogo) {
-        this.odontonlogo = odontonlogo;
-    }
 
     public Paciente getPaciente() {
         return paciente;

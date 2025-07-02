@@ -11,7 +11,7 @@ public class UpdateSecretarioDto {
     private String direcion;
     @NotNull(message = " No puede ser nulo")
     private Sector sector;
-    private long idUsuario;
+
 
     public UpdateSecretarioDto(){
 
@@ -23,7 +23,7 @@ public class UpdateSecretarioDto {
         this.direcion = direcion;
         this.sector = sector;
         this.telefono = telefono;
-        this.idUsuario = idUsuario;
+
     }
 
     public String getDirecion() {
@@ -38,13 +38,6 @@ public class UpdateSecretarioDto {
         return sector;
     }
 
-    public long getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(long idUsuario) {
-        this.idUsuario = idUsuario;
-    }
 
     public void setSector(Sector sector) {
         this.sector = sector;

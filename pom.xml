@@ -61,6 +61,7 @@
 			<artifactId>mapstruct-processor</artifactId>
 			<version>1.5.5.Final</version>
 			<scope>provided</scope>
+
 		</dependency>
 
 		<dependency>
@@ -112,6 +113,10 @@
 							<version>1.18.30</version>
 						</path>
 					</annotationProcessorPaths>
+
+					<compilerArgs>
+						<arg>-Amapstruct.verbose=true</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 

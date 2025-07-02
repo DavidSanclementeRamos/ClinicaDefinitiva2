@@ -12,4 +12,4 @@ public class ClinicaDefinitivaApplication {
 	}
 // http://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=prueva&table=horario
 }
-C:/Users/David/Documents/proyectosJava/ClinicaDefinitiva
+//C:/Users/David/Documents/proyectosJava/ClinicaDefinitiva

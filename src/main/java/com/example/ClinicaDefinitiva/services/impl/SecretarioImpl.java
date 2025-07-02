@@ -1,22 +1,26 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
+import com.example.ClinicaDefinitiva.Enum.Sector;
 import com.example.ClinicaDefinitiva.exceptions.SecretarioNotFountException;
 import com.example.ClinicaDefinitiva.mapper.SecretarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.secretarioDto.CreateSecretarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.secretarioDto.ReadSecretarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.secretarioDto.UpdateSecretarioDto;
+
 import com.example.ClinicaDefinitiva.persistence.entity.Secretario;
 import com.example.ClinicaDefinitiva.repository.SecretarioRepository;
 import com.example.ClinicaDefinitiva.repository.UsuarioRepository;
 import com.example.ClinicaDefinitiva.services.SecretarioService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-//@RequiredArgsConstructor
+
 public class SecretarioImpl implements SecretarioService {
 
     private final SecretarioRepository secretarioRepository;
@@ -25,7 +29,8 @@ public class SecretarioImpl implements SecretarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    public SecretarioImpl(SecretarioRepository secretarioRepository, UsuarioRepository usuarioRepository, SecretarioMapperResponse secretarioReadMapper) {
+    public SecretarioImpl(SecretarioRepository secretarioRepository, UsuarioRepository usuarioRepository
+            , SecretarioMapperResponse secretarioReadMapper) {
         this.secretarioRepository = secretarioRepository;
         this.secretarioReadMapper = secretarioReadMapper;
         this.usuarioRepository = usuarioRepository;
@@ -39,39 +44,44 @@ public class SecretarioImpl implements SecretarioService {
                 .orElseThrow(SecretarioNotFountException::new);
     }
 
-    @Override
-    public List<ReadSecretarioDto> findAll() {
 
-        return secretarioRepository.findAll()
-                .stream()
+    @Override
+    public Page<ReadSecretarioDto> findAll(Pageable pageable) {
+        // Le decimos al repo que haga la búsqueda paginada+ordenada
+        Page<Secretario> pageEntidades = secretarioRepository.findAll(pageable);
+
+        // Convertimos cada Entidad a DTO
+        return pageEntidades.map(secretarioReadMapper::readSecretarioDto);
+
+    }
+
+    @Override
+    public List<ReadSecretarioDto> findByNombreContainingIgnoreCase(String nombre) {
+        return secretarioRepository.findByNombreContainingIgnoreCase(nombre).stream()
                 .map(secretarioReadMapper::readSecretarioDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ReadSecretarioDto> findBySector(String sector) {
+    public List<ReadSecretarioDto> findBySector(Sector sector) {
 
-        return secretarioRepository.findAll().stream()
-                .filter(secretario -> false)
+        return secretarioRepository.findBySector(sector).stream()
                 .map(secretarioReadMapper::readSecretarioDto)
                 .collect(Collectors.toList());
 
     }
 
     @Override
-    public List<ReadSecretarioDto> findByUsuario(long usuarioId) {
-
-        return  usuarioRepository.findById(usuarioId)
-                .map(secretarioRepository::findByUnUsuario)
-                .map(listaSecretario -> listaSecretario.stream()
-                        .map(secretarioReadMapper::readSecretarioDto)
-                        .collect(Collectors.toList())).orElseThrow(SecretarioNotFountException::new);
+    public Optional<ReadSecretarioDto> findByUsuarioId(long idUsuario) {
+        return secretarioRepository.findByUnUsuario_Id(idUsuario)
+                .map(secretarioReadMapper::readSecretarioDto);
     }
+
 
     @Override
     public ReadSecretarioDto save(CreateSecretarioDto createSecretarioDto) {
 
-        return usuarioRepository.findById(createSecretarioDto.getSecretarioId())
+        return usuarioRepository.findById(createSecretarioDto.getIdUsuario())
                 .map(usuario -> {
                     Secretario secretario = new Secretario();
                     secretario.setDni(createSecretarioDto.getDni());

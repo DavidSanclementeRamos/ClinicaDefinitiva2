@@ -12,6 +12,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Setter
 public class CreateEndReadResponsableDto {
     private long id;
@@ -34,34 +36,34 @@ public class CreateEndReadResponsableDto {
     private Tipo_sangre tipoSangre;
     private TipoResponsable tipoResponsable;
     private ReadUsuarioDto readUsuarioDto;
-    private ReadPacienteDto readPacienteDto;
+   // private List<ReadPacienteDto> readPacienteDto;
+
 
     public CreateEndReadResponsableDto(){
 
     }
-    public CreateEndReadResponsableDto(String apellido, String direcion, String dni
-            , LocalDate fecha_nacimiento, long id, String nombre, String telefono,Tipo_sangre tipoSangre
-            ,TipoResponsable tipoResponsable,ReadUsuarioDto readUsuarioDto, ReadPacienteDto readPacienteDto) {
+
+    public CreateEndReadResponsableDto(String apellido, String direcion, String dni, LocalDate fecha_nacimiento, String nombre, long id, /*List<ReadPacienteDto> readPacienteDto,*/ ReadUsuarioDto readUsuarioDto, String telefono, TipoResponsable tipoResponsable, Tipo_sangre tipoSangre) {
         this.apellido = apellido;
         this.direcion = direcion;
         this.dni = dni;
         this.fecha_nacimiento = fecha_nacimiento;
-        this.id = id;
         this.nombre = nombre;
-        this.telefono = telefono;
-        this.tipoSangre = tipoSangre;
-        this.tipoResponsable = tipoResponsable;
+        this.id = id;
+      //  this.readPacienteDto = readPacienteDto;
         this.readUsuarioDto = readUsuarioDto;
-        this.readPacienteDto = readPacienteDto;
+        this.telefono = telefono;
+        this.tipoResponsable = tipoResponsable;
+        this.tipoSangre = tipoSangre;
     }
 
-    public ReadPacienteDto getReadPacienteDto() {
+  /*  public List<ReadPacienteDto> getReadPacienteDto() {
         return readPacienteDto;
     }
 
-    public void setReadPacienteDto(ReadPacienteDto readPacienteDto) {
+    public void setReadPacienteDto(List<ReadPacienteDto> readPacienteDto) {
         this.readPacienteDto = readPacienteDto;
-    }
+    }*/
 
     public TipoResponsable getTipoResponsable() {
         return tipoResponsable;

@@ -9,9 +9,9 @@ public class HorarioDto {
 
     private long id;
     @NotNull(message = " No puede ser nulo")
-    private LocalTime horarInicio;
+    private LocalTime horaInicio;
     @NotNull(message = " No puede ser nulo")
-    private LocalTime horaFinal;
+    private LocalTime horaFin;
     @NotNull(message = " No puede ser nulo")
     private boolean estado;
     @NotNull(message = " No puede ser nulo")
@@ -19,11 +19,11 @@ public class HorarioDto {
     private DayOfWeek diaSemana;
     private long idOdontologo;
 
-    public HorarioDto(DayOfWeek diaSemana, boolean estado, LocalTime horaFinal, LocalTime horarInicio, long id, long idOdontologo) {
+    public HorarioDto(DayOfWeek diaSemana, boolean estado, LocalTime horaFin, LocalTime horaInicio, long id, long idOdontologo) {
         this.diaSemana = diaSemana;
         this.estado = estado;
-        this.horaFinal = horaFinal;
-        this.horarInicio = horarInicio;
+        this.horaFin = horaFin;
+        this.horaInicio = horaInicio;
         this.id = id;
         this.idOdontologo = idOdontologo;
     }
@@ -45,19 +45,19 @@ public class HorarioDto {
     }
 
     public LocalTime getHoraFinal() {
-        return horaFinal;
+        return horaFin;
     }
 
-    public void setHoraFinal(LocalTime horaFinal) {
-        this.horaFinal = horaFinal;
+    public void setHoraFinal(LocalTime horaFin) {
+        this.horaFin = horaFin;
     }
 
-    public LocalTime getHorarInicio() {
-        return horarInicio;
+    public LocalTime getHoraInicio() {
+        return horaInicio;
     }
 
-    public void setHorarInicio(LocalTime horarInicio) {
-        this.horarInicio = horarInicio;
+    public void setHoraInicio(LocalTime horarInicio) {
+        this.horaInicio = horarInicio;
     }
 
     public long getId() {

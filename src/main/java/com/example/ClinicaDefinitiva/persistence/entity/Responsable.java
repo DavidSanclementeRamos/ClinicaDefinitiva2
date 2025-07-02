@@ -18,8 +18,6 @@ public class Responsable extends Persona{
         private TipoResponsable tipoResponsable;
         @OneToOne
         @JoinColumn(name = "usuario_id") // Clave foránea está en la clase hija
-        private Usuario usuario;
-
         private Usuario unUsuario;
 
         @OneToMany(mappedBy = "responsable")
@@ -46,13 +44,7 @@ public class Responsable extends Persona{
                 this.paciente = paciente;
         }
 
-        public Usuario getUsuario() {
-                return usuario;
-        }
 
-        public void setUsuario(Usuario usuario) {
-                this.usuario = usuario;
-        }
 
         public TipoResponsable getTipoResponsable() {
                 return tipoResponsable;

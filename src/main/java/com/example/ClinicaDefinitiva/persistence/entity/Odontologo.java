@@ -29,7 +29,7 @@ public class Odontologo extends Persona implements Serializable {
     @OneToOne(mappedBy = "unOdontologo") // No  almacena clave foránea, solo referencia
     private Horario unHorario;
 
-    @OneToMany(mappedBy = "odontonlogo") // No  almacena clave foránea, solo referencia
+    @OneToMany(mappedBy = "odontologo") // No  almacena clave foránea, solo referencia
     private List<Turno> unTurno;     // NO SE PONE LISTA, PARA NO PERJUDICAR EL RENDIMIENTO
 
 

@@ -1,5 +1,6 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
+import com.example.ClinicaDefinitiva.Enum.TipoResponsable;
 import com.example.ClinicaDefinitiva.exceptions.ResponsableNotFountException;
 import com.example.ClinicaDefinitiva.mapper.ResponsableMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.responsableDto.CambioResponsableDto;
@@ -10,11 +11,13 @@ import com.example.ClinicaDefinitiva.repository.PacienteRepository;
 import com.example.ClinicaDefinitiva.repository.ResponsableRepository;
 import com.example.ClinicaDefinitiva.repository.UsuarioRepository;
 import com.example.ClinicaDefinitiva.services.ResponsableService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
-//@RequiredArgsConstructor
 public class ResponsableImpl implements ResponsableService {
 
     private final ResponsableRepository responsableRepository;
@@ -29,6 +32,38 @@ public class ResponsableImpl implements ResponsableService {
         this.pacienteRepository = pacienteRepository;
     }
 
+
+    @Override
+    public Optional<CreateEndReadResponsableDto> findByUsuario_Id(long idUsuario) {
+        return responsableRepository.findByUnUsuario_Id(idUsuario)
+                .map(responsableMapperResponse::createEndReadResponsableDto);
+    }
+
+    @Override
+    public List<CreateEndReadResponsableDto> findByPacientes_Id(long idPaciente) {
+        return responsableRepository.findByPaciente_Id(idPaciente)
+                .stream().map(responsableMapperResponse::createEndReadResponsableDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<CreateEndReadResponsableDto> findByDocumento(String documento) {
+        return responsableRepository.findByDni(documento)
+                .map(responsableMapperResponse::createEndReadResponsableDto);
+    }
+
+    @Override
+    public Optional<CreateEndReadResponsableDto> findByTelefono(String telefono) {
+        return responsableRepository.findByTelefono(telefono)
+                .map(responsableMapperResponse::createEndReadResponsableDto);
+    }
+
+    @Override
+    public List<CreateEndReadResponsableDto> findByTipoRelacion(TipoResponsable tipoRelacion) {
+        return responsableRepository.findByTipoResponsable(tipoRelacion).stream()
+                .map(responsableMapperResponse::createEndReadResponsableDto)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public CreateEndReadResponsableDto updateCambio(long id, CambioResponsableDto cambioResponsableDto) {
