@@ -2,33 +2,61 @@ package com.example.ClinicaDefinitiva.persistence.dto.pacienteDto;
 
 
 import com.example.ClinicaDefinitiva.Enum.Tipo_sangre;
+import com.example.ClinicaDefinitiva.Enumvalidation.TipoSangreValido;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Setter
 public class CreatePacienteDto {
 
     @Pattern(regexp = "[0-9]+", message = "Debe contener solo numeros")
+    @NotBlank(message = "El dni no puede estar vacio ")
     @NotNull(message = "El dni no puede ser nulo")
     private String dni;
+
+    @NotBlank(message = "El nombre no puede estar vacio")
+    @Pattern(regexp = "^[a-zA-ZÁÉÍÓÚáéíóúÑñ]{2,30}$", message = "Solo letras permitidas, entre 2 y 30 caracteres")
     @NotNull(message = "El nombre no puede ser nulo")
     private String nombre;
+
+    @NotBlank(message = "El apellido no puede estar vacio")
+    @Pattern(regexp = "^[a-zA-ZÁÉÍÓÚáéíóúÑñ]{2,30}$", message = "Solo letras permitidas, entre 2 y 30 caracteres")
     @NotNull(message = "El apellido no puede ser nulo")
     private String apellido;
+
+    @NotBlank(message = "El el telefono no puede estar vacio")
     @NotNull(message = "El telefono no puede ser nulo")
+    @Pattern(
+            regexp = "^\\+57\\s3\\d{2}\\d{7}$",
+            message = "El teléfono debe tener el formato: +57 3XXYYYYYYY")
     private String telefono;
+
+    @NotBlank(message = "La direccion no puede estar vacio ")
     @NotNull(message = "La direcion no puede ser nula")
-    private String direcion;
+    private String direccion;
+
+    @NotBlank(message = "La fecha de nacimiento no puede estar vacia")
+    @Temporal(TemporalType.DATE)
     @NotNull(message = "La fecha de nacimiento no puede ser nula")
     private LocalDate fecha_nacimiento;
+
+    @NotBlank(message = "El seguro no puede estar vacio ")
+    @NotNull(message = "El seguro no puede ser nulo")
     private boolean tiene_Os;
+
+    @NotBlank(message = "El responsable no puede estar vacio ")
+    @NotNull(message = "El reponsable no puede ser nulo")
     private boolean tieneResponsable;
-    private long idTurno;
+
     private long idUsuario;
     private long idResponsable;
+
+    @NotNull(message = "El tipo de sangre no puede ser nulo")
+    @TipoSangreValido
     private Tipo_sangre tipoSangre;
 
     public CreatePacienteDto(){
@@ -36,9 +64,9 @@ public class CreatePacienteDto {
 
     }
 
-    public CreatePacienteDto(String apellido, String direcion, String dni, LocalDate fecha_nacimiento, long idResponsable,  long idUsuario, String nombre, String telefono, boolean tiene_Os, boolean tieneResponsable, Tipo_sangre tipoSangre) {
+    public CreatePacienteDto(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, long idResponsable,  long idUsuario, String nombre, String telefono, boolean tiene_Os, boolean tieneResponsable, Tipo_sangre tipoSangre) {
         this.apellido = apellido;
-        this.direcion = direcion;
+        this.direccion = direccion;
         this.dni = dni;
         this.fecha_nacimiento = fecha_nacimiento;
         this.idResponsable = idResponsable;
@@ -55,9 +83,6 @@ public class CreatePacienteDto {
         return apellido;
     }
 
-    public String getDirecion() {
-        return direcion;
-    }
 
     public void setIdResponsable(long idResponsable) {
         this.idResponsable = idResponsable;
@@ -118,8 +143,12 @@ public class CreatePacienteDto {
         this.apellido = apellido;
     }
 
-    public void setDirecion(String direcion) {
-        this.direcion = direcion;
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public void setDni(String dni) {

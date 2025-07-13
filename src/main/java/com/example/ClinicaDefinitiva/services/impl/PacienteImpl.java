@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 
-import com.example.ClinicaDefinitiva.exceptions.PacienteNotFountException;
-import com.example.ClinicaDefinitiva.exceptions.UsuarioNotfountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.UsuarioNotfountException;
 import com.example.ClinicaDefinitiva.mapper.PacienteMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.CreatePacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.ReadPacienteDto;
@@ -91,7 +91,7 @@ public class PacienteImpl  implements PacienteServise {
 
 
         // Actualizar los datos del paciente
-        paciente.setDirecion(updatePacienteDto.getDirecion());
+        paciente.setDireccion(updatePacienteDto.getDireccion());
         paciente.setTelefono(updatePacienteDto.getTelefono());
         paciente.setTiene_Os(updatePacienteDto.isTiene_Os());
 
@@ -102,9 +102,16 @@ public class PacienteImpl  implements PacienteServise {
         return pacienteMapperResponse.readPaciente(pacienteActualizado);
     }
 
+    @Override
+    public void deleaById(long id) {
+        if(pacienteRepository.findById(id).isEmpty()){
+            throw new PacienteNotFountException();
+        }
+        pacienteRepository.deleteById(id);
+    }
 
 
-@Override
+    @Override
 public ReadPacienteDto save(CreatePacienteDto createPacienteDto) {
     Usuario usuario = usuarioRepository.findById(createPacienteDto.getIdUsuario())
             .orElseThrow(UsuarioNotfountException::new);
@@ -130,7 +137,7 @@ public ReadPacienteDto save(CreatePacienteDto createPacienteDto) {
     paciente.setApellido(createPacienteDto.getApellido());
     paciente.setTipoSangre(createPacienteDto.getTipoSangre());
     paciente.setFecha_nacimiento(createPacienteDto.getFecha_nacimiento());
-    paciente.setDirecion(createPacienteDto.getDirecion());
+    paciente.setDireccion(createPacienteDto.getDireccion());
     paciente.setTiene_Os(createPacienteDto.isTiene_Os());
     paciente.setUnResponsable(responsable);
    // paciente.setUnTurno(turno);

@@ -29,5 +29,6 @@ public interface UsuarioService {
 
     ReadUsuarioDto update(long idUsuario, UpdateUsuarioDto updateUsuarioDto);
 
+    void deleaById(long id);
 
 }

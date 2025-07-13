@@ -3,25 +3,43 @@ package com.example.ClinicaDefinitiva.persistence.dto.usuarioDto;
 
 import com.example.ClinicaDefinitiva.Enum.Estado;
 import com.example.ClinicaDefinitiva.Enum.Roles;
+import com.example.ClinicaDefinitiva.Enumvalidation.EstadoValido;
+import com.example.ClinicaDefinitiva.Enumvalidation.RolValido;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class CreateUsuarioDto {
 
+    @NotBlank(message = " No puede estar vacio")
+    @Pattern(regexp = "^[a-zA-Z0-9]{2,12}$", message = "El nombre debe tener entre 2 y 12 caracteres alfanuméricos")
     @NotNull(message = " No puede ser nulo")
     private String nombreUsuario;
+
+    @Pattern(regexp = "^[\\w.-]+@[\\w.-]+\\.\\w{2,}$", message = "El correo debe ser valido")
     @NotNull(message = " No puede ser nulo")
+    @NotBlank(message = " No puede estar vacio")
     private String correoEletronico;
-    @NotNull(message = " No puede ser nulo")
+
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{8,}$",
+            message = "Debe tener al menos una minúscula, una mayúscula y un carácter especial"
+    )
+    @NotNull(message = " La contrasena no puede ser nulo")
+    @NotBlank(message = " No  contrase no puede esta vacio")
     private String contrasena;
-    @NotNull(message = " No puede ser nulo")
-    private Date fechaDeCreacion;
-    @NotNull(message = " No puede ser nulo")
+
+    @NotNull(message = " El estado puede ser null")
+    @EstadoValido
     private Estado estado;
+
     private String imagenPerfil;
-    private Date ultimaFechaDeCoexion;
+    private LocalDate ultimaFechaDeCoexion;
+
     @NotNull(message = " No puede ser nulo")
+    @RolValido
     private Roles rol;
 
 
@@ -29,12 +47,11 @@ public class CreateUsuarioDto {
 
     }
     public CreateUsuarioDto(String contrasena, String correoEletronico,
-                            Estado estado, Date fechaDeCreacion, String nombreUsuario
-            , String imagenPerfil, Roles rol, Date ultimaFechaDeCoexion) {
+                            Estado estado, String nombreUsuario
+            , String imagenPerfil, Roles rol, LocalDate ultimaFechaDeCoexion) {
         this.contrasena = contrasena;
         this.correoEletronico = correoEletronico;
         this.estado = estado;
-        this.fechaDeCreacion = fechaDeCreacion;
         this.nombreUsuario = nombreUsuario;
         this.imagenPerfil = imagenPerfil;
         this.rol = rol;
@@ -53,9 +70,6 @@ public class CreateUsuarioDto {
         this.estado = estado;
     }
 
-    public void setFechaDeCreacion(Date fechaDeCreacion) {
-        this.fechaDeCreacion = fechaDeCreacion;
-    }
 
     public String getContrasena() {
         return contrasena;
@@ -69,9 +83,6 @@ public class CreateUsuarioDto {
         return estado;
     }
 
-    public Date getFechaDeCreacion() {
-        return fechaDeCreacion;
-    }
 
     public String getImagenPerfil() {
         return imagenPerfil;
@@ -85,7 +96,7 @@ public class CreateUsuarioDto {
         return rol;
     }
 
-    public Date getUltimaFechaDeCoexion() {
+    public LocalDate getUltimaFechaDeCoexion() {
         return ultimaFechaDeCoexion;
     }
 
@@ -101,7 +112,7 @@ public class CreateUsuarioDto {
         this.rol = rol;
     }
 
-    public void setUltimaFechaDeCoexion(Date ultimaFechaDeCoexion) {
+    public void setUltimaFechaDeCoexion(LocalDate ultimaFechaDeCoexion) {
         this.ultimaFechaDeCoexion = ultimaFechaDeCoexion;
     }
 }

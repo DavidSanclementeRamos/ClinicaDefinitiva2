@@ -3,16 +3,17 @@ package com.example.ClinicaDefinitiva.persistence.entity;
 
 import com.example.ClinicaDefinitiva.Enum.Estado;
 import com.example.ClinicaDefinitiva.Enum.Roles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Getter
-@Setter
 public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +21,12 @@ public class Usuario implements Serializable {
     private String nombreUsuario;
     private String correoEletronico;
     private String contrasena;
-    private Date fechaDeCreacion;
+    @Column(nullable = false)
+    @CreationTimestamp
+    private LocalDate fechaDeCreacion;
     private Estado estado;
     private String imagenPerfil;
-    private Date ultimaFechaDeCoexion;
+    private LocalDate ultimaFechaDeCoexion;
     @Enumerated(EnumType.STRING)
     private Roles rol;
 
@@ -31,8 +34,8 @@ public class Usuario implements Serializable {
 
     }
     public Usuario(String correoEletronico, String contrasena, Estado estado
-            , Date fechaDeCreacion, long id, String imagenPerfil
-            , String nombreUsuario, Roles rol, Date ultimaFechaDeCoexion) {
+            , LocalDate fechaDeCreacion, long id, String imagenPerfil
+            , String nombreUsuario, Roles rol, LocalDate ultimaFechaDeCoexion) {
         this.correoEletronico = correoEletronico;
         this.contrasena = contrasena;
         this.estado = estado;
@@ -68,11 +71,11 @@ public class Usuario implements Serializable {
         this.estado = estado;
     }
 
-    public Date getFechaDeCreacion() {
+    public LocalDate getFechaDeCreacion() {
         return fechaDeCreacion;
     }
 
-    public void setFechaDeCreacion(Date fechaDeCreacion) {
+    public void setFechaDeCreacion(LocalDate fechaDeCreacion) {
         this.fechaDeCreacion = fechaDeCreacion;
     }
 
@@ -108,11 +111,11 @@ public class Usuario implements Serializable {
         this.rol = rol;
     }
 
-    public Date getUltimaFechaDeCoexion() {
+    public LocalDate getUltimaFechaDeCoexion() {
         return ultimaFechaDeCoexion;
     }
 
-    public void setUltimaFechaDeCoexion(Date ultimaFechaDeCoexion) {
+    public void setUltimaFechaDeCoexion(LocalDate ultimaFechaDeCoexion) {
         this.ultimaFechaDeCoexion = ultimaFechaDeCoexion;
     }
 }

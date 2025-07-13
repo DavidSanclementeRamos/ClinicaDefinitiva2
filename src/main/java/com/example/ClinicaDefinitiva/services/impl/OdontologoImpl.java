@@ -1,7 +1,8 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
+import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.Especialidades;
-import com.example.ClinicaDefinitiva.exceptions.OdontologoNotfountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfountException;
 import com.example.ClinicaDefinitiva.mapper.OdontologoMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.odontologoDto.CreateOdontologoDto;
 import com.example.ClinicaDefinitiva.persistence.dto.odontologoDto.ReadOdontologoDto;
@@ -12,6 +13,7 @@ import com.example.ClinicaDefinitiva.repository.OdontologoRepository;
 import com.example.ClinicaDefinitiva.repository.UsuarioRepository;
 import com.example.ClinicaDefinitiva.services.OdontologoService;
 
+import com.example.ClinicaDefinitiva.util.EdadMinimaConfig;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -76,7 +78,8 @@ public class OdontologoImpl  implements OdontologoService {
 
     @Override
     public ReadOdontologoDto save(CreateOdontologoDto createOdontologoDto ) {
-
+        EdadMinimaConfig validar = new EdadMinimaConfig();
+        validar.validarEdadMinima(createOdontologoDto.getFecha_nacimiento(),25);
         // 1 VERIFICACION DE LAS RELACIONES
         return usuarioRepository.findById(createOdontologoDto.getIdUsuario())
                 .map(usuario -> {
@@ -86,12 +89,13 @@ public class OdontologoImpl  implements OdontologoService {
 
                     odontologo.setNombre(createOdontologoDto.getNombre());
                     odontologo.setApellido(createOdontologoDto.getApellido());
-                    odontologo.setDirecion(createOdontologoDto.getDirecion());
+                    odontologo.setDireccion(createOdontologoDto.getDireccion());
                     odontologo.setFecha_nacimiento(createOdontologoDto.getFecha_nacimiento());
                     odontologo.setDni(createOdontologoDto.getDni());
                     odontologo.setEspecialidad(createOdontologoDto.getEspecialidad());
                     odontologo.setUnUsuario(usuario);
                     odontologo.setTelefono(createOdontologoDto.getTelefono());
+                    odontologo.setTipoSangre(createOdontologoDto.getTipoSangre());
 
                     return odontologoRepository.save(odontologo);
                  }
@@ -102,15 +106,24 @@ public class OdontologoImpl  implements OdontologoService {
     }
 
     @Override
+    public void deleaById(long id) {
+
+        if(odontologoRepository.findById(id).isEmpty()){
+            throw new OdontologoNotfountException();
+        }
+        odontologoRepository.deleteById(id);
+    }
+
+    @Override
     public ReadOdontologoDto update(long idOdontologo, UpdateOdontologoDto updateOdontologoDto) {
 
         // 1. Verificar que el odontólogo existe
         Odontologo odontologo = odontologoRepository.findById(idOdontologo)
-                .orElseThrow(OdontologoNotfountException::new);
+                .orElseThrow(() -> new OdontologoNotfountException(ContextoEntidad.ODONTOLOGO, "No se encontró el odontólogo con ID: " + idOdontologo));
 
         // 4. Actualizar los datos del odontólogo
         odontologo.setTelefono(updateOdontologoDto.getTelefono());
-        odontologo.setDirecion(updateOdontologoDto.getDirecion());
+        odontologo.setDireccion(updateOdontologoDto.getDireccion());
         odontologo.setEspecialidad(updateOdontologoDto.getEspecialidad());
 
         // 5. Guardar cambios
@@ -118,6 +131,7 @@ public class OdontologoImpl  implements OdontologoService {
 
         return odontologoMapperResponse.readOdontologoDto(actualizado);
     }
+
 
 
 }

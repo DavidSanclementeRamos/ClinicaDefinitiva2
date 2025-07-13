@@ -30,4 +30,5 @@ public interface SecretarioService {
 
    ReadSecretarioDto update(long id, UpdateSecretarioDto updateSecretarioDto);
 
+   void deleaById(long id);
 }

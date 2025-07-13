@@ -34,4 +34,5 @@ public interface TurnoService {
 
     boolean existsByOdontologo_IdAndFechaAndHora(long idOdontologo, LocalDate fecha, LocalTime hora);
 
+
 }

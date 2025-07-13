@@ -9,17 +9,65 @@ public class ErrorResponse {
 
 
     private String code;
-    private HttpStatus status;
+    private String codigoEntidad;
+    private String contexto;
+    private String usuario;
     private String message;
     private List<String> detailMessages;
+    private HttpStatus status;
     private LocalDateTime timeStamp;
+    private String requestId;
 
-    public ErrorResponse(String code, List<String> detailMessages, String message, HttpStatus status, LocalDateTime timeStamp) {
+    public ErrorResponse(String code,
+                         String codigoEntidad,
+                         String contexto,
+                         String usuario,
+                         String message,
+                         List<String> detailMessages,
+                         HttpStatus status,
+                         LocalDateTime timeStamp,
+                         String requestId) {
         this.code = code;
-        this.detailMessages = detailMessages;
+        this.codigoEntidad = codigoEntidad;
+        this.contexto = contexto;
+        this.usuario = usuario;
         this.message = message;
+        this.detailMessages = detailMessages;
         this.status = status;
         this.timeStamp = timeStamp;
+        this.requestId = requestId;
+    }
+
+    public String getCodigoEntidad() {
+        return codigoEntidad;
+    }
+
+    public void setCodigoEntidad(String codigoEntidad) {
+        this.codigoEntidad = codigoEntidad;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getContexto() {
+        return contexto;
+    }
+
+    public void setContexto(String contexto) {
+        this.contexto = contexto;
     }
 
     public String getCode() {

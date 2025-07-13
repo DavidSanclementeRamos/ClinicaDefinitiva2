@@ -17,7 +17,7 @@ public class ReadOdontologoDto {
     private  String nombre;
     private  String apellido;
     private  String telefono;
-    private  String direcion;
+    private  String direccion;
     private  LocalDate fecha_nacimiento;
 
     private  Especialidades especialidad;
@@ -28,9 +28,9 @@ public class ReadOdontologoDto {
 
 
 
-    public ReadOdontologoDto(String apellido, String direcion, String dni, Especialidades especialidad, LocalDate fecha_nacimiento, HorarioDto horarioDto, long id, String nombre, ReadUsuarioDto readUsuarioDto, String telefono, Tipo_sangre tipoSangre) {
+    public ReadOdontologoDto(String apellido, String direccion, String dni, Especialidades especialidad, LocalDate fecha_nacimiento, HorarioDto horarioDto, long id, String nombre, ReadUsuarioDto readUsuarioDto, String telefono, Tipo_sangre tipoSangre) {
         this.apellido = apellido;
-        this.direcion = direcion;
+        this.direccion = direccion;
         this.dni = dni;
         this.especialidad = especialidad;
         this.fecha_nacimiento = fecha_nacimiento;
@@ -46,9 +46,6 @@ public class ReadOdontologoDto {
         this.apellido = apellido;
     }
 
-    public void setDirecion(String direcion) {
-        this.direcion = direcion;
-    }
 
     public void setDni(String dni) {
         this.dni = dni;
@@ -90,8 +87,12 @@ public class ReadOdontologoDto {
         return apellido;
     }
 
-    public String getDirecion() {
-        return direcion;
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getDni() {

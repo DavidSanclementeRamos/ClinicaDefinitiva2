@@ -13,6 +13,8 @@ public interface OdontologoMapperResponse {
 
    @Mapping(target = "readUsuarioDto", source = "unUsuario")
    @Mapping(target = "horarioDto", source = "unHorario")
+   @Mapping(target = "tipoSangre", source = "tipoSangre")
 
-    ReadOdontologoDto readOdontologoDto (Odontologo odontologo);
+
+   ReadOdontologoDto readOdontologoDto (Odontologo odontologo);
 }

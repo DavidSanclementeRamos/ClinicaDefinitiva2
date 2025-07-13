@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.Enum;
 
 public enum Roles {
-    Odontologo, Secretario, Paciente, Responsable, Administrador
+    ODONTOLOGO,
+    SECRETARIO,
+    PACIENTE,
+    RESPONSABLE,
+    ADMINISTRADOR
 }

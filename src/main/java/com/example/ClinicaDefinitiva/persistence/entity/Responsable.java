@@ -29,8 +29,8 @@ public class Responsable extends Persona{
         }
 
 
-        public Responsable(String apellido, String direcion, String dni, LocalDate fecha_nacimiento, int id, String nombre, String telefono, Tipo_sangre tipoSangre, TipoResponsable tipoResponsable, Usuario unUsuario, List<Paciente> paciente) {
-                super(apellido, direcion, dni, fecha_nacimiento, id, nombre, telefono, tipoSangre);
+        public Responsable(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, int id, String nombre, String telefono, Tipo_sangre tipoSangre, TipoResponsable tipoResponsable, Usuario unUsuario, List<Paciente> paciente) {
+                super(apellido, direccion, dni, fecha_nacimiento, id, nombre, telefono, tipoSangre);
                 this.tipoResponsable = tipoResponsable;
                 this.unUsuario = unUsuario;
                 this.paciente = paciente;

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 import com.example.ClinicaDefinitiva.Enum.TipoResponsable;
-import com.example.ClinicaDefinitiva.exceptions.ResponsableNotFountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.ResponsableNotFountException;
 import com.example.ClinicaDefinitiva.mapper.ResponsableMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.responsableDto.CambioResponsableDto;
 import com.example.ClinicaDefinitiva.persistence.dto.responsableDto.CreateEndReadResponsableDto;
@@ -76,7 +76,7 @@ public class ResponsableImpl implements ResponsableService {
                             responsable.setNombre(cambioResponsableDto.getNombre());
                             responsable.setApellido(cambioResponsableDto.getApellido());
                             responsable.setTelefono(cambioResponsableDto.getTelefono());
-                            responsable.setDirecion(cambioResponsableDto.getDirecion());
+                            responsable.setDireccion(cambioResponsableDto.getDireccion());
                             responsable.setFecha_nacimiento(cambioResponsableDto.getFecha_nacimiento());
                             responsable.setTipoResponsable(cambioResponsableDto.getTipoResponsable());
                             responsable.setTipoSangre(cambioResponsableDto.getTipoSangre());
@@ -93,7 +93,7 @@ public class ResponsableImpl implements ResponsableService {
                 .map(responsable ->  {
 
                     responsable.setTelefono(updateResponsableDto.getTelefono());
-                    responsable.setDirecion(updateResponsableDto.getDirecion());
+                    responsable.setDireccion(updateResponsableDto.getDireccion());
                    // responsable.setUnUsuario(usuario);
                     return responsableRepository.save(responsable);
                 }).map(responsableMapperResponse::createEndReadResponsableDto)
@@ -102,7 +102,7 @@ public class ResponsableImpl implements ResponsableService {
 
     @Override
     public CreateEndReadResponsableDto save(CreateEndReadResponsableDto createEndReadResponsableDto) {
-        return usuarioRepository.findById(createEndReadResponsableDto.getReadUsuarioDto().getId_usuario())
+        return usuarioRepository.findById(createEndReadResponsableDto.getReadUsuarioDto().getId())
                 .map(usuario -> {
 
                     Responsable responsable = new Responsable();
@@ -111,7 +111,7 @@ public class ResponsableImpl implements ResponsableService {
                     responsable.setNombre(createEndReadResponsableDto.getNombre());
                     responsable.setApellido(createEndReadResponsableDto.getApellido());
                     responsable.setFecha_nacimiento(createEndReadResponsableDto.getFecha_nacimiento());
-                    responsable.setDirecion(createEndReadResponsableDto.getDirecion());
+                    responsable.setDireccion(createEndReadResponsableDto.getDireccion());
                     responsable.setTelefono(createEndReadResponsableDto.getTelefono());
                     responsable.setTipoSangre(createEndReadResponsableDto.getTipoSangre());
                     responsable.setTipoResponsable(createEndReadResponsableDto.getTipoResponsable());
@@ -121,5 +121,13 @@ public class ResponsableImpl implements ResponsableService {
                 }).map(responsableMapperResponse::createEndReadResponsableDto)
                 .orElseThrow(ResponsableNotFountException::new);
 
+    }
+
+    @Override
+    public void deleaById(long id) {
+        if(responsableRepository.findById(id).isEmpty()){
+            throw new ResponsableNotFountException();
+        }
+        responsableRepository.deleteById(id);
     }
 }

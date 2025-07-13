@@ -1,5 +1,8 @@
 package com.example.ClinicaDefinitiva.Enum;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum Tipo_sangre {
 
         A_POSITIVO("A+"),
@@ -18,8 +21,19 @@ public enum Tipo_sangre {
         this.etiqueta = etiqueta;
     }
 
-    public String getEtiqueta() {
-            return etiqueta;
-        }
 
+    @JsonCreator
+    public static Tipo_sangre desdeEtiqueta(String etiqueta) {
+        for (Tipo_sangre tipo : Tipo_sangre.values()) {
+            if (tipo.getEtiqueta().equalsIgnoreCase(etiqueta)) {
+                return tipo;
+            }
+        }
+        throw new IllegalArgumentException("Tipo de sangre inválido: " + etiqueta);
     }
+
+    @JsonValue
+    public String getEtiqueta() {
+        return etiqueta;
+    }
+}

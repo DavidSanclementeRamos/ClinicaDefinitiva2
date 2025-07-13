@@ -1,17 +1,24 @@
 package com.example.ClinicaDefinitiva.persistence.dto.pacienteDto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Pattern;
 
-@Getter
-@Setter
 public class UpdatePacienteDto {
 
+    @NotBlank(message = "El el telefono no puede estar vacio")
+    @Pattern(
+            regexp = "^\\+57\\s3\\d{2}\\d{7}$",
+            message = "El teléfono debe tener el formato: +57 3XXYYYYYYY")
     @NotNull(message = "El telefono no puede ser nulo")
     private String telefono;
+
+    @NotBlank(message = "La direccion no puede estar vacio ")
     @NotNull(message = "La direción no puede ser nulo")
-    private String direcion;
+    private String direccion;
+
+    @NotBlank(message = "El seguro no puede estar vacio ")
+    @NotNull(message = "El seguro no puede ser nulo")
     private boolean tiene_Os;
 
 
@@ -20,18 +27,18 @@ public class UpdatePacienteDto {
 
     }
 
-    public UpdatePacienteDto(String direcion, String telefono, boolean tiene_Os) {
-        this.direcion = direcion;
+    public UpdatePacienteDto(String direccion, String telefono, boolean tiene_Os) {
+        this.direccion = direccion;
         this.telefono = telefono;
         this.tiene_Os = tiene_Os;
     }
 
-    public String getDirecion() {
-        return direcion;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDirecion(String direcion) {
-        this.direcion = direcion;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getTelefono() {

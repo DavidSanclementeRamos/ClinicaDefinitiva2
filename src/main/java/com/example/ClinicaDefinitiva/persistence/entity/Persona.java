@@ -16,8 +16,9 @@ public class Persona implements Serializable {
     private String dni;
     private String nombre;
     private String apellido;
+    @Column(unique = true) // para evitar dublicado de telefono
     private String telefono;
-    private String direcion;
+    private String direccion;
     @Column(nullable = false)
     private LocalDate fecha_nacimiento;
     @Enumerated(EnumType.STRING)
@@ -27,10 +28,10 @@ public class Persona implements Serializable {
 
     }
 
-    public Persona(String apellido, String direcion, String dni
+    public Persona(String apellido, String direccion, String dni
             , LocalDate fecha_nacimiento, int id, String nombre, String telefono,Tipo_sangre tipoSangre ) {
         this.apellido = apellido;
-        this.direcion = direcion;
+        this.direccion = direccion;
         this.dni = dni;
         this.fecha_nacimiento = fecha_nacimiento;
         this.id = id;
@@ -39,12 +40,12 @@ public class Persona implements Serializable {
         this.tipoSangre = tipoSangre;
     }
 
-    public String getDirecion() {
-        return direcion;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDirecion(String direcion) {
-        this.direcion = direcion;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getApellido() {

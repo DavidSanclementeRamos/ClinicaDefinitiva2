@@ -30,6 +30,8 @@ public interface PacienteServise {
 
    ReadPacienteDto update(long id, UpdatePacienteDto updatePacienteDto);
 
+   void deleaById(long id);
+
 
 
 

@@ -1,14 +1,13 @@
 package com.example.ClinicaDefinitiva.web.controller;
 
 
-import com.example.ClinicaDefinitiva.exceptions.HorarioNotfountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.HorarioNotfountException;
 import com.example.ClinicaDefinitiva.persistence.dto.HorarioDto;
 import com.example.ClinicaDefinitiva.services.HorarioService;
-import com.example.ClinicaDefinitiva.util.Paginacion;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,8 +20,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(
@@ -49,9 +46,9 @@ public class HorarioController {
     @GetMapping
     public ResponseEntity<Page<HorarioDto>> findAll(
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "id,asc") String[] sort) {
-        Page<HorarioDto> resultado = horarioService.findAll(PageRequest.of(page, size, Sort.by(parseSort(sort))));
+        @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size); // sin ordenamiento
+        Page<HorarioDto> resultado = horarioService.findAll(PageRequest.of(page, size));
 
         return ResponseEntity.ok(resultado);
 
@@ -84,7 +81,7 @@ public class HorarioController {
     }
 
 
-    @GetMapping("/buscar")
+    @GetMapping("/disponibilidadPorDia")
     public ResponseEntity<List<HorarioDto>> findByDiaYHora(
             @RequestParam DayOfWeek dia,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime desde,
@@ -93,7 +90,7 @@ public class HorarioController {
                 .findByDiaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(dia, desde, hasta));
 
     }
-    @GetMapping("/fecha")
+    @GetMapping("/rangoDeFecha")
     public ResponseEntity<List<HorarioDto>> findByFechaBetween(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta) {
@@ -109,14 +106,5 @@ public class HorarioController {
     }
 
 
-    // Método auxiliar para Sort
-    private Sort.Order[] parseSort(String[] sort) {
-        return Stream.of(sort)
-                .map(s -> {
-                    String[] parts = s.split(",");
-                    return new Sort.Order(Sort.Direction.fromString(parts[1]), parts[0]);
-                })
-                .toArray(Sort.Order[]::new);
-    }
 
 }

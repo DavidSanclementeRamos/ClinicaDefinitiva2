@@ -19,7 +19,6 @@ public class HistorialCambioResponsable {
     private LocalDateTime fechaCambio;
     private String motivoCambio;
 
-    C:/Users/David/Documents/proyectosJava/ClinicaDefinitiva
 
     public HistorialCambioResponsable(LocalDateTime fechaCambio, Long id
             , Long idAntiguoResponsable, Long idMenor, Long idNuevoResponsable

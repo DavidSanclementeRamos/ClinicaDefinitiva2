@@ -36,8 +36,8 @@ public class Paciente extends Persona implements Serializable {
 
     }
 
-    public Paciente(String apellido, String direcion, String dni, LocalDate fecha_nacimiento, int id, String nombre, String telefono, Tipo_sangre tipoSangre, Responsable responsable, boolean tiene_Os, boolean tieneResponsable, Responsable unResponsable, List<Turno> unTurno, Usuario unUsuario) {
-        super(apellido, direcion, dni, fecha_nacimiento, id, nombre, telefono, tipoSangre);
+    public Paciente(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, int id, String nombre, String telefono, Tipo_sangre tipoSangre, Responsable responsable, boolean tiene_Os, boolean tieneResponsable, Responsable unResponsable, List<Turno> unTurno, Usuario unUsuario) {
+        super(apellido, direccion, dni, fecha_nacimiento, id, nombre, telefono, tipoSangre);
         this.responsable = responsable;
         this.tiene_Os = tiene_Os;
         this.tieneResponsable = tieneResponsable;

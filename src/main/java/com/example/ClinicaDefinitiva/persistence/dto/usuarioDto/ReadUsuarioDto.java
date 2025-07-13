@@ -6,27 +6,28 @@ package com.example.ClinicaDefinitiva.persistence.dto.usuarioDto;
 import com.example.ClinicaDefinitiva.Enum.Estado;
 import com.example.ClinicaDefinitiva.Enum.Roles;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class ReadUsuarioDto {
-    private long id_usuario;
+    private long id;
     private String nombreUsuario;
     private String correoEletronico;
-    private Date fechaDeCreacion;
+    private LocalDate fechaDeCreacion;
     private Estado estado;
     private String imagenPerfil;
-    private Date ultimaFechaDeCoexion;
+    private LocalDate ultimaFechaDeCoexion;
     private Roles rol;
 
     public ReadUsuarioDto(){
 
     }
-    public ReadUsuarioDto(Estado estado, String correoEletronico, long id_usuario
-            , Date fechaDeCreacion, String imagenPerfil, Roles rol
-            , String nombreUsuario, Date ultimaFechaDeCoexion) {
+    public ReadUsuarioDto(Estado estado, String correoEletronico, long id
+            , LocalDate fechaDeCreacion, String imagenPerfil, Roles rol
+            , String nombreUsuario, LocalDate ultimaFechaDeCoexion) {
         this.estado = estado;
         this.correoEletronico = correoEletronico;
-        this.id_usuario = id_usuario;
+        this.id = id;
         this.fechaDeCreacion = fechaDeCreacion;
         this.imagenPerfil = imagenPerfil;
         this.rol = rol;
@@ -42,13 +43,10 @@ public class ReadUsuarioDto {
         this.estado = estado;
     }
 
-    public void setFechaDeCreacion(Date fechaDeCreacion) {
+    public void setFechaDeCreacion(LocalDate fechaDeCreacion) {
         this.fechaDeCreacion = fechaDeCreacion;
     }
 
-    public void setId_usuario(long id_usuario) {
-        this.id_usuario = id_usuario;
-    }
 
     public void setImagenPerfil(String imagenPerfil) {
         this.imagenPerfil = imagenPerfil;
@@ -62,7 +60,7 @@ public class ReadUsuarioDto {
         this.rol = rol;
     }
 
-    public void setUltimaFechaDeCoexion(Date ultimaFechaDeCoexion) {
+    public void setUltimaFechaDeCoexion(LocalDate ultimaFechaDeCoexion) {
         this.ultimaFechaDeCoexion = ultimaFechaDeCoexion;
     }
 
@@ -74,12 +72,16 @@ public class ReadUsuarioDto {
         return estado;
     }
 
-    public Date getFechaDeCreacion() {
+    public LocalDate getFechaDeCreacion() {
         return fechaDeCreacion;
     }
 
-    public Long getId_usuario() {
-        return id_usuario;
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getImagenPerfil() {
@@ -94,7 +96,7 @@ public class ReadUsuarioDto {
         return rol;
     }
 
-    public Date getUltimaFechaDeCoexion() {
+    public LocalDate getUltimaFechaDeCoexion() {
         return ultimaFechaDeCoexion;
     }
 }

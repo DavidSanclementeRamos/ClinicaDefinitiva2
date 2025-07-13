@@ -2,8 +2,10 @@ package com.example.ClinicaDefinitiva.persistence.dto.secretarioDto;
 
 
 import com.example.ClinicaDefinitiva.Enum.Sector;
+import com.example.ClinicaDefinitiva.Enumvalidation.SectorValido;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
@@ -11,24 +13,40 @@ import java.time.LocalDate;
 
 public class CreateSecretarioDto {
 
+    @NotBlank(message = "El dni no puede estar vacio")
     @NotNull(message = "El dni no puede ser nulo")
     @Pattern(regexp = "[0-9]+", message = "Debe contener solo numeros")
     private String dni;
-    @NotNull(message = "El nombre no puede ser nulo")
 
+    @NotBlank(message = "El nombre no puede estar vacio")
+    @NotNull(message = "El nombre no puede ser nulo")
+    @Pattern(regexp = "^[a-zA-ZÁÉÍÓÚáéíóúÑñ]{2,30}$", message = "Solo letras permitidas, entre 2 y 30 caracteres")
     private String nombre;
+
+    @NotBlank(message = "El apellido no puede estar vacio")
     @NotNull(message = "El apellido no puede ser nulo")
+    @Pattern(regexp = "^[a-zA-ZÁÉÍÓÚáéíóúÑñ]{2,30}$", message = "Solo letras permitidas, entre 2 y 30 caracteres")
     private String apellido;
-    // @Pattern(regexp = "[0-9]+", message = "Debe contener solo numeros")
+
+    @NotBlank(message = "El el telefono no puede estar vacio")
     @NotNull(message = "El teléfono no puede ser nulo")
+    @Pattern(
+            regexp = "^\\+57\\s3\\d{2}\\d{7}$",
+            message = "El teléfono debe tener el formato: +57 3XXYYYYYYY")
     private String telefono;
+
+    @NotBlank(message = "La direccion no puede estar vacio ")
     @NotNull(message = "La dirección no puede ser nula")
-    private String direcion;
+    private String direccion;
+
     @Temporal(TemporalType.DATE)
     @NotNull(message = "La fecha de nacimiento no puede ser nula")
     private LocalDate fecha_nacimiento;
+
+    @SectorValido
     @NotNull(message = " No puede ser nulo")
     private Sector sector;
+
     private long idUsuario;
 
 
@@ -36,9 +54,9 @@ public class CreateSecretarioDto {
 
     }
 
-    public CreateSecretarioDto(String apellido, String direcion, String dni, LocalDate fecha_nacimiento, long idUsuario, String nombre, Sector sector, String telefono) {
+    public CreateSecretarioDto(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, long idUsuario, String nombre, Sector sector, String telefono) {
         this.apellido = apellido;
-        this.direcion = direcion;
+        this.direccion = direccion;
         this.dni = dni;
         this.fecha_nacimiento = fecha_nacimiento;
         this.idUsuario = idUsuario;
@@ -51,12 +69,12 @@ public class CreateSecretarioDto {
         this.apellido = apellido;
     }
 
-    public void setDirecion(String direcion) {
-        this.direcion = direcion;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public String getDirecion() {
-        return direcion;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getApellido() {

@@ -27,5 +27,5 @@ public interface ResponsableService {
 
     CreateEndReadResponsableDto save(CreateEndReadResponsableDto createEndReadResponsableDto);
 
-
+    void deleaById(long id);
 }

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 import com.example.ClinicaDefinitiva.Enum.Sector;
-import com.example.ClinicaDefinitiva.exceptions.SecretarioNotFountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.SecretarioNotFountException;
 import com.example.ClinicaDefinitiva.mapper.SecretarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.secretarioDto.CreateSecretarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.secretarioDto.ReadSecretarioDto;
@@ -87,7 +87,7 @@ public class SecretarioImpl implements SecretarioService {
                     secretario.setDni(createSecretarioDto.getDni());
                     secretario.setNombre(createSecretarioDto.getNombre());
                     secretario.setApellido(createSecretarioDto.getApellido());
-                    secretario.setDirecion(createSecretarioDto.getDirecion());
+                    secretario.setDireccion(createSecretarioDto.getDireccion());
                     secretario.setTelefono(createSecretarioDto.getTelefono());
                     secretario.setSector(createSecretarioDto.getSector());
                     secretario.setFecha_nacimiento(createSecretarioDto.getFecha_nacimiento());
@@ -103,7 +103,7 @@ public class SecretarioImpl implements SecretarioService {
         return secretarioRepository.findById(id)
                 .map(secretario -> {
 
-                    secretario.setDirecion(updateSecretarioDto.getDirecion());
+                    secretario.setDireccion(updateSecretarioDto.getDireccion());
                     secretario.setTelefono(updateSecretarioDto.getTelefono());
                     // secretario.setUnUsuario(usuario);
                     secretario.setSector(updateSecretarioDto.getSector());
@@ -114,5 +114,13 @@ public class SecretarioImpl implements SecretarioService {
                 .orElseThrow(SecretarioNotFountException::new);
 
 
+    }
+
+    @Override
+    public void deleaById(long id) {
+        if(secretarioRepository.findById(id).isEmpty()){
+            throw new SecretarioNotFountException();
+        }
+        secretarioRepository.deleteById(id);
     }
 }

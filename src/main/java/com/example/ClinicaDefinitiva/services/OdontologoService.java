@@ -29,5 +29,7 @@ public interface OdontologoService {
 
    ReadOdontologoDto save(CreateOdontologoDto createOdontologoDto);
 
+   void deleaById(long id);
+
    ReadOdontologoDto update(long idOdontologo, UpdateOdontologoDto updateOdontologoDto);
 }

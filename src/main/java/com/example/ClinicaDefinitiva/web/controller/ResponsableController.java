@@ -7,6 +7,7 @@ import com.example.ClinicaDefinitiva.persistence.dto.responsableDto.CreateEndRea
 import com.example.ClinicaDefinitiva.persistence.dto.responsableDto.UpdateResponsableDto;
 import com.example.ClinicaDefinitiva.services.ResponsableService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,7 @@ import static org.springframework.http.ResponseEntity.ok;
 //@ResquiredArgsConstructor
 @RequestMapping(
         path = "/api/v1/responsables",
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE
+        produces = MediaType.APPLICATION_JSON_VALUE
 )
 public class ResponsableController  {
 
@@ -82,5 +82,9 @@ public class ResponsableController  {
         return ResponseEntity.created(uri).body(response);
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id) {responsableService.deleaById(id);}
 
-}
+
+    }

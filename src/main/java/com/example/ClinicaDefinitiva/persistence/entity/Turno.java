@@ -16,6 +16,7 @@ public class Turno implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column(nullable = false)
     private LocalDate fechaTurno;
     private LocalTime horaTurno;
@@ -27,11 +28,14 @@ public class Turno implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_paciente") // Clave foránea en la entidad dependiente
     private Paciente paciente;
+
     @Enumerated(EnumType.STRING)
     private Afeccion afeccion;
+
     @ManyToOne
     @JoinColumn(name = "horario_id")
     private Horario horario;
+
     private Estado estado;
 
     public Turno(){

@@ -2,6 +2,18 @@ package com.example.ClinicaDefinitiva.Enum;
 
 public enum CatalogoError {
 
+    METHOD_NOT_ALLOWED("ERR_HTTP_405", "Método HTTP no permitido."),
+    MISSING_REQUEST_PARAM("ERR_PARAM_001", "Parámetro de solicitud faltante."),
+    INVALID_JSON("ERR_JSON_001", "Cuerpo JSON mal formado."),
+    INVALID_PARAMETERS("ERR_PARAM_001", "Parámetros inválidos en ruta o query."),
+    TYPE_MISMATCH("ERR_TYPE_400", "Parámetro de tipo incorrecto."),
+    UNSUPPORTED_MEDIA_TYPE("ERR_CONT_415", "Tipo de contenido no soportado."),
+    ROUTE_NOT_FOUND("ERR_ROUTE_404", "Recurso no encontrado."),
+    ACCESS_DENIED("ERR_AUTH_403", "Acceso denegado."),
+    DATA_INTEGRITY_VIOLATION("ERR_DB_409", "Conflicto de integridad de datos."),
+    GENERIC_ERROR("ERR_GEN_001", "Error inesperado."),
+    EDAD_NO_PERMITIDA("ERR_PARAM_001", "Edad no valida para ese cargo"),
+
     // 🕒 Errores de Horario
     SCHEDULE_NOT_FOUND("ERR_SCH_001", "Schedule not found."),
     INVALID_SCHEDULE("ERR_SCH_002", "Invalid schedule parameters."),
@@ -28,10 +40,10 @@ public enum CatalogoError {
 
     // 👪 Errores de Responsable
     RESPONSIBLE_NOT_FOUND("ERR_RESP_001", "Responsible person not found."),
-    INVALID_RESPONSIBLE("ERR_RESP_002", "Invalid responsible data."),
+    INVALID_RESPONSIBLE("ERR_RESP_002", "Invalid responsible data.");
 
     // ⚠️ Error genérico
-    GENERIC_ERROR("ERR_GEN_001", "An unexpected error occurred.");
+   // GENERIC_ERROR("ERR_GEN_001", "An unexpected error occurred.");
     private final String code;
     private final String message;
 

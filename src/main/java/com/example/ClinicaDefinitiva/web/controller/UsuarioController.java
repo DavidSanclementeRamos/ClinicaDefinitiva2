@@ -9,7 +9,9 @@ import com.example.ClinicaDefinitiva.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +25,9 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping(
 
-        path = "/api/v1/usuarios",
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE
+         "/api/v1/usuarios"
+      //  produces = MediaType.APPLICATION_JSON_VALUE
+      //  consumes = MediaType.APPLICATION_JSON_VALUE
 
 )
 public class UsuarioController {
@@ -41,17 +43,19 @@ public class UsuarioController {
      return  ResponseEntity.ok(usuarioService.findId(id));
     }
 
-    @GetMapping()
-    public ResponseEntity<ReadUsuarioDto> findAll(
+    @GetMapping
+    public ResponseEntity<Page<ReadUsuarioDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id,asc") String[] sort){
-        Page<ReadUsuarioDto> response = usuarioService.findAll(PageRequest.of(page, size, Sort.by(parseSort(sort))));
-        return ResponseEntity.ok((ReadUsuarioDto) response);
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size); // sin ordenamiento
+        Page<ReadUsuarioDto> usuarios = usuarioService.findAll(pageable);
+        return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/buscarUsuarioPorEmail/{email}")
-    public ResponseEntity<Optional<ReadUsuarioDto>> findByEmail(@PathVariable String email){
+
+    @GetMapping("/buscarUsuarioPorEmail")
+    public ResponseEntity<Optional<ReadUsuarioDto>> findByEmail(@RequestParam String email){
         return ResponseEntity.ok(usuarioService.findByEmail(email));
     }
 
@@ -76,8 +80,8 @@ public class UsuarioController {
             @Valid @RequestBody CreateUsuarioDto createUsuarioDto, UriComponentsBuilder uriBuilder){
         ReadUsuarioDto response = usuarioService.save(createUsuarioDto) ;
 
-        URI uri = uriBuilder.path("/api/secretarios/{id}")
-                .buildAndExpand(response.getId_usuario()).toUri();
+        URI uri = uriBuilder.path("/api/v1/usuarios/{id}")
+                .buildAndExpand(response.getId()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
     @PutMapping("/{id}")
@@ -87,15 +91,10 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.update(id, updateUsuarioDto));
     }
 
-    // Método auxiliar para Sort
-    private Sort.Order[] parseSort(String[] sort) {
-        return Stream.of(sort)
-                .map(s -> {
-                    String[] parts = s.split(",");
-                    return new Sort.Order(Sort.Direction.fromString(parts[1]), parts[0]);
-                })
-                .toArray(Sort.Order[]::new);
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id) {usuarioService.deleaById(id);}
+
+
     }
-
-
-}

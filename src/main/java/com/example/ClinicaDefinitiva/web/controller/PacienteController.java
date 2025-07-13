@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.web.controller;
 
 
-import com.example.ClinicaDefinitiva.exceptions.PacienteNotFountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFountException;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.CreatePacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.ReadPacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.UpdatePacienteDto;
@@ -9,8 +9,9 @@ import com.example.ClinicaDefinitiva.services.PacienteServise;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +21,11 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(
         path = "/api/v1/pacientes",
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE
+        produces = MediaType.APPLICATION_JSON_VALUE
 
 )
 public class PacienteController {
@@ -45,12 +44,13 @@ public class PacienteController {
     }
 
     @GetMapping
-    public ResponseEntity <ReadPacienteDto> findAll(
+    public ResponseEntity<Page< ReadPacienteDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id,asc") String[] sort){
-        Page<ReadPacienteDto> resultado = pacienteServise.findAll(PageRequest.of(page, size, Sort.by(parseSort(sort))));
-        return  ResponseEntity.ok((ReadPacienteDto) resultado);
+            @RequestParam(defaultValue = "10") int size){
+        Page<ReadPacienteDto> resultado = pacienteServise.findAll(PageRequest.of(page, size));
+        Pageable pageable = PageRequest.of(page, size); // sin ordenamiento
+
+        return  ResponseEntity.ok( resultado);
     }
 
 
@@ -99,15 +99,10 @@ public class PacienteController {
         return ResponseEntity.ok(atualizar);
     }
 
-    // Método auxiliar para Sort
-    private Sort.Order[] parseSort(String[] sort) {
-        return Stream.of(sort)
-                .map(s -> {
-                    String[] parts = s.split(",");
-                    return new Sort.Order(Sort.Direction.fromString(parts[1]), parts[0]);
-                })
-                .toArray(Sort.Order[]::new);
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id) {pacienteServise.deleaById(id);}
+
+
     }
-
-
-}

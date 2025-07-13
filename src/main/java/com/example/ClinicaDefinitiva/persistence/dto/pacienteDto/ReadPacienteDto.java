@@ -20,7 +20,7 @@ public class ReadPacienteDto {
     private  String nombre;
     private  String apellido;
     private  String telefono;
-    private  String direcion;
+    private  String direccion;
     private  LocalDate fecha_nacimiento;
     private  boolean tiene_Os;
     private  CreateEndReadResponsableDto readResponsableDto;
@@ -33,7 +33,7 @@ public class ReadPacienteDto {
     public ReadPacienteDto(String apellido, long id, String nombre, boolean tieneResponsable
             , CreateEndReadResponsableDto readResponsableDto, String telefono
             ,  boolean tiene_Os, List<TurnoDto> turnoDto, ReadUsuarioDto readUsuarioDto
-            , String direcion, String dni, LocalDate fecha_nacimiento,Tipo_sangre tipoSangre) {
+            , String direccion, String dni, LocalDate fecha_nacimiento,Tipo_sangre tipoSangre) {
         this.apellido = apellido;
         this.id = id;
         this.nombre = nombre;
@@ -43,7 +43,7 @@ public class ReadPacienteDto {
         this.tipoSangre = tipoSangre;
         this.tiene_Os = tiene_Os;
         this.turnoDto = turnoDto;
-        this.direcion = direcion;
+        this.direccion = direccion;
         this.dni = dni;
         this.fecha_nacimiento = fecha_nacimiento;
         this.readUsuarioDto = readUsuarioDto;
@@ -54,9 +54,6 @@ public class ReadPacienteDto {
         this.apellido = apellido;
     }
 
-    public void setDirecion(String direcion) {
-        this.direcion = direcion;
-    }
 
     public void setDni(String dni) {
         this.dni = dni;
@@ -106,8 +103,12 @@ public class ReadPacienteDto {
         return apellido;
     }
 
-    public String getDirecion() {
-        return direcion;
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public Tipo_sangre getTipoSangre() {

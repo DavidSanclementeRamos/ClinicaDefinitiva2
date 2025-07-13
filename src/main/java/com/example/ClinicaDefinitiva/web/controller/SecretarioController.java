@@ -10,7 +10,9 @@ import com.example.ClinicaDefinitiva.services.SecretarioService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +27,7 @@ import java.util.stream.Stream;
 @RequestMapping(
 
         path = "/api/v1/secretarios",
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE
+        produces = MediaType.APPLICATION_JSON_VALUE
 
 )
 public class SecretarioController {
@@ -45,12 +46,12 @@ public class SecretarioController {
     }
 
     @GetMapping
-    public ResponseEntity<ReadSecretarioDto> findAll(
+    public ResponseEntity<Page<ReadSecretarioDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id,asc") String[] sort){
-        Page<ReadSecretarioDto> resultado = secretarioService.findAll(PageRequest.of(page, size, Sort.by(parseSort(sort))));
-      return  ResponseEntity.ok((ReadSecretarioDto) resultado);
+            @RequestParam(defaultValue = "10") int size){
+        Page<ReadSecretarioDto> resultado = secretarioService.findAll(PageRequest.of(page, size));
+
+        return  ResponseEntity.ok( resultado);
     }
 
     @GetMapping("/buscarSecretarioPorNombre/{nombre}")
@@ -91,14 +92,9 @@ public class SecretarioController {
     }
 
 
-    // Método auxiliar para Sort
-    private Sort.Order[] parseSort(String[] sort) {
-        return Stream.of(sort)
-                .map(s -> {
-                    String[] parts = s.split(",");
-                    return new Sort.Order(Sort.Direction.fromString(parts[1]), parts[0]);
-                })
-                .toArray(Sort.Order[]::new);
-    }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id) {secretarioService.deleaById(id);}
 
-}
+
+    }

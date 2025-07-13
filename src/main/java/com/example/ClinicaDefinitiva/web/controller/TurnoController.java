@@ -29,8 +29,7 @@ import java.util.stream.Stream;
 @RequestMapping(
 
         path = "/api/v1/turnos",
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE
+        produces = MediaType.APPLICATION_JSON_VALUE
 
 )
 public class TurnoController {
@@ -48,12 +47,11 @@ public class TurnoController {
     }
 
     @GetMapping
-    public ResponseEntity<TurnoDto> findAll(
+    public ResponseEntity<Page<TurnoDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id,asc") String[] sort){
-        Page<TurnoDto> resultado = turnoService.findAll(PageRequest.of(page, size, Sort.by(parseSort(sort))));
-        return  ResponseEntity.ok((TurnoDto) resultado);
+            @RequestParam(defaultValue = "10") int size){
+             Page<TurnoDto> resultado = turnoService.findAll(PageRequest.of(page, size));
+        return  ResponseEntity.ok( resultado);
     }
 
 
@@ -128,13 +126,5 @@ public class TurnoController {
     }
 
 
-    // Método auxiliar para Sort
-    private Sort.Order[] parseSort(String[] sort) {
-        return Stream.of(sort)
-                .map(s -> {
-                    String[] parts = s.split(",");
-                    return new Sort.Order(Sort.Direction.fromString(parts[1]), parts[0]);
-                })
-                .toArray(Sort.Order[]::new);
-    }
+
 }

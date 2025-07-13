@@ -4,7 +4,11 @@ package com.example.ClinicaDefinitiva.persistence.dto;
 
 import com.example.ClinicaDefinitiva.Enum.Afeccion;
 import com.example.ClinicaDefinitiva.Enum.Estado;
-import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.ReadPacienteDto;
+import com.example.ClinicaDefinitiva.Enumvalidation.AfeccionValido;
+import com.example.ClinicaDefinitiva.Enumvalidation.EstadoValido;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -13,16 +17,29 @@ import java.time.LocalTime;
 public class TurnoDto {
 
     private long id;
-    @NotNull(message = " No puede ser nulo")
+
+    @Temporal(TemporalType.DATE)
+    @NotBlank(message = " La fecha no puede estar vacio")
+    @NotNull(message = " La fecha no puede ser nulo")
     private LocalDate fechaTurno;
-    @NotNull(message = " No puede ser nulo")
+
+    @NotBlank(message = " La hora no puede estar vacio")
+    @Temporal(TemporalType.TIME)
+    @NotNull(message = "La hora no puede ser nulo")
     private LocalTime hora_turno;
+
     @NotNull(message = " No puede ser nulo")
+    @AfeccionValido
     private Afeccion afeccion;
+
+    @EstadoValido
+    @NotNull(message = " No puede ser nulo")
+    private Estado estado;
+
     private long idPaciente;
     private long horarioId;
     private long odontologo;
-    private Estado estado;
+
 
     public TurnoDto() {
 

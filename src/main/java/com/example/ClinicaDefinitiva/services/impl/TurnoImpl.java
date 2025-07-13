@@ -2,10 +2,10 @@ package com.example.ClinicaDefinitiva.services.impl;
 
 
 import com.example.ClinicaDefinitiva.Enum.Estado;
-import com.example.ClinicaDefinitiva.exceptions.HorarioNotfountException;
-import com.example.ClinicaDefinitiva.exceptions.OdontologoNotfountException;
-import com.example.ClinicaDefinitiva.exceptions.PacienteNotFountException;
-import com.example.ClinicaDefinitiva.exceptions.TurnoNotFountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.HorarioNotfountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.TurnoNotFountException;
 import com.example.ClinicaDefinitiva.mapper.TurnoMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.TurnoDto;
 import com.example.ClinicaDefinitiva.persistence.entity.Horario;

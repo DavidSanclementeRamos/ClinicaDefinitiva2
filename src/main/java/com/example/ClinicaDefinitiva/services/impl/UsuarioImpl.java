@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.services.impl;
 
 
 import com.example.ClinicaDefinitiva.Enum.Roles;
-import com.example.ClinicaDefinitiva.exceptions.UsuarioNotfountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.UsuarioNotfountException;
 import com.example.ClinicaDefinitiva.mapper.UsuarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.CreateUsuarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.ReadUsuarioDto;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class UsuarioImpl implements UsuarioService {
@@ -78,7 +77,6 @@ public class UsuarioImpl implements UsuarioService {
             usu.setContrasena(createUsuarioDto.getContrasena());
             usu.setEstado(createUsuarioDto.getEstado());
             usu.setRol(createUsuarioDto.getRol());
-            usu.setFechaDeCreacion(createUsuarioDto.getFechaDeCreacion());
             usu.setImagenPerfil(createUsuarioDto.getImagenPerfil());
             usu.setUltimaFechaDeCoexion(createUsuarioDto.getUltimaFechaDeCoexion());
             return usuarioMapper.readUsuarioDto( usuarioRepository.save(usu));
@@ -99,5 +97,13 @@ public class UsuarioImpl implements UsuarioService {
                     return usuarioRepository.save(usu);
                 }).map(usuarioMapper::readUsuarioDto)
                 .orElseThrow(UsuarioNotfountException::new);
+    }
+
+    @Override
+    public void deleaById(long id) {
+        if(usuarioRepository.findById(id).isEmpty()){
+            throw new UsuarioNotfountException();
+        }
+        usuarioRepository.deleteById(id);
     }
 }

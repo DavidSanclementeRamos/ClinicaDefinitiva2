@@ -15,6 +15,7 @@ public class Horario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private DayOfWeek diaSemana; // Define el día de la semana (lunes, Martes...)
     private LocalTime horaInicio;
     private LocalTime horaFin;

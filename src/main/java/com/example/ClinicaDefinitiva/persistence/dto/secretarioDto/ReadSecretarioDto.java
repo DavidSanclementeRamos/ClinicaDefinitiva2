@@ -14,7 +14,7 @@ public class ReadSecretarioDto {
     private String nombre;
     private String apellido;
     private String telefono;
-    private String direcion;
+    private String direccion;
     private LocalDate fecha_nacimiento;
     private Sector sector;
     private ReadUsuarioDto readUsuarioDto;
@@ -22,11 +22,11 @@ public class ReadSecretarioDto {
     public ReadSecretarioDto(){
 
     }
-    public ReadSecretarioDto(String apellido, String direcion, String dni
+    public ReadSecretarioDto(String apellido, String direccion, String dni
             , LocalDate fecha_nacimiento, long id, String nombre
             , ReadUsuarioDto readUsuarioDto, Sector sector, String telefono) {
         this.apellido = apellido;
-        this.direcion = direcion;
+        this.direccion = direccion;
         this.dni = dni;
         this.fecha_nacimiento = fecha_nacimiento;
         this.id = id;
@@ -40,9 +40,6 @@ public class ReadSecretarioDto {
         this.apellido = apellido;
     }
 
-    public void setDirecion(String direcion) {
-        this.direcion = direcion;
-    }
 
     public void setDni(String dni) {
         this.dni = dni;
@@ -76,8 +73,12 @@ public class ReadSecretarioDto {
         return apellido;
     }
 
-    public String getDirecion() {
-        return direcion;
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getDni() {

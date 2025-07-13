@@ -14,9 +14,9 @@ public enum Sector {
 
     /*
     - RECEPCION: gestión de citas y atención inicial
-- FACTURACION: control de pagos, seguros y cuentas
-- HISTORIA_CLINICA: manejo de expedientes de pacientes
-- TECNICO_ODONTOLOGICO: si colabora en procesos clínicos o técnicos
+    - FACTURACION: control de pagos, seguros y cuentas
+    - HISTORIA_CLINICA: manejo de expedientes de pacientes
+    - TECNICO_ODONTOLOGICO: si colabora en procesos clínicos o técnicos
 
 
     * */

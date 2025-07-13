@@ -2,8 +2,7 @@ package com.example.ClinicaDefinitiva.web.controller;
 
 
 import com.example.ClinicaDefinitiva.Enum.Especialidades;
-import com.example.ClinicaDefinitiva.exceptions.OdontologoNotfountException;
-import com.example.ClinicaDefinitiva.persistence.dto.HorarioDto;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfountException;
 import com.example.ClinicaDefinitiva.persistence.dto.odontologoDto.CreateOdontologoDto;
 import com.example.ClinicaDefinitiva.persistence.dto.odontologoDto.ReadOdontologoDto;
 import com.example.ClinicaDefinitiva.persistence.dto.odontologoDto.UpdateOdontologoDto;
@@ -11,8 +10,8 @@ import com.example.ClinicaDefinitiva.services.OdontologoService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +21,12 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @RestController
 //@ResquiredArgsConstructor
 @RequestMapping(
         path = "/api/v1/odontologos",
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE
+        produces = MediaType.APPLICATION_JSON_VALUE
 )
 
 public class OdontologoController {
@@ -50,15 +47,15 @@ public class OdontologoController {
 
 
     @GetMapping
-    public ResponseEntity<ReadOdontologoDto> findAll(
+    public ResponseEntity<Page<ReadOdontologoDto>> findAll(
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "id,asc") String[] sort) {
-            Page<ReadOdontologoDto> resultado = odontologoService.findAll(PageRequest.of(page, size, Sort.by(parseSort(sort))));
+        @RequestParam(defaultValue = "10") int size)
+    {
+        Page<ReadOdontologoDto> resultado = odontologoService.findAll(PageRequest.of(page, size));
 
-            return ResponseEntity.ok((ReadOdontologoDto) resultado);
+            return ResponseEntity.ok( resultado);
 
-        }
+    }
 
 
      @GetMapping("/buscarUsuario/{id}")
@@ -100,15 +97,10 @@ public class OdontologoController {
         return ResponseEntity.ok(atualizado);
     }
 
-    // Método auxiliar para Sort
-    private Sort.Order[] parseSort(String[] sort) {
-        return Stream.of(sort)
-                .map(s -> {
-                    String[] parts = s.split(",");
-                    return new Sort.Order(Sort.Direction.fromString(parts[1]), parts[0]);
-                })
-                .toArray(Sort.Order[]::new);
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id) { odontologoService.deleaById(id);}
+
+
     }
-
-
-}
