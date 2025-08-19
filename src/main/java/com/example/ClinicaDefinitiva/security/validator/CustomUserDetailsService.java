@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        Usuario u = userRepo.findByNombreUsuario(username)
+        Usuario u = userRepo.findByNombreUsuarioIgnoreCase(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no existe"));
 
         Set<GrantedAuthority> authorities = new HashSet<>();
