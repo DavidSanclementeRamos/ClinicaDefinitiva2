@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class Persona implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String dni;
     private String nombre;
     private String apellido;
@@ -29,7 +29,7 @@ public class Persona implements Serializable {
     }
 
     public Persona(String apellido, String direccion, String dni
-            , LocalDate fecha_nacimiento, int id, String nombre, String telefono,Tipo_sangre tipoSangre ) {
+            , LocalDate fecha_nacimiento, Long id, String nombre, String telefono,Tipo_sangre tipoSangre ) {
         this.apellido = apellido;
         this.direccion = direccion;
         this.dni = dni;
@@ -72,11 +72,11 @@ public class Persona implements Serializable {
         this.fecha_nacimiento = fecha_nacimiento;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

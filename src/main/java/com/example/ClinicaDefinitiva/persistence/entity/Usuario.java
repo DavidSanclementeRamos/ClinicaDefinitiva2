@@ -12,6 +12,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Usuario implements Serializable {
@@ -21,30 +23,92 @@ public class Usuario implements Serializable {
     private String nombreUsuario;
     private String correoEletronico;
     private String contrasena;
+
     @Column(nullable = false)
     @CreationTimestamp
     private LocalDate fechaDeCreacion;
+
     private Estado estado;
     private String imagenPerfil;
     private LocalDate ultimaFechaDeCoexion;
-    @Enumerated(EnumType.STRING)
-    private Roles rol;
+
+    @ManyToMany(cascade = {  CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "rol_id"))
+    private Set<RolesEntity> roles = new HashSet<>();
+
+    @Column(name = "is_enabled")
+    private boolean isEnabled;
+
+    @Column(name = "account_No_Expired")
+    private boolean accountNoExpired;
+
+    @Column(name = "account_No_Locked")
+    private boolean accountNoLocked;
+
+    @Column(name = "credential_No_Expired")
+    private boolean credentialNoExpired;
+
+    public boolean isAccountNoExpired() {
+        return accountNoExpired;
+    }
+
+    public void setAccountNoExpired(boolean accountNoExpired) {
+        this.accountNoExpired = accountNoExpired;
+    }
 
     public Usuario(){
 
     }
-    public Usuario(String correoEletronico, String contrasena, Estado estado
-            , LocalDate fechaDeCreacion, long id, String imagenPerfil
-            , String nombreUsuario, Roles rol, LocalDate ultimaFechaDeCoexion) {
-        this.correoEletronico = correoEletronico;
+
+    public Usuario(boolean accountNoExpired, boolean accountNoLocked, String contrasena, String correoEletronico, boolean credentialNoExpired, Estado estado, LocalDate fechaDeCreacion, long id, String imagenPerfil, boolean isEnabled, String nombreUsuario, Set<RolesEntity> roles, LocalDate ultimaFechaDeCoexion) {
+        this.accountNoExpired = accountNoExpired;
+        this.accountNoLocked = accountNoLocked;
         this.contrasena = contrasena;
+        this.correoEletronico = correoEletronico;
+        this.credentialNoExpired = credentialNoExpired;
         this.estado = estado;
         this.fechaDeCreacion = fechaDeCreacion;
         this.id = id;
         this.imagenPerfil = imagenPerfil;
+        this.isEnabled = isEnabled;
         this.nombreUsuario = nombreUsuario;
-        this.rol = rol;
+        this.roles = roles;
         this.ultimaFechaDeCoexion = ultimaFechaDeCoexion;
+    }
+
+    public boolean isAccountNoLocked() {
+        return accountNoLocked;
+    }
+
+    public void setAccountNoLocked(boolean accountNoLocked) {
+        this.accountNoLocked = accountNoLocked;
+    }
+
+    public boolean isCredentialNoExpired() {
+        return credentialNoExpired;
+    }
+
+    public void setCredentialNoExpired(boolean credentialNoExpired) {
+        this.credentialNoExpired = credentialNoExpired;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public Set<RolesEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RolesEntity> roles) {
+        this.roles = roles;
     }
 
     public String getContrasena() {
@@ -103,13 +167,7 @@ public class Usuario implements Serializable {
         this.imagenPerfil = imagenPerfil;
     }
 
-    public Roles getRol() {
-        return rol;
-    }
 
-    public void setRol(Roles rol) {
-        this.rol = rol;
-    }
 
     public LocalDate getUltimaFechaDeCoexion() {
         return ultimaFechaDeCoexion;

@@ -14,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -41,11 +42,14 @@ public class TurnoController {
     }
 
 
+    @PreAuthorize("hasAuthority('GET_TURNO_ID')")
     @GetMapping("/{id}")
     public ResponseEntity<TurnoDto> findById(@PathVariable long id){
         return ResponseEntity.ok( turnoService.findById(id));
     }
 
+
+    @PreAuthorize("hasAuthority('GET_TURNOS_LIST')")
     @GetMapping
     public ResponseEntity<Page<TurnoDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
@@ -56,12 +60,13 @@ public class TurnoController {
 
 
 
-
+    @PreAuthorize("hasAuthority('GET_TURNO_POR_ODONTOLOGO')")
     @GetMapping("/buscarTurnoPorOdontoogoId/{id}")
     public ResponseEntity<List<TurnoDto>> findByOdontologoId(@PathVariable long id){
         return ResponseEntity.ok(turnoService.findByOdontologoId(id));
     }
 
+    @PreAuthorize("hasAuthority('GET_TURNO_POR_ESTADO')")
     @GetMapping("/buscarTurnoPorEstado/{estado}")
     public ResponseEntity<List<TurnoDto>> findByEstado(@PathVariable Estado estado){
 
@@ -69,6 +74,7 @@ public class TurnoController {
     }
 
 
+    @PreAuthorize("hasAuthority('GET_TURNO_POR_DISPONIBILIDAD')")
     @GetMapping("/disponibilidad")
     public ResponseEntity<Map<String, String>> verificarDisponibilidad(
             @RequestParam Long idOdontologo,
@@ -88,6 +94,7 @@ public class TurnoController {
     }
 
 
+    @PreAuthorize("hasAuthority('GET_TURNO_POR_FECHA')")
     @GetMapping("/buscarTurnoPorFeccha")
     public ResponseEntity<List<TurnoDto>> findByFecha(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)LocalDate desde,
@@ -95,6 +102,7 @@ public class TurnoController {
         return ResponseEntity.ok( turnoService.findByFechaBetween(desde, hasta));
     }
 
+    @PreAuthorize("hasAuthority('GET_TURNO_PACIENTE-ID')")
     @GetMapping("/buscarTurnoPorPacienteId/{id}")
     public ResponseEntity<List<TurnoDto>>  findByPacienteId(@PathVariable long id){
     return ResponseEntity.ok( turnoService.findByPacienteId(id));
@@ -102,15 +110,18 @@ public class TurnoController {
     }
 
 
+    @PreAuthorize("hasAuthority('POST_TURNOS')")
     @PostMapping
     public ResponseEntity<TurnoDto> save(
-            @Valid @RequestBody TurnoDto turnoDto, UriComponentsBuilder uriBuilder){
+            @Valid @RequestBody TurnoDto turnoDto, UriComponentsBuilder uriBuilder) {
         TurnoDto response = turnoService.save(turnoDto);
 
         URI uri = uriBuilder.path("/api/secretarios/{id}")
                 .buildAndExpand(response.getId()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
+
+    @PreAuthorize("hasAuthority('PUT_TURNO')")
     @PutMapping("/{id}")
     public ResponseEntity<TurnoDto> update(
             @PathVariable long idTurno,
@@ -118,6 +129,7 @@ public class TurnoController {
         return ResponseEntity.ok( turnoService.update(idTurno, turnoDto));
     }
 
+    @PreAuthorize("hasAuthority('DELETE_TURNO')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleaById(@PathVariable long id){

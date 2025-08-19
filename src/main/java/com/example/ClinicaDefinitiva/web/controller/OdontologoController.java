@@ -2,7 +2,6 @@ package com.example.ClinicaDefinitiva.web.controller;
 
 
 import com.example.ClinicaDefinitiva.Enum.Especialidades;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfountException;
 import com.example.ClinicaDefinitiva.persistence.dto.odontologoDto.CreateOdontologoDto;
 import com.example.ClinicaDefinitiva.persistence.dto.odontologoDto.ReadOdontologoDto;
 import com.example.ClinicaDefinitiva.persistence.dto.odontologoDto.UpdateOdontologoDto;
@@ -14,13 +13,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 //@ResquiredArgsConstructor
@@ -38,14 +37,15 @@ public class OdontologoController {
     }
 
 
+    @PreAuthorize("hasAuthority('GET_ODONTOLOGO_ID')")
     @GetMapping("/{id}")
     public ResponseEntity<ReadOdontologoDto> findId(@PathVariable long id) {
-        return odontologoService.findId(id).map(ResponseEntity::ok)
-                .orElseThrow(OdontologoNotfountException::new);
+        return ResponseEntity.ok(odontologoService.findId(id));
+
     }
 
 
-
+    @PreAuthorize("hasAuthority('GET_ODONTOLOGOS_LIST')")
     @GetMapping
     public ResponseEntity<Page<ReadOdontologoDto>> findAll(
         @RequestParam(defaultValue = "0") int page,
@@ -57,12 +57,13 @@ public class OdontologoController {
 
     }
 
-
+    @PreAuthorize("hasAuthority('GET_ODONTOLOGO_POR_USUARIO_ID')")
      @GetMapping("/buscarUsuario/{id}")
-    public ResponseEntity<Optional<ReadOdontologoDto>> findByUsuario_Id(@PathVariable Long id){
+    public ResponseEntity<ReadOdontologoDto> findByUsuario_Id(@PathVariable Long id){
         return ResponseEntity.ok(odontologoService.findByUsuario_Id(id));
     }
 
+    @PreAuthorize("hasAuthority('GET_ODONTOLOGO_POR_ESPECIALIDAD')")
     @GetMapping("/buscarPorEspecialidad/{especialidad}")
     public ResponseEntity<List<ReadOdontologoDto>> findByEspecialidadContainingIgnoreCase(
             @PathVariable Especialidades especialidad){
@@ -71,6 +72,7 @@ public class OdontologoController {
                 .findByEspecialidad(especialidad));
     }
 
+    @PreAuthorize("hasAuthority('GET_ODONTOLOGO_POR_TURNO')")
     @GetMapping("/buscarPorFechaTurno")
     public ResponseEntity<List<ReadOdontologoDto>> findConTurnosEntreFechas(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
@@ -78,6 +80,8 @@ public class OdontologoController {
         return ResponseEntity.ok(odontologoService.findConTurnosEntreFechas(desde, hasta));
     }
 
+
+    @PreAuthorize("hasAuthority('POST_ODONTOLOGOS')")
 
     @PostMapping
    public ResponseEntity<ReadOdontologoDto> save(@Valid @RequestBody CreateOdontologoDto createOdontologoDto, UriComponentsBuilder uriBuilder){
@@ -88,6 +92,7 @@ public class OdontologoController {
         return ResponseEntity.created(uri).body(response);
     }
 
+    @PreAuthorize("hasAuthority('PUT_ODONTOLOGO')")
     @PutMapping("{id}")
     public ResponseEntity<ReadOdontologoDto> update (
             @PathVariable long id,
@@ -97,7 +102,7 @@ public class OdontologoController {
         return ResponseEntity.ok(atualizado);
     }
 
-
+    @PreAuthorize("hasAuthority('DELETE_ODONTOLOGO')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long id) { odontologoService.deleaById(id);}

@@ -17,11 +17,11 @@ import java.util.Optional;
 
 public interface OdontologoService {
 
-   Optional<ReadOdontologoDto> findId(long idOdontologo);
+   ReadOdontologoDto findId(long idOdontologo);
 
    Page<ReadOdontologoDto> findAll(Pageable pageable);
 
-   Optional<ReadOdontologoDto> findByUsuario_Id(long idUsuario);
+   ReadOdontologoDto findByUsuario_Id(long idUsuario);
 
    List<ReadOdontologoDto> findByEspecialidad(Especialidades especialidad);
 

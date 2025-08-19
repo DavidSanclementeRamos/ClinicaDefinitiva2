@@ -24,7 +24,7 @@ public interface SecretarioService {
 
    List<ReadSecretarioDto> findBySector(Sector sector);
 
-   Optional<ReadSecretarioDto> findByUsuarioId(long idUsuario);
+   ReadSecretarioDto findByUsuarioId(long idUsuario);
 
    ReadSecretarioDto save(CreateSecretarioDto createSecretarioDto);
 

@@ -40,7 +40,13 @@ public enum CatalogoError {
 
     // 👪 Errores de Responsable
     RESPONSIBLE_NOT_FOUND("ERR_RESP_001", "Responsible person not found."),
-    INVALID_RESPONSIBLE("ERR_RESP_002", "Invalid responsible data.");
+    INVALID_RESPONSIBLE("ERR_RESP_002", "Invalid responsible data."),
+
+    ROLE_NOT_FOUND("ERR_RESP_001", "Role not found."),
+
+    // 📞 Teléfono duplicado en persistencia
+    TELEFONO_DUPLICADO("ERR_TEL_002", "Teléfono ya registrado en otra entidad"),
+    DNI_DUPLICADO("ERR_DNI_002", "El Dni ya existe");
 
     // ⚠️ Error genérico
    // GENERIC_ERROR("ERR_GEN_001", "An unexpected error occurred.");

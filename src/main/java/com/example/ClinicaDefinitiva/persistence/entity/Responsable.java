@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,7 @@ public class Responsable extends Persona{
         private Usuario unUsuario;
 
         @OneToMany(mappedBy = "responsable")
-        private List<Paciente> paciente;
+        private List<Paciente> paciente = new ArrayList<>();
 
 
         public Responsable() {
@@ -29,7 +30,7 @@ public class Responsable extends Persona{
         }
 
 
-        public Responsable(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, int id, String nombre, String telefono, Tipo_sangre tipoSangre, TipoResponsable tipoResponsable, Usuario unUsuario, List<Paciente> paciente) {
+        public Responsable(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, Long id, String nombre, String telefono, Tipo_sangre tipoSangre, TipoResponsable tipoResponsable, Usuario unUsuario, List<Paciente> paciente) {
                 super(apellido, direccion, dni, fecha_nacimiento, id, nombre, telefono, tipoSangre);
                 this.tipoResponsable = tipoResponsable;
                 this.unUsuario = unUsuario;

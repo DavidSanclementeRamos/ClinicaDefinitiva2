@@ -11,13 +11,13 @@ import java.util.Optional;
 
 public interface ResponsableService {
 
-    Optional<CreateEndReadResponsableDto> findByUsuario_Id(long idUsuario);
+    CreateEndReadResponsableDto findByUsuario_Id(long idUsuario);
 
-    List<CreateEndReadResponsableDto> findByPacientes_Id(long idPaciente);
+    CreateEndReadResponsableDto findByPacientes_Id(long idPaciente);
 
-    Optional<CreateEndReadResponsableDto> findByDocumento(String documento);
+    CreateEndReadResponsableDto findByDocumento(String documento);
 
-    Optional<CreateEndReadResponsableDto> findByTelefono(String telefono);
+    CreateEndReadResponsableDto findByTelefono(String telefono);
 
     List<CreateEndReadResponsableDto> findByTipoRelacion(TipoResponsable tipoRelacion);
 

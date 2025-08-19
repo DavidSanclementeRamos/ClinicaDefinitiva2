@@ -54,12 +54,14 @@ public class CambioResponsableDto {
     private TipoResponsable tipoResponsable;
 
     private long pacienteId;
+    private long idUsuario;
+
 
     public CambioResponsableDto() {
 
     }
 
-    public CambioResponsableDto(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, String nombre, long pacienteId, String telefono, TipoResponsable tipoResponsable, Tipo_sangre tipoSangre) {
+    public CambioResponsableDto(long idUsuario,String apellido, String direccion, String dni, LocalDate fecha_nacimiento, String nombre, long pacienteId, String telefono, TipoResponsable tipoResponsable, Tipo_sangre tipoSangre) {
         this.apellido = apellido;
         this.direccion = direccion;
         this.dni = dni;
@@ -69,6 +71,15 @@ public class CambioResponsableDto {
         this.telefono = telefono;
         this.tipoResponsable = tipoResponsable;
         this.tipoSangre = tipoSangre;
+        this.idUsuario = idUsuario;
+    }
+
+    public long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getApellido() {

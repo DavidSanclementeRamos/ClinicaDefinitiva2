@@ -1,12 +1,19 @@
 package com.example.ClinicaDefinitiva.util;
 
+import com.example.ClinicaDefinitiva.Enum.CodigoEntidad;
+import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.Roles;
 import com.example.ClinicaDefinitiva.config.EdadMinimaConfig;
+import com.example.ClinicaDefinitiva.exceptions.DniDuplicadoException;
 import com.example.ClinicaDefinitiva.exceptions.EdadNoPermitidaException;
+import com.example.ClinicaDefinitiva.exceptions.TelefonoDuplicadoException;
+import com.example.ClinicaDefinitiva.repository.ResponsableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.Period;
+
+import static com.example.ClinicaDefinitiva.Enum.ContextoEntidad.*;
 
 
 public class ValidarEdades {
@@ -14,7 +21,9 @@ public class ValidarEdades {
     @Autowired
     private EdadMinimaConfig edadMinimaConfig;
 
-     public void validarEdades (LocalDate fecha, Roles rol){
+    ResponsableRepository responsableRepository;
+
+     public void validarEdades (LocalDate fecha, ContextoEntidad rol){
         int edadActual = Period.between(fecha, LocalDate.now()).getYears();
         int edadMinima;
 
@@ -26,7 +35,17 @@ public class ValidarEdades {
         }
 
         if (edadActual < edadMinima) {
-            throw new EdadNoPermitidaException();
+            throw new EdadNoPermitidaException(rol,"Edad insuficiente");
+        }
+    }
+
+
+    public void verificarDuplicados(String telefono, String dni) {
+        if (responsableRepository.existsByTelefono(telefono)) {
+            throw new TelefonoDuplicadoException(ContextoEntidad.RESPONSABLE, "Teléfono duplicado: " + telefono);
+        }
+        if (responsableRepository.existsByDni(dni)) {
+            throw new DniDuplicadoException(ContextoEntidad.RESPONSABLE, "DNI duplicado: " + dni);
         }
     }
 

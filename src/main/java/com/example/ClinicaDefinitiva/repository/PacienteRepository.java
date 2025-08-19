@@ -20,6 +20,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
     Optional<Paciente> findByUnUsuario_Id(long idUsuario);
 
     // pacientes que tienen turnos agendados hoy
-   // @Query("SELECT Odontologo p FROM Paciente p JOIN p.turnos t WHERE t.fecha = :fecha")
     List<Paciente> findByUnTurno_FechaTurno(LocalDate fecha);
+    boolean existsByTelefono(String telefono);
+    boolean existsByDni(String dni);
 }

@@ -9,21 +9,22 @@ import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.UpdateUsuarioDto
 import com.example.ClinicaDefinitiva.persistence.entity.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UsuarioService {
+public interface UsuarioService  {
 
     ReadUsuarioDto findId(long idUsuario);
 
     Page<ReadUsuarioDto> findAll(Pageable pageable);
 
-    Optional<ReadUsuarioDto> findByEmail(String email);
+    ReadUsuarioDto findByEmail(String email);
 
-    List<ReadUsuarioDto> findByRol(Roles rol);
+   // List<ReadUsuarioDto> findByRol(Roles rol);
 
-    Optional<ReadUsuarioDto> findByNombreUsuario(String nombreUsuario);
+    ReadUsuarioDto findByNombreUsuario(String nombreUsuario);
 
     ReadUsuarioDto save(CreateUsuarioDto createUsuarioDto);
 

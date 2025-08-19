@@ -22,7 +22,7 @@ public class Secretario extends Persona {
 
     }
 
-    public Secretario(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, int id, String nombre, String telefono, Tipo_sangre tipoSangre, Sector sector, Usuario unUsuario) {
+    public Secretario(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, long id, String nombre, String telefono, Tipo_sangre tipoSangre, Sector sector, Usuario unUsuario) {
         super(apellido, direccion, dni, fecha_nacimiento, id, nombre, telefono, tipoSangre);
         this.sector = sector;
         this.unUsuario = unUsuario;

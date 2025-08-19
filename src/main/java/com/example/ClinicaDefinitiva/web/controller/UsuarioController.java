@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@PreAuthorize("denyAll()")
 @RestController
 @RequestMapping(
 
@@ -38,11 +40,13 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
+    @PreAuthorize("hasAuthority('GET_USUARIO_ID')")
     @GetMapping("/{id}")
     public ResponseEntity<ReadUsuarioDto> findId(@PathVariable long id){
      return  ResponseEntity.ok(usuarioService.findId(id));
     }
 
+    @PreAuthorize("hasAuthority('GET_USUARIOS_LIST')")
     @GetMapping
     public ResponseEntity<Page<ReadUsuarioDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
@@ -53,19 +57,20 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-
+    @PreAuthorize("hasAuthority('GET_USUARIO_POR_EMAIL')")
     @GetMapping("/buscarUsuarioPorEmail")
-    public ResponseEntity<Optional<ReadUsuarioDto>> findByEmail(@RequestParam String email){
+    public ResponseEntity<ReadUsuarioDto> findByEmail(@RequestParam String email){
         return ResponseEntity.ok(usuarioService.findByEmail(email));
     }
 
-    @GetMapping("/buscarUsuarioPorRol/{rol}")
+  /*  @GetMapping("/buscarUsuarioPorRol/{rol}")
     public ResponseEntity<List<ReadUsuarioDto>> findByRol(@PathVariable Roles rol){
         return ResponseEntity.ok(usuarioService.findByRol(rol));
-    }
+    }*/
 
+    @PreAuthorize("hasAuthority('GET_USUARIO_POR_NOMBRE')")
     @GetMapping("/buscarUsuarioPorNombre/{nombre}")
-    public ResponseEntity<Optional<ReadUsuarioDto>> findByNombreUsuario(
+    public ResponseEntity<ReadUsuarioDto> findByNombreUsuario(
             @PathVariable String nombre){
        return ResponseEntity.ok(usuarioService.findByNombreUsuario(nombre));
     }
@@ -74,7 +79,7 @@ public class UsuarioController {
 
 
 
-
+    @PreAuthorize("hasAuthority('POST_USUARIOS')")
     @PostMapping
     public ResponseEntity<ReadUsuarioDto> save(
             @Valid @RequestBody CreateUsuarioDto createUsuarioDto, UriComponentsBuilder uriBuilder){
@@ -84,6 +89,8 @@ public class UsuarioController {
                 .buildAndExpand(response.getId()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
+
+    @PreAuthorize("hasAuthority('PUT_USUARIOS')")
     @PutMapping("/{id}")
     public ResponseEntity<ReadUsuarioDto> update(
             @PathVariable long id,
@@ -92,6 +99,7 @@ public class UsuarioController {
     }
 
 
+    @PreAuthorize("hasAuthority('DELETE_USUARIOS')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long id) {usuarioService.deleaById(id);}

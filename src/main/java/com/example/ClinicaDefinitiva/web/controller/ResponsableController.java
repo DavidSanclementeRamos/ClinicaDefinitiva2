@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -32,31 +33,40 @@ public class ResponsableController  {
     public ResponsableController(ResponsableService responsableService) {
         this.responsableService = responsableService;
     }
+
+    @PreAuthorize("hasAuthority('GET_RESPONSABLE_ID')")
     @GetMapping("/buscarResponsablePorUsuarioId/{id}")
-    public ResponseEntity< Optional<CreateEndReadResponsableDto> >findByUsuario_Id(@PathVariable Long id){
+    public ResponseEntity<CreateEndReadResponsableDto>findByUsuario_Id(@PathVariable Long id){
 
         return ok(responsableService.findByUsuario_Id(id));
     }
+
+    @PreAuthorize("hasAuthority('GET_RESPONSABLE_POR_PACIENTE')")
     @GetMapping("/buscarResponsablePorPacienteId/{id}")
-    public ResponseEntity<List<CreateEndReadResponsableDto>> findByPacientes_Id(@PathVariable Long id){
+    public ResponseEntity<CreateEndReadResponsableDto> findByPacientes_Id(@PathVariable Long id){
         return ok(responsableService.findByPacientes_Id(id));
     }
+
+    @PreAuthorize("hasAuthority('GET_RESPONSABLE_POR_DOCUMENTO')")
     @GetMapping("/buscarPorDocumento/{documento}")
-    public ResponseEntity<Optional<CreateEndReadResponsableDto>> findByDocumento(@PathVariable String documento){
+    public ResponseEntity<CreateEndReadResponsableDto> findByDocumento(@PathVariable String documento){
         return ok(responsableService.findByDocumento(documento));
     }
 
+    @PreAuthorize("hasAuthority('GET_RESPONSABLE_POR_TELEFONO')")
     @GetMapping("/buscarPorTelefono/{telefono}")
-    public ResponseEntity<Optional<CreateEndReadResponsableDto>>findByTelefono(@PathVariable String telefono){
+    public ResponseEntity<CreateEndReadResponsableDto>findByTelefono(@PathVariable String telefono){
         return ok(responsableService.findByTelefono(telefono));
     }
 
+    @PreAuthorize("hasAuthority('GET_RESPONSABLE_POR_PARENTESCO')")
     @GetMapping("/buscarPorTipoRelacion/{tipoRelacion}")
     public ResponseEntity<List<CreateEndReadResponsableDto>> findByTipoRelacion(
             @PathVariable TipoResponsable tipoRelacion){
         return ok(responsableService.findByTipoRelacion(tipoRelacion));
     }
 
+    @PreAuthorize("hasAuthority('PUT_RESPONSABLE_CAMBIO_TOTAL')")
     @PutMapping("/cambio/{id}")
     public ResponseEntity<CreateEndReadResponsableDto> updateCambio(
            @PathVariable long id,
@@ -64,6 +74,7 @@ public class ResponsableController  {
         return ok(responsableService.updateCambio(id,cambioResponsableDto));
     }
 
+    @PreAuthorize("hasAuthority('PUT_RESPONSABLE')")
     @PutMapping("/{id}")
     public ResponseEntity<CreateEndReadResponsableDto> update(
             @PathVariable long id,
@@ -71,6 +82,7 @@ public class ResponsableController  {
        return ResponseEntity.ok(responsableService.update(id, updateResponsableDto));
     }
 
+    @PreAuthorize("hasAuthority('POST_RESPONSABLE')")
     @PostMapping
     public ResponseEntity<CreateEndReadResponsableDto> save(
             @Valid @RequestBody  CreateEndReadResponsableDto createEndReadResponsableDto, UriComponentsBuilder uriBuilder){
@@ -82,6 +94,7 @@ public class ResponsableController  {
         return ResponseEntity.created(uri).body(response);
     }
 
+    @PreAuthorize("hasAuthority('DELETE_RESPONSABLE')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long id) {responsableService.deleaById(id);}

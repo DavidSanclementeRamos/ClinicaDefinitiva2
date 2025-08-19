@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.web.controller;
 
 
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFoundException;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.CreatePacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.ReadPacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.UpdatePacienteDto;
@@ -14,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -36,13 +37,13 @@ public class PacienteController {
         this.pacienteServise = pacienteServise;
     }
 
-
+    @PreAuthorize("hasAuthority('GET_PACIENTE_ID')")
     @GetMapping("/{id}")
     public ResponseEntity<ReadPacienteDto> findId(@PathVariable long id){
-        return pacienteServise.findId(id).map(ResponseEntity::ok)
-                .orElseThrow(PacienteNotFountException::new);
+        return ResponseEntity.ok( pacienteServise.findId(id));
     }
 
+    @PreAuthorize("hasAuthority('GET_PACIENTE_LIST')")
     @GetMapping
     public ResponseEntity<Page< ReadPacienteDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
@@ -53,26 +54,29 @@ public class PacienteController {
         return  ResponseEntity.ok( resultado);
     }
 
-
+    @PreAuthorize("hasAuthority('GET_PACIENTE_POR_NOMBRE')")
     @GetMapping("/buscarPorNombre/{nombre}")
     public ResponseEntity<List<ReadPacienteDto>> findByNombreContainingIgnoreCase(@PathVariable String nombre){
 
         return ResponseEntity.ok(pacienteServise.findByNombreContainingIgnoreCase(nombre));
     }
 
+    @PreAuthorize("hasAuthority('GET_PACIENTE_POR_DOCUMENTO')")
     @GetMapping("/buscarPorDocumento/{documento}")
-    public ResponseEntity<Optional<ReadPacienteDto>> findByDocumento(@PathVariable String documento){
+    public ResponseEntity<ReadPacienteDto> findByDocumento(@PathVariable String documento){
 
         return ResponseEntity.ok(pacienteServise.findByDocumento(documento));
     }
 
 
+    @PreAuthorize("hasAuthority('GET_PACIENTE_POR_USUARIO')")
     @GetMapping("/buscarPorUsuarioId/{id}")
-    public ResponseEntity<Optional<ReadPacienteDto>> findByUsuario_Id(@PathVariable Long id){
+    public ResponseEntity<ReadPacienteDto> findByUsuario_Id(@PathVariable Long id){
 
         return ResponseEntity.ok(pacienteServise.findByUsuario_Id(id));
     }
 
+    @PreAuthorize("hasAuthority('GET_PACIENTE_TURNO')")
     @GetMapping("/buscarPorFechaDeTurno")
     public ResponseEntity<List<ReadPacienteDto>> findConTurnosParaFecha(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate fecha){
@@ -82,7 +86,7 @@ public class PacienteController {
 
 
 
-
+    @PreAuthorize("hasAuthority('POST_PACIENTE')")
     @PostMapping
     public ResponseEntity<ReadPacienteDto> save(@Valid @RequestBody CreatePacienteDto createPacienteDto, UriComponentsBuilder uriBuilder) {
         ReadPacienteDto response = pacienteServise.save(createPacienteDto);
@@ -91,6 +95,8 @@ public class PacienteController {
                 .buildAndExpand(response.getId()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
+
+    @PreAuthorize("hasAuthority('PUT_PACIENTE')")
     @PutMapping("{id}")
      public ResponseEntity<ReadPacienteDto> update(
              @PathVariable long id,
@@ -99,7 +105,7 @@ public class PacienteController {
         return ResponseEntity.ok(atualizar);
     }
 
-
+    @PreAuthorize("hasAuthority('DELETE_PACIENTE')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long id) {pacienteServise.deleaById(id);}

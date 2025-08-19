@@ -12,7 +12,7 @@ import org.mapstruct.Mapping;
 public interface OdontologoMapperResponse {
 
    @Mapping(target = "readUsuarioDto", source = "unUsuario")
-   @Mapping(target = "horarioDto", source = "unHorario")
+  // @Mapping(target = "horarioDto", source = "listaHorarios")
    @Mapping(target = "tipoSangre", source = "tipoSangre")
 
 

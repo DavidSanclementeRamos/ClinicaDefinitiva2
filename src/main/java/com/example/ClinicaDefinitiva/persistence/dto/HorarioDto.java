@@ -1,5 +1,7 @@
 package com.example.ClinicaDefinitiva.persistence.dto;
 
+import com.example.ClinicaDefinitiva.Enum.Estado;
+import com.example.ClinicaDefinitiva.Enumvalidation.EstadoValido;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Temporal;
@@ -25,8 +27,8 @@ public class HorarioDto {
     private LocalTime horaFin;
 
     @NotNull(message = " El estado no puede ser nulo")
-    @NotBlank(message = " El estado no puede estar vacio")
-    private boolean estado;
+    @EstadoValido
+    private Estado estado;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = " No puede ser nulo")
@@ -34,13 +36,21 @@ public class HorarioDto {
 
     private long idOdontologo;
 
-    public HorarioDto(DayOfWeek diaSemana, boolean estado, LocalTime horaFin, LocalTime horaInicio, long id, long idOdontologo) {
+    public HorarioDto(DayOfWeek diaSemana, Estado estado, LocalTime horaFin, LocalTime horaInicio, long id, long idOdontologo) {
         this.diaSemana = diaSemana;
         this.estado = estado;
         this.horaFin = horaFin;
         this.horaInicio = horaInicio;
         this.id = id;
         this.idOdontologo = idOdontologo;
+    }
+
+    public LocalTime getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
     }
 
     public DayOfWeek getDiaSemana() {
@@ -51,11 +61,11 @@ public class HorarioDto {
         this.diaSemana = diaSemana;
     }
 
-    public boolean isEstado() {
+    public Estado getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(Estado estado) {
         this.estado = estado;
     }
 
@@ -63,7 +73,7 @@ public class HorarioDto {
         return horaFin;
     }
 
-    public void setHoraFinal(LocalTime horaFin) {
+    public void setHoraFin(LocalTime horaFin) {
         this.horaFin = horaFin;
     }
 
@@ -71,9 +81,6 @@ public class HorarioDto {
         return horaInicio;
     }
 
-    public void setHoraInicio(LocalTime horarInicio) {
-        this.horaInicio = horarInicio;
-    }
 
     public long getId() {
         return id;

@@ -20,4 +20,6 @@ public interface SecretarioRepository extends JpaRepository<Secretario, Long> {
 
     // busqueda por usuario asociado
     Optional<Secretario> findByUnUsuario_Id(long idUsuario);
+    boolean existsByDni(String din);
+    boolean existsByTelefono(String telefono);
 }

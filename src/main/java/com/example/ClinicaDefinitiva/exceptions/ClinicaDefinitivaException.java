@@ -2,6 +2,7 @@ package com.example.ClinicaDefinitiva.exceptions;
 
 import com.example.ClinicaDefinitiva.Enum.CatalogoError;
 import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
+import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
 
 public class ClinicaDefinitivaException extends RuntimeException {
 

@@ -1,12 +1,16 @@
 package com.example.ClinicaDefinitiva.persistence.entity;
 
+import com.example.ClinicaDefinitiva.Enum.Estado;
 import jakarta.persistence.*;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 
 
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -19,19 +23,20 @@ public class Horario implements Serializable {
     private DayOfWeek diaSemana; // Define el día de la semana (lunes, Martes...)
     private LocalTime horaInicio;
     private LocalTime horaFin;
-    private boolean estado;
+    private Estado estado;
     private LocalDate fecha;
-    @OneToMany(mappedBy = "horario")
-    private List<Turno> turnos; // Horario conoce los turnos asignados a ese bloque
 
-    @OneToOne()
-    @JoinColumn(name = "id_odontologo")
+    @OneToMany(mappedBy = "horario")
+    private List<Turno> turnos = new ArrayList<>(); // Horario conoce los turnos asignados a ese bloque
+
+    @ManyToOne()
+    @JoinColumn(name = "odontologo_id", nullable = false)
     private Odontologo unOdontologo;
 
 
     public Horario(){}
 
-    public Horario(DayOfWeek diaSemana, boolean estado, LocalTime horaFin, LocalTime horaInicio, Long id, List<Turno> turnos, Odontologo unOdontologo, LocalDate fecha) {
+    public Horario(DayOfWeek diaSemana, Estado estado, LocalTime horaFin, LocalTime horaInicio, Long id, List<Turno> turnos, Odontologo unOdontologo, LocalDate fecha) {
         this.diaSemana = diaSemana;
         this.estado = estado;
         this.horaFin = horaFin;
@@ -40,6 +45,9 @@ public class Horario implements Serializable {
         this.turnos = turnos;
         this.unOdontologo = unOdontologo;
     }
+
+
+
 
     public LocalDate getFecha() {
         return fecha;
@@ -65,11 +73,11 @@ public class Horario implements Serializable {
         this.diaSemana = diaSemana;
     }
 
-    public boolean isEstado() {
+    public Estado getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(Estado estado) {
         this.estado = estado;
     }
 

@@ -15,7 +15,7 @@ public interface ResponsableRepository extends JpaRepository<Responsable, Long> 
     Optional<Responsable> findByUnUsuario_Id(long idUsuario);
 
     // buacar por paciente
-    List<Responsable> findByPaciente_Id(long idPaciente);
+    Optional<Responsable> findByPaciente_Id(long idPaciente);
 
     // buscar por documento y contato
     Optional<Responsable> findByDni(String documento);
@@ -23,4 +23,6 @@ public interface ResponsableRepository extends JpaRepository<Responsable, Long> 
 
     // filtrar por parentesco
     List<Responsable> findByTipoResponsable(TipoResponsable tipoRelacion);
+    boolean existsByDni(String din);
+    boolean existsByTelefono(String telefono);
 }

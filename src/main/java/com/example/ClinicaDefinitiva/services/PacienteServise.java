@@ -14,15 +14,15 @@ import java.util.Optional;
 
 public interface PacienteServise {
 
-   Optional<ReadPacienteDto> findId(long idPaciente);
+   ReadPacienteDto findId(long idPaciente);
 
    Page<ReadPacienteDto> findAll(Pageable pageable);
 
    List<ReadPacienteDto> findByNombreContainingIgnoreCase(String nombre);
 
-   Optional<ReadPacienteDto> findByDocumento(String documento);
+   ReadPacienteDto findByDocumento(String documento);
 
-   Optional<ReadPacienteDto> findByUsuario_Id(long idUsuario);
+   ReadPacienteDto findByUsuario_Id(long idUsuario);
 
    List<ReadPacienteDto> findConTurnosParaFecha(LocalDate fecha);
 

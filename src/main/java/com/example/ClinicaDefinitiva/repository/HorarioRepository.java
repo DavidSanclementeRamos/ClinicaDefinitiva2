@@ -19,5 +19,5 @@ public interface HorarioRepository extends JpaRepository<Horario, Long> {
    List<Horario> findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(DayOfWeek dia, LocalTime desde, LocalTime hasta);
 
    // cosulta por rango de fecha
-   List<Horario> findByTurnos_FechaTurnoBetween(LocalDate desde, LocalDate hasta);
+   List<Horario> findDistinctByTurnos_FechaTurnoBetween(LocalDate desde, LocalDate hasta);
 }

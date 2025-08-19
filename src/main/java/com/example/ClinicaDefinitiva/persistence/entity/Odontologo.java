@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,11 +27,11 @@ public class Odontologo extends Persona implements Serializable {
     @JoinColumn(name = "usuario_id") // Clave foránea está en la clase hija
     private Usuario unUsuario;
 
-    @OneToOne(mappedBy = "unOdontologo") // No  almacena clave foránea, solo referencia
-    private Horario unHorario;
+    @OneToMany(mappedBy = "unOdontologo",  cascade = CascadeType.ALL, orphanRemoval = true) // No  almacena clave foránea, solo referencia
+    private List<Horario> listaHorarios = new ArrayList<>();
 
     @OneToMany(mappedBy = "odontologo") // No  almacena clave foránea, solo referencia
-    private List<Turno> unTurno;     // NO SE PONE LISTA, PARA NO PERJUDICAR EL RENDIMIENTO
+    private List<Turno> listaTurnos =  new ArrayList<>();    // NO SE PONE LISTA, PARA NO PERJUDICAR EL RENDIMIENTO
 
 
 
@@ -38,12 +39,33 @@ public class Odontologo extends Persona implements Serializable {
 
     }
 
-    public Odontologo(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, int id, String nombre, String telefono, Tipo_sangre tipoSangre, Especialidades especialidad, Horario unHorario, List<Turno> unTurno, Usuario unUsuario) {
+    public Odontologo(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, Long id, String nombre, String telefono, Tipo_sangre tipoSangre, Especialidades especialidad, List<Horario> listaHorarios, List<Turno> listaTurnos, Usuario unUsuario) {
         super(apellido, direccion, dni, fecha_nacimiento, id, nombre, telefono, tipoSangre);
         this.especialidad = especialidad;
-        this.unHorario = unHorario;
-        this.unTurno = unTurno;
+        this.listaHorarios = listaHorarios;
+        this.listaTurnos = listaTurnos;
         this.unUsuario = unUsuario;
+    }
+    public void eliminarHorario(Horario horario) {
+        if (horario != null && this.listaHorarios.contains(horario)) {
+            horario.setUnOdontologo(null); // romper la relación inversa
+            this.listaHorarios.remove(horario); // quitar de la colección
+        }
+    }
+    public List<Turno> getListaTurnos() {
+        return listaTurnos;
+    }
+
+    public void setListaTurnos(List<Turno> listaTurnos) {
+        this.listaTurnos = listaTurnos;
+    }
+
+    public List<Horario> getListaHorarios() {
+        return listaHorarios;
+    }
+
+    public void setListaHorarios(List<Horario> listaHorarios) {
+        this.listaHorarios = listaHorarios;
     }
 
     public Especialidades getEspecialidad() {
@@ -54,21 +76,6 @@ public class Odontologo extends Persona implements Serializable {
         this.especialidad = especialidad;
     }
 
-    public Horario getUnHorario() {
-        return unHorario;
-    }
-
-    public void setUnHorario(Horario unHorario) {
-        this.unHorario = unHorario;
-    }
-
-    public List<Turno> getUnTurno() {
-        return unTurno;
-    }
-
-    public void setUnTurno(List<Turno> unTurno) {
-        this.unTurno = unTurno;
-    }
 
     public Usuario getUnUsuario() {
         return unUsuario;

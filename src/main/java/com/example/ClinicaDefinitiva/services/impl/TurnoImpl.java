@@ -1,11 +1,13 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 
+
+import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.Estado;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.HorarioNotfountException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfountException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFountException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.TurnoNotFountException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.HorarioNotfoundException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfoundException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFoundException;
+import com.example.ClinicaDefinitiva.exceptions.entityNotFount.TurnoNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.TurnoMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.TurnoDto;
 import com.example.ClinicaDefinitiva.persistence.entity.Horario;
@@ -17,6 +19,9 @@ import com.example.ClinicaDefinitiva.repository.OdontologoRepository;
 import com.example.ClinicaDefinitiva.repository.PacienteRepository;
 import com.example.ClinicaDefinitiva.repository.TurnoRepository;
 import com.example.ClinicaDefinitiva.services.TurnoService;
+import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,6 +38,10 @@ public class TurnoImpl implements TurnoService {
     private final PacienteRepository pacienteRepository;
     private final HorarioRepository horarioRepository;
     private final OdontologoRepository odontologoRepository;
+    String requestId = RequestIdFilter.getRequestId();
+    private static final Logger logger = LoggerFactory.getLogger(TurnoImpl.class);
+
+
 
 
     public TurnoImpl(TurnoRepository turnoRepository, TurnoMapperResponse turnoMapper
@@ -47,17 +56,27 @@ public class TurnoImpl implements TurnoService {
 
     @Override
     public TurnoDto save(TurnoDto turnoDto) {
-        // Buscar el paciente
-        Paciente paciente = pacienteRepository.findById(turnoDto.getIdPaciente())
-                .orElseThrow(PacienteNotFountException::new);
+        // validar la existencia del paciente asociado
+        Paciente paciente = pacienteRepository.findById(turnoDto.getIdPaciente() )
+                .orElseThrow(() -> {
+                    logger.warn("No hay paciente asociado a ese id:  [{}], requestId={}",turnoDto.getIdPaciente() , requestId);
+                    return new PacienteNotFoundException(ContextoEntidad.TURNO
+                , "No se encontro un paciente asociado al turno con el id: " + turnoDto.getIdPaciente() );});
 
-        // Buscar el horario
+        // validar la existencia del horario asociado
         Horario horario = horarioRepository.findById(turnoDto.getHorarioId())
-                .orElseThrow(HorarioNotfountException::new);
+                .orElseThrow(() -> {
+                    logger.warn("No hay horario asociado a ese id:  [{}], requestId={}",turnoDto.getHorarioId() , requestId);
+                  return new  HorarioNotfoundException(ContextoEntidad.HORARIO,
+                          "No se encontro un horario asociado al turno con el id: " + turnoDto.getHorarioId() );});
 
-        // Buscar el odontólogo
+
+        // validar el odontólogo asociado
         Odontologo odontologo = odontologoRepository.findById(turnoDto.getOdontologo())
-                .orElseThrow(OdontologoNotfountException::new);
+                .orElseThrow(() -> {
+                        logger.warn("No hay odontologo asociado a ese id:  [{}], requestId={}",turnoDto.getOdontologo() , requestId);
+                        return new OdontologoNotfoundException(ContextoEntidad.TURNO,
+                                "No hay odontologo asociado a ese id: " + turnoDto.getOdontologo());});
 
         // Crear la entidad Turno
         Turno turno = new Turno();
@@ -87,7 +106,10 @@ public class TurnoImpl implements TurnoService {
 
                             return turnoRepository.save(turno);
                         }).map(turnoMapper::turnoDto)
-                .orElseThrow(TurnoNotFountException::new);
+                .orElseThrow(() -> {
+                    logger.warn("No existe un turno asociado a ese id:  [{}], requestId={}",idTurno , requestId);
+                   return new  TurnoNotFoundException(ContextoEntidad.TURNO,
+                           "No existe el id: " + idTurno + " del turno que quiere editar");});
     }
 
     @Override
@@ -96,6 +118,12 @@ public class TurnoImpl implements TurnoService {
         // Le decimos al repo que haga la búsqueda paginada+ordenada
         Page<Turno> pageEntidades = turnoRepository.findAll(pageable);
 
+        if (pageEntidades.isEmpty()) {
+            logger.warn("No existen registros de turno para los filtros [id={}, requestId={}]", pageable, requestId);
+            throw new TurnoNotFoundException(
+            ContextoEntidad.TURNO,
+                    "No existen registros de turnos para los filtros dados"
+            );}
         // Convertimos cada Entidad a DTO
         return pageEntidades.map(turnoMapper::turnoDto);
 
@@ -106,7 +134,10 @@ public class TurnoImpl implements TurnoService {
     @Override
     public void deleaById(long id) {
         if (turnoRepository.findById(id).isEmpty()){
-            throw new TurnoNotFountException();
+            logger.warn("No existe el el id: " + id + " que quiere eliminar [id={}, requestId={}]", id, requestId);
+
+            throw new TurnoNotFoundException(ContextoEntidad.TURNO,
+                    "No exixte el id "  + id + " que quiere eliminar");
         }
            turnoRepository.deleteById(id);
     }
@@ -116,12 +147,25 @@ public class TurnoImpl implements TurnoService {
     @Override
     public List<TurnoDto> findByPacienteId(long idPaciente) {
 
-        return   pacienteRepository.findById(idPaciente)
-                .map( paciente -> turnoRepository.findByPaciente_Id(idPaciente))
-                .map(turno -> turno.stream()
-                        .map(turnoMapper::turnoDto)
-                        .collect(Collectors.toList()))
-                .orElseThrow(TurnoNotFountException::new);
+        Paciente paciente = pacienteRepository.findById(idPaciente).orElseThrow(()->{
+                    logger.warn("No existe el el id: " + idPaciente + " del paciente [id={}, requestId={}]", idPaciente, requestId);
+                    return new PacienteNotFoundException(ContextoEntidad.TURNO,
+                            "No existe el id: " + idPaciente);
+
+                    });
+        List<Turno> lista = turnoRepository.findByPaciente_Id(idPaciente);
+
+       if(lista.isEmpty()){
+           logger.warn("No se encontro resultado de la busqueda [idPaciente={}, requestId={}]", idPaciente, requestId);
+           throw new TurnoNotFoundException(ContextoEntidad.TURNO,
+            " No se encontro resultado de la busqueda de turnos por el id: " + idPaciente);
+       }
+
+        logger.info("Turnos encontrado por idPaciente [idPaciente={}, requestId={}]",
+                idPaciente, requestId);
+       return lista.stream()
+               .map(turnoMapper::turnoDto)
+               .collect(Collectors.toList());
 
     }
 
@@ -129,26 +173,61 @@ public class TurnoImpl implements TurnoService {
 
     @Override
     public TurnoDto findById(long idTurno) {
-        return turnoRepository.findById(idTurno)
-                .map(turnoMapper::turnoDto)
-                .orElseThrow(TurnoNotFountException::new);
+        Turno turno = turnoRepository.findById(idTurno)
+                .orElseThrow(() -> {
+            //odontologoMetrics.contarOdontologoNoEncontrado(requestId);
+            logger.warn("Turno no encontrado [idTurno={}, requestId={}]", idTurno, requestId);
+            return new  TurnoNotFoundException(ContextoEntidad.TURNO," Turno no encontrado por el id:" + idTurno);
+
+        });
+
+        logger.info("Turno recuperado [idTurno={}, requestId={}]", idTurno, requestId);
+        return turnoMapper.turnoDto(turno);
     }
 
     @Override
     public List<TurnoDto> findByFechaBetween(LocalDate desde, LocalDate hasta) {
-        return turnoRepository.findByFechaTurnoBetween(desde, hasta).stream()
-                .map(turnoMapper::turnoDto).collect(Collectors.toList());
+        List<Turno> lista = turnoRepository.findByFechaTurnoBetween(desde, hasta);
+        if( lista.isEmpty()) {
+            logger.warn("fecha no encontrada [desde={}], [hasta={}] requestId={}]", desde,hasta, requestId);
+
+            throw new TurnoNotFoundException(ContextoEntidad.TURNO,
+                    " No se encontro un turno en esa fecha, desde:" + desde + " hata: " + hasta);
+
+        }
+        logger.info("Turno recuperado [desde={}, hasta={}, requestId={}]", desde, hasta,requestId);
+
+        return  lista.stream().map(turnoMapper::turnoDto).collect(Collectors.toList());
     }
 
     @Override
     public List<TurnoDto> findByOdontologoId(long idOdontologo) {
-        return turnoRepository.findByOdontologo_Id(idOdontologo).stream()
+        List<Turno> lista =  turnoRepository.findByOdontologo_Id(idOdontologo);
+        if(lista.isEmpty()){
+            logger.warn("Turno no encontrado por id odontologo: [idOdontologo={},  requestId={}]", idOdontologo, requestId);
+
+            throw new TurnoNotFoundException(ContextoEntidad.TURNO,
+                    " No se encontro un turno por ese id odontologo:" + idOdontologo );
+
+        }
+             logger.info("Turno recuperado por idOdontologo  [idOdontologo={},  requestId={}]", idOdontologo ,requestId);
+                return lista.stream()
                 .map(turnoMapper::turnoDto).collect(Collectors.toList());
     }
 
     @Override
     public List<TurnoDto> findByEstado(Estado estado) {
-        return turnoRepository.findByEstado(estado).stream()
+
+        List<Turno> lista = turnoRepository.findByEstado(estado);
+        if(lista.isEmpty()){
+
+            logger.warn("Turno no encontrado por estado: [estado={},  requestId={}]", estado.name(), requestId);
+
+            throw new TurnoNotFoundException(ContextoEntidad.TURNO,
+                    " No se encontroron turnos por ese estado:" + estado );}
+            logger.info("Turnos encotrados {} , estado  [estado={},  requestId={}]",lista.size(), estado.name() ,requestId);
+
+                return  lista.stream()
                 .map(turnoMapper::turnoDto).collect(Collectors.toList());
     }
 

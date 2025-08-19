@@ -2,16 +2,17 @@ package com.example.ClinicaDefinitiva.exceptions;
 
 
 import com.example.ClinicaDefinitiva.Enum.CatalogoError;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.*;
 import com.example.ClinicaDefinitiva.persistence.entity.ErrorResponse;
+import com.example.ClinicaDefinitiva.util.ErrorCodeResolver;
+import com.example.ClinicaDefinitiva.util.ErrorHandlerUtils;
+import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,246 +22,256 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import static com.example.ClinicaDefinitiva.Enum.CatalogoError.*;
+import static com.example.ClinicaDefinitiva.web.filter.RequestIdFilter.getRequestId;
 
 
 @RestControllerAdvice
 public class GlobalControllerAdvice {
-
+    private static final Logger logger = LoggerFactory.getLogger(GlobalControllerAdvice.class);
 
     // ERRORES DE NOT FOUND
 
+    /*Esto significa que cualquier excepción que herede de ClinicaDefinitivaException
+    (como OdontologoNotfountException) será capturada por este método sin necesidad
+    de crear un handler por cada tipo.*/
+
     @ExceptionHandler(ClinicaDefinitivaException.class)
-    public ResponseEntity<ErrorResponse> manejarError(ClinicaDefinitivaException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ErrorResponse(
-                        ex.getCatalogo().getCode(),
-                        List.of(ex.getMessage()),
-                        ex.getCatalogo().getMessage(),
-                        HttpStatus.BAD_REQUEST,
-                        LocalDateTime.now(),
-                        ex.getContexto().name()  // Contexto como string
-                )
+    public ResponseEntity<ErrorResponse> manejarExcepciones(ClinicaDefinitivaException ex) {
+
+        /*Esta línea extrae el usuario activo si estás usando Spring Security.
+         Si no tienes seguridad aún, simplemente devolverá "anonimo".
+         No es obligatorio, pero prepara tu sistema para auditoría futura.
+         */
+
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+
+        // 🔍 Registrar el error en logs
+        logger.error("Error capturado [requestId={}]: código={}, contexto={}, usuario={}, detalle={}",
+                ex.getRequestId(),
+                ex.getCatalogo().getCode(),
+                ex.getContexto().name(),
+                usuario,
+                ex.getMessage()
         );
+
+        /*Este objeto encapsula TODO lo que un frontend moderno, un logger estructurado
+        o una herramienta de monitoreo necesita para entender el error*/
+        ErrorResponse response = new ErrorResponse(
+
+                ex.getCatalogo().getCode(),                   // Código estandarizado (ERR_DENTIST_NOT_FOUND)
+                ex.getContexto().getCodigoEntidad().name(),   // Código lógico del módulo (OD01)
+                ex.getContexto().name(),                      // Contexto semántico ("ODONTOLOGO")
+                usuario,                                      // Usuario autenticado o "anonimo"
+                ex.getCatalogo().getMessage(),                // Mensaje base del catálogo
+                List.of(ex.getMessage()),                     // Detalle dinámico (ej: "No se encontró el odontólogo con ID 12")
+                HttpStatus.BAD_REQUEST,                       // Código HTTP (ajustable según error)
+                LocalDateTime.now(),                          // Marca de tiempo
+                ex.getRequestId()                             // ID único de la solicitud (para trazabilidad)
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(PacienteNotFountException.class)
-    public ErrorResponse  handlePacienteNotFoundException(){
-         return new ErrorResponse(
-                 PATIENT_NOT_FOUND.getCode(),
-                 null,
-                 PATIENT_NOT_FOUND.getMessage(),
-                 HttpStatus.NOT_FOUND,
-                 LocalDateTime.now()
-
-         );
-    }
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(SecretarioNotFountException.class)
-    public ErrorResponse handleSecretarioNotFoundException(){
-        return new ErrorResponse(
-                SECRETARY_NOT_FOUND.getCode(),
-                null,
-                SECRETARY_NOT_FOUND.getMessage(),
-                HttpStatus.NOT_FOUND,
-                LocalDateTime.now()
-
-        );
-    }
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ResponsableNotFountException.class)
-    public ErrorResponse handleResponsableNotFoundException(){
-        return new ErrorResponse (
-                RESPONSIBLE_NOT_FOUND.getCode(),
-        null,
-                RESPONSIBLE_NOT_FOUND.getMessage(),
-                HttpStatus.NOT_FOUND,
-                LocalDateTime.now()
-        );
-    }
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(TurnoNotFountException.class)
-    public ErrorResponse handleTurnoNotFoundException(){
-       return new ErrorResponse(
-               SHIFT_NOT_FOUND.getCode(),
-               null,
-               SHIFT_NOT_FOUND.getMessage(),
-               HttpStatus.NOT_FOUND,
-               LocalDateTime.now()
-       );
-    }
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(HorarioNotfountException.class)
-    public ErrorResponse handleHorarioNotFoundException(){
-        return new ErrorResponse(
-                SCHEDULE_NOT_FOUND.getCode(),
-                null,
-                SCHEDULE_NOT_FOUND.getMessage(),
-                HttpStatus.NOT_FOUND,
-                LocalDateTime.now()
-        );
-    }
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(UsuarioNotfountException.class)
-    public ErrorResponse handleUsuarioNotFoundException(){
-        return new ErrorResponse(
-                USER_NOT_FOUND.getCode(),
-                null,
-                USER_NOT_FOUND.getMessage(),
-                HttpStatus.NOT_FOUND,
-                LocalDateTime.now()
-        );
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ErrorResponse handleValidationErrors(MethodArgumentNotValidException ex) {
-        BindingResult result = ex.getBindingResult();
-        String objectName = result.getObjectName();
+    public ResponseEntity<ErrorResponse> manejarValidaciones(MethodArgumentNotValidException ex) {
+       //Class<?> dtoClass = ex.getBindingResult().getTarget().g
+        Object target = ex.getBindingResult().getTarget();
+        Class<?> dtoClass = (target != null) ? target.getClass() : null;
 
-        CatalogoError errorCode = switch (objectName) {
-            case "HorarioDto"   -> CatalogoError.INVALID_SCHEDULE;
-            case "TurnoDto"     -> CatalogoError.INVALID_SHIFT;
-            case "UsuarioDto"   -> CatalogoError.INVALID_USER;
-            case "CreateOdontologoDto" -> CatalogoError.INVALID_DENTIST;
-            case "CreatePacienteDto" -> CatalogoError.INVALID_PATIENT;
-            case "CreateSecretarioDto" -> CatalogoError.INVALID_SECRETARY;
-            case "CreateEndReadResponsable" -> INVALID_RESPONSIBLE;
-            // añade aquí más casos según tus DTOs…
-            default             -> CatalogoError.GENERIC_ERROR;
-        };
+            CatalogoError error = ErrorCodeResolver.resolver(dtoClass);
 
-        return new ErrorResponse(
-                errorCode.getCode(),
-                result.getFieldErrors().stream()
-                        .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                        .collect(Collectors.toList()),
-                errorCode.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()
+            logger.warn("No se pudo determinar la clase del DTO. Usando error genérico.");
+
+
+
+        List<String> detalles = ex.getBindingResult().getFieldErrors().stream()
+                .map(field -> field.getField() + ": " + field.getDefaultMessage())
+                .toList();
+
+        assert dtoClass != null;
+        ErrorResponse response = ErrorHandlerUtils.construirError(
+                 error, dtoClass.getSimpleName(), detalles, HttpStatus.BAD_REQUEST
         );
-    }
 
+        return ResponseEntity.badRequest().body(response);
+    }
 
 
     // ERRORES GENERALES
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public ErrorResponse handleInternalServeError(
-            Exception exception) {
-        return new ErrorResponse(
-                GENERIC_ERROR.getCode(),
-                Collections.singletonList(exception.getMessage()),
-                GENERIC_ERROR.getMessage(),
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                LocalDateTime.now()
+    public ResponseEntity<ErrorResponse> manejarExcepcionInterna(Exception ex) {
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+        String requestId = getRequestId();
+
+        logger.error("Error interno inesperado [usuario={}, requestId={}]: {}", usuario, requestId, ex.getMessage());
+
+        ErrorResponse response = new ErrorResponse(
+                CatalogoError.GENERIC_ERROR.getCode(), "GENERIC", "EXCEPCION", usuario,
+                CatalogoError.GENERIC_ERROR.getMessage(),
+                List.of(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR,
+                LocalDateTime.now(), requestId
         );
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+
+
     // Esto te permite devolver un error 415 Unsupported Media Type
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    public ErrorResponse handleUnsupportedMediaType(HttpMediaTypeNotSupportedException ex) {
-        return new ErrorResponse(
-                CatalogoError.UNSUPPORTED_MEDIA_TYPE.getCode(), // o reemplaza por tu código
-                Collections.singletonList("El tipo de contenido no es compatible: " + ex.getContentType()),
-                "Tipo de contenido no soportado.",
-                HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-                LocalDateTime.now()
+    public ResponseEntity<ErrorResponse> handleUnsupportedMediaType(HttpMediaTypeNotSupportedException ex) {
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+        String requestId = getRequestId();
+
+        logger.error("El tipo de contenido no es compatible [usuario={}," + " requestId={}]: {}",
+                usuario,
+                requestId,
+                ex.getMessage());
+
+
+
+        ErrorResponse response = new ErrorResponse(
+                CatalogoError.UNSUPPORTED_MEDIA_TYPE.getCode(), // Código estandarizado (UNSUPPORTED_MEDIA_TYPE)
+                "UNSUPPORTED",// Código lógico del módulo (OD01)
+                "EXCEPTION",  // Contexto semántico ("EXCEPTION")
+                usuario,  // Usuario autenticado o "anonimo"
+                CatalogoError.UNSUPPORTED_MEDIA_TYPE.getMessage(), // Mensaje base del catálogo
+                List.of(ex.getMessage()), // Detalle dinámico (ej:
+                HttpStatus.UNSUPPORTED_MEDIA_TYPE,// Código HTTP (ajustable según error)
+                LocalDateTime.now(), // Marca de tiempo
+                requestId // ID único de la solicitud (para trazabilidad)
+
+
         );
+         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(response);
     }
 
     // Para capturarlo y devolver un 405 Method Not Allowed:
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorResponse handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex) {
-        String mensaje = String.format(
-                "El método %s no está soportado. Métodos válidos: %s",
-                ex.getMethod(),
-                String.join(", ", Objects.requireNonNull(ex.getSupportedHttpMethods()).stream()
-                        .map(HttpMethod::name)
-                        .toList())
+    public ResponseEntity<ErrorResponse> handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex) {
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+        String requestId = getRequestId();
+
+        logger.error("El método %s no está soportado. Métodos válidos: %s[usuario={}," + " requestId={}]: {}",
+                usuario,
+                requestId,
+                ex.getMessage());
+        ErrorResponse response = new ErrorResponse(
+                CatalogoError.METHOD_NOT_ALLOWED.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                "MISSING_REQUEST_PARAM",// Código lógico del módulo (OD01)
+                "METHOD_NOT_SUPPORTED_EXCEPTION",  // Contexto semántico ("EXCEPTION")
+                usuario,  // Usuario autenticado o "anonimo"
+                CatalogoError.METHOD_NOT_ALLOWED.getMessage(), // Mensaje base del catálogo
+                List.of(ex.getMessage()), // Detalle dinámico (ej:
+                HttpStatus.METHOD_NOT_ALLOWED,// Código HTTP (ajustable según error)
+                LocalDateTime.now(), // Marca de tiempo
+                requestId // ID único de la solicitud (para trazabilidad)
+
+
         );
-        return new ErrorResponse(
-                CatalogoError.METHOD_NOT_ALLOWED.getCode(),
-                List.of(mensaje),
-                CatalogoError.METHOD_NOT_ALLOWED.getMessage(),
-                HttpStatus.METHOD_NOT_ALLOWED,
-                LocalDateTime.now()
-        );
+       return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
     }
 
 
     //  Para devolver un 400 Bad Request bien explicado: MissingServletRequestParameterException
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMissingParams(MissingServletRequestParameterException ex) {
-        String mensaje = String.format(
-                "Falta el parámetro '%s' de tipo %s",
-                ex.getParameterName(),
-                ex.getParameterType()
+    public ResponseEntity<ErrorResponse> handleMissingParams(MissingServletRequestParameterException ex) {
+
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+        String requestId = getRequestId();
+
+        logger.error("Falta el parámetro '%s' de tipo %s: %s[usuario={}," + " requestId={}]: {}",
+                usuario,
+                requestId,
+                ex.getMessage());
+        ErrorResponse response = new ErrorResponse(
+                CatalogoError.MISSING_REQUEST_PARAM.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                "PARAM",// Código lógico del módulo (OD01)
+                "MISSING_REQUEST_PARAM",  // Contexto semántico ("EXCEPTION")
+                usuario,  // Usuario autenticado o "anonimo"
+                CatalogoError.MISSING_REQUEST_PARAM.getMessage(), // Mensaje base del catálogo
+                List.of(ex.getMessage()), // Detalle dinámico (ej:
+                HttpStatus.BAD_REQUEST, // Código HTTP (ajustable según error)
+                LocalDateTime.now(), // Marca de tiempo
+                requestId // ID único de la solicitud (para trazabilidad)
         );
-        return new ErrorResponse(
-                CatalogoError.MISSING_REQUEST_PARAM.getCode(),
-                List.of(mensaje),
-                CatalogoError.MISSING_REQUEST_PARAM.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()
-        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     // Se dispara cuando el cuerpo JSON está mal formado o no puede deserializarse.
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        String detalle = "Cuerpo JSON mal formado: " + ex.getMostSpecificCause().getMessage();
-        return new ErrorResponse(
-                CatalogoError.INVALID_JSON.getCode(),
-                List.of(detalle),
-                CatalogoError.INVALID_JSON.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+        String requestId = getRequestId();
+
+        logger.error("Cuerpo JSON mal formado: %s[usuario={}," + " requestId={}]: {}",
+                usuario,
+                requestId,
+                ex.getMessage());
+        ErrorResponse response = new ErrorResponse(
+                CatalogoError.INVALID_JSON.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                "JSON",// Código lógico del módulo (OD01)
+                "INVALID_JSON",  // Contexto semántico ("EXCEPTION")
+                usuario,  // Usuario autenticado o "anonimo"
+                CatalogoError.INVALID_JSON.getMessage(), // Mensaje base del catálogo
+                List.of(ex.getMessage()), // Detalle dinámico (ej:
+                HttpStatus.BAD_REQUEST, // Código HTTP (ajustable según error)
+                LocalDateTime.now(), // Marca de tiempo
+                requestId // ID único de la solicitud (para trazabilidad)
         );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     // Atrapamos violaciones de restricciones en parámetros de ruta o query params (por ejemplo, con @Validated).
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleConstraintViolation(ConstraintViolationException ex) {
-        List<String> detalles = ex.getConstraintViolations().stream()
-                .map(cv -> cv.getPropertyPath() + ": " + cv.getMessage())
-                .toList();
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+        String requestId = getRequestId();
 
-        return new ErrorResponse(
-                CatalogoError.INVALID_PARAMETERS.getCode(),
-                detalles,
-                CatalogoError.INVALID_PARAMETERS.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()
+        logger.error("Violacion de parmetro: %s[usuario={}," + " requestId={}]: {}",
+                usuario,
+                requestId,
+                ex.getMessage());
+        ErrorResponse response = new ErrorResponse(
+                CatalogoError.INVALID_PARAMETERS.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                "VAL99",// Código lógico del módulo (OD01)
+                "validation",  // Contexto semántico ("EXCEPTION")
+                usuario,  // Usuario autenticado o "anonimo"
+                CatalogoError.INVALID_PARAMETERS.getMessage(), // Mensaje base del catálogo
+                List.of(ex.getMessage()), // Detalle dinámico (ej:
+                HttpStatus.BAD_REQUEST, // Código HTTP (ajustable según error)
+                LocalDateTime.now(), // Marca de tiempo
+                requestId // ID único de la solicitud (para trazabilidad)
         );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+
+
 
     // Se lanza cuando la ruta solicitada no está mapeada en ningún controlador
     @ExceptionHandler(NoHandlerFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNoHandlerFound(NoHandlerFoundException ex) {
-        String detalle = "La ruta " + ex.getHttpMethod() + " " + ex.getRequestURL() + " no existe";
-        return new ErrorResponse(
-                CatalogoError.ROUTE_NOT_FOUND.getCode(),
-                List.of(detalle),
-                CatalogoError.ROUTE_NOT_FOUND.getMessage(),
-                HttpStatus.NOT_FOUND,
-                LocalDateTime.now()
+    public ResponseEntity<ErrorResponse> handleNoHandlerFound(NoHandlerFoundException ex) {
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+        String requestId = getRequestId();
+
+        logger.error("La ruta {} {} no existen %s[usuario={}, requestId={}]: {}", ex.getHttpMethod(), ex.getRequestURL(), usuario, requestId, ex.getMessage());
+        ErrorResponse response = new ErrorResponse(
+                CatalogoError.ROUTE_NOT_FOUND.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                "NOHANDLER",// Código lógico del módulo (OD01)
+                "RUTA_MAPEADA",  // Contexto semántico ("EXCEPTION")
+                usuario,  // Usuario autenticado o "anonimo"
+                CatalogoError.ROUTE_NOT_FOUND.getMessage(), // Mensaje base del catálogo
+                List.of(ex.getMessage()), // Detalle dinámico (ej:
+                HttpStatus.BAD_REQUEST, // Código HTTP (ajustable según error)
+                LocalDateTime.now(), // Marca de tiempo
+                requestId // ID único de la solicitud (para trazabilidad)
         );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
 
@@ -268,60 +279,110 @@ public class GlobalControllerAdvice {
     //Captura errores cuando un parámetro de consulta o ruta no coincide
     // con el tipo esperado (por ejemplo, enviar texto en lugar de número).
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        String detalle = String.format(
-                "Parámetro '%s' con valor '%s' no válido. Se esperaba tipo %s",
-                ex.getName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName()
-        );
-        return new ErrorResponse(
-                CatalogoError.TYPE_MISMATCH.getCode(),
-                List.of(detalle),
-                CatalogoError.TYPE_MISMATCH.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()
-        );
-    }
+    public ResponseEntity<ErrorResponse>handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+        String requestId = getRequestId();
 
+        logger.error("Parámetro {} con valor {} no válido. Se esperaba tipo {} %s[usuario={}," + " requestId={}]: ", ex.getParameter(), ex.getValue(), ex.getMessage(),
+                usuario,
+                requestId);
+
+        ErrorResponse response = new ErrorResponse(
+                CatalogoError.TYPE_MISMATCH.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                "PARAMETRO NO VALIDO",// Código lógico del módulo (OD01)
+                "HAY TEXTO EN LUGAR DE NUMERO",  // Contexto semántico ("EXCEPTION")
+                usuario,  // Usuario autenticado o "anonimo"
+                CatalogoError.TYPE_MISMATCH.getMessage(), // Mensaje base del catálogo
+                List.of(ex.getMessage()), // Detalle dinámico (ej:
+                HttpStatus.BAD_REQUEST,// Código HTTP (ajustable según error)
+                LocalDateTime.now(), // Marca de tiempo
+                requestId // ID único de la solicitud (para trazabilidad)
+
+
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+
+    }
     // acceso denegado
     @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse handleAccessDenied(AccessDeniedException ex) {
-        String detalle = "No tienes permiso para acceder a este recurso.";
-        return new ErrorResponse(
-                CatalogoError.ACCESS_DENIED.getCode(),
-                List.of(detalle),
-                CatalogoError.ACCESS_DENIED.getMessage(),
+    public ResponseEntity<ErrorResponse> manejarAccesoDenegado(AccessDeniedException ex) {
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+        String requestId = RequestIdFilter.getRequestId();
+
+        logger.warn("Acceso denegado [usuario={}, requestId={}]", usuario, requestId);
+
+        ErrorResponse response = new ErrorResponse(
+                "ERR_ACCESO_403",
+                "GENERIC",
+                "SEGURIDAD",
+                usuario,
+                "Acceso denegado a la operación solicitada",
+                List.of(ex.getMessage()),
                 HttpStatus.FORBIDDEN,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                requestId
         );
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
     // violacion de integridad de datos
     @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        String detalle = "Violación de restricciones de la base de datos: " + Objects.requireNonNull(ex.getRootCause()).getMessage();
-        return new ErrorResponse(
-                CatalogoError.DATA_INTEGRITY_VIOLATION.getCode(),
-                List.of(detalle),
-                CatalogoError.DATA_INTEGRITY_VIOLATION.getMessage(),
-                HttpStatus.CONFLICT,
-                LocalDateTime.now()
-        );
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
 
+        String usuario = ErrorHandlerUtils.getUsuarioActual();
+        String requestId = getRequestId();
+
+        logger.error("Violación de restricciones de la base de datos: %s[usuario={}," + " requestId={}]: {}",
+                usuario,
+                requestId,
+                ex.getMessage());
+        ErrorResponse response = new ErrorResponse(
+                CatalogoError.DATA_INTEGRITY_VIOLATION.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                "BDD",// Código lógico del módulo (OD01)
+                "VIOLACION_BT",  // Contexto semántico ("EXCEPTION")
+                usuario,  // Usuario autenticado o "anonimo"
+                CatalogoError.DATA_INTEGRITY_VIOLATION.getMessage(), // Mensaje base del catálogo
+                List.of(ex.getMessage()), // Detalle dinámico (ej:
+                HttpStatus.CONFLICT,// Código HTTP (ajustable según error)
+                LocalDateTime.now(), // Marca de tiempo
+                requestId // ID único de la solicitud (para trazabilidad)
+
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
+
 
     @ExceptionHandler(EdadNoPermitidaException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse manejarEdadNoPermitida(EdadNoPermitidaException ex) {
-        return new ErrorResponse(
-                CatalogoError.EDAD_NO_PERMITIDA.getCode(),
-                List.of(ex.getMessage()),
-                CatalogoError.EDAD_NO_PERMITIDA.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()
+    public ResponseEntity<ErrorResponse> manejarEdadNoPermitida(EdadNoPermitidaException ex) {
+       String usuario = ErrorHandlerUtils.getUsuarioActual();
+       /* String usuario = Optional.ofNullable(
+                SecurityContextHolder.getContext().getAuthentication()
+        ).map(auth -> auth.getName()).orElse("anonimo");*/
+
+        // 🔍 Registrar el error en logs
+        logger.error("Error capturado [requestId={}]: código={}, contexto={}, usuario={}, detalle={}",
+                ex.getRequestId(),
+                ex.getCatalogo().getCode(),
+                ex.getContexto().name(),
+                usuario,
+                ex.getMessage()
         );
+        ErrorResponse response = new ErrorResponse(
+
+                ex.getCatalogo().getCode(),                   // Código estandarizado (ERR_DENTIST_NOT_FOUND)
+                ex.getContexto().getCodigoEntidad().name(),   // Código lógico del módulo (OD01)
+                ex.getContexto().name(),                      // Contexto semántico ("ODONTOLOGO")
+                usuario,                                      // Usuario autenticado o "anonimo"
+                ex.getCatalogo().getMessage(),                // Mensaje base del catálogo
+                List.of(ex.getMessage()),                     // Detalle dinámico (ej: "No se encontró el odontólogo con ID 12")
+                HttpStatus.BAD_REQUEST,                       // Código HTTP (ajustable según error)
+                LocalDateTime.now(),                          // Marca de tiempo
+                ex.getRequestId()                             // ID único de la solicitud (para trazabilidad)
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
 }

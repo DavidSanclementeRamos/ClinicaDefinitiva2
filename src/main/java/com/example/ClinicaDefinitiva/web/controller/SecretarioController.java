@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -40,11 +41,13 @@ public class SecretarioController {
         this.secretarioService = secretarioService;
     }
 
+    @PreAuthorize("hasAuthority('GET_SECRETARIO_ID')")
     @GetMapping("/{id}")
     public ResponseEntity<ReadSecretarioDto> findId(@PathVariable long id){
        return ResponseEntity.ok(secretarioService.findId(id));
     }
 
+    @PreAuthorize("hasAuthority('GET_SECRETARIOS_LIST')")
     @GetMapping
     public ResponseEntity<Page<ReadSecretarioDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
@@ -54,6 +57,7 @@ public class SecretarioController {
         return  ResponseEntity.ok( resultado);
     }
 
+    @PreAuthorize("hasAuthority('GET_SECRETARIO_POR_NOMBRE')")
     @GetMapping("/buscarSecretarioPorNombre/{nombre}")
     public ResponseEntity<List<ReadSecretarioDto>> findByNombreContainingIgnoreCase(
             @PathVariable String nombre){
@@ -62,17 +66,19 @@ public class SecretarioController {
 
     }
 
-
+    @PreAuthorize("hasAuthority('GET_SECRETARIO_SECTOR')")
     @GetMapping("/buscarSecretarioPorSector{sector}")
     public ResponseEntity<List<ReadSecretarioDto>> findBySector(@PathVariable Sector sector){
         return ResponseEntity.ok( secretarioService.findBySector(sector));
     }
 
+    @PreAuthorize("hasAuthority('GET_SECRETARIO_POR_USUARIO')")
     @GetMapping("/buscarSecretarioPorUsuarioId/{id}")
-    public ResponseEntity<Optional<ReadSecretarioDto>> findByUsuario(@PathVariable long Id){
+    public ResponseEntity<ReadSecretarioDto> findByUsuario(@PathVariable long Id){
         return ResponseEntity.ok(secretarioService.findByUsuarioId(Id));
     }
 
+    @PreAuthorize("hasAuthority('POST_SECRETARIO')")
     @PostMapping
     public ResponseEntity<ReadSecretarioDto> save(
             @Valid @RequestBody CreateSecretarioDto createSecretarioDto, UriComponentsBuilder uriBuilder){
@@ -84,6 +90,7 @@ public class SecretarioController {
         return ResponseEntity.created(uri).body(response);
     }
 
+    @PreAuthorize("hasAuthority('PUT_SECRETARIO')")
     @PutMapping("{id}")
     public ResponseEntity<ReadSecretarioDto> update(
             @PathVariable long id,
@@ -91,7 +98,7 @@ public class SecretarioController {
         return ResponseEntity.ok( secretarioService.update(id, updateSecretarioDto));
     }
 
-
+    @PreAuthorize("hasAuthority('DELETE_SECRETARIO')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long id) {secretarioService.deleaById(id);}

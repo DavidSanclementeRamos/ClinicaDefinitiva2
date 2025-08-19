@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,13 +16,13 @@ public class Paciente extends Persona implements Serializable {
 
     private boolean tiene_Os;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Responsable unResponsable;
 
     private boolean tieneResponsable;
 
     @OneToMany(mappedBy = "paciente") // solo indica quién gestiona la relación
-    private List<Turno> unTurno;
+    private List<Turno> unTurno = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "usuario_id") // Clave foránea está en la clase hija
@@ -36,7 +37,7 @@ public class Paciente extends Persona implements Serializable {
 
     }
 
-    public Paciente(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, int id, String nombre, String telefono, Tipo_sangre tipoSangre, Responsable responsable, boolean tiene_Os, boolean tieneResponsable, Responsable unResponsable, List<Turno> unTurno, Usuario unUsuario) {
+    public Paciente(String apellido, String direccion, String dni, LocalDate fecha_nacimiento, Long id, String nombre, String telefono, Tipo_sangre tipoSangre, Responsable responsable, boolean tiene_Os, boolean tieneResponsable, Responsable unResponsable, List<Turno> unTurno, Usuario unUsuario) {
         super(apellido, direccion, dni, fecha_nacimiento, id, nombre, telefono, tipoSangre);
         this.responsable = responsable;
         this.tiene_Os = tiene_Os;

@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public interface HorarioService {
 
-    Optional<HorarioDto> findId(long horarioId);
+    HorarioDto findId(long horarioId);
 
     HorarioDto save( HorarioDto horarioDto);
 
