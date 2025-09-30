@@ -33,7 +33,7 @@ public class TestPacienteRepository {
     private Usuario userAna, userAndres, userLibre;
     private Paciente ana, andres, beatriz;
     private Odontologo odontologo;
-    private Horario horario;
+    private Disponibilidad disponibilidad;
 
     // Fechas de prueba
     private final LocalDate FECHA_EN_RANGO_1 = LocalDate.of(2025, 8, 20);
@@ -55,7 +55,7 @@ public class TestPacienteRepository {
         userLibre = usuarioRepository.save(new UsuarioBuilder().withNombreUsuario("sin.paciente").withFechaDeCreacion(LocalDate.of(2025,1,3)).builder());
         usuarioRepository.saveAll(List.of(userAna, userLibre,userAndres));
 
-        // Odontólogo y horario mínimos para poder crear turnos
+        // Odontólogo y disponibilidad mínimos para poder crear turnos
       /*  odontologo = odontologoRepository.save(new OdontologoBuilder()
                 .withUsuario( new UsuarioBuilder().withNombreUsuario("odo.user").withFechaDeCreacion(LocalDate.of(2025,1,4)).builder())
                 .withFechaNacimiento(LocalDate.of(1980,1,1))
@@ -80,13 +80,13 @@ public class TestPacienteRepository {
                         .builder()
         );
 
-        horario = new Horario();
-        horario.setUnOdontologo(odontologo);
-        horario.setDiaSemana(java.time.DayOfWeek.WEDNESDAY);
-        horario.setHoraInicio(LocalTime.of(6, 30));
-        horario.setHoraFin(LocalTime.of(12, 30));
-        // si Horario requiere persistencia explícita, usa un repositorio/EntityManager adecuado
-        em.persist(horario);
+        disponibilidad = new Disponibilidad();
+        disponibilidad.setUnOdontologo(odontologo);
+        disponibilidad.setDiaSemana(java.time.DayOfWeek.WEDNESDAY);
+        disponibilidad.setHoraInicio(LocalTime.of(6, 30));
+        disponibilidad.setHoraFin(LocalTime.of(12, 30));
+        // si Disponibilidad requiere persistencia explícita, usa un repositorio/EntityManager adecuado
+        em.persist(disponibilidad);
 
         // Pacientes base (valores únicos para evitar constraints)
         ana = new Paciente();
@@ -112,25 +112,25 @@ public class TestPacienteRepository {
 
         pacienteRepository.saveAll(List.of(ana, andres, beatriz));
 
-        // Turnos: asocia paciente + odontólogo + horario
+        // Turnos: asocia paciente + odontólogo + disponibilidad
         Turno tAna1 = new TurnoBuilder()
                 .withPaciente(ana)
                 .withOdontologo(odontologo)
-                .withHorario(horario)
+                .withHorario(disponibilidad)
                 .withFechaTurno(FECHA_EN_RANGO_1) // 2025-08-20
                 .builder();
 
         Turno tAna2 = new TurnoBuilder()
                 .withPaciente(ana)
                 .withOdontologo(odontologo)
-                .withHorario(horario)
+                .withHorario(disponibilidad)
                 .withFechaTurno(FECHA_EN_RANGO_2) // 2025-08-17
                 .builder();
 
         Turno tAndresOut = new TurnoBuilder()
                 .withPaciente(andres)
                 .withOdontologo(odontologo)
-                .withHorario(horario)
+                .withHorario(disponibilidad)
                 .withFechaTurno(FECHA_FUERA) // 2025-09-01 (fuera)
                 .builder();
 
@@ -172,7 +172,7 @@ public class TestPacienteRepository {
         /**
          * Verifica el dirty checking al modificar un Paciente existente:
          * - Cambia nombre y teléfono.
-         * - Recarga y valida nuevos valores.
+         * - Recarga y válida nuevos valores.
          */
         Paciente managed = pacienteRepository.findById(ana.getId()).orElseThrow();
         managed.setNombre("Ana M.");

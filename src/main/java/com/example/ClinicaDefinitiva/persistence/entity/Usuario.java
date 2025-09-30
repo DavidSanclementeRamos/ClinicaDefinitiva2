@@ -32,7 +32,7 @@ public class Usuario implements Serializable {
     private String imagenPerfil;
     private LocalDate ultimaFechaDeCoexion;
 
-    @ManyToMany(cascade = {  CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {  CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuario_roles",
             joinColumns = @JoinColumn(name = "usuario_id"),

@@ -1,11 +1,8 @@
 package com.example.ClinicaDefinitiva.persistence.entity;
 
 
-import com.example.ClinicaDefinitiva.Enum.Afeccion;
-import com.example.ClinicaDefinitiva.Enum.Estado;
+import com.example.ClinicaDefinitiva.vo.EstadoTurno;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -29,56 +26,49 @@ public class Turno implements Serializable {
     @JoinColumn(name = "id_paciente") // Clave foránea en la entidad dependiente
     private Paciente paciente;
 
-    @Enumerated(EnumType.STRING)
-    private Afeccion afeccion;
-
     @ManyToOne
     @JoinColumn(name = "horario_id")
-    private Horario horario;
+    private Disponibilidad disponibilidad;
 
-    private Estado estado;
+
+    private EstadoTurno estadoTurno;
+
 
     public Turno(){
 
     }
 
-    public Turno(Afeccion afeccion, LocalDate fechaTurno, LocalTime horaTurno, Long id, Odontologo odontologo, Paciente paciente,Horario horario,Estado estado) {
-        this.afeccion = afeccion;
+    public Turno(LocalDate fechaTurno, LocalTime horaTurno, Long id, Odontologo odontologo, Paciente paciente, Disponibilidad disponibilidad, EstadoTurno estadoTurno) {
+
         this.fechaTurno = fechaTurno;
         this.horaTurno = horaTurno;
         this.id = id;
         this.odontologo = odontologo;
         this.paciente = paciente;
-        this.horario = horario;
-        this.estado = estado;
+        this.disponibilidad = disponibilidad;
+        this.estadoTurno = estadoTurno;
     }
 
-    public Afeccion getAfeccion() {
-        return afeccion;
+
+    public Disponibilidad getHorario() {
+        return disponibilidad;
     }
 
-    public Horario getHorario() {
-        return horario;
-    }
-
-    public void setHorario(Horario horario) {
-        this.horario = horario;
-    }
-
-    public void setAfeccion(Afeccion afeccion) {
-        this.afeccion = afeccion;
+    public void setHorario(Disponibilidad disponibilidad) {
+        this.disponibilidad = disponibilidad;
     }
 
     public LocalDate getFechaTurno() {
         return fechaTurno;
     }
 
-    public Estado getEstado() {
-        return estado;
+
+    public EstadoTurno getEstadoTurno() {
+        return estadoTurno;
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
+    public void setEstadoTurno(EstadoTurno estadoTurno) {
+        this.estadoTurno = estadoTurno;
     }
 
     public Odontologo getOdontologo() {

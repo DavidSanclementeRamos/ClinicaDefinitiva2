@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva;
 
 import com.example.ClinicaDefinitiva.Enum.Estado;
-import com.example.ClinicaDefinitiva.persistence.entity.Horario;
+import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;
 import com.example.ClinicaDefinitiva.persistence.entity.Odontologo;
 
 import java.time.DayOfWeek;
@@ -11,7 +11,7 @@ import java.time.Month;
 
 public class TestDataFactory {
 
-    private Horario crearHorario(DayOfWeek dia, String nombreOdontologo, String dni) {
+    private Disponibilidad crearHorario(DayOfWeek dia, String nombreOdontologo, String dni) {
         Odontologo od = new Odontologo();
         od.setDni(dni);
         od.setNombre(nombreOdontologo);
@@ -19,7 +19,7 @@ public class TestDataFactory {
         od.setFecha_nacimiento(LocalDate.of(1995, Month.JUNE, 10));
       //  odontologoRepository.save(od);
 
-        Horario h = new Horario();
+        Disponibilidad h = new Disponibilidad();
         h.setEstado(Estado.ACTIVO);
         h.setDiaSemana(dia);
         h.setHoraInicio(LocalTime.of(9, 0));

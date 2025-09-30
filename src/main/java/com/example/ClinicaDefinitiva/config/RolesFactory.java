@@ -92,7 +92,7 @@ public final class RolesFactory {
                         Permisos.GET_TURNOS_LIST,
                         Permisos.POST_TURNOS,
                         Permisos.PUT_TURNOS,
-                        Permisos.DELETE_TURNOS),
+                        permisos.DELETE_TURNOS),
                 Roles.ADMINISTRADOR,
                 Estado.ACTIVO
 
@@ -275,7 +275,7 @@ public final class RolesFactory {
 
     public static RolesEntity createRoleEntity(Roles rol) {
     RolesEntity entity = roles.get(rol);
-    if (entity == null) throw new IllegalArgumentException("Rol no definido: " + rol);
+    if (entity == null) throw new IllegalArgumentException("RolEnum no definido: " + rol);
     return entity;
 
 }

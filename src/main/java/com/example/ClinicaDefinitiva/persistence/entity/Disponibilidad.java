@@ -1,8 +1,7 @@
 package com.example.ClinicaDefinitiva.persistence.entity;
 
-import com.example.ClinicaDefinitiva.Enum.Estado;
+import com.example.ClinicaDefinitiva.vo.EstadoHorario;
 import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 
 
 import java.io.Serializable;
@@ -10,11 +9,10 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
-public class Horario implements Serializable {
+public class Disponibilidad implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,22 +21,22 @@ public class Horario implements Serializable {
     private DayOfWeek diaSemana; // Define el día de la semana (lunes, Martes...)
     private LocalTime horaInicio;
     private LocalTime horaFin;
-    private Estado estado;
+    private EstadoHorario estadoHorario;
     private LocalDate fecha;
 
     @OneToMany(mappedBy = "horario")
-    private List<Turno> turnos = new ArrayList<>(); // Horario conoce los turnos asignados a ese bloque
+    private List<Turno> turnos = new ArrayList<>(); // Disponibilidad conoce los turnos asignados a ese bloque
 
     @ManyToOne()
     @JoinColumn(name = "odontologo_id", nullable = false)
     private Odontologo unOdontologo;
 
 
-    public Horario(){}
+    public Disponibilidad(){}
 
-    public Horario(DayOfWeek diaSemana, Estado estado, LocalTime horaFin, LocalTime horaInicio, Long id, List<Turno> turnos, Odontologo unOdontologo, LocalDate fecha) {
+    public Disponibilidad(DayOfWeek diaSemana, EstadoHorario estadoHorario, LocalTime horaFin, LocalTime horaInicio, Long id, List<Turno> turnos, Odontologo unOdontologo, LocalDate fecha) {
         this.diaSemana = diaSemana;
-        this.estado = estado;
+        this.estadoHorario = estadoHorario;
         this.horaFin = horaFin;
         this.horaInicio = horaInicio;
         this.id = id;
@@ -73,12 +71,12 @@ public class Horario implements Serializable {
         this.diaSemana = diaSemana;
     }
 
-    public Estado getEstado() {
-        return estado;
+    public EstadoHorario getEstadoHorario() {
+        return estadoHorario;
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
+    public void setEstadoHorario(EstadoHorario estadoHorario) {
+        this.estadoHorario = estadoHorario;
     }
 
     public LocalTime getHoraFin() {

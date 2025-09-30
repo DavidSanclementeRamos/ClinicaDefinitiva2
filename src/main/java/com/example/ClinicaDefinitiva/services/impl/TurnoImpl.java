@@ -10,7 +10,7 @@ import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFoundE
 import com.example.ClinicaDefinitiva.exceptions.entityNotFount.TurnoNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.TurnoMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.TurnoDto;
-import com.example.ClinicaDefinitiva.persistence.entity.Horario;
+import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;
 import com.example.ClinicaDefinitiva.persistence.entity.Odontologo;
 import com.example.ClinicaDefinitiva.persistence.entity.Paciente;
 import com.example.ClinicaDefinitiva.persistence.entity.Turno;
@@ -63,12 +63,12 @@ public class TurnoImpl implements TurnoService {
                     return new PacienteNotFoundException(ContextoEntidad.TURNO
                 , "No se encontro un paciente asociado al turno con el id: " + turnoDto.getIdPaciente() );});
 
-        // validar la existencia del horario asociado
-        Horario horario = horarioRepository.findById(turnoDto.getHorarioId())
+        // validar la existencia del disponibilidad asociado
+        Disponibilidad disponibilidad = horarioRepository.findById(turnoDto.getHorarioId())
                 .orElseThrow(() -> {
-                    logger.warn("No hay horario asociado a ese id:  [{}], requestId={}",turnoDto.getHorarioId() , requestId);
+                    logger.warn("No hay disponibilidad asociado a ese id:  [{}], requestId={}",turnoDto.getHorarioId() , requestId);
                   return new  HorarioNotfoundException(ContextoEntidad.HORARIO,
-                          "No se encontro un horario asociado al turno con el id: " + turnoDto.getHorarioId() );});
+                          "No se encontro un disponibilidad asociado al turno con el id: " + turnoDto.getHorarioId() );});
 
 
         // validar el odontólogo asociado
@@ -84,7 +84,7 @@ public class TurnoImpl implements TurnoService {
         turno.setHoraTurno(turnoDto.getHora_turno());
         turno.setAfeccion(turnoDto.getAfeccion());
         turno.setPaciente(paciente);
-        turno.setHorario(horario);
+        turno.setHorario(disponibilidad);
         turno.setOdontologo(odontologo);
 
 

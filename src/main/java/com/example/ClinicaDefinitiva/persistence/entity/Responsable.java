@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-//@Getter
-//@Setter
 public class Responsable extends Persona{
         @Enumerated(EnumType.STRING)
         private TipoResponsable tipoResponsable;

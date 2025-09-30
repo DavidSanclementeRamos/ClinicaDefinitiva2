@@ -2,11 +2,10 @@ package com.example.ClinicaDefinitiva.builder;
 
 import com.example.ClinicaDefinitiva.Enum.Afeccion;
 import com.example.ClinicaDefinitiva.Enum.Estado;
-import com.example.ClinicaDefinitiva.persistence.entity.Horario;
+import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;
 import com.example.ClinicaDefinitiva.persistence.entity.Odontologo;
 import com.example.ClinicaDefinitiva.persistence.entity.Paciente;
 import com.example.ClinicaDefinitiva.persistence.entity.Turno;
-import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,7 +19,7 @@ import java.time.LocalTime;
         private Odontologo odontologo = new OdontologoBuilder().builder();
         private Paciente paciente = new Paciente(); // puedes usar PacienteBuilder si lo tienes
         private Afeccion afeccion = Afeccion.CARIES; // valor por defecto
-        private Horario horario ; // puedes usar HorarioBuilder si lo tienes
+        private Disponibilidad disponibilidad; // puedes usar HorarioBuilder si lo tienes
         private Estado estado = Estado.ACTIVO;
 
         public TurnoBuilder withFechaTurno(LocalDate fechaTurno) {
@@ -48,8 +47,8 @@ import java.time.LocalTime;
             return this;
         }
 
-        public TurnoBuilder withHorario(Horario horario) {
-            this.horario = horario;
+        public TurnoBuilder withHorario(Disponibilidad disponibilidad) {
+            this.disponibilidad = disponibilidad;
             return this;
         }
 
@@ -66,7 +65,7 @@ import java.time.LocalTime;
             turno.setOdontologo(odontologo);
             turno.setPaciente(paciente);
             turno.setAfeccion(afeccion);
-            turno.setHorario(horario);
+            turno.setHorario(disponibilidad);
             turno.setEstado(estado);
             return turno;
         }

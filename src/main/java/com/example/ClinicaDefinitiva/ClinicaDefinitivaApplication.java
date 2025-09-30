@@ -58,8 +58,6 @@ public class ClinicaDefinitivaApplication {
 
 // http://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=prueva&tab
 
-//C:/Users/David/Documents/proyectosJava/ClinicaDefinitiva
-
-
+//C:/Users/David/OneDrive/Documents/proyectosJava/ClinicaDefinitiva
 	}
 }

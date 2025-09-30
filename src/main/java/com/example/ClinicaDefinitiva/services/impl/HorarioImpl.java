@@ -6,7 +6,7 @@ import com.example.ClinicaDefinitiva.exceptions.entityNotFount.HorarioNotfoundEx
 import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfoundException;
 import com.example.ClinicaDefinitiva.mapper.HorarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.HorarioDto;
-import com.example.ClinicaDefinitiva.persistence.entity.Horario;
+import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;
 import com.example.ClinicaDefinitiva.persistence.entity.Odontologo;
 import com.example.ClinicaDefinitiva.repository.HorarioRepository;
 import com.example.ClinicaDefinitiva.repository.OdontologoRepository;
@@ -48,17 +48,17 @@ public class HorarioImpl implements HorarioService {
     @Override
     public HorarioDto findId(long horarioId) {
 
-        Horario horario = horarioRepository.findById(horarioId)
+        Disponibilidad disponibilidad = horarioRepository.findById(horarioId)
                 .orElseThrow(() -> {
                    // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
-                    logger.warn("Horario no encontrado [id={}, requestId={}]", horarioId, requestId);
+                    logger.warn("Disponibilidad no encontrado [id={}, requestId={}]", horarioId, requestId);
                     return new OdontologoNotfoundException(
                             ContextoEntidad.HORARIO,
-                            "No se encontró el horario con ID: " + horarioId
+                            "No se encontró el disponibilidad con ID: " + horarioId
                     );
                 });
 
-                return horarioMapper.horarioDto(horario);
+                return horarioMapper.horarioDto(disponibilidad);
 
     }
 
@@ -68,15 +68,15 @@ public class HorarioImpl implements HorarioService {
         return odontologoRepository.findById(horarioDto.getIdOdontologo())
                 .map(odontologo -> {
 
-                    Horario horario = new Horario();
-                    horario.setDiaSemana(horarioDto.getDiaSemana());
-                    horario.setHoraFin(horarioDto.getHoraFinal());
-                    horario.setHoraInicio(horarioDto.getHoraInicio());
-                    horario.setUnOdontologo(odontologo);
-                    horario.setEstado(horarioDto.getEstado());
+                    Disponibilidad disponibilidad = new Disponibilidad();
+                    disponibilidad.setDiaSemana(horarioDto.getDiaSemana());
+                    disponibilidad.setHoraFin(horarioDto.getHoraFinal());
+                    disponibilidad.setHoraInicio(horarioDto.getHoraInicio());
+                    disponibilidad.setUnOdontologo(odontologo);
+                    disponibilidad.setEstado(horarioDto.getEstado());
 
 
-                     return horarioRepository.save(horario);
+                     return horarioRepository.save(disponibilidad);
 
                 }).map(horarioMapper::horarioDto)
                 .orElseThrow(()-> new OdontologoNotfoundException(ContextoEntidad.ODONTOLOGO, "No fue encontrado el odontologo con id: " + horarioDto.getIdOdontologo()));
@@ -85,14 +85,14 @@ public class HorarioImpl implements HorarioService {
     @Override
     public HorarioDto update(long horarioId, HorarioDto horarioDto) {
 
-                Horario horario = horarioRepository.findById(horarioId)
-                        .orElseThrow(()-> new HorarioNotfoundException(ContextoEntidad.HORARIO, "No fue encontrado en horario con id: " + horarioId));
+                Disponibilidad disponibilidad = horarioRepository.findById(horarioId)
+                        .orElseThrow(()-> new HorarioNotfoundException(ContextoEntidad.HORARIO, "No fue encontrado en disponibilidad con id: " + horarioId));
                 Odontologo odontologo = odontologoRepository.findById(horarioDto.getIdOdontologo())
                         .orElseThrow(()-> new OdontologoNotfoundException(ContextoEntidad.ODONTOLOGO, "No fue encontrado el odontologo con id: " + horarioDto.getIdOdontologo() ));
-                    horario.setEstado(horarioDto.getEstado());
-                    horario.setUnOdontologo(odontologo);
-                horarioMapper.horarioDto(horario);
-                Horario actualizar = horarioRepository.save(horario);
+                    disponibilidad.setEstado(horarioDto.getEstado());
+                    disponibilidad.setUnOdontologo(odontologo);
+                horarioMapper.horarioDto(disponibilidad);
+                Disponibilidad actualizar = horarioRepository.save(disponibilidad);
 
         return horarioMapper.horarioDto(actualizar);
     }
@@ -101,7 +101,7 @@ public class HorarioImpl implements HorarioService {
     public Page<HorarioDto> findAll(Pageable pageable) {
 
         // Le decimos al repo que haga la búsqueda paginada+ordenada
-        Page<Horario> pageEntidades = horarioRepository.findAll(pageable);
+        Page<Disponibilidad> pageEntidades = horarioRepository.findAll(pageable);
 
         if (pageEntidades.isEmpty()) {
             throw new HorarioNotfoundException(
@@ -122,7 +122,7 @@ public class HorarioImpl implements HorarioService {
                     "No existe un odontólogo con el id: " + idOdontologo
             );
         }
-        List<Horario>  lista = horarioRepository.findByUnOdontologo_Id(idOdontologo);
+        List<Disponibilidad>  lista = horarioRepository.findByUnOdontologo_Id(idOdontologo);
 
         if (lista.isEmpty()) {
            // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
@@ -144,7 +144,7 @@ public class HorarioImpl implements HorarioService {
     @Override
     public List<HorarioDto> findByDiaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
             DayOfWeek dia, LocalTime desde, LocalTime hasta) {
-        List<Horario> lista = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(dia, desde,hasta);
+        List<Disponibilidad> lista = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(dia, desde,hasta);
         if (lista.isEmpty()) {
             // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
             logger.warn("No se encontraron horarios  en el dia [{}], dede[{}], hasta[{}] ,requestId={}"
@@ -166,7 +166,7 @@ public class HorarioImpl implements HorarioService {
 
     @Override
     public List<HorarioDto> findByFechaBetween(LocalDate desde, LocalDate hasta) {
-        List<Horario> lista = horarioRepository.findDistinctByTurnos_FechaTurnoBetween(desde,hasta);
+        List<Disponibilidad> lista = horarioRepository.findDistinctByTurnos_FechaTurnoBetween(desde,hasta);
 
         if (lista.isEmpty()) {
             // odontologoMetrics.contarOdontologoNoEncontrado(requestId);

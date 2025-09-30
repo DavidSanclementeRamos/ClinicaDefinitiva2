@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.builder;
 
 import com.example.ClinicaDefinitiva.Enum.Especialidades;
 import com.example.ClinicaDefinitiva.Enum.Tipo_sangre;
-import com.example.ClinicaDefinitiva.persistence.entity.Horario;
+import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;
 import com.example.ClinicaDefinitiva.persistence.entity.Odontologo;
 import com.example.ClinicaDefinitiva.persistence.entity.Turno;
 import com.example.ClinicaDefinitiva.persistence.entity.Usuario;
@@ -27,7 +27,7 @@ public class OdontologoBuilder implements IBuilder<Odontologo> {
         // Atributos propios de Odontologo
         private Especialidades especialidad = Especialidades.ENDODONCIA;
         private Usuario unUsuario; // puedes usar un UsuarioBuilder si lo tienes
-        private List<Horario> listaHorarios = new ArrayList<>() ; // idem con HorarioBuilder
+        private List<Disponibilidad> listaDisponibilidads = new ArrayList<>() ; // idem con HorarioBuilder
         private List<Turno> listaTurnos = new ArrayList<>();
 
         // Métodos fluidos
@@ -76,8 +76,8 @@ public class OdontologoBuilder implements IBuilder<Odontologo> {
             return this;
         }
 
-        public OdontologoBuilder withHorario(List<Horario> listaHorarios) {
-            this.listaHorarios = listaHorarios;
+        public OdontologoBuilder withHorario(List<Disponibilidad> listaDisponibilidads) {
+            this.listaDisponibilidads = listaDisponibilidads;
             return this;
         }
 
@@ -104,7 +104,7 @@ public class OdontologoBuilder implements IBuilder<Odontologo> {
         o.setTipoSangre(tipoSangre);
         o.setEspecialidad(especialidad);
         o.setUnUsuario(unUsuario);
-        o.setListaHorarios(listaHorarios);
+        o.setListaHorarios(listaDisponibilidads);
         o.setListaTurnos(listaTurnos);
         return o;
     }

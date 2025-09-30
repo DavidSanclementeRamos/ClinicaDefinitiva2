@@ -1,9 +1,8 @@
 package com.example.ClinicaDefinitiva.repository;
-import com.example.ClinicaDefinitiva.Enum.Estado;
 import com.example.ClinicaDefinitiva.builder.HorarioBuilder;
 import com.example.ClinicaDefinitiva.builder.OdontologoBuilder;
 import com.example.ClinicaDefinitiva.builder.TurnoBuilder;
-import com.example.ClinicaDefinitiva.persistence.entity.Horario;
+import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;
 import com.example.ClinicaDefinitiva.persistence.entity.Odontologo;
 import com.example.ClinicaDefinitiva.persistence.entity.Paciente;
 import com.example.ClinicaDefinitiva.persistence.entity.Turno;
@@ -22,14 +21,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
-import java.util.stream.Collectors;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 
 @DataJpaTest
 @ActiveProfiles("test") // Usa application-test.properties
-public class TestHorarioRepository {
+public class TestDisponibilidadRepository {
 
     @Autowired
     private HorarioRepository horarioRepository;
@@ -46,11 +45,11 @@ public class TestHorarioRepository {
     @Autowired
     PacienteRepository pacienteRepository;
 
-    private Horario horarioBuilder;
+    private Disponibilidad disponibilidadBuilder;
     private Odontologo odontologoBuilder;
-    private Horario horarioBuilder1;
-    private Horario horarioBuilder2;
-    private Horario horarioBuilder3;
+    private Disponibilidad disponibilidadBuilder1;
+    private Disponibilidad disponibilidadBuilder2;
+    private Disponibilidad disponibilidadBuilder3;
     private Turno turnoBuilder;
     private Turno turnoBuilder1;
     private Turno turnoBuilder2;
@@ -67,27 +66,27 @@ public class TestHorarioRepository {
         paciente.setFecha_nacimiento(LocalDate.EPOCH);
 
 
-        horarioBuilder = new HorarioBuilder()
+        disponibilidadBuilder = new HorarioBuilder()
                 .setOdontologo(odontologoBuilder)
 
                 .setHoraInicio(LocalTime.of(9, 0))
                 .builder();
 
-         horarioBuilder1 = new HorarioBuilder()
+         disponibilidadBuilder1 = new HorarioBuilder()
                 .setOdontologo(odontologoBuilder)
                 .setDiaSemana(DayOfWeek.WEDNESDAY)
                 .setHoraInicio(LocalTime.of(6,0))
                 .setHoraFin(LocalTime.of(13,0))
                 .builder();
 
-        horarioBuilder2 = new HorarioBuilder()
+        disponibilidadBuilder2 = new HorarioBuilder()
                 .setOdontologo(odontologoBuilder)
                 .setDiaSemana(DayOfWeek.FRIDAY)
                 .setHoraInicio(LocalTime.of(7,30))
                 .setHoraFin(LocalTime.of(12,30))
                 .builder();
 
-        horarioBuilder3 = new HorarioBuilder()
+        disponibilidadBuilder3 = new HorarioBuilder()
                 .setOdontologo(odontologoBuilder)
                 .setDiaSemana(DayOfWeek.WEDNESDAY)
                 .setHoraInicio(LocalTime.of(6,30))
@@ -96,35 +95,35 @@ public class TestHorarioRepository {
 
           turnoBuilder = new TurnoBuilder()
                  .withOdontologo(odontologoBuilder)
-                 .withHorario(horarioBuilder)
+                 .withHorario(disponibilidadBuilder)
                   .withPaciente(paciente)
                  .builder();
 
          turnoBuilder1 = new TurnoBuilder()
                 .withFechaTurno(LocalDate.of(2025,8,17))
                 .withOdontologo(odontologoBuilder)
-                .withHorario(horarioBuilder1)
+                .withHorario(disponibilidadBuilder1)
                  .withPaciente(paciente)
                 .builder();
 
          turnoBuilder2 = new TurnoBuilder()
                 .withFechaTurno(LocalDate.of(2025,8,19))
                 .withOdontologo(odontologoBuilder)
-                .withHorario(horarioBuilder2)
+                .withHorario(disponibilidadBuilder2)
                  .withPaciente(paciente)
                 .builder();
 
-         odontologoBuilder.setListaHorarios(List.of(horarioBuilder,horarioBuilder1,horarioBuilder2,horarioBuilder3));
+         odontologoBuilder.setListaHorarios(List.of(disponibilidadBuilder, disponibilidadBuilder1, disponibilidadBuilder2, disponibilidadBuilder3));
          paciente.setUnTurno(List.of(turnoBuilder,turnoBuilder1,turnoBuilder2));
-         horarioBuilder.setTurnos(List.of( turnoBuilder));
-         horarioBuilder1.setTurnos(List.of( turnoBuilder1));
-         horarioBuilder2.setTurnos(List.of( turnoBuilder2));
+         disponibilidadBuilder.setTurnos(List.of( turnoBuilder));
+         disponibilidadBuilder1.setTurnos(List.of( turnoBuilder1));
+         disponibilidadBuilder2.setTurnos(List.of( turnoBuilder2));
 
     }
 
     @Nested
-    @DisplayName("Tests para obtener un Horario por ID")
-    class HorarioFindByIdTests {
+    @DisplayName("Tests para obtener un Disponibilidad por ID")
+    class DisponibilidadFindByIdTests {
         @DisplayName("Test horario id valido")
         @Test
         void testHorarioFindById() {
@@ -132,13 +131,13 @@ public class TestHorarioRepository {
             odontologoRepository.save(odontologoBuilder);
 
             // when accion o el comportamiento que vamos a probar
-            Horario horarioDB = horarioRepository.findById(horarioBuilder.getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Horario no encontrado"));
+            Disponibilidad disponibilidadDB = horarioRepository.findById(disponibilidadBuilder.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Disponibilidad no encontrado"));
 
             // then verificar la salida
-            assertThat(horarioDB)
+            assertThat(disponibilidadDB)
                     .isNotNull()
-                    .extracting(Horario::getHoraInicio, h -> h.getUnOdontologo().getNombre(), h ->h.getDiaSemana())
+                    .extracting(Disponibilidad::getHoraInicio, h -> h.getUnOdontologo().getNombre(), h ->h.getDiaSemana())
                     .containsExactly(LocalTime.of(9, 0), "NombreDefault",DayOfWeek.MONDAY);
 
         }
@@ -147,7 +146,7 @@ public class TestHorarioRepository {
         @Test
         void testHorarioFindByIdInvalido() {
             long idInexistente = Long.MAX_VALUE;
-            Optional<Horario> horarioDB = horarioRepository.findById(idInexistente);
+            Optional<Disponibilidad> horarioDB = horarioRepository.findById(idInexistente);
 
             // then verificar la salida
             assertThat(horarioDB)
@@ -160,32 +159,32 @@ public class TestHorarioRepository {
 
     @Nested
     @DisplayName("Tests de findALL horario")
-    class HorarioFindAllTests {
+    class DisponibilidadFindAllTests {
         @DisplayName("Test lista de Horarios ")
         @Test
         void testHorarioFindAll() {
 
-            //horarioRepository.save(horarioBuilder);
+            //horarioRepository.save(disponibilidadBuilder);
             odontologoRepository.save(odontologoBuilder);
 
             // when accion o el comportamiento que vamos a probar
-            List<Horario> listaHorario = horarioRepository.findAll();
+            List<Disponibilidad> listaDisponibilidad = horarioRepository.findAll();
 
             // then verificar la salida
-            assertThat(listaHorario)
+            assertThat(listaDisponibilidad)
                     .isNotNull()
                     .hasSize(4)
-                    .extracting(Horario::getId)
+                    .extracting(Disponibilidad::getId)
                     .doesNotHaveDuplicates();
 
             // verificar atributos claves de horario
-            Horario horarioRecuperado = listaHorario.stream()
+            Disponibilidad disponibilidadRecuperado = listaDisponibilidad.stream()
                     .filter(h -> h.getDiaSemana() == DayOfWeek.MONDAY)
                     .findFirst()
-                    .orElseThrow(() -> new AssertionError("Horario no encontrado"));
+                    .orElseThrow(() -> new AssertionError("Disponibilidad no encontrado"));
 
-            assertThat(horarioRecuperado)
-                    .extracting(Horario::getHoraInicio, h -> h.getUnOdontologo().getNombre(), Horario::getDiaSemana)
+            assertThat(disponibilidadRecuperado)
+                    .extracting(Disponibilidad::getHoraInicio, h -> h.getUnOdontologo().getNombre(), Disponibilidad::getDiaSemana)
                     .containsExactly(LocalTime.of(9, 0), "NombreDefault",DayOfWeek.MONDAY);
 
         }
@@ -195,30 +194,30 @@ public class TestHorarioRepository {
         void testFindAllIsEmpty() {
 
             // when accion o el comportamiento que vamos a probar
-            List<Horario> listaHorario = horarioRepository.findAll();
+            List<Disponibilidad> listaDisponibilidad = horarioRepository.findAll();
 
             // then verificar la salida
-            assertThat(listaHorario).isEmpty();
+            assertThat(listaDisponibilidad).isEmpty();
         }
     }
 
     @Nested
     @DisplayName("Tests de horario por id odontologo")
-    class HorarioFindByOdontologoIdTests {
-        @DisplayName("Test para obtener un Horario por el id del Odontologo")
+    class DisponibilidadFindByOdontologoIdTests {
+        @DisplayName("Test para obtener un Disponibilidad por el id del Odontologo")
         @Test
         void testFindByUnOdontologo_Id() {
             // given
             odontologoRepository.save(odontologoBuilder);
 
             // when accion o el comportamiento que vamos a probar
-            List<Horario> listaHorario = horarioRepository.findByUnOdontologo_Id(odontologoBuilder.getId());
+            List<Disponibilidad> listaDisponibilidad = horarioRepository.findByUnOdontologo_Id(odontologoBuilder.getId());
 
             // then verificar la salida
-            assertThat(listaHorario)
+            assertThat(listaDisponibilidad)
                     .hasSize(4)
                     .isNotNull()
-                    .extracting(Horario::getDiaSemana)
+                    .extracting(Disponibilidad::getDiaSemana)
                     .containsExactlyInAnyOrder(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY,DayOfWeek.WEDNESDAY)
 
                     .isNotEmpty(); // Asegura que se encontró al menos un horario
@@ -236,10 +235,10 @@ public class TestHorarioRepository {
              odontologoRepository.save(odontologo); // Lo guardas sin horarios
 
             // when
-            List<Horario> listaHorario = horarioRepository.findByUnOdontologo_Id(odontologo.getId());
+            List<Disponibilidad> listaDisponibilidad = horarioRepository.findByUnOdontologo_Id(odontologo.getId());
 
             // then
-            assertThat(listaHorario).isEmpty(); // Verifica que no se devuelve nada
+            assertThat(listaDisponibilidad).isEmpty(); // Verifica que no se devuelve nada
         }
 
         @DisplayName("Test para  horario con odontólogo con ID inexistente")
@@ -249,10 +248,10 @@ public class TestHorarioRepository {
             long idInexistente =  Long.MAX_VALUE; // Asegúrate de que este ID no exista en la base de datos
 
             // when
-            List<Horario> listaHorario = horarioRepository.findByUnOdontologo_Id(idInexistente);
+            List<Disponibilidad> listaDisponibilidad = horarioRepository.findByUnOdontologo_Id(idInexistente);
 
             // then
-            assertThat(listaHorario).isEmpty(); // El repositorio debe devolver lista vacía, no null ni excepción
+            assertThat(listaDisponibilidad).isEmpty(); // El repositorio debe devolver lista vacía, no null ni excepción
 
         }
     }
@@ -277,14 +276,14 @@ public class TestHorarioRepository {
             odontologoRepository.save(odontologoBuilder);
 
             // when: se consulta un rango fuera del horario guardado
-            List<Horario> listaHorario = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
+            List<Disponibilidad> listaDisponibilidad = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
                     DayOfWeek.SATURDAY, LocalTime.of(7, 0), LocalTime.of(4, 0));
 
             // then
-            assertThat(listaHorario).isEmpty(); // No debe haber disponibilidad
+            assertThat(listaDisponibilidad).isEmpty(); // No debe haber disponibilidad
         }
 
-        @DisplayName("Horario completamente dentro del rango solicitado")
+        @DisplayName("Disponibilidad completamente dentro del rango solicitado")
         @Test
         void testFindByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqualHorarioDentroDelRango() {
 
@@ -299,13 +298,13 @@ public class TestHorarioRepository {
 
             odontologoRepository.save(odontologoBuilder);
 
-            List<Horario> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
+            List<Disponibilidad> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
                     DayOfWeek.WEDNESDAY, LocalTime.of(6, 30), LocalTime.of(12, 30));
 
-            assertThat(resultado).contains(horarioBuilder1);
+            assertThat(resultado).contains(disponibilidadBuilder1);
         }
 
-        @DisplayName("Horario con horaInicio igual pero horaFin menor a la solicitada")
+        @DisplayName("Disponibilidad con horaInicio igual pero horaFin menor a la solicitada")
         @Test
         void testFindByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqualHorarioFinMenorQueLimiteSuperior() {
 
@@ -318,26 +317,26 @@ public class TestHorarioRepository {
              *
              * Ejemplo: filtro → lunes [06:30 – 12:30], horario de prueba → [06:30 – 11:30] → no debe aparecer.
              */
-            Horario horarioBordeInferiorNegativo = new Horario();
+            Disponibilidad disponibilidadBordeInferiorNegativo = new Disponibilidad();
             Odontologo odontologo = new Odontologo();
 
             odontologo.setFecha_nacimiento(LocalDate.EPOCH);
-            odontologo.setListaHorarios(List.of(horarioBordeInferiorNegativo));
+            odontologo.setListaHorarios(List.of(disponibilidadBordeInferiorNegativo));
 
-            horarioBordeInferiorNegativo.setUnOdontologo(odontologo);
-            horarioBordeInferiorNegativo.setDiaSemana(DayOfWeek.MONDAY);
-            horarioBordeInferiorNegativo.setHoraInicio(LocalTime.of(6, 30));
-            horarioBordeInferiorNegativo.setHoraFin(LocalTime.of(11, 30));
+            disponibilidadBordeInferiorNegativo.setUnOdontologo(odontologo);
+            disponibilidadBordeInferiorNegativo.setDiaSemana(DayOfWeek.MONDAY);
+            disponibilidadBordeInferiorNegativo.setHoraInicio(LocalTime.of(6, 30));
+            disponibilidadBordeInferiorNegativo.setHoraFin(LocalTime.of(11, 30));
 
             odontologoRepository.saveAndFlush(odontologo);
 
-            List<Horario> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
+            List<Disponibilidad> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
                     DayOfWeek.MONDAY, LocalTime.of(6, 30), LocalTime.of(12, 30));
 
             assertThat(resultado).isEmpty();
         }
 
-        @DisplayName("Horario con horaFin igual pero horaInicio mayor a la solicitada")
+        @DisplayName("Disponibilidad con horaFin igual pero horaInicio mayor a la solicitada")
         @Test
         void testFindByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqualHoraInicioMayorQueLimiteInferior() {
 
@@ -350,26 +349,26 @@ public class TestHorarioRepository {
              *
              * Ejemplo: filtro → lunes [06:30 – 12:30], horario de prueba → [07:30 – 12:30] → no debe aparecer.
              */
-            Horario horarioBordeSuperiorNegativo = new Horario();
+            Disponibilidad disponibilidadBordeSuperiorNegativo = new Disponibilidad();
             Odontologo odontologo = new Odontologo();
 
             odontologo.setFecha_nacimiento(LocalDate.EPOCH);
-            odontologo.setListaHorarios(List.of(horarioBordeSuperiorNegativo));
+            odontologo.setListaHorarios(List.of(disponibilidadBordeSuperiorNegativo));
 
-            horarioBordeSuperiorNegativo.setUnOdontologo(odontologo);
-            horarioBordeSuperiorNegativo.setDiaSemana(DayOfWeek.MONDAY);
-            horarioBordeSuperiorNegativo.setHoraInicio(LocalTime.of(7, 30));
-            horarioBordeSuperiorNegativo.setHoraFin(LocalTime.of(12, 30));
+            disponibilidadBordeSuperiorNegativo.setUnOdontologo(odontologo);
+            disponibilidadBordeSuperiorNegativo.setDiaSemana(DayOfWeek.MONDAY);
+            disponibilidadBordeSuperiorNegativo.setHoraInicio(LocalTime.of(7, 30));
+            disponibilidadBordeSuperiorNegativo.setHoraFin(LocalTime.of(12, 30));
 
             odontologoRepository.saveAndFlush(odontologo);
 
-            List<Horario> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
+            List<Disponibilidad> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
                     DayOfWeek.MONDAY, LocalTime.of(6, 30), LocalTime.of(12, 30));
 
             assertThat(resultado).isEmpty();
         }
 
-        @DisplayName("Horario en día distinto")
+        @DisplayName("Disponibilidad en día distinto")
         @Test
         void testFindByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqualHorarioDiaIncorrecto() {
             /**
@@ -381,13 +380,13 @@ public class TestHorarioRepository {
              */
             odontologoRepository.save(odontologoBuilder);
 
-            List<Horario> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
+            List<Disponibilidad> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
                     DayOfWeek.MONDAY, LocalTime.of(6, 30), LocalTime.of(12, 30));
 
             assertThat(resultado).isEmpty();
         }
 
-        @DisplayName("Horario fuera del rango por poco")
+        @DisplayName("Disponibilidad fuera del rango por poco")
         @Test
         void testFindByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqualHorarioFueraPorPoco() {
             /**
@@ -398,16 +397,16 @@ public class TestHorarioRepository {
              *
              * En este caso: buscado [06:30 – 12:30], horario de prueba [07:30 – 12:30] → no debe ser válido.
              */
-            Horario horarioFueraPorPoco = new Horario();
+            Disponibilidad disponibilidadFueraPorPoco = new Disponibilidad();
             Odontologo odontologo = new Odontologo();
-            odontologo.setListaHorarios(List.of(horarioFueraPorPoco));
+            odontologo.setListaHorarios(List.of(disponibilidadFueraPorPoco));
             odontologo.setFecha_nacimiento(LocalDate.EPOCH);
-            horarioFueraPorPoco.setDiaSemana(DayOfWeek.MONDAY);
-            horarioFueraPorPoco.setUnOdontologo(odontologo);
-            horarioFueraPorPoco.setHoraInicio(LocalTime.of(6, 31)); // después del límite
-            horarioFueraPorPoco.setHoraFin(LocalTime.of(12, 29));   // antes del límite
+            disponibilidadFueraPorPoco.setDiaSemana(DayOfWeek.MONDAY);
+            disponibilidadFueraPorPoco.setUnOdontologo(odontologo);
+            disponibilidadFueraPorPoco.setHoraInicio(LocalTime.of(6, 31)); // después del límite
+            disponibilidadFueraPorPoco.setHoraFin(LocalTime.of(12, 29));   // antes del límite
             odontologoRepository.saveAndFlush(odontologo);
-            List<Horario> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
+            List<Disponibilidad> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
                     DayOfWeek.MONDAY, LocalTime.of(6, 30), LocalTime.of(12, 30));
 
             assertThat(resultado).isEmpty();
@@ -433,13 +432,13 @@ public class TestHorarioRepository {
 
 
             // when
-            List<Horario> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
+            List<Disponibilidad> resultado = horarioRepository.findByDiaSemanaAndHoraInicioLessThanEqualAndHoraFinGreaterThanEqual(
                     DayOfWeek.WEDNESDAY, LocalTime.of(6, 30), LocalTime.of(12, 30));
 
             // then
             assertThat(resultado).hasSize(2)
-                    .extracting(Horario::getId)
-                    .containsExactlyInAnyOrder(horarioBuilder3.getId(), horarioBuilder1.getId());
+                    .extracting(Disponibilidad::getId)
+                    .containsExactlyInAnyOrder(disponibilidadBuilder3.getId(), disponibilidadBuilder1.getId());
 
 
         }
@@ -456,7 +455,7 @@ public class TestHorarioRepository {
              * Verifica que el repositorio devuelva los Horarios que tienen al menos un Turno
              * dentro del rango de fechas consultado.
              * - Rango de búsqueda: [2025-08-16 – 2025-08-30] (inclusive).
-             * - Un Horario califica con que tenga ≥1 Turno en el rango; puede tener otros Turnos
+             * - Un Disponibilidad califica con que tenga ≥1 Turno en el rango; puede tener otros Turnos
              *   fuera del rango sin ser excluido.
              *
              * En el setup hay Turnos con fechas como 2025-08-17, 2025-08-19 y 2025-08-20,
@@ -472,7 +471,7 @@ public class TestHorarioRepository {
 
 
             // when
-            List<Horario> listaHorario = horarioRepository.findDistinctByTurnos_FechaTurnoBetween(
+            List<Disponibilidad> listaDisponibilidad = horarioRepository.findDistinctByTurnos_FechaTurnoBetween(
                     LocalDate.of(2025, Month.AUGUST, 16),
                     LocalDate.of(2025, Month.AUGUST, 25)
             );
@@ -481,7 +480,7 @@ public class TestHorarioRepository {
             LocalDate from = LocalDate.of(2025, Month.AUGUST, 16);
             LocalDate to   = LocalDate.of(2025, Month.AUGUST, 30);
 
-            assertThat(listaHorario).hasSize(3)
+            assertThat(listaDisponibilidad).hasSize(3)
                     .allSatisfy(h -> assertThat(h.getTurnos())
                             .extracting(Turno::getFechaTurno)
                             .anySatisfy(f -> assertThat(f).isBetween(from, to))
@@ -493,11 +492,11 @@ public class TestHorarioRepository {
         void turnosFueraDelRango() {
 
             /**
-             * Verifica que un Horario no se incluya en el resultado cuando:
+             * Verifica que un Disponibilidad no se incluya en el resultado cuando:
              * - Todos sus turnos tienen fecha fuera del rango buscado
              *   ([2025-06-29 – 2025-08-01]).
              * - El filtro `findDistinctByTurnos_FechaTurnoBetween` requiere al menos
-             *   un turno cuya fecha esté dentro del rango para que el Horario califique.
+             *   un turno cuya fecha esté dentro del rango para que el Disponibilidad califique.
              *
              * En este escenario, todos los turnos guardados quedan fuera del rango,
              * por lo que la consulta debe devolver lista vacía.
@@ -508,7 +507,7 @@ public class TestHorarioRepository {
             turnoRepository.save(turnoBuilder1);
             turnoRepository.save(turnoBuilder2);
 
-            List<Horario> result = horarioRepository.findDistinctByTurnos_FechaTurnoBetween(
+            List<Disponibilidad> result = horarioRepository.findDistinctByTurnos_FechaTurnoBetween(
                     LocalDate.of(2025, Month.JUNE, 29),
                     LocalDate.of(2025, Month.AUGUST, 1)
             );
@@ -521,23 +520,23 @@ public class TestHorarioRepository {
         void horariosSinTurnos() {
 
             /**
-             * Verifica que un Horario NO sea devuelto por la consulta cuando:
+             * Verifica que un Disponibilidad NO sea devuelto por la consulta cuando:
              * - No tiene turnos asignados (lista de turnos vacía).
              * - El filtro busca por un rango de fechas específico ([2025-06-10 – 2025-06-20]).
              *
-             * Ejemplo: un Horario sin turnos no puede cumplir la condición
+             * Ejemplo: un Disponibilidad sin turnos no puede cumplir la condición
              * `findDistinctByTurnos_FechaTurnoBetween`, ya que no hay ninguna fecha de turno que
              * pueda estar en el rango → la consulta debe devolver lista vacía.
              */
             Odontologo odontologo = new OdontologoBuilder()
                     .withFechaNacimiento(LocalDate.EPOCH).builder();
-            Horario horarioSinTurno = new HorarioBuilder()
+            Disponibilidad disponibilidadSinTurno = new HorarioBuilder()
                     .setOdontologo(odontologo)
                     .setTurnos(Collections.emptyList())
                     .builder();
             odontologoRepository.save(odontologo);
 
-            List<Horario> result = horarioRepository.findDistinctByTurnos_FechaTurnoBetween(
+            List<Disponibilidad> result = horarioRepository.findDistinctByTurnos_FechaTurnoBetween(
                     LocalDate.of(2025, Month.JUNE, 10),
                     LocalDate.of(2025, Month.JUNE, 20)
             );
@@ -550,22 +549,22 @@ public class TestHorarioRepository {
         void horariosConTurnosMixtos() {
 
             /**
-             * Verifica que un Horario SÍ sea devuelto cuando al menos uno de sus Turnos
+             * Verifica que un Disponibilidad SÍ sea devuelto cuando al menos uno de sus Turnos
              * se encuentra dentro del rango de fechas consultado.
              * - Rango de búsqueda: [2025-08-10 – 2025-08-20] (inclusive).
-             * - Grafo de datos: un mismo Horario con turnos "mixtos":
+             * - Grafo de datos: un mismo Disponibilidad con turnos "mixtos":
              *   - uno dentro del rango (p. ej., 2025-08-20),
              *   - y otro fuera del rango (p. ej., 2025-09-17).
              * - La consulta aplica DISTINCT para evitar duplicados cuando varios turnos del
-             *   mismo Horario califican.
+             *   mismo Disponibilidad califican.
              *
-             * Resultado esperado: se devuelve exactamente 1 Horario (el asociado a esos turnos),
+             * Resultado esperado: se devuelve exactamente 1 Disponibilidad (el asociado a esos turnos),
              * ya que basta con un Turno en rango para incluirlo en los resultados.
              */
             turnoBuilder3 = new TurnoBuilder()
                     .withFechaTurno(LocalDate.of(2025,9,17))
                     .withOdontologo(odontologoBuilder)
-                    .withHorario(horarioBuilder)
+                    .withHorario(disponibilidadBuilder)
                     .withPaciente(paciente)
                     .builder();
 
@@ -578,7 +577,7 @@ public class TestHorarioRepository {
             turnoRepository.save(turnoBuilder3);
           //  pacienteRepository.save(paciente);
 
-            List<Horario> result = horarioRepository.findDistinctByTurnos_FechaTurnoBetween(
+            List<Disponibilidad> result = horarioRepository.findDistinctByTurnos_FechaTurnoBetween(
                     LocalDate.of(2025, 8, 10),
                     LocalDate.of(2025, 8, 20)
             );
@@ -589,7 +588,7 @@ public class TestHorarioRepository {
 
     @Nested
     @DisplayName("Tests guardar horario")
-    class TestSaveHorario {
+    class TestSaveDisponibilidad {
 
     @DisplayName("Guardar horario con odontólogo y turno asociado")
     @Test
@@ -602,16 +601,16 @@ public class TestHorarioRepository {
         turnoRepository.save(turnoBuilder);
 
         // then
-        assertThat(horarioBuilder.getId()).isNotNull();
+        assertThat(disponibilidadBuilder.getId()).isNotNull();
 
        // assertThat(..get(0));
         assertThat(turnoBuilder.getFechaTurno()).isEqualTo(LocalDate.of(2025, Month.AUGUST, 20));
 
         // recuperación desde base
-        horarioRepository.findById(horarioBuilder.getId())
-                .orElseThrow(() -> new AssertionError("Horario no encontrado"));
+        horarioRepository.findById(disponibilidadBuilder.getId())
+                .orElseThrow(() -> new AssertionError("Disponibilidad no encontrado"));
 
-        assertThat(horarioBuilder.getUnOdontologo().getNombre())
+        assertThat(disponibilidadBuilder.getUnOdontologo().getNombre())
                 .isEqualTo("NombreDefault");
 
         assertThat(horarioRepository.findAll())
@@ -622,11 +621,11 @@ public class TestHorarioRepository {
     @Test
     void testHorarioSinOdontologo() {
         // given
-        Horario horario1 = new HorarioBuilder()
+        Disponibilidad disponibilidad1 = new HorarioBuilder()
                 .setDiaSemana(DayOfWeek.FRIDAY).builder();
 
         // when & then
-        assertThatThrownBy(() -> horarioRepository.saveAndFlush(horario1))
+        assertThatThrownBy(() -> horarioRepository.saveAndFlush(disponibilidad1))
                 .isInstanceOf(DataIntegrityViolationException.class);
 
     }
@@ -657,32 +656,32 @@ public class TestHorarioRepository {
         void testHorarioUpdateDia() {
             // given
            Odontologo odontologo = new Odontologo();
-            Horario horario = new Horario();
+            Disponibilidad disponibilidad = new Disponibilidad();
 
             odontologo.setNombre("Dr. Actualizable");
             odontologo.setFecha_nacimiento(LocalDate.EPOCH);
-            odontologo.setListaHorarios(List.of(horario));
+            odontologo.setListaHorarios(List.of(disponibilidad));
 
-            horario.setDiaSemana(DayOfWeek.MONDAY);
-            horario.setUnOdontologo(odontologo);
-            horario.setTurnos(Collections.emptyList());
-            horario.setUnOdontologo(odontologo);
+            disponibilidad.setDiaSemana(DayOfWeek.MONDAY);
+            disponibilidad.setUnOdontologo(odontologo);
+            disponibilidad.setTurnos(Collections.emptyList());
+            disponibilidad.setUnOdontologo(odontologo);
             odontologoRepository.saveAndFlush(odontologo);
 
             // when: actualizar el día
-            horario.setDiaSemana(DayOfWeek.THURSDAY);
-            horarioRepository.save(horario);
+            disponibilidad.setDiaSemana(DayOfWeek.THURSDAY);
+            horarioRepository.save(disponibilidad);
 
             // then: recuperar y verificar
-             horarioRepository.findById(horario.getId())
-                    .orElseThrow(() -> new AssertionError("Horario no encontrado"));
+             horarioRepository.findById(disponibilidad.getId())
+                    .orElseThrow(() -> new AssertionError("Disponibilidad no encontrado"));
 
-            assertThat(horario.getDiaSemana()).isEqualTo(DayOfWeek.THURSDAY);
-            assertThat(horario.getUnOdontologo().getId()).isEqualTo(odontologo.getId());
+            assertThat(disponibilidad.getDiaSemana()).isEqualTo(DayOfWeek.THURSDAY);
+            assertThat(disponibilidad.getUnOdontologo().getId()).isEqualTo(odontologo.getId());
 
-            // y que cada turno conoce su horario
-            for (Turno t : horarioBuilder.getTurnos()) {
-                assertThat(t.getHorario().getId()).isEqualTo(horarioBuilder.getId());
+            // y que cada turno conoce su disponibilidad
+            for (Turno t : disponibilidadBuilder.getTurnos()) {
+                assertThat(t.getHorario().getId()).isEqualTo(disponibilidadBuilder.getId());
             }
         }
 
@@ -699,10 +698,10 @@ public class TestHorarioRepository {
             odontologoRepository.save(odontologoBuilder);
 
             // when
-            horarioRepository.delete(horarioBuilder);
+            horarioRepository.delete(disponibilidadBuilder);
 
             // Then
-            Optional<Horario> resultado = horarioRepository.findById(horarioBuilder.getId());
+            Optional<Disponibilidad> resultado = horarioRepository.findById(disponibilidadBuilder.getId());
             assertThat(resultado).isEmpty(); // el horario ya no está en la base
 
 

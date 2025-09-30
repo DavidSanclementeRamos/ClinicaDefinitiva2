@@ -14,7 +14,7 @@ public enum CatalogoError {
     GENERIC_ERROR("ERR_GEN_001", "Error inesperado."),
     EDAD_NO_PERMITIDA("ERR_PARAM_001", "Edad no valida para ese cargo"),
 
-    // 🕒 Errores de Horario
+    // 🕒 Errores de Disponibilidad
     SCHEDULE_NOT_FOUND("ERR_SCH_001", "Schedule not found."),
     INVALID_SCHEDULE("ERR_SCH_002", "Invalid schedule parameters."),
 
@@ -23,7 +23,7 @@ public enum CatalogoError {
     INVALID_SHIFT("ERR_SHF_002", "Invalid shift parameters."),
 
     // 👤 Errores de Usuario
-    USER_NOT_FOUND("ERR_USR_001", "User not found."),
+    USER_NOT_FOUND("ERR_USR_001", "UserModel not found."),
     INVALID_USER("ERR_USR_002", "Invalid user data."),
 
     // 🦷 Errores de Odontólogo

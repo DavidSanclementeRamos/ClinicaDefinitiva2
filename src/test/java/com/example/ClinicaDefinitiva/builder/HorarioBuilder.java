@@ -1,10 +1,9 @@
 package com.example.ClinicaDefinitiva.builder;
 
 import com.example.ClinicaDefinitiva.Enum.Estado;
-import com.example.ClinicaDefinitiva.persistence.entity.Horario;
+import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;
 import com.example.ClinicaDefinitiva.persistence.entity.Odontologo;
 import com.example.ClinicaDefinitiva.persistence.entity.Turno;
-import jakarta.persistence.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -12,7 +11,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class HorarioBuilder implements IBuilder<Horario>{
+public  class HorarioBuilder implements IBuilder<Disponibilidad>{
 
     private DayOfWeek diaSemana = DayOfWeek.MONDAY;
     private LocalTime horaInicio = LocalTime.of(6, 30);
@@ -67,16 +66,16 @@ public  class HorarioBuilder implements IBuilder<Horario>{
 
 
     @Override
-    public Horario builder() {
-        Horario horario = new Horario();
-        horario.setDiaSemana(diaSemana);
-        horario.setHoraInicio(horaInicio);
-        horario.setHoraFin(horaFin);
-        horario.setEstado(estado);
-        horario.setFecha(fecha);
-        horario.setTurnos(turnos);
-        horario.setUnOdontologo(unOdontologo);
-        return horario;
+    public Disponibilidad builder() {
+        Disponibilidad disponibilidad = new Disponibilidad();
+        disponibilidad.setDiaSemana(diaSemana);
+        disponibilidad.setHoraInicio(horaInicio);
+        disponibilidad.setHoraFin(horaFin);
+        disponibilidad.setEstado(estado);
+        disponibilidad.setFecha(fecha);
+        disponibilidad.setTurnos(turnos);
+        disponibilidad.setUnOdontologo(unOdontologo);
+        return disponibilidad;
 
     }
 }
