@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.util;
 
-import com.example.ClinicaDefinitiva.Enum.CatalogoError;
-import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.persistence.entity.ErrorResponse;
 import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,7 @@ public class ErrorHandlerUtils {
         return RequestIdFilter.getRequestId();
     }
 
-    public static ErrorResponse construirError(CatalogoError error,
+    public static ErrorResponse construirError(ErrorCatalog error,
                                                ContextoEntidad contexto,
                                                String mensajeDetalle,
                                                HttpStatus status) {
@@ -50,7 +50,7 @@ public class ErrorHandlerUtils {
         );
     }
 
-    public static ErrorResponse construirError(CatalogoError error,
+    public static ErrorResponse construirError(ErrorCatalog error,
                                                String contextoRaw,
                                                List<String> detalles,
                                                HttpStatus status) {

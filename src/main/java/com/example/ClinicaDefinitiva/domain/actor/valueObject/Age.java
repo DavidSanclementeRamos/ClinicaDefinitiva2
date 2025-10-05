@@ -1,5 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.invalid.AgeOutOfRangeException;
+
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -10,7 +13,7 @@ public final class Age {
     public Age(DateOfBirth dateOfBirth) {
         this.value = Period.between(dateOfBirth.asDate(), LocalDate.now()).getYears();
         if (value < 0 || value > 130) {
-            throw new IllegalArgumentException("Derived age is invalid.");
+            throw new AgeOutOfRangeException(ContextoEntidad.AGE, "Invalid age fura del rango 0 a 130 " + value);
         }
     }
 

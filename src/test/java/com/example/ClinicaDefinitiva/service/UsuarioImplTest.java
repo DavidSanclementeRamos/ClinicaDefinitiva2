@@ -1,13 +1,11 @@
 package com.example.ClinicaDefinitiva.service;
 
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.UsuarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.UserNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.UsuarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.ReadUsuarioDto;
 import com.example.ClinicaDefinitiva.persistence.entity.Usuario;
 import com.example.ClinicaDefinitiva.repository.UsuarioRepository;
 import com.example.ClinicaDefinitiva.services.impl.UsuarioImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,8 +16,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -58,7 +54,7 @@ class UsuarioImplTest {
 
         when(usuarioRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(UsuarioNotfoundException.class, () -> usuarioService.findId(id));
+        assertThrows(UserNotFoundException.class, () -> usuarioService.findId(id));
         verify(usuarioRepository).findById(id);
     }
 

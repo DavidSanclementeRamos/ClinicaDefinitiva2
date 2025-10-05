@@ -1,0 +1,17 @@
+# Plantilla para nueva entrada del catálogo de errores
+- Código: ERR_<AGREGADO>_<CAUSA>
+- Nombre corto: Texto breve y técnico (una línea).
+- Mensaje base: Texto internacionalizable para clientes (una línea).
+- Descripción clínica: Explicación clara del fallo en lenguaje clínico y operacional (2–4 líneas).
+- Operación / Caso de uso: Identificador de la operación que origina el error (ej. CREAR_PACIENTE, ASIGNAR_TURNO).
+- Regla de negocio: Referencia a la regla que lo genera (título y enlace a ADR o documento interno).
+- Contexto del agregado: UNO de: PACIENTE, ODONTOLOGO, SECRETARIO, TURNO, HORARIO, USUARIO, ROL.
+- Tipo semántico: Validación clínica; Integridad; Autorización; Sistema; Presentación.
+- Severidad sugerida: ERROR; WARN; INFO.
+- HTTP sugerido: 4xx o 5xx (ej. 400, 403, 404, 409, 500).
+- Detalle dinámico sugerido: Ejemplo de mensaje extensible para logs y detalleMessages (ej. "Paciente con ID 123 sin responsable").
+- Mapa a código existente: Si reemplaza o es equivalente a un código previo, indicar código anterior.
+- Justificación ética: Razonamiento corto que explique por qué este error debe existir y cómo protege la integridad clínica (1–3 líneas).
+- Ejemplo de uso: Fragmento de pseudocódigo o descripción de cuándo lanzar esta excepción.
+- Pruebas mínimas requeridas: Lista de tests (unitario para excepción; integración para mapping HTTP).
+- Changelog / versión: Fecha, autor y motivo de creación o cambio.

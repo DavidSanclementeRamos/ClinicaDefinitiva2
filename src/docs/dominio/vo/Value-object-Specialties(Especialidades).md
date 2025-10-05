@@ -17,43 +17,63 @@ Este VO fue introducido como parte de la migración hacia arquitectura hexagonal
 ## Estructura
 
 ```java
-public class Specialties {
+public final class Specialties {
+    private final Set<Specialty> values;
 
-    private final String value;
-
-    public Specialties(String value) {
-        if (value == null || value.isBlank()) {
-            throw new ClinicalValidationException("La especialidad es obligatoria");
+    public Specialties(Set<Specialty> values) {
+        if (values == null ){
+            throw new NullSpecialtySetException(ContextoEntidad.DENTIST, "At least one specialty must be null.");
         }
-
-        List<String> especialidadesValidas = List.of(
-            "ORTODONCIA", "ENDODONCIA", "CIRUGIA", "ESTETICA", "PERIODONCIA", "GENERAL"
-        );
-
-        if (!especialidadesValidas.contains(value.toUpperCase())) {
-            throw new ClinicalValidationException("Especialidad inválida: " + value);
+        if (values.isEmpty()){
+            throw new EmptySpecialtySetException(ContextoEntidad.DENTIST, "At least one specialty must be provided.");
         }
-
-        this.value = value.toUpperCase();
+        this.values = Collections.unmodifiableSet(new HashSet<>(values));
     }
 
-    public String getValue() {
-        return value;
+    // methods semantic
+    public boolean contains(Specialty specialty) {
+        return values.contains(specialty);
     }
 
-    public boolean isOrthodontics() {
-        return "ORTODONCIA".equals(value);
+    public boolean isMultidisciplinary() {
+        return values.size() > 1;
     }
 
-    public boolean isSurgery() {
-        return "CIRUGIA".equals(value);
+    public boolean allowsSurgicalProcedures() {
+        return contains(new Specialty("Oral Surgery"));
     }
 
-    public boolean isGeneral() {
-        return "GENERAL".equals(value);
+    public Set<Specialty> asSet() {
+        return values;
     }
 
-    // Otros métodos específicos según especialidad
+    // methods access
+    public Set<Specialty> Values() {
+        return values;
+    }
+
+    // methods utility
+    @Override
+    public String toString() {
+        return "Specialties: " + values;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Specialties)) return false;
+        Specialties that = (Specialties) o;
+        return values.equals(that.values);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(values);
+    }
+
+
+
+
 }
 ```
 

@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.util;
 
-import com.example.ClinicaDefinitiva.Enum.CatalogoError;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.persistence.dto.HorarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.TurnoDto;
 import com.example.ClinicaDefinitiva.persistence.dto.odontologoDto.CreateOdontologoDto;
@@ -13,19 +13,19 @@ import java.util.Map;
 
 public class ErrorCodeResolver {
 
-    private static final Map<Class<?>, CatalogoError> errorMapping = Map.ofEntries(
-            Map.entry(CreateOdontologoDto.class, CatalogoError.INVALID_DENTIST),
-            Map.entry(CreatePacienteDto.class, CatalogoError.INVALID_PATIENT),
-            Map.entry(CreateSecretarioDto.class, CatalogoError.INVALID_SECRETARY),
-            Map.entry(CreateEndReadResponsableDto.class, CatalogoError.INVALID_RESPONSIBLE),
-            Map.entry(CreateUsuarioDto.class, CatalogoError.INVALID_USER),
-            Map.entry(HorarioDto.class, CatalogoError.INVALID_SCHEDULE),
-            Map.entry(TurnoDto.class, CatalogoError.INVALID_SHIFT)
+    private static final Map<Class<?>, ErrorCatalog> errorMapping = Map.ofEntries(
+            Map.entry(CreateOdontologoDto.class, ErrorCatalog.INVALID_DENTIST),
+            Map.entry(CreatePacienteDto.class, ErrorCatalog.INVALID_PATIENT),
+            Map.entry(CreateSecretarioDto.class, ErrorCatalog.INVALID_SECRETARY),
+            Map.entry(CreateEndReadResponsableDto.class, ErrorCatalog.INVALID_RESPONSIBLE),
+            Map.entry(CreateUsuarioDto.class, ErrorCatalog.INVALID_USER),
+            Map.entry(HorarioDto.class, ErrorCatalog.INVALID_SCHEDULE),
+            Map.entry(TurnoDto.class, ErrorCatalog.INVALID_SHIFT)
             //  Puedes seguir agregando tus DTO aquí fácilmente
     );
 
-    public static CatalogoError resolver(Class<?> dtoClass) {
-        return errorMapping.getOrDefault(dtoClass, CatalogoError.GENERIC_ERROR);
+    public static ErrorCatalog resolver(Class<?> dtoClass) {
+        return errorMapping.getOrDefault(dtoClass, ErrorCatalog.GENERIC_ERROR);
     }
 
 }

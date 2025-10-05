@@ -13,35 +13,53 @@ Este VO fue introducido como parte de la migración hacia arquitectura hexagonal
 ## Estructura
 
 ```java
-public class DateOfBirth {
+public final class DateOfBirth {
+  private final LocalDate value;
 
-    private final LocalDate value;
-
-    public DateOfBirth(LocalDate value) {
-        if (value == null) {
-            throw new ClinicalValidationException("La fecha de nacimiento es obligatoria");
-        }
-        if (value.isAfter(LocalDate.now())) {
-            throw new ClinicalValidationException("La fecha de nacimiento no puede ser futura");
-        }
-        this.value = value;
+  public DateOfBirth(LocalDate value) {
+    if (value == null) {
+      throw new NullDateOfBirthException(ContextoEntidad.DATE_OF_BIRTH, "Date of birth cannot be null.");
     }
 
-    public int calculateAge() {
-        return Period.between(value, LocalDate.now()).getYears();
+    if (value.isAfter(LocalDate.now())) {
+      throw new DateOfBirthInFutureException(ContextoEntidad.DATE_OF_BIRTH, "Date of birth cannot be in the future.");
     }
+    if (Period.between(value, LocalDate.now()).getYears() > 130) {
+      throw new InvalidDateOfBirthException(ContextoEntidad.DATE_OF_BIRTH, "Date of birth is not valid: age exceeds 130 years.");
+    }
+    this.value = value;
+  }
 
-    public boolean isMinor(int edadLegal) {
-        return calculateAge() < edadLegal;
-    }
+  // methods semantic
+  public LocalDate asDate() {
+    return value;
+  }
 
-    public boolean isEligible(int edadMinima) {
-        return calculateAge() >= edadMinima;
-    }
+  // methods access
+  public LocalDate Value() {
+    return value;
+  }
 
-    public LocalDate getValue() {
-        return value;
-    }
+  // methods utility
+  @Override
+  public String toString() {
+    return "Date of birth: " + value;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof DateOfBirth)) return false;
+    DateOfBirth that = (DateOfBirth) o;
+    return value.equals(that.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(value);
+  }
+
+
 }
 ```
 Reglas clínicas encapsuladas

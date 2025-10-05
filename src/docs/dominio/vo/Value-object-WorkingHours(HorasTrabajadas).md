@@ -15,43 +15,49 @@ Este VO fue introducido como parte de la migración hacia arquitectura hexagonal
 ## Estructura
 
 ```java
-public class WorkingHours {
+public final class WorkingHours {
+  private final LocalTime start;
+  private final LocalTime end;
+  private final DayOfWeek dayOfWeek;
 
-    private final LocalTime startTime;
-    private final LocalTime endTime;
-
-    public WorkingHours(LocalTime startTime, LocalTime endTime) {
-        if (startTime == null || endTime == null) {
-            throw new ClinicalValidationException("Las horas de inicio y fin son obligatorias");
-        }
-        if (!startTime.isBefore(endTime)) {
-            throw new ClinicalValidationException("La hora de inicio debe ser anterior a la hora de fin");
-        }
-
-        this.startTime = startTime;
-        this.endTime = endTime;
+  public WorkingHours(LocalTime start, LocalTime end, DayOfWeek dayOfWeek) {
+    if (start == null || end == null ||dayOfWeek == null) {
+      throw new NullWorkingHoursException(ContextoEntidad.WORKING_HOURS, "Invalid working hours.");
     }
-
-    public LocalTime getStartTime() {
-        return startTime;
+    if( !start.isBefore(end) ){
+      throw new StartTimeAfterEndTimeException(ContextoEntidad.WORKING_HOURS, "Invalid working hours.");
     }
+    this.start = start;
+    this.end = end;
+    this.dayOfWeek = dayOfWeek;
+  }
+  public boolean isWithin(LocalDateTime dateTime) {
+    if (dateTime == null) return false;
+    return dateTime.getDayOfWeek().equals(dayOfWeek)
+            && !dateTime.toLocalTime().isBefore(start)
+            && !dateTime.toLocalTime().isAfter(end);
+  }
 
-    public LocalTime getEndTime() {
-        return endTime;
-    }
+  public boolean cubre(TimeSlot slot) {
+    if (slot == null) return false;
+    if (!slot.getDayOfWeek().equals(this.dayOfWeek)) return false;
+    return !slot.getInicio().isBefore(start) && !slot.getFin().isAfter(end);
+  }
 
-    public Duration getDuration() {
-        return Duration.between(startTime, endTime);
-    }
+  public Duration duracionTotal() {
+    return Duration.between(start, end);
+  }
 
-    public boolean includes(LocalTime time) {
-        return !time.isBefore(startTime) && !time.isAfter(endTime);
-    }
-
-    public boolean overlapsWith(WorkingHours other) {
-        return this.startTime.isBefore(other.endTime) && other.startTime.isBefore(this.endTime);
-    }
+  public DayOfWeek getDayOfWeek() { return dayOfWeek; }
+  public LocalTime getStart() { return start; }
+  public LocalTime getEnd() { return end; }
 }
+
+
+
+
+
+
 ```
 ## Reglas clínicas encapsuladas
 

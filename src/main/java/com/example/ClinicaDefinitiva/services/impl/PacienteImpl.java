@@ -1,12 +1,12 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 
-import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
-import com.example.ClinicaDefinitiva.exceptions.EdadNoPermitidaException;
-import com.example.ClinicaDefinitiva.exceptions.TelefonoDuplicadoException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.UsuarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.EdadNoPermitidaException;
+import com.example.ClinicaDefinitiva.domain.exceptions.TelefonoDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.PatientNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.UserNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.PacienteMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.CreatePacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.ReadPacienteDto;
@@ -59,7 +59,7 @@ public class PacienteImpl  implements PacienteServise {
                 .orElseThrow(() -> {
                    // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("Paciente no encontrado [id={}, requestId={}]", id, requestId);
-                    return new PacienteNotFoundException(
+                    return new PatientNotFoundException(
                             ContextoEntidad.PACIENTE,
                             "No se encontró el paciente con ID: " + id
                     );
@@ -73,7 +73,7 @@ public class PacienteImpl  implements PacienteServise {
     public Page<ReadPacienteDto> findAll(Pageable pageable) {
         Page<Paciente> entidadPage = pacienteRepository.findAll(pageable);
         if(entidadPage.isEmpty()){
-        throw new PacienteNotFoundException(ContextoEntidad.PACIENTE,
+        throw new PatientNotFoundException(ContextoEntidad.PACIENTE,
                 "No existen registros de pacientes para los filtros dados"
         );}
          return       entidadPage.map(pacienteMapperResponse::readPaciente);
@@ -89,7 +89,7 @@ public class PacienteImpl  implements PacienteServise {
             //odontologoMetrics.contarOdontologoNoEncontrado(requestId);
             logger.warn("No se encontraron pacientes con ese nombre [{}], requestId={}", nombre, requestId);
 
-            throw new PacienteNotFoundException(
+            throw new PatientNotFoundException(
                     ContextoEntidad.PACIENTE,
                     "No se encontraron pacientes con el nombre: " + nombre
             );
@@ -109,7 +109,7 @@ public class PacienteImpl  implements PacienteServise {
                 .orElseThrow(() -> {
                    // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("El documento no existe  [documento={}, requestId={}]", documento, requestId);
-                    return new PacienteNotFoundException(
+                    return new PatientNotFoundException(
                             ContextoEntidad.PACIENTE,
                             "No se encontró ningún paciente asociado al documento: " + documento
                     );
@@ -128,7 +128,7 @@ public class PacienteImpl  implements PacienteServise {
                 .orElseThrow(() -> {
                    // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("Usuario sin paciente asociado [usuarioId={}, requestId={}]", idUsuario, requestId);
-                    return new OdontologoNotfoundException(
+                    return new DentistNotFoundException(
                             ContextoEntidad.ODONTOLOGO,
                             "No se encontró ningún paciente asociado al usuario con ID: " + idUsuario
                     );
@@ -147,7 +147,7 @@ public class PacienteImpl  implements PacienteServise {
 
         if(lista.isEmpty()){
             logger.warn("No se encontraron pacientes en el turno con fecha [fecha={}, requestId={}]", fecha, requestId);
-            throw new PacienteNotFoundException(ContextoEntidad.PACIENTE, "No fue encontrado el turno del paciente en la fecha:" + fecha);
+            throw new PatientNotFoundException(ContextoEntidad.PACIENTE, "No fue encontrado el turno del paciente en la fecha:" + fecha);
         }
 
         return  lista.stream().map(pacienteMapperResponse::readPaciente)
@@ -166,7 +166,7 @@ public class PacienteImpl  implements PacienteServise {
         }
         // verificar que el id exista
         Paciente paciente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new  PacienteNotFoundException(ContextoEntidad.PACIENTE, "No exsiste el id: " + id));
+                .orElseThrow(() -> new PatientNotFoundException(ContextoEntidad.PACIENTE, "No exsiste el id: " + id));
 
         // Actualizar los datos del paciente
         paciente.setDireccion(updatePacienteDto.getDireccion());
@@ -185,7 +185,7 @@ public class PacienteImpl  implements PacienteServise {
         if(pacienteRepository.findById(id).isEmpty()){
             logger.info("No exite el id [id={}, requestId={}]", id,requestId);
 
-            throw new PacienteNotFoundException(ContextoEntidad.PACIENTE,"No fue en contrado el paciente con id: " + id);
+            throw new PatientNotFoundException(ContextoEntidad.PACIENTE,"No fue en contrado el paciente con id: " + id);
         }
         pacienteRepository.deleteById(id);
     }
@@ -194,7 +194,7 @@ public class PacienteImpl  implements PacienteServise {
     @Override
 public ReadPacienteDto save(CreatePacienteDto createPacienteDto) {
     Usuario usuario = usuarioRepository.findById(createPacienteDto.getIdUsuario())
-            .orElseThrow(() -> new UsuarioNotfoundException(ContextoEntidad.PACIENTE,
+            .orElseThrow(() -> new UserNotFoundException(ContextoEntidad.PACIENTE,
                     "El paciente: " + createPacienteDto.getIdUsuario() + " no tiene un usuario asignado "));
 
 

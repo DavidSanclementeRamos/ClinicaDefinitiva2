@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.blank.BlankAddressException;
+import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.nulo.NullAddressException;
+
 import java.util.Objects;
 
 public final class Address {
@@ -11,9 +15,13 @@ public final class Address {
 
 
     public Address(String street, String city, String state, String country, String postalCode) {
-        if (isBlank(street) || isBlank(city) || isBlank(state) || isBlank(country) || isBlank(postalCode)) {
-            throw new IllegalArgumentException("All address fields must be non-empty.");
+        if (street == null || city == null || state == null || country == null || postalCode == null) {
+            throw new NullAddressException(ContextoEntidad.ADDRESS, "Address fields must not be null.");
         }
+        if (street.isBlank() || city.isBlank() || state.isBlank() || country.isBlank() || postalCode.isBlank()) {
+            throw new BlankAddressException(ContextoEntidad.ADDRESS, "Address fields must not be blank.");
+        }
+
         this.street = street.trim();
         this.city = city.trim();
         this.state = state.trim();

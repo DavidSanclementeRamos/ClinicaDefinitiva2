@@ -1,5 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.blank.BlankPhoneNumberException;
+import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.invalid.InvalidPhoneNumberException;
+import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.nulo.NullPhoneNumberException;
+
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -9,12 +14,15 @@ public final class PhoneNumber {
     private final String value;
 
     public PhoneNumber(String value) {
+        if (value == null) {
+            throw new NullPhoneNumberException(ContextoEntidad.PHONE_NUMBER, "Phone number must not be null.");
+        }
         if (isBlank(value)) {
-            throw new IllegalArgumentException("Phone number must not be empty.");
+            throw new BlankPhoneNumberException(ContextoEntidad.PHONE_NUMBER, "Phone number must not be empty.");
         }
         String normalized = value.trim().replaceAll("\\s+", "");
         if (!VALID_PATTERN.matcher(normalized).matches()) {
-            throw new IllegalArgumentException("Invalid phone number format.");
+            throw new InvalidPhoneNumberException(ContextoEntidad.PHONE_NUMBER, "Invalid phone number format.");
         }
         this.value = normalized;
     }

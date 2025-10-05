@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.CodigoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.NullWorkingHoursException;
+import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.StartTimeAfterEndTimeException;
 import com.example.ClinicaDefinitiva.domain.schedule.model.TimeSlot;
 
 import java.time.DayOfWeek;
@@ -13,8 +17,11 @@ public final class WorkingHours {
     private final DayOfWeek dayOfWeek;
 
     public WorkingHours(LocalTime start, LocalTime end, DayOfWeek dayOfWeek) {
-        if (start == null || end == null ||dayOfWeek == null|| !start.isBefore(end)) {
-            throw new IllegalArgumentException("Invalid working hours.");
+        if (start == null || end == null ||dayOfWeek == null) {
+            throw new NullWorkingHoursException(ContextoEntidad.WORKING_HOURS, "Invalid working hours.");
+        }
+        if( !start.isBefore(end) ){
+            throw new StartTimeAfterEndTimeException(ContextoEntidad.WORKING_HOURS, "Invalid working hours.");
         }
         this.start = start;
         this.end = end;
@@ -45,4 +52,4 @@ public final class WorkingHours {
 
 
 
-}
+

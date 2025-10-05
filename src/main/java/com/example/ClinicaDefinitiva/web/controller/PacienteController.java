@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.web.controller;
 
 
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFoundException;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.CreatePacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.ReadPacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.UpdatePacienteDto;
@@ -21,7 +20,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(

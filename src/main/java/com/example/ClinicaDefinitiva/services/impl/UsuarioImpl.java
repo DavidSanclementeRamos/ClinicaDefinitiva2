@@ -1,10 +1,9 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 
-import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
-import com.example.ClinicaDefinitiva.Enum.Roles;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.HorarioNotfoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.UsuarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.HorarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.UserNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.UsuarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.CreateUsuarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.ReadUsuarioDto;
@@ -17,15 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UsuarioImpl implements UsuarioService {
@@ -48,7 +39,7 @@ public class UsuarioImpl implements UsuarioService {
                 .orElseThrow(() -> {
             //odontologoMetrics.contarOdontologoNoEncontrado(requestId);
             logger.warn("Usuario no encontrado [idUsuario={}, requestId={}]", idUsuario, requestId);
-            return new UsuarioNotfoundException(ContextoEntidad.TURNO," Usuario no encontrado por el id:" + idUsuario);
+            return new UserNotFoundException(ContextoEntidad.TURNO," Usuario no encontrado por el id:" + idUsuario);
         });
 
         logger.info("Usuario recuperado [idUsuario={}, requestId={}]", idUsuario, requestId);
@@ -77,7 +68,7 @@ public class UsuarioImpl implements UsuarioService {
                 .orElseThrow(() -> {
 
                     logger.warn("No se encontro usuario el email: [email={}, requestId={}]", email, requestId);
-                    return new UsuarioNotfoundException(ContextoEntidad.USUARIO,
+                    return new UserNotFoundException(ContextoEntidad.USUARIO,
                             "No se encontro usuario con ese email");});
 
         logger.info("Email recuperado [email={}, requestId={}]", email, requestId);
@@ -91,7 +82,7 @@ public class UsuarioImpl implements UsuarioService {
 
             logger.warn("Usuario no encontrado por rol: [rol={},  requestId={}]", rol.name(), requestId);
 
-            throw new UsuarioNotfoundException(ContextoEntidad.USUARIO,
+            throw new UserNotFoundException(ContextoEntidad.USUARIO,
                     " No se encontron roles de tipo : " + rol.name() );
 
         }
@@ -110,7 +101,7 @@ public class UsuarioImpl implements UsuarioService {
                 .orElseThrow(() -> {
                     logger.warn("No se encontro el user [nombreUsuario={}, requestId={}]", nombreUsuario, requestId);
 
-                   return new UsuarioNotfoundException(ContextoEntidad.USUARIO,
+                   return new UserNotFoundException(ContextoEntidad.USUARIO,
                             "No se encontro el nombre de usuario: " + nombreUsuario );
                 });
         logger.info("Nombre de usuario recuperado [nombreUsuario={}, requestId={}]", nombreUsuario, requestId);
@@ -153,7 +144,7 @@ public class UsuarioImpl implements UsuarioService {
                             idUsuario, requestId);
 
                     logger.info("Usuario editado [idUsuario={}, requestId={}]", idUsuario, requestId);
-                    return new UsuarioNotfoundException(ContextoEntidad.USUARIO, " No se encontro el usuario con id: " + idUsuario);
+                    return new UserNotFoundException(ContextoEntidad.USUARIO, " No se encontro el usuario con id: " + idUsuario);
                 });
     }
 
@@ -162,7 +153,7 @@ public class UsuarioImpl implements UsuarioService {
         if(usuarioRepository.findById(id).isEmpty()){
             logger.warn("No se pudo eliminar, el id no existe [id={}, requestId={}]", id, requestId);
 
-            throw new UsuarioNotfoundException(ContextoEntidad.USUARIO,"No se pudo eliminar, el id no existe :" + id);
+            throw new UserNotFoundException(ContextoEntidad.USUARIO,"No se pudo eliminar, el id no existe :" + id);
         }
         logger.info("Usuario eliminado [idUsuario={}, requestId={}]", id, requestId);
 

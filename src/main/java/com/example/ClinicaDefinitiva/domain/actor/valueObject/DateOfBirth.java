@@ -1,5 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.DateOfBirthInFutureException;
+import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.invalid.InvalidDateOfBirthException;
+import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.nulo.NullDateOfBirthException;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Objects;
@@ -9,13 +14,14 @@ public final class DateOfBirth {
 
     public DateOfBirth(LocalDate value) {
         if (value == null) {
-            throw new IllegalArgumentException("Date of birth cannot be null.");
+            throw new NullDateOfBirthException(ContextoEntidad.DATE_OF_BIRTH, "Date of birth cannot be null.");
         }
+
         if (value.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Date of birth cannot be in the future.");
+            throw new DateOfBirthInFutureException(ContextoEntidad.DATE_OF_BIRTH, "Date of birth cannot be in the future.");
         }
         if (Period.between(value, LocalDate.now()).getYears() > 130) {
-            throw new IllegalArgumentException("Date of birth is not valid: age exceeds 130 years.");
+            throw new InvalidDateOfBirthException(ContextoEntidad.DATE_OF_BIRTH, "Date of birth is not valid: age exceeds 130 years.");
         }
         this.value = value;
     }

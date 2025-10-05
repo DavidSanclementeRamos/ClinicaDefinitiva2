@@ -1,5 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.InvalidSpecialtyValueException;
+
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,12 +20,12 @@ public final class Specialty {
     private final String value;
 
     public  Specialty(String value) {
-        if (isBlank(value)) {
+       /* if (isBlank(value)) {
             throw new IllegalArgumentException("Specialty must not be empty.");
-        }
+        }*/
         String normalized = value.trim();
         if (!VALID_SPECIALTIES.contains(normalized)) {
-            throw new IllegalArgumentException("Invalid specialty: " + value);
+            throw new InvalidSpecialtyValueException(ContextoEntidad.DENTIST,"Invalid specialty: " + value);
         }
         this.value = normalized;
     }

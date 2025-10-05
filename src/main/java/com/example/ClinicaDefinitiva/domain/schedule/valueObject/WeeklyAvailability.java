@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public final class WeeklyAvailability {
+    // disponibilidad semana
     private final List<TimeSlot> slots;
 
     public WeeklyAvailability(Collection<TimeSlot> slots) {

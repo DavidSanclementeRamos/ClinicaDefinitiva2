@@ -3,6 +3,15 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.dto.PersonRegistrationData;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.DentistMinimumAgeException;
+import com.example.ClinicaDefinitiva.domain.exceptions.EdadNoPermitidaException;
+import com.example.ClinicaDefinitiva.domain.exceptions.WeeklyAvailabilityException;
+import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.FutureAppointmentsExistException;
+import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.PendingAppointmentsWithin24HoursException;
+import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.nulo.NullAgeException;
+import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.NullUserException;
+import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
 import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Availability;
@@ -45,14 +54,15 @@ public  class Dentist  extends Person {
                                    WeeklyAvailability weeklyAvailability,
                                    Collection<Appointment> initialAppointments) {
         if (!data.getAge().isBetween(25, 130)) {
-            throw new BusinessRuleViolationException("Dentist must be at least 25 years old.");
+            throw new DentistMinimumAgeException(ContextoEntidad.DENTIST, "Dentist must be at least 25 years old.");
         }
         if (!user.isActive()) {
-            throw new BusinessRuleViolationException("El usuario no puede estar inactivo");
+            throw new UserInactiveException(ContextoEntidad.DENTIST, "El usuario no puede estar inactivo");
         }
         if (!weeklyAvailability.cumpleMinimoHoras(10)) {
-            throw new BusinessRuleViolationException("Debe registrar al menos 10 horas semanales");
+            throw new WeeklyAvailabilityException(ContextoEntidad.DENTIST, "Debe registrar al menos 10 horas semanales");
         }
+
         // build
         return new Builder()
                 .withAddress(data.getAddress())
@@ -74,11 +84,12 @@ public  class Dentist  extends Person {
 
 
     // Operaciones de instancia
-    public List<Appointment> citasActivasEnLasProximas24Horas() {
+    //citasActivasEnLasProximas24Horas()
+    public List<Appointment> listConfirmedAppointmentsInNext24Hours() {
         return schedule.upcomingWithinHours(24);
     }
-
-    public boolean tieneCitasActivasEnLasProximas24Horas() {
+    // tieneCitasActivasEnLasProximas24Horas
+    public boolean  hasConfirmedAppointmentsInNextDay() {
         return schedule.hasAppointmentsWithinHours(24);
     }
 
@@ -89,10 +100,10 @@ public  class Dentist  extends Person {
 
     public void deactivate() {
         if (schedule.hasAppointmentsWithinHours(24)) {
-            throw new BusinessRuleViolationException("Tiene citas pendientes en las proximas 24 horas");
+            throw new PendingAppointmentsWithin24HoursException(ContextoEntidad.DENTIST, "Tiene citas pendientes en las proximas 24 horas");
         }
         if (!schedule.getAppointments().stream().filter(Appointment::esFutura).collect(Collectors.toList()).isEmpty()) {
-            throw new BusinessRuleViolationException("No se puede desactivar: tiene citas futuras");
+            throw new FutureAppointmentsExistException(ContextoEntidad.DENTIST, "No se puede desactivar: tiene citas futuras");
         }
         // mutación controlada: delega a user o status
         // ejemplo: marcar availabilityStatus como INACTIVE o similar
@@ -142,11 +153,7 @@ public  class Dentist  extends Person {
         public Builder withAvailabilityStatus(DentistAvailabilityStatus s) { this.availabilityStatus = s; return this; }
 
         public Dentist build() {
-            // invariantes mínimas
-            if (address == null) throw new BusinessRuleViolationException("Address is required");
-            if (age == null) throw new BusinessRuleViolationException("Age is required");
-            if (user == null) throw new BusinessRuleViolationException("User is required");
-            if (!user.isActive()) throw new BusinessRuleViolationException("User must be active");
+
             return new Dentist(this);
         }
     }

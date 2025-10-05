@@ -1,10 +1,10 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
-import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.Sector;
-import com.example.ClinicaDefinitiva.exceptions.TelefonoDuplicadoException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.SecretarioNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.TelefonoDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.ReceptionistNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.SecretarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.secretarioDto.CreateSecretarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.secretarioDto.ReadSecretarioDto;
@@ -50,7 +50,7 @@ public class SecretarioImpl implements SecretarioService {
                  .orElseThrow(() -> {
                      //odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                      logger.warn("Secretari@ no encontrado [idSecretario={}, requestId={}]", idSecretario, requestId);
-                     return new OdontologoNotfoundException(
+                     return new DentistNotFoundException(
                              ContextoEntidad.SECRETARIO,
                              "No se encontró el secretari@ con ID: " + idSecretario
                      );
@@ -66,7 +66,7 @@ public class SecretarioImpl implements SecretarioService {
         // Le decimos al repo que haga la búsqueda paginada+ordenada
         Page<Secretario> pageEntidades = secretarioRepository.findAll(pageable);
         if(pageEntidades.isEmpty()){
-            throw new  SecretarioNotFoundException(ContextoEntidad.SECRETARIO
+            throw new ReceptionistNotFoundException(ContextoEntidad.SECRETARIO
                     , "No existen registros de secretari@ para los filtros dados"
             );
         }
@@ -83,7 +83,7 @@ public class SecretarioImpl implements SecretarioService {
             logger.info("Se encontraron {} secretari@ con nombre [{}], requestId={}",
                     lista.size(),nombre , requestId);
 
-            throw new SecretarioNotFoundException(ContextoEntidad.SECRETARIO
+            throw new ReceptionistNotFoundException(ContextoEntidad.SECRETARIO
             ,"No se encontro secretari@ con ese nombre:" + nombre);
         }
                 return lista.stream().map(secretarioReadMapper::readSecretarioDto)
@@ -95,7 +95,7 @@ public class SecretarioImpl implements SecretarioService {
 
         List< Secretario>  lista =  secretarioRepository.findBySector(sector);
         if (lista.isEmpty()){
-            throw new SecretarioNotFoundException(ContextoEntidad.SECRETARIO
+            throw new ReceptionistNotFoundException(ContextoEntidad.SECRETARIO
                     ,"No se encontro secretari@ en ese sector:" + sector);
         }
 
@@ -110,7 +110,7 @@ public class SecretarioImpl implements SecretarioService {
         Secretario secretario =  secretarioRepository.findByUnUsuario_Id(idUsuario)
                 .orElseThrow(()-> {
                     logger.warn("Secretari@ no encontrado [idUsuario={}, requestId={}]", idUsuario, requestId);
-                    return  new SecretarioNotFoundException(ContextoEntidad.SECRETARIO, "No se encontro secretari@ con ese  id usuario:" + idUsuario);
+                    return  new ReceptionistNotFoundException(ContextoEntidad.SECRETARIO, "No se encontro secretari@ con ese  id usuario:" + idUsuario);
 
                 });
 
@@ -147,7 +147,7 @@ public class SecretarioImpl implements SecretarioService {
 
                     return secretarioRepository.save(secretario);
                 }).map(secretarioReadMapper::readSecretarioDto)
-                .orElseThrow(() -> new SecretarioNotFoundException(ContextoEntidad.SECRETARIO, "No existe un usuario con el id:" + createSecretarioDto.getIdUsuario())) ;
+                .orElseThrow(() -> new ReceptionistNotFoundException(ContextoEntidad.SECRETARIO, "No existe un usuario con el id:" + createSecretarioDto.getIdUsuario())) ;
     }
 
     @Override
@@ -168,7 +168,7 @@ public class SecretarioImpl implements SecretarioService {
                 }).map(secretarioReadMapper::readSecretarioDto)
                 .orElseThrow(() -> {
                         logger.warn("EL id del secretario que quiere editar no existe [{}], requestId={}", id, requestId);
-                        return new SecretarioNotFoundException(ContextoEntidad.SECRETARIO,"No se encontro el id: " + id );});
+                        return new ReceptionistNotFoundException(ContextoEntidad.SECRETARIO,"No se encontro el id: " + id );});
 
 
 
@@ -179,7 +179,7 @@ public class SecretarioImpl implements SecretarioService {
         if(secretarioRepository.findById(id).isEmpty()){
             logger.warn("No existe el id: [{}], requestId={}", id, requestId);
 
-            throw new SecretarioNotFoundException(ContextoEntidad.SECRETARIO,
+            throw new ReceptionistNotFoundException(ContextoEntidad.SECRETARIO,
                     "No se encontro el id: " + id + " del secretari@ que quiere eliminar" );
         }
         secretarioRepository.deleteById(id);

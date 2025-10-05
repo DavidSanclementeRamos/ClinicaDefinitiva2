@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 
-import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.HorarioNotfoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfoundException;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.HorarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.HorarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.HorarioDto;
 import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;
@@ -52,7 +52,7 @@ public class HorarioImpl implements HorarioService {
                 .orElseThrow(() -> {
                    // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("Disponibilidad no encontrado [id={}, requestId={}]", horarioId, requestId);
-                    return new OdontologoNotfoundException(
+                    return new DentistNotFoundException(
                             ContextoEntidad.HORARIO,
                             "No se encontró el disponibilidad con ID: " + horarioId
                     );
@@ -79,7 +79,7 @@ public class HorarioImpl implements HorarioService {
                      return horarioRepository.save(disponibilidad);
 
                 }).map(horarioMapper::horarioDto)
-                .orElseThrow(()-> new OdontologoNotfoundException(ContextoEntidad.ODONTOLOGO, "No fue encontrado el odontologo con id: " + horarioDto.getIdOdontologo()));
+                .orElseThrow(()-> new DentistNotFoundException(ContextoEntidad.ODONTOLOGO, "No fue encontrado el odontologo con id: " + horarioDto.getIdOdontologo()));
     }
 
     @Override
@@ -88,7 +88,7 @@ public class HorarioImpl implements HorarioService {
                 Disponibilidad disponibilidad = horarioRepository.findById(horarioId)
                         .orElseThrow(()-> new HorarioNotfoundException(ContextoEntidad.HORARIO, "No fue encontrado en disponibilidad con id: " + horarioId));
                 Odontologo odontologo = odontologoRepository.findById(horarioDto.getIdOdontologo())
-                        .orElseThrow(()-> new OdontologoNotfoundException(ContextoEntidad.ODONTOLOGO, "No fue encontrado el odontologo con id: " + horarioDto.getIdOdontologo() ));
+                        .orElseThrow(()-> new DentistNotFoundException(ContextoEntidad.ODONTOLOGO, "No fue encontrado el odontologo con id: " + horarioDto.getIdOdontologo() ));
                     disponibilidad.setEstado(horarioDto.getEstado());
                     disponibilidad.setUnOdontologo(odontologo);
                 horarioMapper.horarioDto(disponibilidad);
@@ -117,7 +117,7 @@ public class HorarioImpl implements HorarioService {
     public List<HorarioDto> findByOdontologo_Id(long idOdontologo) {
         if (!odontologoRepository.existsById(idOdontologo)) {
             logger.warn("El odontólogo con id [{}] no existe, requestId={}", idOdontologo, requestId);
-            throw new OdontologoNotfoundException(
+            throw new DentistNotFoundException(
                     ContextoEntidad.ODONTOLOGO,
                     "No existe un odontólogo con el id: " + idOdontologo
             );

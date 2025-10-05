@@ -1,12 +1,11 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
-import com.example.ClinicaDefinitiva.Enum.CatalogoError;
-import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.TipoResponsable;
-import com.example.ClinicaDefinitiva.exceptions.TelefonoDuplicadoException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.ResponsableNotFoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.UsuarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.TelefonoDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.PatientNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.GuardianNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.UserNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.ResponsableMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.responsableDto.CambioResponsableDto;
 import com.example.ClinicaDefinitiva.persistence.dto.responsableDto.CreateEndReadResponsableDto;
@@ -24,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +49,7 @@ public class ResponsableImpl implements ResponsableService {
                 .orElseThrow(() -> {
                     // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("Responsable no encontrado [id={}, requestId={}]", idUsuario, requestId);
-                    return new PacienteNotFoundException(
+                    return new PatientNotFoundException(
                             ContextoEntidad.RESPONSABLE,
                             "No se encontró el responsable con ID: " + idUsuario
                     );
@@ -67,7 +65,7 @@ public class ResponsableImpl implements ResponsableService {
                 .orElseThrow(() -> {
                     logger.warn("Responsable no encontrado [idPaciente={}, requestId={}]", idPaciente, requestId);
 
-                    return new ResponsableNotFoundException(ContextoEntidad.RESPONSABLE,
+                    return new GuardianNotFoundException(ContextoEntidad.RESPONSABLE,
                     "No existen responsable con ese idPaciente:" + idPaciente);
         });
         logger.info("Responsable no encontrado [idPaciente={}, requestId={}]",idPaciente , requestId);
@@ -81,7 +79,7 @@ public class ResponsableImpl implements ResponsableService {
                 .orElseThrow(() -> {
                     logger.warn("Responsable no encontrado con el documento[documento={}, requestId={}]", documento, requestId);
 
-                    return new ResponsableNotFoundException(ContextoEntidad.RESPONSABLE,
+                    return new GuardianNotFoundException(ContextoEntidad.RESPONSABLE,
                             "No existen responsable con ese documento:" + documento);
                 });
         logger.info("Responsable no encontrado [documento={}, requestId={}]",documento , requestId);
@@ -94,7 +92,7 @@ public class ResponsableImpl implements ResponsableService {
                 .orElseThrow(() -> {
                     logger.warn("Responsable no encontrado con el telefono[telefono={}, requestId={}]", telefono, requestId);
 
-                    return new ResponsableNotFoundException(ContextoEntidad.RESPONSABLE,
+                    return new GuardianNotFoundException(ContextoEntidad.RESPONSABLE,
                             "No existen responsable con ese telefono:" + telefono);
                 });
         logger.info("Responsable no encontrado [telefono={}, requestId={}]",telefono , requestId);
@@ -108,7 +106,7 @@ public class ResponsableImpl implements ResponsableService {
 
         if(lista.isEmpty()){
             logger.warn("Responsable no encontrado con relacion: [tipoRelacion={}, requestId={}]",tipoRelacion.name() , requestId);
-            throw new ResponsableNotFoundException(ContextoEntidad.RESPONSABLE,
+            throw new GuardianNotFoundException(ContextoEntidad.RESPONSABLE,
                     "No hay resultado de la busquedacon esa relacion:" + tipoRelacion.name());
         }
         logger.info("Se encontraron {} responsable con tipoRelacion [{}], requestId={}",
@@ -132,12 +130,12 @@ public class ResponsableImpl implements ResponsableService {
         // validar que tenga usuario
 
         Responsable responsable = responsableRepository.findById(id)
-                .orElseThrow(() -> new PacienteNotFoundException(ContextoEntidad.RESPONSABLE, "El responsable que quiere cambiar no existe"));
+                .orElseThrow(() -> new PatientNotFoundException(ContextoEntidad.RESPONSABLE, "El responsable que quiere cambiar no existe"));
 
 
 
         Usuario usuario = responsableRepository.findByUnUsuario_Id(cambioResponsableDto.getIdUsuario())
-                .orElseThrow(() -> new UsuarioNotfoundException(ContextoEntidad.RESPONSABLE, "El responsable no tiene un usuario asignado")).getUnUsuario();
+                .orElseThrow(() -> new UserNotFoundException(ContextoEntidad.RESPONSABLE, "El responsable no tiene un usuario asignado")).getUnUsuario();
 
         responsable.setDni(cambioResponsableDto.getDni());
         responsable.setNombre(cambioResponsableDto.getNombre());
@@ -173,7 +171,7 @@ public class ResponsableImpl implements ResponsableService {
                    // responsable.setUnUsuario(usuario);
                     return responsableRepository.save(responsable);
                 }).map(responsableMapperResponse::createEndReadResponsableDto)
-                .orElseThrow(() -> new ResponsableNotFoundException(ContextoEntidad.RESPONSABLE,"No existe un responsable con ese id:" + id ));
+                .orElseThrow(() -> new GuardianNotFoundException(ContextoEntidad.RESPONSABLE,"No existe un responsable con ese id:" + id ));
     }
 
     @Override
@@ -203,7 +201,7 @@ public class ResponsableImpl implements ResponsableService {
                     return responsableRepository.save(responsable);
 
                 }).map(responsableMapperResponse::createEndReadResponsableDto)
-                .orElseThrow(() -> new ResponsableNotFoundException(ContextoEntidad.RESPONSABLE,
+                .orElseThrow(() -> new GuardianNotFoundException(ContextoEntidad.RESPONSABLE,
                 " EL responsable no tiene un usuario asignado"));
 
     }
@@ -212,7 +210,7 @@ public class ResponsableImpl implements ResponsableService {
     public void deleaById(long id) {
         if(responsableRepository.findById(id).isEmpty()){
             logger.warn("Responsable no encontrado con id: [id={}, requestId={}]",id , requestId);
-            throw new ResponsableNotFoundException(ContextoEntidad.RESPONSABLE,
+            throw new GuardianNotFoundException(ContextoEntidad.RESPONSABLE,
                     " El responsable no existe, id:" + id);
         }
         responsableRepository.deleteById(id);

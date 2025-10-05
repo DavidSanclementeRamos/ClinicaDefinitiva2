@@ -2,12 +2,12 @@ package com.example.ClinicaDefinitiva.services.impl;
 
 
 
-import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.Estado;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.HorarioNotfoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.PacienteNotFoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.TurnoNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.HorarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.PatientNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.TurnoNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.TurnoMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.TurnoDto;
 import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;
@@ -60,7 +60,7 @@ public class TurnoImpl implements TurnoService {
         Paciente paciente = pacienteRepository.findById(turnoDto.getIdPaciente() )
                 .orElseThrow(() -> {
                     logger.warn("No hay paciente asociado a ese id:  [{}], requestId={}",turnoDto.getIdPaciente() , requestId);
-                    return new PacienteNotFoundException(ContextoEntidad.TURNO
+                    return new PatientNotFoundException(ContextoEntidad.TURNO
                 , "No se encontro un paciente asociado al turno con el id: " + turnoDto.getIdPaciente() );});
 
         // validar la existencia del disponibilidad asociado
@@ -75,7 +75,7 @@ public class TurnoImpl implements TurnoService {
         Odontologo odontologo = odontologoRepository.findById(turnoDto.getOdontologo())
                 .orElseThrow(() -> {
                         logger.warn("No hay odontologo asociado a ese id:  [{}], requestId={}",turnoDto.getOdontologo() , requestId);
-                        return new OdontologoNotfoundException(ContextoEntidad.TURNO,
+                        return new DentistNotFoundException(ContextoEntidad.TURNO,
                                 "No hay odontologo asociado a ese id: " + turnoDto.getOdontologo());});
 
         // Crear la entidad Turno
@@ -149,7 +149,7 @@ public class TurnoImpl implements TurnoService {
 
         Paciente paciente = pacienteRepository.findById(idPaciente).orElseThrow(()->{
                     logger.warn("No existe el el id: " + idPaciente + " del paciente [id={}, requestId={}]", idPaciente, requestId);
-                    return new PacienteNotFoundException(ContextoEntidad.TURNO,
+                    return new PatientNotFoundException(ContextoEntidad.TURNO,
                             "No existe el id: " + idPaciente);
 
                     });

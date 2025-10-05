@@ -15,46 +15,77 @@ Este VO fue introducido como parte de la migración hacia arquitectura hexagonal
 ## Estructura
 
 ```java
-public class Specialty {
+public final class Specialty {
+  private static final Set<String> VALID_SPECIALTIES = Set.of(
+          "Orthodontics",
+          "Endodontics",
+          "Periodontics",
+          "Prosthodontics",
+          "Pediatric Dentistry",
+          "Oral Surgery",
+          "General Dentistry"
+  );
 
-    private final String value;
+  private final String value;
 
-    public Specialty(String value) {
-        if (value == null || value.isBlank()) {
-            throw new ClinicalValidationException("La especialidad no puede estar vacía");
-        }
-
-        List<String> especialidadesReconocidas = List.of(
-            "ORTODONCIA", "ENDODONCIA", "CIRUGIA", "ESTETICA", "PERIODONCIA", "GENERAL"
-        );
-
-        if (!especialidadesReconocidas.contains(value.toUpperCase())) {
-            throw new ClinicalValidationException("Especialidad no reconocida: " + value);
-        }
-
-        this.value = value.toUpperCase();
+  public  Specialty(String value) {
+       /* if (isBlank(value)) {
+            throw new IllegalArgumentException("Specialty must not be empty.");
+        }*/
+    String normalized = value.trim();
+    if (!VALID_SPECIALTIES.contains(normalized)) {
+      throw new InvalidSpecialtyValueException(ContextoEntidad.DENTIST,"Invalid specialty: " + value);
     }
+    this.value = normalized;
+  }
 
-    public String getValue() {
-        return value;
-    }
+  // public Specialty(String value) {
+  //   this.value = value;
+  // }
 
-    public boolean is(String expected) {
-        return value.equalsIgnoreCase(expected);
-    }
+  // methods semantic
+  public boolean is(String expected) {
+    return value.equalsIgnoreCase(expected.trim());
+  }
 
-    public boolean isGeneral() {
-        return "GENERAL".equals(value);
-    }
+  public String asText() {
+    return value;
+  }
 
-    public boolean isSurgical() {
-        return "CIRUGIA".equals(value);
-    }
+  private boolean isBlank(String input) {
+    return input == null || input.trim().isEmpty();
+  }
 
-    public boolean isOrthodontic() {
-        return "ORTODONCIA".equals(value);
-    }
+  // methods access
+  public String Value() {
+    return value;
+  }
+
+  // methods utility
+  @Override
+  public String toString() {
+    return value;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Specialty)) return false;
+    Specialty that = (Specialty) o;
+    return value.equalsIgnoreCase(that.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(value.toLowerCase());
+  }
+
+
+
+
+
 }
+
 ```
 
 ## Reglas clínicas encapsuladas

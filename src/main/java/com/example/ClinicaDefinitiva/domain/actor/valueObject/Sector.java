@@ -1,5 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.exceptions.receptionist.exception.BlankSectorException;
+import com.example.ClinicaDefinitiva.domain.exceptions.receptionist.exception.NullSectorException;
+import com.example.ClinicaDefinitiva.domain.exceptions.receptionist.exception.SectorNotAllowedException;
+
 import java.util.Set;
 
 public final class Sector {
@@ -24,13 +29,16 @@ public final class Sector {
 
     public  Sector (String value) {
         if (value == null || value.trim().isEmpty()) {
-            throw new IllegalArgumentException("Sector cannot be empty.");
+            throw new NullSectorException(ContextoEntidad.SECTOR, "Sector cannot be empty.");
+        }
+        if(value.isBlank()) {
+            throw new BlankSectorException(ContextoEntidad.SECTOR, "Sector cannot be empty.");
         }
 
         String normalized = value.trim().toUpperCase();
 
         if (!ALLOWED_VALUES.contains(normalized)) {
-            throw new IllegalArgumentException("Sector '" + normalized + "' is not allowed.");
+            throw new SectorNotAllowedException(ContextoEntidad.SECTOR,"Sector '" + normalized + "' is not allowed.");
         }
 
         //return new Sector(normalized);

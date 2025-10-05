@@ -1,16 +1,7 @@
 package com.example.ClinicaDefinitiva.config;
 
-import com.example.ClinicaDefinitiva.Enum.Roles;
-import com.example.ClinicaDefinitiva.exceptions.EdadNoPermitidaException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import java.time.LocalDate;
-import java.time.Period;
-
-import static com.example.ClinicaDefinitiva.Enum.Roles.ODONTOLOGO;
-import static com.example.ClinicaDefinitiva.Enum.Roles.SECRETARIO;
 
 @Configuration
 @ConfigurationProperties(prefix = "edad.minima")

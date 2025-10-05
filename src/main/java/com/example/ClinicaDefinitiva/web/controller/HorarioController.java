@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.web.controller;
 
 
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.HorarioNotfoundException;
 import com.example.ClinicaDefinitiva.persistence.dto.HorarioDto;
 import com.example.ClinicaDefinitiva.services.HorarioService;
 import jakarta.validation.Valid;

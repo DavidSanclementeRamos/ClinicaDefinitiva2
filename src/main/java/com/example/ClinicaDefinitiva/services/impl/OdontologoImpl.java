@@ -1,10 +1,10 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
-import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.Especialidades;
-import com.example.ClinicaDefinitiva.exceptions.TelefonoDuplicadoException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.OdontologoNotfoundException;
-import com.example.ClinicaDefinitiva.exceptions.entityNotFount.UsuarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.TelefonoDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.UserNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.OdontologoMapperResponse;
 import com.example.ClinicaDefinitiva.metrics.OdontologoMetrics;
 import com.example.ClinicaDefinitiva.persistence.dto.odontologoDto.CreateOdontologoDto;
@@ -52,7 +52,7 @@ public class OdontologoImpl  implements OdontologoService {
                 .orElseThrow(() -> {
                     odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("Odontólogo no encontrado [id={}, requestId={}]", id, requestId);
-                    return new OdontologoNotfoundException(
+                    return new DentistNotFoundException(
                             ContextoEntidad.ODONTOLOGO,
                             "No se encontró el odontólogo con ID: " + id
                     );
@@ -69,7 +69,7 @@ public class OdontologoImpl  implements OdontologoService {
         Page<Odontologo> pageEntidades = odontologoRepository.findAll(pageable);
 
         if (pageEntidades.isEmpty()) {
-            throw new OdontologoNotfoundException(
+            throw new DentistNotFoundException(
                     ContextoEntidad.ODONTOLOGO,
                     "No existen registros de odontólogos para los filtros dados"
             );
@@ -87,7 +87,7 @@ public class OdontologoImpl  implements OdontologoService {
         Odontologo odontologo = odontologoRepository.findByUnUsuario_Id(idUsuario)
                 .orElseThrow(() -> {
                     odontologoMetrics.contarOdontologoNoEncontrado(requestId);
-                     return new OdontologoNotfoundException(
+                     return new DentistNotFoundException(
                             ContextoEntidad.ODONTOLOGO,
                             "No se encontró ningún odontólogo asociado al usuario con ID: " + idUsuario
                     );
@@ -111,7 +111,7 @@ public class OdontologoImpl  implements OdontologoService {
             odontologoMetrics.contarOdontologoNoEncontrado(requestId);
             logger.warn("No se encontraron odontólogos con especialidad [{}], requestId={}", especialidad.name(), requestId);
 
-            throw new OdontologoNotfoundException(
+            throw new DentistNotFoundException(
                     ContextoEntidad.ODONTOLOGO,
                     "No se encontraron odontólogos con la especialidad: " + especialidad.name()
             );
@@ -135,7 +135,7 @@ public class OdontologoImpl  implements OdontologoService {
             odontologoMetrics.contarOdontologoNoEncontrado(requestId);
             logger.warn("Sin odontólogos con turnos entre fechas [{} - {}], requestId={}", desde, hasta, requestId);
 
-            throw new OdontologoNotfoundException(
+            throw new DentistNotFoundException(
                     ContextoEntidad.ODONTOLOGO,
                     "No se encontraron odontólogos con turnos entre " + desde + " y " + hasta
             );
@@ -187,7 +187,7 @@ public class OdontologoImpl  implements OdontologoService {
                     return odontologoRepository.save(odontologo);
                  }
                 ).map(odontologoMapperResponse::readOdontologoDto)
-                .orElseThrow(()-> new UsuarioNotfoundException(ContextoEntidad.ODONTOLOGO, "No se encontro el usuario el id" + createOdontologoDto.getIdUsuario()));
+                .orElseThrow(()-> new UserNotFoundException(ContextoEntidad.ODONTOLOGO, "No se encontro el usuario el id" + createOdontologoDto.getIdUsuario()));
 
 
     }
@@ -196,7 +196,7 @@ public class OdontologoImpl  implements OdontologoService {
     public void deleaById(long id) {
 
         if(odontologoRepository.findById(id).isEmpty()){
-            throw new OdontologoNotfoundException(ContextoEntidad.ODONTOLOGO," No se encontró el odontólogo con ID: " + id );
+            throw new DentistNotFoundException(ContextoEntidad.ODONTOLOGO," No se encontró el odontólogo con ID: " + id );
         }
         odontologoRepository.deleteById(id);
     }
@@ -210,7 +210,7 @@ public class OdontologoImpl  implements OdontologoService {
         }
         // 1. Verificar que el odontólogo existe
         Odontologo odontologo = odontologoRepository.findById(idOdontologo)
-                .orElseThrow(() -> new OdontologoNotfoundException(ContextoEntidad.ODONTOLOGO, " No se encontró el odontólogo con ID: " + idOdontologo));
+                .orElseThrow(() -> new DentistNotFoundException(ContextoEntidad.ODONTOLOGO, " No se encontró el odontólogo con ID: " + idOdontologo));
 
         // 4. Actualizar los datos del odontólogo
         odontologo.setTelefono(updateOdontologoDto.getTelefono());

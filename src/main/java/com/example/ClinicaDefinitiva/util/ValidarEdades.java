@@ -1,19 +1,15 @@
 package com.example.ClinicaDefinitiva.util;
 
-import com.example.ClinicaDefinitiva.Enum.CodigoEntidad;
-import com.example.ClinicaDefinitiva.Enum.ContextoEntidad;
-import com.example.ClinicaDefinitiva.Enum.Roles;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.config.EdadMinimaConfig;
-import com.example.ClinicaDefinitiva.exceptions.DniDuplicadoException;
-import com.example.ClinicaDefinitiva.exceptions.EdadNoPermitidaException;
-import com.example.ClinicaDefinitiva.exceptions.TelefonoDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptions.DniDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptions.EdadNoPermitidaException;
+import com.example.ClinicaDefinitiva.domain.exceptions.TelefonoDuplicadoException;
 import com.example.ClinicaDefinitiva.repository.ResponsableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.Period;
-
-import static com.example.ClinicaDefinitiva.Enum.ContextoEntidad.*;
 
 
 public class ValidarEdades {

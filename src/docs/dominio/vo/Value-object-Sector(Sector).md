@@ -15,44 +15,61 @@ Este VO fue introducido como parte de la migración hacia arquitectura hexagonal
 ## Estructura
 
 ```java
-public class Sector {
+public final class Sector {
+
+    private static final Set<String> ALLOWED_VALUES = Set.of(
+            "RECEPTION",
+            "ADMINISTRATION",
+            "BILLING",
+            "CUSTOMER_SERVICE",
+            "MEDICAL_RECORDS",
+            "CALL_CENTER",
+            "INVENTORY",
+            "DENTAL_TECHNICIAN_SUPPORT",
+            "DENTAL_ASSISTANCE"
+    );
 
     private final String value;
 
-    public Sector(String value) {
-        if (value == null || value.isBlank()) {
-            throw new ClinicalValidationException("El sector no puede estar vacío");
+    // private Sector(String value) {
+    //   this.value = value;
+    // }
+
+    public  Sector (String value) {
+        if (value == null || value.trim().isEmpty()) {
+            throw new NullSectorException(ContextoEntidad.SECTOR, "Sector cannot be empty.");
+        }
+        if(value.isBlank()) {
+            throw new BlankSectorException(ContextoEntidad.SECTOR, "Sector cannot be empty.");
         }
 
-        List<String> sectoresValidos = List.of("RECEPCION", "FACTURACION", "COORDINACION", "ATENCION_CLIENTE");
+        String normalized = value.trim().toUpperCase();
 
-        if (!sectoresValidos.contains(value.toUpperCase())) {
-            throw new ClinicalValidationException("Sector inválido: " + value);
+        if (!ALLOWED_VALUES.contains(normalized)) {
+            throw new SectorNotAllowedException(ContextoEntidad.SECTOR,"Sector '" + normalized + "' is not allowed.");
         }
 
-        this.value = value.toUpperCase();
+        //return new Sector(normalized);
+        this.value=normalized;
     }
 
-    public String getValue() {
+    // methods semantic
+    public boolean is(String expected) {
+        return value.equalsIgnoreCase(expected.trim());
+    }
+
+    // methods access
+    public String Value() {
         return value;
     }
 
-    public boolean isRecepcion() {
-        return "RECEPCION".equals(value);
-    }
-
-    public boolean isFacturacion() {
-        return "FACTURACION".equals(value);
-    }
-
-    public boolean isCoordinacion() {
-        return "COORDINACION".equals(value);
-    }
-
-    public boolean isAtencionCliente() {
-        return "ATENCION_CLIENTE".equals(value);
+    // methods utility
+    @Override
+    public String toString() {
+        return value;
     }
 }
+
 ```
 ## Reglas clínicas encapsuladas
 
