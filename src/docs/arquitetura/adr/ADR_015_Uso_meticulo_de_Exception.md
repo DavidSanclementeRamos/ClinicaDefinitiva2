@@ -1,9 +1,9 @@
 
 ## 📄 ADR-015: Uso meticuloso de excepciones personalizadas
-Fecha: 2025-10-05
-Estado: Aprobado
-Contexto Entidad: Sistema clínico — validación semántica y ética de Value Objects
-Autor: David
+- Fecha: 2025-10-05
+- Estado: Aprobado
+- Contexto Entidad: Sistema clínico — validación semántica y ética de Value Objects
+- Autor: David
 
 ## 🎯 Contexto
 En el diseño de nuestro sistema clínico, cada Value Object (VO) encapsula reglas de legitimidad que deben ser trazables, exhibibles y éticamente justificadas. Las excepciones no son simples mecanismos de control de flujo, sino artefactos semánticos que:

@@ -1,6 +1,4 @@
 package com.example.ClinicaDefinitiva.domain.administration.model;
 
-public class Invoice {
-
-
+public class ReportesAdministrative {
 }

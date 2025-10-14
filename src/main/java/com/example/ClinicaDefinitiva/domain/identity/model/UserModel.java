@@ -51,9 +51,20 @@ public class UserModel {
     public boolean isActive() {
         return  status.isActive();
     }
-    public UserStatus getStatus() {
+    public  UserStatus getStatus() {
         return status;
     }
+
+    public void inactivate() {
+        this.status = UserStatus.of(UserStatus.Status.INACTIVE);
+    }
+
+    public void activate() {
+        this.status = UserStatus.of(UserStatus.Status.ACTIVE);
+    }
+
+
+
 
     public void setStatus(UserStatus status) {
         this.status = status;

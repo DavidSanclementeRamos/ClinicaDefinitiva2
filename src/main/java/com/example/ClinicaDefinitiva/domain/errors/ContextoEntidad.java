@@ -5,7 +5,7 @@ public enum ContextoEntidad {
     DENTIST(CodigoEntidad.OD01),
     SECRETARIO(CodigoEntidad.SEC02),
     RESPONSABLE(CodigoEntidad.RES03),
-    PACIENTE(CodigoEntidad.PAC04),
+    PATIENT(CodigoEntidad.PAT04),
     USUARIO(CodigoEntidad.USR05),
     HORARIO(CodigoEntidad.HOR06),
     TURNO(CodigoEntidad.TUR07),
@@ -20,7 +20,8 @@ public enum ContextoEntidad {
     SPECIALTY(CodigoEntidad.SPC017),
     SPECIALTIES(CodigoEntidad.SPC018),
     FULL_NAME(CodigoEntidad.NAM10),
-    WORKING_HOURS(CodigoEntidad.WOR020);
+    WORKING_HOURS(CodigoEntidad.WOR020),
+    APPOINTMENT(CodigoEntidad.APP021);
 
 
 

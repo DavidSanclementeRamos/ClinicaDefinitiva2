@@ -40,6 +40,7 @@ public enum ErrorCatalog {
     // 🏥 Errores de Paciente
     PATIENT_NOT_FOUND("ERR_PAT_001", "Patient not found."),
     INVALID_PATIENT("ERR_PAT_002", "Invalid patient information."),
+    UNASSIGNED_RESPONSIBLE_PATIENT("ERR_PAT_003", "No responsible party has been assigned"),
 
     // 👪 Errores de Responsable
     RESPONSIBLE_NOT_FOUND("ERR_RESP_001", "Responsible person not found."),
@@ -57,6 +58,7 @@ public enum ErrorCatalog {
 
     // semana laboral de disponibilidad
     INVALID_WEEKLY_AVAILABILITY("ERRO_WEA ", ""),
+
 
     NULL_ADDRESS("ERR_ADD_O1", "La direcion no puede ser nula"),
     BLANK_ADDRESS("ERR_ADD_O2", "La direcion no puede ser "),
@@ -86,19 +88,38 @@ public enum ErrorCatalog {
     NULL_WORKING_HOURS("ERR_SPC_1","NO NULL "),
 
    // citas
-    PENDING_APPOINTMENT("APP01","Tiene citas pendientes en las próximas 24 horas"),
-    FUTURE_APPOINTMENT("APP02", "No se puede desactivar: tiene citas futuras");
+   PENDING_APPOINTMENT("APP01", "error.patient.pendingAppointment",
+           "Tiene citas pendientes en las próximas {hours} horas"),
+    FUTURE_APPOINTMENT("APP02", "error.patient.futureAppointment",
+            "No se puede desactivar: tiene citas futuras"),
+    INVALID_DATE_RANGE_APPOINTMENT("ERR_03", "error.appointment.invalidDateRange",
+            "La fecha de inicio no puede ser anterior al final"),
+    NULL_START_DATE_APPOINTMENT("ERR_04", "error.appointment.nullStartDate",
+            "La fecha de inicio no puede ser NULL"),
+    NULL_END_DATE_APPOINTMENT("ERR_05", "error.appointment.nullEndDate",
+            "La fecha final no puede ser NULL"),
+    OUTSIDE_AVAILABILITY_APPOINTMENT("ERR_06", "error.appointment.outsideAvailability",
+            "El intervalo ya está cubierto por la disponibilidad declarada"),
+    TIME_NO_AVAILABILITY_APPOINTMENT("ERR_07", "error.appointment.timeNotAvailable",
+            "El intervalo ya está ocupado por otra cita");
+
+
 
     // ⚠️ Error genérico
    // GENERIC_ERROR("ERR_GEN_001", "An unexpected error occurred.");
     private final String code;
+    private final String key;
     private final String message;
 
-    ErrorCatalog(String code, String message) {
+
+    ErrorCatalog(String code, String key, String message) {
         this.code = code;
+        this.key = key;
         this.message = message;
 
     }
+
+    public String getKey() {return key;}
 
     public String getMessage() {
         return message;

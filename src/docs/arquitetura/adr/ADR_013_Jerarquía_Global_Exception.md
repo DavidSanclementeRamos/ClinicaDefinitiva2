@@ -27,7 +27,7 @@
 
 ## Implementación plantilla copiable
 ```java
-// Archivo: domain-common/exception/DomainRootException.java
+// Archivo: domain-common/exceptions/DomainRootException.java
 public class DomainRootException extends RuntimeException {
 private final String code;
 public DomainRootException(String code, String message) {
@@ -37,21 +37,21 @@ this.code = code;
 public String getCode() { return code; }
 }
 
-// Archivo: domain-common/exception/ValueObjectValidationException.java
+// Archivo: domain-common/exceptions/ValueObjectValidationException.java
 public class ValueObjectValidationException extends DomainRootException {
 public ValueObjectValidationException(String code, String message) {
 super(code, message);
 }
 }
 
-// Archivo: shared/person/exception/PersonValueObjectException.java
+// Archivo: shared/person/exceptions/PersonValueObjectException.java
 public class PersonValueObjectException extends ValueObjectValidationException {
 public PersonValueObjectException(String code, String message) {
 super(code, message);
 }
 }
 
-// Archivo: shared/person/exception/InvalidAgeException.java
+// Archivo: shared/person/exceptions/InvalidAgeException.java
 /**
 * Código: VO_PERSON_AGE_001
 * ADR: ADR-2025-10-02-vo-person-exceptions

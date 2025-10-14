@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.util;
 
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.persistence.entity.ErrorResponse;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.ErrorResponse;
 import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;

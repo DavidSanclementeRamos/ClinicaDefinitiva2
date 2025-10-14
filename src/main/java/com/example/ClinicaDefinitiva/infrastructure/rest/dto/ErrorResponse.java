@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.persistence.entity;
+package com.example.ClinicaDefinitiva.infrastructure.rest.dto;
 
 import org.springframework.http.HttpStatus;
 

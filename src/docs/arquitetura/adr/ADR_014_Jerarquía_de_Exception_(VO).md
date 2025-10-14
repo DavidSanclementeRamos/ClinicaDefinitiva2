@@ -1,7 +1,7 @@
-## ADR-043: Jerarquía de excepciones para valores faltantes en Value Objects
-Fecha: 2025-10-03
-Estado: Aprobado
-Decidido por: David 
+## ADR-014: Jerarquía de excepciones para valores faltantes en Value Objects
+- Fecha: 2025-10-03
+- Estado: Aprobado
+- Decidido por: David 
 
 ## Contexto
 Se requiere una convención clara, trazable y reutilizable para las excepciones que representan la ausencia de un valor con significado semántico en Value Objects (VOs) distribuidos por dominios (por ejemplo, person, schedule, clinical). Estas excepciones deben facilitar: (1) manejo por semántica (todos los “missing semantic value”), (2) manejo por contexto/paquete (errores pertenecientes a un dominio) y (3) auditoría/internacionalización con metadatos consistentes.
