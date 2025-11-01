@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 
 public class PersonRegistrationData  {
-
+/// eliminar no sirve xd
 
     private Address address;
     private Age age;
@@ -14,8 +14,10 @@ public class PersonRegistrationData  {
     private PhoneNumber phoneNumber;
     private String dni;
     private Long id;
+    private String documentoEPS;
 
-    public PersonRegistrationData(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, String dni, FullName fullname, Long id, PhoneNumber phoneNumber) {
+    public PersonRegistrationData(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth,
+                                  String dni, FullName fullname, Long id, PhoneNumber phoneNumber, String documentoEPS) {
         this.address = address;
         this.age = age;
         this.bloodType = bloodType;
@@ -24,6 +26,11 @@ public class PersonRegistrationData  {
         this.fullname = fullname;
         this.id = id;
         this.phoneNumber = phoneNumber;
+        this.documentoEPS = documentoEPS;
+    }
+
+    public String getDocumentoEPS() {
+        return documentoEPS;
     }
 
     public Address getAddress() {

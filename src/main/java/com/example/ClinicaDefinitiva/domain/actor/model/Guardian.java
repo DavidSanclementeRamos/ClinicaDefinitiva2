@@ -8,19 +8,15 @@ import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
 import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
-import com.example.ClinicaDefinitiva.persistence.entity.Paciente;
-import com.example.ClinicaDefinitiva.persistence.entity.Usuario;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Guardian  extends Person{
+public class Guardian {
 
+    private final GuardianId guardianId;
+    private final Person person;
     private final TypeGuardian typeGuardian;
     private final Schedule schedule;
     private final UserModel user;
@@ -28,20 +24,21 @@ public class Guardian  extends Person{
     private final LocalDateTime lastUpdate;
 
     public Guardian (Builder b){
-        super(b.address, b.age, b.bloodType, b.dateOfBirth, b.dni, b.fullname, b.id, b.phoneNumber);
 
         this.user = b.user;
         this.typeGuardian = b.typeGuardian;
         this.schedule = b.schedule;
         this.patientList = List.copyOf( b.patientList);
         this.lastUpdate = b.lastUpdate;
+        this.person = b.personData;
+        this.guardianId = b.guardianId;
     }
 
     // Un responsable puede ser registrado si:
     // Usuario activo.
     // Cumple con la edad requerida.
     // El responsable no sede el tope de pacientes a cargos.
-    public static Guardian registerGuardian(PersonRegistrationData data,
+    public static Guardian registerGuardian(GuardianId id, Person data,
                                             UserModel user,
                                             List<Patient> patientList,
                                             TypeGuardian typeGuardian){
@@ -53,34 +50,39 @@ public class Guardian  extends Person{
             throw new IllegalArgumentException("El responsable no puede tener mas de 6 pacientes ");
         }
         return new Builder()
+                .withGuardianId(id)
+                .withDocumentoEPS("")
                 .withAddress(data.getAddress())
                 .withAge(data.getAge())
                 .withBloodType(data.getBloodType())
                 .withDateOfBirth(data.getDateOfBirth())
                 .withDni(data.getDni())
                 .withFullName(data.getFullname())
-                .withId(data.getId())
                 .withPhoneNumber(data.getPhoneNumber())
                 .withUser(user)
                 .withTypeGuardian(typeGuardian)
                 .withPatient(patientList)
+                .withDocumentoEPS(data.getDocumentoEPS())
                 .build();
     }
-    public static Guardian updateGuardianDataContact(PersonRegistrationData data, UserModel user ){
+    public static Guardian updateGuardianDataContact(GuardianId id ,Person data, UserModel user ){
         ensureActiveUser(user);
         LocalDateTime lastUpdate =  LocalDateTime.now();
         return new Builder()
+                .withGuardianId(id)
+                .withDocumentoEPS("")
                 .withAddress(data.getAddress())
                 .withPhoneNumber(data.getPhoneNumber())
                 .withLastUpdate(lastUpdate)
                 .build();
     }
 
-    public static Guardian updateGuardianSensitiveData(PersonRegistrationData data, UserModel user, TypeGuardian typeGuardian){
+    public static Guardian updateGuardianSensitiveData(GuardianId id ,Person data, UserModel user, TypeGuardian typeGuardian){
         ensureActiveUser(user);
         LocalDateTime lastUpdate =  LocalDateTime.now();
         return new Builder()
-
+                .withGuardianId(id)
+                .withDocumentoEPS("")
                 .withAge(data.getAge())
                 .withBloodType(data.getBloodType())
                 .withDateOfBirth(data.getDateOfBirth())
@@ -134,6 +136,10 @@ public class Guardian  extends Person{
         private Schedule schedule;
         private List<Patient> patientList;
         private LocalDateTime lastUpdate;
+        private String documentoEPS;
+        private GuardianId guardianId;
+        private Person personData;
+
 
         public Builder withAddress(Address a) { this.address = a; return this; }
         public Builder withAge(Age a) { this.age = a; return this; }
@@ -148,7 +154,9 @@ public class Guardian  extends Person{
         public Builder withSchedule(Schedule s){this.schedule = s; return  this;}
         public Builder withPatient(Collection<Patient> p){this.patientList = new ArrayList<>(p); return this;}
         public Builder withLastUpdate(LocalDateTime l){this.lastUpdate = l; return this;}
-
+        public Builder withDocumentoEPS(String d){this.documentoEPS = d; return this;}
+        public Builder withPerson(Person p){this.personData = p; return this;}
+        public Builder withGuardianId(GuardianId d){this.guardianId = d; return this;}
         public Guardian build () {
             return new Guardian(this);
         }

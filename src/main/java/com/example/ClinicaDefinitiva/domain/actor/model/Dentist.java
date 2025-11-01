@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public  class Dentist  extends Person {
+public  class Dentist   {
 
+    private final DentistId dentistId;
+    private final Person personData;
     private final Specialties specialties;
     private final DentistAvailabilityStatus availabilityStatus;
     private final WorkingHours workingHours;
@@ -33,7 +35,7 @@ public  class Dentist  extends Person {
 
 
     private Dentist(Builder b ) {
-        super(b.address, b.age, b.bloodType, b.dateOfBirth, b.dni, b.fullname, b.id, b.phoneNumber);
+        this.personData = b.personData;
         this.specialties = b.specialties;
         this.user = b.user;
         this.workingHours = b.workingHours;
@@ -41,17 +43,20 @@ public  class Dentist  extends Person {
         this.availabilityList = List.copyOf(b.availabilityList);
         this.availabilityStatus = b.availabilityStatus;
         this.lastUpdate = b.lastUpdate;
+        this.dentistId = b.dentistId;
         this.schedule = new Schedule(b.appointments, new WeeklyAvailability(b.timeSlotList, List.of(b.workingHours)));
     }
 
     // Factory method (fábrica semántica)
-    public static Dentist registerDentist(PersonRegistrationData data,
-                                   Specialties specialties,
-                                   UserModel user,
-                                   WorkingHours workingHours,
-                                   WeeklyAvailability weeklyAvailability,
-                                   Collection<Appointment> initialAppointments,
-                                   LocalDateTime lastUpdate) {
+    public static Dentist registerDentist(
+            DentistId id,
+            Person data,
+            Specialties specialties,
+            UserModel user,
+            WorkingHours workingHours,
+            WeeklyAvailability weeklyAvailability,
+            Collection<Appointment> initialAppointments,
+            LocalDateTime lastUpdate) {
         ensureActiveUser(user);
         if (!data.getAge().isBetween(25, 130)) {
             throw new DentistMinimumAgeException(ContextoEntidad.DENTIST, "Dentist must be at least 25 years old.");
@@ -60,17 +65,16 @@ public  class Dentist  extends Person {
         if (!weeklyAvailability.HorasRegistradas(40)) {
             throw new WeeklyAvailabilityException(ContextoEntidad.DENTIST, "Debe registrar al menos 40 horas semanales");
         }
-
-
         // build
         return new Builder()
+                .withDentistId(id)
                 .withAddress(data.getAddress())
                 .withAge(data.getAge())
                 .withBloodType(data.getBloodType())
                 .withDateOfBirth(data.getDateOfBirth())
                 .withDni(data.getDni())
                 .withFullname(data.getFullname())
-                .withId(data.getId())
+                .withDocumentoEPS("")
                 .withPhoneNumber(data.getPhoneNumber())
                 .withSpecialties(specialties)
                 .withUser(user)
@@ -78,16 +82,19 @@ public  class Dentist  extends Person {
                 .withTimeSlots(weeklyAvailability.getSlots())
                 .withAppointments(initialAppointments)
                 .withLastUpdate(lastUpdate)
+                .withDocumentoEPS(data.getDocumentoEPS())
                 .withAvailabilityStatus(DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.AVAILABLE))
                 .build();
         }
 
-    public static Dentist updateDentistSensitiveData(PersonRegistrationData data,
+    public static Dentist updateDentistSensitiveData(Person data,
+                                                     DentistId id,
                                                      UserModel user,
                                                      LocalDateTime lastUpdate,
                                                      Specialties specialties,
                                                      WorkingHours workingHours){
         return new Builder()
+                .withDentistId(id)
                 .withAddress(data.getAddress())
                 .withPhoneNumber(data.getPhoneNumber())
                 .withLastUpdate(lastUpdate)
@@ -96,17 +103,19 @@ public  class Dentist  extends Person {
                 .withDateOfBirth(data.getDateOfBirth())
                 .withDni(data.getDni())
                 .withFullname(data.getFullname())
-                .withId(data.getId())
+                .withDocumentoEPS("")
                 .withSpecialties(specialties)
                 .withWorkingHours(workingHours)
 
                 .build();
     }
-    public static Dentist updateDentistContactData(PersonRegistrationData data, UserModel user,LocalDateTime lastUpdate){
+    public static Dentist updateDentistContactData(DentistId id, Person data, UserModel user,LocalDateTime lastUpdate){
         return new Builder()
+                .withDentistId(id)
                 .withAddress(data.getAddress())
                 .withPhoneNumber(data.getPhoneNumber())
                 .withLastUpdate(lastUpdate)
+                .withDocumentoEPS("")
                 .build();
     }
 
@@ -195,6 +204,8 @@ public  class Dentist  extends Person {
     public Specialties getSpecialties() {return specialties;}
     public List<TimeSlot> getTimeSlotList() {return timeSlotList;}
     public WorkingHours getWorkingHours() {return workingHours;}
+    public DentistId getDentistId() {return dentistId;}
+    public Person getPersonData() {return personData;}
 
     // Builder estático
     public static final class Builder {
@@ -214,6 +225,9 @@ public  class Dentist  extends Person {
         private Collection<Appointment> appointments = new ArrayList<>();
         private DentistAvailabilityStatus availabilityStatus;
         private LocalDateTime lastUpdate;
+        private String documentoEPS;
+        private Person personData;
+        private DentistId dentistId;
 
         public Builder withAddress(Address a) { this.address = a; return this; }
         public Builder withAge(Age a) { this.age = a; return this; }
@@ -221,7 +235,7 @@ public  class Dentist  extends Person {
         public Builder withDateOfBirth(DateOfBirth d) { this.dateOfBirth = d; return this; }
         public Builder withDni(String d) { this.dni = d; return this; }
         public Builder withFullname(FullName f) { this.fullname = f; return this; }
-        public Builder withId(Long id) { this.id = id; return this; }
+       // public Builder withId(Long id) { this.id = id; return this; }
         public Builder withPhoneNumber(PhoneNumber p) { this.phoneNumber = p; return this; }
         public Builder withSpecialties(Specialties s) { this.specialties = s; return this; }
         public Builder withUser(UserModel u) { this.user = u; return this; }
@@ -231,7 +245,9 @@ public  class Dentist  extends Person {
         public Builder withAppointments(Collection<Appointment> apps) { this.appointments = apps == null ? new ArrayList<>() : new ArrayList<>(apps); return this; }
         public Builder withAvailabilityStatus(DentistAvailabilityStatus s) { this.availabilityStatus = s; return this; }
         public Builder withLastUpdate(LocalDateTime l){this.lastUpdate = l; return this;}
-
+        public Builder withDocumentoEPS(String d){this.documentoEPS = d; return this;}
+        public Builder withPerson(Person p){this.personData = p; return this;}
+        public Builder withDentistId(DentistId d){this.dentistId = d; return this;}
         public Dentist build() {
 
             return new Dentist(this);

@@ -3,6 +3,8 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.dto.PersonRegistrationData;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.administration.model.Contract;
+import com.example.ClinicaDefinitiva.domain.administration.valueObject.ContractId;
 import com.example.ClinicaDefinitiva.domain.errors.CodigoEntidad;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
@@ -23,31 +25,38 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Patient extends Person {
+public class Patient  {
 
-    private Guardian guardian;
+    private PatientId patientId;
+    private Person person;
+    private GuardianId guardianId;
     private UserModel user;
     private Shift shift;
-
     private Schedule schedule;
     private LocalDateTime lastUpdate;
+    private ContractId contractId;
+
 
 
     public Patient(Builder b) {
-        super(b.address, b.age, b.bloodType, b.dateOfBirth, b.dni, b.fullname, b.id, b.phoneNumber);
         this.user = b.user;
         this.shift = b.shift;
-        this.guardian = b.guardian;
+        this.guardianId = b.guardianId;
         this.schedule = b.schedule;
         this.lastUpdate = b.lastUpdate;
+        this.contractId = b.contractId;
+        this.patientId = b.patientId;
+        this.person = b.person;
         validarResponsable(); // asegura consistencia al nacer
     }
 
-    public Patient(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, String dni, FullName fullname, Long id, PhoneNumber phoneNumber) {
-        super(address, age, bloodType, dateOfBirth, dni, fullname, id, phoneNumber);
-    }
 
-    public static Patient registerPatient(PersonRegistrationData data, UserModel user, Guardian guardian, LocalDateTime lastUpdate) {
+
+    public static Patient registerPatient(PatientId id ,Person data,
+                                          UserModel user,
+                                          GuardianId guardian,
+                                          LocalDateTime lastUpdate,
+                                          ContractId contractId) {
 
         if (!data.getAge().isEligibleForRegistration()) {
             throw new AgeBelowMinimumForRegistrationException(ContextoEntidad.PATIENT, "age= " + data.getAge());
@@ -58,31 +67,34 @@ public class Patient extends Person {
         }
         ensureActiveUser(user);
         return new Builder()
+                .withPatientId(id)
                 .withAddress(data.getAddress())
                 .withAge(data.getAge())
                 .withBloodType(data.getBloodType())
                 .withDateOfBirth(data.getDateOfBirth())
                 .withDni(data.getDni())
                 .withFullName(data.getFullname())
-                .withId(data.getId())
                 .withPhoneNumber(data.getPhoneNumber())
                 .withUser(user)
-                .withGuardian(guardian)
+                .withGuardianId(guardian)
                 .withLastUpdate(lastUpdate)
+                .withContractId(contractId)
+                .withDocumentoEPS(data.getDocumentoEPS())
                 .build();
     }
 
-    public static Patient updatePatientContact(PersonRegistrationData data, LocalDateTime lastUpdate, UserModel user) {
+    public static Patient updatePatientContact(PatientId id ,Person data, LocalDateTime lastUpdate, UserModel user) {
 
         ensureActiveUser(user);
         return new Builder()
+                .withPatientId(id)
                 .withAddress(data.getAddress())
                 .withPhoneNumber(data.getPhoneNumber())
                 .withLastUpdate(lastUpdate)
                 .build();
     }
 
-    public static Patient updateDataSensible(PersonRegistrationData data, LocalDateTime lastUpdate, UserModel user, Schedule schedule) {
+    public static Patient updateDataSensible(PatientId id ,Person data, LocalDateTime lastUpdate, UserModel user, Schedule schedule) {
 
         ensureActiveUser(user);
         if (schedule.hasAppointmentsWithin(2)) {
@@ -90,6 +102,7 @@ public class Patient extends Person {
         }
 
         return new Builder()
+                .withPatientId(id)
                 .withAddress(data.getAddress())
                 .withPhoneNumber(data.getPhoneNumber())
                 .withLastUpdate(lastUpdate)
@@ -97,7 +110,6 @@ public class Patient extends Person {
                 .withBloodType(data.getBloodType())
                 .withDateOfBirth(data.getDateOfBirth())
                 .withFullName(data.getFullname())
-                .withId(data.getId())
                 .build();
     }
 
@@ -154,11 +166,11 @@ public class Patient extends Person {
     }
 
     // Métodos auxiliares para validar responsable
-    public Guardian getGuardian(){
-        return guardian;
+    public GuardianId getGuardian(){
+        return guardianId;
     }
     public  boolean requiereResponsable() {
-        return !getAge().isAdult();
+        return !person.getAge().isAdult();
     }
     public  boolean tieneResponsable(){
         return getGuardian() != null;
@@ -170,6 +182,38 @@ public class Patient extends Person {
                 throw new UnassignedResponsibleException(ContextoEntidad.PATIENT, "No responsible party has been assigned");
             }
         }
+    }
+
+    public ContractId getContractId() {
+        return contractId;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public PatientId getPatientId() {
+        return patientId;
+    }
+
+    public GuardianId getGuardianId() {
+        return guardianId;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public Shift getShift() {
+        return shift;
+    }
+
+    public UserModel getUser() {
+        return user;
     }
 
     // Builder estático
@@ -185,9 +229,13 @@ public class Patient extends Person {
         private UserModel user;
         private Shift shift;
         private Appointment appointment;
-        private Guardian guardian;
+        private GuardianId guardianId;
         private Schedule schedule;
         private LocalDateTime lastUpdate;
+        private ContractId contractId;
+        private String documentoEPS;
+        private PatientId patientId;
+        private Person person;
 
 
         public Builder withAddress(Address a) { this.address = a; return this; }
@@ -201,9 +249,12 @@ public class Patient extends Person {
         public Builder withUser(UserModel u){this.user = u; return this;}
         public Builder withShift(Shift s){this.shift = s; return this;}
         public Builder withSchedule(Schedule s) { this.schedule = s; return this; }
-        public Builder withGuardian(Guardian g){this.guardian = g; return this;}
+        public Builder withGuardianId(GuardianId g){this.guardianId = g; return this;}
         public Builder withLastUpdate(LocalDateTime l){this.lastUpdate = l; return this;}
-
+        public Builder withContractId(ContractId c){this.contractId = c; return this;}
+        public Builder withDocumentoEPS(String d){this.documentoEPS = d; return this;}
+        public Builder withPerson(Person p){this.person = p; return this;}
+        public Builder withPatientId(PatientId p){this.patientId = p; return this;}
         public Patient build() {
             return new Patient(this);
         }

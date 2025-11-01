@@ -27,18 +27,18 @@ public final class WeeklyAvailability {
     }
 
 
-    /**
-     * Verifica si el total de horas registradas en la semana cumple con el mínimo requerido.
-     * @param //minimoHoras Número mínimo de horas requeridas.
-     * @return true si cumple, false si no.
-     /
+
+      /**Verifica si el total de horas registradas en la semana cumple con el mínimo requerido.
+      @param minimoHoras Número mínimo de horas requeridas.
+      @return true si cumple, false si no.*/
+
     public boolean HorasRegistradas(int minimoHoras) {
         int totalHoras = workingHoursList.stream()
                 .mapToInt(WorkingHours.isCompliantWithWorkingHours())
                 .sum();
 
         return totalHoras >= minimoHoras;
-    }*/
+    }
 
 
 

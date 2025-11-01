@@ -5,6 +5,7 @@ import com.example.ClinicaDefinitiva.Enum.Estado;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Collection;
 
 public final class TimeSlot {
     // horario
@@ -43,6 +44,7 @@ public final class TimeSlot {
         }
 
     }
+
 
     public DayOfWeek getDayOfWeek() { return dayOfWeek; }
     public LocalTime getInicio() { return inicio; }

@@ -2,8 +2,11 @@ package com.example.ClinicaDefinitiva.domain.schedule.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentType;
 
@@ -14,9 +17,9 @@ import java.time.LocalTime;
 
 public class Appointment {
 
-    private Long id;
-    private Dentist dentist;
-    private Patient patient;
+    private AppointmentId id;
+    private DentistId dentist;
+    private PatientId patient;
     private LocalDateTime start;                 // fechaHora
     private LocalDateTime end;
     private AppointmentStatus status;                // estado
@@ -123,7 +126,7 @@ public class Appointment {
      • 	Cubres agenda (slots disponibles y sin conflictos).
      • 	Cubres políticas de negocio (anticipación mínima y ventana máxima). */
 
-    public static Appointment validateReschedule(Appointment original,
+    public static Appointment validationReschedule(Appointment original,
                                           LocalDateTime newStart,
                                           LocalDateTime newEnd,
                                           Schedule schedule,
@@ -352,16 +355,16 @@ public class Appointment {
         private LocalDateTime lastUpdated;               // ultima atualizacion
         private boolean rescheduled;
 
-        private Builder withId(Long id){this.id = id; return this;}
-        private Builder withDentist(Dentist d){this.dentist = d; return this;}
-        private Builder withPatient(Patient p){this.patient = p; return this;}
-        private Builder withStart(LocalDateTime s){this.start = s; return this;}
-        private Builder withEnd(LocalDateTime e){this.end = e; return this;}
-        private Builder withStatus(AppointmentStatus s){this.status = s; return this;}
-        private Builder withReason(String r){this.reason = r; return this;}
-        private Builder withAppointmentType(AppointmentType t){this.appointmentType = t; return this;}
-        private Builder withClinicaNotes(String t){this.clinicalNotes = t; return this;}
-        private Builder withServiceDuratio(ServiceDuration a ){this.scheduledDuration = a; return this;}
+        public  Builder withId(Long id){this.id = id; return this;}
+        public Builder withDentist(Dentist d){this.dentist = d; return this;}
+        public Builder withPatient(Patient p){this.patient = p; return this;}
+        public  Builder withStart(LocalDateTime s){this.start = s; return this;}
+        public Builder withEnd(LocalDateTime e){this.end = e; return this;}
+        public Builder withStatus(AppointmentStatus s){this.status = s; return this;}
+        public Builder withReason(String r){this.reason = r; return this;}
+        public Builder withAppointmentType(AppointmentType t){this.appointmentType = t; return this;}
+        public Builder withClinicaNotes(String t){this.clinicalNotes = t; return this;}
+        public Builder withServiceDuratio(ServiceDuration a){this.scheduledDuration = a; return this;}
 
         public Appointment buildAppointment(){
             return new Appointment(this);

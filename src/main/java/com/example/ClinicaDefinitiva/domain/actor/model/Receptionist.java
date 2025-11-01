@@ -10,20 +10,24 @@ import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
 
 import java.time.LocalDateTime;
 
-public class Receptionist extends Person {
+public class Receptionist   {
+    private ReceptionId id;
+    private Person person;
     private Sector sector;
     private UserModel user;
 
     public Receptionist(Builder b ) {
-        super(b.address, b.age, b.bloodType, b.dateOfBirth, b.dni, b.fullname, b.id, b.phoneNumber);
         this.sector = b.sector;
         this.user = b.user;
+        this.id = b.id;
+        this.person = b.person;
     }
 
-    public static Receptionist registerReceptionist(PersonRegistrationData data, UserModel user, Sector sector){
+    public static Receptionist registerReceptionist(ReceptionId id ,Person data, UserModel user, Sector sector){
         ensureActiveUser(user);
         LocalDateTime lastUpdate = LocalDateTime.now();
         return  new Builder()
+                .withReceptionId(id)
                 .withAddress(data.getAddress())
                 .withPhoneNumber(data.getPhoneNumber())
                 .withLastUpdate(lastUpdate)
@@ -32,25 +36,26 @@ public class Receptionist extends Person {
                 .withDateOfBirth(data.getDateOfBirth())
                 .withDni(data.getDni())
                 .withFullName(data.getFullname())
-                .withId(data.getId())
                 .withSector(sector)
                 .withUser(user)
                 .buildReceptionist();
     }
-    public static Receptionist updateReceptionistContactData(PersonRegistrationData data, UserModel user){
+    public static Receptionist updateReceptionistContactData(ReceptionId id , PersonRegistrationData data, UserModel user){
         ensureActiveUser(user);
         LocalDateTime lastUpdate = LocalDateTime.now();
         return  new Builder()
+                .withReceptionId(id)
                 .withAddress(data.getAddress())
                 .withPhoneNumber(data.getPhoneNumber())
                 .withLastUpdate(lastUpdate)
                 .withUser(user)
                 .buildReceptionist();
     }
-    public static Receptionist updateReceptionistSensitiveData(PersonRegistrationData data, UserModel user, Sector sector){
+    public static Receptionist updateReceptionistSensitiveData(ReceptionId id ,PersonRegistrationData data, UserModel user, Sector sector){
         ensureActiveUser(user);
         LocalDateTime lastUpdate = LocalDateTime.now();
         return  new Builder()
+                .withReceptionId(id)
                 .withAge(data.getAge())
                 .withBloodType(data.getBloodType())
                 .withDateOfBirth(data.getDateOfBirth())
@@ -86,11 +91,12 @@ public class Receptionist extends Person {
         private DateOfBirth dateOfBirth;
         private String dni;
         private FullName fullname;
-        private Long id;
         private PhoneNumber phoneNumber;
         private UserModel user;
         private LocalDateTime lastUpdate;
         private Sector sector;
+        private ReceptionId id;
+        private Person person;
 
 
         public Builder withAddress(Address a) { this.address = a; return this; }
@@ -99,11 +105,13 @@ public class Receptionist extends Person {
         public Builder withDateOfBirth(DateOfBirth d) { this.dateOfBirth = d; return this; }
         public Builder withDni(String d) { this.dni = d; return this; }
         public Builder withFullName(FullName f) { this.fullname = f; return this; }
-        public Builder withId(Long id) { this.id = id; return this; }
+       // public Builder withId(Long id) { this.id = id; return this; }
         public Builder withPhoneNumber(PhoneNumber p) { this.phoneNumber = p; return this; }
         public Builder withUser(UserModel u){this.user = u; return this;}
         public Builder withLastUpdate(LocalDateTime l){this.lastUpdate = l; return this;}
         public Builder withSector(Sector s){this.sector = s; return this;}
+        public Builder withReceptionId(ReceptionId r){this.id = r; return this;}
+        public Builder withPerson(Person p){this.person = p; return this;}
         public Receptionist buildReceptionist() {
             return new Receptionist(this);
         }

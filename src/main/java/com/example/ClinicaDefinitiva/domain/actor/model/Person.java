@@ -8,8 +8,8 @@ import com.example.ClinicaDefinitiva.domain.actor.valueObject.PhoneNumber;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.Address;
 
 
-public class Person {
-    private Long id;
+public final class Person {
+
     private String dni;
     private FullName fullname;
     private PhoneNumber phoneNumber;
@@ -17,21 +17,24 @@ public class Person {
     private DateOfBirth dateOfBirth;
     private BloodType bloodType;
     private Age age ;
+    private String documentoEPS;
 
 
-    public Person(com.example.ClinicaDefinitiva.domain.actor.valueObject.Address address, com.example.ClinicaDefinitiva.domain.actor.valueObject.Age age, BloodType bloodType, com.example.ClinicaDefinitiva.domain.actor.valueObject.DateOfBirth dateOfBirth, String dni, com.example.ClinicaDefinitiva.domain.actor.valueObject.FullName fullname, Long id, com.example.ClinicaDefinitiva.domain.actor.valueObject.PhoneNumber phoneNumber) {
+    public Person(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, String dni, String documentoEPS, FullName fullname, Long id, PhoneNumber phoneNumber) {
         this.address = address;
         this.age = age;
         this.bloodType = bloodType;
         this.dateOfBirth = dateOfBirth;
         this.dni = dni;
+        this.documentoEPS = documentoEPS;
         this.fullname = fullname;
-        this.id = id;
+
         this.phoneNumber = phoneNumber;
     }
 
-
-
+    public String getDocumentoEPS() {
+        return documentoEPS;
+    }
 
     public Address getAddress() {
         return address;
@@ -81,13 +84,7 @@ public class Person {
         this.fullname = fullname;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public PhoneNumber getPhoneNumber() {
         return phoneNumber;

@@ -4,7 +4,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Set;
 
-public class AvailabilityStatus {
+public final class AvailabilityStatus {
     public enum Status {
         FREE,
         BOOKED,

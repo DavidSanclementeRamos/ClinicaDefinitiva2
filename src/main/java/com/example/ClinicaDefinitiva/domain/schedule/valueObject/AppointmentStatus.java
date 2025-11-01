@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.schedule.valueObject;
 
-public class AppointmentStatus {
+public final class AppointmentStatus {
     public enum Status {
         SCHEDULED,
         COMPLETED,
