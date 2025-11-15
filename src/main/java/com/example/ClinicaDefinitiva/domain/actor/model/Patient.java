@@ -1,13 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
-import com.example.ClinicaDefinitiva.domain.actor.dto.PersonRegistrationData;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.administration.model.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.errors.CodigoEntidad;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.NoShiftAssignedException;
 import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.PendingAppointmentsException;
 import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.ShiftNotAvailableException;
@@ -18,16 +14,12 @@ import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;
-import com.example.ClinicaDefinitiva.domain.util.TimeIntervalRules;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class Patient  {
 
-    private PatientId patientId;
+    private final PatientId patientId;
     private Person person;
     private GuardianId guardianId;
     private UserModel user;
@@ -83,37 +75,33 @@ public class Patient  {
                 .build();
     }
 
-    public static Patient updatePatientContact(PatientId id ,Person data, LocalDateTime lastUpdate, UserModel user) {
 
+    public void updatePatientContact(Person data, UserModel user) {
         ensureActiveUser(user);
-        return new Builder()
-                .withPatientId(id)
-                .withAddress(data.getAddress())
-                .withPhoneNumber(data.getPhoneNumber())
-                .withLastUpdate(lastUpdate)
-                .build();
+        this.person = this.person.updateContact(data.getAddress(), data.getPhoneNumber());
+        this.lastUpdate = LocalDateTime.now();
     }
 
-    public static Patient updateDataSensible(PatientId id ,Person data, LocalDateTime lastUpdate, UserModel user, Schedule schedule) {
-
+    public void updateDataSensible(Person data, UserModel user) {
         ensureActiveUser(user);
-        if (schedule.hasAppointmentsWithin(2)) {
+        if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
             throw new PendingAppointmentsException(ContextoEntidad.PATIENT, "{days=2}");
         }
 
-        return new Builder()
-                .withPatientId(id)
-                .withAddress(data.getAddress())
-                .withPhoneNumber(data.getPhoneNumber())
-                .withLastUpdate(lastUpdate)
-                .withAge(data.getAge())
-                .withBloodType(data.getBloodType())
-                .withDateOfBirth(data.getDateOfBirth())
-                .withFullName(data.getFullname())
-                .build();
+        this.person = this.person.updateSensitive(
+                data.getAge(),
+                data.getBloodType(),
+                data.getDateOfBirth(),
+                data.getDni(),
+                data.getDocumentoEPS(),
+                data.getFullname()
+        );
+        this.lastUpdate = LocalDateTime.now();
     }
 
 
+
+    /** SERA REMOVIDO */
     public void desactivar(Schedule schedule) {
         final int DAYS_TO_BLOCK_DEACTIVATION = 30;
 

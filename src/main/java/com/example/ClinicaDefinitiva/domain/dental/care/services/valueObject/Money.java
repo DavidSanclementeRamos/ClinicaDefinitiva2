@@ -8,7 +8,7 @@ public final class Money {
     private final BigDecimal amount;
     private final String currency;
 
-    private Money(BigDecimal amount, String currency) {
+    public Money(BigDecimal amount, String currency) {
         this.amount = amount.setScale(2, RoundingMode.HALF_UP);
         this.currency = Objects.requireNonNull(currency);
     }

@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
-import com.example.ClinicaDefinitiva.domain.actor.dto.PersonRegistrationData;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
@@ -11,10 +10,11 @@ import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
 import java.time.LocalDateTime;
 
 public class Receptionist   {
-    private ReceptionId id;
+    private final ReceptionId id;
     private Person person;
     private Sector sector;
     private UserModel user;
+    private LocalDateTime lastUpdate;
 
     public Receptionist(Builder b ) {
         this.sector = b.sector;
@@ -40,30 +40,24 @@ public class Receptionist   {
                 .withUser(user)
                 .buildReceptionist();
     }
-    public static Receptionist updateReceptionistContactData(ReceptionId id , PersonRegistrationData data, UserModel user){
+    public  void updateReceptionistContactData(Person data, UserModel user){
         ensureActiveUser(user);
-        LocalDateTime lastUpdate = LocalDateTime.now();
-        return  new Builder()
-                .withReceptionId(id)
-                .withAddress(data.getAddress())
-                .withPhoneNumber(data.getPhoneNumber())
-                .withLastUpdate(lastUpdate)
-                .withUser(user)
-                .buildReceptionist();
+
+        this.person = data.updateContact(data.getAddress(), data.getPhoneNumber());
+        this.lastUpdate = LocalDateTime.now();
     }
-    public static Receptionist updateReceptionistSensitiveData(ReceptionId id ,PersonRegistrationData data, UserModel user, Sector sector){
+    public  void updateReceptionistSensitiveData(Person data, UserModel user, Sector sector){
         ensureActiveUser(user);
         LocalDateTime lastUpdate = LocalDateTime.now();
-        return  new Builder()
-                .withReceptionId(id)
-                .withAge(data.getAge())
-                .withBloodType(data.getBloodType())
-                .withDateOfBirth(data.getDateOfBirth())
-                .withDni(data.getDni())
-                .withFullName(data.getFullname())
-                .withLastUpdate(lastUpdate)
-                .withUser(user)
-                .buildReceptionist();
+        this.person = data.updateSensitive( data.getAge(),
+                data.getBloodType(),
+                data.getDateOfBirth(),
+                data.getDni(),
+                data.getDocumentoEPS(),
+                data.getFullname());
+        this.lastUpdate = lastUpdate;
+        this.sector= sector;
+
     }
     public void desactive(){
         ensureActiveUser(user);
@@ -73,6 +67,34 @@ public class Receptionist   {
         if (!user.isActive()) {
             throw new UserInactiveException(ContextoEntidad.DENTIST, "user=" + user);
         }
+    }
+
+    public ReceptionId getId() {
+        return id;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public Sector getSector() {
+        return sector;
+    }
+
+    public UserModel getUser() {
+        return user;
     }
 
     public void setSector(Sector sector) {

@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.service;
 
-import com.example.ClinicaDefinitiva.domain.actor.dto.PersonRegistrationData;
+import com.example.ClinicaDefinitiva.application.dto.person.PersonRegistrationData;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.Specialties;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.WorkingHours;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 public class DentistOrchestratorService {
-
+/** SERA ELIMINADA XD*/
     public Dentist registerDentist(PersonRegistrationData data,
                                    Specialties specialties,
                                    UserModel user,

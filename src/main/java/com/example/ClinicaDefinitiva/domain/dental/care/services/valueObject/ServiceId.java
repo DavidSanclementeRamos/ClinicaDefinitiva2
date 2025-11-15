@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public final class ServiceId {
 
@@ -13,10 +14,16 @@ public final class ServiceId {
         this.value = value;
     }
 
-    public static ServiceId of(String value) {
-        return new ServiceId(value);
+    public static ServiceId generate() {
+        return new ServiceId(UUID.randomUUID().toString());
     }
 
+    public static ServiceId fromString(String value){
+        if (value == null) return null;
+        String trimmed = value.trim();
+        if(trimmed.isEmpty()) throw new IllegalArgumentException("InvoiceId string is empty");
+        return new ServiceId(trimmed);
+    }
     public String getValue() {
         return value;
     }

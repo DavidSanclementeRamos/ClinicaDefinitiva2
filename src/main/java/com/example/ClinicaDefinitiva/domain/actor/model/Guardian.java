@@ -1,12 +1,11 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
-import com.example.ClinicaDefinitiva.Enum.TipoResponsable;
 import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
-import com.example.ClinicaDefinitiva.domain.actor.dto.PersonRegistrationData;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
 import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.identity.valueObjectes.UserStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,13 +14,13 @@ import java.util.List;
 
 public class Guardian {
 
-    private final GuardianId guardianId;
-    private final Person person;
-    private final TypeGuardian typeGuardian;
-    private final Schedule schedule;
-    private final UserModel user;
-    private final List<Patient> patientList;
-    private final LocalDateTime lastUpdate;
+    private  final GuardianId guardianId;
+    private  Person person;
+    private  TypeGuardian typeGuardian;
+    private  Schedule schedule;
+    private  UserModel user;
+    private  List<Patient> patientList;
+    private  LocalDateTime lastUpdate;
 
     public Guardian (Builder b){
 
@@ -34,21 +33,30 @@ public class Guardian {
         this.guardianId = b.guardianId;
     }
 
+    public Guardian(GuardianId guardianId) {
+        this.guardianId = guardianId;
+    }
+
     // Un responsable puede ser registrado si:
     // Usuario activo.
     // Cumple con la edad requerida.
     // El responsable no sede el tope de pacientes a cargos.
-    public static Guardian registerGuardian(GuardianId id, Person data,
+    public static Guardian registerGuardian(GuardianId id,
+                                            Person data,
                                             UserModel user,
-                                            List<Patient> patientList,
+                                           // List<Patient> patientList,
                                             TypeGuardian typeGuardian){
         ensureActiveUser(user);
         if (data.getAge().isBetween(22,60)){
             throw new IllegalArgumentException("El responsable no cuenta con la edad requerida para hacerse cargo de un responsable");
         }
+        /**
+         * ESTA VALIDATION NO ES VALIDA EN REGISTRO, CAMBIAR
+         * NO es coherente validar cuantas personas tiene a cargo
+         * al momento de crear, tampoco es valido crear el mismo responsable nuevamente, cuando es reasignado a otro paciente**
         if(patientList.size() <= 6){
             throw new IllegalArgumentException("El responsable no puede tener mas de 6 pacientes ");
-        }
+        }*/
         return new Builder()
                 .withGuardianId(id)
                 .withDocumentoEPS("")
@@ -61,54 +69,89 @@ public class Guardian {
                 .withPhoneNumber(data.getPhoneNumber())
                 .withUser(user)
                 .withTypeGuardian(typeGuardian)
-                .withPatient(patientList)
+                //.withPatient(patientList)
                 .withDocumentoEPS(data.getDocumentoEPS())
                 .build();
     }
-    public static Guardian updateGuardianDataContact(GuardianId id ,Person data, UserModel user ){
-        ensureActiveUser(user);
-        LocalDateTime lastUpdate =  LocalDateTime.now();
-        return new Builder()
-                .withGuardianId(id)
-                .withDocumentoEPS("")
-                .withAddress(data.getAddress())
-                .withPhoneNumber(data.getPhoneNumber())
-                .withLastUpdate(lastUpdate)
-                .build();
-    }
 
-    public static Guardian updateGuardianSensitiveData(GuardianId id ,Person data, UserModel user, TypeGuardian typeGuardian){
-        ensureActiveUser(user);
-        LocalDateTime lastUpdate =  LocalDateTime.now();
-        return new Builder()
-                .withGuardianId(id)
-                .withDocumentoEPS("")
-                .withAge(data.getAge())
-                .withBloodType(data.getBloodType())
-                .withDateOfBirth(data.getDateOfBirth())
-                .withDni(data.getDni())
-                .withFullName(data.getFullname())
-                .withUser(user)
-                .withTypeGuardian(typeGuardian)
-                .withLastUpdate(lastUpdate)
+   public void updateContactData(Person data,
+                                 UserModel user) {
 
-                .build();
-    }
+       ensureActiveUser(user);
+       this.person= this.person.updateContact(data.getAddress(), data.getPhoneNumber());
+       this.lastUpdate = LocalDateTime.now();
+   }
 
-    public void deactivateGuardian(){
+    public void updateSensitiveData(Person data, UserModel user, TypeGuardian typeGuardian) {
         ensureActiveUser(user);
-        if(patientList != null){
-           throw new IllegalArgumentException("No se puede eliminar si tine pacientes asignados ");
+
+        if (!data.getAge().isBetween(18, 130)) {
+            throw new GuardianMinimumAgeException(ContextoEntidad.GUARDIAN, "El acudiente debe tener al menos 18 años.");
         }
+
+        this.person = this.person.updateSensitive(
+                data.getAge(),
+                data.getBloodType(),
+                data.getDateOfBirth(),
+                data.getDni(),
+                data.getDocumentoEPS(),
+                data.getFullname()
+        );
+        this.user = user;
+        this.typeGuardian = typeGuardian;
+        this.lastUpdate = LocalDateTime.now();
     }
 
+    public void deactivateGuardian(GuardianId id,  UserModel user, List<Patient> patientList) {
+
+        if (user == null) throw new IllegalArgumentException("user no puede ser null");
+
+        // Verificar que el id coincide con el del agregado (evita desactivar otro guardian)
+        if (!id.equals(this.guardianId)) {
+            throw new IllegalArgumentException("El guardianId proporcionado no coincide con este Guardian");
+        }
+
+        // Verificar pacientes asignados: no permitir desactivar si hay pacientes
+        boolean hasAssignedPatients = (patientList != null && !patientList.isEmpty()) || (this.patientList != null && !this.patientList.isEmpty());
+        if (hasAssignedPatients) {
+            throw new IllegalStateException("No se puede desactivar: hay pacientes asignados");
+        }
+
+        // Asegurar que el usuario proporcionado sea el mismo que el asociado (opcional, pero recomendable)
+        if (!user.equals(this.user)) {
+            throw new IllegalArgumentException("El usuario proporcionado no coincide con el usuario asociado al Guardian");
+        }
+
+        // Realizar la desactivación in-place
+        // Asumo que UserModel expone un método para cambiar el estado; ajusta según tu API.
+        this.user.setStatus(UserStatus.of(UserStatus.Status.INACTIVE));
 
 
+
+        ensureActiveUser(user);
+        // Actualizar metadatos de auditoría
+        this.lastUpdate = LocalDateTime.now();
+
+
+    }
     private static void ensureActiveUser(UserModel user) {
         if (!user.isActive()) {
             throw new UserInactiveException(ContextoEntidad.PATIENT, "user=" + user);
         }
     }
+
+    public GuardianId getGuardianId() {
+        return guardianId;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
     public UserModel getUser() {
         return user;
     }
@@ -139,6 +182,7 @@ public class Guardian {
         private String documentoEPS;
         private GuardianId guardianId;
         private Person personData;
+        private UserStatus userStatus;
 
 
         public Builder withAddress(Address a) { this.address = a; return this; }
@@ -157,6 +201,7 @@ public class Guardian {
         public Builder withDocumentoEPS(String d){this.documentoEPS = d; return this;}
         public Builder withPerson(Person p){this.personData = p; return this;}
         public Builder withGuardianId(GuardianId d){this.guardianId = d; return this;}
+        public Builder withUserStatus(UserStatus s){this.userStatus = s; return  this;}
         public Guardian build () {
             return new Guardian(this);
         }

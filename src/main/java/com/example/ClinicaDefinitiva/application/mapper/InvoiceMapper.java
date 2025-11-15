@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper;
 
-import com.example.ClinicaDefinitiva.application.dto.InvoiceDto;
-import com.example.ClinicaDefinitiva.application.dto.InvoiceItemDto;
+import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceDto;
+import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceItemDto;
 import com.example.ClinicaDefinitiva.application.dto.ServiceRendered;
 import com.example.ClinicaDefinitiva.application.dto.ServiceRenderedDto;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 public class InvoiceMapper {
     public ServiceRendered toServiceRenderedDomain(ServiceRenderedDto dto) {
-        return new ServiceRendered(dto.serviceCode, dto.description, dto.quantity, dto.performedAt, toProviderId(dto.providerId));
+        return new ServiceRendered(dto.serviceId, dto.serviceCode, dto.description, dto.quantity, dto.performedAt, toProviderId(dto.providerId));
     }
 
     public InvoiceDto toInvoiceDto(Invoice invoice) {

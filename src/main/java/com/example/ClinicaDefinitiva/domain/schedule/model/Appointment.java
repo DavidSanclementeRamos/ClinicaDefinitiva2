@@ -6,6 +6,7 @@ import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceId;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentType;
@@ -26,12 +27,12 @@ public class Appointment {
     private String reason;                           // motivo
     private AppointmentType appointmentType;         // tipo cita (Control, emergency, first-time)
     private String clinicalNotes;                    // notas Clinicas (Professional observations)
-    //private LocalTime actualDuration;              // duracionReal (Efficiency analysis)
-    private Dentist attendedBy;                      // atendidaPor (May differ from assigned)
+    private ServiceDuration actualDuration;              // duracionReal (Efficiency analysis)
+    private String attendedBy;                      // atendidaPor (May differ from assigned)
     private LocalDateTime creationDate;              // fecha creacion
     private LocalDateTime lastUpdated;               // ultima atualizacion
     private boolean rescheduled;
-    private ServiceDuration scheduledDuration;
+   // private ServiceDuration scheduledDuration;
 
 
 
@@ -39,7 +40,7 @@ public class Appointment {
     private static final Duration CANCELLATION_WINDOW = Duration.ofHours(2);
 
     public Appointment (Builder b){
-        this.scheduledDuration = b.scheduledDuration;
+       // this.scheduledDuration = b.scheduledDuration;
         this.appointmentType = b.appointmentType;
         this.attendedBy = b.attendedBy;
         this.clinicalNotes = b.clinicalNotes;
@@ -61,150 +62,28 @@ public class Appointment {
 
 
 
-
-
-
-
-
-    // 1) No puede agendarse si el odontólogo está inactivo
-    // 2) No puede agendarse fuera del horario de disponibilidad del odontólogo
-    // 4) Debe tener un paciente y un odontólogo válidos para ser confirmada.
-    // 5) La duration de la cita debe coincidir con la del servicio.
-    public static Appointment registerSchedule(Dentist dentist,
-                                               Patient patient,
-                                               LocalDateTime star,
-                                               LocalDateTime end,
-                                               AppointmentType type,
-                                               String reason,
-                                               ServiceDuration scheduledDuration,
-                                               ProvidedService service) {
-        if (dentist == null ) {
-            throw new IllegalArgumentException("Odontólogo inválido .");
+    // Confirmar cita (puede usarse si necesitas un paso explícito de confirmación)
+    public void confirm() {
+        if (this.patient == null || this.dentist == null) {
+            throw new IllegalArgumentException(
+                    "No se puede confirmar: paciente u odontólogo inválido");
         }
-        if (patient == null) {
-            throw new IllegalArgumentException("Paciente inválido.");
-        }
-        dentist.canScheduleBetween(star, end);
-
-        patient.canScheduleBetween(star, end);
-
-        if (type == null || reason == null || reason.isBlank()) {
-            throw new IllegalArgumentException("Tipo de cita y motivo son obligatorios.");
-        }
-        if (scheduledDuration.getMinutes() != service.getDuration().getMinutes()) {
-            throw new IllegalStateException("Appointment duration must match service duration");
-        }
-
-
-
-        return new Builder()
-                .withServiceDuratio(scheduledDuration)
-                .withDentist(dentist)
-                .withAppointmentType(type)
-                .withEnd(end)
-                .withClinicaNotes("Experimental")
-                .withPatient(patient)
-                .withStart(star)
-                .withStatus(AppointmentStatus.from(AppointmentStatus.Status.SCHEDULED))
-                .withReason("Motivo")
-                .buildAppointment();
+        this.status.isConfirmed();
     }
 
-    // Una cita puede ser reagendada si:
-    // paciente y odontólogo están activos
-    // la nueva fecha de assignation no se solapa con otra cita
-    // la nueva fecha está en el horario del odontólogo.
-    // El paciente no tiene citas en esa nueva fecha
-    // el odontólogo esta disponible en esa fecha
-    // La cita está en estado programada
-    // La cita existe
-    // La cita es vigente, no ha pasado o ha iniciado
-    //-----------------------------------------------------
-    /**Cubres estado (solo citas programadas).
-     • 	Cubres identidad (mismo paciente y odontólogo).
-     • 	Cubres actividad (paciente y odontólogo activos).
-     • 	Cubres agenda (slots disponibles y sin conflictos).
-     • 	Cubres políticas de negocio (anticipación mínima y ventana máxima). */
-
-    public static Appointment validationReschedule(Appointment original,
-                                          LocalDateTime newStart,
-                                          LocalDateTime newEnd,
-                                          Schedule schedule,
-                                          Patient patient,
-                                          Dentist dentist) {
-
-        // Validaciones de estado, asegurado que la cita este en estado Scheduled y no Cancelled o Completed.
-        schedule.validateStatus(original);
-
-        // Validaciones de identidad, asegura que la cita que se intenta reagendar
-        // pertenezca al mismo paciente y odontólogo que está en contexto.
-        schedule.validateIdentity(original,patient,dentist);
-
-        // Validaciones de actividad
-        dentist.validateReschedule(newStart, newEnd);
-        patient.validateReschedule();
-
-        // Validaciones de agenda
-        schedule.validateScheduleBetween(newStart, newEnd);
-
-        // Política de tiempo mínimo, no reagendar con menos de 24 h de anticipation
-        final long MIN_HOURS_BEFORE_RESCHEDULE = 24;
-        if (original.getStart().isBefore(LocalDateTime.now().plusHours(MIN_HOURS_BEFORE_RESCHEDULE))) {
-            throw new IllegalArgumentException("No se puede reagendar con menos de "
-                    + MIN_HOURS_BEFORE_RESCHEDULE + " horas de anticipación.");
+    // 3) No puede eliminarse (cancelarse) si está a menos de X horas de su ejecución (2)
+    public void cancel() {
+        LocalDateTime now = LocalDateTime.now();
+        if (start.minus(CANCELLATION_WINDOW).isBefore(now)) {
+            throw new IllegalArgumentException(
+                    "No se puede cancelar: faltan menos de "
+                            + CANCELLATION_WINDOW.toHours()
+                            + " horas para la cita");
         }
-
-        // Ventana máxima, no reagendar mas alla de 6 meses.
-        final long MAX_MONTHS_AHEAD = 6;
-        if (newStart.isAfter(LocalDateTime.now().plusMonths(MAX_MONTHS_AHEAD))) {
-            throw new IllegalArgumentException("No se puede reagendar más allá de "
-                    + MAX_MONTHS_AHEAD + " meses en el futuro.");
-        }
-
-        // validation de disponibilidad neta
-        if (schedule.getTotalAvailableTime(newStart.getDayOfWeek()).isZero()){
-            throw new IllegalArgumentException("No hay disponibilidad en ese dia ");
-        }
-
-        return new Builder()
-                .withPatient(patient)
-
-                .buildAppointment();
+        this.status.isCancelled();
     }
 
 
-        // 3) No puede eliminarse (cancelarse) si está a menos de X horas de su ejecución (2)
-        public void cancel() {
-            LocalDateTime now = LocalDateTime.now();
-            if (start.minus(CANCELLATION_WINDOW).isBefore(now)) {
-                throw new IllegalArgumentException(
-                        "No se puede cancelar: faltan menos de "
-                                + CANCELLATION_WINDOW.toHours()
-                                + " horas para la cita");
-            }
-            this.status.isCancelled();
-        }
-
-    public void cancelarCita() {
-
-        if (!this.isScheduled()) {
-            throw new IllegalArgumentException("La cita no está en estado programado");
-        }
-        if (this.getStart().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("No se puede cancelar una cita ya iniciada o pasada");
-        }
-
-        this.cancel(); // delegas en Appointment el cambio de estado
-    }
-
-        // Confirmar cita (puede usarse si necesitas un paso explícito de confirmación)
-        public void confirm() {
-            if (this.patient == null || this.dentist == null) {
-                throw new IllegalArgumentException(
-                        "No se puede confirmar: paciente u odontólogo inválido");
-            }
-            this.status.isConfirmed();
-        }
 
      /**
       Se decidió delegar la lógica de estado desde Appointment hacia su VO AppointmentStatus,
@@ -242,9 +121,6 @@ public class Appointment {
         this.lastUpdated = lastUpdated;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
 
     public void setRescheduled(boolean rescheduled) {
         this.rescheduled = rescheduled;
@@ -258,11 +134,8 @@ public class Appointment {
         this.start = start;
     }
 
-    public void setDentist(Dentist dentist) {
-        this.dentist = dentist;
-    }
 
-    public Dentist getDentist() {
+    public DentistId getDentistId() {
         return dentist;
     }
 
@@ -271,7 +144,7 @@ public class Appointment {
         return lastUpdated;
     }
 
-    public Patient getPatient() {
+    public PatientId getPatientId() {
         return patient;
     }
 
@@ -287,11 +160,11 @@ public class Appointment {
         this.appointmentType = appointmentType;
     }
 
-    public Dentist getAttendedBy() {
+    public String getAttendedBy() {
         return attendedBy;
     }
 
-    public void setAttendedBy(Dentist attendedBy) {
+    public void setAttendedBy(String attendedBy) {
         this.attendedBy = attendedBy;
     }
 
@@ -313,23 +186,26 @@ public class Appointment {
         this.creationDate = creationDate;
     }
 
+    public ServiceDuration getActualDuration() {
+        return actualDuration;
+    }
 
+    public DentistId getDentist() {
+        return dentist;
+    }
 
-    public Long getId() {
+    public AppointmentId getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public PatientId getPatient() {
+        return patient;
     }
 
     public String getReason() {
         return reason;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
 
     public AppointmentStatus getStatus() {
         return status;
@@ -340,9 +216,9 @@ public class Appointment {
     }
 
     public static final class Builder{
-        private Long id;
-        private Dentist dentist;
-        private Patient patient;
+        private AppointmentId id;
+        private DentistId dentist;
+        private PatientId patient;
         private LocalDateTime start;                 // fechaHora
         private LocalDateTime end;
         private AppointmentStatus status;                // estado
@@ -350,14 +226,14 @@ public class Appointment {
         private AppointmentType appointmentType;         // tipo cita (Control, emergency, first-time)
         private String clinicalNotes;                    // notas Clinicas (Professional observations)
         private ServiceDuration scheduledDuration;                 // duracionReal (Efficiency analysis)
-        private Dentist attendedBy;                      // atendidaPor (May differ from assigned)
+        private String attendedBy;                      // atendidaPor (May differ from assigned)
         private LocalDateTime creationDate;              // fecha creacion
         private LocalDateTime lastUpdated;               // ultima atualizacion
         private boolean rescheduled;
 
-        public  Builder withId(Long id){this.id = id; return this;}
-        public Builder withDentist(Dentist d){this.dentist = d; return this;}
-        public Builder withPatient(Patient p){this.patient = p; return this;}
+        public  Builder withId(AppointmentId id){this.id = id; return this;}
+        public Builder withDentistId(DentistId d){this.dentist = d; return this;}
+        public Builder withPatientId(PatientId p){this.patient = p; return this;}
         public  Builder withStart(LocalDateTime s){this.start = s; return this;}
         public Builder withEnd(LocalDateTime e){this.end = e; return this;}
         public Builder withStatus(AppointmentStatus s){this.status = s; return this;}

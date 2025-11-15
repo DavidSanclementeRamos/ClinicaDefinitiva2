@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller;
 
-import com.example.ClinicaDefinitiva.application.dto.BuildInvoiceRequest;
-import com.example.ClinicaDefinitiva.application.dto.InvoiceDto;
+import com.example.ClinicaDefinitiva.application.dto.billing.BuildInvoiceRequest;
+import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceDto;
 import com.example.ClinicaDefinitiva.application.usecase.BillingUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

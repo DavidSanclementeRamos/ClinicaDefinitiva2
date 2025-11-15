@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.application.usecase;
 
-import com.example.ClinicaDefinitiva.application.dto.BuildInvoiceRequest;
-import com.example.ClinicaDefinitiva.application.dto.InvoiceDto;
-import com.example.ClinicaDefinitiva.application.dto.UpdateInvoiceRequest;
+import com.example.ClinicaDefinitiva.application.dto.billing.BuildInvoiceRequest;
+import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceDto;
+import com.example.ClinicaDefinitiva.application.dto.billing.UpdateInvoiceRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

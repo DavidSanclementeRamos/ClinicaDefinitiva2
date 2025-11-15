@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.application.service;
 
-import com.example.ClinicaDefinitiva.application.dto.BuildInvoiceRequest;
-import com.example.ClinicaDefinitiva.application.dto.InvoiceDto;
+import com.example.ClinicaDefinitiva.application.dto.billing.BuildInvoiceRequest;
+import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceDto;
 import com.example.ClinicaDefinitiva.application.dto.ServiceRendered;
-import com.example.ClinicaDefinitiva.application.dto.UpdateInvoiceRequest;
+import com.example.ClinicaDefinitiva.application.dto.billing.UpdateInvoiceRequest;
 import com.example.ClinicaDefinitiva.application.mapper.InvoiceMapper;
 import com.example.ClinicaDefinitiva.application.usecase.BillingUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.model.Contract;
@@ -84,7 +84,7 @@ public class BillingApplicationService implements BillingUseCase {
                 rates,
                 request.issuedAt,
                 dueDate,
-                String.valueOf(contractId)                                 // pasamos el VO ContractId
+                ContractId.fromString(String.valueOf(contractId))                                 // pasamos el VO ContractId
         );
 
         invoiceRepository.save(invoice);
@@ -108,7 +108,7 @@ public class BillingApplicationService implements BillingUseCase {
     @Override
     public InvoiceDto findId(Long invoiceId) {
         // convertir Long -> InvoiceId VO y buscar
-        InvoiceId id = InvoiceId.fromString(String.valueOf(invoiceId));
+       InvoiceId id = InvoiceId.fromString(String.valueOf(invoiceId));
         Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invoice not found: " + invoiceId));
         return mapper.toInvoiceDto(invoice);
@@ -121,14 +121,7 @@ public class BillingApplicationService implements BillingUseCase {
                 .orElseThrow(() -> new IllegalArgumentException("Invoice not found: " + invoiceRequest.invoiceId));
 
         // obtener ContractId: preferir el de la petición (si viene) sino el del invoice
-        ContractId contractId;
-        if (invoiceRequest.contractId != null) {
-            contractId = ContractId.fromLong(invoiceRequest.contractId);
-        } else {
-            // asumimos invoice.getContractId() devuelve ContractId; si devuelve Long adapta aquí
-            contractId = ContractId.fromLong(invoice.getContractId());
-        }
-
+        ContractId contractId = ContractId.fromString(invoiceRequest.contractId);
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new IllegalArgumentException("Contract not found: " + contractId));
 

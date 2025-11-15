@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
-import com.example.ClinicaDefinitiva.domain.actor.dto.PersonRegistrationData;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.DentistMinimumAgeException;
@@ -14,7 +13,6 @@ import com.example.ClinicaDefinitiva.domain.schedule.model.TimeSlot;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.WeeklyAvailability;
 import com.example.ClinicaDefinitiva.domain.util.TimeIntervalRules;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,18 +21,18 @@ import java.util.List;
 public  class Dentist   {
 
     private final DentistId dentistId;
-    private final Person personData;
-    private final Specialties specialties;
-    private final DentistAvailabilityStatus availabilityStatus;
-    private final WorkingHours workingHours;
-    private final UserModel user;
-    private final List<TimeSlot> timeSlotList;
-    private final List<WeeklyAvailability> availabilityList;
-    private final Schedule schedule;
-    private final LocalDateTime lastUpdate;
+    private  Person personData;
+    private  Specialties specialties;
+    private  DentistAvailabilityStatus availabilityStatus;
+    private  WorkingHours workingHours;
+    private  UserModel user;
+    private  List<TimeSlot> timeSlotList;
+    private  List<WeeklyAvailability> availabilityList;
+    private  Schedule schedule;
+    private  LocalDateTime lastUpdate;
 
 
-    private Dentist(Builder b ) {
+    public Dentist(Builder b ) {
         this.personData = b.personData;
         this.specialties = b.specialties;
         this.user = b.user;
@@ -47,17 +45,21 @@ public  class Dentist   {
         this.schedule = new Schedule(b.appointments, new WeeklyAvailability(b.timeSlotList, List.of(b.workingHours)));
     }
 
+    public Dentist(DentistId dentistId) {
+        this.dentistId = dentistId;
+    }
+
     // Factory method (fábrica semántica)
     public static Dentist registerDentist(
             DentistId id,
             Person data,
             Specialties specialties,
             UserModel user,
-            WorkingHours workingHours,
             WeeklyAvailability weeklyAvailability,
-            Collection<Appointment> initialAppointments,
             LocalDateTime lastUpdate) {
+
         ensureActiveUser(user);
+
         if (!data.getAge().isBetween(25, 130)) {
             throw new DentistMinimumAgeException(ContextoEntidad.DENTIST, "Dentist must be at least 25 years old.");
         }
@@ -74,63 +76,53 @@ public  class Dentist   {
                 .withDateOfBirth(data.getDateOfBirth())
                 .withDni(data.getDni())
                 .withFullname(data.getFullname())
-                .withDocumentoEPS("")
                 .withPhoneNumber(data.getPhoneNumber())
                 .withSpecialties(specialties)
                 .withUser(user)
-                .withWorkingHours(workingHours)
                 .withTimeSlots(weeklyAvailability.getSlots())
-                .withAppointments(initialAppointments)
                 .withLastUpdate(lastUpdate)
                 .withDocumentoEPS(data.getDocumentoEPS())
                 .withAvailabilityStatus(DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.AVAILABLE))
                 .build();
         }
 
-    public static Dentist updateDentistSensitiveData(Person data,
-                                                     DentistId id,
-                                                     UserModel user,
-                                                     LocalDateTime lastUpdate,
-                                                     Specialties specialties,
-                                                     WorkingHours workingHours){
-        return new Builder()
-                .withDentistId(id)
-                .withAddress(data.getAddress())
-                .withPhoneNumber(data.getPhoneNumber())
-                .withLastUpdate(lastUpdate)
-                .withAge(data.getAge())
-                .withBloodType(data.getBloodType())
-                .withDateOfBirth(data.getDateOfBirth())
-                .withDni(data.getDni())
-                .withFullname(data.getFullname())
-                .withDocumentoEPS("")
-                .withSpecialties(specialties)
-                .withWorkingHours(workingHours)
+    public void updateSensitiveData( Person data, UserModel user, Specialties specialties, WorkingHours workingHours) {
+        ensureActiveUser(user);
 
-                .build();
-    }
-    public static Dentist updateDentistContactData(DentistId id, Person data, UserModel user,LocalDateTime lastUpdate){
-        return new Builder()
-                .withDentistId(id)
-                .withAddress(data.getAddress())
-                .withPhoneNumber(data.getPhoneNumber())
-                .withLastUpdate(lastUpdate)
-                .withDocumentoEPS("")
-                .build();
-    }
-
-    // se puede eliminar si:
-    // tiene citas pendientes en X tiempo
-    // el usuario está inactivo
-    public void deactivateDentist(int hoursRange) {
-        ensureActiveUser();
-        if (schedule.hasAppointmentsWithinHours(hoursRange)) {
-            throw new PendingAppointmentsWithinHoursException(
-                    ContextoEntidad.DENTIST,
-                    String.format("No se puede desactivar: tiene citas pendientes en las próximas %d horas", hoursRange)
-            );
+        if (!data.getAge().isBetween(25, 130)) {
+            throw new DentistMinimumAgeException(ContextoEntidad.DENTIST, "El odontólogo debe tener al menos 25 años.");
         }
-        DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.UNAVAILABLE);
+        this.personData = data.updateSensitive(
+                data.getAge(),
+                data.getBloodType(),
+                data.getDateOfBirth(),
+                data.getDni(),
+                data.getDocumentoEPS(),
+                data.getFullname()
+        );
+        this.lastUpdate = LocalDateTime.now();
+        this.specialties = specialties;
+        this.workingHours = workingHours;
+    }
+
+    public void updateContactData(Person data, UserModel user) {
+        ensureActiveUser(user);
+
+        this.personData = personData.updateContact(data.getAddress(), data.getPhoneNumber());
+        this.lastUpdate= LocalDateTime.now();
+    }
+
+    // se puede desactivar si:
+    // No tiene citas pendientes en X tiempo
+    // el usuario está inactivo
+    public Dentist deactivate(UserModel user, int hoursRange) {
+        ensureActiveUser(user);
+        if (this.schedule.hasAppointmentsWithinHours(hoursRange)) {
+            throw new PendingAppointmentsWithinHoursException(ContextoEntidad.DENTIST, "");
+        }
+        return new Dentist.Builder()
+                .withAvailabilityStatus(DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.UNAVAILABLE))
+                .build();
     }
     // puede agendar una cita si
     // usuario está activo
