@@ -1,11 +1,5 @@
 package com.example.ClinicaDefinitiva.domain.billing.doiman;
 
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Money;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 public class InvoiceFactory {
    /** public static Invoice createDraft(String patientId,
                                       String providerId,

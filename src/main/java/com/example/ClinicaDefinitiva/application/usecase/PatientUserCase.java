@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.application.usecase;
 
-import com.example.ClinicaDefinitiva.application.dto.Patient.CreatePatientDto;
-import com.example.ClinicaDefinitiva.application.dto.Patient.ReadPatientDto;
-import com.example.ClinicaDefinitiva.application.dto.Patient.UpdatePatientDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.CreatePatientDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.ReadPatientDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.UpdatePatientDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

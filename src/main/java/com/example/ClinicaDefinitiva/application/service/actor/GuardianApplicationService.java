@@ -1,14 +1,14 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
 
-import com.example.ClinicaDefinitiva.application.dto.guardian.CreateGuardianDto;
-import com.example.ClinicaDefinitiva.application.dto.guardian.ReadGuardian;
-import com.example.ClinicaDefinitiva.application.dto.guardian.UpdateGuardian;
+import com.example.ClinicaDefinitiva.application.dto.actor.guardian.CreateGuardianDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.guardian.ReadGuardian;
+import com.example.ClinicaDefinitiva.application.dto.actor.guardian.UpdateGuardian;
 import com.example.ClinicaDefinitiva.application.mapper.GuardianMapper;
 import com.example.ClinicaDefinitiva.application.usecase.GuardianUserCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.GuardianId;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.identity.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.portsInput.GuardianRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.PatientRepository;
@@ -53,7 +53,7 @@ public class GuardianApplicationService implements GuardianUserCase {
         // conversion de string a vo
         UserId userId = UserId.fromString(createGuardianDto.getUserId());
         // verificar existencia de user
-        UserModel user = userRepository.findById((userId)).
+        UserIdentity user = userRepository.findById((userId)).
                 orElseThrow(() -> new IllegalArgumentException("No found"));
        // conversion
         GuardianId id = GuardianId.fromString(createGuardianDto.getGuardianId());
@@ -76,7 +76,7 @@ public class GuardianApplicationService implements GuardianUserCase {
 
         UserId userId = UserId.fromString(updateGuardian.getUserId());
         // verificar existencia de user
-        UserModel user = userRepository.findById((userId)).
+        UserIdentity user = userRepository.findById((userId)).
                 orElseThrow(() -> new IllegalArgumentException("No found"));
 
         guardian.updateContactData(updateGuardian.getData(),user);
@@ -92,7 +92,7 @@ public class GuardianApplicationService implements GuardianUserCase {
 
         UserId userId = UserId.fromString(updateGuardian.getUserId());
         // verificar existencia de user
-        UserModel user = userRepository.findById((userId)).
+        UserIdentity user = userRepository.findById((userId)).
                 orElseThrow(() -> new IllegalArgumentException("No found"));
 
         guardian.updateSensitiveData(updateGuardian.getData(),user, updateGuardian.getTypeGuardian());

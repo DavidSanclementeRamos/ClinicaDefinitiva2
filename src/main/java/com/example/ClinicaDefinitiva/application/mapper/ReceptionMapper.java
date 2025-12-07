@@ -13,7 +13,7 @@ public final class ReceptionMapper {
         dto.setPerson(r.getPerson());
         dto.setSector(r.getSector());
         dto.setUserId(String.valueOf(r.getUser() != null ? r.getUser().getId() : null));
-        // si tu UserModel.getId() no devuelve String, ajusta
+        // si tu UserIdentity.getId() no devuelve String, ajusta
         dto.setLastUpdate(null); // si Receptionist expone lastUpdate, mapearlo; en tu ejemplo no está en campos explícitos
         return dto;
     }

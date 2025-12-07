@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
 
 
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ public class Receptionist   {
     private final ReceptionId id;
     private Person person;
     private Sector sector;
-    private UserModel user;
+    private UserIdentity user;
     private LocalDateTime lastUpdate;
 
     public Receptionist(Builder b ) {
@@ -23,7 +23,7 @@ public class Receptionist   {
         this.person = b.person;
     }
 
-    public static Receptionist registerReceptionist(ReceptionId id ,Person data, UserModel user, Sector sector){
+    public static Receptionist registerReceptionist(ReceptionId id , Person data, UserIdentity user, Sector sector){
         ensureActiveUser(user);
         LocalDateTime lastUpdate = LocalDateTime.now();
         return  new Builder()
@@ -40,13 +40,13 @@ public class Receptionist   {
                 .withUser(user)
                 .buildReceptionist();
     }
-    public  void updateReceptionistContactData(Person data, UserModel user){
+    public  void updateReceptionistContactData(Person data, UserIdentity user){
         ensureActiveUser(user);
 
         this.person = data.updateContact(data.getAddress(), data.getPhoneNumber());
         this.lastUpdate = LocalDateTime.now();
     }
-    public  void updateReceptionistSensitiveData(Person data, UserModel user, Sector sector){
+    public  void updateReceptionistSensitiveData(Person data, UserIdentity user, Sector sector){
         ensureActiveUser(user);
         LocalDateTime lastUpdate = LocalDateTime.now();
         this.person = data.updateSensitive( data.getAge(),
@@ -63,7 +63,7 @@ public class Receptionist   {
         ensureActiveUser(user);
         LocalDateTime lastUpdate = LocalDateTime.now();
     }
-    private static void ensureActiveUser(UserModel user) {
+    private static void ensureActiveUser(UserIdentity user) {
         if (!user.isActive()) {
             throw new UserInactiveException(ContextoEntidad.DENTIST, "user=" + user);
         }
@@ -93,7 +93,7 @@ public class Receptionist   {
         return sector;
     }
 
-    public UserModel getUser() {
+    public UserIdentity getUser() {
         return user;
     }
 
@@ -101,7 +101,7 @@ public class Receptionist   {
         this.sector = sector;
     }
 
-    public void setUser(UserModel user) {
+    public void setUser(UserIdentity user) {
         this.user = user;
     }
 
@@ -114,7 +114,7 @@ public class Receptionist   {
         private String dni;
         private FullName fullname;
         private PhoneNumber phoneNumber;
-        private UserModel user;
+        private UserIdentity user;
         private LocalDateTime lastUpdate;
         private Sector sector;
         private ReceptionId id;
@@ -129,7 +129,7 @@ public class Receptionist   {
         public Builder withFullName(FullName f) { this.fullname = f; return this; }
        // public Builder withId(Long id) { this.id = id; return this; }
         public Builder withPhoneNumber(PhoneNumber p) { this.phoneNumber = p; return this; }
-        public Builder withUser(UserModel u){this.user = u; return this;}
+        public Builder withUser(UserIdentity u){this.user = u; return this;}
         public Builder withLastUpdate(LocalDateTime l){this.lastUpdate = l; return this;}
         public Builder withSector(Sector s){this.sector = s; return this;}
         public Builder withReceptionId(ReceptionId r){this.id = r; return this;}

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper;
 
-import com.example.ClinicaDefinitiva.application.dto.Patient.ReadPatientDto;
-import com.example.ClinicaDefinitiva.application.dto.guardian.ReadGuardian;
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.ReadPatientDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.guardian.ReadGuardian;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import org.springframework.stereotype.Component;
 

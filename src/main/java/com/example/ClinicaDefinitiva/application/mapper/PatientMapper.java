@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.application.mapper;
 
-import com.example.ClinicaDefinitiva.application.dto.Patient.ReadPatientDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.ReadPatientDto;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import org.springframework.stereotype.Component;
 

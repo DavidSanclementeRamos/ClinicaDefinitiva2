@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.administration.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ContractId;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.NoShiftAssignedException;
 import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.PendingAppointmentsException;
@@ -10,7 +10,7 @@ import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.Shi
 import com.example.ClinicaDefinitiva.domain.exceptions.patient.exception.AgeBelowMinimumForRegistrationException;
 import com.example.ClinicaDefinitiva.domain.exceptions.patient.exception.UnassignedResponsibleException;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;
@@ -22,7 +22,7 @@ public class Patient  {
     private final PatientId patientId;
     private Person person;
     private GuardianId guardianId;
-    private UserModel user;
+    private UserIdentity user;
     private Shift shift;
     private Schedule schedule;
     private LocalDateTime lastUpdate;
@@ -45,7 +45,7 @@ public class Patient  {
 
 
     public static Patient registerPatient(PatientId id ,Person data,
-                                          UserModel user,
+                                          UserIdentity user,
                                           GuardianId guardian,
                                           LocalDateTime lastUpdate,
                                           ContractId contractId) {
@@ -76,13 +76,13 @@ public class Patient  {
     }
 
 
-    public void updatePatientContact(Person data, UserModel user) {
+    public void updatePatientContact(Person data, UserIdentity user) {
         ensureActiveUser(user);
         this.person = this.person.updateContact(data.getAddress(), data.getPhoneNumber());
         this.lastUpdate = LocalDateTime.now();
     }
 
-    public void updateDataSensible(Person data, UserModel user) {
+    public void updateDataSensible(Person data, UserIdentity user) {
         ensureActiveUser(user);
         if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
             throw new PendingAppointmentsException(ContextoEntidad.PATIENT, "{days=2}");
@@ -147,7 +147,7 @@ public class Patient  {
         }
     }
     // para factories.
-    private static void ensureActiveUser(UserModel user) {
+    private static void ensureActiveUser(UserIdentity user) {
         if (!user.isActive()) {
             throw new UserInactiveException(ContextoEntidad.PATIENT, "user=" + user);
         }
@@ -200,7 +200,7 @@ public class Patient  {
         return shift;
     }
 
-    public UserModel getUser() {
+    public UserIdentity getUser() {
         return user;
     }
 
@@ -214,7 +214,7 @@ public class Patient  {
         private FullName fullname;
         private Long id;
         private PhoneNumber phoneNumber;
-        private UserModel user;
+        private UserIdentity user;
         private Shift shift;
         private Appointment appointment;
         private GuardianId guardianId;
@@ -234,7 +234,7 @@ public class Patient  {
         public Builder withFullName(FullName f) { this.fullname = f; return this; }
         public Builder withId(Long id) { this.id = id; return this; }
         public Builder withPhoneNumber(PhoneNumber p) { this.phoneNumber = p; return this; }
-        public Builder withUser(UserModel u){this.user = u; return this;}
+        public Builder withUser(UserIdentity u){this.user = u; return this;}
         public Builder withShift(Shift s){this.shift = s; return this;}
         public Builder withSchedule(Schedule s) { this.schedule = s; return this; }
         public Builder withGuardianId(GuardianId g){this.guardianId = g; return this;}

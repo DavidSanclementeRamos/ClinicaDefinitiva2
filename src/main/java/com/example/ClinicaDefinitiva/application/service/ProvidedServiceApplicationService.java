@@ -5,6 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.service.ReadProvidedService
 import com.example.ClinicaDefinitiva.application.dto.service.UpdateProvidedServiceDto;
 import com.example.ClinicaDefinitiva.application.mapper.ProvidedServiceMapper;
 import com.example.ClinicaDefinitiva.application.usecase.ProvidedServiceUseCase;
+import com.example.ClinicaDefinitiva.domain.Money;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.portsInput.ProvidedServiceRepository;

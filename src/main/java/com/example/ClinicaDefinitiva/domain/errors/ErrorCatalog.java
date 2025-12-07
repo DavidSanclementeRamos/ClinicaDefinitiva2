@@ -24,7 +24,7 @@ public enum ErrorCatalog {
     INVALID_SHIFT("ERR_SHF_002", "Invalid shift parameters."),
 
     // 👤 Errores de Usuario
-    USER_NOT_FOUND("ERR_USR_001", "UserModel not found."),
+    USER_NOT_FOUND("ERR_USR_001", "UserIdentity not found."),
     INVALID_USER("ERR_USR_002", "Invalid user data."),
     USER_STATUS("ERR_USR_003", "Estado invalido para operation"),
 

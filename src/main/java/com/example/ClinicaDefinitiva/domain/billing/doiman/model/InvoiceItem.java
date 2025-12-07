@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceItemId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Money;
+import com.example.ClinicaDefinitiva.domain.Money;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;

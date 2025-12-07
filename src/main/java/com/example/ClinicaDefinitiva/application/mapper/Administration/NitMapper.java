@@ -1,0 +1,9 @@
+package com.example.ClinicaDefinitiva.application.mapper.Administration;
+
+import com.example.ClinicaDefinitiva.application.dto.NitDto;
+import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.Nit;
+
+public class NitMapper {
+    public static NitDto toNit(Nit a){return new NitDto(a.value());}
+    public static Nit fromDto(NitDto dto){return new Nit(dto.nit());}
+}

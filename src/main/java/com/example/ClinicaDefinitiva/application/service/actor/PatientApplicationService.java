@@ -1,16 +1,16 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
-import com.example.ClinicaDefinitiva.application.dto.Patient.CreatePatientDto;
-import com.example.ClinicaDefinitiva.application.dto.Patient.ReadPatientDto;
-import com.example.ClinicaDefinitiva.application.dto.Patient.UpdatePatientDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.CreatePatientDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.ReadPatientDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.UpdatePatientDto;
 import com.example.ClinicaDefinitiva.application.mapper.PatientMapper;
 import com.example.ClinicaDefinitiva.application.usecase.PatientUserCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.Person;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.GuardianId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
-import com.example.ClinicaDefinitiva.domain.administration.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.identity.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.portsInput.PatientRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.UserRepository;
@@ -56,7 +56,7 @@ public class PatientApplicationService implements PatientUserCase {
         GuardianId guardianId = GuardianId.fromString(dto.getGuardianId().getVauel());
         ContractId contractId = ContractId.fromString(dto.getContractId().getValue());
 
-        UserModel user = userRepository.findById(userId)
+        UserIdentity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: id=" + userId));
 
         Person person = dto.getPerson(); // Asumo que CreatePatientDto puede construir Person
@@ -85,7 +85,7 @@ public class PatientApplicationService implements PatientUserCase {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new IllegalArgumentException("Patient not found: id=" + dto.getPatientId()));
 
-        UserModel user = userRepository.findById(userId)
+        UserIdentity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: id=" + dto.getUserId()));
 
        patient.updatePatientContact(dto.getPerson(), user);
@@ -103,7 +103,7 @@ public class PatientApplicationService implements PatientUserCase {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new IllegalArgumentException("Patient not found: id=" + updatePatientDto.getPatientId()));
 
-        UserModel user = userRepository.findById(userId)
+        UserIdentity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: id=" + updatePatientDto.getUserId()));
 
         patient.updateDataSensible(updatePatientDto.getPerson(), user);

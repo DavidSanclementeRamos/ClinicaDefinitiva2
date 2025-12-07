@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.identity.valueObjectes.UserStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public class Guardian {
     private  Person person;
     private  TypeGuardian typeGuardian;
     private  Schedule schedule;
-    private  UserModel user;
+    private UserIdentity user;
     private  List<Patient> patientList;
     private  LocalDateTime lastUpdate;
 
@@ -43,7 +43,7 @@ public class Guardian {
     // El responsable no sede el tope de pacientes a cargos.
     public static Guardian registerGuardian(GuardianId id,
                                             Person data,
-                                            UserModel user,
+                                            UserIdentity user,
                                            // List<Patient> patientList,
                                             TypeGuardian typeGuardian){
         ensureActiveUser(user);
@@ -75,14 +75,14 @@ public class Guardian {
     }
 
    public void updateContactData(Person data,
-                                 UserModel user) {
+                                 UserIdentity user) {
 
        ensureActiveUser(user);
        this.person= this.person.updateContact(data.getAddress(), data.getPhoneNumber());
        this.lastUpdate = LocalDateTime.now();
    }
 
-    public void updateSensitiveData(Person data, UserModel user, TypeGuardian typeGuardian) {
+    public void updateSensitiveData(Person data, UserIdentity user, TypeGuardian typeGuardian) {
         ensureActiveUser(user);
 
         if (!data.getAge().isBetween(18, 130)) {
@@ -102,7 +102,7 @@ public class Guardian {
         this.lastUpdate = LocalDateTime.now();
     }
 
-    public void deactivateGuardian(GuardianId id,  UserModel user, List<Patient> patientList) {
+    public void deactivateGuardian(GuardianId id, UserIdentity user, List<Patient> patientList) {
 
         if (user == null) throw new IllegalArgumentException("user no puede ser null");
 
@@ -123,7 +123,7 @@ public class Guardian {
         }
 
         // Realizar la desactivación in-place
-        // Asumo que UserModel expone un método para cambiar el estado; ajusta según tu API.
+        // Asumo que UserIdentity expone un método para cambiar el estado; ajusta según tu API.
         this.user.setStatus(UserStatus.of(UserStatus.Status.INACTIVE));
 
 
@@ -134,7 +134,7 @@ public class Guardian {
 
 
     }
-    private static void ensureActiveUser(UserModel user) {
+    private static void ensureActiveUser(UserIdentity user) {
         if (!user.isActive()) {
             throw new UserInactiveException(ContextoEntidad.PATIENT, "user=" + user);
         }
@@ -152,7 +152,7 @@ public class Guardian {
         return person;
     }
 
-    public UserModel getUser() {
+    public UserIdentity getUser() {
         return user;
     }
     public TypeGuardian getTypeGuardian() {
@@ -174,7 +174,7 @@ public class Guardian {
         private FullName fullname;
         private Long id;
         private PhoneNumber phoneNumber;
-        private UserModel user;
+        private UserIdentity user;
         private TypeGuardian typeGuardian;
         private Schedule schedule;
         private List<Patient> patientList;
@@ -193,7 +193,7 @@ public class Guardian {
         public Builder withFullName(FullName f) { this.fullname = f; return this; }
         public Builder withId(Long id) { this.id = id; return this; }
         public Builder withPhoneNumber(PhoneNumber p) { this.phoneNumber = p; return this; }
-        public Builder withUser(UserModel u){this.user = u; return this;}
+        public Builder withUser(UserIdentity u){this.user = u; return this;}
         public Builder withTypeGuardian(TypeGuardian t){this.typeGuardian = t; return this;}
         public Builder withSchedule(Schedule s){this.schedule = s; return  this;}
         public Builder withPatient(Collection<Patient> p){this.patientList = new ArrayList<>(p); return this;}

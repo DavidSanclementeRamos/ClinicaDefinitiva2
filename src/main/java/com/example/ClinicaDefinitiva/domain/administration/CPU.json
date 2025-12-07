@@ -1,0 +1,218 @@
+[
+  {
+    "codigo": "1",
+    "nombre": "ACTIVO",
+    "naturaleza": "deudora",
+    "nivel": 1,
+    "requiereTercero": false,
+    "requiereDocumento": false,
+    "codigoPadre": null
+  },
+  {
+    "codigo": "11",
+    "nombre": "DISPONIBLE",
+    "naturaleza": "deudora",
+    "nivel": 2,
+    "requiereTercero": false,
+    "requiereDocumento": false,
+    "codigoPadre": "1"
+  },
+  {
+    "codigo": "1105",
+    "nombre": "CAJA",
+    "naturaleza": "deudora",
+    "nivel": 3,
+    "requiereTercero": false,
+    "requiereDocumento": false,
+    "codigoPadre": "11"
+  },
+  {
+    "codigo": "110505",
+    "nombre": "Caja general",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": false,
+    "requiereDocumento": false,
+    "codigoPadre": "1105"
+  },
+  {
+    "codigo": "110510",
+    "nombre": "Cajas menores",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": false,
+    "requiereDocumento": false,
+    "codigoPadre": "1105"
+  },
+  {
+    "codigo": "1110",
+    "nombre": "BANCOS",
+    "naturaleza": "deudora",
+    "nivel": 3,
+    "requiereTercero": false,
+    "requiereDocumento": false,
+    "codigoPadre": "11"
+  },
+  {
+    "codigo": "111005",
+    "nombre": "Moneda nacional",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": false,
+    "requiereDocumento": false,
+    "codigoPadre": "1110"
+  },
+  {
+    "codigo": "111010",
+    "nombre": "Moneda extranjera",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": false,
+    "requiereDocumento": false,
+    "codigoPadre": "1110"
+  },
+  {
+    "codigo": "1305",
+    "nombre": "CLIENTES",
+    "naturaleza": "deudora",
+    "nivel": 3,
+    "requiereTercero": true,
+    "requiereDocumento": true,
+    "codigoPadre": "13"
+  },
+  {
+    "codigo": "2305",
+    "nombre": "CUENTAS CORRIENTES COMERCIALES",
+    "naturaleza": "acreedora",
+    "nivel": 3,
+    "requiereTercero": true,
+    "requiereDocumento": true,
+    "codigoPadre": "23"
+  },
+  {
+    "codigo": "2380",
+    "nombre": "ACREEDORES VARIOS",
+    "naturaleza": "acreedora",
+    "nivel": 3,
+    "requiereTercero": true,
+    "requiereDocumento": true,
+    "codigoPadre": "23"
+  },
+  {
+    "codigo": "5105",
+    "nombre": "GASTOS DE PERSONAL",
+    "naturaleza": "deudora",
+    "nivel": 3,
+    "requiereTercero": false,
+    "requiereDocumento": true,
+    "codigoPadre": "51"
+  },
+  {
+    "codigo": "510506",
+    "nombre": "Sueldos",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": true,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510518",
+    "nombre": "Comisiones",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": true,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510530",
+    "nombre": "Cesantías",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": false,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510536",
+    "nombre": "Prima de servicios",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": false,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510539",
+    "nombre": "Vacaciones",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": false,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510548",
+    "nombre": "Bonificaciones",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": false,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510551",
+    "nombre": "Dotación y suministro a trabajadores",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": false,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510569",
+    "nombre": "Aportes a entidades promotoras de salud EPS",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": false,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510570",
+    "nombre": "Aportes a fondos de pensiones y/o cesantías",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": false,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510572",
+    "nombre": "Aportes cajas de compensación familiar",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": false,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510575",
+    "nombre": "Aportes ICBF",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": false,
+    "codigoPadre": "5105"
+  },
+  {
+    "codigo": "510578",
+    "nombre": "SENA",
+    "naturaleza": "deudora",
+    "nivel": 4,
+    "requiereTercero": true,
+    "requiereDocumento": false,
+    "codigoPadre": "5105"
+  }
+]

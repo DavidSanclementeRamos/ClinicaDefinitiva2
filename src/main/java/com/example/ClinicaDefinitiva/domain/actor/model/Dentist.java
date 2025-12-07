@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.Dentist
 import com.example.ClinicaDefinitiva.domain.exceptions.WeeklyAvailabilityException;
 import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.PendingAppointmentsWithinHoursException;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.TimeSlot;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
@@ -25,7 +25,7 @@ public  class Dentist   {
     private  Specialties specialties;
     private  DentistAvailabilityStatus availabilityStatus;
     private  WorkingHours workingHours;
-    private  UserModel user;
+    private UserIdentity user;
     private  List<TimeSlot> timeSlotList;
     private  List<WeeklyAvailability> availabilityList;
     private  Schedule schedule;
@@ -54,7 +54,7 @@ public  class Dentist   {
             DentistId id,
             Person data,
             Specialties specialties,
-            UserModel user,
+            UserIdentity user,
             WeeklyAvailability weeklyAvailability,
             LocalDateTime lastUpdate) {
 
@@ -86,7 +86,7 @@ public  class Dentist   {
                 .build();
         }
 
-    public void updateSensitiveData( Person data, UserModel user, Specialties specialties, WorkingHours workingHours) {
+    public void updateSensitiveData(Person data, UserIdentity user, Specialties specialties, WorkingHours workingHours) {
         ensureActiveUser(user);
 
         if (!data.getAge().isBetween(25, 130)) {
@@ -105,7 +105,7 @@ public  class Dentist   {
         this.workingHours = workingHours;
     }
 
-    public void updateContactData(Person data, UserModel user) {
+    public void updateContactData(Person data, UserIdentity user) {
         ensureActiveUser(user);
 
         this.personData = personData.updateContact(data.getAddress(), data.getPhoneNumber());
@@ -115,7 +115,7 @@ public  class Dentist   {
     // se puede desactivar si:
     // No tiene citas pendientes en X tiempo
     // el usuario está inactivo
-    public Dentist deactivate(UserModel user, int hoursRange) {
+    public Dentist deactivate(UserIdentity user, int hoursRange) {
         ensureActiveUser(user);
         if (this.schedule.hasAppointmentsWithinHours(hoursRange)) {
             throw new PendingAppointmentsWithinHoursException(ContextoEntidad.DENTIST, "");
@@ -179,7 +179,7 @@ public  class Dentist   {
         }
     }
     // para factories.
-    private static void ensureActiveUser(UserModel user) {
+    private static void ensureActiveUser(UserIdentity user) {
         if (!user.isActive()) {
             throw new UserInactiveException(ContextoEntidad.DENTIST, "user=" + user);
         }
@@ -190,7 +190,7 @@ public  class Dentist   {
     //public List<TimeSlot> getTimeSlotList() { return List.copyOf(timeSlotList); }
     public List<WeeklyAvailability> getAvailabilityList() { return List.copyOf(availabilityList); }
     public Schedule getSchedule() { return schedule; }
-    public UserModel getUser() { return user; }
+    public UserIdentity getUser() { return user; }
     public DentistAvailabilityStatus getAvailabilityStatus() {return availabilityStatus;}
     public LocalDateTime getLastUpdate() {return lastUpdate;}
     public Specialties getSpecialties() {return specialties;}
@@ -210,7 +210,7 @@ public  class Dentist   {
         private Long id;
         private PhoneNumber phoneNumber;
         private Specialties specialties;
-        private UserModel user;
+        private UserIdentity user;
         private WorkingHours workingHours;
         private List<TimeSlot> timeSlotList = new ArrayList<>();
         private List<WeeklyAvailability> availabilityList = new ArrayList<>();
@@ -230,7 +230,7 @@ public  class Dentist   {
        // public Builder withId(Long id) { this.id = id; return this; }
         public Builder withPhoneNumber(PhoneNumber p) { this.phoneNumber = p; return this; }
         public Builder withSpecialties(Specialties s) { this.specialties = s; return this; }
-        public Builder withUser(UserModel u) { this.user = u; return this; }
+        public Builder withUser(UserIdentity u) { this.user = u; return this; }
         public Builder withWorkingHours(WorkingHours w) { this.workingHours = w; return this; }
         public Builder withTimeSlots(Collection<TimeSlot> slots) { this.timeSlotList = new ArrayList<>(slots); return this; }
         public Builder withAvailabilityList(Collection<WeeklyAvailability> availability) { this.availabilityList = new ArrayList<>(availability); return this; }

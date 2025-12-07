@@ -2,10 +2,10 @@ package com.example.ClinicaDefinitiva.domain.billing.doiman.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
-import com.example.ClinicaDefinitiva.domain.administration.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ContractId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.enu.InvoiceStatus;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Money;
+import com.example.ClinicaDefinitiva.domain.Money;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;

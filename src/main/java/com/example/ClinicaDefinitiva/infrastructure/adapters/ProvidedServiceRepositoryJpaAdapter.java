@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.infrastructure.adapters;
 
 import com.example.ClinicaDefinitiva.application.mapper.ProvidedServiceMapper;
+import com.example.ClinicaDefinitiva.domain.Money;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.*;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;

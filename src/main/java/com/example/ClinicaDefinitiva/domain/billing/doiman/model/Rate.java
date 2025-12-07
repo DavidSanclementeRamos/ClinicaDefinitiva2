@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.billing.doiman.model;
 
-import com.example.ClinicaDefinitiva.domain.administration.model.Contract;
+import com.example.ClinicaDefinitiva.domain.administration.contable.Contract;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Money;
+import com.example.ClinicaDefinitiva.domain.Money;
 import java.time.LocalDateTime;
 
 public class Rate {

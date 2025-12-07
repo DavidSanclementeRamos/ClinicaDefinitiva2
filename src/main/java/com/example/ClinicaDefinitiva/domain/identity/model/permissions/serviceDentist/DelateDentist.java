@@ -1,11 +1,11 @@
 package com.example.ClinicaDefinitiva.domain.identity.model.permissions.serviceDentist;
 
-import com.example.ClinicaDefinitiva.domain.identity.model.permissions.ContextoAccion;
-import com.example.ClinicaDefinitiva.domain.identity.model.permissions.PermissionModel;
-import com.example.ClinicaDefinitiva.domain.identity.model.permissions.Rol;
-import com.example.ClinicaDefinitiva.domain.identity.num.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.permisos.ContextoAccion;
+import com.example.ClinicaDefinitiva.domain.administration.permisos.PermissionPolicy;
+import com.example.ClinicaDefinitiva.domain.administration.permisos.Rol;
+import com.example.ClinicaDefinitiva.domain.administration.permisos.num.RolEnum;
 
-public class DelateDentist  implements PermissionModel{
+public class DelateDentist  implements PermissionPolicy {
     @Override
     public String getCodigo() {
         return "DELATE DENTIST";

@@ -3,13 +3,13 @@ package com.example.ClinicaDefinitiva.domain.service;
 import com.example.ClinicaDefinitiva.domain.InvoiceItemBuilder;
 import com.example.ClinicaDefinitiva.application.dto.ServiceRendered;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.administration.model.Contract;
+import com.example.ClinicaDefinitiva.domain.administration.contable.Contract;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.InvoiceFactory;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Money;
-import com.example.ClinicaDefinitiva.domain.portsInput.ContractRepository;
+import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.portsInput.Administration.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.RateRepository;
 
 import java.time.LocalDateTime;

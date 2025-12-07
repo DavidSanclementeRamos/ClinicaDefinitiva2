@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.application.mapper.ReceptionMapper;
 import com.example.ClinicaDefinitiva.application.usecase.ReceptionUserCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.ReceptionId;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.identity.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.portsInput.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.UserRepository;
@@ -47,7 +47,7 @@ public class ReceptionApplicationService implements ReceptionUserCase {
         if (dto == null) throw new IllegalArgumentException("dto no puede ser null");
 
         UserId userId = UserId.fromString(dto.getUserId());
-        UserModel user = userRepository.findById(userId)
+        UserIdentity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + dto.getUserId()));
         ReceptionId receptionId = ReceptionId.fromString(dto.getReceptionId());
 
@@ -67,7 +67,7 @@ public class ReceptionApplicationService implements ReceptionUserCase {
                 .orElseThrow(() -> new IllegalArgumentException("Receptionist not found: " + dto.getReceptionId()));
 
         UserId userId = UserId.fromString(dto.getUserId());
-        UserModel user = userRepository.findById(userId)
+        UserIdentity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + dto.getUserId()));
 
 
@@ -86,7 +86,7 @@ public class ReceptionApplicationService implements ReceptionUserCase {
                 .orElseThrow(() -> new IllegalArgumentException("Receptionist not found: " + dto.getReceptionId()));
 
         UserId userId = UserId.fromString(dto.getUserId());
-        UserModel user = userRepository.findById(userId)
+        UserIdentity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + dto.getUserId()));
 
         existing.updateReceptionistSensitiveData( dto.getPersonData(), user, dto.getSector());

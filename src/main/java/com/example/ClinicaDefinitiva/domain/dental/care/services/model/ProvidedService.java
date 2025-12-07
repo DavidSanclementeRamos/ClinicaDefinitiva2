@@ -1,5 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.model;
 
+import com.example.ClinicaDefinitiva.domain.Money;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
 
@@ -11,7 +12,7 @@ public class ProvidedService {
     private  String name;                         // Nombre del servicio
     private  ServiceCatalog category;      //Categoría (ej. "Orthodontics", "Surgery", "Pediatrics")
     private  ServiceCode code;               // Código estandarizado (ej. CUPS en Colombia)
-    private  Money baseRate;                // Tarifa base del servicio
+    private Money baseRate;                // Tarifa base del servicio
     private  ServiceDuration duration;           // Duración estimada en minutos
     private  boolean requiresAuthorization;      // Indica si requiere autorización (EPS/aseguradora)
     private  String description;                // Descripción general del servicio

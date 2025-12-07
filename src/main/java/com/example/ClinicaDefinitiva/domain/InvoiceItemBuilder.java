@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.domain;
 // InvoiceItemBuilder.java (fluent builder)
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.InvoiceItem;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Money;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

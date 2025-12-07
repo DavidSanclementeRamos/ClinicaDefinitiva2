@@ -1,13 +1,13 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
-import com.example.ClinicaDefinitiva.application.dto.dentist.CreateDentistDto;
-import com.example.ClinicaDefinitiva.application.dto.dentist.ReadDentistDto;
-import com.example.ClinicaDefinitiva.application.dto.dentist.UpdateDentistDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.dentist.CreateDentistDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.dentist.ReadDentistDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.dentist.UpdateDentistDto;
 import com.example.ClinicaDefinitiva.application.mapper.DentistMapper;
 import com.example.ClinicaDefinitiva.application.usecase.DentistUseCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.identity.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.portsInput.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.UserRepository;
@@ -51,7 +51,7 @@ public class DentistApplicationService implements DentistUseCase {
        // conversion de string a vo
         UserId userId = UserId.fromString(createDentistDto.getUser());
         // verificar existencia de user
-        UserModel user = userRepository.findById((userId)).
+        UserIdentity user = userRepository.findById((userId)).
                 orElseThrow(() -> new IllegalArgumentException("No found"));
         Dentist dentist = Dentist.registerDentist(
                 createDentistDto.getDentistId(),
@@ -75,7 +75,7 @@ public class DentistApplicationService implements DentistUseCase {
         // conversion de string a vo
         UserId userId = UserId.fromString(updateDentistDto.getUserId());
         // verificar existencia de user
-        UserModel user = userRepository.findById((userId)).
+        UserIdentity user = userRepository.findById((userId)).
                 orElseThrow(() -> new IllegalArgumentException("No found"));
 
         dentist.updateSensitiveData(
@@ -96,7 +96,7 @@ public class DentistApplicationService implements DentistUseCase {
         // conversion de string a vo
         UserId userId = UserId.fromString(updateDentistDto.getUserId());
         // verificar existencia de user
-        UserModel user = userRepository.findById((userId)).
+        UserIdentity user = userRepository.findById((userId)).
                 orElseThrow(() -> new IllegalArgumentException("No found"));
 
         dentist.updateContactData(updateDentistDto.getUpdatePersonContactData(), user);

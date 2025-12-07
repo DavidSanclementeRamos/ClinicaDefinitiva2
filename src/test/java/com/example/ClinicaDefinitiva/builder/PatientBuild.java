@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;
@@ -23,7 +23,7 @@ public class PatientBuild implements IBuilder {
         private FullName fullname;
         private Long id;
         private PhoneNumber phoneNumber;
-        private UserModel user;
+        private UserIdentity user;
         private Shift shift;
         private Appointment appointment;
         private Guardian guardian;
@@ -41,7 +41,7 @@ public class PatientBuild implements IBuilder {
         public PatientBuild withFullName(FullName f) { this.fullname = f; return this; }
         public PatientBuild withId(Long id) { this.id = id; return this; }
         public PatientBuild withPhoneNumber(PhoneNumber p) { this.phoneNumber = p; return this; }
-        public PatientBuild withUser(UserModel u){this.user = u; return this;}
+        public PatientBuild withUser(UserIdentity u){this.user = u; return this;}
         public PatientBuild withShift(Shift s){this.shift = s; return this;}
         public PatientBuild withSchedule(Schedule s) { this.schedule = s; return this; }
         public PatientBuild withGuardian(Guardian g){this.guardian = g; return this;}

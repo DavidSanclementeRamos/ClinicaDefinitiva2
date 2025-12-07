@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.DentistMinimumAgeException;
 import com.example.ClinicaDefinitiva.domain.exceptions.WeeklyAvailabilityException;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserModel;
+import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.WeeklyAvailability;
 
@@ -19,7 +19,7 @@ public class DentistOrchestratorService {
 /** SERA ELIMINADA XD*/
     public Dentist registerDentist(PersonRegistrationData data,
                                    Specialties specialties,
-                                   UserModel user,
+                                   UserIdentity user,
                                    WorkingHours workingHours,
                                    WeeklyAvailability weeklyAvailability,
                                    Collection<Appointment> initialAppointments) {
@@ -54,7 +54,7 @@ public class DentistOrchestratorService {
         // Aquí podrías cambiar el estado del usuario o emitir un evento
     }
 
-    private void validarDatosIniciales(PersonRegistrationData data, UserModel user, WeeklyAvailability weeklyAvailability) {
+    private void validarDatosIniciales(PersonRegistrationData data, UserIdentity user, WeeklyAvailability weeklyAvailability) {
         if (!data.getAge().isBetween(25, 130)) {
             throw new DentistMinimumAgeException(ContextoEntidad.DENTIST, "Dentist must be at least 25 years old.");
         }
