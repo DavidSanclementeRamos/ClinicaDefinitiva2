@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.Dentist
 import com.example.ClinicaDefinitiva.domain.exceptions.WeeklyAvailabilityException;
 import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.PendingAppointmentsWithinHoursException;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.TimeSlot;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;

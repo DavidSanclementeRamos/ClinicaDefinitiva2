@@ -51,7 +51,7 @@ Positivas
 // Evaluación actual: roles + atributos
 boolean hasPermission = role.hasPermission("FACTURAR") || attributes.contains("FACTURAR");
 
-// Extensión futura: lista de permisos denegados
+// Extensión futura: lista de accessControl denegados
 boolean hasPermission = (role.hasPermission("FACTURAR") || attributes.contains("FACTURAR"))
 && !deniedPermissions.contains("FACTURAR");
 ```

@@ -5,19 +5,15 @@ import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavi
 import com.example.ClinicaDefinitiva.application.mapper.Administration.NameMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.ReportMapper;
 import com.example.ClinicaDefinitiva.application.usecase.Administration.ReportUseCase;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.AdministrativeReport;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.ExpenseCategory;
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.ExpenseStatus;
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.PaymentMethod;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Expense;
-import com.example.ClinicaDefinitiva.domain.identity.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 public class ReportApplicationService implements ReportUseCase {
 
@@ -81,7 +77,7 @@ public class ReportApplicationService implements ReportUseCase {
     public ReportResponse addJournalEntryToReport(String id, AddJournalEntryToReportRequest request) {
         // Regla: Validar que el asiento exista
         journalEntryRepository.findById(JournalEntryId.fromString(request.journalEntryId()))
-                .orElseThrow(() -> new IllegalArgumentException("Asiento contable no encontrado"));
+                .orElseThrow(() -> new IllegalArgumentException("Asiento accounting no encontrado"));
 
         AdministrativeReportId reportId = AdministrativeReportId.fromString(id);
         AdministrativeReport report =  repository.findById(reportId)

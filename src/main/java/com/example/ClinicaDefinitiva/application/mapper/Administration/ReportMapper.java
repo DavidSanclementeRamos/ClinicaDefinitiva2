@@ -1,11 +1,11 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.*;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.AdministrativeReport;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.Document;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.Indicator;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.JournalEntryId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.Period;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Document;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Indicator;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.JournalEntryId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Period;
 
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;

@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 
 import com.example.ClinicaDefinitiva.application.dto.NameDto;
 import com.example.ClinicaDefinitiva.application.dto.NitDto;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyStatus;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyStatus;
 
 /**
  * DTO simplificado para listados

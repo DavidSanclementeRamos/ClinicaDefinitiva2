@@ -1,12 +1,11 @@
 package com.example.ClinicaDefinitiva.domain.portsInput.Administration;
 
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.ContractStatus;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Contract;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.ContractStatus;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.Optional;

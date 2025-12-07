@@ -33,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         for (RolesEntity role : u.getRoles()) {
             // prefijo ROLE_ para roles
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleEnum().name()));
-            // permisos directos como authorities
+            // accessControl directos como authorities
             role.getPermissionList().forEach(perm ->
                     authorities.add(new SimpleGrantedAuthority(perm.name()))
             );

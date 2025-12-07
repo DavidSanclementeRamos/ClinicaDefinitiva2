@@ -2,9 +2,9 @@ package com.example.ClinicaDefinitiva.application.mapper.Administration;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.OpeningBalanceListResponse;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.OpeningBalanceResponse;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.LedgerAccount;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.OpeningBalance;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.ThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.OpeningBalance;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import org.springframework.stereotype.Component;
 
 /**

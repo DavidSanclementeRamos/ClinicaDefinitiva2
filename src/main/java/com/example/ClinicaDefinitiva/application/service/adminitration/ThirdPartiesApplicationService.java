@@ -2,7 +2,6 @@ package com.example.ClinicaDefinitiva.application.service.adminitration;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.*;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ContractNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ThirdPartiesNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.AddressMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.NameMapper;
@@ -10,16 +9,14 @@ import com.example.ClinicaDefinitiva.application.mapper.Administration.ThirdPart
 import com.example.ClinicaDefinitiva.application.mapper.EmailMapper;
 import com.example.ClinicaDefinitiva.application.mapper.PhoneNumberMapper;
 import com.example.ClinicaDefinitiva.application.usecase.Administration.ThirdPartiesUseCase;
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.TypeThirdParties;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Company;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.ThirdParties;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.CompanyRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.ThirdPartiesRepository;
 import org.springframework.data.domain.Page;
-
-import java.util.Optional;
 
 public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
     private final ThirdPartiesRepository repository;

@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.service;
 import com.example.ClinicaDefinitiva.application.dto.ServiceRendered;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;

@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.application.mapper.Administration;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.LedgerAccountListResponse;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.LedgerAccountResponse;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.LedgerAccount;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
 import org.springframework.stereotype.Component;
 
 /**

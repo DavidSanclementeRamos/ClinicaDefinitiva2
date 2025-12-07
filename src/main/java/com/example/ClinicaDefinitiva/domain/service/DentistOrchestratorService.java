@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.DentistMinimumAgeException;
 import com.example.ClinicaDefinitiva.domain.exceptions.WeeklyAvailabilityException;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.WeeklyAvailability;
 

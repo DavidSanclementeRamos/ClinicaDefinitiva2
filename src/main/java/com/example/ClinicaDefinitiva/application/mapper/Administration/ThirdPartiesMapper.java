@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.mapper.AddressMapper;
 import com.example.ClinicaDefinitiva.application.mapper.EmailMapper;
 import com.example.ClinicaDefinitiva.application.mapper.PhoneNumberMapper;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.ThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import org.springframework.stereotype.Component;
 
 /**

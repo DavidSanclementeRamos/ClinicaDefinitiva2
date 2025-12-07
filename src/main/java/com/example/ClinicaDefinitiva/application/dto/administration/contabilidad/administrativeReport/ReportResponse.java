@@ -1,12 +1,8 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport;
 
 import com.example.ClinicaDefinitiva.application.dto.NameDto;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.AuditoriaInfo;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ReportStatus;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ReportStatus;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record ReportResponse(

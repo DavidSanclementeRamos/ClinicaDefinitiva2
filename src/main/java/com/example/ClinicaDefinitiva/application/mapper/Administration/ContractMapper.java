@@ -2,8 +2,8 @@ package com.example.ClinicaDefinitiva.application.mapper.Administration;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.ContractPageResponse;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.ContractResponse;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Contract;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.ThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -29,7 +29,7 @@ Ejemplo: `(accounting)`, `(third-parties)`, `(ui)`, `(infra)`.
 ```bash
 feat(accounting): refactorización de dominio y nuevas reglas de negocio
 
-- Se refactorizó el dominio del submódulo contable
+- Se refactorizó el dominio del submódulo accounting
 - Se implementaron nuevas reglas de negocio y Value Objects (VO)
 - La capa de aplicación quedó parcialmente terminada
 ```

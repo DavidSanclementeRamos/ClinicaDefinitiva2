@@ -1,10 +1,8 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company;
 
 import com.example.ClinicaDefinitiva.application.dto.*;
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.TaxRegime;
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.TypePerson;
-
-import java.time.LocalDate;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePerson;
 
 /**
  * DTO para crear una nueva compañía

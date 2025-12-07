@@ -4,14 +4,12 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.JournalEntryLineResponse;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.JournalEntryListResponse;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.JournalEntryResponse;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.JournalEntry;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.JournalEntryLine;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.LedgerAccount;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.ThirdParties;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.LedgerAccountId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ThirdPartiesId;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.Comment;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntry;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntryLine;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;

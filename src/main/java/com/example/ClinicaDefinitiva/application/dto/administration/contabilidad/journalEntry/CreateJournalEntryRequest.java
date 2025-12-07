@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * DTO para crear un asiento contable
+ * DTO para crear un asiento accounting
  */
 public record CreateJournalEntryRequest(
         String companyId,

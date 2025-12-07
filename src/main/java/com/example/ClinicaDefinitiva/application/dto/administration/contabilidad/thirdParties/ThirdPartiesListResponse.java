@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties;
 
 import com.example.ClinicaDefinitiva.application.dto.NameDto;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.Name;
 
 public record ThirdPartiesListResponse(
         String id,

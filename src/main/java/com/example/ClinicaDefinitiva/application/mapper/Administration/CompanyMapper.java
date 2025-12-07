@@ -1,15 +1,11 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.CompanyPageResponse;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.CreateCompanyRequest;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.CompanyResponse;
 import com.example.ClinicaDefinitiva.application.mapper.AddressMapper;
 import com.example.ClinicaDefinitiva.application.mapper.EmailMapper;
 import com.example.ClinicaDefinitiva.application.mapper.PhoneNumberMapper;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyStatus;
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.TaxRegime;
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.TypePerson;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Company;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
 
 public class CompanyMapper {
     public CompanyResponse toResponse(Company company) {

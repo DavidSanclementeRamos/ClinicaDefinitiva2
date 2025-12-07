@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;

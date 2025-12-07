@@ -1,30 +1,24 @@
 package com.example.ClinicaDefinitiva.application.service.adminitration;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.*;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ContractNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ThirdPartiesNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.ContractMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.NameMapper;
 import com.example.ClinicaDefinitiva.application.usecase.Administration.ContractUseCase;
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.ContractStatus;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Company;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Contract;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.ThirdParties;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.CompanyRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.ThirdPartiesRepository;
 import com.example.ClinicaDefinitiva.domain.service.ContractDomainService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 
 /**

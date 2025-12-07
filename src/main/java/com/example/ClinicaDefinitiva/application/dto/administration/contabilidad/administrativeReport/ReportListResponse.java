@@ -1,8 +1,7 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport;
 
 import com.example.ClinicaDefinitiva.application.dto.NameDto;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.Name;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ReportStatus;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ReportStatus;
 
 public record ReportListResponse(
         String id,

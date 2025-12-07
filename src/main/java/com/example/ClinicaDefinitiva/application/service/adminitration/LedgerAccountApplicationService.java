@@ -5,16 +5,15 @@ import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavi
 import com.example.ClinicaDefinitiva.application.mapper.Administration.LedgerAccountMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.NameMapper;
 import com.example.ClinicaDefinitiva.application.usecase.Administration.LedgerAccountUseCase;
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.NaturalezaCuenta;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.LedgerAccount;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.LedgerAccountId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.NaturalezaCuenta;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.CompanyRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.LedgerAccountRepository;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class LedgerAccountApplicationService implements LedgerAccountUseCase {
     private final LedgerAccountMapper mapper;

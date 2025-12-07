@@ -2,23 +2,20 @@ package com.example.ClinicaDefinitiva.application.service.adminitration;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.JournalEntryLineRequest;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.*;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.JournalEntryNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ThirdPartiesNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.JournalEntryMapper;
 import com.example.ClinicaDefinitiva.application.usecase.Administration.JournalEntryUseCase;
 import com.example.ClinicaDefinitiva.domain.Money;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.*;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.JournalEntryId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.LedgerAccountId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.*;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.JournalEntryId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.CompanyRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.JournalEntryRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.LedgerAccountRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.ThirdPartiesRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;

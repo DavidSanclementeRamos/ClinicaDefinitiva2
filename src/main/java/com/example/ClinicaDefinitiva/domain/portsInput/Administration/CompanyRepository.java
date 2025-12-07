@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.portsInput.Administration;
 
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Company;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Expense;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyStatus;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

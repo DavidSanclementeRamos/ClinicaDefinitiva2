@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.NoShiftAssignedException;
 import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.PendingAppointmentsException;
@@ -10,7 +10,7 @@ import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.Shi
 import com.example.ClinicaDefinitiva.domain.exceptions.patient.exception.AgeBelowMinimumForRegistrationException;
 import com.example.ClinicaDefinitiva.domain.exceptions.patient.exception.UnassignedResponsibleException;
 import com.example.ClinicaDefinitiva.domain.exceptions.user.exception.UserInactiveException;
-import com.example.ClinicaDefinitiva.domain.identity.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;

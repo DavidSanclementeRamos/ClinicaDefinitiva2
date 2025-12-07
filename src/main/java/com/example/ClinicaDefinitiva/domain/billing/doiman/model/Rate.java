@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.billing.doiman.model;
 
-import com.example.ClinicaDefinitiva.domain.administration.contable.Contract;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.Money;

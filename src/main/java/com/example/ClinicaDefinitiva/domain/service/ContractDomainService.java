@@ -1,11 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.service;
 
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Company;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Contract;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.ThirdParties;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.Name;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Name;
 
 import java.time.LocalDate;
 

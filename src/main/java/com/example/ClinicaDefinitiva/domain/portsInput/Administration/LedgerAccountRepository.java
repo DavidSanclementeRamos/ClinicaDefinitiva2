@@ -1,18 +1,11 @@
 package com.example.ClinicaDefinitiva.domain.portsInput.Administration;
 
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.NaturalezaCuenta;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.JournalEntry;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.LedgerAccount;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.JournalEntryId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.LedgerAccountId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.NaturalezaCuenta;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 /**

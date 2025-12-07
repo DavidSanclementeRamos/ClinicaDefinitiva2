@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.doima;
 
 import com.example.ClinicaDefinitiva.application.dto.ServiceRendered;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.administration.contable.Contract;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
 import com.example.ClinicaDefinitiva.domain.Money;

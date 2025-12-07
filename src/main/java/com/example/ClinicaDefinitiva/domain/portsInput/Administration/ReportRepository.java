@@ -1,13 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.portsInput.Administration;
 
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.AdministrativeReport;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.Expense;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.AdministrativeReportId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ExpenseId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.Period;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ReportStatus;
-import com.example.ClinicaDefinitiva.domain.identity.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.AdministrativeReportId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ReportStatus;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

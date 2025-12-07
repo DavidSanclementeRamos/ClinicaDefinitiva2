@@ -1,12 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.portsInput.Administration;
 
-import com.example.ClinicaDefinitiva.domain.administration.contable.enu.TypeThirdParties;
-import com.example.ClinicaDefinitiva.domain.administration.contable.model.ThirdParties;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.contable.valueObject.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
