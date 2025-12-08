@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.DateOfBirthInFutureException;
-import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.invalid.InvalidDateOfBirthException;
-import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.nulo.NullDateOfBirthException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.DateOfBirthInFutureException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.invalid.InvalidDateOfBirthException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.nulo.NullDateOfBirthException;
 
 import java.time.LocalDate;
 import java.time.Period;

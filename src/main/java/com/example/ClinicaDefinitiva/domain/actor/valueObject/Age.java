@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.invalid.AgeOutOfRangeException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.invalid.AgeOutOfRangeException;
 
 import java.time.LocalDate;
 import java.time.Period;

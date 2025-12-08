@@ -2,10 +2,10 @@ package com.example.ClinicaDefinitiva.services.impl;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.TipoResponsable;
-import com.example.ClinicaDefinitiva.domain.exceptions.TelefonoDuplicadoException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.PatientNotFoundException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.GuardianNotFoundException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.UserNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TelefonoDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.PatientNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.GuardianNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.UserNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.ResponsableMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.responsableDto.CambioResponsableDto;
 import com.example.ClinicaDefinitiva.persistence.dto.responsableDto.CreateEndReadResponsableDto;

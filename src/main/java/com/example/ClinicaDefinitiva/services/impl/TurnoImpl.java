@@ -4,10 +4,10 @@ package com.example.ClinicaDefinitiva.services.impl;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.Estado;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.HorarioNotfoundException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.DentistNotFoundException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.PatientNotFoundException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.TurnoNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.HorarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.PatientNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.TurnoNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.TurnoMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.TurnoDto;
 import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;

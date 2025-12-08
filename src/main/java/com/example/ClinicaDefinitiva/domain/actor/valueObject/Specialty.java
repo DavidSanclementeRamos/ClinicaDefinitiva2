@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.InvalidSpecialtyValueException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.Dentist.exception.InvalidSpecialtyValueException;
 
 import java.util.Objects;
 import java.util.Set;

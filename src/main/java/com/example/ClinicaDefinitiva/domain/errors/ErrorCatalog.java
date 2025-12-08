@@ -101,7 +101,59 @@ public enum ErrorCatalog {
     OUTSIDE_AVAILABILITY_APPOINTMENT("ERR_06", "error.appointment.outsideAvailability",
             "El intervalo ya está cubierto por la disponibilidad declarada"),
     TIME_NO_AVAILABILITY_APPOINTMENT("ERR_07", "error.appointment.timeNotAvailable",
-            "El intervalo ya está ocupado por otra cita");
+            "El intervalo ya está ocupado por otra cita"),
+
+    // 📒 Errores de asientos contables
+    JOURNAL_ENTRY_NULL("ACC01", "error.accounting.journalEntryNull",
+            "La referencia al asiento contable no puede ser nula"),
+
+    JOURNAL_ENTRY_DUPLICATE("ACC02", "error.accounting.journalEntryDuplicate",
+            "El asiento contable ya está referenciado en el reporte"),
+
+    JOURNAL_ENTRY_NOT_FOUND("ACC03", "error.accounting.journalEntryNotFound",
+            "El asiento contable no está referenciado en el reporte"),
+
+    // 📊 Errores de indicadores
+    INDICATOR_NULL("IND01", "error.report.indicatorNull",
+            "El indicador no puede ser nulo"),
+
+    INDICATOR_NOT_FOUND("IND02", "error.report.indicatorNotFound",
+            "El indicador no existe en el reporte"),
+    // 📂 Errores de documentos adjuntos
+    ATTACHMENT_NULL("DOC01", "error.report.attachmentNull",
+            "El documento no puede ser nulo"),
+
+    ATTACHMENT_NOT_FOUND("DOC02", "error.report.attachmentNotFound",
+            "El documento no existe en el reporte"),
+    // 📑 Errores de estado de reporte
+    REPORT_STATUS_INVALID_FOR_SUBMISSION("REP01", "error.report.invalidStatusForSubmission",
+            "Solo se pueden enviar reportes en estado borrador"),
+    // 📑 Errores de estado de reporte
+    REPORT_STATUS_INVALID_FOR_APPROVAL("REP02", "error.report.invalidStatusForApproval",
+            "Solo se pueden aprobar reportes en revisión"),
+    // 📑 Errores de estado de reporte
+    REPORT_STATUS_INVALID_FOR_REJECTION("REP03", "error.report.invalidStatusForRejection",
+            "Solo se pueden rechazar reportes en revisión"),
+    // 📑 Errores de estado de reporte (rechazo)
+    REPORT_REJECTION_REASON_REQUIRED("REP04", "error.report.rejectionReasonRequired",
+            "Se requiere una razón para rechazar el reporte"),
+    // 📑 Errores de estado de reporte (archivo)
+    REPORT_ALREADY_ARCHIVED("REP05", "error.report.alreadyArchived",
+            "El reporte ya está archivado"),
+    // 📑 Errores de estado de reporte (desarchivo)
+    REPORT_NOT_ARCHIVED("REP06", "error.report.notArchived",
+            "Solo se pueden desarchivar reportes archivados"),
+    // 📑 Errores de edición de reporte
+    REPORT_NOT_EDITABLE("REP07", "error.report.notEditable",
+            "No se puede modificar el reporte en estado {status}"),
+
+    // 📑 Errores de estado de reporte (modificación)
+    REPORT_ARCHIVED_NOT_EDITABLE("REP08", "error.report.archivedNotEditable",
+                                         "No se puede modificar un reporte archivado"),
+    // 📑 Errores de completitud de reporte
+    REPORT_INCOMPLETE("REP09", "error.report.incomplete",
+            "El reporte debe tener al menos un asiento contable o un indicador");
+
 
 
 

@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.receptionist.exception.BlankSectorException;
-import com.example.ClinicaDefinitiva.domain.exceptions.receptionist.exception.NullSectorException;
-import com.example.ClinicaDefinitiva.domain.exceptions.receptionist.exception.SectorNotAllowedException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.receptionist.exception.BlankSectorException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.receptionist.exception.NullSectorException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.receptionist.exception.SectorNotAllowedException;
 
 import java.util.Set;
 

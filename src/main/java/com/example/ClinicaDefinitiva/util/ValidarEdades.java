@@ -2,9 +2,9 @@ package com.example.ClinicaDefinitiva.util;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.config.EdadMinimaConfig;
-import com.example.ClinicaDefinitiva.domain.exceptions.DniDuplicadoException;
-import com.example.ClinicaDefinitiva.domain.exceptions.EdadNoPermitidaException;
-import com.example.ClinicaDefinitiva.domain.exceptions.TelefonoDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DniDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.EdadNoPermitidaException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TelefonoDuplicadoException;
 import com.example.ClinicaDefinitiva.repository.ResponsableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 

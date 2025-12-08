@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.EmptySpecialtySetException;
-import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.NullSpecialtySetException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.Dentist.exception.EmptySpecialtySetException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.Dentist.exception.NullSpecialtySetException;
 
 import java.util.Collections;
 import java.util.HashSet;

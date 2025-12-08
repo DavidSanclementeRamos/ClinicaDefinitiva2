@@ -1,6 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -84,10 +88,12 @@ public final class AdministrativeReport {
      */
     public void addJournalEntryReference(JournalEntryId journalEntryId) {
         ensureEditable();
-        Objects.requireNonNull(journalEntryId, "La referencia al asiento accounting no puede ser nula");
+        if(journalEntryId == null){
+            throw new DomainAggregateException(ErrorCatalog.JOURNAL_ENTRY_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
 
+        }
         if (this.journalEntryReferences.contains(journalEntryId)) {
-            throw new InvalidAdministrativeReportException("El asiento accounting ya está referenciado en el reporte");
+            throw new BusinessRuleViolationException(ErrorCatalog.JOURNAL_ENTRY_DUPLICATE, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         this.journalEntryReferences.add(journalEntryId);
@@ -99,10 +105,13 @@ public final class AdministrativeReport {
      */
     public void removeJournalEntryReference(JournalEntryId journalEntryId) {
         ensureEditable();
-        Objects.requireNonNull(journalEntryId, "La referencia al asiento accounting no puede ser nula");
 
+        if(journalEntryId == null){
+            throw new DomainAggregateException(ErrorCatalog.JOURNAL_ENTRY_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
+
+        }
         if (!this.journalEntryReferences.remove(journalEntryId)) {
-            throw new InvalidAdministrativeReportException("El asiento accounting no está referenciado en el reporte");
+            throw new BusinessRuleViolationException(ErrorCatalog.JOURNAL_ENTRY_NOT_FOUND, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -112,8 +121,11 @@ public final class AdministrativeReport {
      */
     public void addIndicator(Indicator indicator) {
         ensureEditable();
-        Objects.requireNonNull(indicator, "El indicador no puede ser nulo");
 
+        if(indicator == null){
+            throw new DomainAggregateException(ErrorCatalog.INDICATOR_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
+
+        }
         this.indicators.add(indicator);
         this.lastUpdate = LocalDateTime.now();
     }
@@ -123,10 +135,13 @@ public final class AdministrativeReport {
      */
     public void removeIndicator(Indicator indicator) {
         ensureEditable();
-        Objects.requireNonNull(indicator, "El indicador no puede ser nulo");
 
+        if(indicator == null){
+            throw new DomainAggregateException(ErrorCatalog.INDICATOR_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
+
+        }
         if (!this.indicators.remove(indicator)) {
-            throw new InvalidAdministrativeReportException("El indicador no existe en el reporte");
+            throw new BusinessRuleViolationException(ErrorCatalog.INDICATOR_NOT_FOUND,ContextoEntidad.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -150,7 +165,7 @@ public final class AdministrativeReport {
         Objects.requireNonNull(document, "El documento no puede ser nulo");
 
         if (!this.attachments.remove(document)) {
-            throw new InvalidAdministrativeReportException("El documento no existe en el reporte");
+            throw new BusinessRuleViolationException(ErrorCatalog.ATTACHMENT_NOT_FOUND, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -171,9 +186,7 @@ public final class AdministrativeReport {
      */
     public void submitForReview() {
         if (!this.status.canBeSubmittedForReview()) {
-            throw new InvalidReportStatusException(
-                    "Solo se pueden enviar reportes en estado borrador"
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_STATUS_INVALID_FOR_SUBMISSION, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         validateReportCompleteness();
@@ -187,8 +200,8 @@ public final class AdministrativeReport {
      */
     public void approve(UserId approver) {
         if (!this.status.canBeApproved()) {
-            throw new InvalidReportStatusException(
-                    "Solo se pueden aprobar reportes en revisión"
+            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_STATUS_INVALID_FOR_APPROVAL, ContextoEntidad.ADMINISTRATIVEREPORT
+
             );
         }
 
@@ -204,15 +217,11 @@ public final class AdministrativeReport {
      */
     public void reject(String reason) {
         if (!this.status.canBeRejected()) {
-            throw new InvalidReportStatusException(
-                    "Solo se pueden rechazar reportes en revisión"
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_STATUS_INVALID_FOR_REJECTION, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         if (reason == null || reason.isBlank()) {
-            throw new InvalidAdministrativeReportException(
-                    "Se requiere una razón para rechazar el reporte"
-            );
+            throw new DomainAggregateException(ErrorCatalog.REPORT_REJECTION_REASON_REQUIRED,ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.draft();
@@ -226,7 +235,7 @@ public final class AdministrativeReport {
      */
     public void archive() {
         if (!this.status.canBeArchived()) {
-            throw new InvalidReportStatusException("El reporte ya está archivado");
+            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_ALREADY_ARCHIVED, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.archived();
@@ -238,7 +247,7 @@ public final class AdministrativeReport {
      */
     public void unarchive() {
         if (!this.status.isArchived()) {
-            throw new InvalidReportStatusException("Solo se pueden desarchivar reportes archivados");
+            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_NOT_ARCHIVED,ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.draft();
@@ -304,24 +313,20 @@ public final class AdministrativeReport {
 
     private void ensureEditable() {
         if (!isEditable()) {
-            throw new InvalidReportStatusException(
-                    "No se puede modificar el reporte en estado " + this.status
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_NOT_EDITABLE, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
     }
 
     private void ensureNotArchived() {
         if (this.status.isArchived()) {
-            throw new InvalidReportStatusException(
-                    "No se puede modificar un reporte archivado"
+            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_ARCHIVED_NOT_EDITABLE, ContextoEntidad.ADMINISTRATIVEREPORT
             );
         }
     }
 
     private void validateReportCompleteness() {
         if (!isComplete()) {
-            throw new InvalidAdministrativeReportException(
-                    "El reporte debe tener al menos un asiento accounting o un indicador"
+            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_INCOMPLETE,ContextoEntidad.ADMINISTRATIVEREPORT
             );
         }
     }

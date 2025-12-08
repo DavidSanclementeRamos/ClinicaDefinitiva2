@@ -2,8 +2,8 @@ package com.example.ClinicaDefinitiva.services.impl;
 
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.HorarioNotfoundException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.UserNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.HorarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.UserNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.UsuarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.CreateUsuarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.ReadUsuarioDto;

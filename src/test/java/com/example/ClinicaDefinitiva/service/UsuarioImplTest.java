@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.service;
 
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.UserNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.UserNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.UsuarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.usuarioDto.ReadUsuarioDto;
 import com.example.ClinicaDefinitiva.persistence.entity.Usuario;

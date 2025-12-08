@@ -1,9 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.CodigoEntidad;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.NullWorkingHoursException;
-import com.example.ClinicaDefinitiva.domain.exceptions.Dentist.exception.StartTimeAfterEndTimeException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.Dentist.exception.NullWorkingHoursException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.Dentist.exception.StartTimeAfterEndTimeException;
 import com.example.ClinicaDefinitiva.domain.schedule.model.TimeSlot;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.WeeklyAvailability;
 

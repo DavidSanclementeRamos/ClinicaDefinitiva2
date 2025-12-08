@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.blank.BlankAddressException;
-import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.nulo.NullAddressException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.blank.BlankAddressException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.nulo.NullAddressException;
 
 import java.util.Objects;
 

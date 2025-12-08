@@ -2,9 +2,9 @@ package com.example.ClinicaDefinitiva.services.impl;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.Sector;
-import com.example.ClinicaDefinitiva.domain.exceptions.TelefonoDuplicadoException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.DentistNotFoundException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.ReceptionistNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TelefonoDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.ReceptionistNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.SecretarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.secretarioDto.CreateSecretarioDto;
 import com.example.ClinicaDefinitiva.persistence.dto.secretarioDto.ReadSecretarioDto;

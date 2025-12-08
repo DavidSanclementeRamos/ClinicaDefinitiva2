@@ -10,18 +10,15 @@ public enum ContextoEntidad {
     HORARIO(CodigoEntidad.HOR06),
     TURNO(CodigoEntidad.TUR07),
     Rol(CodigoEntidad.ROL08),
-    WEEKLY_AVAILABILITY(CodigoEntidad.WEA09),
-    ADDRESS(CodigoEntidad.ADD11),
-    AGE(CodigoEntidad.NAM10),
-    DENTIST_AVAILABILITY_STATUS(CodigoEntidad.STA014),
-    PHONE_NUMBER(CodigoEntidad.PHO015),
-    SECTOR(CodigoEntidad.SCT016),
-    DATE_OF_BIRTH(CodigoEntidad.DOB013),
-    SPECIALTY(CodigoEntidad.SPC017),
-    SPECIALTIES(CodigoEntidad.SPC018),
-    FULL_NAME(CodigoEntidad.NAM10),
-    WORKING_HOURS(CodigoEntidad.WOR020),
-    APPOINTMENT(CodigoEntidad.APP021);
+    APPOINTMENT(CodigoEntidad.APP09),
+    ADMINISTRATIVEREPORT(CodigoEntidad.EDM10),
+    COMPANY(CodigoEntidad.COM11),
+    CONTRACT(CodigoEntidad.CON12),
+    JOURNALENTRY(CodigoEntidad.JOU13),
+    LEDGERACCOUNT(CodigoEntidad.LED14),
+    OPENINGBALANCE(CodigoEntidad.OPE15),
+    THISPARTIES(CodigoEntidad.THI16);
+
 
 
 

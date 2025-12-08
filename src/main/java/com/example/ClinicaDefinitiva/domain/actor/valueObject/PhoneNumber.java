@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.blank.BlankPhoneNumberException;
-import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.invalid.InvalidPhoneNumberException;
-import com.example.ClinicaDefinitiva.domain.exceptions.shared.person.exception.nulo.NullPhoneNumberException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.blank.BlankPhoneNumberException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.invalid.InvalidPhoneNumberException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.nulo.NullPhoneNumberException;
 
 import java.util.Objects;
 import java.util.regex.Pattern;

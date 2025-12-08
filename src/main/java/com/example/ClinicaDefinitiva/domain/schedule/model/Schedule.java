@@ -3,11 +3,11 @@ package com.example.ClinicaDefinitiva.domain.schedule.model;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.invali.date.AppointmentOutsideAvailabilityException;
-import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.AppointmentTimeNotAvailableException;
-import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.invali.date.AppointmentInvalidDateRangeException;
-import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.nulo.AppointmentEndDateMissingException;
-import com.example.ClinicaDefinitiva.domain.exceptions.appointment.exception.nulo.AppointmentStartDateMissingException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.appointment.exception.invali.date.AppointmentOutsideAvailabilityException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.appointment.exception.AppointmentTimeNotAvailableException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.appointment.exception.invali.date.AppointmentInvalidDateRangeException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.appointment.exception.nulo.AppointmentEndDateMissingException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.appointment.exception.nulo.AppointmentStartDateMissingException;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.WeeklyAvailability;
 import com.example.ClinicaDefinitiva.domain.util.TimeIntervalRules;
 

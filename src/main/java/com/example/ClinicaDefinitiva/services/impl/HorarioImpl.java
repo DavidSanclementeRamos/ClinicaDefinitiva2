@@ -2,8 +2,8 @@ package com.example.ClinicaDefinitiva.services.impl;
 
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.HorarioNotfoundException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.HorarioNotfoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.HorarioMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.HorarioDto;
 import com.example.ClinicaDefinitiva.persistence.entity.Disponibilidad;

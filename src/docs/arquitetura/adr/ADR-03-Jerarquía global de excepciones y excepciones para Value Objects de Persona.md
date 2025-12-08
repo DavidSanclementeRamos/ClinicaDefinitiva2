@@ -28,7 +28,7 @@ Adoptar una jerarquía de excepciones global en el dominio que sirva como conven
 
 ## Implementación (plantilla)
 ```java
-// domain-common/exceptions/DomainRootException.java
+// domain-common/exceptionsDomain/DomainRootException.java
 public class DomainRootException extends RuntimeException {
 private final String code;
 public DomainRootException(String code, String message) {
@@ -38,21 +38,21 @@ this.code = code;
 public String getCode() { return code; }
 }
 
-// domain-common/exceptions/ValueObjectValidationException.java
+// domain-common/exceptionsDomain/ValueObjectValidationException.java
 public class ValueObjectValidationException extends DomainRootException {
 public ValueObjectValidationException(String code, String message) {
 super(code, message);
 }
 }
 
-// shared/person/exceptions/PersonValueObjectException.java
+// shared/person/exceptionsDomain/PersonValueObjectException.java
 public class PersonValueObjectException extends ValueObjectValidationException {
 public PersonValueObjectException(String code, String message) {
 super(code, message);
 }
 }
 
-// shared/person/exceptions/InvalidAgeException.java
+// shared/person/exceptionsDomain/InvalidAgeException.java
 /
 * Código: VOPERSONAGE_001
 * ADR: ADR-2025-10-02-vo-person-exceptions

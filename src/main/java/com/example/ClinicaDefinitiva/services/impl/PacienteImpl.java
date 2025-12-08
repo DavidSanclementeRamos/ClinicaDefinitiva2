@@ -2,11 +2,11 @@ package com.example.ClinicaDefinitiva.services.impl;
 
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptions.EdadNoPermitidaException;
-import com.example.ClinicaDefinitiva.domain.exceptions.TelefonoDuplicadoException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.DentistNotFoundException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.PatientNotFoundException;
-import com.example.ClinicaDefinitiva.domain.exceptions.entityNotFount.UserNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.EdadNoPermitidaException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TelefonoDuplicadoException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.PatientNotFoundException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.UserNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.PacienteMapperResponse;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.CreatePacienteDto;
 import com.example.ClinicaDefinitiva.persistence.dto.pacienteDto.ReadPacienteDto;
