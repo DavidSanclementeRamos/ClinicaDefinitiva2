@@ -10,6 +10,12 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePe
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Nit;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TemporalValidationException;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -46,17 +52,11 @@ public final class Company {
             CompanyStatus status
             ) {
 
-
+        validateIncorporationDate(incorporationDate);
         if (Objects.isNull(typePerson)) {
-            throw new InvalidCompanyException("El tipo de persona es obligatorio");
+            throw new DomainAggregateException(ErrorCatalog.ERR_COMPANY_MISSING_PERSON_TYPE,ContextoEntidad.COMPANY);
         }
 
-        if (Objects.isNull(incorporationDate)) {
-            throw new InvalidCompanyException("La fecha de constitución es obligatoria");
-        }
-        if (incorporationDate.isAfter(LocalDate.now())) {
-            throw new InvalidCompanyException("La fecha de constitución no puede ser futura");
-        }
 
         this.id = id;
         this.name = name;
@@ -128,9 +128,7 @@ public final class Company {
 
         if (Objects.equals(this.status, CompanyStatus.of(CompanyStatus.Status.INACTIVE)) &&
                 newStatus.equals(CompanyStatus.of(CompanyStatus.Status.ACTIVE))) {
-            throw new InvalidCompanyStatusException(
-                    "No se puede reactivar una compañía inactiva sin un proceso de reactivación formal"
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_COMPANY_CANNOT_REACTIVATE_DIRECTLY,ContextoEntidad.COMPANY);
         }
 
         this.status = newStatus;
@@ -159,13 +157,21 @@ public final class Company {
 
     private void ensureEditable() {
         if (!status.isEditable()) {
-            throw new InvalidCompanyStatusException(
-                    "No se puede editar la compañía en estado " + status.getStatus()
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_COMPANY_NOT_EDITABLE,ContextoEntidad.COMPANY);
         }
     }
 
-
+    private void validateIncorporationDate(LocalDate date) {
+        if (Objects.isNull(incorporationDate)) {
+            throw new TemporalValidationException(ErrorCatalog.ERR_COMPANY_MISSING_INCORPORATION_DATE, ContextoEntidad.COMPANY);
+        }
+        if (incorporationDate.isAfter(LocalDate.now())) {
+            throw new TemporalValidationException(ErrorCatalog.ERR_COMPANY_FUTURE_INCORPORATION_DATE,ContextoEntidad.COMPANY);
+        }
+        if (date.isBefore(LocalDate.of(1800, 1, 1))) {
+            throw new TemporalValidationException(ErrorCatalog.ERR_COMPANY_INVALID_INCORPORATION_DATE,ContextoEntidad.COMPANY);
+        }
+    }
 
 
     // Getters
