@@ -217,3 +217,5 @@ Estas reglas aseguran que los reportes administrativos sean coherentes, trazable
 - unit: Unidad de medida (%, COP, unidades)
 - period: Período de medición
 - trend: Tendencia (↑ mejora, ↓ deterioro, → estable)
+## Relacionados
+- [ADR-Resolución de inconsistencia entre catálogo de errores y excepciones en AdministrativeReport.md](../../decisions/accounting/ADR-Resoluci%C3%B3n%20de%20inconsistencia%20entre%20cat%C3%A1logo%20de%20errores%20y%20excepciones%20en%20AdministrativeReport.md)

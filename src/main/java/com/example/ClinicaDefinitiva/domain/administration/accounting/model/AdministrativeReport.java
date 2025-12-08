@@ -88,12 +88,9 @@ public final class AdministrativeReport {
      */
     public void addJournalEntryReference(JournalEntryId journalEntryId) {
         ensureEditable();
-        if(journalEntryId == null){
-            throw new DomainAggregateException(ErrorCatalog.JOURNAL_ENTRY_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
 
-        }
         if (this.journalEntryReferences.contains(journalEntryId)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.JOURNAL_ENTRY_DUPLICATE, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_DUPLICATE_JOURNAL_ENTRY, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         this.journalEntryReferences.add(journalEntryId);
@@ -106,12 +103,8 @@ public final class AdministrativeReport {
     public void removeJournalEntryReference(JournalEntryId journalEntryId) {
         ensureEditable();
 
-        if(journalEntryId == null){
-            throw new DomainAggregateException(ErrorCatalog.JOURNAL_ENTRY_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
-
-        }
         if (!this.journalEntryReferences.remove(journalEntryId)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.JOURNAL_ENTRY_NOT_FOUND, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_JOURNAL_ENTRY_NOT_FOUND, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -123,7 +116,7 @@ public final class AdministrativeReport {
         ensureEditable();
 
         if(indicator == null){
-            throw new DomainAggregateException(ErrorCatalog.INDICATOR_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_INDICATOR_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
 
         }
         this.indicators.add(indicator);
@@ -137,11 +130,11 @@ public final class AdministrativeReport {
         ensureEditable();
 
         if(indicator == null){
-            throw new DomainAggregateException(ErrorCatalog.INDICATOR_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_INDICATOR_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
 
         }
         if (!this.indicators.remove(indicator)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.INDICATOR_NOT_FOUND,ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_INDICATOR_NOT_FOUND,ContextoEntidad.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -162,10 +155,13 @@ public final class AdministrativeReport {
      */
     public void removeAttachment(Document document) {
         ensureNotArchived();
-        Objects.requireNonNull(document, "El documento no puede ser nulo");
 
         if (!this.attachments.remove(document)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ATTACHMENT_NOT_FOUND, ContextoEntidad.ADMINISTRATIVEREPORT);
+            if(document == null){
+                throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_ATTACHMENT_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
+
+            }
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_ATTACHMENT_NOT_FOUND, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -186,7 +182,7 @@ public final class AdministrativeReport {
      */
     public void submitForReview() {
         if (!this.status.canBeSubmittedForReview()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_STATUS_INVALID_FOR_SUBMISSION, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_SUBMIT, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         validateReportCompleteness();
@@ -200,7 +196,7 @@ public final class AdministrativeReport {
      */
     public void approve(UserId approver) {
         if (!this.status.canBeApproved()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_STATUS_INVALID_FOR_APPROVAL, ContextoEntidad.ADMINISTRATIVEREPORT
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_APPROVE, ContextoEntidad.ADMINISTRATIVEREPORT
 
             );
         }
@@ -217,11 +213,11 @@ public final class AdministrativeReport {
      */
     public void reject(String reason) {
         if (!this.status.canBeRejected()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_STATUS_INVALID_FOR_REJECTION, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_REJECT, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         if (reason == null || reason.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalog.REPORT_REJECTION_REASON_REQUIRED,ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_REJECTION_REQUIRES_REASON,ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.draft();
@@ -235,7 +231,7 @@ public final class AdministrativeReport {
      */
     public void archive() {
         if (!this.status.canBeArchived()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_ALREADY_ARCHIVED, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_ARCHIVE, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.archived();
@@ -247,7 +243,7 @@ public final class AdministrativeReport {
      */
     public void unarchive() {
         if (!this.status.isArchived()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_NOT_ARCHIVED,ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_UNARCHIVE,ContextoEntidad.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.draft();
@@ -313,20 +309,20 @@ public final class AdministrativeReport {
 
     private void ensureEditable() {
         if (!isEditable()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_NOT_EDITABLE, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_NOT_EDITABLE, ContextoEntidad.ADMINISTRATIVEREPORT);
         }
     }
 
     private void ensureNotArchived() {
         if (this.status.isArchived()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_ARCHIVED_NOT_EDITABLE, ContextoEntidad.ADMINISTRATIVEREPORT
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_UNARCHIVE, ContextoEntidad.ADMINISTRATIVEREPORT
             );
         }
     }
 
     private void validateReportCompleteness() {
         if (!isComplete()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.REPORT_INCOMPLETE,ContextoEntidad.ADMINISTRATIVEREPORT
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_MISSING_APPROVER,ContextoEntidad.ADMINISTRATIVEREPORT
             );
         }
     }
