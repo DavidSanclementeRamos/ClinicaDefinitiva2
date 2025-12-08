@@ -16,7 +16,7 @@ Adoptar una jerarquía consistente por paquete que combina un nombre semántico 
 Cada paquete declara su propia MissingSemanticValueException que hereda de la excepción contextual del dominio.
 
 ## Estructura general por paquete
-`
+```
 ValueObjectValidationException
 ├── Shared<Domain>Exception
 │   └── MissingSemanticValueException
@@ -25,10 +25,10 @@ ValueObjectValidationException
 │       ├── BlankValueException
 │       │   └── Blank<Field>NameException
 │       └── (futuras subcategorías p.ej. InvalidFormatException)
-`
+```
 
 ## Ejemplo concreto (domain.person.vo.exception)
-`
+```
 ValueObjectValidationException
 └── SharedPersonException
     └── MissingSemanticValueException
@@ -36,7 +36,7 @@ ValueObjectValidationException
         │   └── NullAddressFieldException
         └── BlankValueException
             └── BlankAddressFieldException
-`
+```
 
 En domain.schedule.vo.exception se mantiene la misma forma, pero la MissingSemanticValueException extiende SharedScheduleException.
 
@@ -118,4 +118,4 @@ if (street.isBlank()) throw new BlankAddressFieldException("street", street);
 ## Relación con otros ADR
 - [ADR-02 (Arquitectura): Catálogo de errores clínicos por operación](ADR-02-Catálogo%20de%20errores%20clínicos%20por%20operación.md)
 - [ADR-03 (Arquitectura): Jerarquía global de excepciones y excepciones para Value Objects de Persona](ADR-03-Jerarquía%20global%20de%20excepciones%20y%20excepciones%20para%20Value%20Objects%20de%20Persona.md)  
-  
+- [ADR-18-Simplificación general de jerarquía de excepciones en el dominio.md](ADR-18-Simplificaci%C3%B3n%20general%20de%20jerarqu%C3%ADa%20de%20excepciones%20en%20el%20dominio.md)  

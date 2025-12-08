@@ -107,7 +107,8 @@ Positivas
 
 ## Relación con otros ADR
 - [ADR-02 (Arquitectura): Catálogo de errores clínicos por operación](ADR-02-Catálogo%20de%20errores%20clínicos%20por%20operación.md)
-
+- [ADR-03-Jerarquía global de excepciones y excepciones para Value Objects de Persona.md](ADR-03-Jerarqu%C3%ADa%20global%20de%20excepciones%20y%20excepciones%20para%20Value%20Objects%20de%20Persona.md)
+- [ADR-18-Simplificación general de jerarquía de excepciones en el dominio.md](ADR-18-Simplificaci%C3%B3n%20general%20de%20jerarqu%C3%ADa%20de%20excepciones%20en%20el%20dominio.md)
 ## Notas finales
 - La jerarquía propuesta es una convención global para todo el dominio, no solo para VOs.
 - Crear excepciones nuevas solo cuando justifiquen manejo distinto, métricas o trazabilidad.
