@@ -3,6 +3,11 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 /**
  * Representa una línea individual dentro de un asiento accounting.
@@ -167,16 +172,16 @@ public final class JournalEntryLine {
 
 
         if (description == null || description.isBlank()) {
-            throw new InvalidJournalEntryException("La descripción es obligatoria");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD, ContextoEntidad.JOURNALENTRY);
         }
         if (amount == null) {
-            throw new InvalidJournalEntryException("El monto es obligatorio");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_AMOUNT,ContextoEntidad.JOURNALENTRY);
         }
     }
 
     private void validateAmount(Money amount) {
         if (amount.isNegativeOrZero()) {
-            throw new InvalidJournalEntryException("El monto debe ser mayor que cero");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_INVALID_AMOUNT,ContextoEntidad.JOURNALENTRY);
         }
     }
 

@@ -5,6 +5,11 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObjec
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TemporalValidationException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -95,7 +100,7 @@ public final class JournalEntry {
         Objects.requireNonNull(line, "La línea no puede ser nula");
 
         if (!this.lines.remove(line)) {
-            throw new InvalidJournalEntryException("La línea no existe en el asiento");
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_LINE_NOT_FOUND, ContextoEntidad.JOURNALENTRY);
         }
         this.balanced = false;
     }
@@ -117,13 +122,11 @@ public final class JournalEntry {
      */
     public void validateBalance() {
         if (this.lines.isEmpty()) {
-            throw new InvalidJournalEntryException("El asiento debe tener al menos una línea");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_EMPTY,ContextoEntidad.JOURNALENTRY);
         }
 
         if (this.lines.size() < 2) {
-            throw new InvalidJournalEntryException(
-                    "El asiento debe tener al menos dos líneas (partida doble)"
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_INSUFFICIENT_LINES,ContextoEntidad.JOURNALENTRY);
         }
 
         BigDecimal totalDebits = BigDecimal.ZERO;
@@ -131,17 +134,14 @@ public final class JournalEntry {
 
         for (JournalEntryLine line : this.lines) {
             if (line.isDebit()) {
-                totalDebits = totalDebits.add(line.getAmount().getAmount());
+                totalDebits = totalDebits.add(line.getAmount().asBigDecimal());
             } else {
-                totalCredits = totalCredits.add(line.getAmount().getAmount());
+                totalCredits = totalCredits.add(line.getAmount().asBigDecimal());
             }
         }
 
         if (totalDebits.compareTo(totalCredits) != 0) {
-            throw new InvalidJournalEntryException(
-                    String.format("El asiento no está balanceado. Débitos: %s, Créditos: %s",
-                            totalDebits, totalCredits)
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_DEBIT_CREDIT_MISMATCH,ContextoEntidad.JOURNALENTRY);
         }
 
         this.balanced = true;
@@ -152,7 +152,7 @@ public final class JournalEntry {
      */
     public void post() {
         if (this.posted) {
-            throw new InvalidJournalEntryException("El asiento ya está contabilizado");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_ALREADY_POSTED,ContextoEntidad.JOURNALENTRY);
         }
 
         if (!this.balanced) {
@@ -160,7 +160,7 @@ public final class JournalEntry {
         }
 
         if (this.date.isAfter(LocalDate.now())) {
-            throw new InvalidJournalEntryException("No se puede contabilizar un asiento con fecha futura");
+            throw new TemporalValidationException(ErrorCatalog.ERR_JOURNALENTRY_FUTURE_DATE,ContextoEntidad.JOURNALENTRY);
         }
 
         this.posted = true;
@@ -172,11 +172,11 @@ public final class JournalEntry {
      */
     public JournalEntry reverse(String reason) {
         if (!this.posted) {
-            throw new InvalidJournalEntryException("Solo se pueden reversar asientos contabilizados");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_NOT_POSTED_REVERSAL,ContextoEntidad.JOURNALENTRY);
         }
 
         if (reason == null || reason.isBlank()) {
-            throw new InvalidJournalEntryException("Se requiere una razón para reversar el asiento");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_REVERSAL_REQUIRES_REASON,ContextoEntidad.JOURNALENTRY);
         }
 
         // Crear líneas reversas (invertir débitos y créditos)
@@ -200,7 +200,7 @@ public final class JournalEntry {
     public Money getTotalDebits() {
         BigDecimal total = this.lines.stream()
                 .filter(JournalEntryLine::isDebit)
-                .map(line -> line.getAmount().getAmount())
+                .map(line -> line.getAmount().asBigDecimal())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return Money.of(total, "COP");
@@ -212,7 +212,7 @@ public final class JournalEntry {
     public Money getTotalCredits() {
         BigDecimal total = this.lines.stream()
                 .filter(JournalEntryLine::isCredit)
-                .map(line -> line.getAmount().getAmount())
+                .map(line -> line.getAmount().asBigDecimal())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return Money.of(total, "COP");
@@ -251,9 +251,7 @@ public final class JournalEntry {
 
     private void ensureNotPosted() {
         if (this.posted) {
-            throw new InvalidJournalEntryException(
-                    "No se puede modificar un asiento ya contabilizado"
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_NOT_EDITABLE,ContextoEntidad.JOURNALENTRY);
         }
     }
 
@@ -264,7 +262,7 @@ public final class JournalEntry {
 
 
         if (date == null) {
-            throw new InvalidJournalEntryException("La fecha es obligatoria");
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DATE,ContextoEntidad.JOURNALENTRY);
         }
         validateDocumentNumber(documentNumber);
         validateDescription(description);
@@ -272,19 +270,19 @@ public final class JournalEntry {
 
     private void validateDocumentNumber(String documentNumber) {
         if (documentNumber == null || documentNumber.isBlank()) {
-            throw new InvalidJournalEntryException("El número de documento es obligatorio");
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DOCUMENT_NUMBER,ContextoEntidad.JOURNALENTRY);
         }
-        if (documentNumber.trim().length() < 1) {
-            throw new InvalidJournalEntryException("El número de documento debe tener al menos 1 carácter");
+        if (documentNumber.trim().isEmpty()) {
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_INVALID_DOCUMENT_NUMBER,ContextoEntidad.JOURNALENTRY);
         }
     }
 
     private void validateDescription(String description) {
         if (description == null || description.isBlank()) {
-            throw new InvalidJournalEntryException("La descripción es obligatoria");
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD,ContextoEntidad.JOURNALENTRY);
         }
         if (description.trim().length() < 5) {
-            throw new InvalidJournalEntryException("La descripción debe tener al menos 5 caracteres");
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_INVALID_DESCRIPTION_LENGTH,ContextoEntidad.JOURNALENTRY);
         }
     }
 
