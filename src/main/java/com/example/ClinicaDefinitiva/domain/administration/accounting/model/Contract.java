@@ -2,6 +2,11 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.ContractStatus;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TemporalValidationException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -116,13 +121,13 @@ public final class Contract {
         ensureEditable();
 
         if (newEndDate == null) {
-            throw new InvalidContractException("La nueva fecha de fin es obligatoria");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_MISSING_NEW_END_DATE,ContextoEntidad.CONTRACT);
         }
         if (newEndDate.isBefore(this.endDate)) {
-            throw new InvalidContractException("La nueva fecha debe ser posterior a la fecha actual de fin");
+            throw new TemporalValidationException(ErrorCatalog.ERR_CONTRACT_INVALID_DATES,ContextoEntidad.CONTRACT);
         }
         if (newEndDate.isBefore(LocalDate.now())) {
-            throw new InvalidContractException("La nueva fecha no puede estar en el pasado");
+            throw new TemporalValidationException(ErrorCatalog.ERR_CONTRACT_NEW_END_DATE_IN_PAST,ContextoEntidad.CONTRACT);
         }
 
         this.endDate = newEndDate;
@@ -133,12 +138,11 @@ public final class Contract {
      */
     public void suspend(String reason) {
         if (this.status != ContractStatus.ACTIVE) {
-            throw new InvalidContractStatusException(
-                    "Solo se pueden suspender contratos activos"
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_CANNOT_SUSPEND,ContextoEntidad.CONTRACT
             );
         }
         if (reason == null || reason.isBlank()) {
-            throw new InvalidContractException("Se requiere una razón para suspender el contrato");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_TERMINATION_REQUIRES_REASON,ContextoEntidad.CONTRACT);
         }
         this.status = ContractStatus.SUSPENDED;
     }
@@ -148,13 +152,11 @@ public final class Contract {
      */
     public void reactivate() {
         if (this.status != ContractStatus.SUSPENDED) {
-            throw new InvalidContractStatusException(
-                    "Solo se pueden reactivar contratos suspendidos"
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_CANNOT_REACTIVATE,ContextoEntidad.CONTRACT
             );
         }
         if (isExpired()) {
-            throw new InvalidContractException(
-                    "No se puede reactivar un contrato vencido"
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_EXPIRED_CANNOT_REACTIVATE,ContextoEntidad.CONTRACT
             );
         }
         this.status = ContractStatus.ACTIVE;
@@ -165,10 +167,10 @@ public final class Contract {
      */
     public void terminate(String reason) {
         if (this.status == ContractStatus.TERMINATED) {
-            throw new InvalidContractStatusException("El contrato ya está terminado");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_ALREADY_TERMINATED,ContextoEntidad.CONTRACT);
         }
         if (reason == null || reason.isBlank()) {
-            throw new InvalidContractException("Se requiere una razón para terminar el contrato");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_TERMINATION_REQUIRES_REASON,ContextoEntidad.CONTRACT);
         }
         this.status = ContractStatus.TERMINATED;
     }
@@ -215,12 +217,11 @@ public final class Contract {
 
     private void ensureEditable() {
         if (this.status != ContractStatus.ACTIVE) {
-            throw new InvalidContractStatusException(
-                    "Solo se pueden editar contratos activos. Estado actual: " + this.status
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_NOT_EDITABLE,ContextoEntidad.CONTRACT
             );
         }
         if (isExpired()) {
-            throw new InvalidContractException("No se puede editar un contrato vencido");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_EXPIRED_NOT_EDITABLE,ContextoEntidad.CONTRACT);
         }
     }
 
@@ -234,10 +235,10 @@ public final class Contract {
         validateCoverageType(coverageType);
 
         if (startDate == null) {
-            throw new InvalidContractException("La fecha de inicio es obligatoria");
+            throw new DomainAggregateException(ErrorCatalog.ERR_CONTRACT_MISSING_START_DATE,ContextoEntidad.CONTRACT);
         }
         if (endDate == null) {
-            throw new InvalidContractException("La fecha de fin es obligatoria");
+            throw new DomainAggregateException(ErrorCatalog.ERR_CONTRACT_MISSING_END_DATE,ContextoEntidad.CONTRACT);
         }
     }
 
@@ -245,16 +246,14 @@ public final class Contract {
 
     private void validateCoverageType(String coverageType) {
         if (coverageType == null || coverageType.isBlank()) {
-            throw new InvalidContractException("El tipo de cobertura es obligatorio");
+            throw new DomainAggregateException(ErrorCatalog.ERR_CONTRACT_MISSING_COVERAGE_TYPE,ContextoEntidad.CONTRACT);
         }
     }
 
 
     private void validateDates(LocalDate startDate, LocalDate endDate) {
         if (endDate.isBefore(startDate)) {
-            throw new InvalidContractException(
-                    "La fecha de fin debe ser posterior a la fecha de inicio"
-            );
+            throw new TemporalValidationException(ErrorCatalog.ERR_CONTRACT_INVALID_DATES, ContextoEntidad.CONTRACT);
         }
 
 
