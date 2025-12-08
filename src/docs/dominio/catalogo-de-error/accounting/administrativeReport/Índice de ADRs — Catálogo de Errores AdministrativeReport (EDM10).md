@@ -1,6 +1,4 @@
-Excelente 🙌. Aquí tienes el **índice consolidado de ADRs de errores para el agregado AdministrativeReport (EDM10)**. Este índice te servirá como mapa general para enlazar cada ADR individual en tu documentación:
 
----
 
 # Índice de ADRs — Catálogo de Errores AdministrativeReport (EDM10)
 
