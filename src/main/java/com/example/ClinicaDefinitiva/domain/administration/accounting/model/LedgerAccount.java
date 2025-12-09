@@ -4,6 +4,11 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.Natura
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Name;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+
 import java.util.regex.Pattern;
 
 /**
@@ -93,7 +98,7 @@ public final class LedgerAccount {
      */
     public void activate() {
         if (this.active) {
-            throw new InvalidLedgerAccountException("La cuenta ya está activa");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_ACCOUNT_ALREADY_ACTIVE,ContextoEntidad.LEDGERACCOUNT);
         }
         this.active = true;
     }
@@ -103,10 +108,10 @@ public final class LedgerAccount {
      */
     public void inactivate(String reason) {
         if (!this.active) {
-            throw new InvalidLedgerAccountException("La cuenta ya está inactiva");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_ACCOUNT_ALREADY_ACTIVE,ContextoEntidad.LEDGERACCOUNT);
         }
         if (reason == null || reason.isBlank()) {
-            throw new InvalidLedgerAccountException("Se requiere una razón para inactivar la cuenta");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_ACCOUNT_INACTIVATION_REQUIRES_REASON,ContextoEntidad.LEDGERACCOUNT);
         }
         this.active = false;
     }
@@ -185,14 +190,10 @@ public final class LedgerAccount {
      */
     public void validateMovementRequirements(boolean hasThirdParty, boolean hasDocument) {
         if (this.requiresThirdParty && !hasThirdParty) {
-            throw new InvalidLedgerAccountException(
-                    String.format("La cuenta %s - %s requiere un tercero", this.code, this.name)
-            );
+            throw new DomainAggregateException(ErrorCatalog.ERR_ACCOUNT_REQUIRES_THIRD_PARTY,ContextoEntidad.LEDGERACCOUNT);
         }
         if (this.requiresDocument && !hasDocument) {
-            throw new InvalidLedgerAccountException(
-                    String.format("La cuenta %s - %s requiere un documento", this.code, this.name)
-            );
+            throw new DomainAggregateException(ErrorCatalog.ERR_ACCOUNT_REQUIRES_DOCUMENT,ContextoEntidad.LEDGERACCOUNT);
         }
     }
 
@@ -221,9 +222,7 @@ public final class LedgerAccount {
 
     private void ensureActive() {
         if (!this.active) {
-            throw new InvalidLedgerAccountException(
-                    "No se puede modificar una cuenta inactiva"
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_ACCOUNT_NOT_EDITABLE,ContextoEntidad.LEDGERACCOUNT);
         }
     }
 
@@ -233,10 +232,10 @@ public final class LedgerAccount {
 
 
         if (code == null || code.isBlank()) {
-            throw new InvalidLedgerAccountException("El código de la cuenta es obligatorio");
+            throw new DomainAggregateException(ErrorCatalog.ERR_ACCOUNT_MISSING_CODE,ContextoEntidad.LEDGERACCOUNT);
         }
         if (nature == null) {
-            throw new InvalidLedgerAccountException("La naturaleza de la cuenta es obligatoria");
+            throw new DomainAggregateException(ErrorCatalog.ERR_ACCOUNT_MISSING_NATURE,ContextoEntidad.LEDGERACCOUNT);
         }
     }
 
@@ -245,21 +244,17 @@ public final class LedgerAccount {
         String cleanCode = code.trim();
 
         if (cleanCode.isEmpty() || cleanCode.length() > MAX_CODE_LENGTH) {
-            throw new InvalidLedgerAccountException(
-                    String.format("El código debe tener entre %d y %d dígitos", MIN_CODE_LENGTH, MAX_CODE_LENGTH)
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_ACCOUNT_INVALID_CODE_LENGTH,ContextoEntidad.LEDGERACCOUNT);
         }
 
         if (!ACCOUNT_CODE_PATTERN.matcher(cleanCode).matches()) {
-            throw new InvalidLedgerAccountException("El código debe contener solo dígitos numéricos");
+            throw new DomainAggregateException(ErrorCatalog.ERR_ACCOUNT_INVALID_CODE_FORMAT,ContextoEntidad.LEDGERACCOUNT);
         }
 
         // Validar niveles permitidos (1, 2, 4, 6, 8 dígitos)
         int length = cleanCode.length();
         if (length != 1 && length != 2 && length != 4 && length != 6 && length != 8) {
-            throw new InvalidLedgerAccountException(
-                    "El código debe tener 1, 2, 4, 6 u 8 dígitos según el nivel de la cuenta"
-            );
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_ACCOUNT_INVALID_CODE_LENGTH, ContextoEntidad.LEDGERACCOUNT);
         }
     }
 
