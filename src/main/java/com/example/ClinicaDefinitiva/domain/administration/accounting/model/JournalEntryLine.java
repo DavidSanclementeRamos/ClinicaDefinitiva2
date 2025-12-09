@@ -172,10 +172,10 @@ public final class JournalEntryLine {
 
 
         if (description == null || description.isBlank()) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD, ContextoEntidad.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD, ContextoEntidad.JOURNALENTRY);
         }
         if (amount == null) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_AMOUNT,ContextoEntidad.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_AMOUNT,ContextoEntidad.JOURNALENTRY);
         }
     }
 
