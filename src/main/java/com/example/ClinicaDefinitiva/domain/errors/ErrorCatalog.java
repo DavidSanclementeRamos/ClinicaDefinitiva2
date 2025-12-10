@@ -342,7 +342,7 @@ public enum ErrorCatalog {
             "El código de la cuenta es obligatorio"),
 
 
-    // OpeningBalanceErrorCatalog
+    //    // OpeningBalanceErrorCatalog
 
 
     ERR_OPENING_BALANCE_INVALID_AMOUNT("RN-OPENINGBALANCE-001", "error.openingBalance.invalidAmount",
