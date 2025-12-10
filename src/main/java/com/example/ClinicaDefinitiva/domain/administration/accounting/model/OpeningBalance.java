@@ -4,6 +4,10 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObjec
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.OpeningBalanceId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 
 import java.time.LocalDate;
 
@@ -50,13 +54,13 @@ public class OpeningBalance { // saldo inicial
 
   private void validateMandatoryFields(Money amount, LocalDate date) {
     if (amount.isNegativeOrZero()) {
-        throw new InvalidJournalEntryException("El monto debe ser mayor que cero");
+        throw new BusinessRuleViolationException(ErrorCatalog.ERR_OPENING_BALANCE_INVALID_AMOUNT, ContextoEntidad.OPENINGBALANCE);
     }
     if (amount == null) {
-        throw new InvalidJournalEntryException("El monto es obligatorio");
+        throw new DomainAggregateException(ErrorCatalog.ERR_OPENING_BALANCE_MISSING_AMOUNT,ContextoEntidad.OPENINGBALANCE);
     }
       if (date == null) {
-          throw new InvalidJournalEntryException("La fecha es obligatoria");
+          throw new DomainAggregateException(ErrorCatalog.ERR_OPENING_BALANCE_MISSING_DATE,ContextoEntidad.OPENINGBALANCE);
       }
   }
 
