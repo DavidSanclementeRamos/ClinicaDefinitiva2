@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.errors;
 public enum ContextoEntidad {
 
     DENTIST(CodigoEntidad.OD01),
-    SECRETARIO(CodigoEntidad.SEC02),
+    RECEPTIONIST(CodigoEntidad.REC02),
     RESPONSABLE(CodigoEntidad.RES03),
     PATIENT(CodigoEntidad.PAT04),
     USUARIO(CodigoEntidad.USR05),

@@ -88,9 +88,18 @@ public enum ErrorCatalog {
     NULL_WORKING_HOURS("ERR_SPC_1","NO NULL "),
 
     ERR_BLOODTYPE_INVALID(
-            "RN-BLOODTYPE-001",
-            "error.bloodtype.invalid",
+            "RN-BLOODTYPE-001", "error.bloodtype.invalid",
             "Tipo de sangre inválido"),
+
+    ERR_SECRETARY_CREATION_REQUIRES_ACTIVE_USER(
+            "RN-SECRETARY-001",
+            "error.secretary.creationRequiresActiveUser",
+            "No se puede crear secretari@ con un usuario inactivo"
+    ),
+
+    ERR_RECEPTIONIST_NOT_EDITABLE("RN-RECEPTIONIST-002", "error.receptionist.notEditable",
+            "Solo puede editarse si está activo"),
+
 
 
     // citas

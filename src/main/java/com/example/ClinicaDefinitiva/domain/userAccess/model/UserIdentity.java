@@ -9,7 +9,7 @@ import java.util.Set;
 public class UserIdentity {
 // infra estructura tecnica, solo vive lo que garantiza que un usuario
 // puede autenticarse y ser reconocido por el sistema.
-    private UserId id;
+    private String id;
     private String name;
     private String gmail;
     private String passwork;
@@ -28,7 +28,7 @@ public class UserIdentity {
     public UserIdentity() {
     }
 
-    public UserIdentity(boolean accountNoExpired, boolean accountNoLocked, boolean credentialNoExpired, LocalDate dateCreate, String gmail, long id, String imagenPerfil, boolean isEnabled, String name, String passwork, Set<Rol> rol, UserStatus statusUser, LocalDate ultimaFechaDeCoexion, UserStatus status) {
+    public UserIdentity(boolean accountNoExpired, boolean accountNoLocked, boolean credentialNoExpired, LocalDate dateCreate, String gmail, String id, String imagenPerfil, boolean isEnabled, String name, String passwork, Set<Rol> rol, UserStatus statusUser, LocalDate ultimaFechaDeCoexion, UserStatus status) {
         this.accountNoExpired = accountNoExpired;
         this.accountNoLocked = accountNoLocked;
         this.credentialNoExpired = credentialNoExpired;
@@ -124,11 +124,11 @@ public class UserIdentity {
         this.gmail = gmail;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
