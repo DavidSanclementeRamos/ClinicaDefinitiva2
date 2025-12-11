@@ -9,7 +9,7 @@ import java.util.Set;
 public class UserIdentity {
 // infra estructura tecnica, solo vive lo que garantiza que un usuario
 // puede autenticarse y ser reconocido por el sistema.
-    private long id;
+    private UserId id;
     private String name;
     private String gmail;
     private String passwork;

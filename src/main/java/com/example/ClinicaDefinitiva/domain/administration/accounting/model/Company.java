@@ -174,7 +174,6 @@ public final class Company {
     }
 
 
-    // Getters
     public CompanyId getId() { return id; }
     public Name getName() { return name; }
     public Nit getTaxIdentificationNumber() { return taxIdentificationNumber; }
@@ -187,6 +186,5 @@ public final class Company {
     public LocalDate getIncorporationDate() { return incorporationDate; }
     public CompanyStatus getStatus() { return status; }
 
-    // Setters para infraestructura (JPA/Hibernate)
     public void setId(CompanyId id) { this.id = id; }
 }

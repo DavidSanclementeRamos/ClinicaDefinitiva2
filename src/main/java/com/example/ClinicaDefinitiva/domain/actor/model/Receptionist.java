@@ -1,10 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.user.exception.UserInactiveException;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
+
 
 
 import java.time.LocalDateTime;
@@ -13,7 +10,7 @@ public class Receptionist   {
     private final ReceptionId id;
     private Person person;
     private Sector sector;
-    private UserIdentity user;
+    private String user;
     private LocalDateTime lastUpdate;
 
     public Receptionist(Builder b ) {
@@ -23,7 +20,7 @@ public class Receptionist   {
         this.person = b.person;
     }
 
-    public static Receptionist registerReceptionist(ReceptionId id , Person data, UserIdentity user, Sector sector){
+    public static Receptionist registerReceptionist(ReceptionId id , Person data, String user, Sector sector){
         ensureActiveUser(user);
         LocalDateTime lastUpdate = LocalDateTime.now();
         return  new Builder()

@@ -1,6 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.billing.doiman.model;
 
-import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
+
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.Money;
@@ -12,14 +14,14 @@ public class Rate {
     private final RateId id;                   // Identificador único
     private final ProvidedService service_id;           // Referencia al servicio
     private final String payer_type;           // Tipo de pagador (private, EPS, insurer)
-    private final Contract contract_id;          // Referencia a contrato/convenio (opcional)
+    private final ContractId contract_id;          // Referencia a contrato/convenio (opcional)
     private final Money amount;             // Valor de la tarifa
     private String currency;             // Moneda (ej. COP, USD)
     private final LocalDateTime valid_from;          // Vigencia inicial
     private final LocalDateTime valid_to;            // Vigencia final
     private final boolean is_active;           // Estado de la tarifa
 
-    public Rate(Money amount, RateId id, ProvidedService service_id, String payer_type, Contract contract_id, String currency, LocalDateTime valid_from, LocalDateTime valid_to, boolean is_active) {
+    public Rate(Money amount, RateId id, ProvidedService service_id, String payer_type, ContractId contract_id, String currency, LocalDateTime valid_from, LocalDateTime valid_to, boolean is_active) {
         this.amount = amount;
         this.id = id;
         this.service_id = service_id;
@@ -44,7 +46,7 @@ public class Rate {
     public String getCurrency() {
         return currency;
     }
-    public Contract getContract_id() {
+    public ContractId getContract_id() {
         return contract_id;
     }
     public RateId getId() {return id;}

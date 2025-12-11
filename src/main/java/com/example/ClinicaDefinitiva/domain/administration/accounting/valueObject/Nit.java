@@ -1,6 +1,11 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject;
 
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.regex.Pattern;
@@ -27,17 +32,17 @@ public final class Nit implements Serializable {
      *
      * @param rawNIT   cadena con el NIT
      * @return instancia válida de Nit
-     * @throws InvalidNitException si el NIT no cumple formato
+     * @throws ValueObjectValidationException si el NIT no cumple formato
      */
     public static Nit of(String rawNIT) {
         if (rawNIT == null || rawNIT.trim().isEmpty()) {
-            throw new InvalidNitException("El NIT no puede ser nulo ni vacío.");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_COMPANY_MISSING_TAX_ID, ContextoEntidad.COMPANY);
         }
 
         String normalized = rawNIT.trim();
 
         if (!NIT_PATTERN.matcher(normalized).matches()) {
-            throw new InvalidNitException("Formato de NIT inválido. Ejemplo válido: 900123456-7");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_COMPANY_MISSING_TAX_ID,ContextoEntidad.COMPANY);
         }
 
         return new Nit(normalized);

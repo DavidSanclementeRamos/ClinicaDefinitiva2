@@ -327,7 +327,6 @@ public final class AdministrativeReport {
         }
     }
 
-    // Getters
     public AdministrativeReportId getId() { return id; }
     public Name getTitle() { return title; }
     public Period getPeriod() { return period; }
@@ -338,6 +337,5 @@ public final class AdministrativeReport {
     public LocalDateTime getLastUpdate() { return lastUpdate; }
     public UserId getApprovedBy() { return approvedBy; }
 
-    // Setters para infraestructura
     public void setId(AdministrativeReportId id) { this.id = id; }
 }

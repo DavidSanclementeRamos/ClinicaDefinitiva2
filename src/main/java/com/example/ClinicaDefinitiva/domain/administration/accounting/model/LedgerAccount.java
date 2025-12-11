@@ -258,7 +258,6 @@ public final class LedgerAccount {
         }
     }
 
-    // Getters
     public LedgerAccountId getId() { return id; }
     public CompanyId getCompanyId() { return companyId; }
     public String getCode() { return code; }
@@ -268,7 +267,6 @@ public final class LedgerAccount {
     public boolean isRequiresDocument() { return requiresDocument; }
     public boolean isActive() { return active; }
 
-    // Setters para infraestructura
     public void setId(LedgerAccountId id) { this.id = id; }
 
 }

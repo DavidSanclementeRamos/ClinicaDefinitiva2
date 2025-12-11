@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 
 /**
  * Representa una línea individual dentro de un asiento accounting.
@@ -185,7 +185,6 @@ public final class JournalEntryLine {
         }
     }
 
-    // Getters
     public LedgerAccountId getLedgerAccountId() { return ledgerAccountId; }
     public ThirdPartiesId getThirdPartiesId() { return thirdPartiesId; }
     public String getDescription() { return description; }

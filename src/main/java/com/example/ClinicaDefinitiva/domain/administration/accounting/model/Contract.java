@@ -259,7 +259,6 @@ public final class Contract {
 
     }
 
-    // Getters
     public ContractId getContractId() { return contractId; }
     public CompanyId getCompanyId() { return companyId; }
     public ThirdPartiesId getThirdPartiesId() { return thirdPartiesId; }
@@ -273,6 +272,5 @@ public final class Contract {
     public ContractStatus getStatus() { return status; }
     public AuditoriaInfo getAudit() { return audit; }
 
-    // Setters para infraestructura
     public void setContractId(ContractId contractId) { this.contractId = contractId; }
 }

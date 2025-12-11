@@ -121,7 +121,7 @@ public final class ThirdParties {
      */
     public void inactivate(String reason) {
         if (!this.active) {
-            throw new InvalidThirdPartiesException("El tercero ya está inactivo");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_THIRD_PARTY_ALREADY_INACTIVE,ContextoEntidad.THISPARTIES);
         }
         if (reason == null || reason.isBlank()) {
             throw new BusinessRuleViolationException(ErrorCatalog.ERR_THIRD_PARTY_INACTIVATION_REQUIRES_REASON, ContextoEntidad.THISPARTIES);
@@ -188,7 +188,6 @@ public final class ThirdParties {
         }
     }
 
-    // Getters
     public ThirdPartiesId getPartiesId() { return partiesId; }
     public CompanyId getCompanyId() { return companyId; }
     public Name getName() { return name; }
@@ -200,6 +199,5 @@ public final class ThirdParties {
     public Email getEmail() { return email; }
     public boolean isActive() { return active; }
 
-    // Setters para infraestructura
     public void setPartiesId(ThirdPartiesId partiesId) { this.partiesId = partiesId; }
 }

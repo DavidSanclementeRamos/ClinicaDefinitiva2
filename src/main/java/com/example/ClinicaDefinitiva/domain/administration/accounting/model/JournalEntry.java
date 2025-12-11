@@ -286,7 +286,6 @@ public final class JournalEntry {
         }
     }
 
-    // Getters
     public JournalEntryId getId() { return id; }
     public CompanyId getCompanyId() { return companyId; }
     public LocalDate getDate() { return date; }
@@ -295,6 +294,5 @@ public final class JournalEntry {
     public boolean isBalanced() { return balanced; }
     public boolean isPosted() { return posted; }
 
-    // Setters para infraestructura
     public void setId(JournalEntryId id) { this.id = id; }
 }

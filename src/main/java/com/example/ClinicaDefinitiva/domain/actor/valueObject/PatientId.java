@@ -10,9 +10,6 @@ public final class PatientId {
         this.value = Objects.requireNonNull(value);
     }
 
-    public static PatientId generate(){
-        return new PatientId(UUID.randomUUID().toString());
-    }
     // Nuevo: parsea/valida una cadena y devuelve el VO
     public static PatientId fromString(String value) {
         if (value == null) return null; // decisión: devuelve null si no hay valor; cambia a throw si prefieres

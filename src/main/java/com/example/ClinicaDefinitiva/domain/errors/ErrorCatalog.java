@@ -87,7 +87,13 @@ public enum ErrorCatalog {
     START_TIME_AFTER_END_TIME_WORKING_HOURS("ERR_SPC_1","La hora de inicio debe ser anterior a la hora de fin."),
     NULL_WORKING_HOURS("ERR_SPC_1","NO NULL "),
 
-   // citas
+    ERR_BLOODTYPE_INVALID(
+            "RN-BLOODTYPE-001",
+            "error.bloodtype.invalid",
+            "Tipo de sangre inválido"),
+
+
+    // citas
    PENDING_APPOINTMENT("APP01", "error.patient.pendingAppointment",
            "Tiene citas pendientes en las próximas {hours} horas"),
     FUTURE_APPOINTMENT("APP02", "error.patient.futureAppointment",
@@ -400,7 +406,9 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
     ERR_THIRD_PARTY_INVALID_DOCUMENT_FORMAT("RN-THIRDPARTIES-009", "error.thirdParties.invalidDocumentFormat",
             "Número de documento solo acepta caracteres alfanuméricos"),
     ERR_THIRD_PARTY_ALREADY_ACTIVE("RN-THIRDPARTIES-010", "error.thirdParties.alreadyActive",
-            "El tercero ya está activo");
+            "El tercero ya está activo"),
+    ERR_THIRD_PARTY_ALREADY_INACTIVE("RN-THIRDPARTIES-011", "error.thirdParties.alreadyInactive",
+                                             "El tercero ya está inactivo");
 
 
 

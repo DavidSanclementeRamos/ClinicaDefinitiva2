@@ -18,7 +18,7 @@ public class Guardian {
     private  Person person;
     private  TypeGuardian typeGuardian;
     private  Schedule schedule;
-    private UserIdentity user;
+    private UserId user;
     private  List<Patient> patientList;
     private  LocalDateTime lastUpdate;
 
