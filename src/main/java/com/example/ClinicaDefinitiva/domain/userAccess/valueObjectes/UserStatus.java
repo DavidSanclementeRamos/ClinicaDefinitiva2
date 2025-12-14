@@ -1,69 +1,33 @@
 package com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes;
 
-import java.util.Objects;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 
 public class UserStatus {
-    public enum Status {
-        ACTIVE,
-        INACTIVE,
-        SUSPENDED,
-        PENDING_VERIFICATION,
-        DELETED
+    private final boolean active;
+
+    private UserStatus(boolean active) {
+        this.active = active;
     }
 
-    private final Status value;
-
-    private UserStatus(Status value) {
-        this.value = Objects.requireNonNull(value, "Status cannot be null");
+    // Fábrica semántica: crea el VO a partir de UserIdentity
+    public static UserStatus from(UserIdentity user) {
+        return new UserStatus(user.isActive());
     }
 
-    public static UserStatus of(Status value) {
-        return new UserStatus(value);
+    // Regla de negocio: debe estar activo
+    public void  mustBeActive(ErrorCatalog error, ContextoEntidad contexto) {
+        if (!active) {
+            throw new BusinessRuleViolationException(error, contexto);
+        }
     }
 
-    public Status getValue() {
-        return value;
-    }
-
+    // Getter
     public boolean isActive() {
-        return value == Status.ACTIVE;
+        return active;
     }
-
-    public boolean isSuspended() {
-        return value == Status.SUSPENDED;
-    }
-
-    public boolean isInactive() {
-        return value == Status.INACTIVE;
-    }
-    public boolean isPendingVerification() {
-        return value == Status.PENDING_VERIFICATION;
-    }
-
-    public boolean isDeleted() {
-        return value == Status.DELETED;
-    }
-
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserStatus)) return false;
-        UserStatus that = (UserStatus) o;
-        return value == that.value;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value);
-    }
-
-    @Override
-    public String toString() {
-        return "StatuUser{" + "value=" + value + '}';
-    }
-
 
 
 }

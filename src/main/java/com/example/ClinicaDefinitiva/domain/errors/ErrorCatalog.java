@@ -91,16 +91,34 @@ public enum ErrorCatalog {
             "RN-BLOODTYPE-001", "error.bloodtype.invalid",
             "Tipo de sangre inválido"),
 
-    ERR_SECRETARY_CREATION_REQUIRES_ACTIVE_USER(
+    ERR_RECEPTIONIST_CREATION_REQUIRES_ACTIVE_USER(
             "RN-SECRETARY-001",
             "error.secretary.creationRequiresActiveUser",
             "No se puede crear secretari@ con un usuario inactivo"
     ),
 
-    ERR_RECEPTIONIST_NOT_EDITABLE("RN-RECEPTIONIST-002", "error.receptionist.notEditable",
+    ERR_RECEPTIONIST_NOT_EDITABLE("RN-RECEPTIONIST-002",
+            "error.receptionist.notEditable",
             "Solo puede editarse si está activo"),
 
 
+    ERR_RECEPTIONIST_DENTIST_INACTIVE(
+            "RN-RECEPTIONIST-001",
+            "error.receptionist.dentistInactive",
+            "El dentista asociado se encuentra inactivo"
+    ),
+
+    ERR_RECEPTIONIST_DUPLICATE_APPOINTMENT(
+            "RN-RECEPTIONIST-002",
+            "error.receptionist.duplicateAppointment",
+            "La cita ya existe y no puede duplicarse"
+    ),
+
+    ERR_RECEPTIONIST_LATE_CANCELLATION(
+            "RN-RECEPTIONIST-003",
+            "error.receptionist.lateCancellation",
+            "La cancelación se realizó fuera del tiempo permitido"
+    ),
 
     // citas
    PENDING_APPOINTMENT("APP01", "error.patient.pendingAppointment",
@@ -417,7 +435,92 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
     ERR_THIRD_PARTY_ALREADY_ACTIVE("RN-THIRDPARTIES-010", "error.thirdParties.alreadyActive",
             "El tercero ya está activo"),
     ERR_THIRD_PARTY_ALREADY_INACTIVE("RN-THIRDPARTIES-011", "error.thirdParties.alreadyInactive",
-                                             "El tercero ya está inactivo");
+                                             "El tercero ya está inactivo"),
+
+
+
+    // paciente
+    ERR_PATIENT_MISSING_REQUIRED_FIELDS(
+            "RN-PATIENT-001",
+            "error.patient.missingRequiredFields",
+            "El paciente debe tener nombre, documento y fecha de nacimiento válida"
+    ),
+
+    ERR_PATIENT_ACTIVE_SERVICES(
+            "RN-PATIENT-002",
+            "error.patient.activeServices",
+            "No puede desactivarse o editar si tiene citas activas o tratamientos en curso"
+    ),
+
+    ERR_PATIENT_TIME_CONFLICT(
+            "RN-PATIENT-003",
+            "error.patient.timeConflict",
+            "El paciente no puede tener dos citas en el mismo horario"
+    ),
+
+    ERR_PATIENT_NOT_EDITABLE(
+            "RN-PATIENT-004",
+            "error.patient.notEditable",
+            "El paciente solo puede editarse si está activo"
+    ),
+
+    ERR_PATIENT_MISSING_CONTACT(
+            "RN-PATIENT-005",
+            "error.patient.missingContact",
+            "El paciente debe registrar al menos un medio de contacto válido"
+    ),
+
+    // bien
+    ERR_PATIENT_INVALID_AGE(
+            "RN-PATIENT-006",
+            "error.patient.invalidAge",
+            "La edad del paciente debe estar en rango válido (13-120 años)"
+    ),
+    ERR_PATIENT_INACTIVE(
+            "RN-PATIENT-012",
+            "error.patient.inactive",
+            "El paciente debe estar ACTIVO para realizar esta operación"
+    ),
+
+    ERR_PATIENT_FUTURE_BIRTHDATE(
+            "RN-PATIENT-007",
+            "error.patient.futureBirthdate",
+            "La fecha de nacimiento del paciente no puede ser futura"
+    ),
+
+    ERR_PATIENT_MINOR_REQUIRES_GUARDIAN(
+            "RN-PATIENT-008",
+            "error.patient.minorRequiresGuardian",
+            "Si el paciente es menor de edad, debe tener responsable legal vinculado"
+    ),
+
+    ERR_PATIENT_CANNOT_MODIFY_BIRTHDATE(
+            "RN-PATIENT-009",
+            "error.patient.cannotModifyBirthdate",
+            "No puede modificarse la fecha de nacimiento si el paciente tiene citas registradas"
+    ),
+    ERR_PATIENT_CREATION_REQUIRES_ACTIVE_USER(
+            "RN-PATIENT-011",
+            "error.patient.creationRequiresActiveUser",
+            "El paciente debe tener estado ACTIVO para poder ser creado"
+    ),
+    ERR_PATIENT_NO_SHIFT_ASSIGNED(
+            "RN-PATIENT-013",
+            "error.patient.noShiftAssigned",
+            "El paciente no tiene un turno asignado"
+    ),
+
+    ERR_PATIENT_SHIFT_NOT_AVAILABLE(
+            "RN-PATIENT-014",
+            "error.patient.shiftNotAvailable",
+            "El turno no está disponible en el rango de fechas indicado"
+    ),
+
+    ERR_PATIENT_DEACTIVATION_REQUIRES_REASON(
+            "RN-PATIENT-010",
+            "error.patient.deactivationRequiresReason",
+            "La desactivación del paciente requiere motivo obligatorio"
+    );
 
 
 
