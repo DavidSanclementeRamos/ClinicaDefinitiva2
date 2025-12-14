@@ -1,4 +1,4 @@
-# ADR-17 (Arquitectura): Manejo de Plan de Cuentas y Asientos Contables en el Sistema Clínico
+# ADR-17 (Arquitectura): Manejo de Plan de Cuentas y Asientos Contables 
 
 - Estado: Aprobado
 - Fecha: 2025-11-29

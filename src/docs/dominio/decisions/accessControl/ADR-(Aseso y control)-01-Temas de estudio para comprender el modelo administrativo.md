@@ -1,4 +1,4 @@
-# ADR-29 (Dominio): Temas de estudio para comprender el modelo administrativo
+# ADR-10(Dominio)-Temas de estudio para comprender el modelo administrativo
 
 - Estado: Aprobado
 - Fecha: 2025-11-17

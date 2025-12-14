@@ -1,5 +1,5 @@
 
-# ADR-01: Migración progresiva a arquitectura hexagonal
+# ADR-01 (Arquitectura): Migración progresiva a arquitectura hexagonal
 
 - **Estado:** En progreso
 - **Fecha:** 2025-08-25

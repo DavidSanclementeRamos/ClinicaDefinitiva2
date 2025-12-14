@@ -1,6 +1,6 @@
 
 
-# ADR-02: Catálogo de errores clínicos por operación
+# ADR-02 (Arquitectura): Catálogo de errores clínicos por operación
 
 - **Estado:** Aceptado
 - **Fecha:** 2025-09-15
