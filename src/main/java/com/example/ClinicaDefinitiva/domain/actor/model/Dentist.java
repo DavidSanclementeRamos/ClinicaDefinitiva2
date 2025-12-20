@@ -1,245 +1,177 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
-import com.example.ClinicaDefinitiva.domain.schedule.model.TimeSlot;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.WeeklyAvailability;
-import com.example.ClinicaDefinitiva.domain.util.TimeIntervalRules;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
+import com.example.ClinicaDefinitiva.domain.util.*;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public  class Dentist   {
+public class Dentist implements Actor {
 
     private final DentistId dentistId;
-    private  Person personData;
-    private  Specialties specialties;
-    private  DentistAvailabilityStatus availabilityStatus;
-    private  WorkingHours workingHours;
-    private UserIdentity user;
-    private  List<TimeSlot> timeSlotList;
-    private  List<WeeklyAvailability> availabilityList;
-    private  Schedule schedule;
-    private  LocalDateTime lastUpdate;
+    private Person personData;
+    private Specialties specialties;
+    private DentistAvailabilityStatus availabilityStatus;
+    private WorkingHours workingHours;
+    private final UserId user;
+    private final Schedule schedule;
+    private LocalDateTime lastUpdate;
 
-
-    public Dentist(Builder b ) {
-        this.personData = b.personData;
-        this.specialties = b.specialties;
-        this.user = b.user;
-        this.workingHours = b.workingHours;
-        this.timeSlotList = List.copyOf(b.timeSlotList);
-        this.availabilityList = List.copyOf(b.availabilityList);
-        this.availabilityStatus = b.availabilityStatus;
-        this.lastUpdate = b.lastUpdate;
-        this.dentistId = b.dentistId;
-        this.schedule = new Schedule(b.appointments, new WeeklyAvailability(b.timeSlotList, List.of(b.workingHours)));
-    }
-
-    public Dentist(DentistId dentistId) {
+    private Dentist(DentistId dentistId,
+                    Person personData,
+                    Specialties specialties,
+                    UserId user,
+                    WorkingHours workingHours,
+                    Schedule schedule,
+                    DentistAvailabilityStatus availabilityStatus,
+                    LocalDateTime lastUpdate) {
         this.dentistId = dentistId;
+        this.personData = personData;
+        this.specialties = specialties;
+        this.user = user;
+        this.workingHours = workingHours;
+        this.schedule = schedule;
+        this.availabilityStatus = availabilityStatus != null ? availabilityStatus: DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.AVAILABLE);
+        this.lastUpdate = lastUpdate;
     }
 
-    // Factory method (fábrica semántica)
-    public static Dentist registerDentist(
-            DentistId id,
-            Person data,
-            Specialties specialties,
-            UserIdentity user,
-            WeeklyAvailability weeklyAvailability,
-            LocalDateTime lastUpdate) {
+    // Fábrica semántica
+    public static Dentist registerDentist(DentistId id,
+                                          Person data,
+                                          Specialties specialties,
+                                          UserIdentity user,
+                                          WorkingHours workingHours,
+                                          WeeklyAvailability weeklyAvailability,
+                                          LocalDateTime lastUpdate) {
 
-        ensureActiveUser(user);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_USER_INACTIVE, ContextoEntidad.DENTIST);
 
         if (!data.getAge().isBetween(25, 130)) {
-            throw new DentistMinimumAgeException(ContextoEntidad.DENTIST, "Dentist must be at least 25 years old.");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_AGE_INSUFFICIENT,ContextoEntidad.DENTIST);
         }
 
         if (!weeklyAvailability.HorasRegistradas(40)) {
-            throw new WeeklyAvailabilityException(ContextoEntidad.DENTIST, "Debe registrar al menos 40 horas semanales");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_MISSING_AVAILABILITY,ContextoEntidad.DENTIST);
         }
-        // build
-        return new Builder()
-                .withDentistId(id)
-                .withAddress(data.getAddress())
-                .withAge(data.getAge())
-                .withBloodType(data.getBloodType())
-                .withDateOfBirth(data.getDateOfBirth())
-                .withDni(data.getDni())
-                .withFullname(data.getFullname())
-                .withPhoneNumber(data.getPhoneNumber())
-                .withSpecialties(specialties)
-                .withUser(user)
-                .withTimeSlots(weeklyAvailability.getSlots())
-                .withLastUpdate(lastUpdate)
-                .withDocumentoEPS(data.getDocumentoEPS())
-                .withAvailabilityStatus(DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.AVAILABLE))
-                .build();
-        }
+
+        Schedule schedule = new Schedule(List.of(), weeklyAvailability);
+
+        return new Dentist(id, data, specialties, user.getId(), workingHours,
+                schedule, DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.AVAILABLE), lastUpdate);
+    }
 
     public void updateSensitiveData(Person data, UserIdentity user, Specialties specialties, WorkingHours workingHours) {
-        ensureActiveUser(user);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_USER_INACTIVE, ContextoEntidad.DENTIST);
+        ensureEditable();
 
         if (!data.getAge().isBetween(25, 130)) {
-            throw new DentistMinimumAgeException(ContextoEntidad.DENTIST, "El odontólogo debe tener al menos 25 años.");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_AGE_INSUFFICIENT,ContextoEntidad.DENTIST);
         }
-        this.personData = data.updateSensitive(
-                data.getAge(),
-                data.getBloodType(),
-                data.getDateOfBirth(),
-                data.getDni(),
-                data.getDocumentoEPS(),
-                data.getFullname()
-        );
-        this.lastUpdate = LocalDateTime.now();
+
+        this.personData = data.updateSensitive(data.getAge(), data.getBloodType(),
+                data.getDateOfBirth(), data.getDni(), data.getDocumentoEPS(), data.getFullname());
         this.specialties = specialties;
         this.workingHours = workingHours;
+        this.lastUpdate = LocalDateTime.now();
     }
 
     public void updateContactData(Person data, UserIdentity user) {
-        ensureActiveUser(user);
-
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_USER_INACTIVE, ContextoEntidad.DENTIST);
+        ensureEditable();
         this.personData = personData.updateContact(data.getAddress(), data.getPhoneNumber());
-        this.lastUpdate= LocalDateTime.now();
+        this.lastUpdate = LocalDateTime.now();
     }
 
-    // se puede desactivar si:
-    // No tiene citas pendientes en X tiempo
-    // el usuario está inactivo
-    public Dentist deactivate(UserIdentity user, int hoursRange) {
-        ensureActiveUser(user);
+    /** public void deactivate(UserIdentity user, int hoursRange) {
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, ContextoEntidad.DENTIST);
+
         if (this.schedule.hasAppointmentsWithinHours(hoursRange)) {
-            throw new PendingAppointmentsWithinHoursException(ContextoEntidad.DENTIST, "");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_ACTIVE_APPOINTMENTS,ContextoEntidad.DENTIST, "No puede desactivarse con citas pendientes.");
         }
-        return new Dentist.Builder()
-                .withAvailabilityStatus(DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.UNAVAILABLE))
-                .build();
-    }
-    // puede agendar una cita si
-    // usuario está activo
-    // el horario de trabajo está dentro del rango solicitado
-    public void canScheduleBetween(LocalDateTime start,LocalDateTime end ) {
-        ensureActiveUser();
-        if (!workingHours.isWithinRange(start, end)){
-             throw new IllegalArgumentException("El horario solicitado esta fuera de la jornada laboral del odontólogo ");
+        this.availabilityStatus = DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.AVAILABLE);
+    }*/
+
+
+    public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_USER_INACTIVE, ContextoEntidad.DENTIST);
+
+        ensureEditable();
+        if (!workingHours.isWithinRange(start, end)) {
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_OUT_OF_WORKING_HOURS, ContextoEntidad.DENTIST);
         }
     }
 
-    // un odontólogo puede tener vacaciones si:
-    public void validateVacationRequest(LocalDateTime vacationStart, LocalDateTime vacationEnd) {
-        ensureActiveUser();
+    public void validateVacationRequest(UserIdentity user,LocalDateTime vacationStart, LocalDateTime vacationEnd) {
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_USER_INACTIVE, ContextoEntidad.DENTIST);
+
         if (!TimeIntervalRules.isValid(vacationStart, vacationEnd)) {
-            throw new IllegalArgumentException("Rango de fechas inválido.");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_INVALID_VACATION_RANGE, ContextoEntidad.DENTIST);
         }
 
         List<Appointment> conflicts = schedule.getAppointments().stream()
-                .filter(a -> TimeIntervalRules.overlaps(
-                        a.getStart(), a.getEnd(), vacationStart, vacationEnd))
+                .filter(a -> TimeIntervalRules.overlaps(a.getStart(), a.getEnd(), vacationStart, vacationEnd))
                 .toList();
 
         if (!conflicts.isEmpty()) {
-            throw new IllegalArgumentException("No se puede tomar vacaciones: hay " +
-                    conflicts.size() + " cita" + (conflicts.size() > 1 ? "s" : "") +
-                    " en conflicto.");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_VACATION_CONFLICT, ContextoEntidad.DENTIST);
         }
     }
-    // Un odontólogo puede reagendar una cita si:
-    // usuario está activo.
-    // La nueva fecha está en su horario laboral
-    public void validateReschedule(LocalDateTime start, LocalDateTime end) {
-        ensureActiveUser();
+
+    public void validateReschedule(UserIdentity user,LocalDateTime start, LocalDateTime end) {
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_USER_INACTIVE, ContextoEntidad.DENTIST);
+
         if (!canWorkBetween(start, end)) {
-            throw new IllegalArgumentException("La nueva fecha no está dentro del horario laboral del odontólogo.");
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_RESCHEDULE_OUT_OF_WORKING_HOURS, ContextoEntidad.DENTIST);
         }
     }
-    /**
-     * Verifica si un intervalo de tiempo está dentro del horario laboral del odontólogo.
-     */
+
     public boolean canWorkBetween(LocalDateTime start, LocalDateTime end) {
         return workingHours != null && workingHours.isWithinRange(start, end);
     }
 
-    // Validar cumplimiento de horas trabajadas
     public boolean isCompliantWithDeclaredWorkingHours() {
         return workingHours.isCompliantWithWorkingHours(schedule.getWeeklyAvailability());
     }
-    // para operaciones del agregado)
-    private void ensureActiveUser() {
-        if (!user.isActive()) {
-            throw new UserInactiveException(ContextoEntidad.DENTIST, "user=" + user);
-        }
-    }
-    // para factories.
-    private static void ensureActiveUser(UserIdentity user) {
-        if (!user.isActive()) {
-            throw new UserInactiveException(ContextoEntidad.DENTIST, "user=" + user);
+
+    private void ensureEditable() {
+        if (!availabilityStatus.isOperational()) {
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_NOT_AVAILABLE,ContextoEntidad.DENTIST);
         }
     }
 
-
-    // Getters inmutables
-    //public List<TimeSlot> getTimeSlotList() { return List.copyOf(timeSlotList); }
-    public List<WeeklyAvailability> getAvailabilityList() { return List.copyOf(availabilityList); }
+    // Getters
+    public DentistId getDentistId() { return dentistId; }
+    public Person getPersonData() { return personData; }
+    public Specialties getSpecialties() { return specialties; }
+    public DentistAvailabilityStatus getAvailabilityStatus() { return availabilityStatus; }
+    public WorkingHours getWorkingHours() { return workingHours; }
+    public UserId getUser() { return user; }
     public Schedule getSchedule() { return schedule; }
-    public UserIdentity getUser() { return user; }
-    public DentistAvailabilityStatus getAvailabilityStatus() {return availabilityStatus;}
-    public LocalDateTime getLastUpdate() {return lastUpdate;}
-    public Specialties getSpecialties() {return specialties;}
-    public List<TimeSlot> getTimeSlotList() {return timeSlotList;}
-    public WorkingHours getWorkingHours() {return workingHours;}
-    public DentistId getDentistId() {return dentistId;}
-    public Person getPersonData() {return personData;}
+    public LocalDateTime getLastUpdate() { return lastUpdate; }
 
-    // Builder estático
-    public static final class Builder {
-        private Address address;
-        private Age age;
-        private BloodType bloodType;
-        private DateOfBirth dateOfBirth;
-        private String dni;
-        private FullName fullname;
-        private Long id;
-        private PhoneNumber phoneNumber;
-        private Specialties specialties;
-        private UserIdentity user;
-        private WorkingHours workingHours;
-        private List<TimeSlot> timeSlotList = new ArrayList<>();
-        private List<WeeklyAvailability> availabilityList = new ArrayList<>();
-        private Collection<Appointment> appointments = new ArrayList<>();
-        private DentistAvailabilityStatus availabilityStatus;
-        private LocalDateTime lastUpdate;
-        private String documentoEPS;
-        private Person personData;
-        private DentistId dentistId;
+    @Override
+    public Outcome assertCanBeDeactivated(String reason) {
 
-        public Builder withAddress(Address a) { this.address = a; return this; }
-        public Builder withAge(Age a) { this.age = a; return this; }
-        public Builder withBloodType(BloodType b) { this.bloodType = b; return this; }
-        public Builder withDateOfBirth(DateOfBirth d) { this.dateOfBirth = d; return this; }
-        public Builder withDni(String d) { this.dni = d; return this; }
-        public Builder withFullname(FullName f) { this.fullname = f; return this; }
-       // public Builder withId(Long id) { this.id = id; return this; }
-        public Builder withPhoneNumber(PhoneNumber p) { this.phoneNumber = p; return this; }
-        public Builder withSpecialties(Specialties s) { this.specialties = s; return this; }
-        public Builder withUser(UserIdentity u) { this.user = u; return this; }
-        public Builder withWorkingHours(WorkingHours w) { this.workingHours = w; return this; }
-        public Builder withTimeSlots(Collection<TimeSlot> slots) { this.timeSlotList = new ArrayList<>(slots); return this; }
-        public Builder withAvailabilityList(Collection<WeeklyAvailability> availability) { this.availabilityList = new ArrayList<>(availability); return this; }
-        public Builder withAppointments(Collection<Appointment> apps) { this.appointments = apps == null ? new ArrayList<>() : new ArrayList<>(apps); return this; }
-        public Builder withAvailabilityStatus(DentistAvailabilityStatus s) { this.availabilityStatus = s; return this; }
-        public Builder withLastUpdate(LocalDateTime l){this.lastUpdate = l; return this;}
-        public Builder withDocumentoEPS(String d){this.documentoEPS = d; return this;}
-        public Builder withPerson(Person p){this.personData = p; return this;}
-        public Builder withDentistId(DentistId d){this.dentistId = d; return this;}
-        public Dentist build() {
-
-            return new Dentist(this);
+        if(reason == null || reason.isBlank()){
+            return Outcome.fail(new OutcomeDetail(ErrorCatalog.EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
         }
+        if (this.schedule.hasAppointmentsWithinHours(24)) {
+            return Outcome.fail(new OutcomeDetail(ErrorCatalog.ERR_DENTIST_ACTIVE_APPOINTMENTS,Severity.INFO, Category.CLINICO));
+        }
+        return Outcome.ok();
     }
 
+    @Override
+    public UserId getUserId() {
+        return user;
+    }
 }

@@ -146,7 +146,6 @@ public class Patient implements Actor {
         if (schedule != null && schedule.hasAppointmentsWithin(DAYS_TO_BLOCK_DEACTIVATION)) {
             return Outcome.fail(new OutcomeDetail(ErrorCatalog.ERR_PATIENT_ACTIVE_SERVICES,Severity.INFO, Category.CLINICO));
         }
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, ContextoEntidad.RECEPTIONIST);
 
         return Outcome.ok();
     }

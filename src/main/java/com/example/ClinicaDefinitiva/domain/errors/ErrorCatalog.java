@@ -13,79 +13,87 @@ public enum ErrorCatalog {
     DATA_INTEGRITY_VIOLATION("ERR_DB_409", "Conflicto de integridad de datos."),
     GENERIC_ERROR("ERR_GEN_001", "Error inesperado."),
     ,**/
+   ERR_DENTIST_AGE_INSUFFICIENT(
+           "RN-DENTIST-001",
+           "error.dentist.ageInsufficient",
+           "Un odontólogo debe tener al menos 25 años al crearse"
+   ),
 
-   EDAD_NO_PERMITIDA("ERR_PARAM_001", "Edad no valida para ese cargo"),
-    // 🕒 Errores de Disponibilidad
-    SCHEDULE_NOT_FOUND("ERR_SCH_001", "Schedule not found."),
-    INVALID_SCHEDULE("ERR_SCH_002", "Invalid schedule parameters."),
+    ERR_DENTIST_MISSING_AVAILABILITY(
+            "RN-DENTIST-002",
+            "error.dentist.missingAvailability",
+            "Debe registrar disponibilidad inicial"
+    ),
 
-    // 🔄 Errores de Turno
-    SHIFT_NOT_FOUND("ERR_SHF_001", "Shift not found."),
-    INVALID_SHIFT("ERR_SHF_002", "Invalid shift parameters."),
+    ERR_DENTIST_ACTIVE_APPOINTMENTS(
+            "RN-DENTIST-003",
+            "error.dentist.activeAppointments",
+            "No puede desactivarse si tiene citas activas en las próximas 24 horas"
+    ),
 
-    // 👤 Errores de Usuario
-    USER_NOT_FOUND("ERR_USR_001", "UserIdentity not found."),
-    INVALID_USER("ERR_USR_002", "Invalid user data."),
-    USER_STATUS("ERR_USR_003", "Estado invalido para operation"),
+    ERR_DENTIST_TIME_CONFLICT(
+            "RN-DENTIST-004",
+            "error.dentist.timeConflict",
+            "No puede tener dos citas en el mismo horario"
+    ),
 
-    // 🦷 Errores de Odontólogo
-    DENTIST_NOT_FOUND("ERR_DEN_001", "Dentist not found."),
-    INVALID_DENTIST("ERR_DEN_002", "Invalid dentist information."),
-    MinimumAge_Dentist("ERR_DEN_003", "Invalid Age."),
+    ERR_DENTIST_NOT_AVAILABLE(
+            "RN-DENTIST-005",
+            "error.dentist.notAvailable",
+            "Solo puede agendar si está activo y tiene disponibilidad"
+    ),
 
-    // 🏢 Errores de Secretario
-    SECRETARY_NOT_FOUND("ERR_SEC_001", "Secretary not found."),
-    INVALID_SECRETARY("ERR_SEC_002", "Invalid secretary data."),
+    ERR_DENTIST_NOT_EDITABLE(
+            "RN-DENTIST-006",
+            "error.dentist.notEditable",
+            "Solo puede editarse si está activo"
+    ),
 
-    // 🏥 Errores de Paciente
-    PATIENT_NOT_FOUND("ERR_PAT_001", "Patient not found."),
-    INVALID_PATIENT("ERR_PAT_002", "Invalid patient information."),
-    UNASSIGNED_RESPONSIBLE_PATIENT("ERR_PAT_003", "No responsible party has been assigned"),
+    ERR_DENTIST_INVALID_SPECIALTY(
+            "RN-DENTIST-007",
+            "error.dentist.invalidSpecialty",
+            "Debe tener especialidad reconocida válida"
+    ),
 
-    // 👪 Errores de Responsable
-    RESPONSIBLE_NOT_FOUND("ERR_RESP_001", "Responsible person not found."),
-    INVALID_RESPONSIBLE("ERR_RESP_002", "Invalid responsible data."),
+    ERR_DENTIST_INVALID_INITIAL_STATUS(
+            "RN-DENTIST-008",
+            "error.dentist.invalidInitialStatus",
+            "No puede crearse con estado INACTIVO"
+    ),
 
-    ROLE_NOT_FOUND("ERR_RESP_001", "Role not found."),
+    ERR_DENTIST_MISSING_REQUIRED_FIELDS(
+            "RN-DENTIST-009",
+            "error.dentist.missingRequiredFields",
+            "Debe tener nombre y documento válidos"
+    ),
 
-    // 📞 Teléfono duplicado en persistencia
-    TELEFONO_DUPLICADO("ERR_TEL_002", "Teléfono ya registrado en otra entidad"),
- NULL_PHONE_NUMBER("ERR_PHO_01", "Phone numbre no null"),
- BLANK_PHONE_NUMBER("ERR_PHO_03", "Phone numbre no IMPATY"),
- INVALID_PHONE_NUMBER("ERR_PHO_04", "Phone numbre INVALID"),
+    ERR_DENTIST_EMPTY_AVAILABILITY(
+            "RN-DENTIST-010",
+            "error.dentist.emptyAvailability",
+            "La disponibilidad no puede quedar vacía al editar"
+    ),
+    ERR_DENTIST_OUT_OF_WORKING_HOURS(
+            "RN-DENTIST-011",
+            "error.dentist.outOfWorkingHours",
+            "El horario solicitado está fuera de la jornada laboral del odontólogo"
+    ),
+    ERR_DENTIST_INVALID_VACATION_RANGE(
+            "RN-DENTIST-012",
+            "error.dentist.invalidVacationRange",
+            "El rango de fechas de vacaciones es inválido"
+    ),
+    ERR_DENTIST_RESCHEDULE_OUT_OF_WORKING_HOURS(
+            "RN-DENTIST-013",
+            "error.dentist.rescheduleOutOfWorkingHours",
+            "La nueva fecha no está dentro del horario laboral del odontólogo"
+    ),
 
-    DNI_DUPLICADO("ERR_DNI_002", "El Dni ya existe"),
+    ERR_DENTIST_VACATION_CONFLICT(
+            "RN-DENTIST-014",
+            "error.dentist.vacationConflict",
+            "No se puede tomar vacaciones: existen citas en conflicto"
+    ),
 
-    // semana laboral de disponibilidad
-    INVALID_WEEKLY_AVAILABILITY("ERRO_WEA ", ""),
-
-
-    NULL_ADDRESS("ERR_ADD_O1", "La direcion no puede ser nula"),
-    BLANK_ADDRESS("ERR_ADD_O2", "La direcion no puede ser "),
-    INVALID_ADDRESS("ERR_ADD_O3", "La direcion no puede ser nula"),
-
-    NULL_AGE("ERR_AGE01","La edad no puede ser null"),
-    INVALID_AGE("ERR_AGE02","La edad no puede ser invalid"),
-
-    NULL_USER("ERR_USER01", "User no null"),
-    INACTIVE_USER("ERR_USER02", "User inactivo"),
-  NULL_FULL_NAME("ERR_FNM_01", "EL nombre no puede ser nulo"),
- BLANK_FULL_NAME("ERR_FNM_02", "El nombre no puede estar basio"),
-
-    FUTURE_DATE_OF_BIRTH("ERR_FOB_01", "La fecha no puede ser futura"),
-    NULL_DATE_OF_BIRTH("ERR_FOB_02", "La fecha no puede ser NULL"),
-    INVALID_DATE_OF_BIRTH("ERR_FOB_03", "La fecha esta fuera del rango "),
-
-    NULL_SECTOR("ERR_SET_01","NO NULL"),
-    NOT_ALLOWED_SECTOR("ERR_SET_02","NO ALLOWED"),
-    BLANK_SECTOR("ERR_SET03","NO EMTITY"),
-
-    EMPTY_SPECIALTY_SET("ERR-SPE02", "NO NULL Y EMTITY"),
-    INVALID_SPECIALTY_VALUE("ERR_01","Specialit envalid"),
-    NULL_SPECIALTY("ERR_SPC_3","NO NULL"),
-
-    START_TIME_AFTER_END_TIME_WORKING_HOURS("ERR_SPC_1","La hora de inicio debe ser anterior a la hora de fin."),
-    NULL_WORKING_HOURS("ERR_SPC_1","NO NULL "),
 
     ERR_BLOODTYPE_INVALID(
             "RN-BLOODTYPE-001", "error.bloodtype.invalid",
@@ -118,6 +126,12 @@ public enum ErrorCatalog {
             "RN-RECEPTIONIST-003",
             "error.receptionist.lateCancellation",
             "La cancelación se realizó fuera del tiempo permitido"
+    ),
+
+    ERR_USER_INACTIVE(
+            "RN-USER-001",
+            "error.user.inactive",
+            "No se puede realizar la operación porque el usuario está inactivo"
     ),
 
     // citas
