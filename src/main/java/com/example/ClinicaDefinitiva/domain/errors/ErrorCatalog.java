@@ -537,7 +537,74 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
     ),
 
     EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON("","",
-"");
+""),
+
+// RESPONSABLE
+
+    ERR_GUARDIAN_MISSING_PATIENT(
+        "RN-GUARDIAN-001",
+                "error.guardian.missingPatient",
+                "No puede crearse sin vínculo legal con un paciente"
+    ),
+
+    ERR_GUARDIAN_INACTIVE(
+        "RN-GUARDIAN-002",
+                "error.guardian.inactive",
+                "No puede autorizar tratamientos si está inactivo"
+    ),
+
+    ERR_GUARDIAN_TREATMENT_ALREADY_STARTED(
+        "RN-GUARDIAN-003",
+                "error.guardian.treatmentAlreadyStarted",
+                "No puede revocar consentimiento si el tratamiento ya inició"
+    ),
+
+    ERR_GUARDIAN_MISSING_RELATIONSHIP_TYPE(
+        "RN-GUARDIAN-004",
+                "error.guardian.missingRelationshipType",
+                "Debe registrar tipo de relación al crearse"
+    ),
+
+    ERR_GUARDIAN_ACTIVE_AUTHORIZATIONS(
+        "RN-GUARDIAN-005",
+                "error.guardian.activeAuthorizations",
+                "No puede desactivarse si tiene autorizaciones vigentes"
+    ),
+
+    ERR_GUARDIAN_NOT_EDITABLE(
+        "RN-GUARDIAN-006",
+                "error.guardian.notEditable",
+                "Solo puede editarse si está activo"
+    ),
+
+    ERR_GUARDIAN_MISSING_CONTACT(
+        "RN-GUARDIAN-007",
+                "error.guardian.missingContact",
+                "Debe tener al menos un medio de contacto válido"
+    ),
+
+    ERR_GUARDIAN_UNDERAGE(
+        "RN-GUARDIAN-008",
+                "error.guardian.underage",
+                "Debe ser mayor de edad (≥ 18 años)"
+    ),
+
+    ERR_GUARDIAN_CANNOT_MODIFY_RELATIONSHIP(
+        "RN-GUARDIAN-009",
+                "error.guardian.cannotModifyRelationship",
+                "No puede modificarse vínculo si ha autorizado tratamientos"
+    ),
+    ERR_RESPONSIBLE_INVALID_AGE(
+            "RN-RESPONSIBLE-001",
+            "error.responsible.invalidAge",
+            "El responsable no cuenta con la edad requerida para hacerse cargo de un paciente"
+    ),
+
+    ERR_GUARDIAN_DEACTIVATION_REQUIRES_REASON(
+        "RN-GUARDIAN-010",
+                "error.guardian.deactivationRequiresReason",
+                "La desactivación requiere motivo obligatorio"
+    );
 
 
 

@@ -4,7 +4,7 @@ public enum ContextoEntidad {
 
     DENTIST(CodigoEntidad.OD01),
     RECEPTIONIST(CodigoEntidad.REC02),
-    RESPONSABLE(CodigoEntidad.RES03),
+    GUARDIAN(CodigoEntidad.GUAS03),
     PATIENT(CodigoEntidad.PAT04),
     USUARIO(CodigoEntidad.USR05),
     HORARIO(CodigoEntidad.HOR06),
