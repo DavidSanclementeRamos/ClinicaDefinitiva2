@@ -1,10 +1,19 @@
 package com.example.ClinicaDefinitiva.domain.userAccess.model;
 
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.Person;
 import com.example.ClinicaDefinitiva.domain.administration.accessControl.Rol;
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
+import com.example.ClinicaDefinitiva.domain.util.Actor;
+import com.example.ClinicaDefinitiva.domain.util.Outcome;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public class UserIdentity {
@@ -25,11 +34,12 @@ public class UserIdentity {
     private boolean credentialNoExpired;
     private UserStatus status;
    // private Dentist rolOdontologo;
+   private List<Actor> actores;
 
     public UserIdentity() {
     }
 
-    public UserIdentity(boolean accountNoExpired, boolean accountNoLocked, boolean credentialNoExpired, LocalDate dateCreate, String gmail, UserId id, String imagenPerfil, boolean isEnabled, String name, String passwork, Set<Rol> rol, UserStatus statusUser, LocalDate ultimaFechaDeCoexion, UserStatus status) {
+    public UserIdentity(boolean accountNoExpired, boolean accountNoLocked, boolean credentialNoExpired, LocalDate dateCreate, String gmail, UserId id, String imagenPerfil, boolean isEnabled, String name, String passwork, UserStatus statusUser, LocalDate ultimaFechaDeCoexion, UserStatus status) {
         this.accountNoExpired = accountNoExpired;
         this.accountNoLocked = accountNoLocked;
         this.credentialNoExpired = credentialNoExpired;
@@ -40,7 +50,6 @@ public class UserIdentity {
         this.isEnabled = isEnabled;
         this.name = name;
         this.passwork = passwork;
-        this.rol = rol;
         this.statusUser = statusUser;
         this.ultimaFechaDeCoexion = ultimaFechaDeCoexion;
         this.status = status;
@@ -56,37 +65,20 @@ public class UserIdentity {
     }
 
     public void inactivate() {
-        this.status = UserStatus.of(UserStatus.Status.INACTIVE);
+        this.status = UserStatus.from(UserStatus.State.INACTIVE);
     }
-
-    public void activate() {
-        this.status = UserStatus.of(UserStatus.Status.ACTIVE);
-    }
-
-
-
-
     public void setStatus(UserStatus status) {
         this.status = status;
     }
 
-    /// No puede desactivarse si tiene citas activas en las próximas 24 horas
-    /// Protege la continuidad del servicio y evita cancelaciones abruptas
-    public void deactivate() {
-        if (status.isInactive()) return;
-
-        if (rolOdontologo != null && rolOdontologo.tieneCitasActivasEnLasProximas24Horas()) {
-            int count = rolOdontologo.citasActivasEnLasProximas24Horas().size();
-            throw new IllegalArgumentException(
-                    "No se puede desactivar: tiene " + count + " cita" + (count > 1 ? "s" : "") + " en las próximas 24 horas"
-            );
+    public Outcome desactivarActor(Actor actor) {
+        Outcome outcome = actor.assertCanBeDeactivated(""); if (!outcome.isSuccess()) {
+            return outcome;
         }
-
-    }
-
-
-        public boolean isAccountNoExpired() {
-        return accountNoExpired;
+        // Aquí el Usuario marca al actor como inactivo en su propia colección
+        this.actores.remove(actor);
+        // o bien cambia un flag interno en la relación Usuario-Actor
+        return Outcome.ok();
     }
 
     public void setAccountNoExpired(boolean accountNoExpired) {
@@ -129,9 +121,7 @@ public class UserIdentity {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+
 
     public String getImagenPerfil() {
         return imagenPerfil;
@@ -165,13 +155,7 @@ public class UserIdentity {
         this.passwork = passwork;
     }
 
-    public Set<Rol> getRol() {
-        return rol;
-    }
 
-    public void setRol(Set<Rol> rol) {
-        this.rol = rol;
-    }
 
     public UserStatus getStatusUser() {
         return statusUser;

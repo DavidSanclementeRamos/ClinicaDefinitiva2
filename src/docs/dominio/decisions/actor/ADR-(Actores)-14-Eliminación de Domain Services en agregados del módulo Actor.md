@@ -1,4 +1,4 @@
-# ADR-33 (Dominio): Eliminación de Domain Services en agregados del módulo Actor
+# ADR-14 (Dominio): Eliminación de Domain Services en agregados del módulo Actor
 
 - **Estado:** Aprobado
 - **Fecha:** 2025-12-11

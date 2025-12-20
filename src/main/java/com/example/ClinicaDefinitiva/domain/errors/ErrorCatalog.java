@@ -520,7 +520,10 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
             "RN-PATIENT-010",
             "error.patient.deactivationRequiresReason",
             "La desactivación del paciente requiere motivo obligatorio"
-    );
+    ),
+
+    EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON("","",
+"");
 
 
 

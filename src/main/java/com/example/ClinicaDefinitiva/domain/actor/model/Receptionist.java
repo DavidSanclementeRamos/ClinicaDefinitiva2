@@ -7,12 +7,13 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolati
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
+import com.example.ClinicaDefinitiva.domain.util.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Receptionist {
+public class Receptionist  implements Actor {
 
     private final ReceptionId id;
     private Person person;
@@ -63,6 +64,22 @@ public class Receptionist {
         this.lastUpdate = LocalDateTime.now();
     }
 
+    @Override
+    public Outcome assertCanBeDeactivated(String reason) {
+
+        if(reason == null || reason.isBlank()){
+            return Outcome.fail(new OutcomeDetail(ErrorCatalog.EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
+        }
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, ContextoEntidad.RECEPTIONIST);
+
+        return Outcome.ok();
+    }
+
+    @Override
+    public void marcarInativo() {
+
+    }
+
     // Getters
     public ReceptionId getId() {
         return id;
@@ -83,5 +100,6 @@ public class Receptionist {
     public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
+
 
 }

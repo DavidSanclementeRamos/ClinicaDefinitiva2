@@ -11,9 +11,11 @@ import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
+import com.example.ClinicaDefinitiva.domain.util.*;
+
 import java.time.LocalDateTime;
 
-public class Patient {
+public class Patient implements Actor {
 
     private final PatientId patientId;
     private final UserId user;
@@ -58,7 +60,7 @@ public class Patient {
             throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN,ContextoEntidad.PATIENT);
         }
 
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, ContextoEntidad.PATIENT);
+       // UserStatus.from(user.).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, ContextoEntidad.PATIENT);
 
         return new Patient(id, data, guardian, user.getId(), null, null, lastUpdate, contractId);
     }
@@ -89,20 +91,7 @@ public class Patient {
         this.lastUpdate = LocalDateTime.now();
     }
 
-    // Desactivar paciente (ejemplo de regla de negocio)
-    public void deactivate(UserIdentity user, String reason) {
-        final int DAYS_TO_BLOCK_DEACTIVATION = 30;
 
-        if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_DEACTIVATION_REQUIRES_REASON, ContextoEntidad.PATIENT);
-        }
-        if (schedule != null && schedule.hasAppointmentsWithin(DAYS_TO_BLOCK_DEACTIVATION)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_ACTIVE_SERVICES ,ContextoEntidad.PATIENT);
-        }
-
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, ContextoEntidad.PATIENT);
-        user.deactivate();
-    }
 
     // Validar si puede agendar cita
     public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
@@ -144,4 +133,28 @@ public class Patient {
     public Schedule getSchedule() { return schedule; }
     public LocalDateTime getLastUpdate() { return lastUpdate; }
     public ContractId getContractId() { return contractId; }
+
+    @Override
+    public Outcome assertCanBeDeactivated(String reason) {
+
+        final int DAYS_TO_BLOCK_DEACTIVATION = 30;
+
+        if(reason == null || reason.isBlank()){
+            return Outcome.fail(new OutcomeDetail(ErrorCatalog.EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
+        }
+
+        if (schedule != null && schedule.hasAppointmentsWithin(DAYS_TO_BLOCK_DEACTIVATION)) {
+            return Outcome.fail(new OutcomeDetail(ErrorCatalog.ERR_PATIENT_ACTIVE_SERVICES,Severity.INFO, Category.CLINICO));
+        }
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, ContextoEntidad.RECEPTIONIST);
+
+        return Outcome.ok();
+    }
+
+    @Override
+    public UserId getUserId() {
+        return user;
+    }
+
+
 }

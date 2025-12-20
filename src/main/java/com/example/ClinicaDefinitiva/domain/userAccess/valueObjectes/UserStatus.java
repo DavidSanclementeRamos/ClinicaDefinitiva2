@@ -6,28 +6,38 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolati
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 
 public class UserStatus {
-    private final boolean active;
+    public final State state;
 
-    private UserStatus(boolean active) {
-        this.active = active;
+    public enum State {
+        ACTIVE,
+        INACTIVE,
+        SUSPENDED,
+        PENDING_VERIFICATION
     }
 
-    // Fábrica semántica: crea el VO a partir de UserIdentity
+    private UserStatus(State state) {
+        this.state = state;
+    }
+
     public static UserStatus from(UserIdentity user) {
-        return new UserStatus(user.isActive());
+        return new UserStatus(user.isActive() ? State.ACTIVE : State.INACTIVE);
     }
 
-    // Regla de negocio: debe estar activo
-    public void  mustBeActive(ErrorCatalog error, ContextoEntidad contexto) {
-        if (!active) {
+    public static UserStatus from(State state) {
+        return new UserStatus(state );
+    }
+
+    public void mustBeActive(ErrorCatalog error, ContextoEntidad contexto) {
+        if (state != State.ACTIVE) {
             throw new BusinessRuleViolationException(error, contexto);
         }
     }
 
-    // Getter
     public boolean isActive() {
-        return active;
+        return state == State.ACTIVE;
     }
 
-
+    public State getState() {
+        return state;
+    }
 }

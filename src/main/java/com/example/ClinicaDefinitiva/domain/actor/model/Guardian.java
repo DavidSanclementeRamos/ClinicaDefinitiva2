@@ -5,6 +5,7 @@ import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.user.exception.UserInactiveException;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import java.time.LocalDateTime;
@@ -14,13 +15,13 @@ import java.util.List;
 
 public class Guardian {
 
-    private  final GuardianId guardianId;
-    private  Person person;
-    private  TypeGuardian typeGuardian;
-    private  Schedule schedule;
+    private final GuardianId guardianId;
+    private Person person;
+    private TypeGuardian typeGuardian;
+    private Schedule schedule;
     private UserId user;
-    private  List<Patient> patientList;
-    private  LocalDateTime lastUpdate;
+    private List<Patient> patientList;
+    private LocalDateTime lastUpdate;
 
     public Guardian (Builder b){
 
