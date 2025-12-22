@@ -10,6 +10,7 @@ import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
  */
 public class ValueObjectValidationException extends ModelException {
 
+
     public ValueObjectValidationException(ErrorCatalog catalogo, ContextoEntidad contexto){
         super(catalogo, contexto);
     }

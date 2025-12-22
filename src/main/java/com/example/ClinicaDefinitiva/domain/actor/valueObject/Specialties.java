@@ -1,9 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.Dentist.exception.EmptySpecialtySetException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.Dentist.exception.NullSpecialtySetException;
-
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -13,12 +12,10 @@ public final class Specialties {
     private final Set<Specialty> values;
 
     public Specialties(Set<Specialty> values) {
-        if (values == null ){
-            throw new NullSpecialtySetException(ContextoEntidad.DENTIST, "At least one specialty must be null.");
+        if (values == null || values.isEmpty()){
+            throw new DomainAggregateException(ErrorCatalog.ERR_DENTIST_INVALID_SPECIALTY,ContextoEntidad.DENTIST);
         }
-        if (values.isEmpty()){
-            throw new EmptySpecialtySetException(ContextoEntidad.DENTIST, "At least one specialty must be provided.");
-        }
+
         this.values = Collections.unmodifiableSet(new HashSet<>(values));
     }
 

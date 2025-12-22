@@ -5,7 +5,7 @@ package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 public final class Person {
 
-    private String dni;
+    private Document dni;
     private FullName fullname;
     private PhoneNumber phoneNumber;
     private Address address;
@@ -15,7 +15,7 @@ public final class Person {
     private String documentoEPS;
 
 
-    public Person(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, String dni, String documentoEPS, FullName fullname, PhoneNumber phoneNumber) {
+    public Person(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni, String documentoEPS, FullName fullname, PhoneNumber phoneNumber) {
         this.address = address;
         this.age = age;
         this.bloodType = bloodType;
@@ -63,11 +63,11 @@ public final class Person {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getDni() {
+    public Document getDni() {
         return dni;
     }
 
-    public void setDni(String dni) {
+    public void setDni(Document dni) {
         this.dni = dni;
     }
 
@@ -104,7 +104,7 @@ public final class Person {
         );
     }
 
-    public Person updateSensitive(Age age, BloodType bloodType, DateOfBirth dateOfBirth, String dni, String documentoEPS, FullName fullname) {
+    public Person updateSensitive(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni, String documentoEPS, FullName fullname) {
     return  new Person(
             this.address,
             age,

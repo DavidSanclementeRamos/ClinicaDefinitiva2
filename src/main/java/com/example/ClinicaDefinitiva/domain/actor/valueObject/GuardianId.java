@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -13,9 +17,15 @@ public final class GuardianId {
         return new GuardianId(UUID.randomUUID().toString());
     }
     public static GuardianId fromString(String value) {
-        if (value == null) return null; // cambia a throw new IllegalArgumentException(...) si prefieres
+        if (value == null)   {
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_NULL, ContextoEntidad.GUARDIAN);
+        }
+
         String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("GuardianId string is empty");
+        if (trimmed.isEmpty())  {
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_BLANK, ContextoEntidad.GUARDIAN);
+        }
+
         return new GuardianId(trimmed);
     }
 

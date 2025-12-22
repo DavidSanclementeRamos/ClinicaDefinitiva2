@@ -1,9 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.blank.BlankAddressException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.nulo.NullAddressException;
-
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.util.Objects;
 
 public final class Address {
@@ -16,10 +15,10 @@ public final class Address {
 
     public Address(String street, String city, String state, String country, String postalCode) {
         if (street == null || city == null || state == null || country == null || postalCode == null) {
-            throw new NullAddressException(ContextoEntidad.ADDRESS, "Address fields must not be null.");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_ADDRESS_NULL,ContextoEntidad.valueOf("PERSON") );
         }
         if (street.isBlank() || city.isBlank() || state.isBlank() || country.isBlank() || postalCode.isBlank()) {
-            throw new BlankAddressException(ContextoEntidad.ADDRESS, "Address fields must not be blank.");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_ADDRESS_BLANK,ContextoEntidad.valueOf("PERSON"));
         }
 
         this.street = street.trim();

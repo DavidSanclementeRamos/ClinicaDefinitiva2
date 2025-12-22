@@ -1,7 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.util.Objects;
-import java.util.UUID;
+
 
 public final class PatientId {
     private final String value;
@@ -12,9 +15,15 @@ public final class PatientId {
 
     // Nuevo: parsea/valida una cadena y devuelve el VO
     public static PatientId fromString(String value) {
-        if (value == null) return null; // decisión: devuelve null si no hay valor; cambia a throw si prefieres
+        if (value == null) {
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_NULL, ContextoEntidad.PATIENT);
+
+        }
         String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("InvoiceId string is empty");
+        if (trimmed.isEmpty()) {
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_BLANK, ContextoEntidad.PATIENT);
+
+        }
         return new PatientId(trimmed);
     }
 

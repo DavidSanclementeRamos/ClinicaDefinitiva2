@@ -1,5 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentStatus;
 
 import java.util.EnumMap;
@@ -51,7 +54,7 @@ public final class DentistAvailabilityStatus {
 
     public static DentistAvailabilityStatus from(DentistAvailabilityStatus.Status value) {
         if (value == null) {
-            throw new IllegalArgumentException("DentistAvailabilityStatus  cannot be null.");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_AVAILABILITY_STATUS_TRANSITION_NULL, ContextoEntidad.valueOf(""));
         }
         return new DentistAvailabilityStatus (value);
     }

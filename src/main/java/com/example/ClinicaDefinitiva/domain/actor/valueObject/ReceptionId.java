@@ -1,7 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.util.Objects;
-import java.util.UUID;
+
 
 public final class ReceptionId {
 private final String value;
@@ -9,15 +12,15 @@ private final String value;
     public ReceptionId(String value) {
         this.value = Objects.requireNonNull(value);
     }
-    public static ReceptionId generate(){
-        return new ReceptionId(UUID.randomUUID().toString());
-    }
 
     public static ReceptionId fromString(String value) {
-        if (value == null) return null; // puedes lanzar excepción si prefieres forzar presencia
+        if (value == null) {
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_NULL, ContextoEntidad.RECEPTIONIST);
+
+        }
         String trimmed = value.trim();
         if (trimmed.isEmpty()) {
-            throw new IllegalArgumentException("ReceptionId string is empty");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_BLANK, ContextoEntidad.RECEPTIONIST);
         }
         return new ReceptionId(trimmed);
     }

@@ -1,7 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.Dentist.exception.InvalidSpecialtyValueException;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 
 import java.util.Objects;
 import java.util.Set;
@@ -25,7 +26,7 @@ public final class Specialty {
         }*/
         String normalized = value.trim();
         if (!VALID_SPECIALTIES.contains(normalized)) {
-            throw new InvalidSpecialtyValueException(ContextoEntidad.DENTIST,"Invalid specialty: " + value);
+            throw new DomainAggregateException(ErrorCatalog.ERR_DENTIST_INVALID_SPECIALTY,ContextoEntidad.DENTIST );
         }
         this.value = normalized;
     }

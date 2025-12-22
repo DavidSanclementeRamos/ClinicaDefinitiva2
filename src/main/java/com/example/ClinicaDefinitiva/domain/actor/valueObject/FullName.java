@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.blank.BlankFullNameException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.shared.person.exception.nulo.NullFullNameException;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 import java.util.Objects;
 
@@ -12,10 +12,10 @@ public final class FullName {
 
     public FullName(String firstName, String lastName) {
         if(firstName == null || lastName == null){
-            throw new NullFullNameException(ContextoEntidad.FULL_NAME,"First name and last name must not be null");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_FULLNAME_NULL,ContextoEntidad.valueOf("PERSON"));
         }
         if (isBlank(firstName) || isBlank(lastName)) {
-            throw new BlankFullNameException(ContextoEntidad.FULL_NAME, "First name and last name must not be empty.");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_FULLNAME_BLANK,ContextoEntidad.valueOf("PERSON"));
         }
         this.firstName = firstName.trim();
         this.lastName = lastName.trim();

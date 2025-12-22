@@ -1,10 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.receptionist.exception.BlankSectorException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.receptionist.exception.NullSectorException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.receptionist.exception.SectorNotAllowedException;
-
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.util.Set;
 
 public final class Sector {
@@ -28,17 +26,18 @@ public final class Sector {
    // }
 
     public  Sector (String value) {
-        if (value == null || value.trim().isEmpty()) {
-            throw new NullSectorException(ContextoEntidad.SECTOR, "Sector cannot be empty.");
-        }
-        if(value.isBlank()) {
-            throw new BlankSectorException(ContextoEntidad.SECTOR, "Sector cannot be empty.");
+        if (value == null ) {
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_SECTOR_NULL,ContextoEntidad.valueOf(""));
         }
 
+        String trimmed = value.trim();
+        if (trimmed.isEmpty()) {
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_SECTOR_BLANK, ContextoEntidad.valueOf(""));
+        }
         String normalized = value.trim().toUpperCase();
 
         if (!ALLOWED_VALUES.contains(normalized)) {
-            throw new SectorNotAllowedException(ContextoEntidad.SECTOR,"Sector '" + normalized + "' is not allowed.");
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_SECTOR_NOT_ALLOWED,ContextoEntidad.valueOf(""));
         }
 
         //return new Sector(normalized);
