@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 
 /**
@@ -9,7 +9,7 @@ import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
  * * Extiende {@link ModelException}
  */
 public class TemporalValidationException extends ModelException {
-    public TemporalValidationException(ErrorCatalog catalogo, ContextoEntidad contexto ) {
+    public TemporalValidationException(ErrorCatalog catalogo, EntityContext contexto ) {
         super(catalogo, contexto);
     }
 }

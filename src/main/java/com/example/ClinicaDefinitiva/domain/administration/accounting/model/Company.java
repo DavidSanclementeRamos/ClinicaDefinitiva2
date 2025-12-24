@@ -10,7 +10,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePe
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Nit;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -54,7 +54,7 @@ public final class Company {
 
         validateIncorporationDate(incorporationDate);
         if (Objects.isNull(typePerson)) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_COMPANY_MISSING_PERSON_TYPE,ContextoEntidad.COMPANY);
+            throw new DomainAggregateException(ErrorCatalog.ERR_COMPANY_MISSING_PERSON_TYPE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.COMPANY);
         }
 
 
@@ -128,7 +128,7 @@ public final class Company {
 
         if (Objects.equals(this.status, CompanyStatus.of(CompanyStatus.Status.INACTIVE)) &&
                 newStatus.equals(CompanyStatus.of(CompanyStatus.Status.ACTIVE))) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_COMPANY_CANNOT_REACTIVATE_DIRECTLY,ContextoEntidad.COMPANY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_COMPANY_CANNOT_REACTIVATE_DIRECTLY, com.example.ClinicaDefinitiva.domain.errors.EntityContext.COMPANY);
         }
 
         this.status = newStatus;
@@ -157,19 +157,19 @@ public final class Company {
 
     private void ensureEditable() {
         if (!status.isEditable()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_COMPANY_NOT_EDITABLE,ContextoEntidad.COMPANY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_COMPANY_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.COMPANY);
         }
     }
 
     private void validateIncorporationDate(LocalDate date) {
         if (Objects.isNull(incorporationDate)) {
-            throw new TemporalValidationException(ErrorCatalog.ERR_COMPANY_MISSING_INCORPORATION_DATE, ContextoEntidad.COMPANY);
+            throw new TemporalValidationException(ErrorCatalog.ERR_COMPANY_MISSING_INCORPORATION_DATE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.COMPANY);
         }
         if (incorporationDate.isAfter(LocalDate.now())) {
-            throw new TemporalValidationException(ErrorCatalog.ERR_COMPANY_FUTURE_INCORPORATION_DATE,ContextoEntidad.COMPANY);
+            throw new TemporalValidationException(ErrorCatalog.ERR_COMPANY_FUTURE_INCORPORATION_DATE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.COMPANY);
         }
         if (date.isBefore(LocalDate.of(1800, 1, 1))) {
-            throw new TemporalValidationException(ErrorCatalog.ERR_COMPANY_INVALID_INCORPORATION_DATE,ContextoEntidad.COMPANY);
+            throw new TemporalValidationException(ErrorCatalog.ERR_COMPANY_INVALID_INCORPORATION_DATE, EntityContext.COMPANY);
         }
     }
 

@@ -1,8 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
-import org.springframework.data.repository.query.Param;
 
 
 /**
@@ -13,7 +12,7 @@ import org.springframework.data.repository.query.Param;
  * definida por el modelo de negocio.
  */
 public class BusinessRuleViolationException extends ModelException {
-    public BusinessRuleViolationException(ErrorCatalog catalogo, ContextoEntidad contexto ) {
+    public BusinessRuleViolationException(ErrorCatalog catalogo, EntityContext contexto ) {
         super(catalogo, contexto);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.util;
 
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.ErrorResponse;
 import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ y profesional. Esto te libera de repetir lógica dentro de GlobalControllerAdvic
 y organiza tus manejadores como una orquesta
 
 🔹 Este utilitario tiene dos constructores:
-- Uno para excepciones con ContextoEntidad.
+- Uno para excepciones con EntityContext.
 - Otro para casos genéricos como validaciones, JSON mal formado, tipo de parámetro, etc.
 
 */
@@ -34,7 +34,7 @@ public class ErrorHandlerUtils {
     }
 
     public static ErrorResponse construirError(ErrorCatalog error,
-                                               ContextoEntidad contexto,
+                                               EntityContext contexto,
                                                String mensajeDetalle,
                                                HttpStatus status) {
         return new ErrorResponse(

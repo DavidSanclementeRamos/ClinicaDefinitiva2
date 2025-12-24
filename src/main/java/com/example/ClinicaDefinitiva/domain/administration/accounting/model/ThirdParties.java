@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeTh
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -111,7 +111,7 @@ public final class ThirdParties {
      */
     public void activate() {
         if (this.active) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_THIRD_PARTY_ALREADY_ACTIVE,ContextoEntidad.THISPARTIES);
+            throw new DomainAggregateException(ErrorCatalog.ERR_THIRD_PARTY_ALREADY_ACTIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.THISPARTIES);
         }
         this.active = true;
     }
@@ -121,10 +121,10 @@ public final class ThirdParties {
      */
     public void inactivate(String reason) {
         if (!this.active) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_THIRD_PARTY_ALREADY_INACTIVE,ContextoEntidad.THISPARTIES);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_THIRD_PARTY_ALREADY_INACTIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.THISPARTIES);
         }
         if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_THIRD_PARTY_INACTIVATION_REQUIRES_REASON, ContextoEntidad.THISPARTIES);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_THIRD_PARTY_INACTIVATION_REQUIRES_REASON, com.example.ClinicaDefinitiva.domain.errors.EntityContext.THISPARTIES);
         }
         this.active = false;
     }
@@ -160,7 +160,7 @@ public final class ThirdParties {
 
     private void ensureActive() {
         if (!this.active) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_THIRD_PARTY_NOT_EDITABLE,ContextoEntidad.THISPARTIES);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_THIRD_PARTY_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.THISPARTIES);
         }
     }
 
@@ -171,20 +171,20 @@ public final class ThirdParties {
 
 
         if (typeDocument == null || typeDocument.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_THIRD_PARTY_MISSING_DOCUMENT_TYPE,ContextoEntidad.THISPARTIES);
+            throw new DomainAggregateException(ErrorCatalog.ERR_THIRD_PARTY_MISSING_DOCUMENT_TYPE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.THISPARTIES);
         }
         if (documentNumber == null || documentNumber.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_THIRD_PARTY_MISSING_DOCUMENT_NUMBER,ContextoEntidad.THISPARTIES);
+            throw new DomainAggregateException(ErrorCatalog.ERR_THIRD_PARTY_MISSING_DOCUMENT_NUMBER, com.example.ClinicaDefinitiva.domain.errors.EntityContext.THISPARTIES);
         }
         if (typeThirdParties == null) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_THIRD_PARTY_MISSING_TYPE,ContextoEntidad.THISPARTIES);
+            throw new DomainAggregateException(ErrorCatalog.ERR_THIRD_PARTY_MISSING_TYPE, EntityContext.THISPARTIES);
         }
     }
 
     private void validateDocumentNumber(String documentNumber) {
         String cleanDocument = documentNumber.trim().replaceAll("[^0-9A-Za-z]", "");
         if (cleanDocument.length() < MIN_DOCUMENT_LENGTH || cleanDocument.length() > MAX_DOCUMENT_LENGTH) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH,ContextoEntidad.THISPARTIES);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH, com.example.ClinicaDefinitiva.domain.errors.EntityContext.THISPARTIES);
         }
     }
 

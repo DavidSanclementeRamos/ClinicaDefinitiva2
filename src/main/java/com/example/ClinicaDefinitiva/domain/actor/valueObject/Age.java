@@ -1,7 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.time.LocalDate;
 import java.time.Period;
@@ -13,7 +14,7 @@ public final class Age {
     public Age(DateOfBirth dateOfBirth) {
         this.value = Period.between(dateOfBirth.asDate(), LocalDate.now()).getYears();
         if (value < 0 || value > 130) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_AGE_OUT_OF_RANGE,ContextoEntidad.valueOf("PERSON"));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_AGE_OUT_OF_RANGE, VOContext.AGE);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.util.Objects;
 
@@ -15,12 +15,12 @@ private final String value;
 
     public static ReceptionId fromString(String value) {
         if (value == null) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_NULL, ContextoEntidad.RECEPTIONIST);
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_NULL, VOContext.RECEPTION_ID);
 
         }
         String trimmed = value.trim();
         if (trimmed.isEmpty()) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_BLANK, ContextoEntidad.RECEPTIONIST);
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_BLANK, VOContext.RECEPTION_ID);
         }
         return new ReceptionId(trimmed);
     }

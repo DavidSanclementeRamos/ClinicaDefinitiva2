@@ -1,20 +1,12 @@
 package com.example.ClinicaDefinitiva.domain.userAccess.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.Person;
-import com.example.ClinicaDefinitiva.domain.administration.accessControl.Rol;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
 import com.example.ClinicaDefinitiva.domain.util.Actor;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 public class UserIdentity {
 // infra estructura tecnica, solo vive lo que garantiza que un usuario

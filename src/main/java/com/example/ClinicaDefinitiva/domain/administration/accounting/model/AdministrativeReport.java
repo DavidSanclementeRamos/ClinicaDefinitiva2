@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -90,7 +90,7 @@ public final class AdministrativeReport {
         ensureEditable();
 
         if (this.journalEntryReferences.contains(journalEntryId)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_DUPLICATE_JOURNAL_ENTRY, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_DUPLICATE_JOURNAL_ENTRY, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
         }
 
         this.journalEntryReferences.add(journalEntryId);
@@ -104,7 +104,7 @@ public final class AdministrativeReport {
         ensureEditable();
 
         if (!this.journalEntryReferences.remove(journalEntryId)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_JOURNAL_ENTRY_NOT_FOUND, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_JOURNAL_ENTRY_NOT_FOUND, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -116,7 +116,7 @@ public final class AdministrativeReport {
         ensureEditable();
 
         if(indicator == null){
-            throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_INDICATOR_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_INDICATOR_NULL, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
 
         }
         this.indicators.add(indicator);
@@ -130,11 +130,11 @@ public final class AdministrativeReport {
         ensureEditable();
 
         if(indicator == null){
-            throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_INDICATOR_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_INDICATOR_NULL, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
 
         }
         if (!this.indicators.remove(indicator)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_INDICATOR_NOT_FOUND,ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_INDICATOR_NOT_FOUND, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -158,10 +158,10 @@ public final class AdministrativeReport {
 
         if (!this.attachments.remove(document)) {
             if(document == null){
-                throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_ATTACHMENT_NULL, ContextoEntidad.ADMINISTRATIVEREPORT);
+                throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_ATTACHMENT_NULL, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
 
             }
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_ATTACHMENT_NOT_FOUND, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_ATTACHMENT_NOT_FOUND, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -182,7 +182,7 @@ public final class AdministrativeReport {
      */
     public void submitForReview() {
         if (!this.status.canBeSubmittedForReview()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_SUBMIT, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_SUBMIT, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
         }
 
         validateReportCompleteness();
@@ -196,7 +196,7 @@ public final class AdministrativeReport {
      */
     public void approve(UserId approver) {
         if (!this.status.canBeApproved()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_APPROVE, ContextoEntidad.ADMINISTRATIVEREPORT
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_APPROVE, EntityContext.ADMINISTRATIVEREPORT
 
             );
         }
@@ -213,11 +213,11 @@ public final class AdministrativeReport {
      */
     public void reject(String reason) {
         if (!this.status.canBeRejected()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_REJECT, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_REJECT, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
         }
 
         if (reason == null || reason.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_REJECTION_REQUIRES_REASON,ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new DomainAggregateException(ErrorCatalog.ERR_REPORT_REJECTION_REQUIRES_REASON, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.draft();
@@ -231,7 +231,7 @@ public final class AdministrativeReport {
      */
     public void archive() {
         if (!this.status.canBeArchived()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_ARCHIVE, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_ARCHIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.archived();
@@ -243,7 +243,7 @@ public final class AdministrativeReport {
      */
     public void unarchive() {
         if (!this.status.isArchived()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_UNARCHIVE,ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_UNARCHIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.draft();
@@ -309,20 +309,20 @@ public final class AdministrativeReport {
 
     private void ensureEditable() {
         if (!isEditable()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_NOT_EDITABLE, ContextoEntidad.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT);
         }
     }
 
     private void ensureNotArchived() {
         if (this.status.isArchived()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_UNARCHIVE, ContextoEntidad.ADMINISTRATIVEREPORT
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_CANNOT_UNARCHIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT
             );
         }
     }
 
     private void validateReportCompleteness() {
         if (!isComplete()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_MISSING_APPROVER,ContextoEntidad.ADMINISTRATIVEREPORT
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_REPORT_MISSING_APPROVER, com.example.ClinicaDefinitiva.domain.errors.EntityContext.ADMINISTRATIVEREPORT
             );
         }
     }

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -13,14 +13,14 @@ public final class PhoneNumber {
 
     public PhoneNumber(String value) {
         if (value == null) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_PHONE_NULL,ContextoEntidad.valueOf("PERSON"));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_PHONE_NULL, VOContext.PHONE_NUMBER);
         }
         if (isBlank(value)) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_PHONE_BLANK,ContextoEntidad.valueOf("PERSON"));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_PHONE_BLANK, VOContext.PHONE_NUMBER);
         }
         String normalized = value.trim().replaceAll("\\s+", "");
         if (!VALID_PATTERN.matcher(normalized).matches()) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_PHONE_INVALID_FORMAT,ContextoEntidad.valueOf("PERSON"));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_PHONE_INVALID_FORMAT, VOContext.PHONE_NUMBER);
         }
         this.value = normalized;
     }

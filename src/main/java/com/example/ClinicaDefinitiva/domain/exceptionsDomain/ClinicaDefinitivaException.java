@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 
+import com.example.ClinicaDefinitiva.domain.errors.DomainContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
 
 /**
@@ -13,11 +13,11 @@ import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
 public class ClinicaDefinitivaException extends RuntimeException {
 
   private final ErrorCatalog catalogo;
-  private final ContextoEntidad contexto;
+  private final DomainContext contexto;
   private final String requestId;
 
 
-  public ClinicaDefinitivaException(ErrorCatalog catalogo, ContextoEntidad contexto) {
+  public ClinicaDefinitivaException(ErrorCatalog catalogo, DomainContext contexto) {
     super(catalogo.getMessage()); // fallback
     this.catalogo = catalogo;
     this.contexto = contexto;
@@ -26,7 +26,7 @@ public class ClinicaDefinitivaException extends RuntimeException {
 
   public String getRequestId() { return requestId; }
   public ErrorCatalog getCatalogo() { return catalogo; }
-  public ContextoEntidad getContexto() { return contexto; }
+  public DomainContext getContexto() { return contexto; }
 
 
 }

@@ -1,7 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -19,7 +20,7 @@ public final class BloodType {
 
     private BloodType(String value) {
         if (!VALID_TYPES.contains(value.toUpperCase())) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_BLOODTYPE_INVALID, ContextoEntidad.valueOf(""));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_BLOODTYPE_INVALID, VOContext.BLOOD_TYPE);
         }
         this.value = value.toUpperCase();
     }

@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObjec
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.Money;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -100,7 +100,7 @@ public final class JournalEntry {
         Objects.requireNonNull(line, "La línea no puede ser nula");
 
         if (!this.lines.remove(line)) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_LINE_NOT_FOUND, ContextoEntidad.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_LINE_NOT_FOUND, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
         this.balanced = false;
     }
@@ -122,11 +122,11 @@ public final class JournalEntry {
      */
     public void validateBalance() {
         if (this.lines.isEmpty()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_EMPTY,ContextoEntidad.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_EMPTY, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
 
         if (this.lines.size() < 2) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_INSUFFICIENT_LINES,ContextoEntidad.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_INSUFFICIENT_LINES, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
 
         BigDecimal totalDebits = BigDecimal.ZERO;
@@ -141,7 +141,7 @@ public final class JournalEntry {
         }
 
         if (totalDebits.compareTo(totalCredits) != 0) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_DEBIT_CREDIT_MISMATCH,ContextoEntidad.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_DEBIT_CREDIT_MISMATCH, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
 
         this.balanced = true;
@@ -152,7 +152,7 @@ public final class JournalEntry {
      */
     public void post() {
         if (this.posted) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_ALREADY_POSTED,ContextoEntidad.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_ALREADY_POSTED, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
 
         if (!this.balanced) {
@@ -160,7 +160,7 @@ public final class JournalEntry {
         }
 
         if (this.date.isAfter(LocalDate.now())) {
-            throw new TemporalValidationException(ErrorCatalog.ERR_JOURNALENTRY_FUTURE_DATE,ContextoEntidad.JOURNALENTRY);
+            throw new TemporalValidationException(ErrorCatalog.ERR_JOURNALENTRY_FUTURE_DATE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
 
         this.posted = true;
@@ -172,11 +172,11 @@ public final class JournalEntry {
      */
     public JournalEntry reverse(String reason) {
         if (!this.posted) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_NOT_POSTED_REVERSAL,ContextoEntidad.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_NOT_POSTED_REVERSAL, EntityContext.JOURNALENTRY);
         }
 
         if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_REVERSAL_REQUIRES_REASON,ContextoEntidad.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_REVERSAL_REQUIRES_REASON, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
 
         // Crear líneas reversas (invertir débitos y créditos)
@@ -251,7 +251,7 @@ public final class JournalEntry {
 
     private void ensureNotPosted() {
         if (this.posted) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_NOT_EDITABLE,ContextoEntidad.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
     }
 
@@ -262,7 +262,7 @@ public final class JournalEntry {
 
 
         if (date == null) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DATE,ContextoEntidad.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DATE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
         validateDocumentNumber(documentNumber);
         validateDescription(description);
@@ -270,19 +270,19 @@ public final class JournalEntry {
 
     private void validateDocumentNumber(String documentNumber) {
         if (documentNumber == null || documentNumber.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DOCUMENT_NUMBER,ContextoEntidad.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DOCUMENT_NUMBER, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
         if (documentNumber.trim().isEmpty()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_INVALID_DOCUMENT_NUMBER,ContextoEntidad.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_INVALID_DOCUMENT_NUMBER, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
     }
 
     private void validateDescription(String description) {
         if (description == null || description.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD,ContextoEntidad.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
         if (description.trim().length() < 5) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_INVALID_DESCRIPTION_LENGTH,ContextoEntidad.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_INVALID_DESCRIPTION_LENGTH, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
         }
     }
 

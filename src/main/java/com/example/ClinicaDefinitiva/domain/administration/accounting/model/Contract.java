@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.ContractStatus;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -121,13 +121,13 @@ public final class Contract {
         ensureEditable();
 
         if (newEndDate == null) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_MISSING_NEW_END_DATE,ContextoEntidad.CONTRACT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_MISSING_NEW_END_DATE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
         if (newEndDate.isBefore(this.endDate)) {
-            throw new TemporalValidationException(ErrorCatalog.ERR_CONTRACT_INVALID_DATES,ContextoEntidad.CONTRACT);
+            throw new TemporalValidationException(ErrorCatalog.ERR_CONTRACT_INVALID_DATES, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
         if (newEndDate.isBefore(LocalDate.now())) {
-            throw new TemporalValidationException(ErrorCatalog.ERR_CONTRACT_NEW_END_DATE_IN_PAST,ContextoEntidad.CONTRACT);
+            throw new TemporalValidationException(ErrorCatalog.ERR_CONTRACT_NEW_END_DATE_IN_PAST, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
 
         this.endDate = newEndDate;
@@ -138,11 +138,11 @@ public final class Contract {
      */
     public void suspend(String reason) {
         if (this.status != ContractStatus.ACTIVE) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_CANNOT_SUSPEND,ContextoEntidad.CONTRACT
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_CANNOT_SUSPEND, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT
             );
         }
         if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_TERMINATION_REQUIRES_REASON,ContextoEntidad.CONTRACT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_TERMINATION_REQUIRES_REASON, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
         this.status = ContractStatus.SUSPENDED;
     }
@@ -152,11 +152,11 @@ public final class Contract {
      */
     public void reactivate() {
         if (this.status != ContractStatus.SUSPENDED) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_CANNOT_REACTIVATE,ContextoEntidad.CONTRACT
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_CANNOT_REACTIVATE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT
             );
         }
         if (isExpired()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_EXPIRED_CANNOT_REACTIVATE,ContextoEntidad.CONTRACT
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_EXPIRED_CANNOT_REACTIVATE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT
             );
         }
         this.status = ContractStatus.ACTIVE;
@@ -167,10 +167,10 @@ public final class Contract {
      */
     public void terminate(String reason) {
         if (this.status == ContractStatus.TERMINATED) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_ALREADY_TERMINATED,ContextoEntidad.CONTRACT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_ALREADY_TERMINATED, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
         if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_TERMINATION_REQUIRES_REASON,ContextoEntidad.CONTRACT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_TERMINATION_REQUIRES_REASON, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
         this.status = ContractStatus.TERMINATED;
     }
@@ -217,11 +217,11 @@ public final class Contract {
 
     private void ensureEditable() {
         if (this.status != ContractStatus.ACTIVE) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_NOT_EDITABLE,ContextoEntidad.CONTRACT
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_NOT_EDITABLE, EntityContext.CONTRACT
             );
         }
         if (isExpired()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_EXPIRED_NOT_EDITABLE,ContextoEntidad.CONTRACT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_CONTRACT_EXPIRED_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
     }
 
@@ -235,10 +235,10 @@ public final class Contract {
         validateCoverageType(coverageType);
 
         if (startDate == null) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_CONTRACT_MISSING_START_DATE,ContextoEntidad.CONTRACT);
+            throw new DomainAggregateException(ErrorCatalog.ERR_CONTRACT_MISSING_START_DATE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
         if (endDate == null) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_CONTRACT_MISSING_END_DATE,ContextoEntidad.CONTRACT);
+            throw new DomainAggregateException(ErrorCatalog.ERR_CONTRACT_MISSING_END_DATE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
     }
 
@@ -246,14 +246,14 @@ public final class Contract {
 
     private void validateCoverageType(String coverageType) {
         if (coverageType == null || coverageType.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_CONTRACT_MISSING_COVERAGE_TYPE,ContextoEntidad.CONTRACT);
+            throw new DomainAggregateException(ErrorCatalog.ERR_CONTRACT_MISSING_COVERAGE_TYPE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
     }
 
 
     private void validateDates(LocalDate startDate, LocalDate endDate) {
         if (endDate.isBefore(startDate)) {
-            throw new TemporalValidationException(ErrorCatalog.ERR_CONTRACT_INVALID_DATES, ContextoEntidad.CONTRACT);
+            throw new TemporalValidationException(ErrorCatalog.ERR_CONTRACT_INVALID_DATES, com.example.ClinicaDefinitiva.domain.errors.EntityContext.CONTRACT);
         }
 
 

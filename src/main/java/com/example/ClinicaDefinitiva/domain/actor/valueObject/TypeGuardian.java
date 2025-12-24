@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 import java.util.Set;
@@ -21,28 +22,24 @@ public final class TypeGuardian {
         // Validar código
         if (code == null) {
             throw new ValueObjectValidationException(
-                    ErrorCatalog.ERR_TYPE_GUARDIAN_CODE_NULL,
-                    ContextoEntidad.valueOf(""));
+                    ErrorCatalog.ERR_TYPE_GUARDIAN_CODE_NULL, VOContext.TYPE_GUARDIAN);
         }
 
         String normalizedCode = code.trim().toUpperCase();
         if (normalizedCode.isEmpty()) {
             throw new ValueObjectValidationException(
-                    ErrorCatalog.ERR_TYPE_GUARDIAN_CODE_BLANK,
-                    ContextoEntidad.valueOf(""));
+                    ErrorCatalog.ERR_TYPE_GUARDIAN_CODE_BLANK, VOContext.TYPE_GUARDIAN);
         }
 
         if (!VALID_CODES.contains(normalizedCode)) {
             throw new ValueObjectValidationException(
-                        ErrorCatalog.ERR_TYPE_GUARDIAN_CODE_INVALID,
-                    ContextoEntidad.valueOf(""));
+                        ErrorCatalog.ERR_TYPE_GUARDIAN_CODE_INVALID,VOContext.TYPE_GUARDIAN);
         }
 
         // Validar descripción
         if (description == null || description.trim().isEmpty()) {
             throw new ValueObjectValidationException(
-                    ErrorCatalog.ERR_TYPE_GUARDIAN_DESCRIPTION_BLANK,
-                    ContextoEntidad.valueOf(""));
+                    ErrorCatalog.ERR_TYPE_GUARDIAN_DESCRIPTION_BLANK, VOContext.TYPE_GUARDIAN);
         }
 
         this.code = normalizedCode;

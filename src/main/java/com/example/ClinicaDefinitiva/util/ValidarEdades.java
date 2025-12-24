@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.util;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.config.EdadMinimaConfig;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DniDuplicadoException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.EdadNoPermitidaException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TelefonoDuplicadoException;
@@ -19,7 +19,7 @@ public class ValidarEdades {
 
     ResponsableRepository responsableRepository;
 
-     public void validarEdades (LocalDate fecha, ContextoEntidad rol){
+     public void validarEdades (LocalDate fecha, EntityContext rol){
         int edadActual = Period.between(fecha, LocalDate.now()).getYears();
         int edadMinima;
 
@@ -38,10 +38,10 @@ public class ValidarEdades {
 
     public void verificarDuplicados(String telefono, String dni) {
         if (responsableRepository.existsByTelefono(telefono)) {
-            throw new TelefonoDuplicadoException(ContextoEntidad.RESPONSABLE, "Teléfono duplicado: " + telefono);
+            throw new TelefonoDuplicadoException(EntityContext.RESPONSABLE, "Teléfono duplicado: " + telefono);
         }
         if (responsableRepository.existsByDni(dni)) {
-            throw new DniDuplicadoException(ContextoEntidad.RESPONSABLE, "DNI duplicado: " + dni);
+            throw new DniDuplicadoException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE, "DNI duplicado: " + dni);
         }
     }
 

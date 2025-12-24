@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.CodigoEntidad;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 import java.util.Objects;
@@ -24,14 +24,14 @@ public final class Document {
      */
     private Document(String raw) {
         if (raw == null) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_DOCUMENT_NULL, ContextoEntidad.valueOf(""));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_DOCUMENT_NULL, VOContext.DOCUMENT_ID);
         }
         String normalized = raw.trim();
         if (normalized.isBlank()) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_DOCUMENT_BLANK, ContextoEntidad.valueOf(""));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_DOCUMENT_BLANK, VOContext.DOCUMENT_ID);
         }
         if (!DOCUMENT_PATTERN.matcher(normalized).matches()) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_DOCUMENT_INVALID_FORMAT, ContextoEntidad.valueOf(""));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_DOCUMENT_INVALID_FORMAT, VOContext.DOCUMENT_ID);
         }
         this.value = normalized;
     }

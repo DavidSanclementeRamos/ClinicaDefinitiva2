@@ -1,8 +1,11 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -13,7 +16,7 @@ public final class Specialties {
 
     public Specialties(Set<Specialty> values) {
         if (values == null || values.isEmpty()){
-            throw new DomainAggregateException(ErrorCatalog.ERR_DENTIST_INVALID_SPECIALTY,ContextoEntidad.DENTIST);
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_DENTIST_INVALID_SPECIALTY, VOContext.SPECIALTY  );
         }
 
         this.values = Collections.unmodifiableSet(new HashSet<>(values));

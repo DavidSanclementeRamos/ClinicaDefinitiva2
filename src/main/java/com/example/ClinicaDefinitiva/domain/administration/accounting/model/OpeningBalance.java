@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObjec
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.OpeningBalanceId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.Money;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -54,13 +54,13 @@ public class OpeningBalance { // saldo inicial
 
   private void validateMandatoryFields(Money amount, LocalDate date) {
     if (amount.isNegativeOrZero()) {
-        throw new BusinessRuleViolationException(ErrorCatalog.ERR_OPENING_BALANCE_INVALID_AMOUNT, ContextoEntidad.OPENINGBALANCE);
+        throw new BusinessRuleViolationException(ErrorCatalog.ERR_OPENING_BALANCE_INVALID_AMOUNT, com.example.ClinicaDefinitiva.domain.errors.EntityContext.OPENINGBALANCE);
     }
     if (amount == null) {
-        throw new DomainAggregateException(ErrorCatalog.ERR_OPENING_BALANCE_MISSING_AMOUNT,ContextoEntidad.OPENINGBALANCE);
+        throw new DomainAggregateException(ErrorCatalog.ERR_OPENING_BALANCE_MISSING_AMOUNT, com.example.ClinicaDefinitiva.domain.errors.EntityContext.OPENINGBALANCE);
     }
       if (date == null) {
-          throw new DomainAggregateException(ErrorCatalog.ERR_OPENING_BALANCE_MISSING_DATE,ContextoEntidad.OPENINGBALANCE);
+          throw new DomainAggregateException(ErrorCatalog.ERR_OPENING_BALANCE_MISSING_DATE, EntityContext.OPENINGBALANCE);
       }
   }
 

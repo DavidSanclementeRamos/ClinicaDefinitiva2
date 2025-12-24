@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.EdadNoPermitidaException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TelefonoDuplicadoException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.DentistNotFoundException;
@@ -60,7 +60,7 @@ public class PacienteImpl  implements PacienteServise {
                    // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("Paciente no encontrado [id={}, requestId={}]", id, requestId);
                     return new PatientNotFoundException(
-                            ContextoEntidad.PACIENTE,
+                            com.example.ClinicaDefinitiva.domain.errors.EntityContext.PACIENTE,
                             "No se encontró el paciente con ID: " + id
                     );
                 });
@@ -73,7 +73,7 @@ public class PacienteImpl  implements PacienteServise {
     public Page<ReadPacienteDto> findAll(Pageable pageable) {
         Page<Paciente> entidadPage = pacienteRepository.findAll(pageable);
         if(entidadPage.isEmpty()){
-        throw new PatientNotFoundException(ContextoEntidad.PACIENTE,
+        throw new PatientNotFoundException(EntityContext.PACIENTE,
                 "No existen registros de pacientes para los filtros dados"
         );}
          return       entidadPage.map(pacienteMapperResponse::readPaciente);
@@ -90,7 +90,7 @@ public class PacienteImpl  implements PacienteServise {
             logger.warn("No se encontraron pacientes con ese nombre [{}], requestId={}", nombre, requestId);
 
             throw new PatientNotFoundException(
-                    ContextoEntidad.PACIENTE,
+                    com.example.ClinicaDefinitiva.domain.errors.EntityContext.PACIENTE,
                     "No se encontraron pacientes con el nombre: " + nombre
             );
         }
@@ -110,7 +110,7 @@ public class PacienteImpl  implements PacienteServise {
                    // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("El documento no existe  [documento={}, requestId={}]", documento, requestId);
                     return new PatientNotFoundException(
-                            ContextoEntidad.PACIENTE,
+                            com.example.ClinicaDefinitiva.domain.errors.EntityContext.PACIENTE,
                             "No se encontró ningún paciente asociado al documento: " + documento
                     );
                 });
@@ -129,7 +129,7 @@ public class PacienteImpl  implements PacienteServise {
                    // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("Usuario sin paciente asociado [usuarioId={}, requestId={}]", idUsuario, requestId);
                     return new DentistNotFoundException(
-                            ContextoEntidad.ODONTOLOGO,
+                            com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO,
                             "No se encontró ningún paciente asociado al usuario con ID: " + idUsuario
                     );
                 });
@@ -147,7 +147,7 @@ public class PacienteImpl  implements PacienteServise {
 
         if(lista.isEmpty()){
             logger.warn("No se encontraron pacientes en el turno con fecha [fecha={}, requestId={}]", fecha, requestId);
-            throw new PatientNotFoundException(ContextoEntidad.PACIENTE, "No fue encontrado el turno del paciente en la fecha:" + fecha);
+            throw new PatientNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.PACIENTE, "No fue encontrado el turno del paciente en la fecha:" + fecha);
         }
 
         return  lista.stream().map(pacienteMapperResponse::readPaciente)
@@ -162,11 +162,11 @@ public class PacienteImpl  implements PacienteServise {
         if (pacienteRepository.existsByTelefono(updatePacienteDto.getTelefono())) {
             logger.warn("Ya existe el numero [updatePacienteDto.getTelefono()={}, requestId={}]",updatePacienteDto.getTelefono(), requestId);
 
-            throw new TelefonoDuplicadoException(ContextoEntidad.PACIENTE,"El numero de telefono ya exciste" + updatePacienteDto.getTelefono() );
+            throw new TelefonoDuplicadoException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.PACIENTE,"El numero de telefono ya exciste" + updatePacienteDto.getTelefono() );
         }
         // verificar que el id exista
         Paciente paciente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new PatientNotFoundException(ContextoEntidad.PACIENTE, "No exsiste el id: " + id));
+                .orElseThrow(() -> new PatientNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.PACIENTE, "No exsiste el id: " + id));
 
         // Actualizar los datos del paciente
         paciente.setDireccion(updatePacienteDto.getDireccion());
@@ -185,7 +185,7 @@ public class PacienteImpl  implements PacienteServise {
         if(pacienteRepository.findById(id).isEmpty()){
             logger.info("No exite el id [id={}, requestId={}]", id,requestId);
 
-            throw new PatientNotFoundException(ContextoEntidad.PACIENTE,"No fue en contrado el paciente con id: " + id);
+            throw new PatientNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.PACIENTE,"No fue en contrado el paciente con id: " + id);
         }
         pacienteRepository.deleteById(id);
     }
@@ -194,7 +194,7 @@ public class PacienteImpl  implements PacienteServise {
     @Override
 public ReadPacienteDto save(CreatePacienteDto createPacienteDto) {
     Usuario usuario = usuarioRepository.findById(createPacienteDto.getIdUsuario())
-            .orElseThrow(() -> new UserNotFoundException(ContextoEntidad.PACIENTE,
+            .orElseThrow(() -> new UserNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.PACIENTE,
                     "El paciente: " + createPacienteDto.getIdUsuario() + " no tiene un usuario asignado "));
 
 
@@ -209,12 +209,12 @@ public ReadPacienteDto save(CreatePacienteDto createPacienteDto) {
     if (edadPaciente < 18 && responsable == null) {
         logger.info("La edad del paciente es [id={}, requestId={}]",edadPaciente ,requestId);
 
-        throw new EdadNoPermitidaException(ContextoEntidad.PACIENTE,
+        throw new EdadNoPermitidaException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.PACIENTE,
                 "El paciente: " + createPacienteDto.getNombre() + " " + createPacienteDto.getApellido() + "  necesita un responsable por ser menor de edad: + ");
     }
         // Validar que el dni no este dublicado
         if (pacienteRepository.existsByDni(createPacienteDto.getDni())) {
-            throw new TelefonoDuplicadoException(ContextoEntidad.PACIENTE,"El dni de telefono ya exciste" + createPacienteDto.getDni() );
+            throw new TelefonoDuplicadoException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.PACIENTE,"El dni de telefono ya exciste" + createPacienteDto.getDni() );
         }
 
 

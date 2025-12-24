@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.util.Set;
 
@@ -27,17 +27,17 @@ public final class Sector {
 
     public  Sector (String value) {
         if (value == null ) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_SECTOR_NULL,ContextoEntidad.valueOf(""));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_SECTOR_NULL, VOContext.SECTOR);
         }
 
         String trimmed = value.trim();
         if (trimmed.isEmpty()) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_SECTOR_BLANK, ContextoEntidad.valueOf(""));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_SECTOR_BLANK, VOContext.SECTOR);
         }
         String normalized = value.trim().toUpperCase();
 
         if (!ALLOWED_VALUES.contains(normalized)) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_SECTOR_NOT_ALLOWED,ContextoEntidad.valueOf(""));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_SECTOR_NOT_ALLOWED, VOContext.SECTOR);
         }
 
         //return new Sector(normalized);

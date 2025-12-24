@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.Enum.Especialidades;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TelefonoDuplicadoException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.UserNotFoundException;
@@ -53,7 +53,7 @@ public class OdontologoImpl  implements OdontologoService {
                     odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("Odontólogo no encontrado [id={}, requestId={}]", id, requestId);
                     return new DentistNotFoundException(
-                            ContextoEntidad.ODONTOLOGO,
+                            com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO,
                             "No se encontró el odontólogo con ID: " + id
                     );
                 });
@@ -70,7 +70,7 @@ public class OdontologoImpl  implements OdontologoService {
 
         if (pageEntidades.isEmpty()) {
             throw new DentistNotFoundException(
-                    ContextoEntidad.ODONTOLOGO,
+                    com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO,
                     "No existen registros de odontólogos para los filtros dados"
             );
         }
@@ -88,7 +88,7 @@ public class OdontologoImpl  implements OdontologoService {
                 .orElseThrow(() -> {
                     odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                      return new DentistNotFoundException(
-                            ContextoEntidad.ODONTOLOGO,
+                            com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO,
                             "No se encontró ningún odontólogo asociado al usuario con ID: " + idUsuario
                     );
                 });
@@ -112,7 +112,7 @@ public class OdontologoImpl  implements OdontologoService {
             logger.warn("No se encontraron odontólogos con especialidad [{}], requestId={}", especialidad.name(), requestId);
 
             throw new DentistNotFoundException(
-                    ContextoEntidad.ODONTOLOGO,
+                    EntityContext.ODONTOLOGO,
                     "No se encontraron odontólogos con la especialidad: " + especialidad.name()
             );
         }
@@ -136,7 +136,7 @@ public class OdontologoImpl  implements OdontologoService {
             logger.warn("Sin odontólogos con turnos entre fechas [{} - {}], requestId={}", desde, hasta, requestId);
 
             throw new DentistNotFoundException(
-                    ContextoEntidad.ODONTOLOGO,
+                    com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO,
                     "No se encontraron odontólogos con turnos entre " + desde + " y " + hasta
             );
         }
@@ -156,15 +156,15 @@ public class OdontologoImpl  implements OdontologoService {
 
         // validar que la edad del odontologo sea la adecuada
         ValidarEdades validar =new ValidarEdades();
-        validar.validarEdades (createOdontologoDto.getFecha_nacimiento(),ContextoEntidad.ODONTOLOGO);
+        validar.validarEdades (createOdontologoDto.getFecha_nacimiento(), com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO);
 
         // Validar que el telefono no este dublicado
         if (odontologoRepository.existsByTelefono(createOdontologoDto.getTelefono())) {
-            throw new TelefonoDuplicadoException(ContextoEntidad.ODONTOLOGO,"El numero de telefono ya exciste" + createOdontologoDto.getTelefono() );
+            throw new TelefonoDuplicadoException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO,"El numero de telefono ya exciste" + createOdontologoDto.getTelefono() );
         }
         // Validar que el dni no este dublicado
         if (odontologoRepository.existsByDni(createOdontologoDto.getDni())) {
-            throw new TelefonoDuplicadoException(ContextoEntidad.ODONTOLOGO,"El dni  ya exciste" + createOdontologoDto.getDni() );
+            throw new TelefonoDuplicadoException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO,"El dni  ya exciste" + createOdontologoDto.getDni() );
         }
 
         // 1 VERIFICACION DE LAS RELACIONES
@@ -187,7 +187,7 @@ public class OdontologoImpl  implements OdontologoService {
                     return odontologoRepository.save(odontologo);
                  }
                 ).map(odontologoMapperResponse::readOdontologoDto)
-                .orElseThrow(()-> new UserNotFoundException(ContextoEntidad.ODONTOLOGO, "No se encontro el usuario el id" + createOdontologoDto.getIdUsuario()));
+                .orElseThrow(()-> new UserNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO, "No se encontro el usuario el id" + createOdontologoDto.getIdUsuario()));
 
 
     }
@@ -196,7 +196,7 @@ public class OdontologoImpl  implements OdontologoService {
     public void deleaById(long id) {
 
         if(odontologoRepository.findById(id).isEmpty()){
-            throw new DentistNotFoundException(ContextoEntidad.ODONTOLOGO," No se encontró el odontólogo con ID: " + id );
+            throw new DentistNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO," No se encontró el odontólogo con ID: " + id );
         }
         odontologoRepository.deleteById(id);
     }
@@ -206,11 +206,11 @@ public class OdontologoImpl  implements OdontologoService {
 
         // Validar que el telefono no este dublicado
         if (odontologoRepository.existsByTelefono(updateOdontologoDto.getTelefono())) {
-            throw new TelefonoDuplicadoException(ContextoEntidad.ODONTOLOGO,"El numero de telefono ya exciste" + updateOdontologoDto.getTelefono() );
+            throw new TelefonoDuplicadoException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO,"El numero de telefono ya exciste" + updateOdontologoDto.getTelefono() );
         }
         // 1. Verificar que el odontólogo existe
         Odontologo odontologo = odontologoRepository.findById(idOdontologo)
-                .orElseThrow(() -> new DentistNotFoundException(ContextoEntidad.ODONTOLOGO, " No se encontró el odontólogo con ID: " + idOdontologo));
+                .orElseThrow(() -> new DentistNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO, " No se encontró el odontólogo con ID: " + idOdontologo));
 
         // 4. Actualizar los datos del odontólogo
         odontologo.setTelefono(updateOdontologoDto.getTelefono());

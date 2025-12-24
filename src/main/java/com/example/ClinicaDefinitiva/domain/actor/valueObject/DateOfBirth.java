@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.time.LocalDate;
 import java.time.Period;
@@ -12,14 +12,14 @@ public final class DateOfBirth {
 
     public DateOfBirth(LocalDate value) {
         if (value == null) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_BIRTHDATE_NULL,ContextoEntidad.valueOf("PERSON"));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_BIRTHDATE_NULL, VOContext.DATE_OF_BIRTH);
         }
 
         if (value.isAfter(LocalDate.now())) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_BIRTHDATE_FUTURE,ContextoEntidad.valueOf("PERSON"));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_BIRTHDATE_FUTURE, VOContext.DATE_OF_BIRTH);
         }
         if (Period.between(value, LocalDate.now()).getYears() > 130) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_BIRTHDATE_INVALID_RANGE,ContextoEntidad.valueOf("PERSON"));
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_BIRTHDATE_INVALID_RANGE, VOContext.DATE_OF_BIRTH);
         }
         this.value = value;
     }

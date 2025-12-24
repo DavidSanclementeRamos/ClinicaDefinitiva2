@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.errors.ContextoEntidad;
+import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -53,31 +53,31 @@ public class Patient implements Actor {
                                           ContractId contractId) {
 
         if (!data.getAge().isEligibleForRegistration()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_PATIENT_INVALID_AGE,ContextoEntidad.PATIENT);
+            throw new DomainAggregateException(ErrorCatalog.ERR_PATIENT_INVALID_AGE, EntityContext.PATIENT);
         }
 
         if (!data.getAge().isAdult() && guardian == null) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN,ContextoEntidad.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
         }
 
-       // UserStatus.from(user.).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, ContextoEntidad.PATIENT);
+       // UserStatus.from(user.).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
 
         return new Patient(id, data, guardian, user.getId(), null, null, lastUpdate, contractId);
     }
 
     // Actualizar datos de contacto
     public void updatePatientContact(Person data, UserIdentity user) {
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, ContextoEntidad.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
         this.person = this.person.updateContact(data.getAddress(), data.getPhoneNumber());
         this.lastUpdate = LocalDateTime.now();
     }
 
     // Actualizar datos sensibles
     public void updateSensitiveData(Person data, UserIdentity user) {
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, ContextoEntidad.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
 
         if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_ACTIVE_SERVICES,ContextoEntidad.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_ACTIVE_SERVICES, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
         }
 
         this.person = this.person.updateSensitive(
@@ -95,29 +95,29 @@ public class Patient implements Actor {
 
     // Validar si puede agendar cita
     public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, ContextoEntidad.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
 
         if (shift == null) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_NO_SHIFT_ASSIGNED,ContextoEntidad.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_NO_SHIFT_ASSIGNED, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
         }
         if (!shift.isAvailableBetween(start, end)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_SHIFT_NOT_AVAILABLE,ContextoEntidad.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_SHIFT_NOT_AVAILABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
         }
     }
 
     /** Validar reagendamiento
     public void validateReschedule(LocalDateTime newStart, LocalDateTime newEnd) {
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, ContextoEntidad.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.PATIENT);
 
         if (shift == null || !shift.isAvailableBetween(newStart, newEnd)) {
-            throw new ShiftNotAvailableException(ContextoEntidad.PATIENT, "Nueva fecha fuera del turno asignado");
+            throw new ShiftNotAvailableException(EntityContext.PATIENT, "Nueva fecha fuera del turno asignado");
         }
     }*/
 
     // Validar responsable
     private void validarResponsable() {
         if (requiereResponsable() && !tieneResponsable()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN,ContextoEntidad.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
         }
     }
 
