@@ -44,7 +44,7 @@ public enum ReceptionistError implements ErrorCatalog {
             "No puede modificar sede si tiene citas asignadas en curso"
     ),
 
-    ERR_RECEPTIONIST_CREATION_REQUIRES_ACTIVE_USER(
+    ERR_RECEPTIONIST_CREATION_REQUIRES_ACTIVE_USER(// sera eliminado
             "RN-RECEPTIONIST-008",
             "error.receptionist.create.user",
             "Solo se pueden registrar recepcionistas con usuarios activos"
