@@ -59,14 +59,17 @@ public class Patient implements Actor {
         if (!data.getAge().isAdult() && guardian == null) {
             throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
         }
-
-       // UserStatus.from(user.).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
+// eliminar el catalogo de error, debe provenir de user
+// se debe validar que tampoco este suspendido o otros estados
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
 
         return new Patient(id, data, guardian, user.getId(), null, null, lastUpdate, contractId);
     }
 
     // Actualizar datos de contacto
     public void updatePatientContact(Person data, UserIdentity user) {
+        // eliminar el catalogo de error, debe provenir de user
+// se debe validar que tampoco este suspendido o otros estados
         UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
         this.person = this.person.updateContact(data.getAddress(), data.getPhoneNumber());
         this.lastUpdate = LocalDateTime.now();
@@ -74,6 +77,8 @@ public class Patient implements Actor {
 
     // Actualizar datos sensibles
     public void updateSensitiveData(Person data, UserIdentity user) {
+        // eliminar el catalogo de error, debe provenir de user
+// se debe validar que tampoco este suspendido o otros estados
         UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
 
         if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
@@ -95,6 +100,8 @@ public class Patient implements Actor {
 
     // Validar si puede agendar cita
     public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
+        // eliminar el catalogo de error, debe provenir de user
+// se debe validar que tampoco este suspendido o otros estados
         UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
 
         if (shift == null) {
@@ -112,7 +119,7 @@ public class Patient implements Actor {
         if (shift == null || !shift.isAvailableBetween(newStart, newEnd)) {
             throw new ShiftNotAvailableException(EntityContext.PATIENT, "Nueva fecha fuera del turno asignado");
         }
-    }*/
+    }**/
 
     // Validar responsable
     private void validarResponsable() {

@@ -183,6 +183,8 @@ public enum ErrorCatalog {
             "El formato del documento de identidad es inválido"
     ),
 
+
+
     ERR_DENTIST_AGE_INSUFFICIENT(
            "RN-DENTIST-001",
            "error.dentist.ageInsufficient",
@@ -214,7 +216,7 @@ public enum ErrorCatalog {
             "Solo puede agendar si está activo y tiene disponibilidad"
     ),
 
-    ERR_DENTIST_NOT_EDITABLE(
+    ERR_DENTIST_NOT_EDITABLE(// ELIMINAR
             "RN-DENTIST-006",
             "error.dentist.notEditable",
             "Solo puede editarse si está activo"
@@ -226,13 +228,13 @@ public enum ErrorCatalog {
             "Debe tener especialidad reconocida válida"
     ),
 
-    ERR_DENTIST_INVALID_INITIAL_STATUS(
+    ERR_DENTIST_INVALID_INITIAL_STATUS(// ELIMINAR
             "RN-DENTIST-008",
             "error.dentist.invalidInitialStatus",
             "No puede crearse con estado INACTIVO"
     ),
 
-    ERR_DENTIST_MISSING_REQUIRED_FIELDS(
+    ERR_DENTIST_MISSING_REQUIRED_FIELDS(// ELIMINAR
             "RN-DENTIST-009",
             "error.dentist.missingRequiredFields",
             "Debe tener nombre y documento válidos"
@@ -298,6 +300,8 @@ public enum ErrorCatalog {
             "error.receptionist.lateCancellation",
             "La cancelación se realizó fuera del tiempo permitido"
     ),
+ EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON("","",
+         ""),
 
     ERR_USER_INACTIVE(
             "RN-USER-001",
@@ -624,8 +628,10 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
 
 
 
-    // paciente
-    ERR_PATIENT_MISSING_REQUIRED_FIELDS(
+
+
+    // PACIENTE
+    ERR_PATIENT_MISSING_REQUIRED_FIELDS(// ELIMINAR
             "RN-PATIENT-001",
             "error.patient.missingRequiredFields",
             "El paciente debe tener nombre, documento y fecha de nacimiento válida"
@@ -643,13 +649,13 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
             "El paciente no puede tener dos citas en el mismo horario"
     ),
 
-    ERR_PATIENT_NOT_EDITABLE(
+    ERR_PATIENT_NOT_EDITABLE(// ELIMINAR
             "RN-PATIENT-004",
             "error.patient.notEditable",
             "El paciente solo puede editarse si está activo"
     ),
 
-    ERR_PATIENT_MISSING_CONTACT(
+    ERR_PATIENT_MISSING_CONTACT(// ELIMINAR
             "RN-PATIENT-005",
             "error.patient.missingContact",
             "El paciente debe registrar al menos un medio de contacto válido"
@@ -661,13 +667,9 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
             "error.patient.invalidAge",
             "La edad del paciente debe estar en rango válido (13-120 años)"
     ),
-    ERR_PATIENT_INACTIVE(
-            "RN-PATIENT-012",
-            "error.patient.inactive",
-            "El paciente debe estar ACTIVO para realizar esta operación"
-    ),
 
-    ERR_PATIENT_FUTURE_BIRTHDATE(
+
+    ERR_PATIENT_FUTURE_BIRTHDATE(// ELIMINAR
             "RN-PATIENT-007",
             "error.patient.futureBirthdate",
             "La fecha de nacimiento del paciente no puede ser futura"
@@ -684,41 +686,52 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
             "error.patient.cannotModifyBirthdate",
             "No puede modificarse la fecha de nacimiento si el paciente tiene citas registradas"
     ),
-    ERR_PATIENT_CREATION_REQUIRES_ACTIVE_USER(
+
+    ERR_PATIENT_DEACTIVATION_REQUIRES_REASON(
+         "RN-PATIENT-010",
+         "error.patient.deactivationRequiresReason",
+         "La desactivación del paciente requiere motivo obligatorio"
+    ),
+
+
+    ERR_PATIENT_CREATION_REQUIRES_ACTIVE_USER(// ELIMINAR
             "RN-PATIENT-011",
             "error.patient.creationRequiresActiveUser",
             "El paciente debe tener estado ACTIVO para poder ser creado"
     ),
-    ERR_PATIENT_NO_SHIFT_ASSIGNED(
+ ERR_PATIENT_INACTIVE(// ELIMINAR
+         "RN-PATIENT-012",
+         "error.patient.inactive",
+         "El paciente debe estar ACTIVO para realizar esta operación"
+ ),
+    ERR_PATIENT_NO_SHIFT_ASSIGNED( // NUEVO
             "RN-PATIENT-013",
             "error.patient.noShiftAssigned",
             "El paciente no tiene un turno asignado"
     ),
 
-    ERR_PATIENT_SHIFT_NOT_AVAILABLE(
+    ERR_PATIENT_SHIFT_NOT_AVAILABLE( // NUEVO
             "RN-PATIENT-014",
             "error.patient.shiftNotAvailable",
             "El turno no está disponible en el rango de fechas indicado"
     ),
 
-    ERR_PATIENT_DEACTIVATION_REQUIRES_REASON(
-            "RN-PATIENT-010",
-            "error.patient.deactivationRequiresReason",
-            "La desactivación del paciente requiere motivo obligatorio"
-    ),
 
-    EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON("","",
-""),
+
+
+
+
+
 
 // RESPONSABLE
 
-    ERR_GUARDIAN_MISSING_PATIENT(
+    ERR_GUARDIAN_MISSING_PATIENT(// ELIMINAR
         "RN-GUARDIAN-001",
                 "error.guardian.missingPatient",
                 "No puede crearse sin vínculo legal con un paciente"
     ),
 
-    ERR_GUARDIAN_INACTIVE(
+    ERR_GUARDIAN_INACTIVE(// ELIMINAR
         "RN-GUARDIAN-002",
                 "error.guardian.inactive",
                 "No puede autorizar tratamientos si está inactivo"
@@ -742,19 +755,19 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
                 "No puede desactivarse si tiene autorizaciones vigentes"
     ),
 
-    ERR_GUARDIAN_NOT_EDITABLE(
+    ERR_GUARDIAN_NOT_EDITABLE(// ELIMINAR
         "RN-GUARDIAN-006",
                 "error.guardian.notEditable",
                 "Solo puede editarse si está activo"
     ),
 
-    ERR_GUARDIAN_MISSING_CONTACT(
+    ERR_GUARDIAN_MISSING_CONTACT(// ELIMINAR
         "RN-GUARDIAN-007",
                 "error.guardian.missingContact",
                 "Debe tener al menos un medio de contacto válido"
     ),
 
-    ERR_GUARDIAN_UNDERAGE(
+    ERR_GUARDIAN_UNDERAGE(// ELIMINAR
         "RN-GUARDIAN-008",
                 "error.guardian.underage",
                 "Debe ser mayor de edad (≥ 18 años)"
@@ -766,7 +779,7 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
                 "No puede modificarse vínculo si ha autorizado tratamientos"
     ),
     ERR_RESPONSIBLE_INVALID_AGE(
-            "RN-RESPONSIBLE-001",
+            "RN-RESPONSIBLE-011",
             "error.responsible.invalidAge",
             "El responsable no cuenta con la edad requerida para hacerse cargo de un paciente"
     ),
