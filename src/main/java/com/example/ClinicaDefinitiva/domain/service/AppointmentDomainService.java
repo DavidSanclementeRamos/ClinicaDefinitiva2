@@ -8,6 +8,8 @@ import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentType;
+import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
+
 import java.time.LocalDateTime;
 
 // Domain service puro, sin dependencias infra
@@ -26,16 +28,17 @@ public  class AppointmentDomainService {
                                                AppointmentType type,
                                                String reason,
                                                ServiceDuration scheduledDuration,
-                                               ProvidedService service) {
+                                               ProvidedService service,
+                                               UserIdentity user) {
         if (dentist == null ) {
             throw new IllegalArgumentException("Odontólogo inválido .");
         }
         if (patient == null) {
             throw new IllegalArgumentException("Paciente inválido.");
         }
-        dentist.canScheduleBetween(star, end);
+        dentist.canScheduleBetween(user,star, end);
 
-        patient.canScheduleBetween(star, end);
+        patient.canScheduleBetween(user,star, end);
 
         if (type == null || reason == null || reason.isBlank()) {
             throw new IllegalArgumentException("Tipo de cita y motivo son obligatorios.");
