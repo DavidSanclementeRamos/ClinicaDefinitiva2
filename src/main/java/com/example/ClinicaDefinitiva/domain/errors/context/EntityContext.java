@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors;
+package com.example.ClinicaDefinitiva.domain.errors.context;
 
 public enum EntityContext implements DomainContext {
 

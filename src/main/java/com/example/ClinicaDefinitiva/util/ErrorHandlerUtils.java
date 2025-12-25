@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.util;
 
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.ErrorResponse;
 import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;

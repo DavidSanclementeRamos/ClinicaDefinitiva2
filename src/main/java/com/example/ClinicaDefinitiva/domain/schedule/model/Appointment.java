@@ -1,26 +1,21 @@
 package com.example.ClinicaDefinitiva.domain.schedule.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
-import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceDuration;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceId;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentType;
-
-//import java.time.ServiceDuration;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 
 public class Appointment {
 
-    private AppointmentId id;
-    private DentistId dentist;
-    private PatientId patient;
+    private final  AppointmentId id;
+    private final DentistId dentist;
+    private final PatientId patient;
     private LocalDateTime start;                 // fechaHora
     private LocalDateTime end;
     private AppointmentStatus status;                // estado
@@ -39,21 +34,21 @@ public class Appointment {
     // Ventana mínima de cancelación: 2 horas antes de la cita
     private static final Duration CANCELLATION_WINDOW = Duration.ofHours(2);
 
-    public Appointment (Builder b){
-       // this.scheduledDuration = b.scheduledDuration;
-        this.appointmentType = b.appointmentType;
-        this.attendedBy = b.attendedBy;
-        this.clinicalNotes = b.clinicalNotes;
-        this.creationDate = b.creationDate;
-        this.start = b.start;
-        this.dentist = b.dentist;
-        this.end = b.end;
-        this.id = b.id;
-        this.lastUpdated = b.lastUpdated;
-        this.patient = b.patient;
-        this.reason = b.reason;
-        this.rescheduled = b.rescheduled;
-        this.status = b.status;
+    public Appointment(ServiceDuration actualDuration, AppointmentType appointmentType, String attendedBy, String clinicalNotes, LocalDateTime creationDate, DentistId dentist, LocalDateTime end, AppointmentId id, LocalDateTime lastUpdated, PatientId patient, String reason, boolean rescheduled, LocalDateTime start, AppointmentStatus status) {
+        this.actualDuration = actualDuration;
+        this.appointmentType = appointmentType;
+        this.attendedBy = attendedBy;
+        this.clinicalNotes = clinicalNotes;
+        this.creationDate = creationDate;
+        this.dentist = dentist;
+        this.end = end;
+        this.id = id;
+        this.lastUpdated = lastUpdated;
+        this.patient = patient;
+        this.reason = reason;
+        this.rescheduled = rescheduled;
+        this.start = start;
+        this.status = status;
     }
 
     public boolean esFutura() {
@@ -64,10 +59,15 @@ public class Appointment {
 
     // Confirmar cita (puede usarse si necesitas un paso explícito de confirmación)
     public void confirm() {
-        if (this.patient == null || this.dentist == null) {
-            throw new IllegalArgumentException(
-                    "No se puede confirmar: paciente u odontólogo inválido");
+        if (this.patient == null ) {
+            throw new BusinessRuleViolationException(
+                    "No se puede confirmar: paciente inválido");
         }
+        if(this.dentist == null) {
+            throw new BusinessRuleViolationException(
+                    "No se puede confirmar: odontólogo inválido");
+        }
+
         this.status.isConfirmed();
     }
 
@@ -75,7 +75,7 @@ public class Appointment {
     public void cancel() {
         LocalDateTime now = LocalDateTime.now();
         if (start.minus(CANCELLATION_WINDOW).isBefore(now)) {
-            throw new IllegalArgumentException(
+            throw new BusinessRuleViolationException(
                     "No se puede cancelar: faltan menos de "
                             + CANCELLATION_WINDOW.toHours()
                             + " horas para la cita");
@@ -89,7 +89,7 @@ public class Appointment {
       Se decidió delegar la lógica de estado desde Appointment hacia su VO AppointmentStatus,
       manteniendo la semántica encapsulada pero accesible. Esto permite que entidades como Dentist
       consulten el estado sin acoplarse a la estructura interna del VO.
-      * */
+      */
     public boolean isScheduled() {
         return this.status.isScheduled();
     }
@@ -215,35 +215,5 @@ public class Appointment {
         this.status = status;
     }
 
-    public static final class Builder{
-        private AppointmentId id;
-        private DentistId dentist;
-        private PatientId patient;
-        private LocalDateTime start;                 // fechaHora
-        private LocalDateTime end;
-        private AppointmentStatus status;                // estado
-        private String reason;                           // motivo
-        private AppointmentType appointmentType;         // tipo cita (Control, emergency, first-time)
-        private String clinicalNotes;                    // notas Clinicas (Professional observations)
-        private ServiceDuration scheduledDuration;                 // duracionReal (Efficiency analysis)
-        private String attendedBy;                      // atendidaPor (May differ from assigned)
-        private LocalDateTime creationDate;              // fecha creacion
-        private LocalDateTime lastUpdated;               // ultima atualizacion
-        private boolean rescheduled;
 
-        public  Builder withId(AppointmentId id){this.id = id; return this;}
-        public Builder withDentistId(DentistId d){this.dentist = d; return this;}
-        public Builder withPatientId(PatientId p){this.patient = p; return this;}
-        public  Builder withStart(LocalDateTime s){this.start = s; return this;}
-        public Builder withEnd(LocalDateTime e){this.end = e; return this;}
-        public Builder withStatus(AppointmentStatus s){this.status = s; return this;}
-        public Builder withReason(String r){this.reason = r; return this;}
-        public Builder withAppointmentType(AppointmentType t){this.appointmentType = t; return this;}
-        public Builder withClinicaNotes(String t){this.clinicalNotes = t; return this;}
-        public Builder withServiceDuratio(ServiceDuration a){this.scheduledDuration = a; return this;}
-
-        public Appointment buildAppointment(){
-            return new Appointment(this);
-        }
-    }
 }

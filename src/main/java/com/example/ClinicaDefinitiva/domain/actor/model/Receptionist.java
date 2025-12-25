@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
@@ -32,7 +32,7 @@ public class Receptionist  implements Actor {
             Person data,
             UserIdentity user,
             Sector sector) {
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_CREATION_REQUIRES_ACTIVE_USER, com.example.ClinicaDefinitiva.domain.errors.EntityContext.RECEPTIONIST);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_CREATION_REQUIRES_ACTIVE_USER, EntityContext.RECEPTIONIST);
         return new Receptionist(id, data, sector, user, LocalDateTime.now());
     }
 
@@ -40,7 +40,7 @@ public class Receptionist  implements Actor {
     // Validación 3: Solo puede cancelar citas si esta activo
     public void cancelAppointment(Appointment appointment) {
         // 1. Validar que el actor está activo
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.RECEPTIONIST);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.RECEPTIONIST);
 
         // 2. Delegar la cancelación a la cita
         appointment.cancel();
@@ -54,7 +54,7 @@ public class Receptionist  implements Actor {
     }
 
     public void updateSensitiveData(Person data, UserIdentity user, Sector sector) {
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.RECEPTIONIST);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.RECEPTIONIST);
         this.person = data.updateSensitive(data.getAge(), data.getBloodType(),
                 data.getDateOfBirth(), data.getDni(), data.getDocumentoEPS(), data.getFullname());
         this.sector = sector;
@@ -67,7 +67,7 @@ public class Receptionist  implements Actor {
         if(reason == null || reason.isBlank()){
             return Outcome.fail(new OutcomeDetail(ErrorCatalog.EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
         }
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.RECEPTIONIST);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.RECEPTIONIST);
 
         return Outcome.ok();
     }

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
-import com.example.ClinicaDefinitiva.domain.errors.VOContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.util.Objects;
 import java.util.regex.Pattern;

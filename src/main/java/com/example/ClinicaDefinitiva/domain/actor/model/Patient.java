@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -57,7 +57,7 @@ public class Patient implements Actor {
         }
 
         if (!data.getAge().isAdult() && guardian == null) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
 // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
@@ -70,7 +70,7 @@ public class Patient implements Actor {
     public void updatePatientContact(Person data, UserIdentity user) {
         // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
         this.person = this.person.updateContact(data.getAddress(), data.getPhoneNumber());
         this.lastUpdate = LocalDateTime.now();
     }
@@ -79,10 +79,10 @@ public class Patient implements Actor {
     public void updateSensitiveData(Person data, UserIdentity user) {
         // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
 
         if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_ACTIVE_SERVICES, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_ACTIVE_SERVICES, EntityContext.PATIENT);
         }
 
         this.person = this.person.updateSensitive(
@@ -102,13 +102,13 @@ public class Patient implements Actor {
     public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
         // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.PATIENT);
 
         if (shift == null) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_NO_SHIFT_ASSIGNED, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_NO_SHIFT_ASSIGNED, EntityContext.PATIENT);
         }
         if (!shift.isAvailableBetween(start, end)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_SHIFT_NOT_AVAILABLE, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_SHIFT_NOT_AVAILABLE, EntityContext.PATIENT);
         }
     }
 
@@ -124,7 +124,7 @@ public class Patient implements Actor {
     // Validar responsable
     private void validarResponsable() {
         if (requiereResponsable() && !tieneResponsable()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, com.example.ClinicaDefinitiva.domain.errors.EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
     }
 

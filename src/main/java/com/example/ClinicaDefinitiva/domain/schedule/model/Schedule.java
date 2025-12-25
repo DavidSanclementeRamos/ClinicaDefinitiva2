@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.schedule.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.appointment.exception.invali.date.AppointmentOutsideAvailabilityException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.appointment.exception.AppointmentTimeNotAvailableException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.appointment.exception.invali.date.AppointmentInvalidDateRangeException;
@@ -108,13 +108,13 @@ public final class Schedule {
 
     public void validateScheduleBetween(LocalDateTime start, LocalDateTime end) {
         if (start == null) {
-            throw new AppointmentStartDateMissingException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.APPOINTMENT,"La fecha de inicio no puede ser null");
+            throw new AppointmentStartDateMissingException(EntityContext.APPOINTMENT,"La fecha de inicio no puede ser null");
         }
         if (end == null) {
-            throw new AppointmentEndDateMissingException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.APPOINTMENT, "La fecha de fin no puede ser nula.");
+            throw new AppointmentEndDateMissingException(EntityContext.APPOINTMENT, "La fecha de fin no puede ser nula.");
         }
         if (!start.isBefore(end)) {
-            throw new AppointmentInvalidDateRangeException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.APPOINTMENT,"El rango de fechas es inválido: inicio" + start + " no es anterior a fin" + end);
+            throw new AppointmentInvalidDateRangeException(EntityContext.APPOINTMENT,"El rango de fechas es inválido: inicio" + start + " no es anterior a fin" + end);
         }
 
 
@@ -134,7 +134,7 @@ public final class Schedule {
                 .noneMatch(a -> TimeIntervalRules.overlaps(a.getStart(), a.getEnd(), start, end));
 
         if (!slotFree) {
-            throw new AppointmentTimeNotAvailableException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.APPOINTMENT, "El intervalo ya está ocupado por otra cita: " + start+ " y " + end);
+            throw new AppointmentTimeNotAvailableException(EntityContext.APPOINTMENT, "El intervalo ya está ocupado por otra cita: " + start+ " y " + end);
         }
     }
 

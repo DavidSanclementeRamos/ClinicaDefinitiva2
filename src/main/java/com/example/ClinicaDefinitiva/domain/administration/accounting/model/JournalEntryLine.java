@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.Money;
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -172,10 +172,10 @@ public final class JournalEntryLine {
 
 
         if (description == null || description.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD, EntityContext.JOURNALENTRY);
         }
         if (amount == null) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_AMOUNT, com.example.ClinicaDefinitiva.domain.errors.EntityContext.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_AMOUNT, EntityContext.JOURNALENTRY);
         }
     }
 

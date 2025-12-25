@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.HorarioNotfoundException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.UserNotFoundException;
 import com.example.ClinicaDefinitiva.mapper.UsuarioMapperResponse;
@@ -53,7 +53,7 @@ public class UsuarioImpl implements UsuarioService {
         Page<Usuario> pageEntity = usuarioRepository.findAll(pageable);
         if (pageEntity.isEmpty()) {
             throw new HorarioNotfoundException(
-                    com.example.ClinicaDefinitiva.domain.errors.EntityContext.HORARIO,
+                    EntityContext.HORARIO,
                     "No existen registros de usuario para los filtros dados"
             );}
         long total = pageEntity.getTotalElements();
@@ -68,7 +68,7 @@ public class UsuarioImpl implements UsuarioService {
                 .orElseThrow(() -> {
 
                     logger.warn("No se encontro usuario el email: [email={}, requestId={}]", email, requestId);
-                    return new UserNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.USUARIO,
+                    return new UserNotFoundException(EntityContext.USUARIO,
                             "No se encontro usuario con ese email");});
 
         logger.info("Email recuperado [email={}, requestId={}]", email, requestId);
@@ -101,7 +101,7 @@ public class UsuarioImpl implements UsuarioService {
                 .orElseThrow(() -> {
                     logger.warn("No se encontro el user [nombreUsuario={}, requestId={}]", nombreUsuario, requestId);
 
-                   return new UserNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.USUARIO,
+                   return new UserNotFoundException(EntityContext.USUARIO,
                             "No se encontro el nombre de usuario: " + nombreUsuario );
                 });
         logger.info("Nombre de usuario recuperado [nombreUsuario={}, requestId={}]", nombreUsuario, requestId);
@@ -144,7 +144,7 @@ public class UsuarioImpl implements UsuarioService {
                             idUsuario, requestId);
 
                     logger.info("Usuario editado [idUsuario={}, requestId={}]", idUsuario, requestId);
-                    return new UserNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.USUARIO, " No se encontro el usuario con id: " + idUsuario);
+                    return new UserNotFoundException(EntityContext.USUARIO, " No se encontro el usuario con id: " + idUsuario);
                 });
     }
 
@@ -153,7 +153,7 @@ public class UsuarioImpl implements UsuarioService {
         if(usuarioRepository.findById(id).isEmpty()){
             logger.warn("No se pudo eliminar, el id no existe [id={}, requestId={}]", id, requestId);
 
-            throw new UserNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.USUARIO,"No se pudo eliminar, el id no existe :" + id);
+            throw new UserNotFoundException(EntityContext.USUARIO,"No se pudo eliminar, el id no existe :" + id);
         }
         logger.info("Usuario eliminado [idUsuario={}, requestId={}]", id, requestId);
 

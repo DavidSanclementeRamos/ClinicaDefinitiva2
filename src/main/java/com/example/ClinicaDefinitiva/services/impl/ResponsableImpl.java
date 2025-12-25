@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 import com.example.ClinicaDefinitiva.Enum.TipoResponsable;
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TelefonoDuplicadoException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.PatientNotFoundException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.GuardianNotFoundException;
@@ -50,7 +50,7 @@ public class ResponsableImpl implements ResponsableService {
                     // odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                     logger.warn("Responsable no encontrado [id={}, requestId={}]", idUsuario, requestId);
                     return new PatientNotFoundException(
-                            com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE,
+                            EntityContext.RESPONSABLE,
                             "No se encontró el responsable con ID: " + idUsuario
                     );
                 });
@@ -65,7 +65,7 @@ public class ResponsableImpl implements ResponsableService {
                 .orElseThrow(() -> {
                     logger.warn("Responsable no encontrado [idPaciente={}, requestId={}]", idPaciente, requestId);
 
-                    return new GuardianNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE,
+                    return new GuardianNotFoundException(EntityContext.RESPONSABLE,
                     "No existen responsable con ese idPaciente:" + idPaciente);
         });
         logger.info("Responsable no encontrado [idPaciente={}, requestId={}]",idPaciente , requestId);
@@ -79,7 +79,7 @@ public class ResponsableImpl implements ResponsableService {
                 .orElseThrow(() -> {
                     logger.warn("Responsable no encontrado con el documento[documento={}, requestId={}]", documento, requestId);
 
-                    return new GuardianNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE,
+                    return new GuardianNotFoundException(EntityContext.RESPONSABLE,
                             "No existen responsable con ese documento:" + documento);
                 });
         logger.info("Responsable no encontrado [documento={}, requestId={}]",documento , requestId);
@@ -92,7 +92,7 @@ public class ResponsableImpl implements ResponsableService {
                 .orElseThrow(() -> {
                     logger.warn("Responsable no encontrado con el telefono[telefono={}, requestId={}]", telefono, requestId);
 
-                    return new GuardianNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE,
+                    return new GuardianNotFoundException(EntityContext.RESPONSABLE,
                             "No existen responsable con ese telefono:" + telefono);
                 });
         logger.info("Responsable no encontrado [telefono={}, requestId={}]",telefono , requestId);
@@ -106,7 +106,7 @@ public class ResponsableImpl implements ResponsableService {
 
         if(lista.isEmpty()){
             logger.warn("Responsable no encontrado con relacion: [tipoRelacion={}, requestId={}]",tipoRelacion.name() , requestId);
-            throw new GuardianNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE,
+            throw new GuardianNotFoundException(EntityContext.RESPONSABLE,
                     "No hay resultado de la busquedacon esa relacion:" + tipoRelacion.name());
         }
         logger.info("Se encontraron {} responsable con tipoRelacion [{}], requestId={}",
@@ -121,7 +121,7 @@ public class ResponsableImpl implements ResponsableService {
 
         // validar que la edad del odontologo sea la adecuada
         ValidarEdades validar = new ValidarEdades();
-        validar.validarEdades (cambioResponsableDto.getFecha_nacimiento(), com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE);
+        validar.validarEdades (cambioResponsableDto.getFecha_nacimiento(), EntityContext.RESPONSABLE);
 
         // Validar que el telefono no este dublicado
         // Validar que el dni no este dublicado
@@ -130,12 +130,12 @@ public class ResponsableImpl implements ResponsableService {
         // validar que tenga usuario
 
         Responsable responsable = responsableRepository.findById(id)
-                .orElseThrow(() -> new PatientNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE, "El responsable que quiere cambiar no existe"));
+                .orElseThrow(() -> new PatientNotFoundException(EntityContext.RESPONSABLE, "El responsable que quiere cambiar no existe"));
 
 
 
         Usuario usuario = responsableRepository.findByUnUsuario_Id(cambioResponsableDto.getIdUsuario())
-                .orElseThrow(() -> new UserNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE, "El responsable no tiene un usuario asignado")).getUnUsuario();
+                .orElseThrow(() -> new UserNotFoundException(EntityContext.RESPONSABLE, "El responsable no tiene un usuario asignado")).getUnUsuario();
 
         responsable.setDni(cambioResponsableDto.getDni());
         responsable.setNombre(cambioResponsableDto.getNombre());
@@ -171,14 +171,14 @@ public class ResponsableImpl implements ResponsableService {
                    // responsable.setUnUsuario(usuario);
                     return responsableRepository.save(responsable);
                 }).map(responsableMapperResponse::createEndReadResponsableDto)
-                .orElseThrow(() -> new GuardianNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE,"No existe un responsable con ese id:" + id ));
+                .orElseThrow(() -> new GuardianNotFoundException(EntityContext.RESPONSABLE,"No existe un responsable con ese id:" + id ));
     }
 
     @Override
     public CreateEndReadResponsableDto save(CreateEndReadResponsableDto createEndReadResponsableDto) {
         // validar que la edad del odontologo sea la adecuada
         ValidarEdades validar = new ValidarEdades();
-        validar.validarEdades (createEndReadResponsableDto.getFecha_nacimiento(), com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE);
+        validar.validarEdades (createEndReadResponsableDto.getFecha_nacimiento(), EntityContext.RESPONSABLE);
 
         // Validar que el telefono no este dublicado
         // Validar que el dni no este dublicado
@@ -201,7 +201,7 @@ public class ResponsableImpl implements ResponsableService {
                     return responsableRepository.save(responsable);
 
                 }).map(responsableMapperResponse::createEndReadResponsableDto)
-                .orElseThrow(() -> new GuardianNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE,
+                .orElseThrow(() -> new GuardianNotFoundException(EntityContext.RESPONSABLE,
                 " EL responsable no tiene un usuario asignado"));
 
     }
@@ -210,7 +210,7 @@ public class ResponsableImpl implements ResponsableService {
     public void deleaById(long id) {
         if(responsableRepository.findById(id).isEmpty()){
             logger.warn("Responsable no encontrado con id: [id={}, requestId={}]",id , requestId);
-            throw new GuardianNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.RESPONSABLE,
+            throw new GuardianNotFoundException(EntityContext.RESPONSABLE,
                     " El responsable no existe, id:" + id);
         }
         responsableRepository.deleteById(id);

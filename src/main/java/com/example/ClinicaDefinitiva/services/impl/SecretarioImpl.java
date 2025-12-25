@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.services.impl;
 
 import com.example.ClinicaDefinitiva.Enum.Sector;
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TelefonoDuplicadoException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.ReceptionistNotFoundException;
@@ -51,7 +51,7 @@ public class SecretarioImpl implements SecretarioService {
                      //odontologoMetrics.contarOdontologoNoEncontrado(requestId);
                      logger.warn("Secretari@ no encontrado [idSecretario={}, requestId={}]", idSecretario, requestId);
                      return new DentistNotFoundException(
-                             com.example.ClinicaDefinitiva.domain.errors.EntityContext.SECRETARIO,
+                             EntityContext.SECRETARIO,
                              "No se encontró el secretari@ con ID: " + idSecretario
                      );
                  });
@@ -66,7 +66,7 @@ public class SecretarioImpl implements SecretarioService {
         // Le decimos al repo que haga la búsqueda paginada+ordenada
         Page<Secretario> pageEntidades = secretarioRepository.findAll(pageable);
         if(pageEntidades.isEmpty()){
-            throw new ReceptionistNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.SECRETARIO
+            throw new ReceptionistNotFoundException(EntityContext.SECRETARIO
                     , "No existen registros de secretari@ para los filtros dados"
             );
         }
@@ -83,7 +83,7 @@ public class SecretarioImpl implements SecretarioService {
             logger.info("Se encontraron {} secretari@ con nombre [{}], requestId={}",
                     lista.size(),nombre , requestId);
 
-            throw new ReceptionistNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.SECRETARIO
+            throw new ReceptionistNotFoundException(EntityContext.SECRETARIO
             ,"No se encontro secretari@ con ese nombre:" + nombre);
         }
                 return lista.stream().map(secretarioReadMapper::readSecretarioDto)
@@ -95,7 +95,7 @@ public class SecretarioImpl implements SecretarioService {
 
         List< Secretario>  lista =  secretarioRepository.findBySector(sector);
         if (lista.isEmpty()){
-            throw new ReceptionistNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.SECRETARIO
+            throw new ReceptionistNotFoundException(EntityContext.SECRETARIO
                     ,"No se encontro secretari@ en ese sector:" + sector);
         }
 
@@ -123,15 +123,15 @@ public class SecretarioImpl implements SecretarioService {
 
         // validar que la edad del secretario sea la adecuada
         ValidarEdades validar =new ValidarEdades();
-        validar.validarEdades (createSecretarioDto.getFecha_nacimiento(), com.example.ClinicaDefinitiva.domain.errors.EntityContext.SECRETARIO);
+        validar.validarEdades (createSecretarioDto.getFecha_nacimiento(), EntityContext.SECRETARIO);
 
         // Validar que el telefono no este dublicado
         if (secretarioRepository.existsByTelefono(createSecretarioDto.getTelefono())) {
-            throw new TelefonoDuplicadoException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.ODONTOLOGO,"El numero de telefono ya exciste" + createSecretarioDto );
+            throw new TelefonoDuplicadoException(EntityContext.ODONTOLOGO,"El numero de telefono ya exciste" + createSecretarioDto );
         }
         // Validar que el dni no este dublicado
         if (secretarioRepository.existsByDni(createSecretarioDto.getDni())) {
-            throw new TelefonoDuplicadoException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.SECRETARIO,"El dni  ya exciste" + createSecretarioDto.getDni() );
+            throw new TelefonoDuplicadoException(EntityContext.SECRETARIO,"El dni  ya exciste" + createSecretarioDto.getDni() );
         }
         return usuarioRepository.findById(createSecretarioDto.getIdUsuario())
                 .map(usuario -> {
@@ -147,7 +147,7 @@ public class SecretarioImpl implements SecretarioService {
 
                     return secretarioRepository.save(secretario);
                 }).map(secretarioReadMapper::readSecretarioDto)
-                .orElseThrow(() -> new ReceptionistNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.SECRETARIO, "No existe un usuario con el id:" + createSecretarioDto.getIdUsuario())) ;
+                .orElseThrow(() -> new ReceptionistNotFoundException(EntityContext.SECRETARIO, "No existe un usuario con el id:" + createSecretarioDto.getIdUsuario())) ;
     }
 
     @Override
@@ -156,7 +156,7 @@ public class SecretarioImpl implements SecretarioService {
         if (secretarioRepository.existsByTelefono(updateSecretarioDto.getTelefono())) {
             logger.warn("EL numero ya existe [{}], requestId={}", updateSecretarioDto.getTelefono(), requestId);
 
-            throw new TelefonoDuplicadoException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.SECRETARIO,"El numero de telefono ya exciste" + updateSecretarioDto.getTelefono() );
+            throw new TelefonoDuplicadoException(EntityContext.SECRETARIO,"El numero de telefono ya exciste" + updateSecretarioDto.getTelefono() );
         }
         return secretarioRepository.findById(id)
                 .map(secretario -> {
@@ -168,7 +168,7 @@ public class SecretarioImpl implements SecretarioService {
                 }).map(secretarioReadMapper::readSecretarioDto)
                 .orElseThrow(() -> {
                         logger.warn("EL id del secretario que quiere editar no existe [{}], requestId={}", id, requestId);
-                        return new ReceptionistNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.SECRETARIO,"No se encontro el id: " + id );});
+                        return new ReceptionistNotFoundException(EntityContext.SECRETARIO,"No se encontro el id: " + id );});
 
 
 
@@ -179,7 +179,7 @@ public class SecretarioImpl implements SecretarioService {
         if(secretarioRepository.findById(id).isEmpty()){
             logger.warn("No existe el id: [{}], requestId={}", id, requestId);
 
-            throw new ReceptionistNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.SECRETARIO,
+            throw new ReceptionistNotFoundException(EntityContext.SECRETARIO,
                     "No se encontro el id: " + id + " del secretari@ que quiere eliminar" );
         }
         secretarioRepository.deleteById(id);

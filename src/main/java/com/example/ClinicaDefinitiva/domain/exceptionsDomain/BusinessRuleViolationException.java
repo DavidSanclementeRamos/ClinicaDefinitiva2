@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 
 

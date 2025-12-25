@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.services.impl;
 
 
 import com.example.ClinicaDefinitiva.Enum.Estado;
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.HorarioNotfoundException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.entityNotFount.PatientNotFoundException;
@@ -60,14 +60,14 @@ public class TurnoImpl implements TurnoService {
         Paciente paciente = pacienteRepository.findById(turnoDto.getIdPaciente() )
                 .orElseThrow(() -> {
                     logger.warn("No hay paciente asociado a ese id:  [{}], requestId={}",turnoDto.getIdPaciente() , requestId);
-                    return new PatientNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.TURNO
+                    return new PatientNotFoundException(EntityContext.TURNO
                 , "No se encontro un paciente asociado al turno con el id: " + turnoDto.getIdPaciente() );});
 
         // validar la existencia del disponibilidad asociado
         Disponibilidad disponibilidad = horarioRepository.findById(turnoDto.getHorarioId())
                 .orElseThrow(() -> {
                     logger.warn("No hay disponibilidad asociado a ese id:  [{}], requestId={}",turnoDto.getHorarioId() , requestId);
-                  return new  HorarioNotfoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.HORARIO,
+                  return new  HorarioNotfoundException(EntityContext.HORARIO,
                           "No se encontro un disponibilidad asociado al turno con el id: " + turnoDto.getHorarioId() );});
 
 
@@ -108,7 +108,7 @@ public class TurnoImpl implements TurnoService {
                         }).map(turnoMapper::turnoDto)
                 .orElseThrow(() -> {
                     logger.warn("No existe un turno asociado a ese id:  [{}], requestId={}",idTurno , requestId);
-                   return new  TurnoNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.TURNO,
+                   return new  TurnoNotFoundException(EntityContext.TURNO,
                            "No existe el id: " + idTurno + " del turno que quiere editar");});
     }
 
@@ -121,7 +121,7 @@ public class TurnoImpl implements TurnoService {
         if (pageEntidades.isEmpty()) {
             logger.warn("No existen registros de turno para los filtros [id={}, requestId={}]", pageable, requestId);
             throw new TurnoNotFoundException(
-            com.example.ClinicaDefinitiva.domain.errors.EntityContext.TURNO,
+            EntityContext.TURNO,
                     "No existen registros de turnos para los filtros dados"
             );}
         // Convertimos cada Entidad a DTO
@@ -136,7 +136,7 @@ public class TurnoImpl implements TurnoService {
         if (turnoRepository.findById(id).isEmpty()){
             logger.warn("No existe el el id: " + id + " que quiere eliminar [id={}, requestId={}]", id, requestId);
 
-            throw new TurnoNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.TURNO,
+            throw new TurnoNotFoundException(EntityContext.TURNO,
                     "No exixte el id "  + id + " que quiere eliminar");
         }
            turnoRepository.deleteById(id);
@@ -149,7 +149,7 @@ public class TurnoImpl implements TurnoService {
 
         Paciente paciente = pacienteRepository.findById(idPaciente).orElseThrow(()->{
                     logger.warn("No existe el el id: " + idPaciente + " del paciente [id={}, requestId={}]", idPaciente, requestId);
-                    return new PatientNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.TURNO,
+                    return new PatientNotFoundException(EntityContext.TURNO,
                             "No existe el id: " + idPaciente);
 
                     });
@@ -157,7 +157,7 @@ public class TurnoImpl implements TurnoService {
 
        if(lista.isEmpty()){
            logger.warn("No se encontro resultado de la busqueda [idPaciente={}, requestId={}]", idPaciente, requestId);
-           throw new TurnoNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.TURNO,
+           throw new TurnoNotFoundException(EntityContext.TURNO,
             " No se encontro resultado de la busqueda de turnos por el id: " + idPaciente);
        }
 
@@ -177,7 +177,7 @@ public class TurnoImpl implements TurnoService {
                 .orElseThrow(() -> {
             //odontologoMetrics.contarOdontologoNoEncontrado(requestId);
             logger.warn("Turno no encontrado [idTurno={}, requestId={}]", idTurno, requestId);
-            return new  TurnoNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.TURNO," Turno no encontrado por el id:" + idTurno);
+            return new  TurnoNotFoundException(EntityContext.TURNO," Turno no encontrado por el id:" + idTurno);
 
         });
 
@@ -191,7 +191,7 @@ public class TurnoImpl implements TurnoService {
         if( lista.isEmpty()) {
             logger.warn("fecha no encontrada [desde={}], [hasta={}] requestId={}]", desde,hasta, requestId);
 
-            throw new TurnoNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.TURNO,
+            throw new TurnoNotFoundException(EntityContext.TURNO,
                     " No se encontro un turno en esa fecha, desde:" + desde + " hata: " + hasta);
 
         }
@@ -206,7 +206,7 @@ public class TurnoImpl implements TurnoService {
         if(lista.isEmpty()){
             logger.warn("Turno no encontrado por id odontologo: [idOdontologo={},  requestId={}]", idOdontologo, requestId);
 
-            throw new TurnoNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.TURNO,
+            throw new TurnoNotFoundException(EntityContext.TURNO,
                     " No se encontro un turno por ese id odontologo:" + idOdontologo );
 
         }
@@ -223,7 +223,7 @@ public class TurnoImpl implements TurnoService {
 
             logger.warn("Turno no encontrado por estado: [estado={},  requestId={}]", estado.name(), requestId);
 
-            throw new TurnoNotFoundException(com.example.ClinicaDefinitiva.domain.errors.EntityContext.TURNO,
+            throw new TurnoNotFoundException(EntityContext.TURNO,
                     " No se encontroron turnos por ese estado:" + estado );}
             logger.info("Turnos encotrados {} , estado  [estado={},  requestId={}]",lista.size(), estado.name() ,requestId);
 

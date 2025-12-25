@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject;
 
 
-import com.example.ClinicaDefinitiva.domain.errors.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
@@ -41,7 +41,7 @@ public final class Nit implements Serializable {
         String normalized = rawNIT.trim();
 
         if (!NIT_PATTERN.matcher(normalized).matches()) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_COMPANY_MISSING_TAX_ID, com.example.ClinicaDefinitiva.domain.errors.EntityContext.COMPANY);
+            throw new ValueObjectValidationException(ErrorCatalog.ERR_COMPANY_MISSING_TAX_ID, EntityContext.COMPANY);
         }
 
         return new Nit(normalized);

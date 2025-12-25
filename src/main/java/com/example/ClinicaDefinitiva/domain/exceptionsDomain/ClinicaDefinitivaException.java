@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 
-import com.example.ClinicaDefinitiva.domain.errors.DomainContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.DomainContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
 
