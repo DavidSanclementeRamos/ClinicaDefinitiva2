@@ -13,7 +13,7 @@ public enum AppointmentError implements ErrorCatalog {
             "No puede crearse si el odontólogo está inactivo"
     ),
 
-    ERR_APPT_OUTSIDE_AVAILABILITY(// SI AUNQUE PUEDE EDITARSE
+    ERR_APPT_OUTSIDE_AVAILABILITY(// SI
             "RN-APPT-002",
             "error.appointment.outsideAvailability",
             "No puede agendarse fuera del horario de disponibilidad"

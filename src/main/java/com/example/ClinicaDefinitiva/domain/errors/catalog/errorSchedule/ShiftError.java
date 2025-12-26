@@ -5,55 +5,55 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 public enum ShiftError implements ErrorCatalog {
     // ========== APLICADAS ==========
 
-    ERR_SHIFT_INVALID_TIME_RANGE(
+    ERR_SHIFT_INVALID_TIME_RANGE(// // PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-001",
             "error.shift.invalidTimeRange",
             "La hora de inicio debe ser anterior a la hora de fin"
     ),
 
-    ERR_SHIFT_PROFESSIONAL_INACTIVE(
+    ERR_SHIFT_PROFESSIONAL_INACTIVE(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-002",
             "error.shift.professionalInactive",
             "No puede crearse si el profesional está inactivo"
     ),
 
-    ERR_SHIFT_OVERLAP_CONFLICT(
+    ERR_SHIFT_OVERLAP_CONFLICT(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-003",
             "error.shift.overlapConflict",
             "No puede solaparse con otro turno del mismo profesional"
     ),
 
-    ERR_SHIFT_CANNOT_EDIT(
+    ERR_SHIFT_CANNOT_EDIT(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-004",
             "error.shift.cannotEdit",
             "No puede editarse si tiene tareas asignadas o está dentro de 24h"
     ),
 
-    ERR_SHIFT_HAS_ACTIVE_TASKS(
+    ERR_SHIFT_HAS_ACTIVE_TASKS(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-005",
             "error.shift.hasActiveTasks",
             "No puede cancelarse si tiene tareas activas"
     ),
 
-    ERR_SHIFT_INVALID_LOCATION(
+    ERR_SHIFT_INVALID_LOCATION(// POSPONER, NO HAY SEDE, PROYECTO EXPERIMENTAL
             "RN-SHIFT-006",
             "error.shift.invalidLocation",
             "Debe estar asociado a una sede válida"
     ),
 
-    ERR_SHIFT_CANCELLATION_REQUIRES_REASON(
+    ERR_SHIFT_CANCELLATION_REQUIRES_REASON(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-007",
             "error.shift.cancellationRequiresReason",
             "La cancelación requiere motivo obligatorio"
     ),
 
-    ERR_SHIFT_ZERO_DURATION(
+    ERR_SHIFT_ZERO_DURATION(// BIEN
             "RN-SHIFT-008",
             "error.shift.zeroDuration",
             "No puede tener duración negativa o cero"
     ),
 
-    ERR_SHIFT_LATE_MODIFICATION(
+    ERR_SHIFT_LATE_MODIFICATION(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-009",
             "error.shift.lateModification",
             "No puede modificarse si está dentro de 24h previas sin autorización"
