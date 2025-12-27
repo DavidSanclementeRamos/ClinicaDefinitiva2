@@ -1,72 +1,212 @@
 package com.example.ClinicaDefinitiva.domain.schedule.model;
 
-import com.example.ClinicaDefinitiva.domain.util.TimeIntervalRules;
 
-import java.time.DayOfWeek;
+
+
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.schedule.valueObject.ShiftId;
+import com.example.ClinicaDefinitiva.domain.schedule.valueObject.ShiftStatus;
+import com.example.ClinicaDefinitiva.domain.schedule.valueObject.ShiftType;
+
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
-import static com.example.ClinicaDefinitiva.domain.util.TimeIntervalRules.overlaps;
+/**
+ * Agregado: Shift (Turno Operativo)
+ * Representa la presencia física del profesional en la clínica
+ * Diferencia clave con Availability: Shift es presencia física, Availability es horario de atención
+ */
 
 public class Shift {
-// turno
 
-    private DayOfWeek dayOfWeek;
-    private LocalDateTime start;
-    private LocalDateTime end;
-    private List<Appointment> appointments;
-    private boolean active;
+    private ShiftId id;
+    private DentistId dentistId;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private ShiftType type;
+    private ShiftStatus status;
+    private String cancellationReason;
+    private Long version;
+    private static final Duration MODIFICATION_WINDOW = Duration.ofHours(24);
 
+    protected Shift() {
+    } // JPA
 
+    private Shift(ShiftId id, DentistId dentistId, LocalDate date,
+                  LocalTime startTime, LocalTime endTime, ShiftType type) {
+        this.id = id;
+        this.dentistId = dentistId;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.type = type;
+        this.status = ShiftStatus.active();
+    }
 
-    // No puede modificarse el horario si ya existen citas en ese rango
-    public void reschedule(LocalDateTime newStart, LocalDateTime newEnd) {
+    // ==================== FACTORY METHODS ====================
 
-        if(newStart == null || newEnd == null || !newStart.isBefore(newEnd)){
-            throw new IllegalArgumentException("Rango de turno invalido ");
+    /**
+     * RN-SHIFT-001: La hora de inicio debe ser anterior a la hora de fin
+     * RN-SHIFT-008: No puede tener duración negativa o cero
+     */
+    public static  Shift create(DentistId dentistId, LocalDate date,
+                                LocalTime startTime, LocalTime endTime, ShiftType type) {
+        if (dentistId == null) throw new IllegalArgumentException("DentistId is required");
+        if (date == null) throw new IllegalArgumentException("Date is required");
+        if (startTime == null || endTime == null) {
+            throw new IllegalArgumentException("Start and end times are required");
         }
+        if (type == null) throw new IllegalArgumentException("ShiftType is required");
 
-        List<Appointment> conflicts = appointments.stream()
-                .filter(a -> TimeIntervalRules.overlaps(
-                        a.getStart(), a.getEnd(), newStart, newEnd))
-                .toList();
-
-        if (!conflicts.isEmpty()) {
+        if (!startTime.isBefore(endTime)) {
             throw new IllegalArgumentException(
-                    "Cannot reschedule: " + conflicts.size() + " appointment"
-                            + (conflicts.size() > 1 ? "s" : "") + " scheduled in the new range"
+                    "RN-SHIFT-001",
+                    "La hora de inicio debe ser anterior a la hora de fin"
             );
         }
 
-        this.start = newStart;
-        this.end = newEnd;
+        Duration duration = Duration.between(startTime, endTime);
+        if (duration.isZero() || duration.isNegative()) {
+            throw new BusinessRuleViolationException(
+                    "RN-SHIFT-008",
+                    "No puede tener duración negativa o cero"
+            );
+        }
+
+        return new Shift(ShiftId id, dentistId, date, startTime, endTime, type);
     }
 
-   // private DayOfWeek dayOfWeek;
-   // private LocalTime start;
-    //private LocalTime end;
-    //private boolean active;*/
+    // ==================== OPERACIONES DE DOMINIO ====================
 
-    public boolean isAvailableAt(LocalDateTime dateTime) {
-        if (dateTime == null || !active) return false;
-        return dateTime.getDayOfWeek().equals(dayOfWeek)
-                && !dateTime.toLocalTime().isBefore(LocalTime.from(start))
-                && !dateTime.toLocalTime().isAfter(LocalTime.from(end));
+    /**
+     * RN-SHIFT-003: No puede solaparse con otro turno del mismo profesional
+     */
+    public boolean overlapsWith(Shift other) {
+        if (other == null || !this.date.equals(other.date)) {
+            return false;
+        }
+        if (!this.dentistId.equals(other.dentistId)) {
+            return false;
+        }
+        return this.startTime.isBefore(other.endTime) && this.endTime.isAfter(other.startTime);
     }
 
-    // Nuevo: validar rango completo
-    public boolean isAvailableBetween(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if (startDateTime == null || endDateTime == null || !active) return false;
+    /**
+     * RN-SHIFT-009: No puede modificarse si está dentro de 24h previas sin autorización
+     */
+    public void reschedule(LocalDate newDate, LocalTime newStart, LocalTime newEnd, boolean hasAuthorization) {
+        if (newDate == null || newStart == null || newEnd == null) {
+            throw new IllegalArgumentException("New schedule parameters are required");
+        }
+        if (!newStart.isBefore(newEnd)) {
+            throw new BusinessRuleViolationException(
+                    "RN-SHIFT-001",
+                    "La hora de inicio debe ser anterior a la hora de fin"
+            );
+        }
 
-        return startDateTime.getDayOfWeek().equals(dayOfWeek)
-                && endDateTime.getDayOfWeek().equals(dayOfWeek)
-                && !startDateTime.toLocalTime().isBefore(LocalTime.from(start))
-                && !endDateTime.toLocalTime().isAfter(LocalTime.from(end));
+        LocalDateTime shiftDateTime = LocalDateTime.of(this.date, this.startTime);
+        LocalDateTime now = LocalDateTime.now();
+
+        if (shiftDateTime.minus(MODIFICATION_WINDOW).isBefore(now) && !hasAuthorization) {
+            throw new BusinessRuleViolationException(
+                    "RN-SHIFT-009",
+                    "No puede modificarse si está dentro de las " + MODIFICATION_WINDOW.toHours() + "h previas sin autorización"
+            );
+        }
+
+        this.date = newDate;
+        this.startTime = newStart;
+        this.endTime = newEnd;
     }
-}
+    /**
+     * RN-SHIFT-007: Cancelación requiere motivo obligatorio
+     */
+    public void cancel(String reason) {
+        if (reason == null || reason.isBlank()) {
+            throw new BusinessRuleViolationException(
+                    "RN-SHIFT-007",
+                    "La cancelación requiere motivo obligatorio"
+            );
+        }
+        this.status = this.status.cancel();
+        this.cancellationReason = reason;
+    }
 
+// ==================== QUERIES ====================
 
+    /**
+     * Verifica si el turno cubre un momento específico
+     */
+    public boolean covers(LocalDateTime dateTime) {
+        if (dateTime == null || !status.isActive()) return false;
+        if (!dateTime.toLocalDate().equals(this.date)) return false;
+        LocalTime time = dateTime.toLocalTime();
+        return !time.isBefore(startTime) && time.isBefore(endTime);
+    }
 
+    /**
+     * Verifica si el turno cubre un intervalo completo
+     */
+    public boolean coversInterval(LocalDateTime start, LocalDateTime end) {
+        if (start == null || end == null || !status.isActive()) return false;
+        if (!start.toLocalDate().equals(this.date) || !end.toLocalDate().equals(this.date)) {
+            return false;
+        }
+        return !start.toLocalTime().isBefore(this.startTime) &&
+                !end.toLocalTime().isAfter(this.endTime);
+    }
 
+    public Duration getDuration() {
+        return Duration.between(startTime, endTime);
+    }
+
+    public int getDurationInHours() {
+        return (int) getDuration().toHours();
+    }
+
+    public boolean isActive() {
+        return status.isActive();
+    }
+
+    public boolean isInPast() {
+        LocalDateTime shiftEnd = LocalDateTime.of(date, endTime);
+        return shiftEnd.isBefore(LocalDateTime.now());
+    }
+
+    public boolean isWithinNext24Hours() {
+        LocalDateTime shiftStart = LocalDateTime.of(date, startTime);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime limit = now.plusHours(24);
+        return shiftStart.isAfter(now) && !shiftStart.isAfter(limit);
+    }
+
+// ==================== GETTERS ====================
+
+    public ShiftId getId() { return id; }
+    public DentistId getDentistId() { return dentistId; }
+    public LocalDate getDate() { return date; }
+    public LocalTime getStartTime() { return startTime; }
+    public LocalTime getEndTime() { return endTime; }
+    public ShiftType getType() { return type; }
+    public ShiftStatus getStatus() { return status; }
+    public String getCancellationReason() { return cancellationReason; }
+    public Long getVersion() { return version; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Shift)) return false;
+        Shift shift = (Shift) o;
+        return Objects.equals(id, shift.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }

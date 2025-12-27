@@ -1,56 +1,100 @@
 package com.example.ClinicaDefinitiva.domain.schedule.model;
 
-import com.example.ClinicaDefinitiva.Enum.Estado;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
+import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AvailabilityId;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Collection;
+import java.util.Objects;
 
+/**
+ * TimeSlot: Bloque horario específico derivado de Availability
+ * NO es persistido, se genera dinámicamente para consultas de disponibilidad
+ */
 public final class TimeSlot {
-    // horario
 
-    private final DayOfWeek dayOfWeek;
-    private final LocalTime inicio;
-    private final LocalTime fin;
+    private final AvailabilityId availabilityId;  // Referencia al padre
+    private final LocalDate date;                  // Fecha específica
+    private final LocalTime startTime;
+    private final LocalTime endTime;
+    private final int durationMinutes;
 
-    public TimeSlot(DayOfWeek dayOfWeek, LocalTime inicio, LocalTime fin) {
-        if (dayOfWeek == null || inicio == null || fin == null || !inicio.isBefore(fin)) {
-            throw new IllegalArgumentException("Invalid TimeSlot.");
+    private TimeSlot(AvailabilityId availabilityId, LocalDate date,
+                     LocalTime startTime, LocalTime endTime) {
+        this.availabilityId = availabilityId;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.durationMinutes = (int) java.time.Duration.between(startTime, endTime).toMinutes();
+    }
+
+    /**
+     * Genera slots desde una Availability para una fecha específica
+     */
+    public static java.util.List<TimeSlot> generateFrom(Availability availability,
+                                                        LocalDate targetDate,
+                                                        int slotDurationMinutes) {
+        if (!availability.getDayOfWeek().equals(targetDate.getDayOfWeek())) {
+            return java.util.List.of();
         }
 
-        this.dayOfWeek = dayOfWeek;
-        this.inicio = inicio;
-        this.fin = fin;
-    }
+        java.util.List<TimeSlot> slots = new java.util.ArrayList<>();
+        LocalTime current = availability.getStartTime();
+        LocalTime end = availability.getEndTime();
 
+        while (current.plusMinutes(slotDurationMinutes).isBefore(end) ||
+                current.plusMinutes(slotDurationMinutes).equals(end)) {
 
-    // reglas
-    public int duracionHoras(){
-
-        return (int) Duration.between(inicio, fin).toHours();
-    }
-
-    // para verificar si una fecha ya esta ciendo usadad, asi ebitar el acomplamiento
-    public boolean seSolapaCon(TimeSlot otro){
-        if (otro == null || otro.dayOfWeek != this.dayOfWeek) return false;
-        // se solapan si inicio < otro.fin y fin > otro.inicio
-        return !this.inicio.isAfter(otro.fin) && !this.fin.isBefore(otro.inicio);
-    }
-
-    public void update () {
-        if (!tinecitasFuturas().isEmpty()) {
-            throw new ReglaNegocioException("No se puede desactivarse: tiene " + tinecitasFuturas().size() + " citas futuras");
+            LocalTime slotEnd = current.plusMinutes(slotDurationMinutes);
+            slots.add(new TimeSlot(availability.getId(), targetDate, current, slotEnd));
+            current = slotEnd;
         }
 
+        return slots;
     }
 
+    // ==================== QUERIES ====================
 
-    public DayOfWeek getDayOfWeek() { return dayOfWeek; }
-    public LocalTime getInicio() { return inicio; }
-    public LocalTime getFin() { return fin; }
+    public boolean covers(LocalDateTime dateTime) {
+        if (!dateTime.toLocalDate().equals(this.date)) return false;
+        LocalTime time = dateTime.toLocalTime();
+        return !time.isBefore(startTime) && time.isBefore(endTime);
+    }
 
+    public boolean overlapsWith(TimeSlot other) {
+        if (!this.date.equals(other.date)) return false;
+        return this.startTime.isBefore(other.endTime) && this.endTime.isAfter(other.startTime);
+    }
 
+    public LocalDateTime getStartDateTime() {
+        return LocalDateTime.of(date, startTime);
+    }
 
+    public LocalDateTime getEndDateTime() {
+        return LocalDateTime.of(date, endTime);
+    }
 
+    // ==================== GETTERS ====================
+
+    public AvailabilityId getAvailabilityId() { return availabilityId; }
+    public LocalDate getDate() { return date; }
+    public LocalTime getStartTime() { return startTime; }
+    public LocalTime getEndTime() { return endTime; }
+    public int getDurationMinutes() { return durationMinutes; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TimeSlot)) return false;
+        TimeSlot timeSlot = (TimeSlot) o;
+        return Objects.equals(availabilityId, timeSlot.availabilityId) &&
+                Objects.equals(date, timeSlot.date) &&
+                Objects.equals(startTime, timeSlot.startTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(availabilityId, date, startTime);
+    }
 }

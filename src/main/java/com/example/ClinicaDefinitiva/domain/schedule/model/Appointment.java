@@ -3,6 +3,9 @@ package com.example.ClinicaDefinitiva.domain.schedule.model;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.AppointmentError;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentStatus;
@@ -13,7 +16,7 @@ import java.time.LocalDateTime;
 
 public class Appointment {
 
-    private final  AppointmentId id;
+    private final AppointmentId id;
     private final DentistId dentist;
     private final PatientId patient;
     private LocalDateTime start;                 // fechaHora
@@ -51,47 +54,79 @@ public class Appointment {
         this.status = status;
     }
 
-    public boolean esFutura() {
-        return this.start.isAfter(LocalDateTime.now());
-    }
 
+    // ==================== OPERACIONES DE DOMINIO ====================
 
-
-    // Confirmar cita (puede usarse si necesitas un paso explícito de confirmación)
+    /**
+     * RN-APPT-006: Solo puede confirmarse si está en estado SCHEDULED
+     */
     public void confirm() {
-        if (this.patient == null ) {
-            throw new BusinessRuleViolationException(
-                    "No se puede confirmar: paciente inválido");
-        }
-        if(this.dentist == null) {
-            throw new BusinessRuleViolationException(
-                    "No se puede confirmar: odontólogo inválido");
-        }
-
-        this.status.isConfirmed();
+        this.status = this.status.transitionTo(AppointmentStatus.Status.CONFIRMED);
+        this.lastUpdated = LocalDateTime.now();
     }
 
-    // 3) No puede eliminarse (cancelarse) si está a menos de X horas de su ejecución (2)
-    public void cancel() {
+    /**
+     * RN-APPT-007: No puede cancelarse dentro de las 24h previas
+     * RN-APPT-008: La cancelación requiere motivo obligatorio
+     */
+    public void cancel(String cancellationReason) {
+        if (cancellationReason == null || cancellationReason.isBlank()) {
+            throw new BusinessRuleViolationException(
+                    "RN-APPT-008",
+                    "La cancelación requiere motivo obligatorio"
+            );
+        }
+
         LocalDateTime now = LocalDateTime.now();
         if (start.minus(CANCELLATION_WINDOW).isBefore(now)) {
             throw new BusinessRuleViolationException(
-                    "No se puede cancelar: faltan menos de "
-                            + CANCELLATION_WINDOW.toHours()
-                            + " horas para la cita");
+                    "RN-APPT-007",
+                    "No puede cancelarse dentro de las " + CANCELLATION_WINDOW.toHours() + "h previas"
+            );
         }
-        this.status.isCancelled();
+
+        this.status = this.status.transitionTo(AppointmentStatus.Status.CANCELLED);
+        this.clinicalNotes = (this.clinicalNotes == null ? "" : this.clinicalNotes + "\n")
+                + "Cancelación: " + cancellationReason;
+        this.lastUpdated = LocalDateTime.now();
     }
 
+    public void complete(ServiceDuration actualDuration, String clinicalNotes, String attendedBy) {
+        if (actualDuration == null || actualDuration.getMinutes() <= 0) {
+            throw new BusinessRuleViolationException(
+                    "RN-APPT-005",
+                    "La duración real debe ser positiva"
+            );
+        }
+        if (clinicalNotes == null || clinicalNotes.isBlank()) {
+            throw new BusinessRuleViolationException(
+                    "RN-APPT-005",
+                    "Las notas clínicas son obligatorias al completar"
+            );
+        }
 
+        this.status = this.status.transitionTo(AppointmentStatus.Status.COMPLETED);
+        this.actualDuration = actualDuration;
+        this.clinicalNotes = clinicalNotes;
+        this.attendedBy = attendedBy;
+        this.lastUpdated = LocalDateTime.now();
+    }
 
-     /**
-      Se decidió delegar la lógica de estado desde Appointment hacia su VO AppointmentStatus,
-      manteniendo la semántica encapsulada pero accesible. Esto permite que entidades como Dentist
-      consulten el estado sin acoplarse a la estructura interna del VO.
-      */
-    public boolean isScheduled() {
-        return this.status.isScheduled();
+    public void markAsNoShow(String notes) {
+        this.status = this.status.transitionTo(AppointmentStatus.Status.NO_SHOW);
+        this.clinicalNotes = "No Show: " + (notes != null ? notes : "Sin observaciones");
+        this.lastUpdated = LocalDateTime.now();
+    }
+
+    public void markAsRescheduled() {
+        this.status = this.status.transitionTo(AppointmentStatus.Status.RESCHEDULED);
+        this.lastUpdated = LocalDateTime.now();
+    }
+
+    // ==================== QUERIES ====================
+
+    public boolean esFutura() {
+        return this.start.isAfter(LocalDateTime.now());
     }
 
     public boolean isWithinNext24Hours(LocalDateTime reference) {
@@ -99,121 +134,27 @@ public class Appointment {
         return start.isAfter(reference) && !start.isAfter(limit);
     }
 
-    public boolean conflictsWith(LocalDateTime candidate) {
-        LocalDateTime start = this.start;
-        LocalDateTime end = this.end; // debe existir
-        if (start == null || end == null || candidate == null) return false;
-        // Consideramos conflicto si candidate cae dentro del intervalo [start, end)
-        return !candidate.isBefore(start) && candidate.isBefore(end);
-
-
+    public boolean conflictsWith(LocalDateTime candidateStart, LocalDateTime candidateEnd) {
+        if (start == null || end == null || candidateStart == null || candidateEnd == null) {
+            return false;
+        }
+        return !(candidateEnd.isBefore(start) || candidateEnd.equals(start) ||
+                candidateStart.isAfter(end) || candidateStart.equals(end));
     }
 
-    public LocalDateTime getEnd() {
-        return end;
-    }
+    // ==================== GETTERS ====================
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-
-    public void setRescheduled(boolean rescheduled) {
-        this.rescheduled = rescheduled;
-    }
-
-    public LocalDateTime getStart() {
-        return start;
-    }
-
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
-
-
-    public DentistId getDentistId() {
-        return dentist;
-    }
-
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public PatientId getPatientId() {
-        return patient;
-    }
-
-    public boolean isRescheduled() {
-        return rescheduled;
-    }
-
-    public AppointmentType getAppointmentType() {
-        return appointmentType;
-    }
-
-    public void setAppointmentType(AppointmentType appointmentType) {
-        this.appointmentType = appointmentType;
-    }
-
-    public String getAttendedBy() {
-        return attendedBy;
-    }
-
-    public void setAttendedBy(String attendedBy) {
-        this.attendedBy = attendedBy;
-    }
-
-
-
-    public String getClinicalNotes() {
-        return clinicalNotes;
-    }
-
-    public void setClinicalNotes(String clinicalNotes) {
-        this.clinicalNotes = clinicalNotes;
-    }
-
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public ServiceDuration getActualDuration() {
-        return actualDuration;
-    }
-
-    public DentistId getDentist() {
-        return dentist;
-    }
-
-    public AppointmentId getId() {
-        return id;
-    }
-
-    public PatientId getPatient() {
-        return patient;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-
-    public AppointmentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(AppointmentStatus status) {
-        this.status = status;
-    }
-
-
+    public AppointmentId getId() { return id; }
+    public DentistId getDentistId() { return dentist; }
+    public PatientId getPatientId() { return patient; }
+    public LocalDateTime getStart() { return start; }
+    public LocalDateTime getEnd() { return end; }
+    public AppointmentStatus getStatus() { return status; }
+    public String getReason() { return reason; }
+    public AppointmentType getAppointmentType() { return appointmentType; }
+    public String getClinicalNotes() { return clinicalNotes; }
+    public ServiceDuration getActualDuration() { return actualDuration; }
+    public String getAttendedBy() { return attendedBy; }
+    public LocalDateTime getCreationDate() { return creationDate; }
+    public LocalDateTime getLastUpdated() { return lastUpdated; }
 }
