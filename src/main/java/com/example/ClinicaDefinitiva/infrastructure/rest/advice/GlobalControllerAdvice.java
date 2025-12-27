@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.advice;
 
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ClinicaDefinitivaException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.EdadNoPermitidaException;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.ErrorResponse;
@@ -83,7 +83,7 @@ public class GlobalControllerAdvice {
         Object target = ex.getBindingResult().getTarget();
         Class<?> dtoClass = (target != null) ? target.getClass() : null;
 
-            ErrorCatalog error = ErrorCodeResolver.resolver(dtoClass);
+            ErrorCatalogXD error = ErrorCodeResolver.resolver(dtoClass);
 
             logger.warn("No se pudo determinar la clase del DTO. Usando error genérico.");
 
@@ -111,8 +111,8 @@ public class GlobalControllerAdvice {
         logger.error("Error interno inesperado [usuario={}, requestId={}]: {}", usuario, requestId, ex.getMessage());
 
         ErrorResponse response = new ErrorResponse(
-                ErrorCatalog.GENERIC_ERROR.getCode(), "GENERIC", "EXCEPCION", usuario,
-                ErrorCatalog.GENERIC_ERROR.getMessage(),
+                ErrorCatalogXD.GENERIC_ERROR.getCode(), "GENERIC", "EXCEPCION", usuario,
+                ErrorCatalogXD.GENERIC_ERROR.getMessage(),
                 List.of(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR,
                 LocalDateTime.now(), requestId
         );
@@ -135,11 +135,11 @@ public class GlobalControllerAdvice {
 
 
         ErrorResponse response = new ErrorResponse(
-                ErrorCatalog.UNSUPPORTED_MEDIA_TYPE.getCode(), // Código estandarizado (UNSUPPORTED_MEDIA_TYPE)
+                ErrorCatalogXD.UNSUPPORTED_MEDIA_TYPE.getCode(), // Código estandarizado (UNSUPPORTED_MEDIA_TYPE)
                 "UNSUPPORTED",// Código lógico del módulo (OD01)
                 "EXCEPTION",  // Contexto semántico ("EXCEPTION")
                 usuario,  // Usuario autenticado o "anonimo"
-                ErrorCatalog.UNSUPPORTED_MEDIA_TYPE.getMessage(), // Mensaje base del catálogo
+                ErrorCatalogXD.UNSUPPORTED_MEDIA_TYPE.getMessage(), // Mensaje base del catálogo
                 List.of(ex.getMessage()), // Detalle dinámico (ej:
                 HttpStatus.UNSUPPORTED_MEDIA_TYPE,// Código HTTP (ajustable según error)
                 LocalDateTime.now(), // Marca de tiempo
@@ -161,11 +161,11 @@ public class GlobalControllerAdvice {
                 requestId,
                 ex.getMessage());
         ErrorResponse response = new ErrorResponse(
-                ErrorCatalog.METHOD_NOT_ALLOWED.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                ErrorCatalogXD.METHOD_NOT_ALLOWED.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
                 "MISSING_REQUEST_PARAM",// Código lógico del módulo (OD01)
                 "METHOD_NOT_SUPPORTED_EXCEPTION",  // Contexto semántico ("EXCEPTION")
                 usuario,  // Usuario autenticado o "anonimo"
-                ErrorCatalog.METHOD_NOT_ALLOWED.getMessage(), // Mensaje base del catálogo
+                ErrorCatalogXD.METHOD_NOT_ALLOWED.getMessage(), // Mensaje base del catálogo
                 List.of(ex.getMessage()), // Detalle dinámico (ej:
                 HttpStatus.METHOD_NOT_ALLOWED,// Código HTTP (ajustable según error)
                 LocalDateTime.now(), // Marca de tiempo
@@ -190,11 +190,11 @@ public class GlobalControllerAdvice {
                 requestId,
                 ex.getMessage());
         ErrorResponse response = new ErrorResponse(
-                ErrorCatalog.MISSING_REQUEST_PARAM.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                ErrorCatalogXD.MISSING_REQUEST_PARAM.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
                 "PARAM",// Código lógico del módulo (OD01)
                 "MISSING_REQUEST_PARAM",  // Contexto semántico ("EXCEPTION")
                 usuario,  // Usuario autenticado o "anonimo"
-                ErrorCatalog.MISSING_REQUEST_PARAM.getMessage(), // Mensaje base del catálogo
+                ErrorCatalogXD.MISSING_REQUEST_PARAM.getMessage(), // Mensaje base del catálogo
                 List.of(ex.getMessage()), // Detalle dinámico (ej:
                 HttpStatus.BAD_REQUEST, // Código HTTP (ajustable según error)
                 LocalDateTime.now(), // Marca de tiempo
@@ -215,11 +215,11 @@ public class GlobalControllerAdvice {
                 requestId,
                 ex.getMessage());
         ErrorResponse response = new ErrorResponse(
-                ErrorCatalog.INVALID_JSON.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                ErrorCatalogXD.INVALID_JSON.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
                 "JSON",// Código lógico del módulo (OD01)
                 "INVALID_JSON",  // Contexto semántico ("EXCEPTION")
                 usuario,  // Usuario autenticado o "anonimo"
-                ErrorCatalog.INVALID_JSON.getMessage(), // Mensaje base del catálogo
+                ErrorCatalogXD.INVALID_JSON.getMessage(), // Mensaje base del catálogo
                 List.of(ex.getMessage()), // Detalle dinámico (ej:
                 HttpStatus.BAD_REQUEST, // Código HTTP (ajustable según error)
                 LocalDateTime.now(), // Marca de tiempo
@@ -239,11 +239,11 @@ public class GlobalControllerAdvice {
                 requestId,
                 ex.getMessage());
         ErrorResponse response = new ErrorResponse(
-                ErrorCatalog.INVALID_PARAMETERS.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                ErrorCatalogXD.INVALID_PARAMETERS.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
                 "VAL99",// Código lógico del módulo (OD01)
                 "validation",  // Contexto semántico ("EXCEPTION")
                 usuario,  // Usuario autenticado o "anonimo"
-                ErrorCatalog.INVALID_PARAMETERS.getMessage(), // Mensaje base del catálogo
+                ErrorCatalogXD.INVALID_PARAMETERS.getMessage(), // Mensaje base del catálogo
                 List.of(ex.getMessage()), // Detalle dinámico (ej:
                 HttpStatus.BAD_REQUEST, // Código HTTP (ajustable según error)
                 LocalDateTime.now(), // Marca de tiempo
@@ -263,11 +263,11 @@ public class GlobalControllerAdvice {
 
         logger.error("La ruta {} {} no existen %s[usuario={}, requestId={}]: {}", ex.getHttpMethod(), ex.getRequestURL(), usuario, requestId, ex.getMessage());
         ErrorResponse response = new ErrorResponse(
-                ErrorCatalog.ROUTE_NOT_FOUND.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                ErrorCatalogXD.ROUTE_NOT_FOUND.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
                 "NOHANDLER",// Código lógico del módulo (OD01)
                 "RUTA_MAPEADA",  // Contexto semántico ("EXCEPTION")
                 usuario,  // Usuario autenticado o "anonimo"
-                ErrorCatalog.ROUTE_NOT_FOUND.getMessage(), // Mensaje base del catálogo
+                ErrorCatalogXD.ROUTE_NOT_FOUND.getMessage(), // Mensaje base del catálogo
                 List.of(ex.getMessage()), // Detalle dinámico (ej:
                 HttpStatus.BAD_REQUEST, // Código HTTP (ajustable según error)
                 LocalDateTime.now(), // Marca de tiempo
@@ -290,11 +290,11 @@ public class GlobalControllerAdvice {
                 requestId);
 
         ErrorResponse response = new ErrorResponse(
-                ErrorCatalog.TYPE_MISMATCH.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                ErrorCatalogXD.TYPE_MISMATCH.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
                 "PARAMETRO NO VALIDO",// Código lógico del módulo (OD01)
                 "HAY TEXTO EN LUGAR DE NUMERO",  // Contexto semántico ("EXCEPTION")
                 usuario,  // Usuario autenticado o "anonimo"
-                ErrorCatalog.TYPE_MISMATCH.getMessage(), // Mensaje base del catálogo
+                ErrorCatalogXD.TYPE_MISMATCH.getMessage(), // Mensaje base del catálogo
                 List.of(ex.getMessage()), // Detalle dinámico (ej:
                 HttpStatus.BAD_REQUEST,// Código HTTP (ajustable según error)
                 LocalDateTime.now(), // Marca de tiempo
@@ -341,11 +341,11 @@ public class GlobalControllerAdvice {
                 requestId,
                 ex.getMessage());
         ErrorResponse response = new ErrorResponse(
-                ErrorCatalog.DATA_INTEGRITY_VIOLATION.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
+                ErrorCatalogXD.DATA_INTEGRITY_VIOLATION.getCode(), // Código estandarizado (METHOD_NOT_ALLOWED)
                 "BDD",// Código lógico del módulo (OD01)
                 "VIOLACION_BT",  // Contexto semántico ("EXCEPTION")
                 usuario,  // Usuario autenticado o "anonimo"
-                ErrorCatalog.DATA_INTEGRITY_VIOLATION.getMessage(), // Mensaje base del catálogo
+                ErrorCatalogXD.DATA_INTEGRITY_VIOLATION.getMessage(), // Mensaje base del catálogo
                 List.of(ex.getMessage()), // Detalle dinámico (ej:
                 HttpStatus.CONFLICT,// Código HTTP (ajustable según error)
                 LocalDateTime.now(), // Marca de tiempo

@@ -2,8 +2,8 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
@@ -53,15 +53,15 @@ public class Patient implements Actor {
                                           ContractId contractId) {
 
         if (!data.getAge().isEligibleForRegistration()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_PATIENT_INVALID_AGE, EntityContext.PATIENT);
+            throw new DomainAggregateException(ErrorCatalogXD.ERR_PATIENT_INVALID_AGE, EntityContext.PATIENT);
         }
 
         if (!data.getAge().isAdult() && guardian == null) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
 // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
 
         return new Patient(id, data, guardian, user.getId(), null, null, lastUpdate, contractId);
     }
@@ -70,7 +70,7 @@ public class Patient implements Actor {
     public void updatePatientContact(Person data, UserIdentity user) {
         // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
         this.person = this.person.updateContact(data.getAddress(), data.getPhoneNumber());
         this.lastUpdate = LocalDateTime.now();
     }
@@ -79,10 +79,10 @@ public class Patient implements Actor {
     public void updateSensitiveData(Person data, UserIdentity user) {
         // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
 
         if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_ACTIVE_SERVICES, EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_ACTIVE_SERVICES, EntityContext.PATIENT);
         }
 
         this.person = this.person.updateSensitive(
@@ -102,19 +102,19 @@ public class Patient implements Actor {
     public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
         // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.PATIENT);
 
         if (shift == null) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_NO_SHIFT_ASSIGNED, EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_NO_SHIFT_ASSIGNED, EntityContext.PATIENT);
         }
         if (!shift.isAvailableBetween(start, end)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_SHIFT_NOT_AVAILABLE, EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_SHIFT_NOT_AVAILABLE, EntityContext.PATIENT);
         }
     }
 
     /** Validar reagendamiento
     public void validateReschedule(LocalDateTime newStart, LocalDateTime newEnd) {
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.PATIENT);
 
         if (shift == null || !shift.isAvailableBetween(newStart, newEnd)) {
             throw new ShiftNotAvailableException(EntityContext.PATIENT, "Nueva fecha fuera del turno asignado");
@@ -124,7 +124,7 @@ public class Patient implements Actor {
     // Validar responsable
     private void validarResponsable() {
         if (requiereResponsable() && !tieneResponsable()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
     }
 
@@ -147,11 +147,11 @@ public class Patient implements Actor {
         final int DAYS_TO_BLOCK_DEACTIVATION = 30;
 
         if(reason == null || reason.isBlank()){
-            return Outcome.fail(new OutcomeDetail(ErrorCatalog.EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
+            return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
         }
 
         if (schedule != null && schedule.hasAppointmentsWithin(DAYS_TO_BLOCK_DEACTIVATION)) {
-            return Outcome.fail(new OutcomeDetail(ErrorCatalog.ERR_PATIENT_ACTIVE_SERVICES,Severity.INFO, Category.CLINICO));
+            return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.ERR_PATIENT_ACTIVE_SERVICES,Severity.INFO, Category.CLINICO));
         }
 
         return Outcome.ok();

@@ -3,7 +3,6 @@ package com.example.ClinicaDefinitiva.domain.schedule.model;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceDuration;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
@@ -35,7 +34,7 @@ public class Appointment {
 
 
     // Ventana mínima de cancelación: 2 horas antes de la cita
-    private static final Duration CANCELLATION_WINDOW = Duration.ofHours(2);
+    private static final Duration CANCELLATION_WINDOW = Duration.ofHours(24);
 
     public Appointment(ServiceDuration actualDuration, AppointmentType appointmentType, String attendedBy, String clinicalNotes, LocalDateTime creationDate, DentistId dentist, LocalDateTime end, AppointmentId id, LocalDateTime lastUpdated, PatientId patient, String reason, boolean rescheduled, LocalDateTime start, AppointmentStatus status) {
         this.actualDuration = actualDuration;
@@ -61,7 +60,10 @@ public class Appointment {
      * RN-APPT-006: Solo puede confirmarse si está en estado SCHEDULED
      */
     public void confirm() {
-        this.status = this.status.transitionTo(AppointmentStatus.Status.CONFIRMED);
+      if(!status.isScheduled()){
+        throw new  BusinessRuleViolationException(AppointmentError.ERR_APPT_NOT_EDITABLE,EntityContext.APPOINTMENT);
+      }
+        this.status.transitionTo(AppointmentStatus.Status.CONFIRMED);
         this.lastUpdated = LocalDateTime.now();
     }
 
@@ -71,18 +73,12 @@ public class Appointment {
      */
     public void cancel(String cancellationReason) {
         if (cancellationReason == null || cancellationReason.isBlank()) {
-            throw new BusinessRuleViolationException(
-                    "RN-APPT-008",
-                    "La cancelación requiere motivo obligatorio"
-            );
+            throw new BusinessRuleViolationException(AppointmentError.ERR_APPT_MISSING_REASON,EntityContext.APPOINTMENT);
         }
 
         LocalDateTime now = LocalDateTime.now();
         if (start.minus(CANCELLATION_WINDOW).isBefore(now)) {
-            throw new BusinessRuleViolationException(
-                    "RN-APPT-007",
-                    "No puede cancelarse dentro de las " + CANCELLATION_WINDOW.toHours() + "h previas"
-            );
+            throw new BusinessRuleViolationException(AppointmentError.ERR_APPT_LATE_CANCELLATION,EntityContext.APPOINTMENT);
         }
 
         this.status = this.status.transitionTo(AppointmentStatus.Status.CANCELLED);
@@ -91,18 +87,15 @@ public class Appointment {
         this.lastUpdated = LocalDateTime.now();
     }
 
+    /**
+     * RN-APPT-005: Solo puede finalizarse si tiene duración real y notas clínicas
+     */
     public void complete(ServiceDuration actualDuration, String clinicalNotes, String attendedBy) {
         if (actualDuration == null || actualDuration.getMinutes() <= 0) {
-            throw new BusinessRuleViolationException(
-                    "RN-APPT-005",
-                    "La duración real debe ser positiva"
-            );
+            throw new BusinessRuleViolationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION,EntityContext.APPOINTMENT);
         }
         if (clinicalNotes == null || clinicalNotes.isBlank()) {
-            throw new BusinessRuleViolationException(
-                    "RN-APPT-005",
-                    "Las notas clínicas son obligatorias al completar"
-            );
+            throw new BusinessRuleViolationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION,EntityContext.APPOINTMENT);
         }
 
         this.status = this.status.transitionTo(AppointmentStatus.Status.COMPLETED);

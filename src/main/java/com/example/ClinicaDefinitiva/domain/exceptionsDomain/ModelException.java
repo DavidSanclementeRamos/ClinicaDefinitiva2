@@ -1,7 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.context.DomainContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 
 /**
  * Excepción base para errores relacionados con el modelo de dominio.
@@ -11,7 +13,7 @@ import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
  */
 public class ModelException extends ClinicaDefinitivaException{
 
-    public ModelException(ErrorCatalog catalogo, VOContext contexto) {
+    public ModelException(ErrorCatalog catalogo, DomainContext contexto) {
         super(catalogo, contexto);
     }
 }

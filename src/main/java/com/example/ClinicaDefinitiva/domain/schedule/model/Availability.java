@@ -4,6 +4,8 @@ package com.example.ClinicaDefinitiva.domain.schedule.model;
 
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.AvailabilityError;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AvailabilityId;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AvailabilityStatus;
@@ -58,18 +60,12 @@ public class Availability {
             throw new IllegalArgumentException("Start and end times are required");
         }
         if (!startTime.isBefore(endTime)) {
-            throw new BusinessRuleViolationException(
-                    "RN-AVAIL-001",
-                    "La hora de inicio debe ser anterior a la hora de fin"
-            );
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_INVALID_TIME_RANGE,EntityContext.);
         }
 
         Duration duration = Duration.between(startTime, endTime);
         if (duration.isZero() || duration.isNegative()) {
-            throw new BusinessRuleViolationException(
-                    "RN-AVAIL-002",
-                    "No puede crearse disponibilidad con duración negativa o cero"
-            );
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_ZERO_DURATION,EntityContext. );
         }
 
         return new Availability(id, dentistId, dayOfWeek, startTime, endTime);
@@ -105,9 +101,8 @@ public class Availability {
         for (Availability existing : existingAvailabilities) {
             if (existing.getId().equals(this.id)) continue; // Skip self
             if (extended.overlapsWith(existing)) {
-                throw new BusinessRuleViolationException(
-                        "RN-AVAIL-009",
-                        "No puede extenderse sobre otro bloque ya registrado"
+                throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_EXTENSION_CONFLICT,EntityContext.
+
                 );
             }
         }
@@ -120,9 +115,7 @@ public class Availability {
      */
     public void deactivate(String reason) {
         if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(
-                    "RN-AVAIL-008",
-                    "La desactivación requiere motivo obligatorio"
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_DEACTIVATION_REQUIRES_REASON, EntityContext
             );
         }
         if (!status.canTransitionTo(AvailabilityStatus.Status.BLOCKED)) {

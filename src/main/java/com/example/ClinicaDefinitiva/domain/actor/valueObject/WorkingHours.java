@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.schedule.model.TimeSlot;
@@ -20,26 +20,26 @@ public final class WorkingHours {
         // Validación de nulidad
         if (start == null || end == null || dayOfWeek == null) {
             throw new ValueObjectValidationException(
-                    ErrorCatalog.ERR_WORKING_HOURS_NULL, VOContext.WORKING_HOURS);
+                    ErrorCatalogXD.ERR_WORKING_HOURS_NULL, VOContext.WORKING_HOURS);
         }
 
         // Validación de orden temporal
         if (!start.isBefore(end)) {
             throw new ValueObjectValidationException(
-                    ErrorCatalog.ERR_WORKING_HOURS_INVALID_RANGE, VOContext.WORKING_HOURS);
+                    ErrorCatalogXD.ERR_WORKING_HOURS_INVALID_RANGE, VOContext.WORKING_HOURS);
         }
 
         // Validación de horas declaradas
         if (declaredHoursPerWeek <= 0) {
             throw new ValueObjectValidationException(
-                    ErrorCatalog.ERR_WORKING_HOURS_INVALID_DECLARED,
+                    ErrorCatalogXD.ERR_WORKING_HOURS_INVALID_DECLARED,
                     VOContext.WORKING_HOURS);
         }
 
         // Validación de horas máximas (jornada laboral legal)
         if (declaredHoursPerWeek > 48) {
             throw new ValueObjectValidationException(
-                    ErrorCatalog.ERR_WORKING_HOURS_EXCEEDS_LEGAL_LIMIT, VOContext.WORKING_HOURS);
+                    ErrorCatalogXD.ERR_WORKING_HOURS_EXCEEDS_LEGAL_LIMIT, VOContext.WORKING_HOURS);
         }
 
         this.start = start;

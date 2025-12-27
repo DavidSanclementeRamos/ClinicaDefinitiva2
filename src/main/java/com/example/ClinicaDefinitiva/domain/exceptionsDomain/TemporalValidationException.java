@@ -1,7 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 
 /**
  * Excepción lanzada cuando un rango temporal o condición cronológica

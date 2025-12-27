@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.errors;
 
-public enum ErrorCatalog {
+public enum ErrorCatalogXD {
 
    /** METHOD_NOT_ALLOWED("ERR_HTTP_405", "Método HTTP no permitido."),
     MISSING_REQUEST_PARAM("ERR_PARAM_001", "Parámetro de solicitud faltante."),
@@ -803,7 +803,7 @@ ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParti
     private final String message;
 
 
-    ErrorCatalog(String code, String key, String message) {
+    ErrorCatalogXD(String code, String key, String message) {
         this.code = code;
         this.key = key;
         this.message = message;

@@ -5,8 +5,8 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObjec
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TemporalValidationException;
@@ -100,7 +100,7 @@ public final class JournalEntry {
         Objects.requireNonNull(line, "La línea no puede ser nula");
 
         if (!this.lines.remove(line)) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_LINE_NOT_FOUND, EntityContext.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalogXD.ERR_JOURNALENTRY_LINE_NOT_FOUND, EntityContext.JOURNALENTRY);
         }
         this.balanced = false;
     }
@@ -122,11 +122,11 @@ public final class JournalEntry {
      */
     public void validateBalance() {
         if (this.lines.isEmpty()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_EMPTY, EntityContext.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_JOURNALENTRY_EMPTY, EntityContext.JOURNALENTRY);
         }
 
         if (this.lines.size() < 2) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_INSUFFICIENT_LINES, EntityContext.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_JOURNALENTRY_INSUFFICIENT_LINES, EntityContext.JOURNALENTRY);
         }
 
         BigDecimal totalDebits = BigDecimal.ZERO;
@@ -141,7 +141,7 @@ public final class JournalEntry {
         }
 
         if (totalDebits.compareTo(totalCredits) != 0) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_DEBIT_CREDIT_MISMATCH, EntityContext.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_JOURNALENTRY_DEBIT_CREDIT_MISMATCH, EntityContext.JOURNALENTRY);
         }
 
         this.balanced = true;
@@ -152,7 +152,7 @@ public final class JournalEntry {
      */
     public void post() {
         if (this.posted) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_ALREADY_POSTED, EntityContext.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_JOURNALENTRY_ALREADY_POSTED, EntityContext.JOURNALENTRY);
         }
 
         if (!this.balanced) {
@@ -160,7 +160,7 @@ public final class JournalEntry {
         }
 
         if (this.date.isAfter(LocalDate.now())) {
-            throw new TemporalValidationException(ErrorCatalog.ERR_JOURNALENTRY_FUTURE_DATE, EntityContext.JOURNALENTRY);
+            throw new TemporalValidationException(ErrorCatalogXD.ERR_JOURNALENTRY_FUTURE_DATE, EntityContext.JOURNALENTRY);
         }
 
         this.posted = true;
@@ -172,11 +172,11 @@ public final class JournalEntry {
      */
     public JournalEntry reverse(String reason) {
         if (!this.posted) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_NOT_POSTED_REVERSAL, EntityContext.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_JOURNALENTRY_NOT_POSTED_REVERSAL, EntityContext.JOURNALENTRY);
         }
 
         if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_REVERSAL_REQUIRES_REASON, EntityContext.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_JOURNALENTRY_REVERSAL_REQUIRES_REASON, EntityContext.JOURNALENTRY);
         }
 
         // Crear líneas reversas (invertir débitos y créditos)
@@ -251,7 +251,7 @@ public final class JournalEntry {
 
     private void ensureNotPosted() {
         if (this.posted) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_JOURNALENTRY_NOT_EDITABLE, EntityContext.JOURNALENTRY);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_JOURNALENTRY_NOT_EDITABLE, EntityContext.JOURNALENTRY);
         }
     }
 
@@ -262,7 +262,7 @@ public final class JournalEntry {
 
 
         if (date == null) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DATE, EntityContext.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalogXD.ERR_JOURNALENTRY_MISSING_DATE, EntityContext.JOURNALENTRY);
         }
         validateDocumentNumber(documentNumber);
         validateDescription(description);
@@ -270,19 +270,19 @@ public final class JournalEntry {
 
     private void validateDocumentNumber(String documentNumber) {
         if (documentNumber == null || documentNumber.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DOCUMENT_NUMBER, EntityContext.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalogXD.ERR_JOURNALENTRY_MISSING_DOCUMENT_NUMBER, EntityContext.JOURNALENTRY);
         }
         if (documentNumber.trim().isEmpty()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_INVALID_DOCUMENT_NUMBER, EntityContext.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalogXD.ERR_JOURNALENTRY_INVALID_DOCUMENT_NUMBER, EntityContext.JOURNALENTRY);
         }
     }
 
     private void validateDescription(String description) {
         if (description == null || description.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD, EntityContext.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalogXD.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD, EntityContext.JOURNALENTRY);
         }
         if (description.trim().length() < 5) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_JOURNALENTRY_INVALID_DESCRIPTION_LENGTH, EntityContext.JOURNALENTRY);
+            throw new DomainAggregateException(ErrorCatalogXD.ERR_JOURNALENTRY_INVALID_DESCRIPTION_LENGTH, EntityContext.JOURNALENTRY);
         }
     }
 

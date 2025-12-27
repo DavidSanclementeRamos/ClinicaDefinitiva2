@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
@@ -18,12 +18,12 @@ public final class GuardianId {
     }
     public static GuardianId fromString(String value) {
         if (value == null)   {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_NULL, VOContext.GUARDIAN_ID);
+            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_ID_NULL, VOContext.GUARDIAN_ID);
         }
 
         String trimmed = value.trim();
         if (trimmed.isEmpty())  {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_BLANK, VOContext.GUARDIAN_ID);
+            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_ID_BLANK, VOContext.GUARDIAN_ID);
         }
 
         return new GuardianId(trimmed);

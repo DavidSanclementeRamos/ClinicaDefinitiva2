@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
@@ -46,10 +46,10 @@ public class Guardian implements Actor {
             UserIdentity user,
             TypeGuardian typeGuardian){
 
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_USER_INACTIVE, EntityContext.GUARDIAN);
+        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.GUARDIAN);
 
         if (data.getAge().isBetween(22,60)){
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
         }
 
         return new Guardian(
@@ -64,26 +64,26 @@ public class Guardian implements Actor {
    public void updateContactData(Person data,
                                  UserIdentity user) {
 
-       UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_USER_INACTIVE, EntityContext.GUARDIAN);
+       UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.GUARDIAN);
 
        this.person= this.person.updateContact(data.getAddress(), data.getPhoneNumber());
        this.lastUpdate = LocalDateTime.now();
    }
 
     public void updateSensitiveData(Person data, UserIdentity user, TypeGuardian typeGuardian) {
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_USER_INACTIVE, EntityContext.PATIENT);
+        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.PATIENT);
 
         // RN-PATIENT-009: Validar cambio de fecha nacimiento
         if (!this.person.getDateOfBirth().equals(data.getDateOfBirth())) {
             if (this.schedule != null && this.schedule.hasAppointmentsWithinHour(24)) {
                 throw new BusinessRuleViolationException(
-                        ErrorCatalog.ERR_PATIENT_CANNOT_MODIFY_BIRTHDATE_WITH_HISTORY,
+                        ErrorCatalogXD.ERR_PATIENT_CANNOT_MODIFY_BIRTHDATE_WITH_HISTORY,
                         EntityContext.PATIENT,
                         "No se puede modificar la fecha de nacimiento si el paciente tiene historial de citas"
                 );
             }
         if (!data.getAge().isBetween(22, 60)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
+            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
         }
 
         this.person = this.person.updateSensitive(
@@ -102,14 +102,14 @@ public class Guardian implements Actor {
     @Override
     public Outcome assertCanBeDeactivated(String reason) {
         if(reason == null || reason.isBlank()){
-            return Outcome.fail(new OutcomeDetail(ErrorCatalog.ERR_GUARDIAN_DEACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
+            return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.ERR_GUARDIAN_DEACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
         }
 
 
         // Verificar pacientes asignados: no permitir desactivar si hay pacientes
         boolean hasAssignedPatients = (patientList != null && !patientList.isEmpty());
         if (hasAssignedPatients) {
-            return Outcome.fail(new OutcomeDetail (ErrorCatalog.ERR_GUARDIAN_ACTIVE_AUTHORIZATIONS,Severity.INFO,Category.CLINICO));
+            return Outcome.fail(new OutcomeDetail (ErrorCatalogXD.ERR_GUARDIAN_ACTIVE_AUTHORIZATIONS,Severity.INFO,Category.CLINICO));
         }
         return Outcome.ok();
     }

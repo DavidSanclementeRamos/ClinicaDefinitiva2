@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
@@ -20,11 +20,11 @@ public final class  DentistId {
     // Nuevo: parsea/valida una cadena y devuelve el VO
     public static DentistId fromString(String value) {
         if (value == null) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_NULL, VOContext.DENTIST_ID);
+            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_ID_NULL, VOContext.DENTIST_ID);
         }
         String trimmed = value.trim();
         if (trimmed.isEmpty()) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_ID_BLANK,VOContext.DENTIST_ID );
+            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_ID_BLANK,VOContext.DENTIST_ID );
         }
         return new DentistId(trimmed);
     }

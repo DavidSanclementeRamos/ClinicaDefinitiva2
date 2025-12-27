@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
@@ -12,10 +12,10 @@ public final class FullName {
 
     public FullName(String firstName, String lastName) {
         if(firstName == null || lastName == null){
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_FULLNAME_NULL, VOContext.FULL_NAME);
+            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_FULLNAME_NULL, VOContext.FULL_NAME);
         }
         if (isBlank(firstName) || isBlank(lastName)) {
-            throw new ValueObjectValidationException(ErrorCatalog.ERR_FULLNAME_BLANK, VOContext.FULL_NAME);
+            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_FULLNAME_BLANK, VOContext.FULL_NAME);
         }
         this.firstName = firstName.trim();
         this.lastName = lastName.trim();
