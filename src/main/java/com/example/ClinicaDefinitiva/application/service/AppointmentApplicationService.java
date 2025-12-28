@@ -15,13 +15,13 @@ import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceId;
-import com.example.ClinicaDefinitiva.domain.portsInput.AppointmentRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.DentistRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.PatientRepository;
+import com.example.ClinicaDefinitiva.domain.portsInput.ScheduleRepository.AppointmentRepository;
+import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.DentistRepository;
+import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.PatientRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.ProvidedServiceRepository;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentId;
-import com.example.ClinicaDefinitiva.domain.service.AppointmentDomainService;
+import com.example.ClinicaDefinitiva.domain.service.AppointmentSchedulingService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -81,7 +81,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
         ProvidedService service = serviceRepository.findById(seId)
                 .orElseThrow(() -> new DentalServiceNotFoundException("Servicio no encontrado: " + seId));
 
-        Appointment appointment =  AppointmentDomainService.registerSchedule(
+        Appointment appointment =  AppointmentSchedulingService.registerSchedule(
                 dentist,
                 patient,
                 dto.start,
@@ -120,7 +120,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
 
         // Pasamos la entidad concreta al DomainService
-        appointment = AppointmentDomainService.validationReschedule(
+        appointment = AppointmentSchedulingService.validationReschedule(
                 appointment,
                 dto.getNewStart(),
                 dto.getNewEnd(),
@@ -141,7 +141,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
         Appointment app =  appointmentRepository.findById(apId).
                 orElseThrow(()  -> new AppointmentNotFoundException("Cita no encontrada: " + apId));
 
-        Appointment appointment = AppointmentDomainService.cancelarCita(app);
+        Appointment appointment = AppointmentSchedulingService.cancelarCita(app);
         appointmentRepository.save(appointment);
         return mapper.toAppointmentDto(appointment);
 

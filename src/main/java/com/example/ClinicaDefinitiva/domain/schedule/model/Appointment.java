@@ -28,40 +28,38 @@ public class Appointment {
     private String attendedBy;                      // atendidaPor (May differ from assigned)
     private LocalDateTime creationDate;              // fecha creacion
     private LocalDateTime lastUpdated;               // ultima atualizacion
-    private boolean rescheduled;
-   // private ServiceDuration scheduledDuration;
 
 
 
-    // Ventana mínima de cancelación: 2 horas antes de la cita
+    // Ventana mínima de cancelación: 24 horas antes de la cita
     private static final Duration CANCELLATION_WINDOW = Duration.ofHours(24);
 
-    public Appointment(ServiceDuration actualDuration, AppointmentType appointmentType, String attendedBy, String clinicalNotes, LocalDateTime creationDate, DentistId dentist, LocalDateTime end, AppointmentId id, LocalDateTime lastUpdated, PatientId patient, String reason, boolean rescheduled, LocalDateTime start, AppointmentStatus status) {
-        this.actualDuration = actualDuration;
-        this.appointmentType = appointmentType;
-        this.attendedBy = attendedBy;
-        this.clinicalNotes = clinicalNotes;
-        this.creationDate = creationDate;
-        this.dentist = dentist;
-        this.end = end;
-        this.id = id;
-        this.lastUpdated = lastUpdated;
-        this.patient = patient;
-        this.reason = reason;
-        this.rescheduled = rescheduled;
-        this.start = start;
-        this.status = status;
+
+    private Appointment(Builder builder) {
+        this.id = builder.id;
+        this.dentist = builder.dentist;
+        this.patient = builder.patient;
+        this.start = builder.start;
+        this.end = builder.end;
+        this.status = builder.status;
+        this.reason = builder.reason;
+        this.appointmentType = builder.appointmentType;
+        this.clinicalNotes = builder.clinicalNotes;
+        this.actualDuration = builder.actualDuration;
+        this.attendedBy = builder.attendedBy;
+        this.creationDate = LocalDateTime.now();
+        this.lastUpdated = LocalDateTime.now();
     }
 
 
-    // ==================== OPERACIONES DE DOMINIO ====================
+    // OPERACIONES DE DOMINIO
 
     /**
      * RN-APPT-006: Solo puede confirmarse si está en estado SCHEDULED
      */
     public void confirm() {
       if(!status.isScheduled()){
-        throw new  BusinessRuleViolationException(AppointmentError.ERR_APPT_NOT_EDITABLE,EntityContext.APPOINTMENT);
+        throw new BusinessRuleViolationException(AppointmentError.ERR_APPT_NOT_EDITABLE,EntityContext.APPOINTMENT);
       }
         this.status.transitionTo(AppointmentStatus.Status.CONFIRMED);
         this.lastUpdated = LocalDateTime.now();
@@ -116,7 +114,7 @@ public class Appointment {
         this.lastUpdated = LocalDateTime.now();
     }
 
-    // ==================== QUERIES ====================
+    // QUERIES
 
     public boolean esFutura() {
         return this.start.isAfter(LocalDateTime.now());
@@ -135,7 +133,7 @@ public class Appointment {
                 candidateStart.isAfter(end) || candidateStart.equals(end));
     }
 
-    // ==================== GETTERS ====================
+    // GETTERS
 
     public AppointmentId getId() { return id; }
     public DentistId getDentistId() { return dentist; }
@@ -150,4 +148,96 @@ public class Appointment {
     public String getAttendedBy() { return attendedBy; }
     public LocalDateTime getCreationDate() { return creationDate; }
     public LocalDateTime getLastUpdated() { return lastUpdated; }
+
+
+    // BUILDER
+
+    public static class Builder {
+        private AppointmentId id;
+        private DentistId dentist;
+        private PatientId patient;
+        private LocalDateTime start;
+        private LocalDateTime end;
+        private AppointmentStatus status = AppointmentStatus.scheduled();
+        private String reason;
+        private AppointmentType appointmentType;
+        private String clinicalNotes;
+        private ServiceDuration actualDuration;
+        private String attendedBy;
+
+        public Builder withId(AppointmentId id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withDentistId(DentistId dentist) {
+            this.dentist = dentist;
+            return this;
+        }
+
+        public Builder withPatientId(PatientId patient) {
+            this.patient = patient;
+            return this;
+        }
+
+        public Builder withStart(LocalDateTime start) {
+            this.start = start;
+            return this;
+        }
+
+        public Builder withEnd(LocalDateTime end) {
+            this.end = end;
+            return this;
+        }
+
+        public Builder withStatus(AppointmentStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder withReason(String reason) {
+            this.reason = reason;
+            return this;
+        }
+
+        public Builder withAppointmentType(AppointmentType type) {
+            this.appointmentType = type;
+            return this;
+        }
+
+        public Builder withClinicalNotes(String notes) {
+            this.clinicalNotes = notes;
+            return this;
+        }
+
+        public Builder withServiceDuration(ServiceDuration duration) {
+            this.actualDuration = duration;
+            return this;
+        }
+
+        public Builder withAttendedBy(String attendedBy) {
+            this.attendedBy = attendedBy;
+            return this;
+        }
+
+        public Appointment build() {
+            if (id == null) throw new IllegalArgumentException("AppointmentId is required");
+            if (dentist == null) throw new IllegalArgumentException("DentistId is required");
+            if (patient == null) throw new IllegalArgumentException("PatientId is required");
+            if (start == null) throw new IllegalArgumentException("Start time is required");
+            if (end == null) throw new IllegalArgumentException("End time is required");
+            if (reason == null || reason.isBlank()) {
+                throw new IllegalArgumentException("Reason is required");
+            }
+            if (appointmentType == null) {
+                throw new IllegalArgumentException("AppointmentType is required");
+            }
+            if (!start.isBefore(end)) {
+                throw new IllegalArgumentException("Start must be before end");
+            }
+
+            return new Appointment(this);
+        }
+    }
 }
+

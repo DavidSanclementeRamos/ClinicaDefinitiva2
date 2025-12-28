@@ -71,6 +71,16 @@ public enum AppointmentError implements ErrorCatalog {
             "RN-APPT-011",
             "error.appointment.missingReason",
             "Motivo clínico es obligatorio"
+    ),
+    ERR_APPT_MINIMUM_RESCHEDULE_NOTICE(
+            "RN-APPT-012",
+            "error.appointment.minimumRescheduleNotice",
+            "No se puede reagendar con menos de 24 horas de anticipación"
+    ),
+    ERR_APPT_CANNOT_SPAN_MULTIPLE_DAYS(
+            "RN-APPT-013",
+            "error.appointment.cannotSpanMultipleDays",
+            "La cita no puede cruzar días"
     );
 
     private final String code;

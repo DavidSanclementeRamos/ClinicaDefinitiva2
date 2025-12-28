@@ -6,55 +6,55 @@ import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentId;
 public enum ScheduleVOError implements ErrorCatalog {
 
     ERR_APPOINTMENT_ID_REQUIRED(
-            "RN-APPT-01",
+            "RN-APPT-001",
             "error.appointment.idRequired",
             "El valor de AppointmentId no puede ser nulo"
     ),
 
     ERR_APPOINTMENT_ID_EMPTY(
-            "RN-APPT-02",
+            "RN-APPT-002",
             "error.appointment.idEmpty",
             "El valor de AppointmentId no puede estar vacío"
     ),
 
     ERR_APPOINTMENT_STATUS_REQUIRED(
-            "RN-APPT-01",
+            "RN-APPT-001",
             "error.appointment.statusRequired",
             "El estado de Appointment no puede ser nulo"
     ),
 
     ERR_APPOINTMENT_STATUS_INVALID_TRANSITION(
-            "RN-APPT-02",
+            "RN-APPT-002",
             "error.appointment.statusInvalidTransition",
             "No se puede transicionar desde el estado actual a un estado inválido"
     ),
 
     ERR_AVAIL_ID_REQUIRED(
-            "RN-AVAIL-01",
+            "RN-AVAIL-001",
             "error.availability.idRequired",
             "El valor de AvailabilityId no puede ser nulo"
     ),
 
     ERR_AVAIL_ID_BLANK(
-            "RN-AVAIL-02",
+            "RN-AVAIL-002",
             "error.availability.idBlank",
             "El valor de AvailabilityId no puede estar vacío"
     ),
 
     ERR_AVAIL_STATUS_REQUIRED(
-            "RN-AVAIL-01",
+            "RN-AVAIL-001",
             "error.availability.statusRequired",
             "El estado de Availability no puede ser nulo"
     ),
 
     ERR_SHIFT_ID_REQUIRED(
-            "RN-SHIFT-01",
+            "RN-SHIFT-001",
             "error.shift.idRequired",
             "El valor de ShiftId no puede ser nulo"
     ),
 
     ERR_SHIFT_ID_BLANK(
-            "RN-SHIFT-02",
+            "RN-SHIFT-002",
             "error.shift.idBlank",
             "El valor de ShiftId no puede estar vacío"
     );

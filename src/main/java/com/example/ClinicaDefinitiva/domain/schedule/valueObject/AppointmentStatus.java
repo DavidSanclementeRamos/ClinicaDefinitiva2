@@ -3,7 +3,6 @@ package com.example.ClinicaDefinitiva.domain.schedule.valueObject;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ScheduleVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
-
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Set;

@@ -1,8 +1,6 @@
-package com.example.ClinicaDefinitiva.domain.portsInput;
+package com.example.ClinicaDefinitiva.domain.portsInput.actorRepository;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.util.Actor;
 import java.util.ArrayList;
 import java.util.List;

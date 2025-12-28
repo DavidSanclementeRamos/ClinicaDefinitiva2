@@ -9,7 +9,7 @@ import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.portsInput.DentistRepository;
+import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,21 +1,225 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+/**
+ * Value Object: Duración de un servicio clínico
+ * Propósito: Representar la duración de un servicio/cita en minutos
+ * Validaciones: Debe ser positiva y dentro de límites razonables
+ */
 public final class ServiceDuration {
+
     private final int minutes;
 
-    public ServiceDuration(int minutes) {
-        if (minutes <= 0) {
-            throw new IllegalArgumentException("ServiceDuration must be greater than 0 minutes");
-        }
+    // Constantes de negocio
+    private static final int MIN_DURATION_MINUTES = 15;    // Duración mínima: 15 minutos
+    private static final int MAX_DURATION_MINUTES = 480;   // Duración máxima: 8 horas
+
+    private ServiceDuration(int minutes) {
+        validateDuration(minutes);
         this.minutes = minutes;
     }
 
-    public int getMinutes() { return minutes; }
+    // ==================== FACTORY METHODS ====================
+
+    /**
+     * Crea una duración desde minutos
+     */
+    public static ServiceDuration of(int minutes) {
+        return new ServiceDuration(minutes);
+    }
+
+    /**
+     * Crea una duración desde horas
+     */
+    public static ServiceDuration ofHours(int hours) {
+        return new ServiceDuration(hours * 60);
+    }
+
+    /**
+     * Crea una duración calculada entre dos fechas/horas
+     */
+    public static ServiceDuration between(LocalDateTime start, LocalDateTime end) {
+        if (start == null || end == null) {
+            throw new IllegalArgumentException("Start and end times cannot be null");
+        }
+        if (!start.isBefore(end)) {
+            throw new IllegalArgumentException("Start must be before end");
+        }
+
+        long minutes = Duration.between(start, end).toMinutes();
+        return new ServiceDuration((int) minutes);
+    }
+
+    /**
+     * Crea una duración desde Java Duration
+     */
+    public static ServiceDuration from(Duration duration) {
+        if (duration == null) {
+            throw new IllegalArgumentException("Duration cannot be null");
+        }
+        return new ServiceDuration((int) duration.toMinutes());
+    }
+
+    // ==================== VALIDACIONES ====================
+
+    private void validateDuration(int minutes) {
+        if (minutes <= 0) {
+            throw new IllegalArgumentException(
+                    "La duración debe ser positiva, pero fue: " + minutes
+            );
+        }
+
+        if (minutes < MIN_DURATION_MINUTES) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "La duración mínima es %d minutos, pero fue: %d",
+                            MIN_DURATION_MINUTES,
+                            minutes
+                    )
+            );
+        }
+
+        if (minutes > MAX_DURATION_MINUTES) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "La duración máxima es %d minutos (%d horas), pero fue: %d",
+                            MAX_DURATION_MINUTES,
+                            MAX_DURATION_MINUTES / 60,
+                            minutes
+                    )
+            );
+        }
+    }
+
+    // ==================== OPERACIONES ====================
+
+    /**
+     * Suma otra duración
+     */
+    public ServiceDuration plus(ServiceDuration other) {
+        return new ServiceDuration(this.minutes + other.minutes);
+    }
+
+    /**
+     * Resta otra duración
+     */
+    public ServiceDuration minus(ServiceDuration other) {
+        int result = this.minutes - other.minutes;
+        if (result <= 0) {
+            throw new IllegalArgumentException(
+                    "La duración resultante debe ser positiva"
+            );
+        }
+        return new ServiceDuration(result);
+    }
+
+    /**
+     * Multiplica la duración
+     */
+    public ServiceDuration multiply(int factor) {
+        if (factor <= 0) {
+            throw new IllegalArgumentException("El factor debe ser positivo");
+        }
+        return new ServiceDuration(this.minutes * factor);
+    }
+
+    /**
+     * Convierte a Java Duration
+     */
+    public Duration toDuration() {
+        return Duration.ofMinutes(minutes);
+    }
+
+    // ==================== QUERIES ====================
+
+    /**
+     * Verifica si es una duración corta (< 30 minutos)
+     */
+    public boolean isShort() {
+        return minutes < 30;
+    }
+
+    /**
+     * Verifica si es una duración larga (>= 2 horas)
+     */
+    public boolean isLong() {
+        return minutes >= 120;
+    }
+
+    /**
+     * Verifica si es múltiplo de 15 minutos
+     */
+    public boolean isStandardSlot() {
+        return minutes % 15 == 0;
+    }
+
+    /**
+     * Compara con otra duración
+     */
+    public boolean isLongerThan(ServiceDuration other) {
+        return this.minutes > other.minutes;
+    }
+
+    public boolean isShorterThan(ServiceDuration other) {
+        return this.minutes < other.minutes;
+    }
+
+    public boolean isEqualTo(ServiceDuration other) {
+        return this.minutes == other.minutes;
+    }
+
+    // ==================== GETTERS ====================
+
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public int getHours() {
+        return minutes / 60;
+    }
+
+    public int getRemainingMinutes() {
+        return minutes % 60;
+    }
+
+    /**
+     * Formato legible: "1h 30m" o "45m"
+     */
+    public String toReadableFormat() {
+        if (minutes < 60) {
+            return minutes + "m";
+        }
+
+        int hours = getHours();
+        int remainingMinutes = getRemainingMinutes();
+
+        if (remainingMinutes == 0) {
+            return hours + "h";
+        }
+
+        return hours + "h " + remainingMinutes + "m";
+    }
+
+    // ==================== OBJECT METHODS ====================
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServiceDuration)) return false;
+        ServiceDuration that = (ServiceDuration) o;
+        return minutes == that.minutes;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(minutes);
+    }
 
     @Override
     public String toString() {
-        return minutes + " minutes";
+        return toReadableFormat();
     }
-
-
 }

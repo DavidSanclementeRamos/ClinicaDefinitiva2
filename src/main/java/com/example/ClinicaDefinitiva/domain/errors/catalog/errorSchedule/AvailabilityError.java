@@ -61,29 +61,29 @@ public enum AvailabilityError implements ErrorCatalog {
     // Catálogo de errores para Availability
 
     ERR_AVAIL_DENTIST_REQUIRED(
-            "RN-AVAIL-10",
+            "RN-AVAIL-010",
             "error.availability.dentistRequired",
             "Debe especificarse un DentistId válido para crear disponibilidad"
     ),
 
     ERR_AVAIL_DAY_REQUIRED(
-            "RN-AVAIL-11",
+            "RN-AVAIL-011",
             "error.availability.dayRequired",
             "Debe especificarse un día de la semana válido para crear disponibilidad"
     ),
 
     ERR_AVAIL_TIME_REQUIRED(
-            "RN-AVAIL-12",
+            "RN-AVAIL-012",
             "error.availability.timeRequired",
             "Debe especificarse hora de inicio y fin para crear disponibilidad"
     ),
     ERR_AVAIL_INVALID_DEACTIVATION(
-            "RN-AVAIL-13",
+            "RN-AVAIL-013",
             "error.availability.invalidDeactivation",
             "No puede desactivarse la disponibilidad en el estado actual"
     ),
     ERR_AVAIL_INVALID_ACTIVATION(
-            "RN-AVAIL-14",
+            "RN-AVAIL-014",
             "error.availability.invalidActivation",
             "No puede activarse la disponibilidad en el estado actual"
     );

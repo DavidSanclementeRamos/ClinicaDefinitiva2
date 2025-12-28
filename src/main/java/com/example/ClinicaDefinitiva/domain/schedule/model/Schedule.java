@@ -1,7 +1,5 @@
 package com.example.ClinicaDefinitiva.domain.schedule.model;
 
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -12,7 +10,6 @@ import java.util.List;
 
 /**
  * Schedule: Agregador que coordina Appointments y WeeklyAvailability
- * ✅ DOMINIO PURO - Sin dependencias de infraestructura
  *
  * Propósito: Proveer queries y cálculos sobre la agenda completa
  * NO valida conflictos (eso es responsabilidad del Domain Service con locks)
@@ -27,7 +24,7 @@ public final class Schedule {
         this.availability = availability;
     }
 
-    // ==================== QUERIES SEMÁNTICAS ====================
+    // QUERIES SEMÁNTICAS
 
     /**
      * Encuentra citas programadas dentro de las próximas N horas
@@ -83,7 +80,7 @@ public final class Schedule {
         return !findAppointmentsWithin(days).isEmpty();
     }
 
-    // ==================== CÁLCULOS TEMPORALES ====================
+    // CÁLCULOS TEMPORALES
 
     /**
      * Calcula el tiempo total ocupado por citas activas
@@ -100,7 +97,7 @@ public final class Schedule {
      * Calcula el tiempo disponible neto en un día específico
      * Útil para: Validar si hay capacidad antes de reagendar
      */
-    public Duration getTotalAvailableTime(DayOfWeek day) {
+   /** public Duration getTotalAvailableTime(DayOfWeek day) {
         // Obtener slots del día
         List<TimeSlot> slotsForDay = Availability.getSlots().stream()
                 .filter(slot -> slot.getDayOfWeek().equals(day))
@@ -121,7 +118,7 @@ public final class Schedule {
         // Tiempo neto disponible
         Duration available = totalSlots.minus(occupied);
         return available.isNegative() ? Duration.ZERO : available;
-    }
+    }*/
 
     /**
      * Cuenta cuántas citas activas hay en total
@@ -142,11 +139,11 @@ public final class Schedule {
     /**
      * Verifica si hay disponibilidad neta en un día
      */
-    public boolean hasAvailabilityOn(DayOfWeek day) {
+   /** public boolean hasAvailabilityOn(DayOfWeek day) {
         return !getTotalAvailableTime(day).isZero();
-    }
+    }*/
 
-    // ==================== GETTERS INMUTABLES ====================
+    // GETTERS INMUTABLES
 
     public List<Appointment> getAppointments() {
         return List.copyOf(appointments);

@@ -39,7 +39,7 @@ public class Availability {
         this.status = AvailabilityStatus.from(AvailabilityStatus.Status.FREE);
     }
 
-    // ==================== FACTORY METHODS ====================
+    // FACTORY METHODS
 
     /**
      * RN-AVAIL-001: La hora de inicio debe ser anterior a la hora de fin
@@ -68,7 +68,7 @@ public class Availability {
         return new Availability(id, dentistId, dayOfWeek, startTime, endTime);
     }
 
-    // ==================== OPERACIONES DE DOMINIO ====================
+    // OPERACIONES DE DOMINIO
 
     /**
      * RN-AVAIL-004: No puede haber dos bloques que se solapen para el mismo profesional
@@ -127,7 +127,7 @@ public class Availability {
         this.deactivationReason = null;
     }
 
-    // ==================== QUERIES ====================
+    // QUERIES
 
     /**
      * Verifica si esta disponibilidad cubre un horario específico
@@ -154,7 +154,7 @@ public class Availability {
         return status.isFree() || status.isBooked();
     }
 
-    // ==================== GETTERS ====================
+    // GETTERS
 
     public AvailabilityId getId() { return id; }
     public DentistId getDentistId() { return dentistId; }

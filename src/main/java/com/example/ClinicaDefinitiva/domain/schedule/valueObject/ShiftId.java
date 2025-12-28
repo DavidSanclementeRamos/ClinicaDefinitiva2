@@ -6,10 +6,9 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidati
 
 import java.util.Objects;
 
-public class ShiftId   {
-    private String value;
+public final class ShiftId   {
+    private final String value;
 
-    protected ShiftId() {}
 
     private ShiftId(String value) {
         this.value = Objects.requireNonNull(value,"El valor de ShiftId no puede ser nulo ");

@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.domain.schedule.valueObject;
 
-
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Set;

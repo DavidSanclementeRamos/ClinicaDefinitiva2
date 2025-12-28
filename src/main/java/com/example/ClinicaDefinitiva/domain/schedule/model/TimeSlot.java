@@ -2,7 +2,6 @@ package com.example.ClinicaDefinitiva.domain.schedule.model;
 
 
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AvailabilityId;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -54,7 +53,7 @@ public final class TimeSlot {
         return slots;
     }
 
-    // ==================== QUERIES ====================
+    // QUERIES
 
     public boolean covers(LocalDateTime dateTime) {
         if (!dateTime.toLocalDate().equals(this.date)) return false;
@@ -75,7 +74,7 @@ public final class TimeSlot {
         return LocalDateTime.of(date, endTime);
     }
 
-    // ==================== GETTERS ====================
+    // GETTERS
 
     public AvailabilityId getAvailabilityId() { return availabilityId; }
     public LocalDate getDate() { return date; }

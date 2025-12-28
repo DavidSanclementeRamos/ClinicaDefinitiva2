@@ -1,4 +1,4 @@
-# ADR-27 (Dominio): Formas de construcción de objetos (Builder vs Setters vs Atributos directos)
+# Formas de construcción de objetos (Builder vs Setters vs Atributos directos)
 
 - Estado: Exploratorio / Aprendizaje
 - Fecha: 2025-11-24
@@ -74,9 +74,4 @@ company.setNit("123456789");
 ## Nota
 Este ADR se clasifica como aprendizaje: no es una decisión definitiva del sistema, sino un ejercicio de reflexión crítica sobre estilos de construcción de objetos y su impacto en la exhibición profesional.
 
-## Relación con otros ADR
-- ADR-25 (Dominio): Modelado de Persona en el dominio clínico.
-- ADR-26 (Dominio): Identificador único de agregados como String encapsulado en VO.
-- ADR-23 (Dominio): Desactivación de usuario debe ser responsabilidad del agregado UserModel.  
-  
 

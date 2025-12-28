@@ -45,7 +45,7 @@ public class Shift {
         this.status = ShiftStatus.active();
     }
 
-    // ==================== FACTORY METHODS ====================
+    // FACTORY METHODS
 
     /**
      * RN-SHIFT-001: La hora de inicio debe ser anterior a la hora de fin
@@ -80,7 +80,7 @@ public class Shift {
         return new Shift(null, dentistId, date, startTime, endTime, type);
     }
 
-    // ==================== OPERACIONES DE DOMINIO ====================
+    // OPERACIONES DE DOMINIO
 
     /**
      * RN-SHIFT-003: No puede solaparse con otro turno del mismo profesional
@@ -133,7 +133,7 @@ public class Shift {
         this.cancellationReason = reason;
     }
 
-// ==================== QUERIES ====================
+    // QUERIES
 
     /**
      * Verifica si el turno cubre un momento específico
@@ -181,7 +181,7 @@ public class Shift {
         return shiftStart.isAfter(now) && !shiftStart.isAfter(limit);
     }
 
-// ==================== GETTERS ====================
+   // GETTERS
 
     public ShiftId getId() {
         return id;

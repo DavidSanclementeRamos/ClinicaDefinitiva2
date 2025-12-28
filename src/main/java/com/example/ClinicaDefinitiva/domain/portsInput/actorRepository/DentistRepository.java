@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.portsInput;
+package com.example.ClinicaDefinitiva.domain.portsInput.actorRepository;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;

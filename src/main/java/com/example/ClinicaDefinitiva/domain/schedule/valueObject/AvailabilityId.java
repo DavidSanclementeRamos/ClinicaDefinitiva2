@@ -1,18 +1,16 @@
 package com.example.ClinicaDefinitiva.domain.schedule.valueObject;
 
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ScheduleVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 import java.util.Objects;
 
-public class AvailabilityId   {
+public final class AvailabilityId   {
 
-    private String value;
+    private final String value;
 
-    protected AvailabilityId() {}
 
     private AvailabilityId(String value) {
         this.value =   Objects.requireNonNull(value,"AvailabilityId cannot be null");
