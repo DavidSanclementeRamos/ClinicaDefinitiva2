@@ -18,7 +18,12 @@ public enum VOContext implements DomainContext {
     WORKING_HOURS(CodeVO.WOR08),
     DENTIST_AVAILABILITY_STATUS(CodeVO.DAS19),
     DOCUMENT_ID(CodeVO.DOC01),
-    EMAIL(CodeVO.EMA20) ;
+    EMAIL(CodeVO.EMA20),
+    APPOINTMENT_ID(CodeVO.APP21),
+    APPOINTMENT_STATUS(CodeVO.APP22),
+    AVAILABILITY_ID(CodeVO.AVA23),
+    AVAILABILITY_STATUS(CodeVO.AVA24),
+    SHIFT_ID(CodeVO.SHI25);
 
     private final CodeVO codigo;
 

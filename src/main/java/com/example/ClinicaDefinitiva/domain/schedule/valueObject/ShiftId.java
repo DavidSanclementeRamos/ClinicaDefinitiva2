@@ -1,23 +1,28 @@
 package com.example.ClinicaDefinitiva.domain.schedule.valueObject;
 
-import java.io.Serializable;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ScheduleVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.Objects;
 
-public class ShiftId implements Serializable {
+public class ShiftId   {
     private String value;
 
     protected ShiftId() {}
 
     private ShiftId(String value) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("ShiftId cannot be null or blank");
-        }
-        this.value = value;
+        this.value = Objects.requireNonNull(value,"El valor de ShiftId no puede ser nulo ");
     }
 
-
-
     public static ShiftId from(String value) {
+
+        if (value == null) {
+            throw new ValueObjectValidationException(ScheduleVOError.ERR_SHIFT_ID_REQUIRED, VOContext.SHIFT_ID);
+        }
+        if(value.isBlank()){
+            throw new ValueObjectValidationException(ScheduleVOError.ERR_SHIFT_ID_BLANK,VOContext.SHIFT_ID);
+        }
         return new ShiftId(value);
     }
 

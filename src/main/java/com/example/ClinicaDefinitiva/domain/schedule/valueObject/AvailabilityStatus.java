@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.schedule.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ScheduleVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Set;
@@ -75,7 +79,7 @@ public final class AvailabilityStatus {
      */
     public static AvailabilityStatus from(Status value) {
         if (value == null) {
-            throw new IllegalArgumentException("Availability status cannot be null.");
+            throw new ValueObjectValidationException(ScheduleVOError.ERR_AVAIL_STATUS_REQUIRED, VOContext.AVAILABILITY_STATUS);
         }
         return new AvailabilityStatus(value);
     }

@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.schedule.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ScheduleVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Set;
@@ -43,7 +47,7 @@ public final class AppointmentStatus {
 
     private AppointmentStatus(Status value) {
         if (value == null) {
-            throw new IllegalArgumentException("Appointment status cannot be null.");
+            throw new ValueObjectValidationException(ScheduleVOError.ERR_APPOINTMENT_STATUS_REQUIRED,VOContext.AVAILABILITY_STATUS);
         }
         this.value = value;
     }
@@ -63,9 +67,7 @@ public final class AppointmentStatus {
 
     public AppointmentStatus transitionTo(Status next) {
         if (!canTransitionTo(next)) {
-            throw new IllegalArgumentException(
-                    "Cannot transition from " + value + " to " + next
-            );
+            throw new ValueObjectValidationException(ScheduleVOError.ERR_APPOINTMENT_STATUS_INVALID_TRANSITION, VOContext.AVAILABILITY_STATUS);
         }
         return new AppointmentStatus(next);
     }

@@ -21,7 +21,12 @@ public enum CodeVO {
     SPE17, // Specialty
     TGU18, // TypeGuardian
     DAS19, // DentistAvailabilityStatus
-    EMA20  // Email
+    EMA20, // Email
+    APP21, // AppointmentId
+    APP22, // AppointmentStatus
+    AVA23, // AvailabilityId
+    AVA24, //AvailabilityStatus
+    SHI25, // ShiftId
 }
 
 

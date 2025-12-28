@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.schedule.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ScheduleVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.Objects;
 
 public final class AppointmentId {
@@ -7,15 +11,15 @@ public final class AppointmentId {
 
     public AppointmentId(String value) {
         this.value = Objects.requireNonNull(value, "AppointmentId value cannot be null");
-        if (value.trim().isEmpty()) throw new IllegalArgumentException("AppointmentId value cannot be empty");
     }
+
 
 
     // Nuevo: parsea/valida una cadena y devuelve el VO
     public static AppointmentId fromString(String value) {
-        if (value == null) throw new IllegalArgumentException("AppointmentId value cannot be empty");
+        if (value == null) throw new ValueObjectValidationException(ScheduleVOError.ERR_APPOINTMENT_ID_REQUIRED, VOContext.APPOINTMENT_ID);
         String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("AppointmentId string is empty");
+        if (trimmed.isEmpty()) throw new ValueObjectValidationException(ScheduleVOError.ERR_APPOINTMENT_ID_EMPTY,VOContext.APPOINTMENT_ID);
         return new AppointmentId(trimmed);
     }
 
