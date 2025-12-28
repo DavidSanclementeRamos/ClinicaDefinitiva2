@@ -1,12 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.schedule.model;
 
-
-
-
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.AvailabilityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AvailabilityId;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AvailabilityStatus;
 import java.time.DayOfWeek;
@@ -18,7 +16,6 @@ import java.util.Objects;
  * Agregado: Availability (Disponibilidad)
  * Representa un bloque de tiempo recurrente donde un dentista puede atender citas
  */
-
 public class Availability {
 
     private AvailabilityId id;
@@ -30,7 +27,7 @@ public class Availability {
     private String deactivationReason;
     private Long version;
 
-    protected Availability() {} // JPA
+    protected Availability() {}
 
     private Availability(AvailabilityId id, DentistId dentistId, DayOfWeek dayOfWeek,
                          LocalTime startTime, LocalTime endTime) {
@@ -51,21 +48,21 @@ public class Availability {
     public static Availability create(AvailabilityId id, DentistId dentistId, DayOfWeek dayOfWeek,
                                       LocalTime startTime, LocalTime endTime) {
         if (dentistId == null) {
-            throw new IllegalArgumentException("DentistId is required");
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_DENTIST_REQUIRED,EntityContext.AVAILABILITY);
         }
         if (dayOfWeek == null) {
-            throw new IllegalArgumentException("DayOfWeek is required");
+            throw new DomainAggregateException(AvailabilityError.ERR_AVAIL_DAY_REQUIRED,EntityContext.AVAILABILITY);
         }
         if (startTime == null || endTime == null) {
-            throw new IllegalArgumentException("Start and end times are required");
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_TIME_REQUIRED,EntityContext.AVAILABILITY);
         }
         if (!startTime.isBefore(endTime)) {
-            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_INVALID_TIME_RANGE,EntityContext.);
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_INVALID_TIME_RANGE,EntityContext.AVAILABILITY);
         }
 
         Duration duration = Duration.between(startTime, endTime);
         if (duration.isZero() || duration.isNegative()) {
-            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_ZERO_DURATION,EntityContext. );
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_ZERO_DURATION,EntityContext.AVAILABILITY );
         }
 
         return new Availability(id, dentistId, dayOfWeek, startTime, endTime);
@@ -92,7 +89,7 @@ public class Availability {
      */
     public void extend(LocalTime newEndTime, Availability... existingAvailabilities) {
         if (newEndTime == null || !this.endTime.isBefore(newEndTime)) {
-            throw new IllegalArgumentException("New end time must be after current end time");
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_EXTENSION_CONFLICT,EntityContext.AVAILABILITY);
         }
 
         // Validar que la extensión no cause solapamiento
@@ -101,9 +98,7 @@ public class Availability {
         for (Availability existing : existingAvailabilities) {
             if (existing.getId().equals(this.id)) continue; // Skip self
             if (extended.overlapsWith(existing)) {
-                throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_EXTENSION_CONFLICT,EntityContext.
-
-                );
+                throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_EXTENSION_CONFLICT,EntityContext.AVAILABILITY);
             }
         }
 
@@ -115,13 +110,10 @@ public class Availability {
      */
     public void deactivate(String reason) {
         if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_DEACTIVATION_REQUIRES_REASON, EntityContext
-            );
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_DEACTIVATION_REQUIRES_REASON, EntityContext.AVAILABILITY);
         }
         if (!status.canTransitionTo(AvailabilityStatus.Status.BLOCKED)) {
-            throw new BusinessRuleViolationException(
-                    "Cannot deactivate availability in current state: " + status.getValue()
-            );
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_INVALID_DEACTIVATION,EntityContext.AVAILABILITY);
         }
         this.status = AvailabilityStatus.from(AvailabilityStatus.Status.BLOCKED);
         this.deactivationReason = reason;
@@ -129,9 +121,7 @@ public class Availability {
 
     public void activate() {
         if (!status.canTransitionTo(AvailabilityStatus.Status.FREE)) {
-            throw new BusinessRuleViolationException(
-                    "Cannot activate availability in current state: " + status.getValue()
-            );
+            throw new BusinessRuleViolationException(AvailabilityError.ERR_AVAIL_INVALID_ACTIVATION,EntityContext.AVAILABILITY);
         }
         this.status = AvailabilityStatus.from(AvailabilityStatus.Status.FREE);
         this.deactivationReason = null;

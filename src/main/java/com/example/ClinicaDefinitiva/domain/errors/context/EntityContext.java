@@ -4,11 +4,11 @@ public enum EntityContext implements DomainContext {
 
     DENTIST(CodeEntity.OD01),
     RECEPTIONIST(CodeEntity.REC02),
-    GUARDIAN(CodeEntity.GUAS03),
+    GUARDIAN(CodeEntity.GUA03),
     PATIENT(CodeEntity.PAT04),
     USUARIO(CodeEntity.USR05),
     HORARIO(CodeEntity.HOR06),
-    TURNO(CodeEntity.TUR07),
+    SHIFT(CodeEntity.TUR07),
     Rol(CodeEntity.ROL08),
     APPOINTMENT(CodeEntity.APP09),
     ADMINISTRATIVEREPORT(CodeEntity.EDM10),
@@ -17,7 +17,8 @@ public enum EntityContext implements DomainContext {
     JOURNALENTRY(CodeEntity.JOU13),
     LEDGERACCOUNT(CodeEntity.LED14),
     OPENINGBALANCE(CodeEntity.OPE15),
-    THISPARTIES(CodeEntity.THI16);
+    THISPARTIES(CodeEntity.THI16),
+    AVAILABILITY(CodeEntity.AVA17);
 
 
 

@@ -1,8 +1,5 @@
 package com.example.ClinicaDefinitiva.domain.schedule.model;
 
-
-
-
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
@@ -10,7 +7,6 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolati
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.ShiftId;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.ShiftStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.ShiftType;
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +18,6 @@ import java.util.Objects;
  * Representa la presencia física del profesional en la clínica
  * Diferencia clave con Availability: Shift es presencia física, Availability es horario de atención
  */
-
 public class Shift {
 
     private ShiftId id;
@@ -58,24 +53,31 @@ public class Shift {
      */
     public static Shift create(DentistId dentistId, LocalDate date,
                                LocalTime startTime, LocalTime endTime, ShiftType type) {
-        if (dentistId == null) throw new IllegalArgumentException("DentistId is required");
-        if (date == null) throw new IllegalArgumentException("Date is required");
-        if (startTime == null || endTime == null) {
-            throw new IllegalArgumentException("Start and end times are required");
+        if (dentistId == null) {
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_DENTIST_REQUIRED,EntityContext.SHIFT);
         }
-        if (type == null) throw new IllegalArgumentException("ShiftType is required");
+        if (date == null) {
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_DATE_REQUIRED,EntityContext.SHIFT);
+        }
+        if (startTime == null || endTime == null) {
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_TIME_REQUIRED,EntityContext.SHIFT );
+        }
+        if (type == null) {
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_TYPE_REQUIRED,EntityContext.SHIFT);
+        }
+
+
 
         if (!startTime.isBefore(endTime)) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_INVALID_TIME_RANGE, EntityContext.
-            );
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_INVALID_TIME_RANGE, EntityContext.SHIFT);
         }
 
         Duration duration = Duration.between(startTime, endTime);
         if (duration.isZero() || duration.isNegative()) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_ZERO_DURATION, EntityContext.);
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_ZERO_DURATION, EntityContext.SHIFT);
         }
 
-        return new Shift(ShiftId id, dentistId, date, startTime, endTime, type);
+        return new Shift(null, dentistId, date, startTime, endTime, type);
     }
 
     // ==================== OPERACIONES DE DOMINIO ====================
@@ -84,11 +86,15 @@ public class Shift {
      * RN-SHIFT-003: No puede solaparse con otro turno del mismo profesional
      */
     public boolean overlapsWith(Shift other) {
-        if (other == null || !this.date.equals(other.date)) {
-            return false;
+        if (other == null){
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_OVERLAP_TARGET_REQUIRED,EntityContext.SHIFT);
+        }
+        if(!this.date.equals(other.date)) {
+
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_OVERLAP_CONFLICT,EntityContext.SHIFT);
         }
         if (!this.dentistId.equals(other.dentistId)) {
-            return false;
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_DENTIST_REQUIRED,EntityContext.SHIFT);
         }
         return this.startTime.isBefore(other.endTime) && this.endTime.isAfter(other.startTime);
     }
@@ -98,18 +104,17 @@ public class Shift {
      */
     public void reschedule(LocalDate newDate, LocalTime newStart, LocalTime newEnd, boolean hasAuthorization) {
         if (newDate == null || newStart == null || newEnd == null) {
-            throw new IllegalArgumentException("New schedule parameters are required");
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_RESCHEDULE_PARAMETERS_REQUIRED,EntityContext.SHIFT);
         }
         if (!newStart.isBefore(newEnd)) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_INVALID_TIME_RANGE, EntityContext.);
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_INVALID_TIME_RANGE, EntityContext.SHIFT);
         }
 
         LocalDateTime shiftDateTime = LocalDateTime.of(this.date, this.startTime);
         LocalDateTime now = LocalDateTime.now();
 
         if (shiftDateTime.minus(MODIFICATION_WINDOW).isBefore(now) && !hasAuthorization) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_LATE_MODIFICATION, EntityContext.
-            );
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_LATE_MODIFICATION, EntityContext.SHIFT);
         }
 
         this.date = newDate;
@@ -122,7 +127,7 @@ public class Shift {
      */
     public void cancel(String reason) {
         if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_CANCELLATION_REQUIRES_REASON, EntityContext.);
+            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_CANCELLATION_REQUIRES_REASON, EntityContext.SHIFT);
         }
         this.status = this.status.cancel();
         this.cancellationReason = reason;
