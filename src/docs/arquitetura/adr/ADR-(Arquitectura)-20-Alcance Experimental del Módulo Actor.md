@@ -1,7 +1,7 @@
 # ADR-20 (Arquitectura) : Alcance Experimental del Módulo Actor
 
 **Estado:** ✅ Aceptado  
-**Fecha:** Diciembre 24, 2024  
+**Fecha:** Diciembre 24, 2025  
 **Contexto:** Definición del alcance de implementación para exhibición profesional  
 **Decisores:** Equipo de Desarrollo  
 

@@ -2,8 +2,12 @@ package com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
+/**
+ * Catálogo de errores del agregado Availability
+ * Ver: ADR-24 para historial completo de catálogos eliminados
+ */
 public enum AvailabilityError implements ErrorCatalog {
-    // ========== APLICADAS ==========
+
 
     ERR_AVAIL_INVALID_TIME_RANGE(// BIEN
             "RN-AVAIL-001",
@@ -17,11 +21,18 @@ public enum AvailabilityError implements ErrorCatalog {
             "No puede crearse disponibilidad con duración negativa o cero"
     ),
 
-    ERR_AVAIL_HAS_ACTIVE_APPOINTMENTS(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
+   /** ERR_AVAIL_HAS_ACTIVE_APPOINTMENTS(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-AVAIL-003",
             "error.availability.hasActiveAppointments",
             "No puede modificarse si tiene citas agendadas dentro del bloque"
-    ),
+    ),*/
+    // RN-AVAIL-003: ELIMINADA (2024-12-29)
+    // Motivo: Responsabilidad de Domain Service (AvailabilityManagementService)
+    // Original: "No puede modificarse si tiene citas agendadas dentro del bloque"
+    // Reemplazo: Validación en Domain Service consultando AppointmentRepository
+    // Ver: ADR-24 para detalles completos
+
+
 
     ERR_AVAIL_OVERLAP_CONFLICT(// BIEN
             "RN-AVAIL-004",
@@ -29,7 +40,7 @@ public enum AvailabilityError implements ErrorCatalog {
             "No puede haber dos bloques que se solapen para el mismo profesional"
     ),
 
-    ERR_AVAIL_CANNOT_DELETE_WITH_APPOINTMENTS(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
+   /** ERR_AVAIL_CANNOT_DELETE_WITH_APPOINTMENTS(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-AVAIL-005",
             "error.availability.cannotDeleteWithAppointments",
             "No puede eliminarse si tiene citas activas asociadas"
@@ -45,13 +56,30 @@ public enum AvailabilityError implements ErrorCatalog {
             "RN-AVAIL-007",
             "error.availability.cannotEditInactiveDentist",
             "Solo puede editarse si el profesional está activo"
-    ),
+    ),*/
+
+    // RN-AVAIL-005: ELIMINADA (2024-12-29)
+    // Motivo: Responsabilidad de Domain Service (idéntico a RN-AVAIL-003)
+    // Original: "No puede eliminarse si tiene citas activas asociadas"
+    // Reemplazo: Validación en Domain Service
+    // Ver: ADR-24
+
+    // RN-AVAIL-006: ELIMINADA (2024-12-29)
+    // Motivo: Delegada a Dentist.ensureEditable()
+    // Original: "Debe estar asociada a un profesional activo"
+    // Ver: ADR-24
+
+    // RN-AVAIL-007: ELIMINADA (2024-12-29)
+    // Motivo: Delegada a Dentist.ensureEditable() (idéntico a RN-AVAIL-006)
+    // Original: "Solo puede editarse si el profesional está activo"
+    // Ver: ADR-24
 
     ERR_AVAIL_DEACTIVATION_REQUIRES_REASON(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-AVAIL-008",
             "error.availability.deactivationRequiresReason",
             "La desactivación requiere motivo obligatorio"
     ),
+
 
     ERR_AVAIL_EXTENSION_CONFLICT(// BIEN
             "RN-AVAIL-009",

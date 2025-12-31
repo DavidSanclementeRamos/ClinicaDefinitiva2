@@ -3,7 +3,7 @@
 # ADR-24 (Arquitectura): Alcance Experimental del Módulo Schedule
 
 **Estado:** ✅ Aceptado  
-**Fecha:** Diciembre 25, 2024  
+**Fecha:** Diciembre 25, 2025  
 **Contexto:** Definición del alcance de implementación para exhibición profesional  
 **Autor:** David stiven Sanclemente
 

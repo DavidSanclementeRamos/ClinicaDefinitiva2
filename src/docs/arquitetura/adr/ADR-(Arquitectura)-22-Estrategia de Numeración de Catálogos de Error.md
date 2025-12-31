@@ -1,7 +1,7 @@
 # ADR-22 (Arquitectura): Estrategia de Numeración de Catálogos de Error
 
 **Estado:** ✅ Aceptado  
-**Fecha:** Diciembre 24, 2024  
+**Fecha:** Diciembre 24, 2025  
 **Contexto:** Gestión de ciclo de vida de catálogos de error en el dominio  
 **Autor:** David Stiven Sanclemente  
 **Afecta a:** Todos los módulos del dominio
@@ -10,7 +10,7 @@
 
 ## Contexto y Problema
 
-Durante la refactorización del Módulo Actor (ADR-036), surgió la necesidad de **eliminar catálogos de error** que eran:
+Durante la refactorización del Módulo Actor (ADR-20), surgió la necesidad de **eliminar catálogos de error** que eran:
 - Redundantes (validaciones duplicadas)
 - Mal ubicados (responsabilidad de otro componente)
 - Obsoletos (reemplazados por mejor diseño)
@@ -87,7 +87,7 @@ ERR_DENTIST_007 → Nueva (continúa secuencia)
     - Comentario incluye: motivo, fecha, reemplazo
 
 4. **Registro Histórico**
-    - Archivo `ADR-038` mantiene registro completo de eliminados
+    - Archivo `ADR-23` mantiene registro completo de eliminados
     - Cada entrada incluye justificación técnica
 
 ---
@@ -110,10 +110,10 @@ public enum DentistError implements ErrorCatalog {
         "El odontólogo debe registrar disponibilidad inicial"
     ),
     
-    // RN-DENTIST-003: ELIMINADA (2024-12-24)
+    // RN-DENTIST-003: ELIMINADA (2025-12-24)
     // Motivo: Delegada a UserAccessError.ERR_USER_INACTIVE
     // Original: "Solo puede editarse si está activo"
-    // Ver: ADR-038 para detalles completos
+    // Ver: ADR-23 para detalles completos
     
     ERR_DENTIST_ACTIVE_APPOINTMENTS(
         "RN-DENTIST-004",
@@ -121,7 +121,7 @@ public enum DentistError implements ErrorCatalog {
         "No puede desactivarse si tiene citas activas"
     ),
     
-    // RN-DENTIST-005: ELIMINADA (2024-12-24)
+    // RN-DENTIST-005: ELIMINADA (2025-12-24)
     // Motivo: Dividida en catálogos específicos de ValueObject
     // Original: "Debe tener nombre y documento válidos"
     // Reemplazo: ValueObjectError.ERR_FULLNAME_BLANK, ERR_DOCUMENT_INVALID_FORMAT
@@ -150,7 +150,7 @@ public enum DentistError implements ErrorCatalog {
 // Motivo: <RAZÓN_BREVE>
 // Original: "<MENSAJE_ORIGINAL>"
 // Reemplazo: <NUEVO_CATÁLOGO> (si aplica)
-// Ver: ADR-038 para detalles completos
+// Ver: ADR-23 para detalles completos
 ```
 
 ---
@@ -167,7 +167,7 @@ public enum DentistError implements ErrorCatalog {
 **Búsqueda en código:**
 ```java
 // Encuentra comentario:
-// RN-DENTIST-003: ELIMINADA (2024-12-24)
+// RN-DENTIST-003: ELIMINADA (2025-12-24)
 // Reemplazo: UserAccessError.ERR_USER_INACTIVE
 ```
 
@@ -178,7 +178,7 @@ public enum DentistError implements ErrorCatalog {
 **Pregunta:** ¿Cuándo se introdujo la validación de edad mínima para odontólogos?
 
 **Respuesta:**
-- Código `RN-DENTIST-001` creado en commit inicial (Dic 2024)
+- Código `RN-DENTIST-001` creado en commit inicial (Dic 2025)
 - Nunca ha sido eliminado ni modificado
 - Trazabilidad completa en Git blame
 
@@ -204,9 +204,9 @@ if (errorCode.equals("RN-DENTIST-003")) {
 ### 1. **Trazabilidad Completa**
 ```
 Git History:
-2024-12-01: feat: Add ERR_DENTIST_003 (initial)
-2024-12-15: refactor: Deprecate ERR_DENTIST_003, use ERR_USER_INACTIVE
-2024-12-24: docs: Document ERR_DENTIST_003 removal in ADR-038
+2025-12-01: feat: Add ERR_DENTIST_003 (initial)
+2025-12-15: refactor: Deprecate ERR_DENTIST_003, use ERR_USER_INACTIVE
+2025-12-24: docs: Document ERR_DENTIST_003 removal in ADR-038
 
 → Toda la evolución es rastreable
 ```

@@ -11,11 +11,16 @@ public enum ShiftError implements ErrorCatalog {
             "La hora de inicio debe ser anterior a la hora de fin"
     ),
 
-    ERR_SHIFT_PROFESSIONAL_INACTIVE(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
+   /** ERR_SHIFT_PROFESSIONAL_INACTIVE(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-002",
             "error.shift.professionalInactive",
             "No puede crearse si el profesional está inactivo"
-    ),
+    ),*/
+
+    // RN-SHIFT-002: ELIMINADA (2024-12-29)
+    // Motivo: Delegada a Dentist.ensureEditable()
+    // Original: "No puede crearse si el profesional está inactivo"
+    // Ver: ADR-24 para detalles completos
 
     ERR_SHIFT_OVERLAP_CONFLICT(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-003",
@@ -23,7 +28,7 @@ public enum ShiftError implements ErrorCatalog {
             "No puede solaparse con otro turno del mismo profesional"
     ),
 
-    ERR_SHIFT_CANNOT_EDIT(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
+    /**ERR_SHIFT_CANNOT_EDIT(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-004",
             "error.shift.cannotEdit",
             "No puede editarse si tiene tareas asignadas o está dentro de 24h"
@@ -39,7 +44,24 @@ public enum ShiftError implements ErrorCatalog {
             "RN-SHIFT-006",
             "error.shift.invalidLocation",
             "Debe estar asociado a una sede válida"
-    ),
+    ),*/
+
+    // RN-SHIFT-004: ELIMINADA (2024-12-29)
+    // Motivo: Redundancia con validaciones de Appointment
+    // Original: "No puede editarse si tiene tareas asignadas o está dentro de 24h"
+    // Nota: Las "tareas" son citas (Appointment). Validación debe hacerse en Domain Service
+    // Ver: ADR-24
+
+    // RN-SHIFT-005: ELIMINADA (2024-12-29)
+    // Motivo: Redundancia con Appointment (idéntico a RN-SHIFT-004)
+    // Original: "No puede cancelarse si tiene tareas activas"
+    // Ver: ADR-24
+
+    // RN-SHIFT-006: POSPUESTA (2024-12-29)
+    // Motivo: Proyecto experimental sin múltiples sedes
+    // Original: "Debe estar asociado a una sede válida"
+    // Estado: Pendiente para v2.0 cuando exista contexto de múltiples sedes
+    // Ver: ADR-24
 
     ERR_SHIFT_CANCELLATION_REQUIRES_REASON(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
             "RN-SHIFT-007",

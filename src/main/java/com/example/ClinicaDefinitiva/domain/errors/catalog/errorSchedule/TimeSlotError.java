@@ -1,87 +1,87 @@
 package com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
-public enum TimeSlotError implements ErrorCatalog {
+public enum TimeSlotError {
 
-    // ========== APLICADAS ==========
+/**
+ * ⚠️ CATÁLOGO COMPLETO ELIMINADO (2025-12-28)
+ *
+ * Decisión Arquitectónica: TimeSlot NO debe ser un agregado persistido.
+ * TimeSlot es un concepto derivado que se genera dinámicamente desde Availability.
+ *
+ * Consecuencia: Todos los catálogos RN-TIMESLOT-* fueron eliminados porque:
+ * - Validaciones estructurales → ocurren en Availability
+ * - Validaciones de asignación → ocurren en Appointment
+ * - Validaciones de cobertura → ocurren en Domain Service
+ *
+ * Ver: ADR-25 "TimeSlot como Derivado Ligero" para justificación completa
+ */
 
-    ERR_TIMESLOT_INVALID_DURATION(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
-            "RN-TIMESLOT-001",
-            "error.timeslot.invalidDuration",
-            "La duración debe ser positiva y dentro de límites permitidos"
-    ),
+// RN-TIMESLOT-001: ELIMINADA (2025-12-28)
+// Motivo: Validación ocurre en Availability
+// Original: "La duración debe ser positiva y dentro de límites permitidos"
+// Reemplazo: Availability valida su duración completa
+// Ver: ADR-25
 
-    ERR_TIMESLOT_PROFESSIONAL_INACTIVE(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
-            "RN-TIMESLOT-002",
-            "error.timeslot.professionalInactive",
-            "No puede crearse si el profesional está inactivo"
-    ),
+// RN-TIMESLOT-002: ELIMINADA (2025-12-28)
+// Motivo: Delegada a Dentist.ensureEditable()
+// Original: "No puede crearse si el profesional está inactivo"
+// Ver: ADR-25
 
-    ERR_TIMESLOT_OVERLAP_CONFLICT(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
-            "RN-TIMESLOT-003",
-            "error.timeslot.overlapConflict",
-            "No puede solaparse con otro TimeSlot ya asignado"
-    ),
+// RN-TIMESLOT-003: ELIMINADA (2025-12-28)
+// Motivo: Validación ocurre en Availability
+// Original: "No puede solaparse con otro TimeSlot ya asignado"
+// Reemplazo: Availability.overlapsWith()
+// Ver: ADR-25
 
-    ERR_TIMESLOT_CANNOT_EDIT(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
-            "RN-TIMESLOT-004",
-            "error.timeslot.cannotEdit",
-            "No puede editarse si tiene cita asignada o está dentro de 24h previas"
-    ),
+// RN-TIMESLOT-004: ELIMINADA (2025-12-28)
+// Motivo: Validación ocurre en Appointment/Availability
+// Original: "No puede editarse si tiene cita asignada o está dentro de 24h previas"
+// Reemplazo: Validación en Domain Service
+// Ver: ADR-25
 
-    ERR_TIMESLOT_ALREADY_BOOKED(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
-            "RN-TIMESLOT-005",
-            "error.timeslot.alreadyBooked",
-            "No puede tener más de una cita asignada"
-    ),
+// RN-TIMESLOT-005: ELIMINADA (2025-12-28)
+// Motivo: Validación ocurre en Domain Service con pessimistic lock
+// Original: "No puede tener más de una cita asignada"
+// Reemplazo: AppointmentSchedulingService.ensureNoConflicts() con lock
+// Ver: ADR-25
 
-    ERR_TIMESLOT_OUTSIDE_AVAILABILITY(// PUEDE QUE SI O NO
-            "RN-TIMESLOT-006",
-            "error.timeslot.outsideAvailability",
-            "Debe estar contenido dentro de una disponibilidad válida"
-    ),
+// RN-TIMESLOT-006: ELIMINADA (2025-12-28)
+// Motivo: Validación ocurre en Domain Service
+// Original: "Debe estar contenido dentro de una disponibilidad válida"
+// Reemplazo: AppointmentSchedulingService.ensureAvailabilityCoverage()
+// Ver: ADR-25
 
-    ERR_TIMESLOT_CANCELLATION_REQUIRES_REASON(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
-            "RN-TIMESLOT-007",
-            "error.timeslot.cancellationRequiresReason",
-            "Cancelación requiere motivo obligatorio"
-    ),
+// RN-TIMESLOT-007: ELIMINADA (2025-12-28)
+// Motivo: Validación ocurre en Appointment
+// Original: "Cancelación requiere motivo obligatorio"
+// Reemplazo: Appointment.cancel(reason) valida motivo
+// Ver: ADR-25
 
-    ERR_TIMESLOT_HAS_ACTIVE_APPOINTMENT(// PUEDE QUE SE ELIMINE, PUEDE ESTAR DUPLICADA
-            "RN-TIMESLOT-008",
-            "error.timeslot.hasActiveAppointment",
-            "No puede cancelarse si tiene cita activa"
-    ),
+// RN-TIMESLOT-008: ELIMINADA (2025-12-28)
+// Motivo: Validación ocurre en Domain Service
+// Original: "No puede cancelarse si tiene cita activa"
+// Reemplazo: Consulta a AppointmentRepository en Domain Service
+// Ver: ADR-25
 
-    ERR_TIMESLOT_EXCEEDS_AVAILABILITY(// PUEDE QUE SI O NO
-            "RN-TIMESLOT-009",
-            "error.timeslot.exceedsAvailability",
-            "No puede extenderse fuera de la disponibilidad original"
-    );
+// RN-TIMESLOT-009: ELIMINADA (2025-12-28)
+// Motivo: Validación ocurre en Availability
+// Original: "No puede extenderse fuera de la disponibilidad original"
+// Reemplazo: Availability.extend() valida límites
+// Ver: ADR-25
 
-    private final String code;
-    private final String messageKey;
-    private final String defaultMessage;
-
-    TimeSlotError(String code, String messageKey, String defaultMessage) {
-        this.code = code;
-        this.messageKey = messageKey;
-        this.defaultMessage = defaultMessage;
-    }
-
-    @Override
-    public String getCode() {
-        return code;
-    }
-
-    @Override
-    public String getMessageKey() {
-        return messageKey;
-    }
-
-    @Override
-    public String getDefaultMessage() {
-        return defaultMessage;
-    }
+    /*
+     * NOTA HISTÓRICA:
+     *
+     * Este archivo se mantiene como registro histórico de la decisión arquitectónica
+     * de NO modelar TimeSlot como agregado persistido.
+     *
+     * Los 9 catálogos eliminados representan un aprendizaje clave:
+     * "No todo concepto del dominio necesita ser un agregado. TimeSlot es una
+     * proyección derivada, no una entidad con identidad propia."
+     *
+     * Este archivo puede eliminarse físicamente en el futuro, pero se mantiene
+     * temporalmente para documentar la evolución del diseño arquitectónico.
+     *
+     */
 }

@@ -2,18 +2,18 @@ package com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
+/**
+ * Catálogo de errores del agregado Appointment
+ * Ver: ADR-25 para historial completo de catálogos eliminados
+ */
 public enum AppointmentError implements ErrorCatalog {
 
+    // RN-APPT-001: ELIMINADA (2025-12-28)
+    // Motivo: Delegada a Dentist.canScheduleBetween(user, start, end)
+    // Original: "No puede crearse si el odontólogo está inactivo"
+    // Ver: ADR-24 para detalles completos
 
-    // ========== APLICADAS ==========
-
-    ERR_APPT_DENTIST_INACTIVE(// ELIMINAR
-            "RN-APPT-001",
-            "error.appointment.dentist.inactive",
-            "No puede crearse si el odontólogo está inactivo"
-    ),
-
-    ERR_APPT_OUTSIDE_AVAILABILITY(// SI
+    ERR_APPT_OUTSIDE_AVAILABILITY(
             "RN-APPT-002",
             "error.appointment.outsideAvailability",
             "No puede agendarse fuera del horario de disponibilidad"
@@ -25,7 +25,7 @@ public enum AppointmentError implements ErrorCatalog {
             "Debe tener paciente y odontólogo válidos"
     ),
 
-    ERR_APPT_DENTIST_TIME_CONFLICT(// SI, AUN NO ESTA APLICADA
+    ERR_APPT_DENTIST_TIME_CONFLICT(
             "RN-APPT-004",
             "error.appointment.dentistConflict",
             "No puede haber dos citas en el mismo horario para el mismo odontólogo"
@@ -37,19 +37,19 @@ public enum AppointmentError implements ErrorCatalog {
             "Solo puede finalizarse si tiene duración real y notas clínicas"
     ),
 
-    ERR_APPT_NOT_EDITABLE(// SI
+    ERR_APPT_NOT_EDITABLE(
             "RN-APPT-006",
             "error.appointment.notEditable",
             "Solo puede editarse si está en estado SCHEDULED o CONFIRMED"
     ),
 
-    ERR_APPT_LATE_CANCELLATION(// SI
+    ERR_APPT_LATE_CANCELLATION(
             "RN-APPT-007",
             "error.appointment.lateCancellation",
             "No puede cancelarse dentro de las 24h previas"
     ),
 
-    ERR_APPT_CANCELLATION_REQUIRES_REASON(// SI
+    ERR_APPT_CANCELLATION_REQUIRES_REASON(
             "RN-APPT-008",
             "error.appointment.cancellationRequiresReason",
             "La cancelación requiere motivo obligatorio"
