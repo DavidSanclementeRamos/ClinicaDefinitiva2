@@ -7,7 +7,21 @@ import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Agregado raíz: Servicio odontológico ofrecido por la clínica.
+ *
+ * Responsabilidades:
+ * - Gestionar información común a todos los servicios
+ * - Coordinar con detalles específicos por tipo
+ * - Proteger coherencia entre categoría y detalles
+ * - Asegurar trazabilidad de cambios de tarifa
+ * - Validar estado operativo antes de operaciones
+ *
+ * @see ServiceDetails para detalles específicos por especialidad
+ * @see ServiceError para catálogo de errores
+ */
 public class ProvidedService {
+
     private final ServiceId id;                             // Identificador único del servicio
     private  String name;                         // Nombre del servicio
     private  ServiceCatalog category;      //Categoría (ej. "Orthodontics", "Surgery", "Pediatrics")
