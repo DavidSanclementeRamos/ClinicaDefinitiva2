@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.Money;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
@@ -18,7 +18,7 @@ public final class JournalEntryLine {
     private LedgerAccountId ledgerAccountId;
     private ThirdPartiesId thirdPartiesId;
     private String description;
-    private Money amount;
+    private Price amount;
     private boolean isDebit;
     private String documentReference;
 
@@ -26,7 +26,7 @@ public final class JournalEntryLine {
             LedgerAccountId ledgerAccountId,
             ThirdPartiesId thirdPartiesId,
             String description,
-            Money amount,
+            Price amount,
             boolean isDebit,
             String documentReference) {
 
@@ -47,7 +47,7 @@ public final class JournalEntryLine {
     public static JournalEntryLine debit(
             LedgerAccountId ledgerAccountId,
             String description,
-            Money amount) {
+            Price amount) {
 
         return new JournalEntryLine(
                 ledgerAccountId,
@@ -66,7 +66,7 @@ public final class JournalEntryLine {
             LedgerAccountId ledgerAccountId,
             ThirdPartiesId thirdPartiesId,
             String description,
-            Money amount,
+            Price amount,
             String documentReference) {
 
         return new JournalEntryLine(
@@ -85,7 +85,7 @@ public final class JournalEntryLine {
     public static JournalEntryLine credit(
             LedgerAccountId ledgerAccountId,
             String description,
-            Money amount) {
+            Price amount) {
 
         return new JournalEntryLine(
                 ledgerAccountId,
@@ -104,7 +104,7 @@ public final class JournalEntryLine {
             LedgerAccountId ledgerAccountId,
             ThirdPartiesId thirdPartiesId,
             String description,
-            Money amount,
+            Price amount,
             String documentReference) {
 
         return new JournalEntryLine(
@@ -168,7 +168,7 @@ public final class JournalEntryLine {
 
     private void validateMandatoryFields(
             String description,
-            Money amount) {
+            Price amount) {
 
 
         if (description == null || description.isBlank()) {
@@ -179,7 +179,7 @@ public final class JournalEntryLine {
         }
     }
 
-    private void validateAmount(Money amount) {
+    private void validateAmount(Price amount) {
         if (amount.isNegativeOrZero()) {
             throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_JOURNALENTRY_INVALID_AMOUNT, EntityContext.JOURNALENTRY);
         }
@@ -188,7 +188,7 @@ public final class JournalEntryLine {
     public LedgerAccountId getLedgerAccountId() { return ledgerAccountId; }
     public ThirdPartiesId getThirdPartiesId() { return thirdPartiesId; }
     public String getDescription() { return description; }
-    public Money getAmount() { return amount; }
+    public Price getAmount() { return amount; }
     public String getDocumentReference() { return documentReference; }
 
 

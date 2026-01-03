@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper;
 
 import com.example.ClinicaDefinitiva.application.dto.service.*;
-import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.*;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
@@ -16,7 +16,7 @@ public class ProvidedServiceMapper {
         ServiceId id = ServiceId.generate(); // adapta si tu VO usa otra firma
         ServiceCatalog catalog = new ServiceCatalog(ServiceId.fromString(dto.catalog.id), dto.catalog.name, dto.catalog.category);
         ServiceCode code = new ServiceCode(dto.code);
-        Money money = dto.baseRateAmount == null ? null : new Money(dto.baseRateAmount, dto.baseRateCurrency == null ? "COP" : dto.baseRateCurrency);
+        Price money = dto.baseRateAmount == null ? null : new Price(dto.baseRateAmount, dto.baseRateCurrency == null ? "COP" : dto.baseRateCurrency);
         ServiceDuration duration = dto.durationMinutes == null ? null : new ServiceDuration(dto.durationMinutes);
         ServiceStatus status = dto.status == null ? new ServiceStatus("Active") : new ServiceStatus(dto.status);
 

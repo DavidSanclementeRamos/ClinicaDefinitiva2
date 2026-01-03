@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.service.ReadProvidedService
 import com.example.ClinicaDefinitiva.application.dto.service.UpdateProvidedServiceDto;
 import com.example.ClinicaDefinitiva.application.mapper.ProvidedServiceMapper;
 import com.example.ClinicaDefinitiva.application.usecase.ProvidedServiceUseCase;
-import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.portsInput.ProvidedServiceRepository;
@@ -96,7 +96,7 @@ public class ProvidedServiceApplicationService  implements ProvidedServiceUseCas
         existing.updateCommon(
                 dto.name,
                 dto.catalog == null ? null : new ServiceCatalog(ServiceId.fromString(dto.catalog.id), dto.catalog.name, dto.catalog.category),
-                dto.baseRateAmount == null ? null : new Money(dto.baseRateAmount, dto.baseRateCurrency),
+                dto.baseRateAmount == null ? null : new Price(dto.baseRateAmount, dto.baseRateCurrency),
                 dto.durationMinutes == null ? null : new ServiceDuration(dto.durationMinutes),
                 dto.requiresAuthorization,
                 dto.description,

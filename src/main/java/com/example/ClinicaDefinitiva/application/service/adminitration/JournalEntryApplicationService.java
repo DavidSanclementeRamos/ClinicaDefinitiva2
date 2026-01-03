@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.JournalEntryNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.JournalEntryMapper;
 import com.example.ClinicaDefinitiva.application.usecase.Administration.JournalEntryUseCase;
-import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.JournalEntryId;
@@ -90,7 +90,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
         LedgerAccountId accountId = LedgerAccountId.fromString(request.ledgerAccountId());
         ThirdPartiesId thirdPartiesId = request.thirdPartiesId() != null ?
                 ThirdPartiesId.fromString(request.thirdPartiesId()) : null;
-        Money amount = Money.of(request.amount(), request.currency());
+        Price amount = Price.of(request.amount(), request.currency());
 
         if (request.isDebit()) {
             return thirdPartiesId != null ?

@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.OpeningBalanceId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.Money;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
@@ -16,11 +16,11 @@ public class OpeningBalance { // saldo inicial
     private final ThirdPartiesId companyId;
     private final LedgerAccountId cuentaId;
     private final ThirdPartiesId thirdPartiesId; // opcional
-    private final Money amount;
+    private final Price amount;
     private final LocalDate date;
 
 
-    public OpeningBalance(OpeningBalanceId openingBalanceId, ThirdPartiesId companyId, LedgerAccountId cuentaId, ThirdPartiesId thirdPartiesId, Money amount, LocalDate date) {
+    public OpeningBalance(OpeningBalanceId openingBalanceId, ThirdPartiesId companyId, LedgerAccountId cuentaId, ThirdPartiesId thirdPartiesId, Price amount, LocalDate date) {
 
         validateMandatoryFields(amount, date);
         this.openingBalanceId = openingBalanceId;
@@ -36,7 +36,7 @@ public class OpeningBalance { // saldo inicial
             ThirdPartiesId companyId,
             LedgerAccountId cuentaId,
             ThirdPartiesId thirdPartiesId,
-            Money amount
+            Price amount
             ) {
 
         return new OpeningBalance(
@@ -52,7 +52,7 @@ public class OpeningBalance { // saldo inicial
 
     }
 
-  private void validateMandatoryFields(Money amount, LocalDate date) {
+  private void validateMandatoryFields(Price amount, LocalDate date) {
     if (amount.isNegativeOrZero()) {
         throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_OPENING_BALANCE_INVALID_AMOUNT, EntityContext.OPENINGBALANCE);
     }
@@ -84,7 +84,7 @@ public class OpeningBalance { // saldo inicial
         return thirdPartiesId;
     }
 
-    public Money getValor() {
+    public Price getValor() {
         return amount;
     }
 }

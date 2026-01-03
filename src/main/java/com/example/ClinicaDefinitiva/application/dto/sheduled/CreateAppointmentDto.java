@@ -1,7 +1,5 @@
 package com.example.ClinicaDefinitiva.application.dto.sheduled;
 
-import com.example.ClinicaDefinitiva.application.dto.ServiceRendered;
-import com.example.ClinicaDefinitiva.application.dto.ServiceRenderedDto;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceDuration;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentType;
 

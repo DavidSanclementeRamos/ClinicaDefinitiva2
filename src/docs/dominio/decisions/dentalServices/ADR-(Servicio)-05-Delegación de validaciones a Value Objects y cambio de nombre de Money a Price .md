@@ -1,6 +1,6 @@
 
 
-# 📄 ADR Delegación de validaciones a Value Objects y cambio de nombre de Money a Price
+# 📄 ADR 05 (Servicio): Delegación de validaciones a Value Objects y cambio de nombre de Money a Price
 
 Título: Delegación de validaciones a VO y renombrado semántico de Money → Price  
 Estado: Recorded after implementation  

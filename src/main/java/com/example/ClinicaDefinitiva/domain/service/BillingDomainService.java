@@ -1,14 +1,14 @@
 package com.example.ClinicaDefinitiva.domain.service;
 
 import com.example.ClinicaDefinitiva.domain.InvoiceItemBuilder;
-import com.example.ClinicaDefinitiva.application.dto.ServiceRendered;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ServiceRendered;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.InvoiceFactory;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
-import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.RateRepository;
 
@@ -53,7 +53,7 @@ public class BillingDomainService {
             throw new IllegalArgumentException("Rate not valid at performedAt for service " + first.getServiceCode());
         }
 
-        final Money invoiceCurrency = firstRate.getCurrency();
+        final Price invoiceCurrency = firstRate.getCurrency();
         final String invoicePayer = firstRate.getPayer_type();
 
 

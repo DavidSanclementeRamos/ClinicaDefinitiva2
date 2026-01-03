@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.infrastructure.adapters;
 
 import com.example.ClinicaDefinitiva.application.mapper.ProvidedServiceMapper;
-import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.*;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
@@ -100,7 +100,7 @@ public class ProvidedServiceRepositoryJpaAdapter implements ProvidedServiceRepos
         ServiceId id = ServiceId.fromString(e.getId());
         ServiceCatalog catalog = new ServiceCatalog(ServiceId.fromString(e.getCatalogId()), e.getCatalogName(), e.getCatalogCategory());
         ServiceCode code = new ServiceCode(e.getCode());
-        Money money = e.getBaseRateAmount() == null ? null : new Money(e.getBaseRateAmount(), e.getBaseRateCurrency());
+        Price money = e.getBaseRateAmount() == null ? null : new Price(e.getBaseRateAmount(), e.getBaseRateCurrency());
         ServiceDuration duration = e.getDurationMinutes() == null ? null : new ServiceDuration(e.getDurationMinutes());
         ServiceStatus status = e.getStatus() == null ? new ServiceStatus("Active") : new ServiceStatus(e.getStatus());
 

@@ -1,11 +1,11 @@
 package com.example.ClinicaDefinitiva.doima;
 
-import com.example.ClinicaDefinitiva.application.dto.ServiceRendered;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ServiceRendered;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
-import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.portsInput.Administration.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsInput.RateRepository;
 import com.example.ClinicaDefinitiva.domain.service.BillingDomainService;
@@ -53,7 +53,7 @@ class BillingDomainServiceTest {
 
             when(rateRepo.findActiveRateForService("SVC1", patient.getContractId())).thenReturn(Optional.of(rate));
             when(rate.isValidAt(issuedAt)).thenReturn(true);
-            when(rate.getCurrency()).thenReturn(Money.COP);
+            when(rate.getCurrency()).thenReturn(Price.COP);
             when(rate.getPayer_type()).thenReturn("EPS");
             when(rate.getAmount()).thenReturn(50000.0);
             when(rate.getId()).thenReturn("rate-1");
@@ -146,7 +146,7 @@ class BillingDomainServiceTest {
             // Primer rate
             when(rateRepo.findActiveRateForService("SVC1", patient.getContractId())).thenReturn(Optional.of(rate));
             when(rate.isValidAt(issuedAt)).thenReturn(true);
-            when(rate.getCurrency()).thenReturn(new Money("COP"));
+            when(rate.getCurrency()).thenReturn(new Price("COP"));
             when(rate.getPayer_type()).thenReturn("EPS");
             when(rate.getAmount()).thenReturn(50000.0);
             when(rate.getId()).thenReturn("rate-1");
@@ -155,7 +155,7 @@ class BillingDomainServiceTest {
             Rate rate2 = mock(Rate.class);
             when(rateRepo.findActiveRateForService("SVC2", patient.getContractId())).thenReturn(Optional.of(rate2));
             when(rate2.isValidAt(issuedAt)).thenReturn(true);
-            when(rate2.getCurrency()).thenReturn(new Money("USD"));
+            when(rate2.getCurrency()).thenReturn(new Price("USD"));
             when(rate2.getAmount()).thenReturn(100.0);
             when(rate2.getId()).thenReturn("rate-2");
 

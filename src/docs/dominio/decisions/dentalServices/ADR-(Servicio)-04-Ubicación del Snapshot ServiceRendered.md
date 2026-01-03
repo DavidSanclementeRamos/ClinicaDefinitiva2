@@ -1,6 +1,6 @@
 
 
-# 📄 ADR Ubicación del Snapshot ServiceRendered
+# 📄 ADR 04 (Servicio): Ubicación del Snapshot ServiceRendered
 
 Título: Ubicación del Snapshot ServiceRendered  
 Estado: Recorded after implementation  
@@ -71,7 +71,7 @@ Se adopta la Opción B:
 
 ---
 
-Consecuencias
+## Consecuencias
 - Positivas:
     - Semántica correcta: ServiceRendered es parte del dominio odontológico.
     - Refuerza separación de capas.

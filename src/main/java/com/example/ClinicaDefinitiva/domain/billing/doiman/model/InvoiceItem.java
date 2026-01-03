@@ -1,10 +1,11 @@
 package com.example.ClinicaDefinitiva.domain.billing.doiman.model;
 
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceItemId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
-import com.example.ClinicaDefinitiva.domain.Money;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -17,8 +18,8 @@ public class InvoiceItem {
     private final String serviceCode;           // Referencia al servicio prestado
     private final String description;          // Descripción del ítem (ej. "Extracción cordal")
     private final int quantity;             // Cantidad (ej. 1, 2 unidades)
-    private final Money unitPrice;         // Precio unitario aplicado
-    private final Money totalPrice;        // Total (quantity * unit_price)
+    private final Price unitPrice;         // Precio unitario aplicado
+    private final Price totalPrice;        // Total (quantity * unit_price)
     private final RateId rateId;              //Referencia a la tarifa usada
     private final LocalDateTime performedAt;    // Fecha/hora de prestación
     private final DentistId providerId;            // Profesional que realizó el servicio
@@ -28,7 +29,7 @@ public class InvoiceItem {
                 String serviceCode,
                 String description,
                 int quantity,
-                Money unitPrice,
+                Price unitPrice,
                 String currency,
                 RateId rateId,
                 LocalDateTime performedAt,
@@ -60,12 +61,12 @@ public class InvoiceItem {
     public String getServiceCode() { return serviceCode; }
     public String getDescription() { return description; }
     public int getQuantity() { return quantity; }
-    public Money getUnitPrice() { return unitPrice; }
+    public Price getUnitPrice() { return unitPrice; }
     public RateId getRateId() { return rateId; }
     public LocalDateTime getPerformedAt() { return performedAt; }
     public DentistId getProviderId() { return providerId; }
     public String getCurrency() {return currency;}
-    public Money getTotalPrice() {
+    public Price getTotalPrice() {
         return totalPrice;
     }
     public InvoiceId getInvoiceId() {

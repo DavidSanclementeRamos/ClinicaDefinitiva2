@@ -1,6 +1,6 @@
 
 
-# 📄 ADR  Manejo de precios base en el agregado Service
+# 📄 ADR 3 (Servicio): Manejo de precios base en el agregado Service
 
 Título: Definición de precio base en servicios odontológicos  
 Estado: Recorded after implementation  

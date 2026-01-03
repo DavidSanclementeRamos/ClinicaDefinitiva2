@@ -1,10 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.JournalEntryId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.Money;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
@@ -197,25 +197,25 @@ public final class JournalEntry {
     /**
      * Calcula el total de débitos del asiento.
      */
-    public Money getTotalDebits() {
+    public Price getTotalDebits() {
         BigDecimal total = this.lines.stream()
                 .filter(JournalEntryLine::isDebit)
                 .map(line -> line.getAmount().asBigDecimal())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return Money.of(total, "COP");
+        return Price.of(total, "COP");
     }
 
     /**
      * Calcula el total de créditos del asiento.
      */
-    public Money getTotalCredits() {
+    public Price getTotalCredits() {
         BigDecimal total = this.lines.stream()
                 .filter(JournalEntryLine::isCredit)
                 .map(line -> line.getAmount().asBigDecimal())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return Money.of(total, "COP");
+        return Price.of(total, "COP");
     }
 
     /**

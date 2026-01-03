@@ -1,11 +1,12 @@
 package com.example.ClinicaDefinitiva.domain.billing.doiman.model;
 
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.enu.InvoiceStatus;
-import com.example.ClinicaDefinitiva.domain.Money;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,9 +23,9 @@ public class Invoice {
     private final LocalDateTime dueDate;          // Fecha de vencimiento
     private InvoiceStatus status;                 // Estado: Draft, Pending, Paid, Cancelled Vo
     private final List<InvoiceItem> items = new ArrayList<>();    // Lista de ítems facturados
-    private Money subtotal;               // Suma de los ítems antes de impuestos
-    private Money tax;                  // Impuestos aplicados
-    private Money total;                // Total a pagar
+    private Price subtotal;               // Suma de los ítems antes de impuestos
+    private Price tax;                  // Impuestos aplicados
+    private Price total;                // Total a pagar
     private final String currency;               // Moneda (ej. COP, USD)
     private final String payer;                  // EPS, aseguradora o paciente particular
     private final ContractId contractId;            // Referencia a contrato/convenio (opcional)
@@ -57,9 +58,9 @@ public class Invoice {
         this.status = InvoiceStatus.DRAFT;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = this.createdAt;
-        this.subtotal = Money.zero(currency);
-        this.tax = Money.zero(currency);
-        this.total = Money.zero(currency);
+        this.subtotal = Price.zero(currency);
+        this.tax = Price.zero(currency);
+        this.total = Price.zero(currency);
     }
 
     // Add item with domain-level invariants
@@ -88,7 +89,7 @@ public class Invoice {
 
     // Recalcula subtotal, impuestos y total
     public void recalcTotals() {
-        Money sum = Money.zero(currency);
+        Price sum = Price.zero(currency);
         for (InvoiceItem it : items) sum = sum.add(it.getTotalPrice());
         this.subtotal = sum;
         this.tax = computeTax(this.subtotal);
@@ -98,7 +99,7 @@ public class Invoice {
     }
 
     // Implemente la política de impuestos aquí (simplificada)
-    private Money computeTax(Money base) {
+    private Price computeTax(Price base) {
         // ejemplo simple 19%
         return base.multiply(0.19);
 
@@ -150,9 +151,9 @@ public class Invoice {
         return contractId;
     }
     public List<InvoiceItem> getItems() { return Collections.unmodifiableList(items); }
-    public Money getSubtotal() { return subtotal; }
-    public Money getTax() { return tax; }
-    public Money getTotal() { return total; }
+    public Price getSubtotal() { return subtotal; }
+    public Price getTax() { return tax; }
+    public Price getTotal() { return total; }
     public InvoiceStatus getStatus() { return status; }
     public InvoiceId getId() { return id; }
 

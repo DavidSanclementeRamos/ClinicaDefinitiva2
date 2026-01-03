@@ -1,4 +1,4 @@
-# ADR-24: ServiceRendered como input de dominio
+# ADR 1 (Servicio): ServiceRendered como input de dominio
 
 Estado:
 Aprobado

@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.application.service;
 
 import com.example.ClinicaDefinitiva.application.dto.billing.BuildInvoiceRequest;
 import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceDto;
-import com.example.ClinicaDefinitiva.application.dto.ServiceRendered;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ServiceRendered;
 import com.example.ClinicaDefinitiva.application.dto.billing.UpdateInvoiceRequest;
 import com.example.ClinicaDefinitiva.application.mapper.InvoiceMapper;
 import com.example.ClinicaDefinitiva.application.usecase.BillingUseCase;

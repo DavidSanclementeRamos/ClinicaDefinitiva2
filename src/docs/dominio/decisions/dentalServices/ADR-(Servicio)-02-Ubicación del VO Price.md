@@ -1,4 +1,4 @@
-📄 ADR 2: Ubicación del VO Price
+# 📄 ADR 2 (Service): Ubicación del VO Price
 
 Título: Ubicación del Value Object Price  
 Estado: Recorded after implementation  
@@ -6,7 +6,7 @@ Fecha: (retroactivo, se documenta después de la implementación)
 
 ---
 
-Contexto
+## Contexto
 El VO Price encapsula valor monetario, moneda y reglas básicas (ej. no negativos).  
 La duda: ¿en qué módulo debe vivir para mantener coherencia y evitar acoplamientos innecesarios?
 
@@ -14,7 +14,7 @@ Este ADR se redacta retrospectivamente para formalizar una decisión ya aplicada
 
 ---
 
-Soluciones evaluadas
+## Soluciones evaluadas
 
 Opción A: En Service
 - Price vive en el módulo odontológico.
@@ -59,7 +59,7 @@ Desventajas:
 
 ---
 
-Decisión
+## Decisión
 Se adopta la Opción C:
 - Price vive en un módulo compartido (shared-kernel).
 - Service lo usa para definir basePrice.
@@ -67,7 +67,7 @@ Se adopta la Opción C:
 
 ---
 
-Consecuencias
+## Consecuencias
 - Positivas:
     - Neutralidad y reutilización.
     - Balance entre claridad y separación.

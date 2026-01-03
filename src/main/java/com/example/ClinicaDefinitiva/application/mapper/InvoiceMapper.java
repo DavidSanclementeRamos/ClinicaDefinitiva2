@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.application.mapper;
 
 import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceItemDto;
-import com.example.ClinicaDefinitiva.application.dto.ServiceRendered;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ServiceRendered;
 import com.example.ClinicaDefinitiva.application.dto.ServiceRenderedDto;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;

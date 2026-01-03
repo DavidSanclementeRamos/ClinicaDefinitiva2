@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.model;
 
-import com.example.ClinicaDefinitiva.domain.Money;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
 
@@ -26,7 +26,7 @@ public class ProvidedService {
     private  String name;                         // Nombre del servicio
     private  ServiceCatalog category;      //Categoría (ej. "Orthodontics", "Surgery", "Pediatrics")
     private  ServiceCode code;               // Código estandarizado (ej. CUPS en Colombia)
-    private Money baseRate;                // Tarifa base del servicio
+    private Price baseRate;                // Tarifa base del servicio
     private  ServiceDuration duration;           // Duración estimada en minutos
     private  boolean requiresAuthorization;      // Indica si requiere autorización (EPS/aseguradora)
     private  String description;                // Descripción general del servicio
@@ -36,7 +36,7 @@ public class ProvidedService {
 
 
     public ProvidedService(ServiceId id, String name, ServiceCatalog category, ServiceCode code,
-                           Money baseRate, ServiceDuration duration, boolean requiresAuthorization,
+                           Price baseRate, ServiceDuration duration, boolean requiresAuthorization,
                            String description, ServiceStatus status, ServiceDetails details) {
 
         if (name == null || name.isBlank()) throw new IllegalArgumentException("name cannot be null or blank");
@@ -77,7 +77,7 @@ public class ProvidedService {
         this.status = status;
     }
 
-    public Money getBaseRate() {
+    public Price getBaseRate() {
         return baseRate;
     }
 
@@ -113,11 +113,11 @@ public class ProvidedService {
         return status;
     }
 
-    public void updateCommon(String name, ServiceCatalog serviceCatalog, Money money, ServiceDuration serviceDuration, Boolean requiresAuthorization, String description, String status) {
+    public void updateCommon(String name, ServiceCatalog serviceCatalog, Price money, ServiceDuration serviceDuration, Boolean requiresAuthorization, String description, String status) {
     }
 
     // updateCommon
-    public void updateCommon(String name, ServiceCatalog category, Money baseRate, ServiceDuration duration, Boolean requiresAuthorization, String description, ServiceStatus status) {
+    public void updateCommon(String name, ServiceCatalog category, Price baseRate, ServiceDuration duration, Boolean requiresAuthorization, String description, ServiceStatus status) {
         if (name != null && name.isBlank()) throw new IllegalArgumentException("name cannot be blank");
         if (description != null && description.isBlank()) throw new IllegalArgumentException("description cannot be blank");
         if (name != null) this.name = name;
