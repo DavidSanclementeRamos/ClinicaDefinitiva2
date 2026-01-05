@@ -32,7 +32,12 @@ public enum CodeVO {
     ORT28,
     PED29,
     PRO30,
-    SUR31;
+    SUR31,
+    SNV32,
+    SDV33,
+    PRI34,
+    SDV35,
+    SCV36
 }
 
 

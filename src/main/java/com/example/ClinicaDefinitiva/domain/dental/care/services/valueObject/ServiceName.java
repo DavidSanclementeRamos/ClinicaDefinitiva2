@@ -1,7 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject;
 
 
-import java.util.Objects;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 /**
  * Value Object para el nombre del servicio odontológico.
@@ -34,7 +36,7 @@ public final class ServiceName {
 
     public static ServiceName custom(String customName) {
         if (customName == null || customName.trim().length() < 3) {
-            throw new IllegalArgumentException("El nombre personalizado debe tener al menos 3 caracteres");
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_NAME_CUSTOM_INVALID, VOContext.SERVICE_NAME);
         }
         return new ServiceName(DentalServiceName.OTHER, customName.trim());
     }
@@ -43,21 +45,4 @@ public final class ServiceName {
         return predefinedName == DentalServiceName.OTHER ? customName : predefinedName.name();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ServiceName)) return false;
-        ServiceName that = (ServiceName) o;
-        return Objects.equals(getValue(), that.getValue());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getValue());
-    }
-
-    @Override
-    public String toString() {
-        return getValue();
-    }
 }

@@ -44,7 +44,7 @@ public final class ServiceId {
         return Objects.hash(value);
     }
 
-    // 🔗 Identificadores estáticos de servicios conocidos
+    // Identificadores estáticos de servicios conocidos
     public static final ServiceId GENERAL_CONSULTATION = new ServiceId("SRV-0001");
     public static final ServiceId PROPHYLAXIS_CLEANING = new ServiceId("SRV-0002");
 

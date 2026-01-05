@@ -29,7 +29,13 @@ public enum VOContext implements DomainContext {
     ORTHODONTIC(CodeVO.ORT28),
     PEDIATRIC(CodeVO.PED29),
     PROSTHETIC(CodeVO.PRO30),
-    SURGICAL(CodeVO.SUR31);
+    SURGICAL(CodeVO.SUR31),
+    SERVICE_NAME(CodeVO.SNV32),
+    SERVICE_DESCRIPTION(CodeVO.SDV33),
+    SERVICE_PRICE(CodeVO.PRI34),
+    SERVICE_DURATION(CodeVO.SDV35),
+    SERVICE_CODE(CodeVO.SCV36);
+
 
     private final CodeVO codigo;
 

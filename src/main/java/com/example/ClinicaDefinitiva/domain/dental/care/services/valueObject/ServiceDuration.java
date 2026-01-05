@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -22,7 +26,6 @@ public final class ServiceDuration {
         this.minutes = minutes;
     }
 
-    // ==================== FACTORY METHODS ====================
 
     /**
      * Crea una duración desde minutos
@@ -43,10 +46,10 @@ public final class ServiceDuration {
      */
     public static ServiceDuration between(LocalDateTime start, LocalDateTime end) {
         if (start == null || end == null) {
-            throw new IllegalArgumentException("Start and end times cannot be null");
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DURATION_START_END_REQUIRED, VOContext.SERVICE_DURATION);
         }
         if (!start.isBefore(end)) {
-            throw new IllegalArgumentException("Start must be before end");
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DURATION_START_BEFORE_END,VOContext.SERVICE_DURATION);
         }
 
         long minutes = Duration.between(start, end).toMinutes();
@@ -58,43 +61,32 @@ public final class ServiceDuration {
      */
     public static ServiceDuration from(Duration duration) {
         if (duration == null) {
-            throw new IllegalArgumentException("Duration cannot be null");
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DURATION_REQUIRED,VOContext.SERVICE_DURATION);
         }
         return new ServiceDuration((int) duration.toMinutes());
     }
 
-    // ==================== VALIDACIONES ====================
+    //  VALIDACIONES
 
     private void validateDuration(int minutes) {
         if (minutes <= 0) {
-            throw new IllegalArgumentException(
-                    "La duración debe ser positiva, pero fue: " + minutes
+            throw new ValueObjectValidationException(ServiceVOError
+                    .ERR_SERVICE_DURATION_POSITIVE,VOContext.SERVICE_DURATION
             );
         }
 
         if (minutes < MIN_DURATION_MINUTES) {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "La duración mínima es %d minutos, pero fue: %d",
-                            MIN_DURATION_MINUTES,
-                            minutes
-                    )
-            );
+            throw new ValueObjectValidationException(ServiceVOError
+                    .ERR_SERVICE_DURATION_MINIMUM,VOContext.SERVICE_DURATION);
         }
 
         if (minutes > MAX_DURATION_MINUTES) {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "La duración máxima es %d minutos (%d horas), pero fue: %d",
-                            MAX_DURATION_MINUTES,
-                            MAX_DURATION_MINUTES / 60,
-                            minutes
-                    )
-            );
+            throw new ValueObjectValidationException(ServiceVOError
+                    .ERR_SERVICE_DURATION_MAXIMUM,VOContext.SERVICE_DURATION);
         }
     }
 
-    // ==================== OPERACIONES ====================
+    // OPERACIONES
 
     /**
      * Suma otra duración
@@ -109,8 +101,8 @@ public final class ServiceDuration {
     public ServiceDuration minus(ServiceDuration other) {
         int result = this.minutes - other.minutes;
         if (result <= 0) {
-            throw new IllegalArgumentException(
-                    "La duración resultante debe ser positiva"
+            throw new ValueObjectValidationException(ServiceVOError
+                    .ERR_SERVICE_DURATION_RESULT_POSITIVE,VOContext.SERVICE_DURATION
             );
         }
         return new ServiceDuration(result);
@@ -121,7 +113,8 @@ public final class ServiceDuration {
      */
     public ServiceDuration multiply(int factor) {
         if (factor <= 0) {
-            throw new IllegalArgumentException("El factor debe ser positivo");
+            throw new ValueObjectValidationException(ServiceVOError
+                    .ERR_SERVICE_DURATION_FACTOR_POSITIVE,VOContext.SERVICE_DURATION);
         }
         return new ServiceDuration(this.minutes * factor);
     }
@@ -133,7 +126,7 @@ public final class ServiceDuration {
         return Duration.ofMinutes(minutes);
     }
 
-    // ==================== QUERIES ====================
+    //  QUERIES
 
     /**
      * Verifica si es una duración corta (< 30 minutos)
@@ -171,7 +164,7 @@ public final class ServiceDuration {
         return this.minutes == other.minutes;
     }
 
-    // ==================== GETTERS ====================
+    // GETTERS
 
     public int getMinutes() {
         return minutes;
@@ -203,7 +196,6 @@ public final class ServiceDuration {
         return hours + "h " + remainingMinutes + "m";
     }
 
-    // ==================== OBJECT METHODS ====================
 
     @Override
     public boolean equals(Object o) {

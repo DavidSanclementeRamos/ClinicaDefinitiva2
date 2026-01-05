@@ -6,6 +6,8 @@ import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+
+import java.math.BigDecimal;
 import java.util.Optional;
 
 /**
@@ -134,10 +136,12 @@ public class ProvidedService {
             );
         }
 
-        //Price oldRate = this.baseRate;
+        Price oldRate = this.baseRate;
         this.baseRate = newRate;
 
     }
+
+
 
     /**
      * RN-SERVICE-006: Actualizar detalles (debe mantener mismo tipo)

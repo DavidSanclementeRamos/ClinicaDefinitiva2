@@ -9,7 +9,7 @@ public final class ServiceCatalog {
     private final String category;
 
     public ServiceCatalog(ServiceId id, String name, String category) {
-        if (id == null) throw new IllegalArgumentException("ServiceId cannot be null");
+
         if (name == null || name.isBlank()) throw new IllegalArgumentException("Service name cannot be null or blank");
         if (category == null || category.isBlank()) throw new IllegalArgumentException("Service category cannot be null or blank");
 
