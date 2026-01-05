@@ -23,7 +23,13 @@ public enum VOContext implements DomainContext {
     APPOINTMENT_STATUS(CodeVO.APP22),
     AVAILABILITY_ID(CodeVO.AVA23),
     AVAILABILITY_STATUS(CodeVO.AVA24),
-    SHIFT_ID(CodeVO.SHI25);
+    SHIFT_ID(CodeVO.SHI25),
+    AESTHETIC(CodeVO.AES26),
+    IMPLANTOLOGY(CodeVO.IMP27),
+    ORTHODONTIC(CodeVO.ORT28),
+    PEDIATRIC(CodeVO.PED29),
+    PROSTHETIC(CodeVO.PRO30),
+    SURGICAL(CodeVO.SUR31);
 
     private final CodeVO codigo;
 

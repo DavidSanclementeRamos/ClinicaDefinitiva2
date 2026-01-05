@@ -27,6 +27,12 @@ public enum CodeVO {
     AVA23, // AvailabilityId
     AVA24, //AvailabilityStatus
     SHI25, // ShiftId
+    AES26,
+    IMP27,
+    ORT28,
+    PED29,
+    PRO30,
+    SUR31;
 }
 
 
