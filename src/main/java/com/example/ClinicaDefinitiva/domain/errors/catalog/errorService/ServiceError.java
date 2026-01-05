@@ -5,14 +5,14 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 public enum ServiceError implements ErrorCatalog {
 
     // RN-SERVICE-001
-    ERR_SERVICE_INVALID_RATE(
+    ERR_SERVICE_INVALID_RATE(// eliminar
             "RN-SERVICE-001",
             "error.service.rate.invalid",
             "La tarifa base debe ser mayor a 0"
     ),
 
     // RN-SERVICE-002
-    ERR_SERVICE_INVALID_DURATION(
+    ERR_SERVICE_INVALID_DURATION(// eliminar
             "RN-SERVICE-002",
             "error.service.duration.invalid",
             "La duración debe estar entre 15 minutos y 4 horas (240 minutos)"
@@ -33,7 +33,7 @@ public enum ServiceError implements ErrorCatalog {
     ),
 
     // RN-SERVICE-005
-    ERR_SERVICE_HAS_APPOINTMENTS(
+    ERR_SERVICE_HAS_APPOINTMENTS(// Pospuesta
             "RN-SERVICE-005",
             "error.service.appointments.exist",
             "No puede desactivarse porque tiene citas programadas en las próximas 48 horas"

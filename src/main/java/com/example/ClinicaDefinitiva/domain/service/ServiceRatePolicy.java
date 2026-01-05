@@ -13,7 +13,7 @@ public final class ServiceRatePolicy {
     private static final BigDecimal MAX_RATE_PERCENTAGE = new BigDecimal("1.20"); // 120%
 
     private ServiceRatePolicy() {
-        
+
     }
 
     public static void validateRateChange(Price oldRate, Price newRate) {

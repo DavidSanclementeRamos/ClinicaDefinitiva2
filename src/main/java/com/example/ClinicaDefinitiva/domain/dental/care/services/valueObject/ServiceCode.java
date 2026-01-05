@@ -23,7 +23,17 @@ public final class ServiceCode {
             throw new ValueObjectValidationException(ServiceVOError
                     .ERR_SERVICE_CODE_LENGTH_INVALID,VOContext.SERVICE_CODE);}
         this.value = value;
+        ensureUniqueCode()
     }
+    public void ensureUniqueCode(boolean exists) {
+        if (exists) {
+            throw new ValueObjectValidationException(
+                    ServiceVOError.ERR_SERVICE_CODE_DUPLICATE,
+                    VOContext.SERVICE_CODE);
+        }
+    }
+
+
     public String getValue() { return value; }
 
     @Override

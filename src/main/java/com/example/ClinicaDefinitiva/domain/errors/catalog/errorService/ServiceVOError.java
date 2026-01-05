@@ -99,6 +99,13 @@ public enum ServiceVOError implements ErrorCatalog {
             "error.serviceCode.lengthInvalid",
             "El código de servicio debe tener entre {min} y {max} caracteres"
     ),
+    ERR_SERVICE_CODE_DUPLICATE(
+            "RN-SERVICECODE-004",
+            "error.serviceCode.duplicate",
+            "El código de servicio ya existe y debe ser único"
+    );
+
+
     ERR_SERVICE_ID_NULL(
             "RN-SERVICEID-001",
             "error.serviceId.null",
