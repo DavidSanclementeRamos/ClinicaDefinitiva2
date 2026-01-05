@@ -9,7 +9,7 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidati
 import java.util.Objects;
 import java.util.Set;
 
-public class AestheticDetails implements ServiceDetails {
+public final class AestheticDetails implements ServiceDetails {
 
     private static final Set VALID_AESTHETIC_TYPES = Set.of(
             "WHITENING",

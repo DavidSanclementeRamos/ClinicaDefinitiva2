@@ -2,36 +2,81 @@ package com.example.ClinicaDefinitiva.domain.dental.care.services.model;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceType;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.OrthodonticError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 import java.util.Objects;
+import java.util.Set;
 
 public final class OrthodonticDetails implements ServiceDetails {
-    private final String applianceType;              // Tipo de aparato (brackets metálicos, cerámicos, alineadores)
-    private final Integer treatmentDurationMonths;     // Duración estimada del tratamiento en meses
-    private final boolean requiresFollowup;        //Indica si requiere controles periódicos
+    private static final Set VALID_APPLIANCE_TYPES = Set.of(
+            "METAL_BRACKETS",
+            "CERAMIC_BRACKETS",
+            "LINGUAL_BRACKETS",
+            "CLEAR_ALIGNERS",
+            "REMOVABLE_APPLIANCES",
+            "FUNCTIONAL_APPLIANCES"
+    );
+
+    private final String applianceType;
+    private final Integer treatmentDurationMonths;
+    private final boolean requiresFollowup;
 
     public OrthodonticDetails(String applianceType, Integer treatmentDurationMonths, Boolean requiresFollowup) {
-        if (applianceType == null || applianceType.isBlank()) throw new IllegalArgumentException("applianceType required");
-        if (treatmentDurationMonths != null && treatmentDurationMonths <= 0) throw new IllegalArgumentException("treatmentDurationMonths must be > 0");
-        this.applianceType = applianceType;
+        // RN-ORTHODONTIC-001
+        if (applianceType == null || applianceType.isBlank()) {
+            throw new ValueObjectValidationException(
+                    OrthodonticError.ERR_ORTHODONTIC_MISSING_APPLIANCE, VOContext.ORTHODONTIC
+
+            );
+        }
+
+        // RN-ORTHODONTIC-003
+        if (!VALID_APPLIANCE_TYPES.contains(applianceType.toUpperCase())) {
+            throw new ValueObjectValidationException(
+                    OrthodonticError.ERR_ORTHODONTIC_INVALID_APPLIANCE,VOContext.ORTHODONTIC
+            );
+        }
+
+        // RN-ORTHODONTIC-004 y RN-ORTHODONTIC-002
+        if (treatmentDurationMonths != null) {
+            if (treatmentDurationMonths <= 0) {
+                throw new ValueObjectValidationException(
+                        OrthodonticError.ERR_ORTHODONTIC_NEGATIVE_DURATION,VOContext.ORTHODONTIC
+                );
+            }
+            if (treatmentDurationMonths < 6 || treatmentDurationMonths > 48) {
+                throw new ValueObjectValidationException(
+                        OrthodonticError.ERR_ORTHODONTIC_INVALID_DURATION,VOContext.ORTHODONTIC
+                );
+            }
+        }
+
+        this.applianceType = applianceType.toUpperCase();
         this.treatmentDurationMonths = treatmentDurationMonths;
         this.requiresFollowup = Boolean.TRUE.equals(requiresFollowup);
     }
 
-    @Override public ServiceType serviceType() { return ServiceType.ORTHODONTIC; }
-    public String getApplianceType() { return applianceType; }
-    public Integer getTreatmentDurationMonths() { return treatmentDurationMonths; }
-    public Boolean getRequiresFollowup() { return requiresFollowup; }
-
-    @Override public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OrthodonticDetails)) return false;
-        OrthodonticDetails that = (OrthodonticDetails) o;
-        return applianceType.equals(that.applianceType) && java.util.Objects.equals(treatmentDurationMonths, that.treatmentDurationMonths) && java.util.Objects.equals(requiresFollowup, that.requiresFollowup);
+    @Override
+    public ServiceType serviceType() {
+        return ServiceType.ORTHODONTIC;
     }
 
-    @Override public int hashCode() { return Objects.hash(applianceType, treatmentDurationMonths, requiresFollowup); }
+    public String getApplianceType() {
+        return applianceType;
+    }
+
+    public Integer getTreatmentDurationMonths() {
+        return treatmentDurationMonths;
+    }
+
+    public Boolean getRequiresFollowup() {
+        return requiresFollowup;
+    }
 }
+
+
 
 
 

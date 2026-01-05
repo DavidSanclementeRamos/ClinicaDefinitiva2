@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidati
 
 import java.util.Objects;
 
-public class ImplantologyDetails implements ServiceDetails {
+public final class ImplantologyDetails implements ServiceDetails {
     private static final int MIN_HEALING_MONTHS = 2;
     private static final int MAX_HEALING_MONTHS = 12;
     private static final int MIN_HEALING_WITH_GRAFT = 4;
