@@ -1,7 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject;
 
-
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyStatus;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 public final class ServiceStatus {
 
@@ -17,7 +18,7 @@ public final class ServiceStatus {
 
     public ServiceStatus(State value) {
         if (value == null) {
-            throw new IllegalArgumentException("ServiceStatus cannot be null");
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_STATUS_NULL, VOContext.SERVICE_STATUS);
         }
         this.value = value;
     }

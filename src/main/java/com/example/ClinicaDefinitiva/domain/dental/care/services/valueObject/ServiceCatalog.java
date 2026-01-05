@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.Objects;
 
 public final class ServiceCatalog {
@@ -10,8 +14,10 @@ public final class ServiceCatalog {
 
     public ServiceCatalog(ServiceId id, String name, String category) {
 
-        if (name == null || name.isBlank()) throw new IllegalArgumentException("Service name cannot be null or blank");
-        if (category == null || category.isBlank()) throw new IllegalArgumentException("Service category cannot be null or blank");
+        if (name == null || name.isBlank()) throw new ValueObjectValidationException(ServiceVOError
+                .ERR_SERVICE_NAME_NULL_OR_BLANK, VOContext.SERVICE_CATALOG);
+        if (category == null || category.isBlank()) throw new ValueObjectValidationException(ServiceVOError
+                .ERR_SERVICE_CATEGORY_NULL_OR_BLANK, VOContext.SERVICE_CATALOG);
 
         this.id = id;
         this.name = name;

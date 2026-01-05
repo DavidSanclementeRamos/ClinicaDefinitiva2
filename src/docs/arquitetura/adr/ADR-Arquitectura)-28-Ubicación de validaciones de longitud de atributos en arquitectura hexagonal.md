@@ -2,8 +2,10 @@
 
 # ADR 28 (Arquitectura): Ubicación de validaciones de longitud de atributos en arquitectura hexagonal
 
-## Estado
-Aceptado.
+- Estado: Aprobado
+- Fecha: 2026-01-05
+- Autor: David
+
 
 
 ## Contexto

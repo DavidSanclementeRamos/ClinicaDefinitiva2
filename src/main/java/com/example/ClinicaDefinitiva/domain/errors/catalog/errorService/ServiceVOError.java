@@ -98,7 +98,40 @@ public enum ServiceVOError implements ErrorCatalog {
             "RN-SERVICECODE-003",
             "error.serviceCode.lengthInvalid",
             "El código de servicio debe tener entre {min} y {max} caracteres"
+    ),
+    ERR_SERVICE_ID_NULL(
+            "RN-SERVICEID-001",
+            "error.serviceId.null",
+            "El identificador del servicio no puede ser nulo"
+    ),
+
+    ERR_SERVICE_ID_BLANK(
+            "RN-SERVICEID-002",
+            "error.serviceId.blank",
+            "El identificador del servicio no puede estar vacío"
+    ),
+    ERR_SERVICE_STATUS_NULL(
+            "RN-SERVICESTATUS-001",
+            "error.serviceStatus.null",
+            "El estado del servicio no puede ser nulo"
+    ),
+    ERR_SERVICE_NAME_NULL_OR_BLANK(
+            "RN-SERVICECATALOG-001",
+            "error.serviceCatalog.nameNullOrBlank",
+            "El nombre del servicio no puede ser nulo ni estar vacío"
+    ),
+
+    ERR_SERVICE_CATEGORY_NULL_OR_BLANK(
+            "RN-SERVICECATALOG-002",
+            "error.serviceCatalog.categoryNullOrBlank",
+            "La categoría del servicio no puede ser nula ni estar vacía"
     );
+
+
+
+
+
+
 
     private final String code;
     private final String messageKey;

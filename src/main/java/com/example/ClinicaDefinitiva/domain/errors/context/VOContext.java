@@ -34,7 +34,10 @@ public enum VOContext implements DomainContext {
     SERVICE_DESCRIPTION(CodeVO.SDV33),
     SERVICE_PRICE(CodeVO.PRI34),
     SERVICE_DURATION(CodeVO.SDV35),
-    SERVICE_CODE(CodeVO.SCV36);
+    SERVICE_CODE(CodeVO.SCV36),
+    SERVICE_ID(CodeVO.SID37),
+    SERVICE_STATUS(CodeVO.SST38),
+    SERVICE_CATALOG(CodeVO.SCA39);
 
 
     private final CodeVO codigo;

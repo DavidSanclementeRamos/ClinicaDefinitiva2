@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -8,10 +12,7 @@ public final class ServiceId {
     private final String value;
 
     private ServiceId(String value) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("ServiceId cannot be null or blank");
-        }
-        this.value = value;
+        this.value = Objects.requireNonNull(value);
     }
 
     public static ServiceId generate() {
@@ -19,9 +20,11 @@ public final class ServiceId {
     }
 
     public static ServiceId fromString(String value){
-        if (value == null) return null;
+        if (value == null) {
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_ID_NULL, VOContext.SERVICE_ID);
+        }
         String trimmed = value.trim();
-        if(trimmed.isEmpty()) throw new IllegalArgumentException("InvoiceId string is empty");
+        if(trimmed.isEmpty()) throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_ID_BLANK, VOContext.SERVICE_ID);
         return new ServiceId(trimmed);
     }
     public String getValue() {

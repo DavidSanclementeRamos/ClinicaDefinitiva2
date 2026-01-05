@@ -37,7 +37,10 @@ public enum CodeVO {
     SDV33,
     PRI34,
     SDV35,
-    SCV36
+    SCV36,
+    SID37,
+    SST38,
+    SCA39
 }
 
 
