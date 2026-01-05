@@ -6,6 +6,7 @@ import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.service.ServiceRatePolicy;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -127,7 +128,6 @@ public class ProvidedService {
     public void updateRate(Price newRate, String justification) {
         ensureEditable(); // RN-SERVICE-003
 
-
         // RN-SERVICE-008: Justificación obligatoria si hay citas
         // NOTA: Validación de citas delegada a Domain Service en v2.0
         if (justification == null || justification.isBlank()) {
@@ -137,8 +137,10 @@ public class ProvidedService {
         }
 
         Price oldRate = this.baseRate;
-        this.baseRate = newRate;
+        // RN-SERVICE-011
+        ServiceRatePolicy.validateRateChange(oldRate, newRate);
 
+        this.baseRate = newRate;
     }
 
 
