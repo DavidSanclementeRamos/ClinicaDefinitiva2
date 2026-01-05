@@ -1,40 +1,41 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject;
 
+
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyStatus;
+
 public final class ServiceStatus {
-    private final String value;
 
-    private static final String[] ALLOWED = {"Active", "Inactive", "Deprecated"};
+    /**
+     * Enum interno que define los estados permitidos
+     */
+    public enum State {
+        ACTIVE,
+        INACTIVE,
+        DEPRECATED
+    }
+    private final State value;
 
-    public ServiceStatus(String value) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("ServiceStatus cannot be null or blank");
-        }
-        boolean valid = false;
-        for (String allowed : ALLOWED) {
-            if (allowed.equals(value)) {
-                valid = true;
-                break;
-            }
-        }
-        if (!valid) {
-            throw new IllegalArgumentException("Invalid ServiceStatus: " + value);
+    public ServiceStatus(State value) {
+        if (value == null) {
+            throw new IllegalArgumentException("ServiceStatus cannot be null");
         }
         this.value = value;
     }
+    public static ServiceStatus of(State status) {
+        return new ServiceStatus(status);}
 
     public boolean isActive() {
-        return "Active".equals(this.value);
+        return State.ACTIVE.equals(this.value);
     }
 
-    public String getValue() {
+    public State getValue() {
         return value;
     }
 
     @Override
     public String toString() {
-        return value;
+        return value.name();
     }
-
 
 
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public final class ServiceDescription {
 
-    private final String description;
+    public final String description;
 
     private ServiceDescription(String description) {
         if (description == null || description.trim().length() < 10) {

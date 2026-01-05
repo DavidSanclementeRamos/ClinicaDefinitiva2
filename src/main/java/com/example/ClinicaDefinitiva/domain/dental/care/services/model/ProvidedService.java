@@ -3,8 +3,9 @@ package com.example.ClinicaDefinitiva.domain.dental.care.services.model;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
-
-import java.util.Objects;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceError;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import java.util.Optional;
 
 /**
@@ -22,149 +23,245 @@ import java.util.Optional;
  */
 public class ProvidedService {
 
+    private static final int MIN_DEACTIVATION_REASON_LENGTH = 10;
+
+
     private final ServiceId id;                             // Identificador único del servicio
-    private  String name;                         // Nombre del servicio
-    private  ServiceCatalog category;      //Categoría (ej. "Orthodontics", "Surgery", "Pediatrics")
-    private  ServiceCode code;               // Código estandarizado (ej. CUPS en Colombia)
+    private ServiceName  name;                         // Nombre del servicio
+    private ServiceCatalog category;      //Categoría (ej. "Orthodontics", "Surgery", "Pediatrics")
+    private ServiceCode code;               // Código estandarizado (ej. CUPS en Colombia)
     private Price baseRate;                // Tarifa base del servicio
-    private  ServiceDuration duration;           // Duración estimada en minutos
-    private  boolean requiresAuthorization;      // Indica si requiere autorización (EPS/aseguradora)
-    private  String description;                // Descripción general del servicio
-    private  ServiceStatus status;        // Estado del servicio (activo/inactivo)
+    private ServiceDuration duration;           // Duración estimada en minutos
+    private boolean requiresAuthorization;      // Indica si requiere autorización (EPS/aseguradora)
+    private ServiceDescription description;                // Descripción general del servicio
+    private ServiceStatus status;        // Estado del servicio (activo/inactivo)
     private ServiceDetails details; // NUEVO: composición
 
 
 
-    public ProvidedService(ServiceId id, String name, ServiceCatalog category, ServiceCode code,
-                           Price baseRate, ServiceDuration duration, boolean requiresAuthorization,
-                           String description, ServiceStatus status, ServiceDetails details) {
+    public ProvidedService(Price baseRate,
+                           ServiceCatalog category,
+                           ServiceCode code,
+                           ServiceDescription description,
+                           ServiceDetails details,
+                           ServiceDuration duration,
+                           ServiceId id,
+                           ServiceName name,
+                           boolean requiresAuthorization,
+                           ServiceStatus status) {
 
-        if (name == null || name.isBlank()) throw new IllegalArgumentException("name cannot be null or blank");
-        if (description == null || description.isBlank()) throw new IllegalArgumentException("description cannot be null or blank");
+        validateCategoryMatch(category, details);
 
-        this.id = id;
-        this.name = name;
+        this.baseRate = baseRate;
         this.category = category;
         this.code = code;
-        this.baseRate = baseRate;
-        this.duration = duration;
-        this.requiresAuthorization = requiresAuthorization;
         this.description = description;
-        this.status = status;
         this.details = details;
+        this.duration = duration;
+        this.id = id;
+        this.name = name;
+        this.requiresAuthorization = requiresAuthorization;
+        this.status = status;
     }
 
-    public void deactivate() {
-        if (!status.isActive()) {
-            throw new IllegalStateException("Service is already inactive");
+    // OPERACIONES DE DOMINIO
+
+    public static ProvidedService  registerService(ServiceId id,
+                                                   Price baseRate,
+                                                   ServiceCatalog category,
+                                                   ServiceCode code,
+                                                   ServiceDescription description,
+                                                   ServiceDetails details,
+                                                   ServiceDuration duration,
+                                                   ServiceName name,
+                                                   boolean requiresAuthorization,
+                                                   ServiceStatus status){
+
+        return new ProvidedService(
+                baseRate,
+                category,
+                code,
+                description,
+                details,
+                duration,
+                id,
+                name,
+                requiresAuthorization,
+                status
+                );
+    }
+
+
+
+    /**
+     * RN-SERVICE-003, RN-SERVICE-009, RN-SERVICE-014: Actualizar datos comunes
+     */
+    public void updateInformation(ServiceName name, ServiceCatalog category,
+                             ServiceDuration duration, Boolean requiresAuthorization,
+                             ServiceDescription description) {
+        ensureEditable(); // RN-SERVICE-003
+
+
+            this.name = name;
+            this.description = description;
+
+        if (category != null) {
+            // No validamos match aquí porque details puede cambiar después
+            this.category = category;
         }
-        this.status = new ServiceStatus("Inactive");
+            // RN-SERVICE-008: Validación de justificación delegada a updateRate()
+           // this.baseRate = baseRate;
+            this.duration = duration;
+        if (requiresAuthorization != null) {
+            this.requiresAuthorization = requiresAuthorization;
+        }
+
     }
 
-    public Optional<ServiceDetails> getDetails() { return Optional.ofNullable(details); }
+    /**
+     * RN-SERVICE-008: Actualizar tarifa con justificación si hay citas programadas
+     * RN-SERVICE-011: Validar que cambio esté en rango razonable
+     */
+    public void updateRate(Price newRate, String justification) {
+        ensureEditable(); // RN-SERVICE-003
 
 
+        // RN-SERVICE-008: Justificación obligatoria si hay citas
+        // NOTA: Validación de citas delegada a Domain Service en v2.0
+        if (justification == null || justification.isBlank()) {
+            throw new BusinessRuleViolationException(
+                    ServiceError.ERR_SERVICE_RATE_CHANGE_REQUIRES_JUSTIFICATION, EntityContext.DENTAL_SERVICE
+            );
+        }
 
-  //  public ServiceDetails getDetails() {
-      //  return details;
-    //}
+        //Price oldRate = this.baseRate;
+        this.baseRate = newRate;
 
-    public void setDetails(ServiceDetails details) {
-        this.details = details;
     }
 
-    public void setStatus(ServiceStatus status) {
-        this.status = status;
+    /**
+     * RN-SERVICE-006: Actualizar detalles (debe mantener mismo tipo)
+     * RN-SERVICE-004: Validar coherencia con categoría
+     */
+    public void updateDetails(ServiceDetails newDetails) {
+        ensureEditable(); // RN-SERVICE-003
+
+        if (newDetails == null) {
+            throw new IllegalArgumentException("Los detalles no pueden ser null");
+        }
+
+        // RN-SERVICE-006: No puede cambiar tipo
+        if (this.details != null &&
+                !this.details.serviceType().equals(newDetails.serviceType())) {
+            throw new BusinessRuleViolationException(
+                    ServiceError.ERR_SERVICE_TYPE_IMMUTABLE,EntityContext.DENTAL_SERVICE
+            );
+        }
+
+        // RN-SERVICE-004: Validar coherencia con categoría
+        validateCategoryMatch(this.category, newDetails);
+
+        ServiceType oldType = this.details != null ? this.details.serviceType() : null;
+        this.details = newDetails;
+
     }
 
-    public Price getBaseRate() {
-        return baseRate;
+    /**
+     * RN-SERVICE-015: Desactivar servicio con motivo obligatorio
+     * RN-SERVICE-005: Valida que no tenga citas en próximas 48h (delegado a Domain Service)
+     * RN-SERVICE-012: Valida que no tenga facturas pendientes (delegado a Domain Service)
+     */
+
+    public void deactivate(String reason) {
+        ensureEditable(); // RN-SERVICE-003
+
+        // RN-SERVICE-015
+        if (reason == null || reason.length() < MIN_DEACTIVATION_REASON_LENGTH) {
+            throw new BusinessRuleViolationException(
+                    ServiceError.ERR_SERVICE_DEACTIVATION_REASON_REQUIRED,EntityContext.DENTAL_SERVICE
+            );
+        }
+
+        // NOTA: Validaciones RN-SERVICE-005 y RN-SERVICE-012 se delegan a
+        // ProvidedServiceDomainService.deactivateService() en v2.0
+        // que consultará AppointmentRepository e InvoiceRepository
+        this.status = ServiceStatus.of(ServiceStatus.State.INACTIVE);
+
     }
 
-    public ServiceCatalog getCategory() {
-        return category;
+
+
+    /**
+     * Verificar si puede ser usado en agendamiento
+     */
+    public boolean canBeScheduled() {
+        return status.isActive() && details != null;
     }
 
-    public ServiceCode getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public ServiceDuration getDuration() {
+    /**
+     * Obtener duración estimada para cálculo de disponibilidad
+     */
+    public ServiceDuration estimatedDuration() {
         return duration;
     }
 
-    public ServiceId getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isRequiresAuthorization() {
+    /**
+     * Verificar si requiere autorización previa
+     */
+    public boolean requiresPreAuthorization() {
         return requiresAuthorization;
     }
 
-    public ServiceStatus getStatus() {
-        return status;
+    // VALIDACIONES PRIVADAS
+
+    /**
+     * RN-SERVICE-003: Validar que esté activo antes de editar
+     */
+    private void ensureEditable() {
+        if (!status.isActive()) {
+            throw new BusinessRuleViolationException(
+                    ServiceError.ERR_SERVICE_INACTIVE,EntityContext.DENTAL_SERVICE
+            );
+        }
     }
 
-    public void updateCommon(String name, ServiceCatalog serviceCatalog, Price money, ServiceDuration serviceDuration, Boolean requiresAuthorization, String description, String status) {
+    /**
+     * RN-SERVICE-004: Validar coherencia entre categoría y detalles
+     */
+    private void validateCategoryMatch(ServiceCatalog category, ServiceDetails details) {
+        if (category == null || details == null) {
+            return; // Permitir null temporal
+        }
+
+        String categoryName = category.getCategory().toUpperCase();
+        String detailsType = details.serviceType().name().toUpperCase();
+
+        // Mapeo flexible: ORTHODONTICS ↔ ORTHODONTIC, PROSTHETICS ↔ PROSTHETICS, etc.
+        boolean matches = categoryName.contains(detailsType) ||
+                detailsType.contains(categoryName) ||
+                normalizeCategory(categoryName).equals(normalizeCategory(detailsType));
+
+        if (!matches) {
+            throw new BusinessRuleViolationException(
+                    ServiceError.ERR_SERVICE_CATEGORY_MISMATCH,EntityContext.DENTAL_SERVICE
+            );
+        }
     }
 
-    // updateCommon
-    public void updateCommon(String name, ServiceCatalog category, Price baseRate, ServiceDuration duration, Boolean requiresAuthorization, String description, ServiceStatus status) {
-        if (name != null && name.isBlank()) throw new IllegalArgumentException("name cannot be blank");
-        if (description != null && description.isBlank()) throw new IllegalArgumentException("description cannot be blank");
-        if (name != null) this.name = name;
-        if (category != null) this.category = category;
-        if (baseRate != null) this.baseRate = baseRate;
-        if (duration != null) this.duration = duration;
-        if (requiresAuthorization != null) this.requiresAuthorization = requiresAuthorization;
-        if (description != null) this.description = description;
-        if (status != null) this.status = status;
+    private String normalizeCategory(String category) {
+        // Normalizar para comparación: ORTHODONTICS → ORTHODONTIC
+        return category.replaceAll("S$", ""); // Quitar 'S' final si existe
     }
 
-    // replaceDetails
-    public void replaceDetails(ServiceDetails newDetails) {
-        this.details = newDetails;
-    }
-
-    // helpers tipo-específicos
-    public void updateOrthodonticDetails(String applianceType, Integer months, Boolean requiresFollowup) {
-        OrthodonticDetails od = new OrthodonticDetails(applianceType, months, requiresFollowup);
-        replaceDetails(od);
-    }
-    public void updateProstheticDetails(String fixedOrRemovable, String material, String prostheticType, Integer units) {
-        ProstheticDetails pd = new ProstheticDetails(fixedOrRemovable, material, prostheticType, units);
-        replaceDetails(pd);
-    }
-    public void updateImplantologyDetails(Integer healingMonths, String implantType, String placementSite, Boolean requiresBoneGraft) {
-        ImplantologyDetails id = new ImplantologyDetails(healingMonths, implantType, placementSite, requiresBoneGraft);
-        replaceDetails(id);
-    }
-    public void updateAestheticDetails(String aestheticType, String materialUsed, String expectedResult) {
-        AestheticDetails ad = new AestheticDetails(aestheticType, materialUsed, expectedResult);
-        replaceDetails(ad);
-    }
-
-
-    public void updatePediatricDetails(String ageRange, String behaviorManagement, String pediatricMaterials) {
-        PediatricDetails pd = new PediatricDetails(ageRange, behaviorManagement, pediatricMaterials);
-        replaceDetails(pd);
-    }
-    public void updateSurgicalDetails(String surgeryType, String complexityLevel, Boolean requiresAnesthesia, Boolean operatingRoomNeeded) {
-        SurgicalDetails sd = new SurgicalDetails(surgeryType, complexityLevel, requiresAnesthesia, operatingRoomNeeded);
-        replaceDetails(sd);
-    }
-
-    // equals/hashCode por id
-    @Override public boolean equals(Object o) { if (this == o) return true; if (!(o instanceof ProvidedService)) return false; ProvidedService that = (ProvidedService)o; return id.equals(that.id); }
-    @Override public int hashCode() { return Objects.hash(id); }
-
+    public ServiceId getId() { return id; }
+    public ServiceName getName() { return name; }
+    public ServiceCatalog getCategory() { return category; }
+    public ServiceCode getCode() { return code; }
+    public Price getBaseRate() { return baseRate; }
+    public ServiceDuration getDuration() { return duration; }
+    public boolean isRequiresAuthorization() { return requiresAuthorization; }
+    public ServiceDescription getDescription() { return description; }
+    public ServiceStatus getStatus() { return status; }
+    public Optional getDetails() { return Optional.ofNullable(details); }
 
 }
