@@ -103,7 +103,7 @@ public enum ServiceVOError implements ErrorCatalog {
             "RN-SERVICECODE-004",
             "error.serviceCode.duplicate",
             "El código de servicio ya existe y debe ser único"
-    );
+    ),
 
 
     ERR_SERVICE_ID_NULL(
@@ -133,12 +133,6 @@ public enum ServiceVOError implements ErrorCatalog {
             "error.serviceCatalog.categoryNullOrBlank",
             "La categoría del servicio no puede ser nula ni estar vacía"
     );
-
-
-
-
-
-
 
     private final String code;
     private final String messageKey;

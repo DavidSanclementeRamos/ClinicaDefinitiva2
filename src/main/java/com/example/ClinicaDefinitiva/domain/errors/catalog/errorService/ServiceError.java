@@ -47,7 +47,7 @@ public enum ServiceError implements ErrorCatalog {
     ),
 
     // RN-SERVICE-007
-    ERR_SERVICE_CODE_DUPLICATE(
+    ERR_SERVICE_CODE_DUPLICATE(// eliminar
             "RN-SERVICE-007",
             "error.service.code.duplicate",
             "Ya existe otro servicio con este código"
@@ -68,7 +68,7 @@ public enum ServiceError implements ErrorCatalog {
     ),
 
     // RN-SERVICE-010
-    ERR_SERVICE_NOT_BILLABLE(
+    ERR_SERVICE_NOT_BILLABLE(// eliminar
             "RN-SERVICE-010",
             "error.service.not.billable",
             "Servicios inactivos no pueden ser utilizados en facturación"
