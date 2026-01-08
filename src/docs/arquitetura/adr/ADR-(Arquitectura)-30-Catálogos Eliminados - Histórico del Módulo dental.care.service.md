@@ -1,6 +1,6 @@
 
 
-# ADR-31 (Arquitectura): Catálogos Eliminados - Histórico del Módulo `dental.care.services`
+# ADR-30 (Arquitectura): Catálogos Eliminados - Histórico del Módulo `dental.care.services`
 
 **Estado:** 📚 Registro Histórico  
 **Fecha:** Enero 06, 2026  
