@@ -45,7 +45,6 @@ RECEPTIONIST
 2. Implementar AuthorizationService que evalúe permisos CRUD según rol y contexto.
 3. Documentar catálogo en docs/dominio/permissions.md.
 4. Añadir pruebas unitarias para cada rol y operación CRUD.
-5. Validar reglas con expertos administrativos y clínicos.
 
 ## Ejemplo
 ```java

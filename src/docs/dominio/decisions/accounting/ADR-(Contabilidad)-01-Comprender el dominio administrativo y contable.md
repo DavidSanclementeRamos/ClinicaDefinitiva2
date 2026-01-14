@@ -1,4 +1,4 @@
-# ADR-28 (Dominio): Conocimientos necesarios para comprender el dominio administrativo y contable
+# ADR-01(Contabilidad): Conocimientos necesarios para comprender el dominio administrativo y contable
 
 - Estado: Aprobado
 - Fecha: 2025-11-16

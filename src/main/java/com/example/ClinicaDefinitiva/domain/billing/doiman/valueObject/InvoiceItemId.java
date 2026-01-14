@@ -1,11 +1,26 @@
 package com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject;
 
 import java.util.UUID;
+/**
+ * Entidad: InvoiceItem (Ítem de Factura)
+ *
+ * Representa un servicio facturado dentro de una factura.
+ *
+ * Características críticas:
+ * - ⭐ Snapshot inmutable de precio: Preserva tarifa al momento de facturar
+ * - ⭐ Trazabilidad: Referencia a Rate usado (evidencia forense)
+ * - ⭐ Auditoría DIAN: Precio no cambia aunque Rate se ajuste después
+ * - ⭐ Invariante matemático: totalPrice = unitPrice × quantity
+ *
+ * Inmutabilidad:
+ * - Todos los campos son final (no hay setters)
+ * - Una vez creado, el ítem NO puede modificarse
+ * - Para cambios, eliminar y crear nuevo ítem
 
+ */
 public final class InvoiceItemId {
-    private final String value;
 
-    public InvoiceItemId(String value) {
+   /** public InvoiceItemId(String value) {
         this.value = value;
     }
     public static InvoiceItemId generate(){
@@ -20,5 +35,10 @@ public final class InvoiceItemId {
     }
     public String getValue() {
         return value;
-    }
+    }**/
+
+
+
+
+
 }

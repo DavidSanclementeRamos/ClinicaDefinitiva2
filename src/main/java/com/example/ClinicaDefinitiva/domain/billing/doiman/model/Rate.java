@@ -7,7 +7,20 @@ import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
 
 import java.time.LocalDateTime;
-
+/**
+ * Agregado: Rate (Tarifa de Servicios)
+ *
+ * Representa la tarifa aplicable a un servicio odontológico según:
+ * - Tipo de pagador (EPS, particular, aseguradora, ARL, SOAT)
+ * - Vigencia contractual (valid_from, valid_to)
+ * - Contrato asociado (obligatorio para EPSs)
+ *
+ * Reglas críticas implementadas:
+ * - RN-RATE-003:  isValidAt() - Solo facturar con tarifa vigente
+ * - RN-RATE-004: Sin vigencias solapadas para mismo servicio + pagador
+ * - RN-RATE-005: Contrato obligatorio para EPSs (requisito legal Colombia)
+ * - RN-RATE-008: Ajustes de monto con justificación auditable
+ */
 public class Rate {
     //Define la tarifa aplicable a un servicio, según convenio o EPS
 

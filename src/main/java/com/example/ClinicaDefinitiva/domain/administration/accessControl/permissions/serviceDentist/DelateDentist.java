@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.userAccess.model.permissions.serviceDentist;
+package com.example.ClinicaDefinitiva.domain.administration.accessControl.permissions.serviceDentist;
 
 import com.example.ClinicaDefinitiva.domain.administration.accessControl.ContextoAccion;
 import com.example.ClinicaDefinitiva.domain.administration.accessControl.PermissionPolicy;
