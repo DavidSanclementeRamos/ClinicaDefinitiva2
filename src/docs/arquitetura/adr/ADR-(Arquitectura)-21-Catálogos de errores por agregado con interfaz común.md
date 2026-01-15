@@ -6,7 +6,7 @@
 - **Autor:** David
 
 ## Contexto
-Actualmente el sistema cuenta con un **catálogo único de errores** (`ErrorCatalog`) que concentra todas las validaciones de más de 30 agregados y varios Value Objects.  
+Actualmente el sistema cuenta con un **catálogo único de errores** (`ErrorCatalog`) que concentra todas las validaciones de más de 20 classes y varios Value Objects.  
 Este enfoque, aunque consistente con la decisión tomada en [ADR-(Arquitectura)-19-Catálogo único de errores con contextos diferenciados (Entidad vs VO).md](ADR-%28Arquitectura%29-19-Cat%C3%A1logo%20%C3%BAnico%20de%20errores%20con%20contextos%20diferenciados%20%28Entidad%20vs%20VO%29.md), genera problemas de **legibilidad y mantenibilidad**:
 
 - El enum se vuelve demasiado extenso y difícil de navegar.

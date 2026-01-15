@@ -58,7 +58,7 @@ public class DentistApplicationService implements DentistUseCase {
                 createDentistDto.getPersonData(),
                 createDentistDto.getSpecialties(),
                 user,
-                createDentistDto.getAvailability(),
+                createDentistDto.getWorkingHours(),
                 createDentistDto.getLastUpdate()
         );
          dentistRepository.save(dentist);
