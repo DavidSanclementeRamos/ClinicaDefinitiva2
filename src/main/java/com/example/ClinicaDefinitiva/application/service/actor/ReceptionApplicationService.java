@@ -1,97 +1,86 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
-import com.example.ClinicaDefinitiva.application.dto.receptionist.CreateReceptionDto;
-import com.example.ClinicaDefinitiva.application.dto.receptionist.ReadReceptionDto;
-import com.example.ClinicaDefinitiva.application.dto.receptionist.UpdateReceptionDto;
-import com.example.ClinicaDefinitiva.application.mapper.ReceptionMapper;
-import com.example.ClinicaDefinitiva.application.usecase.ReceptionUserCase;
-import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.ReceptionId;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.ReceptionRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.UserRepository;
+import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.*;
+import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionWriteMapper;
+import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUserCase;
+import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.ReceptionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 
-
+@Service
+@Transactional
 public class ReceptionApplicationService implements ReceptionUserCase {
 
     private final ReceptionRepository receptionRepository;
-    private final ReceptionMapper receptionMapper;
-    private final UserRepository userRepository;
+    private final ReceptionReadMapper  readMapper;
+    private final ReceptionWriteMapper writeMapper;
 
-    public ReceptionApplicationService(ReceptionRepository receptionRepository,
-                                       ReceptionMapper receptionMapper,
-                                       UserRepository userRepository) {
+    public ReceptionApplicationService(ReceptionRepository receptionRepository, ReceptionReadMapper readMapper, ReceptionWriteMapper writeMapper ) {
         this.receptionRepository = receptionRepository;
-        this.receptionMapper = receptionMapper;
-        this.userRepository = userRepository;
+        this.readMapper = readMapper;
+        this.writeMapper = writeMapper;
     }
 
     @Override
-    public ReadReceptionDto findById(String id) {
-        ReceptionId receptionId = ReceptionId.fromString(id);
-        Receptionist r = receptionRepository.findById(receptionId)
-                .orElseThrow(() -> new IllegalArgumentException("Receptionist not found: " + id));
-        return receptionMapper.toReadReceptionDto(r);
+    public ReadReceptionistDto findById(Long id) {
+        Receptionist reception = receptionRepository.findById(ReceptionId.fromLong(id))
+                .orElseThrow(() -> new RuntimeException("Receptionist not found with id " + id));
+        return readMapper.toDto(reception);
     }
 
     @Override
-    public Page<ReadReceptionDto> findAll(Pageable pageable) {
-        return receptionRepository.findAll(pageable).map(receptionMapper::toReadReceptionDto);
+    public Page<PageReceptionistDto> findAll(Pageable pageable) {
+        Page<Receptionist> receptions = receptionRepository.findAll(pageable);
+        if (receptions.isEmpty()) {
+            throw new RuntimeException("No receptionists found");
+        }
+        return receptions.map(readMapper::pageToDto);
     }
 
     @Override
-    public ReadReceptionDto save(CreateReceptionDto dto) {
-        if (dto == null) throw new IllegalArgumentException("dto no puede ser null");
-
-        UserId userId = UserId.fromString(dto.getUserId());
-        UserIdentity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + dto.getUserId()));
-        ReceptionId receptionId = ReceptionId.fromString(dto.getReceptionId());
-
-        Receptionist created = Receptionist.registerReceptionist(receptionId, dto.getPersonData(), user, dto.getSector());
-
-        receptionRepository.save(created);
-        return receptionMapper.toReadReceptionDto(created);
-    }
-
-
-    @Override
-    public ReadReceptionDto updateContact(UpdateReceptionDto dto) {
-        if (dto == null) throw new IllegalArgumentException("dto no puede ser null");
-
-        ReceptionId receptionId = ReceptionId.fromString(dto.getReceptionId());
-        Receptionist existing = receptionRepository.findById(receptionId)
-                .orElseThrow(() -> new IllegalArgumentException("Receptionist not found: " + dto.getReceptionId()));
-
-        UserId userId = UserId.fromString(dto.getUserId());
-        UserIdentity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + dto.getUserId()));
-
-
-        existing.updateReceptionistContactData(dto.getPersonData(), user);
-
-        receptionRepository.save(existing);
-        return receptionMapper.toReadReceptionDto(existing);
+    public ReadReceptionistDto save(CreateReceptionistDto dto) {
+        Receptionist reception = writeMapper.dtoCreateToReception(dto);
+        receptionRepository.save(reception);
+        return readMapper.toDto(reception);
     }
 
     @Override
-    public ReadReceptionDto updateSensitive(UpdateReceptionDto dto) {
-        if (dto == null) throw new IllegalArgumentException("dto no puede ser null");
+    public ReadReceptionistDto updateContact(UpdateReceptionistContactDto dto, Long id) {
+        Receptionist reception = receptionRepository.findById(ReceptionId.fromLong(id))
+                .orElseThrow(() -> new RuntimeException("Receptionist not found with id " + id));
+        writeMapper.dtoUpdateContactToReception(dto, reception);
+        receptionRepository.save(reception);
+        return readMapper.toDto(reception);
+    }
 
-        ReceptionId receptionId = ReceptionId.fromString(dto.getReceptionId());
-        Receptionist existing = receptionRepository.findById(receptionId)
-                .orElseThrow(() -> new IllegalArgumentException("Receptionist not found: " + dto.getReceptionId()));
+    @Override
+    public ReadReceptionistDto updateSensitive(UpdateReceptionistSensitiveDto dto, Long id) {
+        Receptionist reception = receptionRepository.findById(ReceptionId.fromLong(id))
+                .orElseThrow(() -> new RuntimeException("Receptionist not found with id " + id));
+        writeMapper.dtoUpdateSensitiveToReception(dto, reception);
+        receptionRepository.save(reception);
+        return readMapper.toDto(reception);
+    }
 
-        UserId userId = UserId.fromString(dto.getUserId());
-        UserIdentity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + dto.getUserId()));
+    @Override
+    public Page<PageReceptionistDto> findBySector(String sector, Pageable pageable) {
+        Page<Receptionist> receptions = receptionRepository.findBySector(sector, pageable);
+        if (receptions.isEmpty()) {
+            throw new RuntimeException("No receptionists found in sector " + sector);
+        }
+        return receptions.map(readMapper::pageToDto);
+    }
 
-        existing.updateReceptionistSensitiveData( dto.getPersonData(), user, dto.getSector());
-
-        receptionRepository.save(existing);
-        return receptionMapper.toReadReceptionDto(existing);
+    @Override
+    public void deleteById(Long id) {
+        if (!receptionRepository.existsById(ReceptionId.fromLong(id))) {
+            throw new RuntimeException("Receptionist with id " + id + " not found");
+        }
+        receptionRepository.deleteById(ReceptionId.fromLong(id));
     }
 }

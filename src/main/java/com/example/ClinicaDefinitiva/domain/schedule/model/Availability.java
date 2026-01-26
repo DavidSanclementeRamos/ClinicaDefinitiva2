@@ -23,6 +23,7 @@ public class Availability {
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
+    private int hour
     private AvailabilityStatus status;
     private String deactivationReason;
     private Long version;

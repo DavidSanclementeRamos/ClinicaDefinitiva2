@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes;
 
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
@@ -27,7 +28,7 @@ public class UserStatus {
         return new UserStatus(state );
     }
 
-    public void mustBeActive(ErrorCatalogXD error, EntityContext contexto) {
+    public void mustBeActive(ErrorCatalog error, EntityContext contexto) {
         if (state != State.ACTIVE) {
             throw new BusinessRuleViolationException(error, contexto);
         }

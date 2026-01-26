@@ -4,12 +4,12 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.*;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.NameMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.ReportMapper;
-import com.example.ClinicaDefinitiva.application.usecase.Administration.ReportUseCase;
+import com.example.ClinicaDefinitiva.application.portsInput.Administration.ReportUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.portsInput.Administration.*;
+import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

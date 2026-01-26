@@ -48,6 +48,8 @@ public class UserIdentity {
     }
 
 
+
+
     // metodo delegado de UserStatus para evitar complamiento
     public boolean isActive() {
         return  status.isActive();

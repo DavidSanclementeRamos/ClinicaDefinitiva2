@@ -8,14 +8,14 @@ import com.example.ClinicaDefinitiva.application.mapper.Administration.NameMappe
 import com.example.ClinicaDefinitiva.application.mapper.Administration.ThirdPartiesMapper;
 import com.example.ClinicaDefinitiva.application.mapper.EmailMapper;
 import com.example.ClinicaDefinitiva.application.mapper.PhoneNumberMapper;
-import com.example.ClinicaDefinitiva.application.usecase.Administration.ThirdPartiesUseCase;
+import com.example.ClinicaDefinitiva.application.portsInput.Administration.ThirdPartiesUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.portsInput.Administration.CompanyRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.Administration.ThirdPartiesRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.CompanyRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.ThirdPartiesRepository;
 import org.springframework.data.domain.Page;
 
 public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {

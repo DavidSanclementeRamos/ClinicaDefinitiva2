@@ -14,6 +14,8 @@ public final class Person {
     private Age age ;
     private String documentoEPS;
 
+    public Person() {
+    }
 
     public Person(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni, String documentoEPS, FullName fullname, PhoneNumber phoneNumber) {
         this.address = address;

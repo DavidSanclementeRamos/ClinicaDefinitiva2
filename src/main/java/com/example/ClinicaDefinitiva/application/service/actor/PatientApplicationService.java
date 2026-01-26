@@ -1,114 +1,103 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
-import com.example.ClinicaDefinitiva.application.dto.actor.Patient.CreatePatientDto;
-import com.example.ClinicaDefinitiva.application.dto.actor.Patient.ReadPatientDto;
-import com.example.ClinicaDefinitiva.application.dto.actor.Patient.UpdatePatientDto;
-import com.example.ClinicaDefinitiva.application.mapper.PatientMapper;
-import com.example.ClinicaDefinitiva.application.usecase.PatientUserCase;
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.*;
+import com.example.ClinicaDefinitiva.application.mapper.actorMapper.patientMapper.PatientReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.actorMapper.patientMapper.PatientWriteMapper;
+import com.example.ClinicaDefinitiva.application.portsInput.actor.PatientUserCase;
+import com.example.ClinicaDefinitiva.application.exceptions.actorException.PatientNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.Person;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.GuardianId;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.PatientRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.UserRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.PatientRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
+@Service
+@Transactional
 public class PatientApplicationService implements PatientUserCase {
 
     private final PatientRepository patientRepository;
-    private final PatientMapper patientMapper;
-    private final UserRepository userRepository;
+    private final PatientReadMapper readMapper ;
+    private final PatientWriteMapper writeMapper ;
 
-    public PatientApplicationService(PatientRepository patientRepository,
-                                     PatientMapper patientMapper,
-                                     UserRepository userRepository) {
+    public PatientApplicationService(PatientRepository patientRepository, PatientReadMapper readMapper, PatientWriteMapper writeMapper) {
         this.patientRepository = patientRepository;
-        this.patientMapper = patientMapper;
-        this.userRepository = userRepository;
+        this.readMapper = readMapper;
+        this.writeMapper = writeMapper;
     }
 
     @Override
     public ReadPatientDto findById(Long id) {
-        PatientId patientId = PatientId.fromString(String.valueOf(id));
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found: id=" + id));
-        return patientMapper.toReadPatientDto(patient);
+        Patient patient = patientRepository.findById(PatientId.fromLong(id))
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found with id " + id));
+        return readMapper.toDto(patient);
     }
 
     @Override
-    public Page<ReadPatientDto> findAll(Pageable pageable) {
+    public Page<PagePatientDto> findAll(Pageable pageable) {
         Page<Patient> patients = patientRepository.findAll(pageable);
-        return patients.map(patientMapper::toReadPatientDto);
+        if (patients.isEmpty()) {
+            throw new PatientNotFoundException("No patients found");
+        }
+        return patients.map(readMapper::pageToDto);
     }
 
     @Override
-    public ReadPatientDto save(CreatePatientDto dto) {
-        if (dto == null) throw new IllegalArgumentException("CreatePatientDto no puede ser null");
-
-        PatientId patientId = PatientId.generate(); // o desde dto si ya viene
-        UserId userId = UserId.fromString(dto.getUser());
-        GuardianId guardianId = GuardianId.fromString(dto.getGuardianId().getVauel());
-        ContractId contractId = ContractId.fromString(dto.getContractId().getValue());
-
-        UserIdentity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: id=" + userId));
-
-        Person person = dto.getPerson(); // Asumo que CreatePatientDto puede construir Person
-        LocalDateTime now = LocalDateTime.now();
-
-        Patient patient = Patient.registerPatient(
-                patientId,
-                person,
-                user,
-                guardianId,
-                now,
-                contractId
-        );
-
+    public ReadPatientDto save(CreatePatientDto createPatientDto) {
+        Patient patient = writeMapper.dtoCreateToPatient(createPatientDto);
         patientRepository.save(patient);
-        return patientMapper.toReadPatientDto(patient);
+        return readMapper.toDto(patient);
     }
 
     @Override
-    public ReadPatientDto updateContact(UpdatePatientDto dto) {
-        if (dto == null) throw new IllegalArgumentException("UpdatePatientDto no puede ser null");
+    public ReadPatientDto updateContactData(UpdatePatientContactDto updatePatientDto, Long id) {
+        Patient patient = patientRepository.findById(PatientId.fromLong(id))
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found with id " + id));
 
-        PatientId patientId = PatientId.fromString(dto.getPatientId().toString());
-        UserId userId = UserId.fromString(dto.getUserId());
-
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found: id=" + dto.getPatientId()));
-
-        UserIdentity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: id=" + dto.getUserId()));
-
-       patient.updatePatientContact(dto.getPerson(), user);
-
+        writeMapper.dtoUpdateContactToPatient(updatePatientDto, patient);
         patientRepository.save(patient);
-        return patientMapper.toReadPatientDto(patient);
+        return readMapper.toDto(patient);
+    }
+
+
+
+    @Override
+    public ReadPatientDto updateSensitiveData(UpdatePatientSensitiveDto updatePatientDto, Long id) {
+        Patient patient = patientRepository.findById(PatientId.fromLong(id))
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found with id " + id));
+
+        writeMapper.dtoUpdateSensitiveToPatient(updatePatientDto, patient);
+        patientRepository.save(patient);
+        return readMapper.toDto(patient);
     }
 
     @Override
-    public ReadPatientDto updateSensitive(UpdatePatientDto updatePatientDto) {
+    public Page<PagePatientDto> findByContractId(Long contractId, Pageable pageable) {
+        Page<Patient> patients = patientRepository.findByContractId(ContractId.fromLong(contractId), pageable);
+        if(patients.isEmpty()) {
+            throw new PatientNotFoundException("No patients found for contract id " + contractId);
+        }
+        return patients.map(readMapper::pageToDto);
+    }
 
-        PatientId patientId = PatientId.fromString(updatePatientDto.getPatientId().toString());
-        UserId userId = UserId.fromString(updatePatientDto.getUserId());
+    @Override
+    public Page<PagePatientDto> findByGuardianId(Long guardianId, Pageable pageable) {
 
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found: id=" + updatePatientDto.getPatientId()));
+        Page<Patient> patients = patientRepository.findByGuardianId(GuardianId.fromLong(guardianId), pageable);
+        if(patients.isEmpty()) {
+            throw new PatientNotFoundException("No patients found for guardian id " + guardianId);
+        }
+        return patients.map(readMapper::pageToDto);
 
-        UserIdentity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: id=" + updatePatientDto.getUserId()));
+    }
 
-        patient.updateDataSensible(updatePatientDto.getPerson(), user);
-
-        patientRepository.save(patient);
-        return patientMapper.toReadPatientDto(patient);
+    @Override
+    public void deleteById(Long id) {
+        if (!patientRepository.existsById(PatientId.fromLong(id))) {
+            throw new PatientNotFoundException("Patient with id " + id + " not found");
+        }
+        patientRepository.deleteById(PatientId.fromLong(id));
     }
 }

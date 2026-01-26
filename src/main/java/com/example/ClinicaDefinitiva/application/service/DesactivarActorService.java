@@ -1,6 +1,10 @@
 package com.example.ClinicaDefinitiva.application.service;
 
 import com.example.ClinicaDefinitiva.application.exceptions.*;
+import com.example.ClinicaDefinitiva.application.exceptions.Admistration.ReceptionNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.actorException.GuardianNoFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.actorException.PatientNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
@@ -9,11 +13,11 @@ import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.GuardianId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.ReceptionId;
-import com.example.ClinicaDefinitiva.domain.portsInput.*;
-import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.DentistRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.GuardianRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.PatientRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.*;
+import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.DentistRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.GuardianRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.PatientRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.util.Actor;

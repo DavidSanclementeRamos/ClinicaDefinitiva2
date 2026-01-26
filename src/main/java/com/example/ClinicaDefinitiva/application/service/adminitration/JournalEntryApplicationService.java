@@ -4,17 +4,17 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.*;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.JournalEntryNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.JournalEntryMapper;
-import com.example.ClinicaDefinitiva.application.usecase.Administration.JournalEntryUseCase;
+import com.example.ClinicaDefinitiva.application.portsInput.Administration.JournalEntryUseCase;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.JournalEntryId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.portsInput.Administration.CompanyRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.Administration.JournalEntryRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.Administration.LedgerAccountRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.Administration.ThirdPartiesRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.CompanyRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.JournalEntryRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.LedgerAccountRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.ThirdPartiesRepository;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;

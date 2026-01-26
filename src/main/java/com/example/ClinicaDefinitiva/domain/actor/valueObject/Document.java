@@ -21,7 +21,7 @@ public final class Document {
     /**
      * Constructor privado con validaciones.
      */
-    private Document(String raw) {
+    public Document(String raw) {
         if (raw == null) {
             throw new ValueObjectValidationException(ErrorCatalogXD.ERR_DOCUMENT_NULL, VOContext.DOCUMENT_ID);
         }

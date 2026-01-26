@@ -1,8 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.UserError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.DentistError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
@@ -11,7 +12,6 @@ import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
 import com.example.ClinicaDefinitiva.domain.util.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,30 +22,29 @@ public class Dentist implements Actor {
     private Specialties specialties;
     private DentistAvailabilityStatus availabilityStatus;
     private WorkingHours workingHours;
-    private final UserId user;
+    private final  UserId user;
     //private final Schedule schedule;
     private LocalDateTime lastUpdate;
 
-    private Dentist(DentistId dentistId,
-                    Person personData,
-                    Specialties specialties,
-                    UserId user,
-                    WorkingHours workingHours,
-                    //Schedule schedule,
-                    DentistAvailabilityStatus availabilityStatus,
-                    LocalDateTime lastUpdate) {
+
+
+    public Dentist(DentistId dentistId,
+                   Person personData,
+                   Specialties specialties,
+                   UserId user,
+                   WorkingHours workingHours,
+                   DentistAvailabilityStatus availabilityStatus,
+                   LocalDateTime lastUpdate) {
         this.dentistId = dentistId;
         this.personData = personData;
         this.specialties = specialties;
         this.user = user;
         this.workingHours = workingHours;
-       ////this.schedule = schedule;
         this.availabilityStatus = availabilityStatus != null ? availabilityStatus: DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.AVAILABLE);
         this.lastUpdate = lastUpdate;
     }
 
-    // Fábrica semántica
-    public static Dentist registerDentist(DentistId id,
+    public static Dentist registerDentist(
                                           Person data,
                                           Specialties specialties,
                                           UserIdentity user,
@@ -53,68 +52,76 @@ public class Dentist implements Actor {
                                           LocalDateTime lastUpdate
                                            ) {
 
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.DENTIST);
+        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
 
         if (!data.getAge().isBetween(25, 130)) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
+            throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
         }
-
+        // se confundio la delegacion, el vo workingHours delega la validacion no weeklyAvailability, que ahora no existe
        /** if (!weeklyAvailability.HorasRegistradas(40)) {
             throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_DENTIST_MISSING_AVAILABILITY, EntityContext.DENTIST);
         }
 
         Schedule schedule = new Schedule(List.of(), weeklyAvailability);*/
 
-        return new Dentist(id, data, specialties, user.getId(), workingHours
+        return new Dentist(null, data, specialties, user.getId(), workingHours
                 , DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.AVAILABLE), lastUpdate);
     }
 
-    public void updateSensitiveData(Person data, UserIdentity user, Specialties specialties, WorkingHours workingHours) {
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.DENTIST);
+    public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
+                                    String documentoEPS, FullName fullname, UserIdentity user, Specialties specialties, WorkingHours workingHours) {
+        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
         ensureEditable();
 
-        if (!data.getAge().isBetween(25, 130)) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
+        if (!age.isBetween(25, 130)) {
+            throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
         }
-
-        this.personData = data.updateSensitive(data.getAge(), data.getBloodType(),
-                data.getDateOfBirth(), data.getDni(), data.getDocumentoEPS(), data.getFullname());
+        Person data = new Person();
+        this.personData = data.updateSensitive(age, bloodType,
+                dateOfBirth,dni, documentoEPS, fullname);
         this.specialties = specialties;
         this.workingHours = workingHours;
         this.lastUpdate = LocalDateTime.now();
     }
 
-    public void updateContactData(Person data, UserIdentity user) {
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.DENTIST);
+    public void updateContactData(Address address, PhoneNumber phoneNumber, UserIdentity user) {
+        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
         ensureEditable();
-        this.personData = personData.updateContact(data.getAddress(), data.getPhoneNumber());
+        Person data = new Person();
+        this.personData = data.updateContact(address,phoneNumber);
         this.lastUpdate = LocalDateTime.now();
     }
 
-    /** public void deactivate(UserIdentity user, int hoursRange) {
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.DENTIST);
 
-        if (this.schedule.hasAppointmentsWithinHours(hoursRange)) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_DENTIST_ACTIVE_APPOINTMENTS,EntityContext.DENTIST, "No puede desactivarse con citas pendientes.");
+
+
+    public void changeAvailability(DentistAvailabilityStatus newStatus) {
+        if (!this.availabilityStatus.canTransitionTo(newStatus.getCurrent())) {
+            throw new BusinessRuleViolationException(
+                    VoActorError.ERR_AVAILABILITY_STATUS_INVALID_TRANSITION,
+                    EntityContext.DENTIST
+            );
         }
-        this.availabilityStatus = DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.AVAILABLE);
-    }*/
+        this.availabilityStatus = newStatus;
+    }
+
+
 
 
     public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.DENTIST);
+        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
 
         ensureEditable();
         if (!workingHours.isWithinRange(start, end)) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_DENTIST_OUT_OF_WORKING_HOURS, EntityContext.DENTIST);
+            throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_OUT_OF_WORKING_HOURS, EntityContext.DENTIST);
         }
     }
 
     public void validateVacationRequest(UserIdentity user,LocalDateTime vacationStart, LocalDateTime vacationEnd, Schedule schedule)  {
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.DENTIST);
+        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
 
         if (!TimeIntervalRules.isValid(vacationStart, vacationEnd)) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_DENTIST_INVALID_VACATION_RANGE, EntityContext.DENTIST);
+            throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_INVALID_VACATION_RANGE, EntityContext.DENTIST);
         }
 
         List<Appointment> conflicts = schedule.getAppointments().stream()
@@ -122,15 +129,15 @@ public class Dentist implements Actor {
                 .toList();
 
         if (!conflicts.isEmpty()) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_DENTIST_VACATION_CONFLICT, EntityContext.DENTIST);
+            throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_VACATION_CONFLICT, EntityContext.DENTIST);
         }
     }
 
     public void validateReschedule(UserIdentity user,LocalDateTime start, LocalDateTime end) {
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.DENTIST);
+        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
 
         if (!canWorkBetween(start, end)) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_DENTIST_RESCHEDULE_OUT_OF_WORKING_HOURS, EntityContext.DENTIST);
+            throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_RESCHEDULE_OUT_OF_WORKING_HOURS, EntityContext.DENTIST);
         }
     }
 
@@ -144,7 +151,7 @@ public class Dentist implements Actor {
 
     private void ensureEditable() {
         if (!availabilityStatus.isOperational()) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_DENTIST_NOT_AVAILABLE, EntityContext.DENTIST);
+            throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_NOT_AVAILABLE, EntityContext.DENTIST);
         }
     }
 
@@ -155,14 +162,13 @@ public class Dentist implements Actor {
     public DentistAvailabilityStatus getAvailabilityStatus() { return availabilityStatus; }
     public WorkingHours getWorkingHours() { return workingHours; }
     public UserId getUser() { return user; }
-    //public Schedule getSchedule() { return schedule; }
     public LocalDateTime getLastUpdate() { return lastUpdate; }
 
     @Override
     public Outcome assertCanBeDeactivated(String reason  ) {
 
         if(reason == null || reason.isBlank()){
-            return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
+            return Outcome.fail(new OutcomeDetail(DentistError.EER_DEN_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
         }
        /** if (schedule.hasAppointmentsWithinHours(24)) {
             return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.ERR_DENTIST_ACTIVE_APPOINTMENTS,Severity.INFO, Category.CLINICO));

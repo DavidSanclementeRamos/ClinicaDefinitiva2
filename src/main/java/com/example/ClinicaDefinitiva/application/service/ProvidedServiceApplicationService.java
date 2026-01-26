@@ -4,11 +4,11 @@ import com.example.ClinicaDefinitiva.application.dto.service.CreateProvidedServi
 import com.example.ClinicaDefinitiva.application.dto.service.ReadProvidedServiceDto;
 import com.example.ClinicaDefinitiva.application.dto.service.UpdateProvidedServiceDto;
 import com.example.ClinicaDefinitiva.application.mapper.ProvidedServiceMapper;
-import com.example.ClinicaDefinitiva.application.usecase.ProvidedServiceUseCase;
+import com.example.ClinicaDefinitiva.application.portsInput.ProvidedServiceUseCase;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.portsInput.ProvidedServiceRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.ProvidedServiceRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +59,7 @@ public class ProvidedServiceApplicationService  implements ProvidedServiceUseCas
     @Override
     @Transactional(readOnly = true)
     public Page<ReadProvidedServiceDto> findByServiceType(String serviceType, Pageable pageable) {
-        // map serviceType string to domain.ServiceType enum if you have one; here we call repository by service type via enum
+        // map serviceType string to domain.ServiceType enum if you have one; here we call jpaRepository by service type via enum
         try {
             ServiceType st = ServiceType.valueOf(serviceType.toUpperCase());
             return repository.findByServiceType(st, pageable).map(providedServiceMapper::toReadDto);

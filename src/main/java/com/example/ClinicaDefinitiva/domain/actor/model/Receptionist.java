@@ -5,7 +5,9 @@ import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.UserError;
 import com.example.ClinicaDefinitiva.domain.util.*;
 
 import java.time.LocalDateTime;
@@ -15,10 +17,10 @@ public class Receptionist  implements Actor {
     private final ReceptionId id;
     private Person person;
     private Sector sector;
-    private final UserIdentity user;
+    private final UserId user;
     private LocalDateTime lastUpdate;
 
-    private Receptionist(ReceptionId id, Person person, Sector sector, UserIdentity user, LocalDateTime lastUpdate) {
+    public Receptionist(ReceptionId id, Person person, Sector sector, UserId user, LocalDateTime lastUpdate) {
         this.id = id;
         this.person = person;
         this.sector = sector;
@@ -28,12 +30,11 @@ public class Receptionist  implements Actor {
 
 
     public static Receptionist registerReceptionist(
-            ReceptionId id,
             Person data,
             UserIdentity user,
             Sector sector) {
         UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_RECEPTIONIST_CREATION_REQUIRES_ACTIVE_USER, EntityContext.RECEPTIONIST);
-        return new Receptionist(id, data, sector, user, LocalDateTime.now());
+        return new Receptionist(null, data, sector, user.getId(), LocalDateTime.now());
     }
 
 
@@ -47,18 +48,29 @@ public class Receptionist  implements Actor {
     }
 
     // Métodos de actualización de datos
-    public void updateContactData(Person data, UserIdentity user) {
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.RECEPTIONIST);
-        this.person = person.updateContact(data.getAddress(), data.getPhoneNumber());
+    public void updateContactData(Address address, PhoneNumber phoneNumber, UserIdentity user) {
+        // Validar que el usuario esté activo (consistencia con Dentist)
+        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.RECEPTIONIST);
+        Person data = new Person();
+        this.person = data.updateContact(address, phoneNumber);
         this.lastUpdate = LocalDateTime.now();
+        // this.sector = sector;  // no aplica aquí
     }
 
-    public void updateSensitiveData(Person data, UserIdentity user, Sector sector) {
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.RECEPTIONIST);
-        this.person = data.updateSensitive(data.getAge(), data.getBloodType(),
-                data.getDateOfBirth(), data.getDni(), data.getDocumentoEPS(), data.getFullname());
-        this.sector = sector;
+    public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
+                                    String documentoEPS, FullName fullname, UserIdentity user, Sector sector) {
+        // Validar que el usuario esté activo (consistencia con Dentist)
+        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.RECEPTIONIST);
+        Person data = new Person();
+        this.person = data.updateSensitive(
+                age,
+                bloodType,
+                dateOfBirth,
+                dni,
+                documentoEPS,
+                fullname);
         this.lastUpdate = LocalDateTime.now();
+        this.sector = sector;
     }
 
     @Override

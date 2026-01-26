@@ -10,9 +10,9 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.Appoint
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.portsInput.ScheduleRepository.AppointmentRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.ScheduleRepository.AvailabilityRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.ScheduleRepository.ShiftRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.ScheduleRepository.AppointmentRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.ScheduleRepository.AvailabilityRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.ScheduleRepository.ShiftRepository;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Availability;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;

@@ -1,35 +1,32 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
-import java.util.Objects;
 
 
 public final class PatientId {
-    private final String value;
+    private final Long value;
 
-    public PatientId(String value) {
-        this.value = Objects.requireNonNull(value);
+    public PatientId(Long value) {
+        this.value = value;
     }
 
-    // Nuevo: parsea/valida una cadena y devuelve el VO
-    public static PatientId fromString(String value) {
+    public static PatientId fromLong(Long value) {
         if (value == null) {
-            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_ID_NULL, VOContext.PATIENT_ID);
+            throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.PATIENT_ID);
 
         }
-        String trimmed = value.trim();
+        // Eliminar
+       /** String trimmed = value.trim();
         if (trimmed.isEmpty()) {
             throw new ValueObjectValidationException(ErrorCatalogXD.ERR_ID_BLANK, VOContext.PATIENT_ID);
 
-        }
-        return new PatientId(trimmed);
+        }*/
+        return new PatientId(value);
     }
 
-
-    public String getValue() {
+    public Long getValue() {
         return value;
     }
 }

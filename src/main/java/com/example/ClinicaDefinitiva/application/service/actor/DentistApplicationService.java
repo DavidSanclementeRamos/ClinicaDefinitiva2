@@ -1,107 +1,124 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
-import com.example.ClinicaDefinitiva.application.dto.actor.dentist.CreateDentistDto;
-import com.example.ClinicaDefinitiva.application.dto.actor.dentist.ReadDentistDto;
-import com.example.ClinicaDefinitiva.application.dto.actor.dentist.UpdateDentistDto;
-import com.example.ClinicaDefinitiva.application.mapper.DentistMapper;
-import com.example.ClinicaDefinitiva.application.usecase.DentistUseCase;
+import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
+import com.example.ClinicaDefinitiva.application.mapper.DentistReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapper.DentistWriteMapper;
+import com.example.ClinicaDefinitiva.application.portsInput.actor.DentistUseCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.DentistRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.UserRepository;
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.DentistRepository;
+import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
+import com.example.ClinicaDefinitiva.domain.service.DentistAvailabilityService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @Transactional
 public class DentistApplicationService implements DentistUseCase {
     private final DentistRepository dentistRepository;
-    private final UserRepository userRepository;
-    private final DentistMapper dentistMapper;
+    private final ScheduleRepository scheduleRepository;
+    private final DentistAvailabilityService availabilityService;
+    private final DentistReadMapper dentistReadMapper;
+    private final DentistWriteMapper dentistWriteMapper;
 
-    public DentistApplicationService(DentistRepository dentistRepository, UserRepository userRepository, DentistMapper dentistMapper) {
+    public DentistApplicationService(DentistRepository dentistRepository, ScheduleRepository scheduleRepository, DentistAvailabilityService availabilityService, DentistReadMapper dentistReadMapper, DentistWriteMapper dentistWriteMapper) {
         this.dentistRepository = dentistRepository;
-        this.userRepository = userRepository;
-        this.dentistMapper = dentistMapper;
+        this.scheduleRepository = scheduleRepository;
+        this.availabilityService = availabilityService;
+        this.dentistReadMapper = dentistReadMapper;
+        this.dentistWriteMapper = dentistWriteMapper;
     }
+
 
     @Override
     public ReadDentistDto findById(Long id) {
-        DentistId dentistId = DentistId.fromString(String.valueOf(id));
-        Dentist dentist = dentistRepository.findById(dentistId).
+
+        Dentist dentist = dentistRepository.findById(DentistId.from(id)).
                 orElseThrow(() -> new IllegalArgumentException(" Dentist no found"));
-        return dentistMapper.toDentist(dentist);
+        return dentistReadMapper.toDto(dentist);
     }
 
     @Override
-    public Page<ReadDentistDto> findAll(Pageable pageable) {
+    public Page<PageDentistDto> findAll(Pageable pageable) {
         Page<Dentist> dentists = dentistRepository.findAll(pageable);
         if(dentists.isEmpty()){
             throw new IllegalArgumentException("No found");
         }
-        return dentists.map(dentistMapper::toDentist);
+        return dentists.map(dentistReadMapper::pageToDto);
     }
 
     @Override
     public ReadDentistDto save(CreateDentistDto createDentistDto) {
-       // conversion de string a vo
-        UserId userId = UserId.fromString(createDentistDto.getUser());
-        // verificar existencia de user
-        UserIdentity user = userRepository.findById((userId)).
-                orElseThrow(() -> new IllegalArgumentException("No found"));
-        Dentist dentist = Dentist.registerDentist(
-                createDentistDto.getDentistId(),
-                createDentistDto.getPersonData(),
-                createDentistDto.getSpecialties(),
-                user,
-                createDentistDto.getWorkingHours(),
-                createDentistDto.getLastUpdate()
-        );
-         dentistRepository.save(dentist);
-        return dentistMapper.toDentist(dentist);
-    }
 
-    @Override
-    public ReadDentistDto updateSensitive(UpdateDentistDto updateDentistDto) {
-
-        DentistId dentistId = DentistId.fromString(updateDentistDto.getId());
-        Dentist dentist =  dentistRepository.findById(dentistId)
-                .orElseThrow(() -> new IllegalArgumentException("No found" + dentistId));
-
-        // conversion de string a vo
-        UserId userId = UserId.fromString(updateDentistDto.getUserId());
-        // verificar existencia de user
-        UserIdentity user = userRepository.findById((userId)).
-                orElseThrow(() -> new IllegalArgumentException("No found"));
-
-        dentist.updateSensitiveData(
-                updateDentistDto.getUpdatePersonContactData() ,
-                user, updateDentistDto.getSpecialties(),
-                updateDentistDto.getWorkingHours());
-
+        Dentist dentist = dentistWriteMapper.dtoCreateToDentist(createDentistDto);
         dentistRepository.save(dentist);
-        return dentistMapper.toDentist(dentist);
+        return dentistReadMapper.toDto(dentist);
     }
 
     @Override
-    public ReadDentistDto updateContact(UpdateDentistDto updateDentistDto) {
-        DentistId dentistId = DentistId.fromString(updateDentistDto.getId());
-        Dentist dentist = dentistRepository.findById(dentistId)
-                .orElseThrow(() -> new IllegalArgumentException("No found" + dentistId));
+    public ReadDentistDto updateContactData(UpdateDentistContactDto updateDentistDto, Long id) {
+        Dentist dentist =  dentistRepository.findById(DentistId.from(id))
+                .orElseThrow(() -> new IllegalArgumentException("No found"));
 
-        // conversion de string a vo
-        UserId userId = UserId.fromString(updateDentistDto.getUserId());
-        // verificar existencia de user
-        UserIdentity user = userRepository.findById((userId)).
-                orElseThrow(() -> new IllegalArgumentException("No found"));
+        dentistWriteMapper.dtoUpdateContactToDentist(updateDentistDto, dentist);
+        dentistRepository.save(dentist);
+        return dentistReadMapper.toDto(dentist);
+    }
 
-        dentist.updateContactData(updateDentistDto.getUpdatePersonContactData(), user);
+    @Override
+    public ReadDentistDto updateSensitiveData(UpdateDentistSensitiveDto updateDentistDto,Long id) {
+        Dentist dentist =  dentistRepository.findById(DentistId.from(id))
+                .orElseThrow(() -> new IllegalArgumentException("No found"));
 
-       dentistRepository.save(dentist);
-       return dentistMapper.toDentist(dentist);
+        dentistWriteMapper.dtoUpdateSensitiveToDentist(updateDentistDto, dentist);
+        dentistRepository.save(dentist);
+        return dentistReadMapper.toDto(dentist);
+    }
+
+    @Override
+    public ReadDentistDto updateStatus(UpdateDentistStatusDto updateDentistStatusDto, Long id) {
+        Dentist dentist = dentistRepository.findById(DentistId.from(id))
+                .orElseThrow(() -> new IllegalArgumentException("No found"));
+
+        Schedule schedule = scheduleRepository.findByDentistId(updateDentistStatusDto.dentistId())
+                .orElseThrow(() -> new IllegalArgumentException("No found"));
+        // Aquí usas el mapper de escritura
+        DentistAvailabilityStatus newStatus = dentistWriteMapper.toAvailabilityStatus(updateDentistStatusDto);
+        availabilityService.changeAvailability(dentist, schedule, newStatus, updateDentistStatusDto.getHoursRange());
+        dentistRepository.save(dentist);
+        return dentistReadMapper.toDto(dentist);
+    }
+
+    @Override
+    public Page<PageDentistDto> findByAvailability(String status, Pageable pageable) {
+        Page<Dentist> dentists =  dentistRepository.findByAvailability(status, pageable);
+        if(dentists.isEmpty()){
+            throw new EntityNotFoundException("Dentist with availability " + status + " not found");
+        }
+        return dentists.map(dentistReadMapper::pageToDto);
+
+    }
+
+    @Override
+    public Page<PageDentistDto> findBySpecialty(String specialty, Pageable pageable) {
+
+        Page<Dentist> dentists =  dentistRepository.findBySpecialty(specialty, pageable);
+        if(dentists.isEmpty()){
+            throw new EntityNotFoundException("Dentist with specialty " + specialty + " not found");
+        }
+        return dentists.map(dentistReadMapper::pageToDto);
+
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if (!dentistRepository.existsById(id)) {
+            throw new EntityNotFoundException("Dentist with id " + id + " not found");
+        }
+        dentistRepository.deleteById(DentistId.from(id));
     }
 }

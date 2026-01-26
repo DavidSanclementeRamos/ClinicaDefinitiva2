@@ -17,7 +17,7 @@ public final class TypeGuardian {
     private final String code;
     private final String description;
 
-    private TypeGuardian(String code, String description) {
+    public TypeGuardian(String code, String description) {
         // Validar código
         if (code == null) {
             throw new ValueObjectValidationException(

@@ -1,76 +1,36 @@
 package com.example.ClinicaDefinitiva.application.dto.actor.guardian;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.Person;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.TypeGuardian;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.PagePatientDto;
+import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class CreateGuardianDto {
-    private String guardianId;
-    private Person person;
-    private TypeGuardian typeGuardian;
-    private Schedule schedule;
-    private String userId;
-    private LocalDateTime lastUpdate;
+public record CreateGuardianDto(
 
-    public CreateGuardianDto(String userId, TypeGuardian typeGuardian, Schedule schedule, Person person, LocalDateTime lastUpdate, String guardianId) {
-        this.userId = userId;
-        this.typeGuardian = typeGuardian;
-        this.schedule = schedule;
-        this.person = person;
-        this.lastUpdate = lastUpdate;
-        this.guardianId = guardianId;
-    }
+        //TypeGuardian
+        String code,
+        String description,
 
-    public CreateGuardianDto() {
-    }
+        Page<PagePatientDto> patientList,
+        // Person
+        String dni,
+        String first,
+        String lastName,
+        String age,
+        String phoneNumber,
 
-    public String getGuardianId() {
-        return guardianId;
-    }
+        LocalDate dateOfBirth,
+        String bloodType,
+        String documentEPS,
+        String user,
+        LocalDateTime lastUpdate,
 
-    public void setGuardianId(String guardianId) {
-        this.guardianId = guardianId;
-    }
-
-    public LocalDateTime getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(LocalDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
-    public Schedule getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
-    }
-
-    public TypeGuardian getTypeGuardian() {
-        return typeGuardian;
-    }
-
-    public void setTypeGuardian(TypeGuardian typeGuardian) {
-        this.typeGuardian = typeGuardian;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-}
+        // Address
+        String street,
+        String city,
+        String state,
+        String country,
+        String postalCode
+) {}

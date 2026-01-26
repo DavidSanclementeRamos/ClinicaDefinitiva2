@@ -80,6 +80,10 @@ public final class WorkingHours {
         return Duration.between(start, end);
     }
 
+    public int getDeclaredHoursPerWeek() {
+        return declaredHoursPerWeek;
+    }
+
     public DayOfWeek getDayOfWeek() { return dayOfWeek; }
     public LocalTime getStart() { return start; }
     public LocalTime getEnd() { return end; }

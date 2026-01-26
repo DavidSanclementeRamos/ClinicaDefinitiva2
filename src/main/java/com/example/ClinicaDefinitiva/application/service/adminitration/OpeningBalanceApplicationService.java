@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.service.adminitration;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.CreateOpeningBalanceRequest;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.OpeningBalanceListResponse;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.OpeningBalanceResponse;
-import com.example.ClinicaDefinitiva.application.usecase.Administration.OpeningBalanceUseCase;
+import com.example.ClinicaDefinitiva.application.portsInput.Administration.OpeningBalanceUseCase;
 import org.springframework.data.domain.Page;
 
 public class OpeningBalanceApplicationService implements OpeningBalanceUseCase {

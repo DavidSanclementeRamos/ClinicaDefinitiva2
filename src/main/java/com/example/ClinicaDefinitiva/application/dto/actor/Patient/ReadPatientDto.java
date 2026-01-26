@@ -7,93 +7,30 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObjec
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class ReadPatientDto {
-    private PatientId patientId;
-    private Person person;
-    private GuardianId guardianId;
-    private String user;
-    private Shift shift;
-    private Schedule schedule;
-    private LocalDateTime lastUpdate;
-    private ContractId contractId;
+public record ReadPatientDto (
+        Long patientId,
+        Long guardianId,
+        Long contractId,
+        // Person
+        String dni,
+        String first,
+        String lastName,
+        String age,
+        String phoneNumber,
 
-    public ReadPatientDto(ContractId contractId, GuardianId guardianId, LocalDateTime lastUpdate, PatientId patientId, Person person, Schedule schedule, Shift shift, String user) {
-        this.contractId = contractId;
-        this.guardianId = guardianId;
-        this.lastUpdate = lastUpdate;
-        this.patientId = patientId;
-        this.person = person;
-        this.schedule = schedule;
-        this.shift = shift;
-        this.user = user;
-    }
+        LocalDate dateOfBirth,
+        String bloodType,
+        String documentEPS,
+        String user,
+        LocalDateTime lastUpdate,
 
-    public ReadPatientDto() {
-    }
-
-    public ContractId getContractId() {
-        return contractId;
-    }
-
-    public void setContractId(ContractId contractId) {
-        this.contractId = contractId;
-    }
-
-    public GuardianId getGuardianId() {
-        return guardianId;
-    }
-
-    public void setGuardianId(GuardianId guardianId) {
-        this.guardianId = guardianId;
-    }
-
-    public LocalDateTime getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(LocalDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    public PatientId getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(PatientId patientId) {
-        this.patientId = patientId;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
-    public Schedule getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
-    }
-
-    public Shift getShift() {
-        return shift;
-    }
-
-    public void setShift(Shift shift) {
-        this.shift = shift;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-}
+        // Address
+        String street,
+        String city,
+        String state,
+        String country,
+        String postalCode
+){}

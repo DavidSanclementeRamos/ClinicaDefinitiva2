@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.application.dto.service.CreateProvidedServi
 import com.example.ClinicaDefinitiva.application.dto.service.ReadProvidedServiceDto;
 import com.example.ClinicaDefinitiva.application.dto.service.UpdateProvidedServiceDto;
 import com.example.ClinicaDefinitiva.application.mapper.ProvidedServiceMapper;
-import com.example.ClinicaDefinitiva.application.usecase.ProvidedServiceUseCase;
+import com.example.ClinicaDefinitiva.application.portsInput.ProvidedServiceUseCase;
 import com.example.ClinicaDefinitiva.infrastructure.rest.DentalServiceValidation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

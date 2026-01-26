@@ -1,104 +1,94 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
-
-import com.example.ClinicaDefinitiva.application.dto.actor.guardian.CreateGuardianDto;
-import com.example.ClinicaDefinitiva.application.dto.actor.guardian.ReadGuardian;
-import com.example.ClinicaDefinitiva.application.dto.actor.guardian.UpdateGuardian;
-import com.example.ClinicaDefinitiva.application.mapper.GuardianMapper;
-import com.example.ClinicaDefinitiva.application.usecase.GuardianUserCase;
+import com.example.ClinicaDefinitiva.application.dto.actor.guardian.*;
+import com.example.ClinicaDefinitiva.application.mapper.actorMapper.guardianMapper.GuardianReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.actorMapper.guardianMapper.GuardianWriteMapper;
+import com.example.ClinicaDefinitiva.application.portsInput.actor.GuardianUserCase;
+import com.example.ClinicaDefinitiva.application.exceptions.actorException.GuardianNoFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.GuardianId;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.GuardianRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.actorRepository.PatientRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.UserRepository;
-
+import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.GuardianRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.PatientRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional
 public class GuardianApplicationService implements GuardianUserCase {
-    private final UserRepository userRepository;
     private final GuardianRepository guardianRepository;
-    private final GuardianMapper guardianMapper;
-    private final PatientRepository patientRepository;
+    private final GuardianReadMapper readMapper;
+    private final GuardianWriteMapper  writeMapper;
 
-    public GuardianApplicationService(UserRepository userRepository, GuardianRepository guardianRepository, GuardianMapper guardianMapper, PatientRepository patientRepository) {
-        this.userRepository = userRepository;
+    public GuardianApplicationService(GuardianRepository guardianRepository, GuardianReadMapper readMapper, GuardianWriteMapper writeMapper ) {
         this.guardianRepository = guardianRepository;
-        this.guardianMapper = guardianMapper;
-        this.patientRepository = patientRepository;
+        this.readMapper = readMapper;
+        this.writeMapper = writeMapper;
+    }
+
+
+    @Override
+    public ReadGuardianDto findById(Long id) {
+        Guardian guardian = guardianRepository.findById(GuardianId.fromLong(id))
+                .orElseThrow(() -> new GuardianNoFoundException("Guardian not found with id " + id));
+        return readMapper.toDto(guardian);
     }
 
     @Override
-    public ReadGuardian findById(Long id) {
-        GuardianId guardianId = GuardianId.fromString(String.valueOf(id));
-        Guardian guardian = guardianRepository.findById(guardianId)
-                .orElseThrow(() -> new IllegalArgumentException(" No found"));
-        return guardianMapper.toGuardian(guardian);
-    }
-
-    @Override
-    public Page<ReadGuardian> findAll(Pageable pageable) {
-        Page<Guardian> guardianPage = guardianRepository.findAll(pageable);
-        if(guardianPage.isEmpty()){
-            throw new IllegalArgumentException("List empty");
+    public Page<PageGuardianDto> findAll(Pageable pageable) {
+        Page<Guardian> guardians = guardianRepository.findAll(pageable);
+        if (guardians.isEmpty()) {
+            throw new GuardianNoFoundException("No guardians found");
         }
-
-        return guardianPage.map(guardianMapper::toGuardian);
+        return guardians.map(readMapper::pageToDto);
     }
 
     @Override
-    public ReadGuardian save(CreateGuardianDto createGuardianDto) {
-        // conversion de string a vo
-        UserId userId = UserId.fromString(createGuardianDto.getUserId());
-        // verificar existencia de user
-        UserIdentity user = userRepository.findById((userId)).
-                orElseThrow(() -> new IllegalArgumentException("No found"));
-       // conversion
-        GuardianId id = GuardianId.fromString(createGuardianDto.getGuardianId());
-        Guardian guardian = Guardian.registerGuardian(
-               id,
-                createGuardianDto.getPerson(),
-                user,
-                createGuardianDto.getTypeGuardian()
+    public Page<PageGuardianDto> findByPatientId(Long patientId, Pageable pageable) {
+        Page<Guardian> guardian  = guardianRepository.findByPatientId(PatientId.fromLong(patientId), pageable);
+        if(guardian.isEmpty()) {
+            throw new GuardianNoFoundException("No guardians found for patient with id " + patientId);
+        }
+        return guardian.map(readMapper::pageToDto);
 
-        );
+    }
+
+    @Override
+    public ReadGuardianDto save(CreateGuardianDto createGuardianDto) {
+        Guardian guardian = writeMapper.dtoCreateToGuardian(createGuardianDto);
         guardianRepository.save(guardian);
-        return guardianMapper.toGuardian(guardian);
+        return readMapper.toDto(guardian);
     }
 
     @Override
-    public ReadGuardian updateContact(UpdateGuardian updateGuardian) {
-       GuardianId id = GuardianId.fromString(updateGuardian.getGuardianId());
-        Guardian guardian = guardianRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("Guardian no found"));
+    public ReadGuardianDto updateContactData(UpdateGuardianContactDto updateGuardian, Long id) {
+        Guardian guardian = guardianRepository.findById(GuardianId.fromLong(id))
+                .orElseThrow(() -> new GuardianNoFoundException("Guardian not found with id " + id));
 
-        UserId userId = UserId.fromString(updateGuardian.getUserId());
-        // verificar existencia de user
-        UserIdentity user = userRepository.findById((userId)).
-                orElseThrow(() -> new IllegalArgumentException("No found"));
-
-        guardian.updateContactData(updateGuardian.getData(),user);
-       guardianRepository.save(guardian);
-        return guardianMapper.toGuardian(guardian);
-    }
-
-    @Override
-    public ReadGuardian updateSensitive(UpdateGuardian updateGuardian) {
-        GuardianId id = GuardianId.fromString(updateGuardian.getGuardianId());
-        Guardian guardian = guardianRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("Guardian no found"));
-
-        UserId userId = UserId.fromString(updateGuardian.getUserId());
-        // verificar existencia de user
-        UserIdentity user = userRepository.findById((userId)).
-                orElseThrow(() -> new IllegalArgumentException("No found"));
-
-        guardian.updateSensitiveData(updateGuardian.getData(),user, updateGuardian.getTypeGuardian());
+        writeMapper.dtoUpdateContactToGuardian(updateGuardian, guardian);
         guardianRepository.save(guardian);
-        return guardianMapper.toGuardian(guardian);
+        return readMapper.toDto(guardian);
     }
 
 
+    @Override
+    public ReadGuardianDto updateSensitiveData(UpdateGuardianSensitiveDto updateGuardian, Long id) {
+        Guardian guardian = guardianRepository.findById(GuardianId.fromLong(id))
+                .orElseThrow(() -> new GuardianNoFoundException("Guardian not found with id " + id));
+
+        writeMapper.dtoUpdateSensitiveToGuardian(updateGuardian, guardian);
+        guardianRepository.save(guardian);
+        return readMapper.toDto(guardian);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if (!guardianRepository.existsById(GuardianId.fromLong(id))) {
+            throw new GuardianNoFoundException("Guardian with id " + id + " not found");
+        }
+        guardianRepository.deleteById(GuardianId.fromLong(id));
+    }
 }

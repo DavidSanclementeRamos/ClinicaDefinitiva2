@@ -8,12 +8,12 @@ import com.example.ClinicaDefinitiva.application.mapper.Administration.NameMappe
 import com.example.ClinicaDefinitiva.application.mapper.Administration.NitMapper;
 import com.example.ClinicaDefinitiva.application.mapper.EmailMapper;
 import com.example.ClinicaDefinitiva.application.mapper.PhoneNumberMapper;
-import com.example.ClinicaDefinitiva.application.usecase.Administration.CompanyUseCase;
+import com.example.ClinicaDefinitiva.application.portsInput.Administration.CompanyUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyStatus;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.portsInput.Administration.CompanyRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.CompanyRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

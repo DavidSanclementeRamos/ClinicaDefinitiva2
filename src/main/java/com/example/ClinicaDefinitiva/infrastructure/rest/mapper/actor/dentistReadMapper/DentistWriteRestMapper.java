@@ -1,0 +1,82 @@
+package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.dentistReadMapper;
+
+import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist.*;
+
+public class DentistWriteRestMapper {
+    // De REST → DTO de aplicación (crear)
+    public CreateDentistDto toCreateDto(DentistCreateRequest request) {
+        if (request == null) return null;
+
+        return new CreateDentistDto(
+                request.specialties(),
+                request.availabilityStatus(),
+
+                request.start(),
+                request.end(),
+                request.dayOfWeek(),
+                request.declaredHoursPerWeek(),
+
+                request.dni(),
+                request.first(),
+                request.lastName(),
+                request.age(),
+                request.phoneNumber(),
+                request.dateOfBirth(),
+                request.bloodType(),
+                request.documentoEPS(),
+                request.user(),
+                request.lastUpdate(),
+
+                request.street(),
+                request.city(),
+                request.state(),
+                request.country(),
+                request.postalCode()
+        );
+    }
+
+    // De REST → DTO de aplicación (actualizar)
+    public UpdateDentistContactDto toUpdateContactDto(DentistUpdateContactRequest request) {
+        if (request == null) return null;
+
+        return new UpdateDentistContactDto(
+                request.street(),
+                request.city(),
+                request.state(),
+                request.country(),
+                request.postalCode(),
+                request.phoneNumber()
+        );
+    }
+
+    // De REST → DTO de aplicación (actualizar)
+    public UpdateDentistSensitiveDto toUpdateSensitiveDto(DentistUpdateSensitiveRequest request) {
+        if (request == null) return null;
+
+        return new UpdateDentistSensitiveDto(
+                request.specialties(),
+                request.start(),
+                request.end(),
+                request.dayOfWeek(),
+                request.declaredHoursPerWeek(),
+                request.dni(),
+                request.first(),
+                request.lastName(),
+                request.age(),
+                request.dateOfBirth(),
+                request.bloodType(),
+                request.documentoEPS()
+        );
+
+    }
+    public UpdateDentistStatusDto toUpdateStatusDto(DentistUpdateStatusRequest request) {
+        if (request == null) return null;
+
+        return new UpdateDentistStatusDto(
+                request.availabilityStatus()
+        );
+
+    }
+
+}

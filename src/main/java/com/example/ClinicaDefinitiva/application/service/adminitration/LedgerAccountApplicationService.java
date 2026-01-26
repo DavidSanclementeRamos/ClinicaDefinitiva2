@@ -4,13 +4,13 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.LedgerAccountNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.LedgerAccountMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.NameMapper;
-import com.example.ClinicaDefinitiva.application.usecase.Administration.LedgerAccountUseCase;
+import com.example.ClinicaDefinitiva.application.portsInput.Administration.LedgerAccountUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.NaturalezaCuenta;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
-import com.example.ClinicaDefinitiva.domain.portsInput.Administration.CompanyRepository;
-import com.example.ClinicaDefinitiva.domain.portsInput.Administration.LedgerAccountRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.CompanyRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.LedgerAccountRepository;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
