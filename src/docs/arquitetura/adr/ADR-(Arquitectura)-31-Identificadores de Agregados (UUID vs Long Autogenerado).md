@@ -1,4 +1,4 @@
-# ADR: Identificadores de Agregados (UUID vs Long Autogenerado)
+# ADR 31 (Arquitectura): Identificadores de Agregados (UUID vs Long Autogenerado)
 
 **Fecha:** 17-01-2026  
 **Estado:** Aceptado

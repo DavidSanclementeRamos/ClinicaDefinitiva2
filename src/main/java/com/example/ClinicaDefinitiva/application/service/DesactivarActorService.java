@@ -42,7 +42,7 @@ public class DesactivarActorService {
     }
 
 
-    public Outcome desactivarPaciente(UserId userId, PatientId patientId) {
+    public Outcome<H> desactivarPaciente(UserId userId, PatientId patientId) {
         Optional<UserIdentity> userOptional = userRepositoryRepo.findById(userId);
         if (userOptional.isEmpty()){
             throw new UserIdentityNofoundException("");
@@ -53,7 +53,7 @@ public class DesactivarActorService {
         }
         Patient patient = patientOptional.get();
         UserIdentity user = userOptional.get();
-        Outcome outcome = user.desactivarActor(patient);
+        Outcome<H> outcome = user.desactivarActor(patient);
         if (!outcome.isSuccess()) {
             return outcome;
         }
@@ -62,7 +62,7 @@ public class DesactivarActorService {
         return Outcome.ok();
     }
 
-    public Outcome desactivarOdontologo(UserId userId, DentistId dentistId) {
+    public Outcome<H> desactivarOdontologo(UserId userId, DentistId dentistId) {
 
         Optional<UserIdentity> userOptional = userRepositoryRepo.findById(userId);
         if (userOptional.isEmpty()){
@@ -76,7 +76,7 @@ public class DesactivarActorService {
         UserIdentity user = userOptional.get();
         Dentist dentist = dentistOptional.get();
 
-        Outcome outcome = user.desactivarActor((Actor) dentist);
+        Outcome<H> outcome = user.desactivarActor((Actor) dentist);
         if (!outcome.isSuccess()) {
             return outcome;
         }
@@ -85,7 +85,7 @@ public class DesactivarActorService {
         return Outcome.ok();
     }
 
-    public Outcome desactivarResponsable(UserId userId, GuardianId guardianId) {
+    public Outcome<H> desactivarResponsable(UserId userId, GuardianId guardianId) {
         Optional<UserIdentity> userOptional = userRepositoryRepo.findById(userId);
         if (userOptional.isEmpty()){
             throw new UserIdentityNofoundException("");
@@ -99,7 +99,7 @@ public class DesactivarActorService {
         UserIdentity user = userOptional.get();
         Guardian guardian = guardianOptional.get();
 
-        Outcome outcome = user.desactivarActor((Actor) guardian);
+        Outcome<H> outcome = user.desactivarActor((Actor) guardian);
         if (!outcome.isSuccess()) {
             return outcome;
         }
@@ -108,7 +108,7 @@ public class DesactivarActorService {
         return Outcome.ok();
     }
 
-    public Outcome desactivarSecretario(UserId userId, ReceptionId receptionId) {
+    public Outcome<H> desactivarSecretario(UserId userId, ReceptionId receptionId) {
         Optional<UserIdentity> userOptional = userRepositoryRepo.findById(userId);
         if (userOptional.isEmpty()){
             throw new UserIdentityNofoundException("");
@@ -121,7 +121,7 @@ public class DesactivarActorService {
         UserIdentity user = userOptional.get();
 
 
-        Outcome outcome = user.desactivarActor(receptionist);
+        Outcome<H> outcome = user.desactivarActor(receptionist);
         if (!outcome.isSuccess()) {
             return outcome;
         }

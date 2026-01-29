@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.UserError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.DentistError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
@@ -165,7 +164,7 @@ public class Dentist implements Actor {
     public LocalDateTime getLastUpdate() { return lastUpdate; }
 
     @Override
-    public Outcome assertCanBeDeactivated(String reason  ) {
+    public Outcome<H> assertCanBeDeactivated(String reason  ) {
 
         if(reason == null || reason.isBlank()){
             return Outcome.fail(new OutcomeDetail(DentistError.EER_DEN_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));

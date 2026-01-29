@@ -7,7 +7,6 @@ import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.UserError;
 import com.example.ClinicaDefinitiva.domain.util.*;
 
 import java.time.LocalDateTime;
@@ -74,7 +73,7 @@ public class Receptionist  implements Actor {
     }
 
     @Override
-    public Outcome assertCanBeDeactivated(String reason) {
+    public Outcome<H> assertCanBeDeactivated(String reason) {
 
         if(reason == null || reason.isBlank()){
             return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));

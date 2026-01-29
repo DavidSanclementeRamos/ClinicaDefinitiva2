@@ -94,7 +94,7 @@ public class Guardian implements Actor {
         }
 
         @Override
-        public Outcome assertCanBeDeactivated (String reason){
+        public Outcome<H> assertCanBeDeactivated (String reason){
             if (reason == null || reason.isBlank()) {
                 return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.ERR_GUARDIAN_DEACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
             }

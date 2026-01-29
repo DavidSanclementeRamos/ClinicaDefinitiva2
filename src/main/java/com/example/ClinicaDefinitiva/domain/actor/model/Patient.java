@@ -11,6 +11,7 @@ import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
 import com.example.ClinicaDefinitiva.domain.util.*;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -51,9 +52,8 @@ public class Patient implements Actor {
         if (!data.getAge().isAdult() && guardian == null) {
             throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
-// eliminar el catalogo de error, debe provenir de user
-// se debe validar que tampoco este suspendido o otros estados
-        UserStatus.from(user).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
+
+        UserStatus.from(user, Instant.now()).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
 
         return new Patient(null, data, guardian, user.getId(), LocalDate.now().atStartOfDay(), null);
     }
@@ -139,7 +139,7 @@ public class Patient implements Actor {
     public ContractId getContractId() { return contractId; }
 
     @Override
-    public Outcome assertCanBeDeactivated(String reason) {
+    public Outcome<H> assertCanBeDeactivated(String reason) {
 
         final int DAYS_TO_BLOCK_DEACTIVATION = 30;
 

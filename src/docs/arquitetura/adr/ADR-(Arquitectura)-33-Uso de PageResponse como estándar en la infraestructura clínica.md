@@ -1,4 +1,4 @@
-# ADR: Uso de `PageResponse<T>` como estándar en la infraestructura clínica
+# ADR 33 (Arquitectura): Uso de `PageResponse<T>` como estándar en la infraestructura clínica
 
 **Fecha:** 26-01-2026  
 **Estado:** Aprobado  

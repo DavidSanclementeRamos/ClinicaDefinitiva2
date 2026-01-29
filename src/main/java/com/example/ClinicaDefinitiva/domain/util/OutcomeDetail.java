@@ -1,20 +1,64 @@
 package com.example.ClinicaDefinitiva.domain.util;
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
+import java.util.Objects;
 
-
+/**
+ * Representa un detalle específico de error o advertencia en un Outcome.
+ *
+ * Contiene:
+ * - Código de error del catálogo
+ * - Severidad (ERROR, WARNING, INFO)
+ * - Categoría (CLINICO, ADMINISTRATIVO, TECNICO)
+ *
+ * Es inmutable y comparable por valor.
+ */
 public class OutcomeDetail {
-    private final ErrorCatalogXD codigo;       // ej. PACIENTE_CITAS_PENDIENTES
-   // private final String mensaje;      // ej. "El paciente tiene citas pendientes"
-    private final Severity severidad;  // ERROR, WARNING, INFO
-    private final Category categoria;  // CLINICO, ADMINISTRATIVO, TECNICO
+    private final ErrorCatalog code;
+    private final Severity severity;
+    private final Category category;
 
-    public OutcomeDetail(ErrorCatalogXD codigo, Severity severidad, Category categoria) {
-        this.codigo = codigo;
-        //this.mensaje = mensaje;
-        this.severidad = severidad;
-        this.categoria = categoria;
+
+    public OutcomeDetail( ErrorCatalog code, Severity severity, Category category) {
+
+        Objects.requireNonNull(code, "Codigo cannot be null");
+        Objects.requireNonNull(severity, "Severidad cannot be null");
+        Objects.requireNonNull(category, "Categoria cannot be null");
+
+        this.code = code;
+        this.severity = severity;
+        this.category = category;
     }
 
-    // getters
+
+    public ErrorCatalog getCode() {
+        return code;
+    }
+
+
+    public Severity getSeverity() {
+        return severity;
+    }
+
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public boolean isError() {
+        return severity == Severity.ERROR;
+    }
+
+    public boolean isWarning() {
+        return severity == Severity.WARNING;
+    }
+
+    public boolean isInfo() {
+        return severity == Severity.INFO;
+    }
+
+    public boolean isCategory(Category category) {
+        return this.category == category;
+    }
+
 }

@@ -1,169 +1,250 @@
 package com.example.ClinicaDefinitiva.domain.userAccess.model;
 
+import com.example.ClinicaDefinitiva.domain.Email;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
+import com.example.ClinicaDefinitiva.domain.service.UserDeactivationPolicy;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.HashedPassword;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserName;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
-import com.example.ClinicaDefinitiva.domain.util.Actor;
+import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
+import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
+import com.example.ClinicaDefinitiva.domain.util.Severity;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.Duration;
+import java.time.Instant;
 
+
+/**
+ * Agregado UserIdentity - Representa la identidad de un usuario en el sistema.
+ *
+ * Responsabilidades:
+ * - Gestionar autenticación (intentos fallidos, bloqueos)
+ * - Controlar verificación de cuenta
+ * - Mantener estado operativo (activo/inactivo/suspendido)
+ * - Validar elegibilidad para acciones sensibles
+ * - Proteger invariantes de negocio relacionados con acceso
+ *
+ * Invariantes:
+ * - Email debe ser único (validado en repositorio)
+ * - Password siempre es HashedPassword
+ * - Usuario activo debe estar verificado para acciones sensibles
+ * - Usuario bloqueado no puede iniciar sesión
+ * - Contador de intentos fallidos solo se resetea en login exitoso
+ */
 public class UserIdentity {
-// infra estructura tecnica, solo vive lo que garantiza que un usuario
-// puede autenticarse y ser reconocido por el sistema.
-    private UserId id;
-    private String name;
-    private String gmail;
-    private String passwork;
-    private LocalDate dateCreate;
-    private UserStatus statusUser;
-    private String imagenPerfil;
-    private LocalDate ultimaFechaDeCoexion;
-   // private Set<Rol> rol = new HashSet<>();
-    private boolean isEnabled;
-    private boolean accountNoExpired;
-    private boolean accountNoLocked;
-    private boolean credentialNoExpired;
+    private final UserId id;
+    private Email email;
+    private HashedPassword hashedPassword;
+    private UserName name;
+    private final Instant createdAt;
+    private Instant lastLoginAt;
+    private int failedLoginAttempts;
+    private Instant lockedUntil;
+    private boolean verified;
     private UserStatus status;
-   // private Dentist rolOdontologo;
-   private List<Actor> actores;
+    private long version;
 
-    public UserIdentity() {
-    }
-
-    public UserIdentity(boolean accountNoExpired, boolean accountNoLocked, boolean credentialNoExpired, LocalDate dateCreate, String gmail, UserId id, String imagenPerfil, boolean isEnabled, String name, String passwork, UserStatus statusUser, LocalDate ultimaFechaDeCoexion, UserStatus status) {
-        this.accountNoExpired = accountNoExpired;
-        this.accountNoLocked = accountNoLocked;
-        this.credentialNoExpired = credentialNoExpired;
-        this.dateCreate = dateCreate;
-        this.gmail = gmail;
+    private UserIdentity(UserId id, Email email, HashedPassword hashedPassword, UserName name, Instant createdAt) {
         this.id = id;
-        this.imagenPerfil = imagenPerfil;
-        this.isEnabled = isEnabled;
+        this.email = email;
+        this.hashedPassword = hashedPassword;
         this.name = name;
-        this.passwork = passwork;
-        this.statusUser = statusUser;
-        this.ultimaFechaDeCoexion = ultimaFechaDeCoexion;
-        this.status = status;
+        this.createdAt = createdAt;
+        this.status = UserStatus.of(UserStatus.State.ACTIVE);
+        this.verified = false;
+    }
+
+    public static UserIdentity register(UserId id, Email email, HashedPassword hashedPassword, UserName name, Instant now) {
+        return new UserIdentity(id, email, hashedPassword, name, now);
     }
 
 
-
-
-    // metodo delegado de UserStatus para evitar complamiento
-    public boolean isActive() {
-        return  status.isActive();
-    }
-    public  UserStatus getStatus() {
-        return status;
-    }
-
-    public void inactivate() {
-        this.status = UserStatus.from(UserStatus.State.INACTIVE);
-    }
-    public void setStatus(UserStatus status) {
-        this.status = status;
+    /**
+     * Registra un login exitoso.
+     * - Resetea contador de intentos fallidos
+     * - Actualiza timestamp del último login
+     * - Falla si la cuenta está bloqueada
+     */
+    public Outcome<UserIdentity> recordSuccessfulLogin(Instant now) {
+        if (isLocked(now)) return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_FAILED_ATTEMPTS_NOT_RESET, Severity.WARNING, Category.TECNICO));
+        this.failedLoginAttempts = 0;
+        this.lastLoginAt = now;
+        return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
-    public Outcome desactivarActor(Actor actor) {
-        Outcome outcome = actor.assertCanBeDeactivated(""); if (!outcome.isSuccess()) {
-            return outcome;
+    public Outcome<UserIdentity> editUserData(UserName newName, Email newEmail, HashedPassword newPassword, Instant now) {
+
+        // Verificar elegibilidad primero
+        Outcome<UserIdentity> eligibility = canPerformSensitiveAction(now);
+        if (!eligibility.isSuccess()) {
+            return eligibility;
         }
-        // Aquí el Usuario marca al actor como inactivo en su propia colección
-        this.actores.remove(actor);
-        // o bien cambia un flag interno en la relación Usuario-Actor
-        return Outcome.ok();
+
+
+        this.name = newName;
+        this.email = newEmail;
+        this.hashedPassword = newPassword;
+
+        return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
-    public void setAccountNoExpired(boolean accountNoExpired) {
-        this.accountNoExpired = accountNoExpired;
+    /**
+     * Registra un intento de login fallido.
+     * - Incrementa contador de intentos
+     * - Bloquea cuenta si supera máximo de intentos
+     * - Falla si ya está bloqueada
+     */
+    public Outcome<UserIdentity> recordFailedLogin(Instant now, int maxAttempts, Duration lockDuration) {
+        if (isLocked(now)) return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_ACCOUNT_LOCKED, Severity.WARNING, Category.TECNICO));
+        this.failedLoginAttempts++;
+        if (this.failedLoginAttempts >= maxAttempts) {
+            this.lockedUntil = now.plus(lockDuration);
+            return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_ACCOUNT_LOCKED_DUE_TO_FAILED_ATTEMPTS, Severity.ERROR, Category.TECNICO));
+        }
+        return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_INVALID_CREDENTIALS, Severity.INFO, Category.TECNICO));
     }
 
-    public boolean isAccountNoLocked() {
-        return accountNoLocked;
+    public boolean isLocked(Instant now) {
+        return lockedUntil != null && now.isBefore(lockedUntil);
     }
 
-    public void setAccountNoLocked(boolean accountNoLocked) {
-        this.accountNoLocked = accountNoLocked;
+    public Outcome<UserIdentity> verify() {
+        if (this.verified) return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_NOT_VERIFIED, Severity.INFO, Category.TECNICO));
+        this.verified = true;
+        return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
-    public boolean isCredentialNoExpired() {
-        return credentialNoExpired;
-    }
+    public Outcome<UserIdentity> deactivate(UserDeactivationPolicy policy, Instant now) {
 
-    public void setCredentialNoExpired(boolean credentialNoExpired) {
-        this.credentialNoExpired = credentialNoExpired;
-    }
+        // Verificar elegibilidad primero
+              Outcome<UserIdentity> eligibility = canPerformSensitiveAction(now);
+              if (!eligibility.isSuccess()) {
+                  return eligibility;
+              }
 
-    public LocalDate getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(LocalDate dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public String getGmail() {
-        return gmail;
-    }
-
-    public void setGmail(String gmail) {
-        this.gmail = gmail;
-    }
-
-    public UserId getId() {
-        return id;
-    }
-
-
-
-    public String getImagenPerfil() {
-        return imagenPerfil;
-    }
-
-    public void setImagenPerfil(String imagenPerfil) {
-        this.imagenPerfil = imagenPerfil;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPasswork() {
-        return passwork;
-    }
-
-    public void setPasswork(String passwork) {
-        this.passwork = passwork;
+        if (!policy.canDeactivate(this)) {
+            return Outcome.fail(
+                    new OutcomeDetail(
+                            UserIdentityError.ERR_USER_DEACTIVATION_CONSTRAINTS,
+                            Severity.ERROR,
+                            Category.TECNICO));
+        }
+        this.status = UserStatus.of(UserStatus.State.INACTIVE);
+        return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
 
+    /**
+     * Verifica si el usuario puede realizar acciones sensibles.
+     * Valida tres condiciones:
+     * 1. Usuario debe estar verificado
+     * 2. Usuario no debe estar bloqueado
+     * 3. Usuario debe estar activo
+     *
+     * @param now Instante actual para verificar bloqueo
+     * @return Outcome.ok() si elegible, Outcome con error específico si no
+     */
+    public Outcome<UserIdentity> canPerformSensitiveAction(Instant now) {
+        if (!verified) {
+            return Outcome.fail(new OutcomeDetail(
+                    UserIdentityError.ERR_USER_NOT_VERIFIED,
+                    Severity.ERROR,
+                    Category.TECNICO
+            ));
+        }
 
-    public UserStatus getStatusUser() {
-        return statusUser;
+        if (isLocked(now)) {
+            return Outcome.fail(new OutcomeDetail(
+                    UserIdentityError.ERR_USER_ACCOUNT_LOCKED,
+                    Severity.ERROR,
+                    Category.TECNICO
+            ));
+        }
+
+        if (status.getState() != UserStatus.State.ACTIVE) {
+            return Outcome.fail(new OutcomeDetail(
+                    VoAccesError.ERR_USER_INACTIVE,
+                    Severity.ERROR,
+                    Category.TECNICO
+            ));
+        }
+
+        return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
-    public void setStatusUser(UserStatus statusUser) {
-        this.statusUser = statusUser;
+    /**
+     * Suspende temporalmente el usuario.
+     * A diferencia de desactivación, la suspensión es reversible.
+     *
+     * @param reason Razón de la suspensión (para auditoría)
+     * @param now Instante actual
+     * @return Outcome indicando éxito o fallo
+     */
+    public Outcome<UserIdentity> suspend(String reason, Instant now) {
+        if (status.getState() == UserStatus.State.SUSPENDED) {
+            return Outcome.fail(new OutcomeDetail(
+                    UserIdentityError.ERR_USER_ALREADY_SUSPENDED,
+                    Severity.INFO,
+                    Category.TECNICO
+            ));
+        }
+        // Validar que haya una razón
+        if (reason == null || reason.isBlank()) {
+            return Outcome.fail(new OutcomeDetail(
+                    UserIdentityError.ERR_USER_SUSPENSION_REQUIRES_REASON,
+                    Severity.ERROR,
+                    Category.TECNICO
+            ));
+        }
+
+        this.status = UserStatus.of(UserStatus.State.SUSPENDED);
+
+        return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
-    public LocalDate getUltimaFechaDeCoexion() {
-        return ultimaFechaDeCoexion;
+
+    /**
+     * Reactiva un usuario previamente suspendido o inactivo.
+     *
+     * @param now Instante actual
+     * @return Outcome indicando éxito o fallo
+     */
+    public Outcome<UserIdentity> reactivate(Instant now) {
+        if (status.getState() == UserStatus.State.ACTIVE) {
+            return Outcome.fail(new OutcomeDetail(
+                    UserIdentityError.ERR_USER_ALREADY_ACTIVE,
+                    Severity.INFO,
+                    Category.TECNICO
+            ));
+        }
+
+        // Verificar que esté verificado para reactivar
+        if (!verified) {
+            return Outcome.fail(new OutcomeDetail(
+                    UserIdentityError.ERR_USER_NOT_VERIFIED,
+                    Severity.ERROR,
+                    Category.TECNICO
+            ));
+        }
+
+        // Limpiar bloqueos al reactivar
+        this.status = UserStatus.of(UserStatus.State.ACTIVE);
+        this.failedLoginAttempts = 0;
+        this.lockedUntil = null;
+
+        return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
-    public void setUltimaFechaDeCoexion(LocalDate ultimaFechaDeCoexion) {
-        this.ultimaFechaDeCoexion = ultimaFechaDeCoexion;
+    public UserId getId() { return id; }
+    public Email getEmail() { return email; }
+    public HashedPassword getHashedPassword() { return hashedPassword; }
+    public UserName getName() { return name; }
+    public Instant getLastLoginAt() { return lastLoginAt; }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 }

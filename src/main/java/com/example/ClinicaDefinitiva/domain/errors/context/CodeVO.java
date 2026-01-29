@@ -40,7 +40,8 @@ public enum CodeVO {
     SCV36,
     SID37,
     SST38,
-    SCA39
+    SCA39,
+    USE40
 }
 
 

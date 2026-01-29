@@ -1,4 +1,4 @@
-# ADR: Uso de DTO simplificado y DTO de detalle en capas de aplicación e infraestructura
+# ADR 32 (Arquitectura): Uso de DTO simplificado y DTO de detalle en capas de aplicación e infraestructura
 
 **Fecha:** 26-01-2026  
 **Estado:** Aprobado  
