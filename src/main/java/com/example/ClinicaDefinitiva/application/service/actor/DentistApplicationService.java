@@ -1,19 +1,24 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
-import com.example.ClinicaDefinitiva.application.mapper.DentistReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapper.DentistReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapper.DentistWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.DentistUseCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.service.DentistAvailabilityService;
+import com.example.ClinicaDefinitiva.domain.service.UserAccessValidator;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
 
 
 @Service
@@ -24,13 +29,15 @@ public class DentistApplicationService implements DentistUseCase {
     private final DentistAvailabilityService availabilityService;
     private final DentistReadMapper dentistReadMapper;
     private final DentistWriteMapper dentistWriteMapper;
+    private final UserAccessValidator userAccessValidator;
 
-    public DentistApplicationService(DentistRepository dentistRepository, ScheduleRepository scheduleRepository, DentistAvailabilityService availabilityService, DentistReadMapper dentistReadMapper, DentistWriteMapper dentistWriteMapper) {
+    public DentistApplicationService(DentistRepository dentistRepository, ScheduleRepository scheduleRepository, DentistAvailabilityService availabilityService, DentistReadMapper dentistReadMapper, DentistWriteMapper dentistWriteMapper, UserAccessValidator userAccessValidator) {
         this.dentistRepository = dentistRepository;
         this.scheduleRepository = scheduleRepository;
         this.availabilityService = availabilityService;
         this.dentistReadMapper = dentistReadMapper;
         this.dentistWriteMapper = dentistWriteMapper;
+        this.userAccessValidator = userAccessValidator;
     }
 
 
@@ -53,7 +60,12 @@ public class DentistApplicationService implements DentistUseCase {
 
     @Override
     public ReadDentistDto save(CreateDentistDto createDentistDto) {
-
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(createDentistDto.user()),
+                now,
+                EntityContext.PATIENT  // Contexto para errores más descriptivos
+        );
         Dentist dentist = dentistWriteMapper.dtoCreateToDentist(createDentistDto);
         dentistRepository.save(dentist);
         return dentistReadMapper.toDto(dentist);
@@ -64,6 +76,12 @@ public class DentistApplicationService implements DentistUseCase {
         Dentist dentist =  dentistRepository.findById(DentistId.from(id))
                 .orElseThrow(() -> new IllegalArgumentException("No found"));
 
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.PATIENT  // Contexto para errores más descriptivos
+        );
         dentistWriteMapper.dtoUpdateContactToDentist(updateDentistDto, dentist);
         dentistRepository.save(dentist);
         return dentistReadMapper.toDto(dentist);
@@ -74,6 +92,12 @@ public class DentistApplicationService implements DentistUseCase {
         Dentist dentist =  dentistRepository.findById(DentistId.from(id))
                 .orElseThrow(() -> new IllegalArgumentException("No found"));
 
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.PATIENT  // Contexto para errores más descriptivos
+        );
         dentistWriteMapper.dtoUpdateSensitiveToDentist(updateDentistDto, dentist);
         dentistRepository.save(dentist);
         return dentistReadMapper.toDto(dentist);
@@ -84,6 +108,12 @@ public class DentistApplicationService implements DentistUseCase {
         Dentist dentist = dentistRepository.findById(DentistId.from(id))
                 .orElseThrow(() -> new IllegalArgumentException("No found"));
 
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.PATIENT  // Contexto para errores más descriptivos
+        );
         Schedule schedule = scheduleRepository.findByDentistId(updateDentistStatusDto.dentistId())
                 .orElseThrow(() -> new IllegalArgumentException("No found"));
         // Aquí usas el mapper de escritura
@@ -119,6 +149,12 @@ public class DentistApplicationService implements DentistUseCase {
         if (!dentistRepository.existsById(id)) {
             throw new EntityNotFoundException("Dentist with id " + id + " not found");
         }
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.PATIENT  // Contexto para errores más descriptivos
+        );
         dentistRepository.deleteById(DentistId.from(id));
     }
 }

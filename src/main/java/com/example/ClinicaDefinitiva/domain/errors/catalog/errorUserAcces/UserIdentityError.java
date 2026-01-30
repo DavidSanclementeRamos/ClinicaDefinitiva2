@@ -76,6 +76,16 @@ public enum UserIdentityError implements ErrorCatalog {
             "RN-USER-011",
             "error.user.already.active",
             "El usuario ya se encuentra activo"
+    ),
+    ERR_USER_NOT_FOUND(
+            "RN-USER-012",
+            "error.user.not.found",
+            "El usuario no fue encontrado en el sistema"
+    ),
+    ERR_USER_NOT_ELIGIBLE(
+            "RN-USER-013",
+            "error.user.not.eligible",
+            "El usuario no es elegible para realizar esta operación"
     );
 
 

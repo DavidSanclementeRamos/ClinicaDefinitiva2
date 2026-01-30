@@ -45,7 +45,7 @@ public class DesactivarActorService {
     public Outcome<H> desactivarPaciente(UserId userId, PatientId patientId) {
         Optional<UserIdentity> userOptional = userRepositoryRepo.findById(userId);
         if (userOptional.isEmpty()){
-            throw new UserIdentityNofoundException("");
+            throw new UserIdentityNoFoundException("");
         }
         Optional<Patient> patientOptional = patientRepository.findById(patientId);
         if(patientOptional.isEmpty()){
@@ -66,7 +66,7 @@ public class DesactivarActorService {
 
         Optional<UserIdentity> userOptional = userRepositoryRepo.findById(userId);
         if (userOptional.isEmpty()){
-            throw new UserIdentityNofoundException("");
+            throw new UserIdentityNoFoundException("");
         }
 
         Optional<Dentist> dentistOptional = dentistRepository.findById(dentistId);
@@ -88,7 +88,7 @@ public class DesactivarActorService {
     public Outcome<H> desactivarResponsable(UserId userId, GuardianId guardianId) {
         Optional<UserIdentity> userOptional = userRepositoryRepo.findById(userId);
         if (userOptional.isEmpty()){
-            throw new UserIdentityNofoundException("");
+            throw new UserIdentityNoFoundException("");
         }
 
         Optional<Guardian> guardianOptional = guardianRepository.findById(guardianId);
@@ -111,7 +111,7 @@ public class DesactivarActorService {
     public Outcome<H> desactivarSecretario(UserId userId, ReceptionId receptionId) {
         Optional<UserIdentity> userOptional = userRepositoryRepo.findById(userId);
         if (userOptional.isEmpty()){
-            throw new UserIdentityNofoundException("");
+            throw new UserIdentityNoFoundException("");
         }
         Optional<Receptionist> receptionOptional = receptionRepository.findById(receptionId);
         if(receptionOptional.isEmpty()){

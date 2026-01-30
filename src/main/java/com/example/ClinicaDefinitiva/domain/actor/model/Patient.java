@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.PatientError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -20,8 +21,7 @@ public class Patient implements Actor {
     private final PatientId patientId;
     private final UserId user;
     private Person person;
-    private GuardianId guardianId;
-    //private Shift shift;
+    private final GuardianId guardianId;
     private LocalDateTime lastUpdate;
     private ContractId contractId;
 
@@ -46,14 +46,13 @@ public class Patient implements Actor {
                                           GuardianId guardian) {
 
         if (!data.getAge().isEligibleForRegistration()) {
-            throw new DomainAggregateException(ErrorCatalog.ERR_PATIENT_INVALID_AGE, EntityContext.PATIENT);
+            throw new DomainAggregateException(PatientError.ERR_PATIENT_INVALID_AGE, EntityContext.PATIENT);
         }
 
         if (!data.getAge().isAdult() && guardian == null) {
-            throw new BusinessRuleViolationException(ErrorCatalog.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(PatientError.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
 
-        UserStatus.from(user, Instant.now()).mustBeActive(ErrorCatalog.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
 
         return new Patient(null, data, guardian, user.getId(), LocalDate.now().atStartOfDay(), null);
     }
@@ -63,7 +62,6 @@ public class Patient implements Actor {
         // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
 
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
         Person data = new Person();
         this.person = data.updateContact(address, phoneNumber);
         this.lastUpdate = LocalDateTime.now();
@@ -74,7 +72,6 @@ public class Patient implements Actor {
                                     String documentoEPS, FullName fullname,UserIdentity user) {
         // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_PATIENT_INACTIVE, EntityContext.PATIENT);
 
         /** if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
             throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_ACTIVE_SERVICES, EntityContext.PATIENT);
@@ -123,7 +120,7 @@ public class Patient implements Actor {
     // Validar responsable
     private void validarResponsable() {
         if (requiereResponsable() && !tieneResponsable()) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
+            throw new BusinessRuleViolationException(PatientError.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
     }
 

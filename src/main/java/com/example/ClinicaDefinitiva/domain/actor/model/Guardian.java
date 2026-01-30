@@ -37,10 +37,9 @@ public class Guardian implements Actor {
             UserIdentity user,
             TypeGuardian typeGuardian) {
 
-        UserStatus.from(user).mustBeActive(GuardianError.ERR_USER_INACTIVE, EntityContext.GUARDIAN);
 
         if (data.getAge().isBetween(22, 60)) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
+            throw new BusinessRuleViolationException(GuardianError.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
         }
 
         return new Guardian(
@@ -55,7 +54,6 @@ public class Guardian implements Actor {
     public void updateContactData(Address address, PhoneNumber phoneNumber,
                                   UserIdentity user) {
 
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.GUARDIAN);
         Person data = new Person();
         this.person = data.updateContact(address, phoneNumber);
         // this.lastUpdate = LocalDateTime.now();
@@ -63,7 +61,6 @@ public class Guardian implements Actor {
 
     public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
                                     String documentoEPS, FullName fullname, UserIdentity user, TypeGuardian typeGuardian) {
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_USER_INACTIVE, EntityContext.PATIENT);
         Schedule schedule = new Schedule();
         // RN-PATIENT-009: Validar cambio de fecha nacimiento
 

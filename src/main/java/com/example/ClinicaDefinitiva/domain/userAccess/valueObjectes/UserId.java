@@ -5,28 +5,23 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAcce
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-import java.util.Objects;
-
 public class UserId {
-    private final String value;
+    private final Long value;
 
-    public UserId(String value) {
-        this.value = Objects.requireNonNull(value);
+    public UserId(Long value) {
+        this.value = value;
     }
 
-    // Nuevo: parsea/valida una cadena y devuelve el VO
-    public static UserId fromString(String value) {
+
+    // Nuevo: parsea/valida una Long y devuelve el VO
+    public static UserId from(Long value) {
         if (value == null) {
             throw new ValueObjectValidationException(VoAccesError.ERR_USER_ID_INVALID, VOContext.USER_ID);
         }
-        String trimmed = value.trim();
-        if (trimmed.isEmpty()) {
-            throw new ValueObjectValidationException(VoAccesError.ERR_USER_ID_INVALID,VOContext.USER_ID );
-        }
-        return new UserId(trimmed);
-    }
 
-    public String getValue() {
+       return new UserId(value);
+    }
+    public Long getValue() {
         return value;
     }
 }

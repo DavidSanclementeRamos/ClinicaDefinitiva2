@@ -32,7 +32,6 @@ public class Receptionist  implements Actor {
             Person data,
             UserIdentity user,
             Sector sector) {
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_RECEPTIONIST_CREATION_REQUIRES_ACTIVE_USER, EntityContext.RECEPTIONIST);
         return new Receptionist(null, data, sector, user.getId(), LocalDateTime.now());
     }
 
@@ -40,7 +39,6 @@ public class Receptionist  implements Actor {
     // Validación 3: Solo puede cancelar citas si esta activo
     public void cancelAppointment(Appointment appointment) {
         // 1. Validar que el actor está activo
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.RECEPTIONIST);
 
         // 2. Delegar la cancelación a la cita
         appointment.cancel();
@@ -49,7 +47,6 @@ public class Receptionist  implements Actor {
     // Métodos de actualización de datos
     public void updateContactData(Address address, PhoneNumber phoneNumber, UserIdentity user) {
         // Validar que el usuario esté activo (consistencia con Dentist)
-        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.RECEPTIONIST);
         Person data = new Person();
         this.person = data.updateContact(address, phoneNumber);
         this.lastUpdate = LocalDateTime.now();
@@ -59,7 +56,6 @@ public class Receptionist  implements Actor {
     public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
                                     String documentoEPS, FullName fullname, UserIdentity user, Sector sector) {
         // Validar que el usuario esté activo (consistencia con Dentist)
-        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.RECEPTIONIST);
         Person data = new Person();
         this.person = data.updateSensitive(
                 age,

@@ -4,13 +4,18 @@ import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.*;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUserCase;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.service.UserAccessValidator;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+
+import java.time.Instant;
 
 @Service
 @Transactional
@@ -19,11 +24,13 @@ public class ReceptionApplicationService implements ReceptionUserCase {
     private final ReceptionRepository receptionRepository;
     private final ReceptionReadMapper  readMapper;
     private final ReceptionWriteMapper writeMapper;
+    private final UserAccessValidator userAccessValidator;
 
-    public ReceptionApplicationService(ReceptionRepository receptionRepository, ReceptionReadMapper readMapper, ReceptionWriteMapper writeMapper ) {
+    public ReceptionApplicationService(ReceptionRepository receptionRepository, ReceptionReadMapper readMapper, ReceptionWriteMapper writeMapper, UserAccessValidator userAccessValidator) {
         this.receptionRepository = receptionRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
+        this.userAccessValidator = userAccessValidator;
     }
 
     @Override
@@ -45,6 +52,12 @@ public class ReceptionApplicationService implements ReceptionUserCase {
     @Override
     public ReadReceptionistDto save(CreateReceptionistDto dto) {
         Receptionist reception = writeMapper.dtoCreateToReception(dto);
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(Long.valueOf(dto.user())),
+                now,
+                EntityContext.RECEPTIONIST
+        );
         receptionRepository.save(reception);
         return readMapper.toDto(reception);
     }
@@ -53,6 +66,13 @@ public class ReceptionApplicationService implements ReceptionUserCase {
     public ReadReceptionistDto updateContact(UpdateReceptionistContactDto dto, Long id) {
         Receptionist reception = receptionRepository.findById(ReceptionId.fromLong(id))
                 .orElseThrow(() -> new RuntimeException("Receptionist not found with id " + id));
+
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.RECEPTIONIST
+        );
         writeMapper.dtoUpdateContactToReception(dto, reception);
         receptionRepository.save(reception);
         return readMapper.toDto(reception);
@@ -62,6 +82,11 @@ public class ReceptionApplicationService implements ReceptionUserCase {
     public ReadReceptionistDto updateSensitive(UpdateReceptionistSensitiveDto dto, Long id) {
         Receptionist reception = receptionRepository.findById(ReceptionId.fromLong(id))
                 .orElseThrow(() -> new RuntimeException("Receptionist not found with id " + id));
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.RECEPTIONIST);
         writeMapper.dtoUpdateSensitiveToReception(dto, reception);
         receptionRepository.save(reception);
         return readMapper.toDto(reception);
@@ -81,6 +106,11 @@ public class ReceptionApplicationService implements ReceptionUserCase {
         if (!receptionRepository.existsById(ReceptionId.fromLong(id))) {
             throw new RuntimeException("Receptionist with id " + id + " not found");
         }
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.RECEPTIONIST);
         receptionRepository.deleteById(ReceptionId.fromLong(id));
     }
 }

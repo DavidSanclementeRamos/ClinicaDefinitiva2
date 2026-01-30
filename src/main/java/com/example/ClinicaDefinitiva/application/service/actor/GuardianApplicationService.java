@@ -8,13 +8,18 @@ import com.example.ClinicaDefinitiva.application.exceptions.actorException.Guard
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.GuardianRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.PatientRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.UserRepository;
+import com.example.ClinicaDefinitiva.domain.service.UserAccessValidator;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
 
 @Service
 @Transactional
@@ -22,11 +27,13 @@ public class GuardianApplicationService implements GuardianUserCase {
     private final GuardianRepository guardianRepository;
     private final GuardianReadMapper readMapper;
     private final GuardianWriteMapper  writeMapper;
+    private final UserAccessValidator userAccessValidator;
 
-    public GuardianApplicationService(GuardianRepository guardianRepository, GuardianReadMapper readMapper, GuardianWriteMapper writeMapper ) {
+    public GuardianApplicationService(GuardianRepository guardianRepository, GuardianReadMapper readMapper, GuardianWriteMapper writeMapper, UserAccessValidator userAccessValidator) {
         this.guardianRepository = guardianRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
+        this.userAccessValidator = userAccessValidator;
     }
 
 
@@ -58,6 +65,12 @@ public class GuardianApplicationService implements GuardianUserCase {
 
     @Override
     public ReadGuardianDto save(CreateGuardianDto createGuardianDto) {
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(Long.valueOf(createGuardianDto.user())),
+                now,
+                EntityContext.GUARDIAN  // Contexto para errores más descriptivos
+        );
         Guardian guardian = writeMapper.dtoCreateToGuardian(createGuardianDto);
         guardianRepository.save(guardian);
         return readMapper.toDto(guardian);
@@ -68,6 +81,12 @@ public class GuardianApplicationService implements GuardianUserCase {
         Guardian guardian = guardianRepository.findById(GuardianId.fromLong(id))
                 .orElseThrow(() -> new GuardianNoFoundException("Guardian not found with id " + id));
 
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.GUARDIAN  // Contexto para errores más descriptivos
+        );
         writeMapper.dtoUpdateContactToGuardian(updateGuardian, guardian);
         guardianRepository.save(guardian);
         return readMapper.toDto(guardian);
@@ -79,6 +98,12 @@ public class GuardianApplicationService implements GuardianUserCase {
         Guardian guardian = guardianRepository.findById(GuardianId.fromLong(id))
                 .orElseThrow(() -> new GuardianNoFoundException("Guardian not found with id " + id));
 
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.GUARDIAN
+        );
         writeMapper.dtoUpdateSensitiveToGuardian(updateGuardian, guardian);
         guardianRepository.save(guardian);
         return readMapper.toDto(guardian);
@@ -89,6 +114,12 @@ public class GuardianApplicationService implements GuardianUserCase {
         if (!guardianRepository.existsById(GuardianId.fromLong(id))) {
             throw new GuardianNoFoundException("Guardian with id " + id + " not found");
         }
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.GUARDIAN
+        );
         guardianRepository.deleteById(GuardianId.fromLong(id));
     }
 }

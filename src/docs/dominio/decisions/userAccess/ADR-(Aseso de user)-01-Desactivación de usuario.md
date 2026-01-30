@@ -1,4 +1,4 @@
-# ADR-23 (Dominio): Desactivación de usuario debe ser responsabilidad del agregado UserModel
+# ADR-1 (Dominio): Desactivación de usuario debe ser responsabilidad del agregado UserModel
 
 - Estado: Propuesto
 - Fecha: 2025-11-12

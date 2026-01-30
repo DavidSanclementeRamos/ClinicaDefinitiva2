@@ -28,7 +28,7 @@ public record CreateDentistDto (
         LocalDate dateOfBirth,
         String bloodType,
         String documentoEPS,
-        String user,
+        Long user,
         LocalDateTime lastUpdate,
 
         // Address

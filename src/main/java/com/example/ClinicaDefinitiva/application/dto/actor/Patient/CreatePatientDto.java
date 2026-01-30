@@ -14,6 +14,7 @@ public record CreatePatientDto(
 
      Long guardianId,
      Long contractId,
+     Long userId,
      // Person
      String dni,
      String first,

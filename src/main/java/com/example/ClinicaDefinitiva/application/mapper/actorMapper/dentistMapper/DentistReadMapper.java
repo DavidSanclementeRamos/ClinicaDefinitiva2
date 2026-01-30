@@ -2,15 +2,9 @@ package com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapp
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Component
 public class DentistReadMapper {
@@ -33,7 +27,7 @@ public class DentistReadMapper {
                 dentist.getPersonData().getDateOfBirth().asDate(),
                 dentist.getPersonData().getBloodType().getValue(),
                 dentist.getPersonData().getDocumentoEPS(),
-                dentist.getUserId().getValue(),
+                dentist.getUserId().getValue().toString(),
                 dentist.getLastUpdate(),
                 dentist.getPersonData().getAddress().Street(),
                 dentist.getPersonData().getAddress().City(),

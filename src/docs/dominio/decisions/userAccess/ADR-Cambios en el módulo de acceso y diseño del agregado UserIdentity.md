@@ -1,4 +1,4 @@
-# ADR 0010: Cambios en el módulo de acceso y diseño del agregado UserIdentity
+# ADR 002: Cambios en el módulo de acceso y diseño del agregado UserIdentity
 **Fecha:** 21/01/2026
 
 ---

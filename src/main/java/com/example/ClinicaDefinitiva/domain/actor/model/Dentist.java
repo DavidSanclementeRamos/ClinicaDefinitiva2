@@ -51,7 +51,6 @@ public class Dentist implements Actor {
                                           LocalDateTime lastUpdate
                                            ) {
 
-        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
 
         if (!data.getAge().isBetween(25, 130)) {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
@@ -69,7 +68,6 @@ public class Dentist implements Actor {
 
     public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
                                     String documentoEPS, FullName fullname, UserIdentity user, Specialties specialties, WorkingHours workingHours) {
-        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
         ensureEditable();
 
         if (!age.isBetween(25, 130)) {
@@ -84,7 +82,6 @@ public class Dentist implements Actor {
     }
 
     public void updateContactData(Address address, PhoneNumber phoneNumber, UserIdentity user) {
-        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
         ensureEditable();
         Person data = new Person();
         this.personData = data.updateContact(address,phoneNumber);
@@ -108,7 +105,6 @@ public class Dentist implements Actor {
 
 
     public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
-        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
 
         ensureEditable();
         if (!workingHours.isWithinRange(start, end)) {
@@ -117,7 +113,6 @@ public class Dentist implements Actor {
     }
 
     public void validateVacationRequest(UserIdentity user,LocalDateTime vacationStart, LocalDateTime vacationEnd, Schedule schedule)  {
-        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
 
         if (!TimeIntervalRules.isValid(vacationStart, vacationEnd)) {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_INVALID_VACATION_RANGE, EntityContext.DENTIST);
@@ -133,7 +128,6 @@ public class Dentist implements Actor {
     }
 
     public void validateReschedule(UserIdentity user,LocalDateTime start, LocalDateTime end) {
-        UserStatus.from(user).mustBeActive(UserError.ERR_USER_INACTIVE, EntityContext.DENTIST);
 
         if (!canWorkBetween(start, end)) {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_RESCHEDULE_OUT_OF_WORKING_HOURS, EntityContext.DENTIST);

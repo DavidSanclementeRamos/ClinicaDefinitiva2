@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.application.dto.actor.Patient;
 public record PagePatientDto (
         Long patientId,
         Long contractId,
+        Long userId,
         String dni,
         String first,
         String lastName,

@@ -8,11 +8,16 @@ import com.example.ClinicaDefinitiva.application.exceptions.actorException.Patie
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.PatientRepository;
+import com.example.ClinicaDefinitiva.domain.service.UserAccessValidator;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
 
 @Service
 @Transactional
@@ -21,11 +26,14 @@ public class PatientApplicationService implements PatientUserCase {
     private final PatientRepository patientRepository;
     private final PatientReadMapper readMapper ;
     private final PatientWriteMapper writeMapper ;
+    private final UserAccessValidator userAccessValidator;
 
-    public PatientApplicationService(PatientRepository patientRepository, PatientReadMapper readMapper, PatientWriteMapper writeMapper) {
+
+    public PatientApplicationService(PatientRepository patientRepository, PatientReadMapper readMapper, PatientWriteMapper writeMapper, UserAccessValidator userAccessValidator) {
         this.patientRepository = patientRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
+        this.userAccessValidator = userAccessValidator;
     }
 
     @Override
@@ -46,6 +54,15 @@ public class PatientApplicationService implements PatientUserCase {
 
     @Override
     public ReadPatientDto save(CreatePatientDto createPatientDto) {
+        Instant now = Instant.now();
+
+        // PASO 1: Validar acceso del usuario
+        // Esta validación lanza excepciones si el usuario no cumple requisitos
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(createPatientDto.userId()),
+                now,
+                EntityContext.PATIENT  // Contexto para errores más descriptivos
+        );
         Patient patient = writeMapper.dtoCreateToPatient(createPatientDto);
         patientRepository.save(patient);
         return readMapper.toDto(patient);
@@ -53,8 +70,16 @@ public class PatientApplicationService implements PatientUserCase {
 
     @Override
     public ReadPatientDto updateContactData(UpdatePatientContactDto updatePatientDto, Long id) {
+
         Patient patient = patientRepository.findById(PatientId.fromLong(id))
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found with id " + id));
+
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.PATIENT
+        );
 
         writeMapper.dtoUpdateContactToPatient(updatePatientDto, patient);
         patientRepository.save(patient);
@@ -68,6 +93,12 @@ public class PatientApplicationService implements PatientUserCase {
         Patient patient = patientRepository.findById(PatientId.fromLong(id))
                 .orElseThrow(() -> new PatientNotFoundException("Patient not found with id " + id));
 
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.PATIENT
+        );
         writeMapper.dtoUpdateSensitiveToPatient(updatePatientDto, patient);
         patientRepository.save(patient);
         return readMapper.toDto(patient);
@@ -98,6 +129,13 @@ public class PatientApplicationService implements PatientUserCase {
         if (!patientRepository.existsById(PatientId.fromLong(id))) {
             throw new PatientNotFoundException("Patient with id " + id + " not found");
         }
+
+        Instant now = Instant.now();
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                UserId.from(id),
+                now,
+                EntityContext.PATIENT  // Contexto para errores más descriptivos
+        );
         patientRepository.deleteById(PatientId.fromLong(id));
     }
 }
