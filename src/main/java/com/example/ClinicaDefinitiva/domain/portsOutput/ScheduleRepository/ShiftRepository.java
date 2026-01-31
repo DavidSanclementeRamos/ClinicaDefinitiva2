@@ -3,8 +3,9 @@ package com.example.ClinicaDefinitiva.domain.portsOutput.ScheduleRepository;
 
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.ShiftId;
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.ReceptionId;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.Shift;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftId;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,6 +21,7 @@ public interface ShiftRepository {
     Shift save(Shift shift);
 
     Optional<Shift> findById(ShiftId id);
+    List<Shift>findByReceptionistId(ReceptionId id);
 
     List<Shift> findAll();
 

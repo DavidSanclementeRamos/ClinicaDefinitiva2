@@ -13,7 +13,7 @@ import com.example.ClinicaDefinitiva.domain.util.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Guardian implements Actor {
+public class Guardian  {
 
     private final GuardianId guardianId;
     private Person person;
@@ -90,25 +90,19 @@ public class Guardian implements Actor {
             this.typeGuardian = typeGuardian;
         }
 
-        @Override
-        public Outcome<H> assertCanBeDeactivated (String reason){
-            if (reason == null || reason.isBlank()) {
-                return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.ERR_GUARDIAN_DEACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
-            }
 
-
-            // Verificar pacientes asignados: no permitir desactivar si hay pacientes
-            boolean hasAssignedPatients = (patientList != null && !patientList.isEmpty());
-            if (hasAssignedPatients) {
-                return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.ERR_GUARDIAN_ACTIVE_AUTHORIZATIONS, Severity.INFO, Category.CLINICO));
+        public Outcome<Void> validateDeactivation() {
+            if (patientList != null && !patientList.isEmpty()) {
+                return Outcome.fail(new OutcomeDetail(
+                        GuardianError.ERR_GUARDIAN_ACTIVE_AUTHORIZATIONS,
+                        Severity.INFO,
+                        Category.CLINICO,EntityContext.GUARDIAN
+                ));
             }
             return Outcome.ok();
         }
 
-        @Override
-        public UserId getUserId () {
-            return user;
-        }
+
 
 
 

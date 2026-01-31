@@ -3,7 +3,9 @@ package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.errors.context.DomainContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
+import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 
+import java.util.List;
 
 
 /**
@@ -14,7 +16,10 @@ import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
  * definida por el modelo de negocio.
  */
 public class BusinessRuleViolationException extends ModelException {
-    public BusinessRuleViolationException(ErrorCatalog catalogo, DomainContext contexto ) {
+
+    public BusinessRuleViolationException(ErrorCatalog catalogo, DomainContext contexto) {
         super(catalogo, contexto);
     }
 }
+
+

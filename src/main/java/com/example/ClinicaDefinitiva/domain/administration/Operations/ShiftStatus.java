@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.schedule.valueObject;
+package com.example.ClinicaDefinitiva.domain.administration.Operations;
 
 import java.util.EnumMap;
 import java.util.EnumSet;

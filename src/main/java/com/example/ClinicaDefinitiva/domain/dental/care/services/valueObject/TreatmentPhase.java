@@ -1,0 +1,30 @@
+package com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject;
+
+
+import com.example.ClinicaDefinitiva.domain.dental.care.services.Enum.PhaseStatus;
+
+import java.time.LocalDate;
+import java.util.Objects;
+
+public class TreatmentPhase {
+    private final String name;
+    private final LocalDate scheduledDate;
+    private final PhaseStatus status;
+    private final String notes;
+
+    public TreatmentPhase(String name, LocalDate scheduledDate, PhaseStatus status, String notes) {
+        Objects.requireNonNull(name, "Phase name cannot be null");
+        Objects.requireNonNull(status, "Phase status cannot be null");
+
+        this.name = name;
+        this.scheduledDate = scheduledDate;
+        this.status = status;
+        this.notes = notes;
+    }
+
+    public String getName() { return name; }
+    public LocalDate getScheduledDate() { return scheduledDate; }
+    public PhaseStatus getStatus() { return status; }
+    public String getNotes() { return notes; }
+}
+

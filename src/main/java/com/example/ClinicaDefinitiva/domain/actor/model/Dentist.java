@@ -14,7 +14,7 @@ import com.example.ClinicaDefinitiva.domain.util.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Dentist implements Actor {
+public class Dentist   {
 
     private final DentistId dentistId;
     private Person personData;
@@ -148,7 +148,6 @@ public class Dentist implements Actor {
         }
     }
 
-    // Getters
     public DentistId getDentistId() { return dentistId; }
     public Person getPersonData() { return personData; }
     public Specialties getSpecialties() { return specialties; }
@@ -157,20 +156,6 @@ public class Dentist implements Actor {
     public UserId getUser() { return user; }
     public LocalDateTime getLastUpdate() { return lastUpdate; }
 
-    @Override
-    public Outcome<H> assertCanBeDeactivated(String reason  ) {
 
-        if(reason == null || reason.isBlank()){
-            return Outcome.fail(new OutcomeDetail(DentistError.EER_DEN_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
-        }
-       /** if (schedule.hasAppointmentsWithinHours(24)) {
-            return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.ERR_DENTIST_ACTIVE_APPOINTMENTS,Severity.INFO, Category.CLINICO));
-        }*/
-        return Outcome.ok();
-    }
 
-    @Override
-    public UserId getUserId() {
-        return user;
-    }
 }

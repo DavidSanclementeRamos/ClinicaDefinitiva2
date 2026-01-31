@@ -1,5 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.model;
 
+import com.example.ClinicaDefinitiva.domain.dental.care.services.Enum.ServiceType;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
@@ -8,7 +9,6 @@ import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.service.ServiceRatePolicy;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 /**

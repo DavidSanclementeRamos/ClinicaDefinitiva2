@@ -86,7 +86,11 @@ public enum UserIdentityError implements ErrorCatalog {
             "RN-USER-013",
             "error.user.not.eligible",
             "El usuario no es elegible para realizar esta operación"
-    );
+    ),
+    ERR_USER_DEACTIVATION_REASON_REQUIRED(
+            "RN-USER-002",
+            "error.user.deactivation.reason",
+            "Debe especificarse una razón para desactivar al usuario" );
 
 
 

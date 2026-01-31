@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.domain.userAccess.model;
 import com.example.ClinicaDefinitiva.domain.Email;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.service.UserDeactivationPolicy;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.HashedPassword;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserName;
@@ -69,7 +70,11 @@ public class UserIdentity {
      * - Falla si la cuenta está bloqueada
      */
     public Outcome<UserIdentity> recordSuccessfulLogin(Instant now) {
-        if (isLocked(now)) return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_FAILED_ATTEMPTS_NOT_RESET, Severity.WARNING, Category.TECNICO));
+        if (isLocked(now)) return Outcome.fail(new OutcomeDetail(
+                UserIdentityError.ERR_USER_FAILED_ATTEMPTS_NOT_RESET,
+                Severity.WARNING,
+                Category.TECNICO,
+                EntityContext.USUARIO));
         this.failedLoginAttempts = 0;
         this.lastLoginAt = now;
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
@@ -98,13 +103,15 @@ public class UserIdentity {
      * - Falla si ya está bloqueada
      */
     public Outcome<UserIdentity> recordFailedLogin(Instant now, int maxAttempts, Duration lockDuration) {
-        if (isLocked(now)) return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_ACCOUNT_LOCKED, Severity.WARNING, Category.TECNICO));
+        if (isLocked(now)) return Outcome.fail(new OutcomeDetail(
+                UserIdentityError.ERR_USER_ACCOUNT_LOCKED,
+                Severity.WARNING, Category.TECNICO,EntityContext.USUARIO));
         this.failedLoginAttempts++;
         if (this.failedLoginAttempts >= maxAttempts) {
             this.lockedUntil = now.plus(lockDuration);
-            return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_ACCOUNT_LOCKED_DUE_TO_FAILED_ATTEMPTS, Severity.ERROR, Category.TECNICO));
+            return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_ACCOUNT_LOCKED_DUE_TO_FAILED_ATTEMPTS, Severity.ERROR, Category.TECNICO,EntityContext.USUARIO));
         }
-        return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_INVALID_CREDENTIALS, Severity.INFO, Category.TECNICO));
+        return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_INVALID_CREDENTIALS, Severity.INFO, Category.TECNICO,EntityContext.USUARIO));
     }
 
     public boolean isLocked(Instant now) {
@@ -112,29 +119,40 @@ public class UserIdentity {
     }
 
     public Outcome<UserIdentity> verify() {
-        if (this.verified) return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_NOT_VERIFIED, Severity.INFO, Category.TECNICO));
+        if (this.verified) return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_NOT_VERIFIED, Severity.INFO, Category.TECNICO,EntityContext.USUARIO));
         this.verified = true;
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
-    public Outcome<UserIdentity> deactivate(UserDeactivationPolicy policy, Instant now) {
-
+    public Outcome<UserIdentity> deactivate(UserDeactivationPolicy policy, Instant now, String reason) {
         // Verificar elegibilidad primero
-              Outcome<UserIdentity> eligibility = canPerformSensitiveAction(now);
-              if (!eligibility.isSuccess()) {
-                  return eligibility;
-              }
-
-        if (!policy.canDeactivate(this)) {
-            return Outcome.fail(
-                    new OutcomeDetail(
-                            UserIdentityError.ERR_USER_DEACTIVATION_CONSTRAINTS,
-                            Severity.ERROR,
-                            Category.TECNICO));
+        Outcome<UserIdentity> eligibility = canPerformSensitiveAction(now);
+        if (!eligibility.isSuccess()) {
+            return eligibility;
         }
+
+        // Validar que exista una razón
+        if (reason == null || reason.isBlank()) {
+            return Outcome.fail(new OutcomeDetail(
+                    UserIdentityError.ERR_USER_DEACTIVATION_REASON_REQUIRED,
+                    Severity.ERROR,
+                    Category.TECNICO,
+                    EntityContext.USUARIO));
+        }
+
+        // Validar restricciones de negocio con la policy
+        Outcome<Void> validation = policy.validate(this);
+        if (validation.isFailure()) {
+            return Outcome.fail(validation.getDetalles());
+        }
+
+        // Cambiar estado a INACTIVO
         this.status = UserStatus.of(UserStatus.State.INACTIVE);
+
+        // Retornar nuevo agregado con estado actualizado
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
+
 
 
     /**
@@ -152,7 +170,8 @@ public class UserIdentity {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_NOT_VERIFIED,
                     Severity.ERROR,
-                    Category.TECNICO
+                    Category.TECNICO,
+                    EntityContext.USUARIO
             ));
         }
 
@@ -160,7 +179,8 @@ public class UserIdentity {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_ACCOUNT_LOCKED,
                     Severity.ERROR,
-                    Category.TECNICO
+                    Category.TECNICO,
+                    EntityContext.USUARIO
             ));
         }
 
@@ -168,7 +188,8 @@ public class UserIdentity {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_INACTIVE,
                     Severity.ERROR,
-                    Category.TECNICO
+                    Category.TECNICO,
+                    EntityContext.USUARIO
             ));
         }
 
@@ -188,7 +209,8 @@ public class UserIdentity {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_ALREADY_SUSPENDED,
                     Severity.INFO,
-                    Category.TECNICO
+                    Category.TECNICO,
+                    EntityContext.USUARIO
             ));
         }
         // Validar que haya una razón
@@ -196,7 +218,8 @@ public class UserIdentity {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_SUSPENSION_REQUIRES_REASON,
                     Severity.ERROR,
-                    Category.TECNICO
+                    Category.TECNICO,
+                    EntityContext.USUARIO
             ));
         }
 
@@ -217,7 +240,8 @@ public class UserIdentity {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_ALREADY_ACTIVE,
                     Severity.INFO,
-                    Category.TECNICO
+                    Category.TECNICO,
+                    EntityContext.USUARIO
             ));
         }
 
@@ -226,7 +250,8 @@ public class UserIdentity {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_NOT_VERIFIED,
                     Severity.ERROR,
-                    Category.TECNICO
+                    Category.TECNICO,
+                    EntityContext.USUARIO
             ));
         }
 

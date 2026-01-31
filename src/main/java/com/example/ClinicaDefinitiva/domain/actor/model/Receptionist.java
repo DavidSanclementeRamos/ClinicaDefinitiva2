@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftId;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
@@ -11,22 +12,23 @@ import com.example.ClinicaDefinitiva.domain.util.*;
 
 import java.time.LocalDateTime;
 
-public class Receptionist  implements Actor {
+public class Receptionist   {
 
     private final ReceptionId id;
+    private final ShiftId shiftId;
     private Person person;
     private Sector sector;
     private final UserId user;
     private LocalDateTime lastUpdate;
 
-    public Receptionist(ReceptionId id, Person person, Sector sector, UserId user, LocalDateTime lastUpdate) {
-        this.id = id;
-        this.person = person;
-        this.sector = sector;
-        this.user = user;
+    public Receptionist(LocalDateTime lastUpdate, UserId user, Sector sector, Person person, ShiftId shiftId, ReceptionId id) {
         this.lastUpdate = lastUpdate;
+        this.user = user;
+        this.sector = sector;
+        this.person = person;
+        this.shiftId = shiftId;
+        this.id = id;
     }
-
 
     public static Receptionist registerReceptionist(
             Person data,
@@ -68,21 +70,7 @@ public class Receptionist  implements Actor {
         this.sector = sector;
     }
 
-    @Override
-    public Outcome<H> assertCanBeDeactivated(String reason) {
 
-        if(reason == null || reason.isBlank()){
-            return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
-        }
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.RECEPTIONIST);
-
-        return Outcome.ok();
-    }
-
-    @Override
-    public void marcarInativo() {
-
-    }
 
     // Getters
     public ReceptionId getId() {
@@ -97,9 +85,6 @@ public class Receptionist  implements Actor {
         return sector;
     }
 
-    public UserIdentity getUser() {
-        return user;
-    }
 
     public LocalDateTime getLastUpdate() {
         return lastUpdate;

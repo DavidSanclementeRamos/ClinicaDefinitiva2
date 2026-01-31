@@ -1,12 +1,11 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.model;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.Enum.ServiceType;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.OrthodonticError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-import java.util.Objects;
 import java.util.Set;
 
 public final class OrthodonticDetails implements ServiceDetails {

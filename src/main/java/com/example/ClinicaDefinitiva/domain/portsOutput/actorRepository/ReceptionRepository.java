@@ -2,6 +2,7 @@ package com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.ReceptionId;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,4 +16,6 @@ public interface ReceptionRepository {
     boolean existsById(ReceptionId id);
     void deleteById(ReceptionId id);
     Page<Receptionist> findBySector(String sector, Pageable pageable);
+
+    Receptionist findByUserId(UserId id);
 }

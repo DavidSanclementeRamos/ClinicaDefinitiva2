@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.Enum.ServiceType;
 
 public interface ServiceDetails {
     ServiceType serviceType(); // ej. "ORTHODONTIC"

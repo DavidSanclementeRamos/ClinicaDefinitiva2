@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.Shift;
 
 import java.time.LocalDateTime;
 

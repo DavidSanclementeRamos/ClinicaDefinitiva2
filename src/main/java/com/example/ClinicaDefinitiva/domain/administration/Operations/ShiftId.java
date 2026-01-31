@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.schedule.valueObject;
+package com.example.ClinicaDefinitiva.domain.administration.Operations;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ScheduleVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;

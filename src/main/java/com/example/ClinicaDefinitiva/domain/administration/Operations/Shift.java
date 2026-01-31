@@ -1,12 +1,10 @@
-package com.example.ClinicaDefinitiva.domain.schedule.model;
+package com.example.ClinicaDefinitiva.domain.administration.Operations;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.ShiftId;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.ShiftStatus;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.ShiftType;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

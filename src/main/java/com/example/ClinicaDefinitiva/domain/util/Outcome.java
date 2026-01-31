@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 
+import java.util.*;
+
 /**
  * Representa el resultado de una operación de dominio que puede tener éxito o fallar.
  * Puede contener un valor en caso de éxito, o detalles de error en caso de fallo.
@@ -14,26 +16,20 @@ import java.util.Optional;
  * @param <T> Tipo del valor en caso de éxito (usar Void si no hay valor)
  */
 public class Outcome<T> {
-    private final List<OutcomeDetail> details = new ArrayList<>();
+
+    private final List<OutcomeDetail> details;
     private final T value;
 
 
     private Outcome(T value) {
         this.value = value;
+        this.details = List.of(); // inmutable y vacío
     }
-
-    private Outcome(OutcomeDetail detail) {
-        this.value = null;
-        this.details.add(detail);
-    }
-
 
     private Outcome(List<OutcomeDetail> details) {
         this.value = null;
-        this.details.addAll(details);
+        this.details = List.copyOf(details); // inmutable
     }
-
-    // ==================== FACTORY METHODS ====================
 
 
     public static <T> Outcome<T> ok(T value) {
@@ -45,17 +41,16 @@ public class Outcome<T> {
     }
 
     public static <T> Outcome<T> fail(OutcomeDetail detail) {
-        return new Outcome<>(detail);
+        Objects.requireNonNull(detail, "Detail cannot be null");
+        return new Outcome<>(List.of(detail));
     }
 
     public static <T> Outcome<T> fail(List<OutcomeDetail> details) {
         if (details == null || details.isEmpty()) {
-            throw new IllegalArgumentException("Detalles cannot be null or empty for failed outcome");
+            throw new IllegalArgumentException("Details cannot be null or empty for failed outcome");
         }
         return new Outcome<>(details);
     }
-
-    // ==================== QUERY METHODS ====================
 
 
     public boolean isSuccess() {
@@ -71,8 +66,37 @@ public class Outcome<T> {
     }
 
     public List<OutcomeDetail> getDetalles() {
-        return Collections.unmodifiableList(details);
+        return details;
     }
 
 
+    /**
+     * Combina este Outcome con otro, acumulando errores si existen.
+     */
+    public Outcome<T> merge(Outcome<?> other) {
+        if (this.isSuccess() && other.isSuccess()) {
+            return Outcome.ok(this.value);
+        }
+        List<OutcomeDetail> merged = new ArrayList<>(this.details);
+        merged.addAll(other.getDetalles());
+        return Outcome.fail(merged);
+    }
+
+    /**
+     * Devuelve un nuevo Outcome con un detalle adicional.
+     */
+    public Outcome<T> addDetail(OutcomeDetail detail) {
+        Objects.requireNonNull(detail, "Detail cannot be null");
+        List<OutcomeDetail> newDetails = new ArrayList<>(this.details);
+        newDetails.add(detail);
+        return Outcome.fail(newDetails);
+    }
+
+    @Override
+    public String toString() {
+        if (isSuccess()) {
+            return "Outcome: SUCCESS, value=" + value;
+        }
+        return "Outcome: FAILURE, details=" + details;
+    }
 }

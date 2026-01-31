@@ -2,7 +2,10 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.model.Treatment;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.TreatmentId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.GuardianError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.PatientError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
@@ -15,29 +18,26 @@ import com.example.ClinicaDefinitiva.domain.util.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class Patient implements Actor {
+public class Patient  {
 
     private final PatientId patientId;
     private final UserId user;
+    private final List<TreatmentId> treatments;
     private Person person;
     private final GuardianId guardianId;
     private LocalDateTime lastUpdate;
     private ContractId contractId;
 
-    public Patient(PatientId patientId,
-                    Person person,
-                    GuardianId guardianId,
-                    UserId user,
-                    LocalDateTime lastUpdate,
-                    ContractId contractId) {
-        this.patientId = patientId;
-        this.person = person;
-        this.guardianId = guardianId;
-        this.user = user;
-        this.lastUpdate = lastUpdate;
+    public Patient(ContractId contractId, LocalDateTime lastUpdate, GuardianId guardianId, Person person, List<TreatmentId> treatments, UserId user, PatientId patientId) {
         this.contractId = contractId;
-        validarResponsable(); // asegura consistencia al nacer
+        this.lastUpdate = lastUpdate;
+        this.guardianId = guardianId;
+        this.person = person;
+        this.treatments = treatments;
+        this.user = user;
+        this.patientId = patientId;
     }
 
     public static Patient registerPatient(
@@ -123,6 +123,17 @@ public class Patient implements Actor {
             throw new BusinessRuleViolationException(PatientError.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
     }
+    public Outcome<Void> validateDeactivation() {
+        if (treatments != null && !treatments.isEmpty()) {
+            return Outcome.fail(new OutcomeDetail(
+                    PatientError.ERR_PATIENT_ACTIVE_TREATMENT,
+                    Severity.INFO,
+                    Category.CLINICO,
+                    EntityContext.PATIENT
+            ));
+        }
+        return Outcome.ok();
+    }
 
     public boolean requiereResponsable() { return !person.getAge().isAdult(); }
     public boolean tieneResponsable() { return guardianId != null; }
@@ -135,26 +146,12 @@ public class Patient implements Actor {
     public LocalDateTime getLastUpdate() { return lastUpdate; }
     public ContractId getContractId() { return contractId; }
 
-    @Override
-    public Outcome<H> assertCanBeDeactivated(String reason) {
-
-        final int DAYS_TO_BLOCK_DEACTIVATION = 30;
-
-        if(reason == null || reason.isBlank()){
-            return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.EER_RECEPTIONIST_INACTIVATION_REQUIRES_REASON, Severity.INFO, Category.ADMINISTRATIVO));
-        }
-
-        if (schedule != null && schedule.hasAppointmentsWithin(DAYS_TO_BLOCK_DEACTIVATION)) {
-            return Outcome.fail(new OutcomeDetail(ErrorCatalogXD.ERR_PATIENT_ACTIVE_SERVICES,Severity.INFO, Category.CLINICO));
-        }
-
-        return Outcome.ok();
+    public List<TreatmentId> getTreatments() {
+        return treatments;
     }
 
-    @Override
-    public UserId getUserId() {
-        return user;
-    }
+
+
 
 
 }

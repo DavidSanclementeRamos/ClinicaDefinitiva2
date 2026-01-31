@@ -15,7 +15,7 @@ import com.example.ClinicaDefinitiva.domain.portsOutput.ScheduleRepository.Avail
 import com.example.ClinicaDefinitiva.domain.portsOutput.ScheduleRepository.ShiftRepository;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Availability;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Shift;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.Shift;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentType;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;

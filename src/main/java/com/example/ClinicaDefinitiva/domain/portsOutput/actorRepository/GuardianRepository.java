@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.GuardianId;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,4 +18,5 @@ public interface GuardianRepository {
     Page<Guardian> findByPatientId(PatientId patientId, Pageable pageable);
     boolean existsById(GuardianId guardianId);
 
+    Guardian findByUserId(UserId id);
 }

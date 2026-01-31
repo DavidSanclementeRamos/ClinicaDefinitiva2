@@ -68,7 +68,11 @@ public enum PatientError implements ErrorCatalog {
             "RN-PATIENT-012",
             "error.patient.shift.unavailable",
             "El horario solicitado no está dentro del turno asignado al paciente"
-    );
+    ),
+    ERR_PATIENT_ACTIVE_TREATMENT(
+            "RN-PATIENT-013",
+            "error.patient.activeTreatment",
+            "El paciente tiene tratamientos activos y no puede ser desactivado" );
 
     private final String code;
     private final String messageKey;

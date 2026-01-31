@@ -555,7 +555,7 @@ Antes de iniciar la codificación del módulo, asegurar comprensión de:
 - Este ADR documenta los conocimientos necesarios para comprender el dominio
   completo de facturación en salud en Colombia
 - **NO implica que todo deba implementarse** en el proyecto experimental
-- Ver **[ADR-(Facturación)-05-Alcance de Implementación del Módulo de Facturación (MVP Portfolio).md](ADR-%28Facturaci%C3%B3n%29-05-Alcance%20de%20Implementaci%C3%B3n%20del%20M%C3%B3dulo%20de%20Facturaci%C3%B3n%20%28MVP%20Portfolio%29.md)** para el alcance específico de implementación del MVP
+- Ver **[ADR-(Facturación)-05-Alcance de Implementación del Módulo de Facturación (MVP Portfolio).md](../glosario-semantico/ADR-(Facturación)-05-Alcance%20de%20Implementación%20del%20Módulo%20de%20Facturación%20(MVP%20Portfolio).md)** para el alcance específico de implementación del MVP
 - El objetivo es tener visión completa del problema real, aunque se implemente
   una versión simplificada para fines de portfolio
 - Los conocimientos adquiridos permitirán:

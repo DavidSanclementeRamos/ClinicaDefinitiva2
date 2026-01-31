@@ -58,7 +58,11 @@ public enum ReceptionistError implements ErrorCatalog {
             "RN-RECEPTIONIST-010",
             "error.receptionist.deactivate.reason",
             "La desactivación requiere motivo obligatorio"
-    );
+    ),
+    ERR_RECEPTIONIST_ASSIGNED_SHIFTS(
+            "RN-RECEPTIONIST-011",
+            "error.receptionist.assignedShifts",
+            "El recepcionista tiene turnos asignados y no puede ser desactivado" );
 
     private final String code;
     private final String messageKey;

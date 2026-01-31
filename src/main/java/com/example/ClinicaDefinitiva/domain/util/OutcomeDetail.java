@@ -1,6 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.util;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.context.DomainContext;
+
 import java.util.Objects;
 
 /**
@@ -17,9 +19,11 @@ public class OutcomeDetail {
     private final ErrorCatalog code;
     private final Severity severity;
     private final Category category;
+    private final DomainContext context;
 
 
-    public OutcomeDetail( ErrorCatalog code, Severity severity, Category category) {
+    public OutcomeDetail(ErrorCatalog code, Severity severity, Category category, DomainContext context) {
+        this.context = context;
 
         Objects.requireNonNull(code, "Codigo cannot be null");
         Objects.requireNonNull(severity, "Severidad cannot be null");
@@ -40,6 +44,9 @@ public class OutcomeDetail {
         return severity;
     }
 
+    public DomainContext getContext() {
+        return context;
+    }
 
     public Category getCategory() {
         return category;

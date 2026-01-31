@@ -2,6 +2,7 @@ package com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,4 +18,6 @@ public interface DentistRepository {
     Page<Dentist> findBySpecialty(String specialty, Pageable pageable);
     void deleteById(DentistId id);
     boolean existsById(Long id);
+
+    Dentist findByUserId(UserId id);
 }
