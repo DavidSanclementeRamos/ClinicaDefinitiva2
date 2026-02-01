@@ -1,9 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper;
 
 // application/mapper/AddressMapper.java
-import com.example.ClinicaDefinitiva.application.dto.AddressDto;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.Address;
-import org.springframework.stereotype.Component;
 
 
 public final class AddressMapper {

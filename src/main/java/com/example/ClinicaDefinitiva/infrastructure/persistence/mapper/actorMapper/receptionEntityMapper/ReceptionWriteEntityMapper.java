@@ -10,48 +10,41 @@ import java.util.Objects;
 
 public class ReceptionWriteEntityMapper {
 
-    public Receptionist toDomain(ReceptionistEntity entity) {
-        Objects.requireNonNull(entity, "ReceptionistEntity must not be null");
+
+
+    public ReceptionistEntity toEntity(Receptionist domain) {
+        Objects.requireNonNull(domain, "Receptionist domain object must not be null");
+
+        ReceptionistEntity entity = new ReceptionistEntity();
+
+        // Identificadores y sector: asumimos que siempre existen
+        entity.setReceptionistId(domain.getId().getValue());
+        entity.setSector(domain.getSector().toString());
 
         // Person: asumimos que siempre existe y está completo
-        Address address = new Address(
-                entity.getStreet(),
-                entity.getCity(),
-                entity.getState(),
-                entity.getCountry(),
-                entity.getPostalCode()
-        );
+        Person person = domain.getPerson();
 
-        DateOfBirth dob = new DateOfBirth(LocalDate.parse(entity.getDateOfBirth()));
-        Age age = new Age(dob);
+        entity.setDni(person.getDni().toString());
+        entity.setFirst(person.getFullname().FirstName());
+        entity.setLastName(person.getFullname().LastName()); // corregimos duplicación: antes se repetía setFirst
 
-        // Corregimos orden: primero nombre, luego apellido
-        FullName fullname = new FullName(entity.getFirst(), entity.getLastName());
-        PhoneNumber phone = new PhoneNumber(entity.getPhoneNumber());
-        BloodType bloodType = BloodType.fromLabel(entity.getBloodType());
-        Document document = new Document(entity.getDni());
+        entity.setPhoneNumber(person.getPhoneNumber().toString());
 
-        Person person = new Person(
-                address,
-                age,
-                bloodType,
-                dob,
-                document,
-                entity.getDocumentEPS(),
-                fullname,
-                phone
-        );
+        entity.setStreet(person.getAddress().Street());
+        entity.setCity(person.getAddress().City());
+        entity.setState(person.getAddress().State());
+        entity.setCountry(person.getAddress().Country());
+        entity.setPostalCode(person.getAddress().PostalCode());
 
-        // Sector y ReceptionId: asumimos que siempre existen
-        ReceptionId receptionId = ReceptionId.fromLong(entity.getReceptionistId());
-        Sector sector = new Sector(entity.getSector());
+        entity.setDateOfBirth(person.getDateOfBirth().asDate().toString());
+        entity.setBloodType(person.getBloodType().getValue());
+        entity.setDocumentEPS(person.getDocumentoEPS());
 
-        return new Receptionist(
-                receptionId,
-                person,
-                sector,
-                new UserId(entity.getUser()),
-                entity.getLastUpdate()
-        );
+        // User: asumimos que siempre existe
+        entity.setUser(domain.getUser().toString());
+
+        entity.setLastUpdate(domain.getLastUpdate());
+
+        return entity;
     }
 }

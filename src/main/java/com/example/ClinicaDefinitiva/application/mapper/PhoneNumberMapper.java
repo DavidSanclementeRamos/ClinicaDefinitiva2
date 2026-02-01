@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.application.mapper;
 
-import com.example.ClinicaDefinitiva.application.dto.PhoneNumberDto;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.PhoneNumber;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.application.mapper;
 
-import com.example.ClinicaDefinitiva.application.dto.EmailDto;
 import com.example.ClinicaDefinitiva.domain.Email;
 
 public class EmailMapper {

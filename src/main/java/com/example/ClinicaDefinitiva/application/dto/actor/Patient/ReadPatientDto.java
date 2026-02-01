@@ -17,7 +17,7 @@ public record ReadPatientDto (
         LocalDate dateOfBirth,
         String bloodType,
         String documentEPS,
-        String user,
+        Long userId,
         LocalDateTime lastUpdate,
 
         // Address

@@ -4,12 +4,8 @@ import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.GuardianError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 import com.example.ClinicaDefinitiva.domain.util.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,23 +14,23 @@ public class Guardian  {
     private final GuardianId guardianId;
     private Person person;
     private TypeGuardian typeGuardian;
-    private UserId user;
+    private UserId userId;
     private List<PatientId> patientList;
     private LocalDateTime lastUpdate;
 
-    public Guardian(GuardianId guardianId, LocalDateTime lastUpdate, List<PatientId> patientList, Person person, TypeGuardian typeGuardian, UserId user) {
+    public Guardian(GuardianId guardianId, LocalDateTime lastUpdate, List<PatientId> patientList, Person person, TypeGuardian typeGuardian, UserId userId) {
         this.guardianId = guardianId;
         this.lastUpdate = lastUpdate;
         this.patientList = patientList;
         this.person = person;
         this.typeGuardian = typeGuardian;
-        this.user = user;
+        this.userId = userId;
     }
 
 
     public static Guardian registerGuardian(
             Person data,
-            UserIdentity user,
+            UserId userId,
             TypeGuardian typeGuardian) {
 
 
@@ -48,34 +44,35 @@ public class Guardian  {
                 null,
                 data,
                 typeGuardian,
-                user.getId());
+                userId);
     }
 
-    public void updateContactData(Address address, PhoneNumber phoneNumber,
-                                  UserIdentity user) {
+    public void updateContactData(Address address, PhoneNumber phoneNumber
+                                   ) {
 
         Person data = new Person();
         this.person = data.updateContact(address, phoneNumber);
-        // this.lastUpdate = LocalDateTime.now();
+         this.lastUpdate = LocalDateTime.now();
     }
 
     public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
-                                    String documentoEPS, FullName fullname, UserIdentity user, TypeGuardian typeGuardian) {
-        Schedule schedule = new Schedule();
-        // RN-PATIENT-009: Validar cambio de fecha nacimiento
+                                    String documentoEPS, FullName fullname, TypeGuardian typeGuardian) {
 
-        // MIGRAR A DOIMAN SERVICE
-       /** if (!this.person.getDateOfBirth().equals(dateOfBirth)) {
-            if (this.schedule != null && this.schedule.hasAppointmentsWithinHour(24)) {
-                throw new BusinessRuleViolationException(
-                        ErrorCatalogXD.ERR_PATIENT_CANNOT_MODIFY_BIRTHDATE_WITH_HISTORY,
-                        EntityContext.PATIENT,
-                        "No se puede modificar la fecha de nacimiento si el paciente tiene historial de citas"
-                );
-            }
+
+        // LA VALIDACION DE VE SER  MIGRAR A DOMAIN SERVICE
+       /** if (this.schedule != null && this.schedule.hasAppointmentsWithinHour(24)) {
+            throw new BusinessRuleViolationException(
+                    ErrorCatalogXD.ERR_PATIENT_CANNOT_MODIFY_BIRTHDATE_WITH_HISTORY,
+                    EntityContext.PATIENT,
+                    "No se puede modificar la fecha de nacimiento si el paciente tiene historial de citas"
+            );
+        }*/
+
+       if (!this.person.getDateOfBirth().equals(dateOfBirth)) {
+
             if (!age.isBetween(22, 60)) {
-                throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
-            }*/
+                throw new BusinessRuleViolationException(GuardianError.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
+            }
             Person data = new Person();
             this.person = data.updateSensitive(
                     age,
@@ -86,9 +83,8 @@ public class Guardian  {
                     fullname
             );
 
-            //this.typeGuardian = t
             this.typeGuardian = typeGuardian;
-        }
+        }}
 
 
         public Outcome<Void> validateDeactivation() {
@@ -101,9 +97,6 @@ public class Guardian  {
             }
             return Outcome.ok();
         }
-
-
-
 
 
     public List<PatientId> getPatientList() {
@@ -122,8 +115,8 @@ public class Guardian  {
         return guardianId;
     }
 
-    public UserId getUser() {
-        return user;
+    public UserId getUserId() {
+        return userId;
     }
 
     public LocalDateTime getLastUpdate() {

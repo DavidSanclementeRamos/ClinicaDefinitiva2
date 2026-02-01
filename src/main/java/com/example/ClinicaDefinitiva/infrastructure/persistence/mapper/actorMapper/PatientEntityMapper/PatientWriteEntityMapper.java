@@ -11,48 +11,37 @@ import java.util.Objects;
 
 public class PatientWriteEntityMapper {
 
-    public Patient toDomain(PatientEntity entity) {
-        Objects.requireNonNull(entity, "PatientEntity must not be null");
+
+
+
+    public PatientEntity toEntity(Patient domain) {
+        Objects.requireNonNull(domain, "Patient domain object must not be null");
+
+        PatientEntity entity = new PatientEntity();
+
+        // Identificadores: asumimos que siempre existen
+        entity.setPatientId(domain.getPatientId().getValue());
+        entity.setGuardian(null); // referencia nula, adapter la seteará si es necesario
+        entity.setContractId(String.valueOf(domain.getContractId().asLong()));
 
         // Person: asumimos que siempre existe y está completo
-        Address address = new Address(
-                entity.getStreet(),
-                entity.getCity(),
-                entity.getState(),
-                entity.getCountry(),
-                entity.getPostalCode()
-        );
+        Person person = domain.getPerson();
 
-        DateOfBirth dob = new DateOfBirth(LocalDate.parse(entity.getDateOfBirth()));
-        Age age = new Age(dob);
+        entity.setDni(person.getDni().toString());
+        entity.setFirst(person.getFullname().FirstName());
+        entity.setLastName(person.getFullname().LastName());
+        entity.setPhoneNumber(person.getPhoneNumber().toString());
 
-        FullName fullname = new FullName(entity.getFirst(), entity.getLastName());
-        PhoneNumber phone = new PhoneNumber(entity.getPhoneNumber());
-        BloodType bloodType = BloodType.fromLabel(entity.getBloodType());
-        Document document = new Document(entity.getDni());
+        entity.setStreet(person.getAddress().Street());
+        entity.setCity(person.getAddress().City());
+        entity.setState(person.getAddress().State());
+        entity.setCountry(person.getAddress().Country());
+        entity.setPostalCode(person.getAddress().PostalCode());
 
-        Person person = new Person(
-                address,
-                age,
-                bloodType,
-                dob,
-                document,
-                entity.getDocumentEPS(),
-                fullname,
-                phone
-        );
+        entity.setDateOfBirth(person.getDateOfBirth().asDate().toString());
+        entity.setBloodType(person.getBloodType().getValue());
+        entity.setDocumentEPS(person.getDocumentoEPS());
 
-        // GuardianId y ContractId: asumimos que siempre existen
-        GuardianId guardianId = GuardianId.fromLong(entity.getGuardian().getGuardianId());
-        ContractId contractId = ContractId.fromString(entity.getContractId());
-
-        return new Patient(
-                PatientId.fromLong(entity.getPatientId()),
-                person,
-                guardianId,
-                new UserId(entity.getUser()),
-                entity.getLastUpdate(),
-                contractId
-        );
+        return entity;
     }
 }

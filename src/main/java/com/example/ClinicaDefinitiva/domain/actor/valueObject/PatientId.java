@@ -17,12 +17,7 @@ public final class PatientId {
             throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.PATIENT_ID);
 
         }
-        // Eliminar
-       /** String trimmed = value.trim();
-        if (trimmed.isEmpty()) {
-            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_ID_BLANK, VOContext.PATIENT_ID);
 
-        }*/
         return new PatientId(value);
     }
 

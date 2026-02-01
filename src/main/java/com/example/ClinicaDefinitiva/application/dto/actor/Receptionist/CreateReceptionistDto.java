@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 public record CreateReceptionistDto (
         String sector,
+        Long shiftId,
         // Person
         String dni,
         String first,
@@ -17,7 +18,7 @@ public record CreateReceptionistDto (
         LocalDate dateOfBirth,
         String bloodType,
         String documentEPS,
-        String user,
+        Long user,
         LocalDateTime lastUpdate,
 
         // Address
@@ -27,4 +28,6 @@ public record CreateReceptionistDto (
         String country,
         String postalCode
 ){
+
+
 }

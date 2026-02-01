@@ -22,7 +22,7 @@ public final class HashedPassword implements Serializable {
 
     private final String hash;
 
-    private HashedPassword(String hash) {
+    public HashedPassword(String hash) {
         this.hash = hash;
     }
 

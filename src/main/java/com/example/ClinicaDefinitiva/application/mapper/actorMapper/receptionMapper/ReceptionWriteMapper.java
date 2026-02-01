@@ -5,7 +5,9 @@ import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.UpdateRe
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.UpdateReceptionistSensitiveDto;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftId;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +15,6 @@ public class ReceptionWriteMapper {
 
     // DTO de entrada → dominio (VOs/Agregado).
     public Receptionist dtoCreateToReception(CreateReceptionistDto dto) {
-        UserIdentity user = new UserIdentity();
 
         return Receptionist.registerReceptionist(
                 new Person(
@@ -27,14 +28,14 @@ public class ReceptionWriteMapper {
                         new FullName(dto.first(), dto.lastName()),
                         new PhoneNumber(dto.phoneNumber())
                 ),
-                user,
-                new Sector(dto.sector())
+               UserId.from( dto.user()),
+                new Sector(dto.sector()),
+                ShiftId.from(dto.shiftId())
         );
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
     public void dtoUpdateSensitiveToReception(UpdateReceptionistSensitiveDto dto, Receptionist reception) {
-        UserIdentity user = new UserIdentity();
 
         reception.updateSensitiveData(
                 new Age(new DateOfBirth(dto.dateOfBirth())),
@@ -43,8 +44,6 @@ public class ReceptionWriteMapper {
                 new Document(dto.dni()),
                 dto.documentEPS(),
                 new FullName(dto.first(), dto.lastName()),
-
-                user,
                 new Sector(dto.sector())
 
         );
@@ -52,13 +51,12 @@ public class ReceptionWriteMapper {
 
     // DTO de entrada → dominio (VOs/Agregado).
     public void dtoUpdateContactToReception(UpdateReceptionistContactDto dto, Receptionist reception) {
-        UserIdentity user = new UserIdentity();
 
         reception.updateContactData(
                 new Address(dto.street(), dto.city(), dto.state(),
                         dto.country(), dto.postalCode()),
-                new PhoneNumber(dto.phoneNumber()),
-                user
+                new PhoneNumber(dto.phoneNumber())
+
         );
     }
 

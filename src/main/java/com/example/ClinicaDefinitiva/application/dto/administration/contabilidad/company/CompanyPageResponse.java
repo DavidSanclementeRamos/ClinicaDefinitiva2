@@ -1,7 +1,5 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company;
 
-import com.example.ClinicaDefinitiva.application.dto.NameDto;
-import com.example.ClinicaDefinitiva.application.dto.NitDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyStatus;
 
 /**

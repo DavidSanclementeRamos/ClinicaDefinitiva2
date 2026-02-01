@@ -18,7 +18,6 @@ public record CreatePatientDto(
      LocalDate dateOfBirth,
      String bloodType,
      String documentEPS,
-     String user,
      LocalDateTime lastUpdate,
 
      // Address

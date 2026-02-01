@@ -4,6 +4,7 @@ import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -27,7 +28,6 @@ public class DentistWriteMapper {
                         .collect(Collectors.toSet()))
                 .orElse(Collections.emptySet());
 
-        UserIdentity user = new UserIdentity();
         return Dentist.registerDentist(
                 new Person(
                         new Address(dto.street(), dto.city(), dto.state(),
@@ -41,7 +41,7 @@ public class DentistWriteMapper {
                         new PhoneNumber(dto.phoneNumber())
                 ),
                 new Specialties(specialtiesSet),
-                user,
+                UserId.from(dto.user()),
                 new WorkingHours(dto.start(), dto.end(),
                         dto.dayOfWeek(), dto.declaredHoursPerWeek()),
                 dto.lastUpdate()
@@ -66,7 +66,6 @@ public class DentistWriteMapper {
                 new Document(dto.dni()),
                 dto.documentEPS(),
                 new FullName(dto.first(), dto.lastName()),
-                new UserIdentity(),
                 new Specialties(specialtiesSet),
                 new WorkingHours(dto.start(), dto.end(), dto.dayOfWeek(), dto.declaredHoursPerWeek())
         );
@@ -74,14 +73,13 @@ public class DentistWriteMapper {
 
     // DTO de entrada → dominio (VOs/Agregado).
     public void dtoUpdateContactToDentist(UpdateDentistContactDto dto, Dentist dentist) {
-        UserIdentity user = new UserIdentity();
 
         dentist.updateContactData(
                 new Address(dto.street(), dto.city(), dto.state(),
                         dto.country(), dto.postalCode()),
 
-                new PhoneNumber(dto.phoneNumber()),
-                user
+                new PhoneNumber(dto.phoneNumber())
+
         );
     }
     // DTO de entrada → dominio (VOs/Agregado).

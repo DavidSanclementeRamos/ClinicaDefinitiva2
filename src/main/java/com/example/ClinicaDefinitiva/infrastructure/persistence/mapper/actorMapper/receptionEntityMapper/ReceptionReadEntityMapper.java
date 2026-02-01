@@ -1,46 +1,57 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.receptionEntityMapper;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.Person;
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.ReceptionistEntity;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class ReceptionReadEntityMapper {
 
-    public ReceptionistEntity toEntity(Receptionist domain) {
-        Objects.requireNonNull(domain, "Receptionist domain object must not be null");
-
-        ReceptionistEntity entity = new ReceptionistEntity();
-
-        // Identificadores y sector: asumimos que siempre existen
-        entity.setReceptionistId(domain.getId().getValue());
-        entity.setSector(domain.getSector().toString());
+    public Receptionist toDomain(ReceptionistEntity entity) {
+        Objects.requireNonNull(entity, "ReceptionistEntity must not be null");
 
         // Person: asumimos que siempre existe y está completo
-        Person person = domain.getPerson();
+        Address address = new Address(
+                entity.getStreet(),
+                entity.getCity(),
+                entity.getState(),
+                entity.getCountry(),
+                entity.getPostalCode()
+        );
 
-        entity.setDni(person.getDni().toString());
-        entity.setFirst(person.getFullname().FirstName());
-        entity.setLastName(person.getFullname().LastName()); // corregimos duplicación: antes se repetía setFirst
+        DateOfBirth dob = new DateOfBirth(LocalDate.parse(entity.getDateOfBirth()));
+        Age age = new Age(dob);
 
-        entity.setPhoneNumber(person.getPhoneNumber().toString());
+        // Corregimos orden: primero nombre, luego apellido
+        FullName fullname = new FullName(entity.getFirst(), entity.getLastName());
+        PhoneNumber phone = new PhoneNumber(entity.getPhoneNumber());
+        BloodType bloodType = BloodType.fromLabel(entity.getBloodType());
+        Document document = new Document(entity.getDni());
 
-        entity.setStreet(person.getAddress().Street());
-        entity.setCity(person.getAddress().City());
-        entity.setState(person.getAddress().State());
-        entity.setCountry(person.getAddress().Country());
-        entity.setPostalCode(person.getAddress().PostalCode());
+        Person person = new Person(
+                address,
+                age,
+                bloodType,
+                dob,
+                document,
+                entity.getDocumentEPS(),
+                fullname,
+                phone
+        );
 
-        entity.setDateOfBirth(person.getDateOfBirth().asDate().toString());
-        entity.setBloodType(person.getBloodType().getValue());
-        entity.setDocumentEPS(person.getDocumentoEPS());
+        // Sector y ReceptionId: asumimos que siempre existen
+        ReceptionId receptionId = ReceptionId.fromLong(entity.getReceptionistId());
+        Sector sector = new Sector(entity.getSector());
 
-        // User: asumimos que siempre existe
-        entity.setUser(domain.getUser().toString());
-
-        entity.setLastUpdate(domain.getLastUpdate());
-
-        return entity;
+        return new Receptionist(
+                receptionId,
+                person,
+                sector,
+                new UserId(entity.getUser()),
+                entity.getLastUpdate()
+        );
     }
 }

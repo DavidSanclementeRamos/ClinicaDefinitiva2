@@ -14,43 +14,42 @@ import java.util.stream.Collectors;
 
 @Component
 public class DentistWriteEntityMapper {
-    // De Entity a Dominio
 
-    public  Dentist toDomain(DentistEntity entity) {
-        if (entity == null) return null;
 
-        // specialties seguro contra null
-        Set<Specialty> specialtiesSet = Optional.ofNullable(entity.getSpecialties())
-                .map(s -> Arrays.stream(s.split(","))
-                        .map(String::trim)
-                        .filter(str -> !str.isEmpty())
-                        .map(Specialty::new)
-                        .collect(Collectors.toSet()))
-                .orElse(Collections.emptySet());
+    // De Dominio a Entity
+    public DentistEntity toEntity(Dentist domain) {
+        // if (domain == null) return null;
 
-        return new Dentist(
-                new DentistId(entity.getDentistId()),
-                new Person(
-                        new Address(entity.getStreet(), entity.getCity(), entity.getState(),
-                                entity.getCountry(), entity.getPostalCode()),
-                        new Age(new DateOfBirth(entity.getDateOfBirth())),
-                        BloodType.fromLabel(entity.getBloodType()),
-                        new DateOfBirth(entity.getDateOfBirth()),
-                        new Document(entity.getDni()),
-                        entity.getDocumentoEPS(),
-                        new FullName(entity.getFirst(), entity.getLastName()),
-                        new PhoneNumber(entity.getPhoneNumber())
-                ),
-                new Specialties(specialtiesSet),
-                new UserId(entity.getUser()),
-                new WorkingHours(entity.getStart(), entity.getEnd(),
-                        entity.getDayOfWeek(), entity.getDeclaredHoursPerWeek()),
-                DentistAvailabilityStatus.from(
-                        DentistAvailabilityStatus.Status.valueOf(entity.getAvailabilityStatus())
-                ),
-                entity.getLastUpdate()
+        DentistEntity entity = new DentistEntity();
+        entity.setDentistId(domain.getDentistId().getValue());
+        entity.setDni(domain.getPersonData().getDni().toString());
+        // FullName
+        entity.setFirst(domain.getPersonData().getFullname().FirstName());
+        entity.setLastName(domain.getPersonData().getFullname().LastName());
+        // Phone
+        entity.setPhoneNumber(domain.getPersonData().getPhoneNumber().toString());
+        // Address
+        entity.setStreet(domain.getPersonData().getAddress().Street());
+        entity.setCity(domain.getPersonData().getAddress().City());
+        entity.setState(domain.getPersonData().getAddress().State());
+        entity.setCountry(domain.getPersonData().getAddress().Country());
+        entity.setPostalCode(domain.getPersonData().getAddress().PostalCode());
 
-        );
+        entity.setDateOfBirth(domain.getPersonData().getDateOfBirth().asDate()); // VO compatible
+        entity.setBloodType(domain.getPersonData().getBloodType().getValue());
+        entity.setDocumentoEPS(domain.getPersonData().getDocumentoEPS());
+        entity.setSpecialties(domain.getSpecialties().toString());
+        entity.setAvailabilityStatus(domain.getAvailabilityStatus().toString());
+
+        // WorkingHours
+        entity.setStart(domain.getWorkingHours().getStart());
+        entity.setEnd(domain.getWorkingHours().getEnd());
+        entity.setDayOfWeek(domain.getWorkingHours().getDayOfWeek());
+        // entity.setDeclaredHoursPerWeek(domain.getWorkingHours().);
+        entity.setUser(domain.getUser().getValue());
+        entity.setLastUpdate(domain.getLastUpdate());
+
+        return entity;
     }
 
 }

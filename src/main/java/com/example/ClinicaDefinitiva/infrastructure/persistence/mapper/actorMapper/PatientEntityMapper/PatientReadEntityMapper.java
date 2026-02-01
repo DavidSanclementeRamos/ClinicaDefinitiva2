@@ -1,41 +1,57 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.PatientEntityMapper;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.Person;
+import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.PatientEntity;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class PatientReadEntityMapper {
-
-    public PatientEntity toEntity(Patient domain) {
-        Objects.requireNonNull(domain, "Patient domain object must not be null");
-
-        PatientEntity entity = new PatientEntity();
-
-        // Identificadores: asumimos que siempre existen
-        entity.setPatientId(domain.getPatientId().getValue());
-        entity.setGuardian(null); // referencia nula, adapter la seteará si es necesario
-        entity.setContractId(String.valueOf(domain.getContractId().asLong()));
+    public Patient toDomain(PatientEntity entity) {
+        Objects.requireNonNull(entity, "PatientEntity must not be null");
 
         // Person: asumimos que siempre existe y está completo
-        Person person = domain.getPerson();
+        Address address = new Address(
+                entity.getStreet(),
+                entity.getCity(),
+                entity.getState(),
+                entity.getCountry(),
+                entity.getPostalCode()
+        );
 
-        entity.setDni(person.getDni().toString());
-        entity.setFirst(person.getFullname().FirstName());
-        entity.setLastName(person.getFullname().LastName());
-        entity.setPhoneNumber(person.getPhoneNumber().toString());
+        DateOfBirth dob = new DateOfBirth(LocalDate.parse(entity.getDateOfBirth()));
+        Age age = new Age(dob);
 
-        entity.setStreet(person.getAddress().Street());
-        entity.setCity(person.getAddress().City());
-        entity.setState(person.getAddress().State());
-        entity.setCountry(person.getAddress().Country());
-        entity.setPostalCode(person.getAddress().PostalCode());
+        FullName fullname = new FullName(entity.getFirst(), entity.getLastName());
+        PhoneNumber phone = new PhoneNumber(entity.getPhoneNumber());
+        BloodType bloodType = BloodType.fromLabel(entity.getBloodType());
+        Document document = new Document(entity.getDni());
 
-        entity.setDateOfBirth(person.getDateOfBirth().asDate().toString());
-        entity.setBloodType(person.getBloodType().getValue());
-        entity.setDocumentEPS(person.getDocumentoEPS());
+        Person person = new Person(
+                address,
+                age,
+                bloodType,
+                dob,
+                document,
+                entity.getDocumentEPS(),
+                fullname,
+                phone
+        );
 
-        return entity;
+        // GuardianId y ContractId: asumimos que siempre existen
+        GuardianId guardianId = GuardianId.fromLong(entity.getGuardian().getGuardianId());
+        ContractId contractId = ContractId.fromString(entity.getContractId());
+
+        return new Patient(
+                PatientId.fromLong(entity.getPatientId()),
+                person,
+                guardianId,
+                new UserId(entity.getUser()),
+                entity.getLastUpdate(),
+                contractId
+        );
     }
 }

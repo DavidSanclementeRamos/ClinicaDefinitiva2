@@ -157,7 +157,12 @@ public enum VoActorError implements ErrorCatalog {
             "RN-VO-011",
             "error.address.blank",
             "Los campos de dirección no pueden estar vacíos"
-    );
+    ), ERR_BLOODTYPE_INVALID("","" ,"" ),
+
+    ERR_DOCUMENT_NULL("", "", ""),
+    ERR_DOCUMENT_BLANK("", "", ""),
+    ERR_DOCUMENT_INVALID_FORMAT("","" ,"" ),
+    ERR_DENTIST_INVALID_SPECIALTY("", "", "");
 
     private final String code;
     private final String messageKey;

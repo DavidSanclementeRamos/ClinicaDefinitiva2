@@ -1,7 +1,5 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract;
 
-import com.example.ClinicaDefinitiva.application.dto.NameDto;
-
 import java.time.LocalDate;
 
 /**

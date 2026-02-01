@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.application.dto.sheduled;
 
-import com.example.ClinicaDefinitiva.application.dto.ServiceRenderedDto;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
 
 import java.time.LocalDateTime;

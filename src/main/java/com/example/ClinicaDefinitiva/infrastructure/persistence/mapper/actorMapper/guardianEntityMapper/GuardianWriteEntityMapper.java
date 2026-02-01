@@ -14,48 +14,37 @@ import java.util.stream.Collectors;
 
 public class GuardianWriteEntityMapper {
 
-    // De Entity a Dominio
-    public Guardian toDomain(GuardianEntity entity) {
-        Objects.requireNonNull(entity, "GuardianEntity must not be null");
 
-        Address address = new Address(
-                entity.getStreet(),
-                entity.getCity(),
-                entity.getState(),
-                entity.getCountry(),
-                entity.getPostalCode()
-        );
+    // De Dominio a Entity
+    public GuardianEntity toEntity(Guardian domain) {
+        Objects.requireNonNull(domain, "Guardian domain object must not be null");
 
-        DateOfBirth dob = new DateOfBirth(LocalDate.parse(entity.getDateOfBirth()));
-        Age age = new Age(dob);
+        GuardianEntity entity = new GuardianEntity();
 
-        FullName fullname = new FullName(entity.getFirst(), entity.getLastName());
-        PhoneNumber phone = new PhoneNumber(entity.getPhoneNumber());
-        BloodType bloodType = BloodType.fromLabel(entity.getBloodType());
-        Document document = new Document(entity.getDni());
+        entity.setGuardianId(domain.getGuardianId().getValue());
 
-        Person person = new Person(
-                address,
-                age,
-                bloodType,
-                dob,
-                document,
-                entity.getDocumentEPS(),
-                fullname,
-                phone
-        );
+        entity.setTypeGuardian(domain.getTypeGuardian());
+        entity.setUser(domain.getUser().getValue());
+        entity.setLastUpdate(domain.getLastUpdate());
 
-        List<PatientId> patientIds = entity.getPatientList().stream()
-                .map(p -> PatientId.fromLong(p.getPatientId()))
-                .collect(Collectors.toList());
+        var p = domain.getPerson();
 
-        return new Guardian(
-                GuardianId.fromLong(entity.getGuardianId()),
-                entity.getLastUpdate(),
-                patientIds,
-                person,
-                entity.getTypeGuardian(),
-                new UserId(entity.getUser())
-        );
+        entity.setDni(p.getDni().toString());
+        entity.setFirst(p.getFullname().FirstName());
+        entity.setLastName(p.getFullname().LastName());
+        entity.setPhoneNumber(p.getPhoneNumber().toString());
+
+        entity.setStreet(p.getAddress().Street());
+        entity.setCity(p.getAddress().City());
+        entity.setState(p.getAddress().State());
+        entity.setCountry(p.getAddress().Country());
+        entity.setPostalCode(p.getAddress().PostalCode());
+
+        entity.setDateOfBirth(p.getDateOfBirth().asDate().toString());
+        entity.setBloodType(p.getBloodType().getValue());
+        entity.setDocumentEPS(p.getDocumentoEPS());
+
+        return entity;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest;
+package com.example.ClinicaDefinitiva.infrastructure.rest.mapper;
 
 
 import com.example.ClinicaDefinitiva.application.dto.service.CreateProvidedServiceDto;

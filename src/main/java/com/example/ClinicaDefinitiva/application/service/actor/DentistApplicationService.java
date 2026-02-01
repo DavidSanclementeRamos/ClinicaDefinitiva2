@@ -112,7 +112,7 @@ public class DentistApplicationService implements DentistUseCase {
         userAccessValidator.validateUserCanPerformSensitiveAction(
                 UserId.from(id),
                 now,
-                EntityContext.PATIENT  // Contexto para errores más descriptivos
+                EntityContext.USUARIO  // Contexto para errores más descriptivos
         );
         Schedule schedule = scheduleRepository.findByDentistId(updateDentistStatusDto.dentistId())
                 .orElseThrow(() -> new IllegalArgumentException("No found"));

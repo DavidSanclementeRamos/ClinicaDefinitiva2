@@ -61,7 +61,7 @@ public class PatientApplicationService implements PatientUserCase {
         userAccessValidator.validateUserCanPerformSensitiveAction(
                 UserId.from(createPatientDto.userId()),
                 now,
-                EntityContext.PATIENT  // Contexto para errores más descriptivos
+                EntityContext.USUARIO  // Contexto para errores más descriptivos
         );
         Patient patient = writeMapper.dtoCreateToPatient(createPatientDto);
         patientRepository.save(patient);

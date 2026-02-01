@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
@@ -13,31 +14,26 @@ import java.util.regex.Pattern;
  */
 public final class Document {
 
-    // Ejemplo: solo dígitos, entre 6 y 10 caracteres (ajusta según tu país)
     private static final Pattern DOCUMENT_PATTERN = Pattern.compile("^\\d{6,10}$");
 
     private final String value;
 
-    /**
-     * Constructor privado con validaciones.
-     */
+
     public Document(String raw) {
         if (raw == null) {
-            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_DOCUMENT_NULL, VOContext.DOCUMENT_ID);
+            throw new ValueObjectValidationException(VoActorError.ERR_DOCUMENT_NULL, VOContext.DOCUMENT_ID);
         }
         String normalized = raw.trim();
         if (normalized.isBlank()) {
-            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_DOCUMENT_BLANK, VOContext.DOCUMENT_ID);
+            throw new ValueObjectValidationException(VoActorError.ERR_DOCUMENT_BLANK, VOContext.DOCUMENT_ID);
         }
         if (!DOCUMENT_PATTERN.matcher(normalized).matches()) {
-            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_DOCUMENT_INVALID_FORMAT, VOContext.DOCUMENT_ID);
+            throw new ValueObjectValidationException(VoActorError.ERR_DOCUMENT_INVALID_FORMAT, VOContext.DOCUMENT_ID);
         }
         this.value = normalized;
     }
 
-    /**
-     * Método de fábrica para crear instancias de Document.
-     */
+
     public static Document of(String raw) {
         return new Document(raw);
     }

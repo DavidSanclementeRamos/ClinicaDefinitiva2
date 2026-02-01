@@ -18,7 +18,7 @@ public record ReadReceptionistDto(
         LocalDate dateOfBirth,
         String bloodType,
         String documentEPS,
-        String user,
+        Long user,
         LocalDateTime lastUpdate,
 
         // Address

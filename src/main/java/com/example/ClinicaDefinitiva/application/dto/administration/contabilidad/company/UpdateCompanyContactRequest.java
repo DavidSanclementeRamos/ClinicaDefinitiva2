@@ -1,10 +1,5 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company;
 
-import com.example.ClinicaDefinitiva.application.dto.AddressDto;
-import com.example.ClinicaDefinitiva.application.dto.EmailDto;
-import com.example.ClinicaDefinitiva.application.dto.NameDto;
-import com.example.ClinicaDefinitiva.application.dto.PhoneNumberDto;
-
 
 /**
  * DTO para actualizar información de contacto

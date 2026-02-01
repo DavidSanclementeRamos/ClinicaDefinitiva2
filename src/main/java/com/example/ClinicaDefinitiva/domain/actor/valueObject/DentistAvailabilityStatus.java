@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.util.EnumMap;
@@ -52,7 +53,7 @@ public final class DentistAvailabilityStatus {
 
     public static DentistAvailabilityStatus from(DentistAvailabilityStatus.Status value) {
         if (value == null) {
-            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_AVAILABILITY_STATUS_TRANSITION_NULL, VOContext.DENTIST_AVAILABILITY_STATUS);
+            throw new ValueObjectValidationException(VoActorError.ERR_AVAILABILITY_STATUS_TRANSITION_NULL, VOContext.DENTIST_AVAILABILITY_STATUS);
         }
         return new DentistAvailabilityStatus (value);
     }

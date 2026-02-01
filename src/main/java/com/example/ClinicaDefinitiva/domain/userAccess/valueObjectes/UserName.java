@@ -34,7 +34,7 @@ public final class UserName implements Serializable {
 
     private final String value;
 
-    private UserName(String value) {
+    public UserName(String value) {
         this.value = value;
     }
 

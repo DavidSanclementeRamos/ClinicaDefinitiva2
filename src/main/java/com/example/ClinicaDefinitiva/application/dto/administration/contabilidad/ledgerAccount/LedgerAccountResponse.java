@@ -1,7 +1,5 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount;
 
-import com.example.ClinicaDefinitiva.application.dto.NameDto;
-
 public record LedgerAccountResponse(
         String id,
         String companyId,

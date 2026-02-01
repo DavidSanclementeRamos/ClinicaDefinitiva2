@@ -5,6 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.actor.guardian.UpdateGuardi
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,7 +13,6 @@ public class GuardianWriteMapper {
 
     // DTO de entrada → dominio (VOs/Agregado).
     public Guardian dtoCreateToGuardian(CreateGuardianDto dto) {
-        UserIdentity user = new UserIdentity();
 
         return Guardian.registerGuardian(
                 new Person(
@@ -26,14 +26,13 @@ public class GuardianWriteMapper {
                         new FullName(dto.first(), dto.lastName()),
                         new PhoneNumber(dto.phoneNumber())
                 ),
-                user,
+                UserId.from(dto.userId()),
                 new TypeGuardian(dto.code(),dto.description())
         );
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
     public void dtoUpdateSensitiveToGuardian(UpdateGuardianSensitiveDto dto, Guardian guardian) {
-        UserIdentity user = new UserIdentity();
 
         guardian.updateSensitiveData(
                 new Age(new DateOfBirth(dto.dateOfBirth())),
@@ -42,20 +41,18 @@ public class GuardianWriteMapper {
                 new Document(dto.dni()),
                 dto.documentEPS(),
                 new FullName(dto.first(), dto.lastName()),
-                user,
              new TypeGuardian(dto.code(),dto.description())
         );
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
     public void dtoUpdateContactToGuardian(UpdateGuardianContactDto dto, Guardian guardian) {
-        UserIdentity user = new UserIdentity();
 
         guardian.updateContactData(
                 new Address(dto.street(), dto.city(), dto.state(),
                         dto.country(), dto.postalCode()),
-                new PhoneNumber(dto.phoneNumber()),
-                user
+                new PhoneNumber(dto.phoneNumber())
+
         );
     }
 

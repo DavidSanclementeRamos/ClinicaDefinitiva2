@@ -2,14 +2,7 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftId;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
-import com.example.ClinicaDefinitiva.domain.util.*;
-
 import java.time.LocalDateTime;
 
 public class Receptionist   {
@@ -18,12 +11,12 @@ public class Receptionist   {
     private final ShiftId shiftId;
     private Person person;
     private Sector sector;
-    private final UserId user;
+    private final UserId userId;
     private LocalDateTime lastUpdate;
 
-    public Receptionist(LocalDateTime lastUpdate, UserId user, Sector sector, Person person, ShiftId shiftId, ReceptionId id) {
+    public Receptionist(LocalDateTime lastUpdate, UserId userId, Sector sector, Person person, ShiftId shiftId, ReceptionId id) {
         this.lastUpdate = lastUpdate;
-        this.user = user;
+        this.userId = userId;
         this.sector = sector;
         this.person = person;
         this.shiftId = shiftId;
@@ -32,32 +25,30 @@ public class Receptionist   {
 
     public static Receptionist registerReceptionist(
             Person data,
-            UserIdentity user,
-            Sector sector) {
-        return new Receptionist(null, data, sector, user.getId(), LocalDateTime.now());
+            UserId userId,
+            Sector sector,
+            ShiftId shiftId) {
+        return new Receptionist(LocalDateTime.now(), userId , sector, data,shiftId, null);
     }
 
 
-    // Validación 3: Solo puede cancelar citas si esta activo
+    // DELEGAR A UN SERVICE LA EVALUACION DE PODER CANCELAR, ALGO PARECIDO A USER
+   /** // Validación 3: Solo puede cancelar citas si esta activo
     public void cancelAppointment(Appointment appointment) {
         // 1. Validar que el actor está activo
 
         // 2. Delegar la cancelación a la cita
         appointment.cancel();
-    }
+    }*/
 
-    // Métodos de actualización de datos
-    public void updateContactData(Address address, PhoneNumber phoneNumber, UserIdentity user) {
-        // Validar que el usuario esté activo (consistencia con Dentist)
+    public void updateContactData(Address address, PhoneNumber phoneNumber) {
         Person data = new Person();
         this.person = data.updateContact(address, phoneNumber);
         this.lastUpdate = LocalDateTime.now();
-        // this.sector = sector;  // no aplica aquí
     }
 
     public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
-                                    String documentoEPS, FullName fullname, UserIdentity user, Sector sector) {
-        // Validar que el usuario esté activo (consistencia con Dentist)
+                                    String documentoEPS, FullName fullname, Sector sector) {
         Person data = new Person();
         this.person = data.updateSensitive(
                 age,
@@ -71,8 +62,18 @@ public class Receptionist   {
     }
 
 
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
-    // Getters
+    public void setSector(Sector sector) {
+        this.sector = sector;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     public ReceptionId getId() {
         return id;
     }
@@ -84,7 +85,6 @@ public class Receptionist   {
     public Sector getSector() {
         return sector;
     }
-
 
     public LocalDateTime getLastUpdate() {
         return lastUpdate;

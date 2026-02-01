@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.application.dto.service.ReadProvidedService
 import com.example.ClinicaDefinitiva.application.dto.service.UpdateProvidedServiceDto;
 import com.example.ClinicaDefinitiva.application.mapper.ProvidedServiceMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.ProvidedServiceUseCase;
-import com.example.ClinicaDefinitiva.infrastructure.rest.DentalServiceValidation;
+import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.DentalServiceValidation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -2,20 +2,13 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.model.Treatment;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.TreatmentId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.GuardianError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.PatientError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
 import com.example.ClinicaDefinitiva.domain.util.*;
-
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,56 +16,53 @@ import java.util.List;
 public class Patient  {
 
     private final PatientId patientId;
-    private final UserId user;
-    private final List<TreatmentId> treatments;
-    private Person person;
+    private final UserId userId;
     private final GuardianId guardianId;
     private LocalDateTime lastUpdate;
     private ContractId contractId;
+    private final List<TreatmentId> treatments;
+    private Person person;
 
-    public Patient(ContractId contractId, LocalDateTime lastUpdate, GuardianId guardianId, Person person, List<TreatmentId> treatments, UserId user, PatientId patientId) {
+
+    public Patient(ContractId contractId, LocalDateTime lastUpdate, GuardianId guardianId, Person person, List<TreatmentId> treatments, UserId userId, PatientId patientId) {
         this.contractId = contractId;
         this.lastUpdate = lastUpdate;
         this.guardianId = guardianId;
         this.person = person;
         this.treatments = treatments;
-        this.user = user;
+        this.userId = userId;
         this.patientId = patientId;
     }
 
     public static Patient registerPatient(
                                           Person data,
-                                          UserIdentity user,
-                                          GuardianId guardian) {
+                                          UserId userId,
+                                          GuardianId guardianId,
+                                          ContractId contractId) {
 
         if (!data.getAge().isEligibleForRegistration()) {
             throw new DomainAggregateException(PatientError.ERR_PATIENT_INVALID_AGE, EntityContext.PATIENT);
         }
 
-        if (!data.getAge().isAdult() && guardian == null) {
+        if (!data.getAge().isAdult() && guardianId == null) {
             throw new BusinessRuleViolationException(PatientError.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
 
-
-        return new Patient(null, data, guardian, user.getId(), LocalDate.now().atStartOfDay(), null);
+        return new Patient(contractId,  LocalDate.now().atStartOfDay(), guardianId, data, null, userId, null);
     }
 
-    // Actualizar datos de contacto
-    public void updatePatientContact( Address address, PhoneNumber phoneNumber, UserIdentity user) {
-        // eliminar el catalogo de error, debe provenir de user
-// se debe validar que tampoco este suspendido o otros estados
+    public void updatePatientContact( Address address, PhoneNumber phoneNumber) {
 
         Person data = new Person();
         this.person = data.updateContact(address, phoneNumber);
         this.lastUpdate = LocalDateTime.now();
     }
 
-    // Actualizar datos sensibles
     public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
-                                    String documentoEPS, FullName fullname,UserIdentity user) {
-        // eliminar el catalogo de error, debe provenir de user
-// se debe validar que tampoco este suspendido o otros estados
+                                    String documentoEPS, FullName fullname) {
 
+
+        // LA VALIDACION DE SERVICIOS ACTIVOS EN LAS PÓCIMAS 2 HORAS DEBE IR EN UN DOMAIN SERVICE
         /** if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
             throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_ACTIVE_SERVICES, EntityContext.PATIENT);
         }**/
@@ -86,15 +76,12 @@ public class Patient  {
                 fullname
 
         );
-        this.contractId = contractId;
+
         this.lastUpdate = LocalDateTime.now();
     }
 
 
-
-    // Validar si puede agendar cita
-
-    // MIGRAR A DOIMAN SERVICE
+    // LA VALIDACION DE PONER AGENDAR DEBE SER  MIGRAR A DOMAIN SERVICE
    /** public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
         // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
@@ -117,9 +104,8 @@ public class Patient  {
         }
     }**/
 
-    // Validar responsable
-    private void validarResponsable() {
-        if (requiereResponsable() && !tieneResponsable()) {
+    private void validateGuardian() {
+        if (requiereResponsable() && !hasGuardian()) {
             throw new BusinessRuleViolationException(PatientError.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
     }
@@ -136,13 +122,13 @@ public class Patient  {
     }
 
     public boolean requiereResponsable() { return !person.getAge().isAdult(); }
-    public boolean tieneResponsable() { return guardianId != null; }
+    public boolean hasGuardian() { return guardianId != null; }
 
     // Getters
     public PatientId getPatientId() { return patientId; }
     public Person getPerson() { return person; }
     public GuardianId getGuardianId() { return guardianId; }
-    public UserId getUser() { return user; }
+    public UserId getUser() { return userId; }
     public LocalDateTime getLastUpdate() { return lastUpdate; }
     public ContractId getContractId() { return contractId; }
 

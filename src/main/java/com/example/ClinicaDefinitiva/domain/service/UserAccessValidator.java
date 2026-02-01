@@ -4,7 +4,6 @@ import com.example.ClinicaDefinitiva.application.exceptions.UserIdentityNoFoundE
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.UserNotEligibleException;
-import com.example.ClinicaDefinitiva.domain.portsOutput.UserIdentityRepository;
 import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;

@@ -24,7 +24,7 @@ public class ReceptionReadMapper {
                 reception.getPerson().getDateOfBirth().asDate(),
                 reception.getPerson().getBloodType().getValue(),
                 reception.getPerson().getDocumentoEPS(),
-                reception.getUserId().getValue(),
+                reception.getId().getValue(),
                 reception.getLastUpdate(),
 
                 reception.getPerson().getAddress().Street(),

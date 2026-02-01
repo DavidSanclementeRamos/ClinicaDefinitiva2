@@ -7,25 +7,23 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidati
 import java.util.Objects;
 
 public final class ShiftId   {
-    private final String value;
+    private final Long value;
 
 
-    private ShiftId(String value) {
+    private ShiftId(Long value) {
         this.value = Objects.requireNonNull(value,"El valor de ShiftId no puede ser nulo ");
     }
 
-    public static ShiftId from(String value) {
+    public static ShiftId from(Long value) {
 
         if (value == null) {
             throw new ValueObjectValidationException(ScheduleVOError.ERR_SHIFT_ID_REQUIRED, VOContext.SHIFT_ID);
         }
-        if(value.isBlank()){
-            throw new ValueObjectValidationException(ScheduleVOError.ERR_SHIFT_ID_BLANK,VOContext.SHIFT_ID);
-        }
-        return new ShiftId(value);
+
+        return new ShiftId(value) ;
     }
 
-    public String getValue() { return value; }
+    public Long getValue() { return value; }
 
     @Override
     public boolean equals(Object o) {

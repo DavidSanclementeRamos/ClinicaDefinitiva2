@@ -18,10 +18,7 @@ private final Long value;
             throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.RECEPTION_ID);
 
         }
-        /**String trimmed = value.trim();
-        if (trimmed.isEmpty()) {
-            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_ID_BLANK, VOContext.RECEPTION_ID);
-        }*/
+
         return new ReceptionId(value);
     }
     public Long getValue() {

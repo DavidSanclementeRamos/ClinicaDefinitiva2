@@ -1,10 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.schedule.model.TimeSlot;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.WeeklyAvailability;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -20,26 +19,26 @@ public final class WorkingHours {
         // Validación de nulidad
         if (start == null || end == null || dayOfWeek == null) {
             throw new ValueObjectValidationException(
-                    ErrorCatalogXD.ERR_WORKING_HOURS_NULL, VOContext.WORKING_HOURS);
+                    VoActorError.ERR_WORKING_HOURS_NULL, VOContext.WORKING_HOURS);
         }
 
         // Validación de orden temporal
         if (!start.isBefore(end)) {
             throw new ValueObjectValidationException(
-                    ErrorCatalogXD.ERR_WORKING_HOURS_INVALID_RANGE, VOContext.WORKING_HOURS);
+                    VoActorError.ERR_WORKING_HOURS_INVALID_RANGE, VOContext.WORKING_HOURS);
         }
 
         // Validación de horas declaradas
         if (declaredHoursPerWeek <= 0) {
             throw new ValueObjectValidationException(
-                    ErrorCatalogXD.ERR_WORKING_HOURS_INVALID_DECLARED,
+                    VoActorError.ERR_WORKING_HOURS_INVALID_DECLARED,
                     VOContext.WORKING_HOURS);
         }
 
         // Validación de horas máximas (jornada laboral legal)
         if (declaredHoursPerWeek > 48) {
             throw new ValueObjectValidationException(
-                    ErrorCatalogXD.ERR_WORKING_HOURS_EXCEEDS_LEGAL_LIMIT, VOContext.WORKING_HOURS);
+                    VoActorError.ERR_WORKING_HOURS_EXCEEDS_LEGAL_LIMIT, VOContext.WORKING_HOURS);
         }
 
         this.start = start;
@@ -65,16 +64,16 @@ public final class WorkingHours {
                 && !endDateTime.toLocalTime().isAfter(end);
     }
     /** Se usa para validar reglas de cumplimiento:
-      ¿el dentista está cumpliendo con lo que declaró como su jornada oficial?*/
+      ¿el dentista está cumpliendo con lo que declaró como su jornada oficial?
     public boolean isCompliantWithWorkingHours(WeeklyAvailability availability) {
         return availability.totalHoras() >= this.declaredHoursPerWeek;
-    }
+    }*/
 
-    public boolean cubre(TimeSlot slot) {
+   /** public boolean cubre(TimeSlot slot) {
         if (slot == null) return false;
         if (!slot.getDayOfWeek().equals(this.dayOfWeek)) return false;
         return !slot.getInicio().isBefore(start) && !slot.getFin().isAfter(end);
-    }
+    } */
 
     public Duration duracionTotal() {
         return Duration.between(start, end);
@@ -87,6 +86,8 @@ public final class WorkingHours {
     public DayOfWeek getDayOfWeek() { return dayOfWeek; }
     public LocalTime getStart() { return start; }
     public LocalTime getEnd() { return end; }
+
+
 }
 
 

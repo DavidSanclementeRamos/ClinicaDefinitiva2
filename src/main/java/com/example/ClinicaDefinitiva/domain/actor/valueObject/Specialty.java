@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
@@ -26,7 +27,7 @@ public final class Specialty {
         }*/
         String normalized = value.trim();
         if (!VALID_SPECIALTIES.contains(normalized)) {
-            throw new ValueObjectValidationException(ErrorCatalogXD.ERR_DENTIST_INVALID_SPECIALTY, VOContext.SPECIALTY);
+            throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.SPECIALTY);
         }
         this.value = normalized;
     }

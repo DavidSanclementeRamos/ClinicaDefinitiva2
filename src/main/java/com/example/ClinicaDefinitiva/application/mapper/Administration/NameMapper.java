@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration;
 
-import com.example.ClinicaDefinitiva.application.dto.NameDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Name;
 
 public class NameMapper {

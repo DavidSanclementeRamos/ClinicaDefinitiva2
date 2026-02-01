@@ -37,6 +37,7 @@ public class PatientReadMapper {
         return new PagePatientDto(
                 patient.getPatientId().getValue(),
                 patient.getContractId().asLong(),
+                patient.getUser().getValue(),
                 patient.getPerson().getDni().toString(),
                 patient.getPerson().getFullname().FirstName(),
                 patient.getPerson().getFullname().LastName(),

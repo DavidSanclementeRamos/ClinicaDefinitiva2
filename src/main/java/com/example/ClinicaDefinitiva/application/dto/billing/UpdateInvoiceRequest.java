@@ -1,7 +1,5 @@
 package com.example.ClinicaDefinitiva.application.dto.billing;
 
-import com.example.ClinicaDefinitiva.application.dto.ServiceRenderedDto;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

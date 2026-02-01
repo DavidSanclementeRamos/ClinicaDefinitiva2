@@ -67,7 +67,7 @@ public class GuardianApplicationService implements GuardianUserCase {
     public ReadGuardianDto save(CreateGuardianDto createGuardianDto) {
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(Long.valueOf(createGuardianDto.user())),
+                UserId.from(createGuardianDto.userId()),
                 now,
                 EntityContext.GUARDIAN  // Contexto para errores más descriptivos
         );

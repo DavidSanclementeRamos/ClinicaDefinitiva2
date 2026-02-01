@@ -48,7 +48,7 @@ public class UserIdentity {
     private UserStatus status;
     private long version;
 
-    private UserIdentity(UserId id, Email email, HashedPassword hashedPassword, UserName name, Instant createdAt) {
+    public UserIdentity(UserId id, Email email, HashedPassword hashedPassword, UserName name, Instant createdAt) {
         this.id = id;
         this.email = email;
         this.hashedPassword = hashedPassword;
@@ -58,8 +58,8 @@ public class UserIdentity {
         this.verified = false;
     }
 
-    public static UserIdentity register(UserId id, Email email, HashedPassword hashedPassword, UserName name, Instant now) {
-        return new UserIdentity(id, email, hashedPassword, name, now);
+    public static UserIdentity register( Email email, HashedPassword hashedPassword, UserName name, Instant now) {
+        return new UserIdentity(null, email, hashedPassword, name, now);
     }
 
 
@@ -268,6 +268,30 @@ public class UserIdentity {
     public HashedPassword getHashedPassword() { return hashedPassword; }
     public UserName getName() { return name; }
     public Instant getLastLoginAt() { return lastLoginAt; }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public int getFailedLoginAttempts() {
+        return failedLoginAttempts;
+    }
+
+    public Instant getLockedUntil() {
+        return lockedUntil;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
 
     public void setVersion(long version) {
         this.version = version;
