@@ -3,9 +3,8 @@ import com.example.ClinicaDefinitiva.application.dto.actor.guardian.CreateGuardi
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.UpdateGuardianContactDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.UpdateGuardianSensitiveDto;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.springframework.stereotype.Component;
 
 @Component

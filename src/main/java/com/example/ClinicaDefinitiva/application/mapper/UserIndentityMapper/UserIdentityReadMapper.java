@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.application.mapper.UserIndentityMapper;
 
 import com.example.ClinicaDefinitiva.application.dto.user.PageUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.dto.user.ReadUserIdentityDto;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import org.springframework.stereotype.Component;
 
 @Component

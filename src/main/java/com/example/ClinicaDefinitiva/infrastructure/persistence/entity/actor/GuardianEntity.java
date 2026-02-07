@@ -1,9 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor;
 
-import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.TypeGuardian;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.TypeGuardian;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

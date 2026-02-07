@@ -1,10 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.GuardianError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import com.example.ClinicaDefinitiva.domain.util.*;
 import java.time.LocalDateTime;
 import java.util.List;

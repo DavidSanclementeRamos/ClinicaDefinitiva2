@@ -1,15 +1,14 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.actor;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.GuardianId;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.PatientRepository;
+import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
+import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.PatientJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.PatientEntityMapper.PatientReadEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.PatientEntityMapper.PatientWriteEntityMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

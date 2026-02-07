@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.LedgerAccountId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.OpeningBalanceId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.OpeningBalanceId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;

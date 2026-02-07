@@ -5,15 +5,15 @@ import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMap
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUserCase;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.ReceptionRepository;
-import com.example.ClinicaDefinitiva.domain.service.UserAccessValidator;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.service.UserAccessValidator;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 
 import java.time.Instant;
 

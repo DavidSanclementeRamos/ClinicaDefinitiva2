@@ -1,0 +1,64 @@
+package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.authorization;
+
+import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.authorization.RolJpaRepository;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.authorization.RolEntityMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
+
+public class RolAdapter implements RolRepository {
+
+    private final RolJpaRepository rolJpaRepository;
+    private final RolEntityMapper rolEntityMapper;
+
+    public RolAdapter(RolJpaRepository rolJpaRepository, RolEntityMapper rolEntityMapper) {
+        this.rolJpaRepository = rolJpaRepository;
+        this.rolEntityMapper = rolEntityMapper;
+    }
+
+    @Override
+    public Optional<Rol> findById(RolId id) {
+        return rolJpaRepository.findById(id.getValue())
+                .map(rolEntityMapper::toDomain);
+    }
+
+    @Override
+    public Optional<Rol> findByRolEnum(RolEnum rolEnum) {
+        return rolJpaRepository.findByRolEnum(rolEnum.name())
+                .map(rolEntityMapper::toDomain);
+    }
+
+    @Override
+    public Page<Rol> findAll(Pageable pageable) {
+        return rolJpaRepository.findAll(pageable)
+                .map(rolEntityMapper::toDomain);
+    }
+
+    @Override
+    public Page<Rol> findByEditable(boolean editable, Pageable pageable) {
+        return rolJpaRepository.findByIsEditable(editable, pageable)
+                .map(rolEntityMapper::toDomain);
+    }
+
+    @Override
+    public Rol save(Rol rol) {
+        var entity = rolEntityMapper.toEntity(rol);
+        var saved = rolJpaRepository.save(entity);
+        return rolEntityMapper.toDomain(saved);
+    }
+
+    @Override
+    public void delete(RolId id) {
+        rolJpaRepository.deleteById(id.getValue());
+    }
+
+    @Override
+    public boolean existsByDescription(String description) {
+        return false;
+    }
+}

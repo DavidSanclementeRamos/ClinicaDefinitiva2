@@ -4,7 +4,6 @@ import com.example.ClinicaDefinitiva.application.dto.user.CreateUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.dto.user.PageUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.dto.user.ReadUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.dto.user.UpdateUserIdentityDto;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

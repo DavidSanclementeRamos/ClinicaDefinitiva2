@@ -1,8 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.billing.doiman.model;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ServiceRendered;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceItemId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;

@@ -6,12 +6,12 @@ import com.example.ClinicaDefinitiva.application.mapper.actorMapper.patientMappe
 import com.example.ClinicaDefinitiva.application.portsInput.actor.PatientUserCase;
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.PatientNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.PatientRepository;
-import com.example.ClinicaDefinitiva.domain.service.UserAccessValidator;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.service.UserAccessValidator;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

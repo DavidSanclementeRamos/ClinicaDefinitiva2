@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftId;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import java.time.LocalDateTime;
 
 public class Receptionist   {

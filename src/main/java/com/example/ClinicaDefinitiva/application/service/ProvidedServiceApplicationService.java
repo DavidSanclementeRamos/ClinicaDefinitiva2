@@ -5,10 +5,10 @@ import com.example.ClinicaDefinitiva.application.dto.service.ReadProvidedService
 import com.example.ClinicaDefinitiva.application.dto.service.UpdateProvidedServiceDto;
 import com.example.ClinicaDefinitiva.application.mapper.ProvidedServiceMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.ProvidedServiceUseCase;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.Enum.ServiceType;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.*;
 import com.example.ClinicaDefinitiva.domain.portsOutput.ProvidedServiceRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

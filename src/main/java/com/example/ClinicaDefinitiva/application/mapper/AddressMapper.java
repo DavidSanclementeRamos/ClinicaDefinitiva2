@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper;
 
 // application/mapper/AddressMapper.java
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.Address;
+import com.example.ClinicaDefinitiva.domain.actor.vo.Address;
 
 
 public final class AddressMapper {

@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
-public enum JournalEntryLineError implements ErrorCatalog {
+public enum JournalEntryLineError implements ErrorCatalog {;
 
     private final String code;
     private final String messageKey;

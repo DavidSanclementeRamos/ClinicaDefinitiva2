@@ -1,11 +1,11 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.*;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -2,8 +2,8 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.actor;
 
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
-import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.DentistRepository;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.DentistJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.dentistEntityMapper.DentistReadEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.dentistEntityMapper.DentistWriteEntityMapper;

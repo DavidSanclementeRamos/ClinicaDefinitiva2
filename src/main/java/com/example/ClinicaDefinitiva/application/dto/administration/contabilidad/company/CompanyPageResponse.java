@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company;
 
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyStatus;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
 
 /**
  * DTO simplificado para listados

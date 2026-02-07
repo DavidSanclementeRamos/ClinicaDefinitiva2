@@ -1,7 +1,5 @@
 package com.example.ClinicaDefinitiva.application.dto.actor.Receptionist;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.Sector;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

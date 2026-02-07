@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 
 import java.util.List;

@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.actor;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.GuardianId;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
-import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.GuardianRepository;
+import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
+import com.example.ClinicaDefinitiva.domain.actor.output.GuardianRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.GuardianJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.guardianEntityMapper.GuardianReadEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.guardianEntityMapper.GuardianWriteEntityMapper;

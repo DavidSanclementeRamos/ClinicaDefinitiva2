@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.userIdentity;
 
-import com.example.ClinicaDefinitiva.domain.portsOutput.UserRepository;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.UserRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.userIdentity.UserEntity;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.userIdentity.UserIdentityJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.userIdentity.UserReadEntityMapper;

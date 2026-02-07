@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentId;
 
 public enum ScheduleVOError implements ErrorCatalog {
 

@@ -1,16 +1,8 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.dentistEntityMapper;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.DentistEntity;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 public class DentistWriteEntityMapper {

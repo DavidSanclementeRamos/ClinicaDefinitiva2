@@ -3,10 +3,9 @@ package com.example.ClinicaDefinitiva.application.mapper.UserIndentityMapper;
 import com.example.ClinicaDefinitiva.application.dto.user.CreateUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.dto.user.UpdateUserIdentityDto;
 import com.example.ClinicaDefinitiva.domain.Email;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.HashedPassword;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserName;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserStatus;
+import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserName;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;

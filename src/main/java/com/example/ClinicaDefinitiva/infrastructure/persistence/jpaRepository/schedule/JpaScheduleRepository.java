@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.schedule;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
-import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.ScheduleRepository;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ScheduleRepository;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Availability;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;

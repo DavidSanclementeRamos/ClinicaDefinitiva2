@@ -1,12 +1,12 @@
 package com.example.ClinicaDefinitiva.domain.schedule.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.AvailabilityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AvailabilityId;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AvailabilityStatus;
+import com.example.ClinicaDefinitiva.domain.schedule.vo.AvailabilityId;
+import com.example.ClinicaDefinitiva.domain.schedule.vo.AvailabilityStatus;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -23,7 +23,7 @@ public class Availability {
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
-    private int hour
+    private int hour;
     private AvailabilityStatus status;
     private String deactivationReason;
     private Long version;

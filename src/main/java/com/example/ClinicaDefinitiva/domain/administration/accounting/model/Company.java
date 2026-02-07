@@ -2,14 +2,14 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
 
 import com.example.ClinicaDefinitiva.domain.Email;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.Address;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.PhoneNumber;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyStatus;
+import com.example.ClinicaDefinitiva.domain.actor.vo.Address;
+import com.example.ClinicaDefinitiva.domain.actor.vo.PhoneNumber;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePerson;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Name;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Nit;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;

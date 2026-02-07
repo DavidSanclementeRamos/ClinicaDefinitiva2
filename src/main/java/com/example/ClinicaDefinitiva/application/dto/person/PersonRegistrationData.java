@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.application.dto.person;
 
 import com.example.ClinicaDefinitiva.domain.actor.Enum.BloodType;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 
 public class PersonRegistrationData  {
 /// eliminar no sirve xd

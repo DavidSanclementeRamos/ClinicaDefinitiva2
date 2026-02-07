@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.administration.Operations;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;

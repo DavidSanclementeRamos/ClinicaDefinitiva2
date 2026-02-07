@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.service;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.Name;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
 
 import java.time.LocalDate;
 

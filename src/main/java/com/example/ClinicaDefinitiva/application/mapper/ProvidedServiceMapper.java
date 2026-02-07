@@ -1,10 +1,10 @@
 package com.example.ClinicaDefinitiva.application.mapper;
 
 import com.example.ClinicaDefinitiva.application.dto.service.*;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.*;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

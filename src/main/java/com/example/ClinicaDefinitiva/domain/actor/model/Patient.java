@@ -1,13 +1,13 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.TreatmentId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.TreatmentId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.PatientError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import com.example.ClinicaDefinitiva.domain.util.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

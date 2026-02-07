@@ -1,10 +1,9 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company;
 
 
-import com.example.ClinicaDefinitiva.application.dto.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePerson;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.CompanyStatus;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
 
 
 import java.time.LocalDate;

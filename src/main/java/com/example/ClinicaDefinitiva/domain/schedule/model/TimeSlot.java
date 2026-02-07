@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.schedule.model;
 
 
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AvailabilityId;
+import com.example.ClinicaDefinitiva.domain.schedule.vo.AvailabilityId;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

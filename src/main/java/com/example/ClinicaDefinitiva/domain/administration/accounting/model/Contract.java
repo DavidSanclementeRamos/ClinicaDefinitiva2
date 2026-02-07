@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.ContractStatus;
 import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;

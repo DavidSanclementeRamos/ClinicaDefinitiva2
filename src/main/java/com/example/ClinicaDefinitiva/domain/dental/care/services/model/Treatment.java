@@ -1,12 +1,12 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.Enum.TreatmentStatus;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.TreatmentId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.TreatmentPhase;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.num.TreatmentStatus;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.TreatmentId;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.TreatmentPhase;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -7,11 +7,11 @@ import com.example.ClinicaDefinitiva.application.dto.billing.UpdateInvoiceReques
 import com.example.ClinicaDefinitiva.application.mapper.InvoiceMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.BillingUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
-import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.ContractRepository;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.InvoiceRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
 import com.example.ClinicaDefinitiva.domain.service.InvoiceFactoryDomainService;

@@ -41,7 +41,10 @@ public enum CodeVO {
     SID37,
     SST38,
     SCA39,
-    USE40
+    USE40,
+    PER41,
+    AUT42
+
 }
 
 

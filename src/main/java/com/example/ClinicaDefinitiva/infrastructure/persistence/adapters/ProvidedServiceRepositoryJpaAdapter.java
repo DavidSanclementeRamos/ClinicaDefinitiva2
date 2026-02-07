@@ -1,11 +1,11 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters;
 
 import com.example.ClinicaDefinitiva.application.mapper.ProvidedServiceMapper;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.Enum.ServiceType;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.*;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.*;
 import com.example.ClinicaDefinitiva.domain.portsOutput.ProvidedServiceRepository;
 
 

@@ -9,7 +9,7 @@ public enum EntityContext implements DomainContext {
     USUARIO(CodeEntity.USR05),
     HORARIO(CodeEntity.HOR06),
     SHIFT(CodeEntity.SHI07),
-    Rol(CodeEntity.ROL08),
+    ROL(CodeEntity.ROL08),
     APPOINTMENT(CodeEntity.APP09),
     ADMINISTRATIVEREPORT(CodeEntity.EDM10),
     COMPANY(CodeEntity.COM11),
@@ -20,24 +20,26 @@ public enum EntityContext implements DomainContext {
     THISPARTIES(CodeEntity.THI16),
     AVAILABILITY(CodeEntity.AVA17),
     DENTAL_SERVICE(CodeEntity.SER18),
-    INVOICE(CodeEntity.INV19);
+    INVOICE(CodeEntity.INV19),
+    ASSIGNMENT(CodeEntity.ASS20);
 
 
 
-    private final CodeEntity codigo;
 
-    EntityContext(CodeEntity codigo) {
-        this.codigo = codigo;
+    private final CodeEntity code;
+
+    EntityContext(CodeEntity code) {
+        this.code = code;
     }
 
-    public CodeEntity getCodigoEntidad() {
-        return codigo;
+    public CodeEntity getCodeEntidad() {
+        return code;
     }
 
 
     @Override
     public CodeEntity getCodeEntity() {
-        return null;
+        return code;
     }
 
     @Override

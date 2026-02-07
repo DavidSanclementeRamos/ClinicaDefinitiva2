@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.actor;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.ReceptionId;
-import com.example.ClinicaDefinitiva.domain.portsOutput.actorRepository.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.actor.vo.ReceptionId;
+import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.ReceptionistJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.receptionEntityMapper.ReceptionReadEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.receptionEntityMapper.ReceptionWriteEntityMapper;

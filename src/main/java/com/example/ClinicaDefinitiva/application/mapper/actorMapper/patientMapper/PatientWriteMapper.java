@@ -4,10 +4,9 @@ import com.example.ClinicaDefinitiva.application.dto.actor.Patient.CreatePatient
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.UpdatePatientContactDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.UpdatePatientSensitiveDto;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.application.dto.sheduled;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceDuration;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentType;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
 
 import java.time.LocalDateTime;
 

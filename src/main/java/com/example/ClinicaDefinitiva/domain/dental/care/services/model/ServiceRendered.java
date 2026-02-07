@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.services.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceId;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

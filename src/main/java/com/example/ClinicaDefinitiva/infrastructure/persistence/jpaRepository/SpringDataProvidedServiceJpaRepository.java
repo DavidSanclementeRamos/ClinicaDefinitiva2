@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.Enum.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.num.ServiceType;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.providedService.ProvidedServiceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

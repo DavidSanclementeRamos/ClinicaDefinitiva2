@@ -8,8 +8,8 @@ import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.InvoiceFactory;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.Price;
-import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.ContractRepository;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
 
 import java.time.LocalDateTime;

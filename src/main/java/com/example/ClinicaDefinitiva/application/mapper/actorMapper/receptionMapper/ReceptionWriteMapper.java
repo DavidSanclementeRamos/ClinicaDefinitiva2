@@ -4,10 +4,9 @@ import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.CreateRe
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.UpdateReceptionistContactDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.UpdateReceptionistSensitiveDto;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftId;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.springframework.stereotype.Component;
 
 @Component

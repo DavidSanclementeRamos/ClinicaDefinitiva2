@@ -38,13 +38,16 @@ public enum VOContext implements DomainContext {
     SERVICE_ID(CodeVO.SID37),
     SERVICE_STATUS(CodeVO.SST38),
     SERVICE_CATALOG(CodeVO.SCA39),
-    USER_ID(CodeVO.USE40);
+    USER_ID(CodeVO.USE40),
+    PERMISSION(CodeVO.PER41),
+    AUTHORIZATION(CodeVO.AUT42);
 
 
-    private final CodeVO codigo;
 
-    VOContext(CodeVO codigo) {
-        this.codigo = codigo;
+    private final CodeVO code;
+
+    VOContext(CodeVO code) {
+        this.code = code;
     }
 
 
@@ -56,6 +59,6 @@ public enum VOContext implements DomainContext {
 
     @Override
     public CodeVO getCodeVo() {
-        return codigo;
+        return code;
     }
 }

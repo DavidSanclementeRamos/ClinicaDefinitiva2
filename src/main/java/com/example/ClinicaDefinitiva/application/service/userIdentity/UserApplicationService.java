@@ -13,12 +13,12 @@ import com.example.ClinicaDefinitiva.domain.Email;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.AggregateBusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.portsOutput.UserRepository;
-import com.example.ClinicaDefinitiva.domain.service.UserDeactivationPolicy;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.HashedPassword;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserName;
+import com.example.ClinicaDefinitiva.domain.authentication.UserRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.service.UserDeactivationPolicy;
+import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserName;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
@@ -30,7 +30,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.Duration;
 import java.time.Instant;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 

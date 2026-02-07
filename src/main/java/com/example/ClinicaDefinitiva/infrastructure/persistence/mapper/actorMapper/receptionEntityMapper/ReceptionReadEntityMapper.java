@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.receptionEntityMapper;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.ReceptionistEntity;
 
 import java.time.LocalDate;

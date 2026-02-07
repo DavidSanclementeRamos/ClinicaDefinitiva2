@@ -1,14 +1,14 @@
 package com.example.ClinicaDefinitiva.domain.schedule.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.DentistId;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.PatientId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.valueObject.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceDuration;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentId;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentStatus;
-import com.example.ClinicaDefinitiva.domain.schedule.valueObject.AppointmentType;
+import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
+import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentStatus;
+import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
 import java.time.Duration;
 import java.time.LocalDateTime;
 

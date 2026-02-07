@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.valueObject.ContractId;
-import com.example.ClinicaDefinitiva.domain.portsOutput.Administration.ContractRepository;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.ContractEntity;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.ContractJpaRepository;
 

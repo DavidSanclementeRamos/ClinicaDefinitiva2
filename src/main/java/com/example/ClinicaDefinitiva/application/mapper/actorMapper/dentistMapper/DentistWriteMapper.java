@@ -2,9 +2,8 @@ package com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapp
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
-import com.example.ClinicaDefinitiva.domain.actor.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.userAccess.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.userAccess.valueObjectes.UserId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
