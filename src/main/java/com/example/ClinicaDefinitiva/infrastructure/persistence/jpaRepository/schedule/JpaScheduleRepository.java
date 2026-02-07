@@ -3,8 +3,7 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.s
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ScheduleRepository;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Availability;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
+import com.example.ClinicaDefinitiva.domain.schedule.service.ScheduleQueryService;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,14 +20,14 @@ public class JpaScheduleRepository implements ScheduleRepository {
     }
 
     @Override
-    public Schedule findByDentistId(DentistId dentistId) {
+    public ScheduleQueryService findByDentistId(DentistId dentistId) {
         List<Appointment> appointments = appointmentJpaRepository.findByDentistId(dentistId);
         Availability availability = availabilityJpaRepository.findByDentistId(dentistId);
-        return new Schedule(appointments, availability);
+        return new ScheduleQueryService(appointments, availability);
     }
 
     @Override
-    public void save(Schedule schedule) {
+    public void save(ScheduleQueryService schedule) {
 
     }
 }

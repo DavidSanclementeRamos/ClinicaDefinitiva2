@@ -1,6 +1,6 @@
-## ADR-13 (Dominio): Mantener y refinar upcomingWithinHours como consulta de soporte
+## ADR-03 (Dominio): Mantener y refinar upcomingWithinHours como consulta de soporte
 
-- Estado: Decidido
+- Estado: Aprobado
 - Fecha: 2025-10-06
 - Autor: David
 

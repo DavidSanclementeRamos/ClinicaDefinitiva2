@@ -1,7 +1,7 @@
 
 
 
-# ADR-07(Cita): Uso del patrón Builder en el agregado Appointment
+# ADR-06(Cita): Uso del patrón Builder en el agregado Appointment
 
 - **Estado:** Propuesto
 - **Fecha:** 2025-12-28

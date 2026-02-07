@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.PatientError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ScheduleRepository;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
+import com.example.ClinicaDefinitiva.domain.schedule.service.ScheduleQueryService;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
@@ -21,7 +21,7 @@ public class PatientDeactivationValidator {
     }
 
     public Outcome<Void> validate(PatientId patientId) {
-        Schedule schedule = scheduleRepository.findByPatientId(patientId);
+        ScheduleQueryService schedule = scheduleRepository.findByPatientId(patientId);
 
         if (schedule != null && schedule.hasAppointmentsWithin(daysToBlockDeactivation)) {
             return Outcome.fail(new OutcomeDetail(

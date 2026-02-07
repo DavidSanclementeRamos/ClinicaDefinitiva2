@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.ReceptionId;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.Shift;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.ReceptionistError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.schedule.output.ShiftRepository;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftRepository;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;

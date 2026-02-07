@@ -54,11 +54,6 @@ public class Dentist   {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
         }
 
-        // SE SUPONE QUE WORKING HOURS YA VIENE VALIDADO AL CREAR EL VALUE OBJECT
-        /** if (!workingHours.HorasRegistradas(40)) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_DENTIST_MISSING_AVAILABILITY, EntityContext.DENTIST);
-        }*/
-
         return new Dentist(null, data, specialties, userId, workingHours
                 , DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.AVAILABLE),
                 lastUpdate, List.of());
@@ -101,14 +96,12 @@ public class Dentist   {
 
 
 
-    //LA VALIDACION DE PODER AGENDAR UNA CITA SEGUN VALIDACION PREVIA DE ESTE AGREGADO SEVE IR EN UN DOMAIN SERVICE
-    /**public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
-
+    public void canScheduleBetween( LocalDateTime start, LocalDateTime end) {
         ensureEditable();
         if (!workingHours.isWithinRange(start, end)) {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_OUT_OF_WORKING_HOURS, EntityContext.DENTIST);
         }
-    }*/
+    }
 
     // LO MISMO QUE LA ANTERIOR
     /**public void validateVacationRequest(UserIdentity user,LocalDateTime vacationStart, LocalDateTime vacationEnd, Schedule schedule)  {
@@ -127,12 +120,12 @@ public class Dentist   {
     }*/
 
     // LO MISMO QUE LA ANTERIOR
-    /** public void validateReschedule(UserIdentity user,LocalDateTime start, LocalDateTime end) {
+     public void validateReschedule(UserIdentity user,LocalDateTime start, LocalDateTime end) {
 
         if (!canWorkBetween(start, end)) {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_RESCHEDULE_OUT_OF_WORKING_HOURS, EntityContext.DENTIST);
         }
-    }*/
+    }
 
     public boolean canWorkBetween(LocalDateTime start, LocalDateTime end) {
         return workingHours != null && workingHours.isWithinRange(start, end);

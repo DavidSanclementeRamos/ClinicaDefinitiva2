@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
+import com.example.ClinicaDefinitiva.domain.schedule.service.ScheduleQueryService;
 import com.example.ClinicaDefinitiva.domain.actor.service.DentistAvailabilityService;
 import com.example.ClinicaDefinitiva.domain.authentication.service.UserAccessValidator;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
@@ -114,7 +114,7 @@ public class DentistApplicationService implements DentistUseCase {
                 now,
                 EntityContext.USUARIO  // Contexto para errores más descriptivos
         );
-        Schedule schedule = scheduleRepository.findByDentistId(updateDentistStatusDto.dentistId())
+        ScheduleQueryService schedule = scheduleRepository.findByDentistId(updateDentistStatusDto.dentistId())
                 .orElseThrow(() -> new IllegalArgumentException("No found"));
         // Aquí usas el mapper de escritura
         DentistAvailabilityStatus newStatus = dentistWriteMapper.toAvailabilityStatus(updateDentistStatusDto);

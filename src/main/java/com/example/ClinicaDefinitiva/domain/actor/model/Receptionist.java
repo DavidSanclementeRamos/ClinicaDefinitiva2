@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftId;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import java.time.LocalDateTime;
 

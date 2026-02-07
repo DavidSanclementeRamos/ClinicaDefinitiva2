@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.schedule;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
@@ -81,7 +81,62 @@ public enum AppointmentError implements ErrorCatalog {
             "RN-APPT-013",
             "error.appointment.cannotSpanMultipleDays",
             "La cita no puede cruzar días"
+    ),
+
+    ERR_APPT_REQUIRED_ID(
+            "RN-APPT-014",
+            "error.appointment.requiredId",
+            "El identificador de la cita es obligatorio"
+    ),
+
+    ERR_APPT_REQUIRED_DENTIST(
+            "RN-APPT-015",
+            "error.appointment.requiredDentist",
+            "El dentista es obligatorio"
+    ),
+
+    ERR_APPT_REQUIRED_PATIENT(
+            "RN-APPT-016",
+            "error.appointment.requiredPatient",
+            "El paciente es obligatorio"
+    ),
+
+    ERR_APPT_REQUIRED_SERVICE(
+            "RN-APPT-017",
+            "error.appointment.requiredService",
+            "El servicio es obligatorio"
+    ),
+
+    ERR_APPT_REQUIRED_START(
+            "RN-APPT-018",
+            "error.appointment.requiredStart",
+            "La hora de inicio es obligatoria"
+    ),
+
+    ERR_APPT_REQUIRED_END(
+            "RN-APPT-019",
+            "error.appointment.requiredEnd",
+            "La hora de fin es obligatoria"
+    ),
+
+    ERR_APPT_REQUIRED_REASON(
+            "RN-APPT-020",
+            "error.appointment.requiredReason",
+            "El motivo de la cita es obligatorio"
+    ),
+
+    ERR_APPT_REQUIRED_TYPE(
+            "RN-APPT-021",
+            "error.appointment.requiredType",
+            "El tipo de cita es obligatorio"
+    ),
+
+    ERR_APPT_INVALID_DATE_RANGE(
+            "RN-APPT-022",
+            "error.appointment.invalidDateRange",
+            "La hora de inicio debe ser anterior a la hora de fin"
     );
+
 
     private final String code;
     private final String messageKey;

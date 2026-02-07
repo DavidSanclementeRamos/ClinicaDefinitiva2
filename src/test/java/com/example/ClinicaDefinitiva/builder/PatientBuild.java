@@ -6,7 +6,7 @@ import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
+import com.example.ClinicaDefinitiva.domain.schedule.service.ScheduleQueryService;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.Shift;
 
 import java.time.LocalDateTime;
@@ -27,7 +27,7 @@ public class PatientBuild implements IBuilder {
         private Shift shift;
         private Appointment appointment;
         private Guardian guardian;
-        private Schedule schedule;
+        private ScheduleQueryService schedule;
         private LocalDateTime lastUpdate;
         private Long contractId;
         private String documentoEPS;
@@ -43,7 +43,7 @@ public class PatientBuild implements IBuilder {
         public PatientBuild withPhoneNumber(PhoneNumber p) { this.phoneNumber = p; return this; }
         public PatientBuild withUser(UserIdentity u){this.user = u; return this;}
         public PatientBuild withShift(Shift s){this.shift = s; return this;}
-        public PatientBuild withSchedule(Schedule s) { this.schedule = s; return this; }
+        public PatientBuild withSchedule(ScheduleQueryService s) { this.schedule = s; return this; }
         public PatientBuild withGuardian(Guardian g){this.guardian = g; return this;}
         public PatientBuild withLastUpdate(LocalDateTime l){this.lastUpdate = l; return this;}
         public PatientBuild withContract(Long c){this.contractId = c; return this;}

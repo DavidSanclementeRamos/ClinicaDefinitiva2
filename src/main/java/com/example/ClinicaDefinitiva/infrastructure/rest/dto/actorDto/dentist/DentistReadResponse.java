@@ -1,12 +1,9 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist;
 
-import com.example.ClinicaDefinitiva.domain.schedule.model.TimeSlot;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
 /**
  * DTO de respuesta para Dentist

@@ -82,10 +82,9 @@ public class Patient  {
 
 
     // LA VALIDACION DE PONER AGENDAR DEBE SER  MIGRAR A DOMAIN SERVICE
-   /** public void canScheduleBetween(UserIdentity user,LocalDateTime start, LocalDateTime end) {
+   /public void canScheduleBetween( LocalDateTime start, LocalDateTime end) {
         // eliminar el catalogo de error, debe provenir de user
 // se debe validar que tampoco este suspendido o otros estados
-        UserStatus.from(user).mustBeActive(ErrorCatalogXD.ERR_RECEPTIONIST_NOT_EDITABLE, EntityContext.PATIENT);
 
         if (shift == null) {
             throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_NO_SHIFT_ASSIGNED, EntityContext.PATIENT);
@@ -93,7 +92,7 @@ public class Patient  {
         if (!shift.isAvailableBetween(start, end)) {
             throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_SHIFT_NOT_AVAILABLE, EntityContext.PATIENT);
         }
-    }*/
+    }
 
     /** Validar reagendamiento
     public void validateReschedule(LocalDateTime newStart, LocalDateTime newEnd) {

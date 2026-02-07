@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.DentistError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ScheduleRepository;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Schedule;
+import com.example.ClinicaDefinitiva.domain.schedule.service.ScheduleQueryService;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
@@ -19,7 +19,7 @@ public class DentistDeactivationValidator {
     }
 
     public Outcome<Void> validate(DentistId dentistId) {
-        Schedule schedule = scheduleRepository.findByDentistId(dentistId);
+        ScheduleQueryService schedule = scheduleRepository.findByDentistId(dentistId);
 
         if (schedule.hasAppointmentsWithinHours(24)) {
             return Outcome.fail(new OutcomeDetail(

@@ -1,4 +1,4 @@
-# ADR-18 (Dominio): Sustitución de retorno booleano por excepciones semánticas en validación de agenda
+# ADR-04 (Dominio): Sustitución de retorno booleano por excepciones semánticas en validación de agenda
 
 - Estado: Aprobado
 - Fecha: 2025-10-08

@@ -1,6 +1,6 @@
-# ADR-12 (Dominio): Eliminación del método upcomingWithinHours(int hours)
+# ADR-02 (Dominio): Eliminación del método upcomingWithinHours(int hours)
 
-- Estado: Decidido
+- Estado: Superseded by ADR-(Cita)-03
 - Fecha: 2025-10-06
 - Autor: David
 

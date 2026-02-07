@@ -2,6 +2,9 @@ package com.example.ClinicaDefinitiva.domain.schedule.output;
 
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
+
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Optional;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
@@ -11,7 +14,7 @@ import java.util.List;
 
 /**
  * Puerto: Interface de repositorio en capa de dominio
- * ✅ SIN dependencias de JPA, Hibernate, Spring Data, etc.
+ *
  */
 public interface AppointmentRepository {
 
@@ -22,7 +25,7 @@ public interface AppointmentRepository {
     List<Appointment> findAll();
 
     /**
-     * ✅ El contrato especifica que esta query debe ser thread-safe
+     *  El contrato especifica que esta query debe ser thread-safe
      * La implementación decidirá cómo (pessimistic lock, optimistic, etc.)
      */
     List<Appointment> findConflictingForDentist(
@@ -56,4 +59,10 @@ public interface AppointmentRepository {
     );
 
     void delete(AppointmentId id);
+
+    List<Appointment> findByDentistBetween(DentistId dentistId, LocalDateTime start, LocalDateTime end);
+
+    List<Appointment> findByDentistAndDate(DentistId dentistId, LocalDate date);
+
+    List<Appointment> findByDentist(DentistId dentistId);
 }

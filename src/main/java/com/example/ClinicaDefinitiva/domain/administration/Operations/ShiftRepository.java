@@ -1,11 +1,10 @@
-package com.example.ClinicaDefinitiva.domain.schedule.output;
+package com.example.ClinicaDefinitiva.domain.administration.Operations;
 
 
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.ReceptionId;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.Shift;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftId;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftId;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

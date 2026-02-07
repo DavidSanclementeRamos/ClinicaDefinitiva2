@@ -3,9 +3,11 @@ package com.example.ClinicaDefinitiva.domain.schedule.model;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceDuration;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.AppointmentError;
+import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
@@ -13,25 +15,28 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 
+/**
+ * Agregado: Appointment (Cita Médica)
+ *
+ * Constructor mediante Builder según ADR-07 (≥7 atributos obligatorios)
+ */
 public class Appointment {
 
     private final AppointmentId id;
     private final DentistId dentist;
     private final PatientId patient;
-    private LocalDateTime start;                 // fechaHora
+    private final ServiceId serviceId;
+    private LocalDateTime start;
     private LocalDateTime end;
-    private AppointmentStatus status;                // estado
-    private String reason;                           // motivo
-    private AppointmentType appointmentType;         // tipo cita (Control, emergency, first-time)
-    private String clinicalNotes;                    // notas Clinicas (Professional observations)
-    private ServiceDuration actualDuration;              // duracionReal (Efficiency analysis)
-    private String attendedBy;                      // atendidaPor (May differ from assigned)
-    private LocalDateTime creationDate;              // fecha creacion
-    private LocalDateTime lastUpdated;               // ultima atualizacion
+    private AppointmentStatus status;
+    private String reason;
+    private AppointmentType appointmentType;
+    private String clinicalNotes;
+    private ServiceDuration actualDuration;
+    private String attendedBy;
+    private LocalDateTime creationDate;
+    private LocalDateTime lastUpdated;
 
-
-
-    // Ventana mínima de cancelación: 24 horas antes de la cita
     private static final Duration CANCELLATION_WINDOW = Duration.ofHours(24);
 
 
@@ -39,6 +44,7 @@ public class Appointment {
         this.id = builder.id;
         this.dentist = builder.dentist;
         this.patient = builder.patient;
+        this.serviceId = builder.serviceId;
         this.start = builder.start;
         this.end = builder.end;
         this.status = builder.status;
@@ -52,16 +58,16 @@ public class Appointment {
     }
 
 
-    // OPERACIONES DE DOMINIO
 
     /**
      * RN-APPT-006: Solo puede confirmarse si está en estado SCHEDULED
      */
     public void confirm() {
-      if(!status.isScheduled()){
-        throw new BusinessRuleViolationException(AppointmentError.ERR_APPT_NOT_EDITABLE,EntityContext.APPOINTMENT);
-      }
-        this.status.transitionTo(AppointmentStatus.Status.CONFIRMED);
+        if (!status.isScheduled()) {
+            throw new BusinessRuleViolationException(
+                    AppointmentError.ERR_APPT_NOT_EDITABLE, EntityContext.APPOINTMENT);
+        }
+        this.status = this.status.transitionTo(AppointmentStatus.Status.CONFIRMED);
         this.lastUpdated = LocalDateTime.now();
     }
 
@@ -71,12 +77,14 @@ public class Appointment {
      */
     public void cancel(String cancellationReason) {
         if (cancellationReason == null || cancellationReason.isBlank()) {
-            throw new BusinessRuleViolationException(AppointmentError.ERR_APPT_MISSING_REASON,EntityContext.APPOINTMENT);
+            throw new BusinessRuleViolationException(
+                    AppointmentError.ERR_APPT_MISSING_REASON, EntityContext.APPOINTMENT);
         }
 
         LocalDateTime now = LocalDateTime.now();
         if (start.minus(CANCELLATION_WINDOW).isBefore(now)) {
-            throw new BusinessRuleViolationException(AppointmentError.ERR_APPT_LATE_CANCELLATION,EntityContext.APPOINTMENT);
+            throw new BusinessRuleViolationException(
+                    AppointmentError.ERR_APPT_LATE_CANCELLATION, EntityContext.APPOINTMENT);
         }
 
         this.status = this.status.transitionTo(AppointmentStatus.Status.CANCELLED);
@@ -90,10 +98,12 @@ public class Appointment {
      */
     public void complete(ServiceDuration actualDuration, String clinicalNotes, String attendedBy) {
         if (actualDuration == null || actualDuration.getMinutes() <= 0) {
-            throw new BusinessRuleViolationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION,EntityContext.APPOINTMENT);
+            throw new BusinessRuleViolationException(
+                    AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, EntityContext.APPOINTMENT);
         }
         if (clinicalNotes == null || clinicalNotes.isBlank()) {
-            throw new BusinessRuleViolationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION,EntityContext.APPOINTMENT);
+            throw new BusinessRuleViolationException(
+                    AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, EntityContext.APPOINTMENT);
         }
 
         this.status = this.status.transitionTo(AppointmentStatus.Status.COMPLETED);
@@ -114,7 +124,7 @@ public class Appointment {
         this.lastUpdated = LocalDateTime.now();
     }
 
-    // QUERIES
+
 
     public boolean esFutura() {
         return this.start.isAfter(LocalDateTime.now());
@@ -133,11 +143,12 @@ public class Appointment {
                 candidateStart.isAfter(end) || candidateStart.equals(end));
     }
 
-    // GETTERS
+
 
     public AppointmentId getId() { return id; }
     public DentistId getDentistId() { return dentist; }
     public PatientId getPatientId() { return patient; }
+    public ServiceId getServiceId() { return serviceId; } // ✅ AÑADIDO
     public LocalDateTime getStart() { return start; }
     public LocalDateTime getEnd() { return end; }
     public AppointmentStatus getStatus() { return status; }
@@ -150,12 +161,12 @@ public class Appointment {
     public LocalDateTime getLastUpdated() { return lastUpdated; }
 
 
-    // BUILDER
 
     public static class Builder {
         private AppointmentId id;
         private DentistId dentist;
         private PatientId patient;
+        private ServiceId serviceId;
         private LocalDateTime start;
         private LocalDateTime end;
         private AppointmentStatus status = AppointmentStatus.scheduled();
@@ -177,6 +188,12 @@ public class Appointment {
 
         public Builder withPatientId(PatientId patient) {
             this.patient = patient;
+            return this;
+        }
+
+
+        public Builder withServiceId(ServiceId serviceId) {
+            this.serviceId = serviceId;
             return this;
         }
 
@@ -220,24 +237,45 @@ public class Appointment {
             return this;
         }
 
+
         public Appointment build() {
-            if (id == null) throw new IllegalArgumentException("AppointmentId is required");
-            if (dentist == null) throw new IllegalArgumentException("DentistId is required");
-            if (patient == null) throw new IllegalArgumentException("PatientId is required");
-            if (start == null) throw new IllegalArgumentException("Start time is required");
-            if (end == null) throw new IllegalArgumentException("End time is required");
+
+            if (id == null) {
+                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_ID,EntityContext.APPOINTMENT);
+            }
+            if (dentist == null) {
+                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_DENTIST,EntityContext.APPOINTMENT);
+            }
+            if (patient == null) {
+                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_PATIENT,EntityContext.APPOINTMENT);
+            }
+            if (serviceId == null) {
+                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_SERVICE,EntityContext.APPOINTMENT);
+            }
+            if (start == null) {
+                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_START,EntityContext.APPOINTMENT);
+            }
+            if (end == null) {
+
+                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_END,EntityContext.APPOINTMENT);
+            }
             if (reason == null || reason.isBlank()) {
-                throw new IllegalArgumentException("Reason is required");
+                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_REASON,EntityContext.APPOINTMENT);
             }
             if (appointmentType == null) {
-                throw new IllegalArgumentException("AppointmentType is required");
+                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_TYPE,EntityContext.APPOINTMENT);
             }
+
+
             if (!start.isBefore(end)) {
-                throw new IllegalArgumentException("Start must be before end");
+                throw new DomainAggregateException(AppointmentError.ERR_APPT_INVALID_DATE_RANGE,EntityContext.APPOINTMENT);
+            }
+
+            if (start.isBefore(LocalDateTime.now())) {
+                throw new DomainAggregateException(AppointmentError.ERR_APPT_PAST_DATE,EntityContext.APPOINTMENT);
             }
 
             return new Appointment(this);
         }
     }
 }
-

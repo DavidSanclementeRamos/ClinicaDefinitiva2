@@ -1,4 +1,4 @@
-## Documento: Motivos para la creación de la clase Schedule
+## ADR 01 (Cita): Motivos para la creación de la clase Schedule
 
 ## Contexto:
 En el dominio clínico existen varias responsabilidades relacionadas con la gestión temporal: disponibilidades declaradas (TimeSlot / WeeklyAvailability), horas contractuales (WorkingHours), y la agenda operativa (Appointment). Estas responsabilidades tienden a entrecruzarse cuando se realizan validaciones compuestas, decisiones de negocio o acciones transaccionales (por ejemplo: determinar si se puede agendar una cita, comprobar conflictos, calcular ventanas de cancelación, o evaluar restricciones antes de desactivar un profesional).

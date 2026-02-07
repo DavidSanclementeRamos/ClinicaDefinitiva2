@@ -1,7 +1,7 @@
 
 
 
-# ADR-19 (Dominio): Revisión de uso de queries de Schedule en validaciones de reagendamiento
+# ADR-05 (Dominio): Revisión de uso de queries de Schedule en validaciones de reagendamiento
 
 - Estado: Adoptado
 - Fecha: 2025-10-08

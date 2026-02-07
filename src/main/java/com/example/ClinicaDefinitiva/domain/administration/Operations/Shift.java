@@ -1,7 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.administration.Operations;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorSchedule.ShiftError;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ExcludedBlock;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftId;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftStatus;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 
@@ -10,11 +13,22 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Agregado: Shift (Turno Operativo)
- * Representa la presencia física del profesional en la clínica
- * Diferencia clave con Availability: Shift es presencia física, Availability es horario de atención
+ *
+ * ÚNICA FUENTE DE VERDAD para validar si un dentista puede atender en un momento dado.
+ *
+ * Responsabilidades:
+ * - Representar presencia física del profesional en la clínica
+ * - Modelar restricciones temporales (almuerzo, reuniones) mediante ExcludedBlocks
+ * - Validar si puede acomodar una cita en un intervalo específico
+ *
+ * Diferencia clave con WorkingHours:
+ * - WorkingHours: Contrato laboral recurrente (ej. "Lunes 8-17h")
+ * - Shift: Presencia operativa específica (ej. "15-Feb-2026 9-18h")
  */
 public class Shift {
 
@@ -26,11 +40,15 @@ public class Shift {
     private ShiftType type;
     private ShiftStatus status;
     private String cancellationReason;
+
+    // ✅ NUEVO: Bloques excluidos (almuerzo, reuniones, pausas)
+    private List<ExcludedBlock> excludedBlocks = new ArrayList<>();
+
     private Long version;
+
     private static final Duration MODIFICATION_WINDOW = Duration.ofHours(24);
 
-    protected Shift() {
-    }
+    protected Shift() {}
 
     private Shift(ShiftId id, DentistId dentistId, LocalDate date,
                   LocalTime startTime, LocalTime endTime, ShiftType type) {
@@ -41,58 +59,126 @@ public class Shift {
         this.endTime = endTime;
         this.type = type;
         this.status = ShiftStatus.active();
+        this.excludedBlocks = new ArrayList<>();
     }
 
-    // FACTORY METHODS
+    // FACTORY METHOD
 
     /**
      * RN-SHIFT-001: La hora de inicio debe ser anterior a la hora de fin
      * RN-SHIFT-008: No puede tener duración negativa o cero
      */
-    public static Shift create(DentistId dentistId, LocalDate date,
+    public static Shift create(ShiftId id, DentistId dentistId, LocalDate date,
                                LocalTime startTime, LocalTime endTime, ShiftType type) {
         if (dentistId == null) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_DENTIST_REQUIRED,EntityContext.SHIFT);
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_DENTIST_REQUIRED, EntityContext.SHIFT);
         }
         if (date == null) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_DATE_REQUIRED,EntityContext.SHIFT);
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_DATE_REQUIRED, EntityContext.SHIFT);
         }
         if (startTime == null || endTime == null) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_TIME_REQUIRED,EntityContext.SHIFT );
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_TIME_REQUIRED, EntityContext.SHIFT);
         }
         if (type == null) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_TYPE_REQUIRED,EntityContext.SHIFT);
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_TYPE_REQUIRED, EntityContext.SHIFT);
         }
-
-
-
         if (!startTime.isBefore(endTime)) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_INVALID_TIME_RANGE, EntityContext.SHIFT);
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_INVALID_TIME_RANGE, EntityContext.SHIFT);
         }
 
         Duration duration = Duration.between(startTime, endTime);
         if (duration.isZero() || duration.isNegative()) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_ZERO_DURATION, EntityContext.SHIFT);
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_ZERO_DURATION, EntityContext.SHIFT);
         }
 
-        return new Shift(null, dentistId, date, startTime, endTime, type);
+        return new Shift(id, dentistId, date, startTime, endTime, type);
     }
 
-    // OPERACIONES DE DOMINIO
+    // ✅ NUEVO: OPERACIONES DE DOMINIO PARA BLOQUES EXCLUIDOS
+
+    /**
+     * RN-SHIFT-010: Excluir bloque de tiempo (almuerzo, reunión, pausa)
+     */
+    public void excludeBlock(LocalTime blockStart, LocalTime blockEnd, String reason) {
+        if (blockStart == null || blockEnd == null) {
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_BLOCK_TIME_REQUIRED, EntityContext.SHIFT);
+        }
+        if (reason == null || reason.isBlank()) {
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_BLOCK_REASON_REQUIRED, EntityContext.SHIFT);
+        }
+        if (!blockStart.isBefore(blockEnd)) {
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_INVALID_TIME_RANGE, EntityContext.SHIFT);
+        }
+
+        // Validar que el bloque esté dentro del turno
+        if (blockStart.isBefore(this.startTime) || blockEnd.isAfter(this.endTime)) {
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_BLOCK_OUTSIDE_SHIFT, EntityContext.SHIFT);
+        }
+
+        ExcludedBlock newBlock = new ExcludedBlock(blockStart, blockEnd, reason);
+
+        // Validar que no se solape con otros bloques excluidos
+        for (ExcludedBlock existing : excludedBlocks) {
+            if (existing.overlapsWith(newBlock)) {
+                throw new BusinessRuleViolationException(
+                        ShiftError.ERR_SHIFT_BLOCK_OVERLAP, EntityContext.SHIFT);
+            }
+        }
+
+        excludedBlocks.add(newBlock);
+    }
+
+    /**
+     * RN-SHIFT-011: Verificar si puede acomodar una cita
+     *
+     * Esta es la ÚNICA validación temporal necesaria.
+     * Reemplaza la necesidad de Availability.
+     */
+    public boolean canAccommodateAppointment(LocalDateTime start, LocalDateTime end) {
+        if (!status.isActive()) {
+            return false;
+        }
+
+        // 1. Verificar que esté dentro del turno
+        if (!coversInterval(start, end)) {
+            return false;
+        }
+
+        // 2. Verificar que no caiga en ningún bloque excluido
+        for (ExcludedBlock block : excludedBlocks) {
+            if (block.overlapsWith(start.toLocalTime(), end.toLocalTime())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // OPERACIONES EXISTENTES (sin cambios)
 
     /**
      * RN-SHIFT-003: No puede solaparse con otro turno del mismo profesional
      */
     public boolean overlapsWith(Shift other) {
-        if (other == null){
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_OVERLAP_TARGET_REQUIRED,EntityContext.SHIFT);
+        if (other == null) {
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_OVERLAP_TARGET_REQUIRED, EntityContext.SHIFT);
         }
-        if(!this.date.equals(other.date)) {
-
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_OVERLAP_CONFLICT,EntityContext.SHIFT);
+        if (!this.date.equals(other.date)) {
+            return false;
         }
         if (!this.dentistId.equals(other.dentistId)) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_DENTIST_REQUIRED,EntityContext.SHIFT);
+            return false;
         }
         return this.startTime.isBefore(other.endTime) && this.endTime.isAfter(other.startTime);
     }
@@ -100,19 +186,23 @@ public class Shift {
     /**
      * RN-SHIFT-009: No puede modificarse si está dentro de 24h previas sin autorización
      */
-    public void reschedule(LocalDate newDate, LocalTime newStart, LocalTime newEnd, boolean hasAuthorization) {
+    public void reschedule(LocalDate newDate, LocalTime newStart, LocalTime newEnd,
+                           boolean hasAuthorization) {
         if (newDate == null || newStart == null || newEnd == null) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_RESCHEDULE_PARAMETERS_REQUIRED,EntityContext.SHIFT);
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_RESCHEDULE_PARAMETERS_REQUIRED, EntityContext.SHIFT);
         }
         if (!newStart.isBefore(newEnd)) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_INVALID_TIME_RANGE, EntityContext.SHIFT);
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_INVALID_TIME_RANGE, EntityContext.SHIFT);
         }
 
         LocalDateTime shiftDateTime = LocalDateTime.of(this.date, this.startTime);
         LocalDateTime now = LocalDateTime.now();
 
         if (shiftDateTime.minus(MODIFICATION_WINDOW).isBefore(now) && !hasAuthorization) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_LATE_MODIFICATION, EntityContext.SHIFT);
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_LATE_MODIFICATION, EntityContext.SHIFT);
         }
 
         this.date = newDate;
@@ -125,7 +215,8 @@ public class Shift {
      */
     public void cancel(String reason) {
         if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(ShiftError.ERR_SHIFT_CANCELLATION_REQUIRES_REASON, EntityContext.SHIFT);
+            throw new BusinessRuleViolationException(
+                    ShiftError.ERR_SHIFT_CANCELLATION_REQUIRES_REASON, EntityContext.SHIFT);
         }
         this.status = this.status.cancel();
         this.cancellationReason = reason;
@@ -159,6 +250,17 @@ public class Shift {
         return Duration.between(startTime, endTime);
     }
 
+    /**
+     * Calcula tiempo neto disponible (turno - bloques excluidos)
+     */
+    public Duration getNetAvailableTime() {
+        Duration total = getDuration();
+        Duration excluded = excludedBlocks.stream()
+                .map(ExcludedBlock::getDuration)
+                .reduce(Duration.ZERO, Duration::plus);
+        return total.minus(excluded);
+    }
+
     public int getDurationInHours() {
         return (int) getDuration().toHours();
     }
@@ -179,43 +281,18 @@ public class Shift {
         return shiftStart.isAfter(now) && !shiftStart.isAfter(limit);
     }
 
-   // GETTERS
+    // GETTERS
 
-    public ShiftId getId() {
-        return id;
-    }
-
-    public DentistId getDentistId() {
-        return dentistId;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public ShiftType getType() {
-        return type;
-    }
-
-    public ShiftStatus getStatus() {
-        return status;
-    }
-
-    public String getCancellationReason() {
-        return cancellationReason;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
+    public ShiftId getId() { return id; }
+    public DentistId getDentistId() { return dentistId; }
+    public LocalDate getDate() { return date; }
+    public LocalTime getStartTime() { return startTime; }
+    public LocalTime getEndTime() { return endTime; }
+    public ShiftType getType() { return type; }
+    public ShiftStatus getStatus() { return status; }
+    public String getCancellationReason() { return cancellationReason; }
+    public List<ExcludedBlock> getExcludedBlocks() { return List.copyOf(excludedBlocks); }
+    public Long getVersion() { return version; }
 
     @Override
     public boolean equals(Object o) {
@@ -229,4 +306,8 @@ public class Shift {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    // ✅ NUEVO: VALUE OBJECT INTERNO PARA BLOQUES EXCLUIDOS
+
+
 }

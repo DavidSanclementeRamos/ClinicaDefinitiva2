@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.UpdateRe
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.UpdateReceptionistSensitiveDto;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftId;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.springframework.stereotype.Component;
 
