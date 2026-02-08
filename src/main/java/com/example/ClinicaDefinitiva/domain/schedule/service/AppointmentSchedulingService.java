@@ -2,7 +2,6 @@ package com.example.ClinicaDefinitiva.domain.schedule.service;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.actor.service.DentistCanScheduleBetween;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftRepository;
@@ -31,17 +30,14 @@ public class AppointmentSchedulingService {
 
     private final AppointmentRepository appointmentRepository;
     private final ShiftRepository shiftRepository;
-    private final DentistCanScheduleBetween dentistCanScheduleBetween;
     private final ScheduleQueryService scheduleQueryService;
 
     public AppointmentSchedulingService(
             AppointmentRepository appointmentRepository,
             ShiftRepository shiftRepository,
-            DentistCanScheduleBetween dentistCanScheduleBetween,
             ScheduleQueryService scheduleQueryService) {
         this.appointmentRepository = appointmentRepository;
         this.shiftRepository = shiftRepository;
-        this.dentistCanScheduleBetween = dentistCanScheduleBetween;
         this.scheduleQueryService = scheduleQueryService;
     }
 
@@ -61,11 +57,9 @@ public class AppointmentSchedulingService {
             LocalDateTime end,
             AppointmentType type,
             String reason,
-            ProvidedService service,
-            UserIdentity user) {
+            ProvidedService service
+             ) {
 
-        dentistCanScheduleBetween.canScheduleBetween(user, start, end);
-        patient.canScheduleBetween(user, start, end);
 
         Shift shift = ensureShiftCoverage(dentist.getDentistId(), start, end);
 
@@ -94,8 +88,8 @@ public class AppointmentSchedulingService {
             Dentist dentist,
             Patient patient,
             LocalDateTime newStart,
-            LocalDateTime newEnd,
-            UserIdentity user) {
+            LocalDateTime newEnd
+             ) {
 
         if (!original.getStatus().isEditable()) {
             throw new BusinessRuleViolationException(
@@ -107,8 +101,6 @@ public class AppointmentSchedulingService {
                     AppointmentError.ERR_APPT_MINIMUM_RESCHEDULE_NOTICE, EntityContext.APPOINTMENT);
         }
 
-        dentistCanScheduleBetween.canScheduleBetween(user, newStart, newEnd);
-        patient.canScheduleBetween(user, newStart, newEnd);
 
         ensureShiftCoverage(dentist.getDentistId(), newStart, newEnd);
 

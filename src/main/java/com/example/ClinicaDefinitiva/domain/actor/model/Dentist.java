@@ -97,6 +97,7 @@ public class Dentist   {
 
 
     public void canScheduleBetween( LocalDateTime start, LocalDateTime end) {
+
         ensureEditable();
         if (!workingHours.isWithinRange(start, end)) {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_OUT_OF_WORKING_HOURS, EntityContext.DENTIST);
@@ -120,7 +121,7 @@ public class Dentist   {
     }*/
 
     // LO MISMO QUE LA ANTERIOR
-     public void validateReschedule(UserIdentity user,LocalDateTime start, LocalDateTime end) {
+     public void validateReschedule( LocalDateTime start, LocalDateTime end) {
 
         if (!canWorkBetween(start, end)) {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_RESCHEDULE_OUT_OF_WORKING_HOURS, EntityContext.DENTIST);

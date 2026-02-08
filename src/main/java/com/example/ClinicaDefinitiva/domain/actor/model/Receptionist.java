@@ -32,14 +32,6 @@ public class Receptionist   {
     }
 
 
-    // DELEGAR A UN SERVICE LA EVALUACION DE PODER CANCELAR, ALGO PARECIDO A USER
-   /** // Validación 3: Solo puede cancelar citas si esta activo
-    public void cancelAppointment(Appointment appointment) {
-        // 1. Validar que el actor está activo
-
-        // 2. Delegar la cancelación a la cita
-        appointment.cancel();
-    }*/
 
     public void updateContactData(Address address, PhoneNumber phoneNumber) {
         Person data = new Person();

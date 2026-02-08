@@ -9,7 +9,7 @@ public final class DentalServiceValidation {
     private DentalServiceValidation() {}
 
     public static void validateCreateDto(CreateProvidedServiceDto dto) {
-        String type = dto.serviceType == null ? (dto.catalog.category == null ? null : dto.catalog.category).toUpperCase()) : dto.serviceType.toUpperCase();
+        String type = dto.serviceType == null ? (dto.catalog.category == null ? null : dto.catalog.category).toUpperCase())dto.serviceType.toUpperCase();
 
         switch (type) {
             case "ORTHODONTIC" -> {
