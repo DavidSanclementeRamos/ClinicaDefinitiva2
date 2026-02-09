@@ -48,8 +48,8 @@ public class DentistReadEntityMapper {
                 DentistAvailabilityStatus.from(
                         DentistAvailabilityStatus.Status.valueOf(entity.getAvailabilityStatus())
                 ),
-                entity.getLastUpdate()
+                entity.getLastUpdate(),
 
-        );
+                , , , , , );
     }
 }
