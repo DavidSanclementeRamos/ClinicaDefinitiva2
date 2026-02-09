@@ -62,10 +62,18 @@ public class Patient  {
                                     String documentoEPS, FullName fullname) {
 
 
-        // LA VALIDACION DE SERVICIOS ACTIVOS EN LAS PÓCIMAS 2 HORAS DEBE IR EN UN DOMAIN SERVICE
-        /** if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_ACTIVE_SERVICES, EntityContext.PATIENT);
-        }**/
+        /** NOTA: Validación comentada intencionalmente.
+         * Regla propuesta: impedir que paciente/guardián modifiquen datos sensibles
+         * si tienen cita en las próximas 24h.
+         * Decisión actual: NO implementar aún, porque puede ser demasiado rígido.
+         * Solución futura: permitir cambios, pero registrar auditoría y notificar al personal.
+         * Esto asegura trazabilidad sin bloquear modificaciones urgentes.
+
+         if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
+         throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_ACTIVE_SERVICES, EntityContext.PATIENT);
+         }**/
+
+
         Person data = new Person();
         this.person = data.updateSensitive(
                 age,

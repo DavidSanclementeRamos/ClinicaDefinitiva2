@@ -59,8 +59,14 @@ public class Guardian  {
                                     String documentoEPS, FullName fullname, TypeGuardian typeGuardian) {
 
 
-        // LA VALIDACION DE VE SER  MIGRAR A DOMAIN SERVICE
-       /** if (this.schedule != null && this.schedule.hasAppointmentsWithinHour(24)) {
+        /** NOTA: Validación comentada intencionalmente.
+         * Regla propuesta: impedir que paciente/guardián modifiquen datos sensibles
+         * si tienen cita en las próximas 24h.
+         * Decisión actual: NO implementar aún, porque puede ser demasiado rígido.
+         * Solución futura: permitir cambios, pero registrar auditoría y notificar al personal.
+         * Esto asegura trazabilidad sin bloquear modificaciones urgentes.
+
+        if (this.schedule != null && this.schedule.hasAppointmentsWithinHour(24)) {
             throw new BusinessRuleViolationException(
                     ErrorCatalogXD.ERR_PATIENT_CANNOT_MODIFY_BIRTHDATE_WITH_HISTORY,
                     EntityContext.PATIENT,

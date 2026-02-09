@@ -16,7 +16,7 @@ public class DentistReadEntityMapper {
 
 // De Entity a Dominio
 
-    public  Dentist toDomain(DentistEntity entity) {
+    public Dentist toDomain(DentistEntity entity) {
         if (entity == null) return null;
 
         // specialties seguro contra null

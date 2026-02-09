@@ -120,4 +120,5 @@ public class Dentist   {
     public UserId getUserId() { return userId; }
     public LocalDateTime getLastUpdate() { return lastUpdate; }
 
+
 }

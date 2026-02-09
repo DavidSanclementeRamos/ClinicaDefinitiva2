@@ -117,7 +117,69 @@ public enum ShiftError implements ErrorCatalog {
             "RN-SHIFT-016",
             "error.shift.noActiveCoverage",
             "El dentista no tiene turno activo en ese horario"
-    );
+    ),
+ /**
+  * RN-SHIFT-017: Excluir bloque de tiempo (almuerzo, reunión, pausa)
+  */
+ ERR_SHIFT_BLOCK_TIME_REQUIRED(
+         "RN-SHIFT-017",
+         "error.shift.block.timeRequired",
+         "El bloque de tiempo debe tener hora de inicio y fin"
+ ),
+
+ /**
+  * RN-SHIFT-018: Razón obligatoria para el bloque
+  */
+ ERR_SHIFT_BLOCK_REASON_REQUIRED(
+         "RN-SHIFT-018",
+         "error.shift.block.reasonRequired",
+         "Debe especificarse la razón del bloque de tiempo"
+ ),
+
+ /**
+  * RN-SHIFT-019: Rango de tiempo inválido
+
+ ERR_SHIFT_INVALID_TIME_RANGE(
+         "RN-SHIFT-019",
+         "error.shift.invalidTimeRange",
+         "La hora de inicio debe ser anterior a la hora de fin"
+ ),*/
+
+ /**
+  * RN-SHIFT-020: Bloque fuera del turno
+  */
+ ERR_SHIFT_BLOCK_OUTSIDE_SHIFT(
+         "RN-SHIFT-020",
+         "error.shift.block.outsideShift",
+         "El bloque de tiempo debe estar dentro del turno asignado"
+ ),
+
+ /**
+  * RN-SHIFT-021: Bloque solapado
+  */
+ ERR_SHIFT_BLOCK_OVERLAP(
+         "RN-SHIFT-021",
+         "error.shift.block.overlap",
+         "El bloque de tiempo se solapa con otro bloque ya excluido"
+ ),
+
+ /**
+  * RN-SHIFT-022: Cita fuera del turno
+  */
+ ERR_SHIFT_APPOINTMENT_OUTSIDE_SHIFT(
+         "RN-SHIFT-022",
+         "error.shift.appointment.outsideShift",
+         "La cita no está cubierta por el turno activo"
+ );
+
+ /**
+  * RN-SHIFT-016: Validación de turno activo (ya existente)
+
+ ERR_SHIFT_NO_ACTIVE_COVERAGE(
+         "RN-SHIFT-016",
+         "error.shift.noActiveCoverage",
+         "El dentista no tiene turno activo en ese horario"
+ );*/
 
     private final String code;
     private final String messageKey;

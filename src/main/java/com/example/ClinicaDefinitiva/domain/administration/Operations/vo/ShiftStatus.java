@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.administration.Operations;
+package com.example.ClinicaDefinitiva.domain.administration.Operations.vo;
 
 import java.util.EnumMap;
 import java.util.EnumSet;

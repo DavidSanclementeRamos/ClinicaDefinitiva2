@@ -7,7 +7,6 @@ import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftSt
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,12 +39,8 @@ public class Shift {
     private ShiftType type;
     private ShiftStatus status;
     private String cancellationReason;
-
-    // ✅ NUEVO: Bloques excluidos (almuerzo, reuniones, pausas)
     private List<ExcludedBlock> excludedBlocks = new ArrayList<>();
-
     private Long version;
-
     private static final Duration MODIFICATION_WINDOW = Duration.ofHours(24);
 
     protected Shift() {}
@@ -62,7 +57,6 @@ public class Shift {
         this.excludedBlocks = new ArrayList<>();
     }
 
-    // FACTORY METHOD
 
     /**
      * RN-SHIFT-001: La hora de inicio debe ser anterior a la hora de fin
@@ -100,7 +94,6 @@ public class Shift {
         return new Shift(id, dentistId, date, startTime, endTime, type);
     }
 
-    // ✅ NUEVO: OPERACIONES DE DOMINIO PARA BLOQUES EXCLUIDOS
 
     /**
      * RN-SHIFT-010: Excluir bloque de tiempo (almuerzo, reunión, pausa)
@@ -149,12 +142,11 @@ public class Shift {
             return false;
         }
 
-        // 1. Verificar que esté dentro del turno
+
         if (!coversInterval(start, end)) {
             return false;
         }
 
-        // 2. Verificar que no caiga en ningún bloque excluido
         for (ExcludedBlock block : excludedBlocks) {
             if (block.overlapsWith(start.toLocalTime(), end.toLocalTime())) {
                 return false;
@@ -164,7 +156,6 @@ public class Shift {
         return true;
     }
 
-    // OPERACIONES EXISTENTES (sin cambios)
 
     /**
      * RN-SHIFT-003: No puede solaparse con otro turno del mismo profesional
@@ -222,7 +213,7 @@ public class Shift {
         this.cancellationReason = reason;
     }
 
-    // QUERIES
+
 
     /**
      * Verifica si el turno cubre un momento específico
@@ -281,7 +272,6 @@ public class Shift {
         return shiftStart.isAfter(now) && !shiftStart.isAfter(limit);
     }
 
-    // GETTERS
 
     public ShiftId getId() { return id; }
     public DentistId getDentistId() { return dentistId; }
@@ -307,7 +297,6 @@ public class Shift {
         return Objects.hash(id);
     }
 
-    // ✅ NUEVO: VALUE OBJECT INTERNO PARA BLOQUES EXCLUIDOS
 
 
 }

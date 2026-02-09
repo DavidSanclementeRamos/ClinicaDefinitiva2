@@ -55,13 +55,12 @@ public final class WorkingHours {
     }
 
     // Nuevo: validar rango completo
-    public boolean isWithinRange(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public boolean isWithinRange(LocalTime startDateTime, LocalTime endDateTime,DayOfWeek day ) {
         if (startDateTime == null || endDateTime == null) return false;
 
-        return startDateTime.getDayOfWeek().equals(dayOfWeek)
-                && endDateTime.getDayOfWeek().equals(dayOfWeek)
-                && !startDateTime.toLocalTime().isBefore(start)
-                && !endDateTime.toLocalTime().isAfter(end);
+        return day.equals(dayOfWeek)
+                && !startDateTime.isBefore(start)
+                && !endDateTime.isAfter(end);
     }
     /** Se usa para validar reglas de cumplimiento:
       ¿el dentista está cumpliendo con lo que declaró como su jornada oficial?
@@ -69,11 +68,6 @@ public final class WorkingHours {
         return availability.totalHoras() >= this.declaredHoursPerWeek;
     }*/
 
-   /** public boolean cubre(TimeSlot slot) {
-        if (slot == null) return false;
-        if (!slot.getDayOfWeek().equals(this.dayOfWeek)) return false;
-        return !slot.getInicio().isBefore(start) && !slot.getFin().isAfter(end);
-    } */
 
     public Duration duracionTotal() {
         return Duration.between(start, end);
