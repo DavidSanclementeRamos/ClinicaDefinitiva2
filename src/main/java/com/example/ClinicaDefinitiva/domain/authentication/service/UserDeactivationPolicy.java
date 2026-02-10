@@ -1,5 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.authentication.service;
 
+import com.example.ClinicaDefinitiva.application.exceptions.Admistration.ReceptionNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
@@ -13,6 +14,7 @@ import com.example.ClinicaDefinitiva.domain.actor.service.PatientDeactivationVal
 import com.example.ClinicaDefinitiva.domain.actor.service.ReceptionistDeactivationValidator;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
+
 
 public class UserDeactivationPolicy {
     private final DentistRepository dentistRepo;
@@ -55,12 +57,12 @@ public class UserDeactivationPolicy {
         }
 
 
-        Receptionist receptionist = receptionistRepo.findByUserId(user.getId());
-        if (receptionist != null ) {
+        Receptionist receptionist = receptionistRepo.findByUserId(user.getId())
+                .orElseThrow(()-> new ReceptionNotFoundException(""));
+        if (receptionist != null) {
             result = result.merge(receptionValidator.validate(receptionist.getId()));
 
         }
-
         return result;
     }
 }

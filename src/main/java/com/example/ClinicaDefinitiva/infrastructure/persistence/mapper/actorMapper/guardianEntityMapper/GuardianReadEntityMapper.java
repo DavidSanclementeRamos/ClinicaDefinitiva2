@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMap
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.GuardianEntity;
 
 import java.time.LocalDate;
@@ -52,7 +52,7 @@ public class GuardianReadEntityMapper {
                 patientIds,
                 person,
                 entity.getTypeGuardian(),
-                new UserId(entity.getUser())
+                new UserIdentityId(entity.getUser())
         );
     }
    }

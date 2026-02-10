@@ -112,7 +112,7 @@ public class DomainAuthenticationProvider implements AuthenticationProvider {
             
             // Convertir a formato Spring Security
             return new UsernamePasswordAuthenticationToken(
-                result.userId(),
+                result.userIdentityId(),
                 null,
                 result.authorities()
             );
@@ -139,7 +139,7 @@ public class DomainAuthenticationProvider implements AuthenticationProvider {
 @Transactional
 public class AuthenticationService implements AuthenticateUserUseCase {
     
-    private final UserRepositoryPort userRepository;
+    private final UserRepositoryPort userIdentityRepository;
     private final PasswordEncoder passwordEncoder;  // Spring Security bean
     private final TokenServicePort tokenService;
     
@@ -148,7 +148,7 @@ public class AuthenticationService implements AuthenticateUserUseCase {
         Instant now = Instant.now();
         
         // 1. Obtener usuario
-        UserIdentity user = userRepository.findByEmail(command.email())
+        UserIdentity user = userIdentityRepository.findByEmail(command.email())
             .orElseThrow(() -> new InvalidCredentialsException());
         
         // 2. Validar contraseña con Spring Security
@@ -160,7 +160,7 @@ public class AuthenticationService implements AuthenticateUserUseCase {
         if (!passwordMatches) {
             // 3. Registrar fallo (lógica de dominio)
             user.recordFailedLogin(now);
-            userRepository.save(user);
+            userIdentityRepository.save(user);
             throw new InvalidCredentialsException();
         }
         
@@ -172,7 +172,7 @@ public class AuthenticationService implements AuthenticateUserUseCase {
         
         // 5. Registrar éxito (lógica de dominio)
         user.recordSuccessfulLogin(now);
-        userRepository.save(user);
+        userIdentityRepository.save(user);
         
         // 6. Crear token con Spring Security
         String token = tokenService.createToken(user.getId(), user.getRoles());
@@ -193,7 +193,7 @@ public class AuthenticationService implements AuthenticateUserUseCase {
 @Transactional
 public class RegistrationService implements RegisterUserUseCase {
     
-    private final UserRepositoryPort userRepository;
+    private final UserRepositoryPort userIdentityRepository;
     private final PasswordEncoder passwordEncoder;  // Spring Security
     private final EmailSenderPort emailSender;
     
@@ -202,7 +202,7 @@ public class RegistrationService implements RegisterUserUseCase {
         Email email = new Email(command.email());
         
         // 1. Validar unicidad (Application Service)
-        if (userRepository.existsByEmail(email)) {
+        if (userIdentityRepository.existsByEmail(email)) {
             throw new EmailAlreadyExistsException(email);
         }
         
@@ -218,7 +218,7 @@ public class RegistrationService implements RegisterUserUseCase {
         );
         
         // 4. Persistir
-        UserIdentity saved = userRepository.save(user);
+        UserIdentity saved = userIdentityRepository.save(user);
         
         // 5. Enviar email de verificación
         VerificationToken token = VerificationToken.generate();
@@ -247,12 +247,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = extractToken(request);
         
         if (token != null) {
-            Optional<UserId> userId = tokenService.validateToken(token);
+            Optional<UserId> userIdentityId = tokenService.validateToken(token);
             
-            if (userId.isPresent()) {
+            if (userIdentityId.isPresent()) {
                 // Autenticar en contexto Spring Security
                 Authentication auth = new UsernamePasswordAuthenticationToken(
-                    userId.get(),
+                    userIdentityId.get(),
                     null,
                     Collections.emptyList()
                 );
@@ -324,7 +324,7 @@ public class AuthenticationService implements AuthenticateUserUseCase {
         // ... autenticación ...
         
         user.recordSuccessfulLogin(now);
-        userRepository.save(user);
+        userIdentityRepository.save(user);
         
         // Emitir evento
         eventPublisher.publishEvent(new UserLoggedInEvent(
@@ -345,7 +345,7 @@ public class UserEventListener {
     @EventListener
     public void onUserLoggedIn(UserLoggedInEvent event) {
         auditRepo.save(new AuditLog(
-            event.userId(),
+            event.userIdentityId(),
             "USER_LOGIN",
             event.timestamp()
         ));

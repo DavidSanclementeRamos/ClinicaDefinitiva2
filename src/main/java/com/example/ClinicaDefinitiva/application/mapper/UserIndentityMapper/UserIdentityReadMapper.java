@@ -11,7 +11,7 @@ public class UserIdentityReadMapper {
     // dominio → DTO de lectura completo
     public ReadUserIdentityDto toDto(UserIdentity user) {
         return new ReadUserIdentityDto(
-                user.getId().getValue(),
+                user.getId().value(),
                 user.getEmail().value(),
                 user.getName().getValue(),
                 user.getCreatedAt(),
@@ -27,7 +27,7 @@ public class UserIdentityReadMapper {
     // dominio → DTO resumido (ej. para listados/paginación)
     public PageUserIdentityDto pageToDto(UserIdentity user) {
         return new PageUserIdentityDto(
-                user.getId().getValue(),
+                user.getId().value(),
                 user.getEmail().value(),
                 user.getName().getValue(),
                 user.isVerified(),

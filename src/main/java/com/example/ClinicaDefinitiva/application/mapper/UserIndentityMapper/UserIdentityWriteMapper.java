@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.user.UpdateUserIdentityDto;
 import com.example.ClinicaDefinitiva.domain.Email;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserName;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -19,7 +19,7 @@ public class UserIdentityWriteMapper {
                  // se genera nuevo ID
                 new Email(dto.email()),
                new HashedPassword(dto.password()),
-                new UserName(dto.name()),
+                new UserIdentityName(dto.name()),
                 Instant.now() // fecha de creación
         );
     }
@@ -27,7 +27,7 @@ public class UserIdentityWriteMapper {
     // DTO de actualización → dominio (aplica cambios sobre agregado existente)
     public void dtoUpdateToUserIdentity(UpdateUserIdentityDto dto, UserIdentity user) {
         user.editUserData(
-                new UserName(dto.name()),
+                new UserIdentityName(dto.name()),
 
                 new Email(dto.email()),
                 new HashedPassword(dto.password()),

@@ -156,8 +156,8 @@ public void reschedule(LocalDateTime newDateTime) {
 public class UserAccessValidator {
     
     // Consume Outcome (módulo técnico)
-    public void validateUserCanPerformSensitiveAction(UserId userId, ...) {
-        UserIdentity user = userRepo.findById(userId)...;
+    public void validateUserCanPerformSensitiveAction(UserId userIdentityId, ...) {
+        UserIdentity user = userRepo.findById(userIdentityId)...;
         
         Outcome eligibility = user.canPerformSensitiveAction(now);
         

@@ -13,14 +13,14 @@ import java.time.LocalDate;
  */
 public record CompanyResponse(
         String id,
-        NameDto name,
-        NitDto taxIdentificationNumber,
+        //NameDto name,
+        //NitDto taxIdentificationNumber,
         TypePerson typePerson,
         TaxRegime taxRegime,
         String legalRepresentative,
-        AddressDto address,
-        PhoneNumberDto phoneNumber,
-        EmailDto email,
+        //AddressDto address,
+        //PhoneNumberDto phoneNumber,
+        //EmailDto email,
         LocalDate incorporationDate,
         CompanyStatus.Status status
 ) {}

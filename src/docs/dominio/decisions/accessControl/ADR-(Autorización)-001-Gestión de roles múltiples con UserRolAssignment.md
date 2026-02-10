@@ -64,15 +64,15 @@ Cada asignación relaciona usuario + rol + vigencia + prioridad
 ```java
 public class UserRolAssignment {
     private Long id;
-    private UserId userId;
+    private UserId userIdentityId;
     private Long rolId;
     private LocalDate validFrom;    // Inicio de vigencia
     private LocalDate validTo;      // Fin de vigencia (null = permanente)
     private boolean isPrimary;      // Rol principal (UI)
     
     // Factory methods
-    static UserRolAssignment assignPermanent(UserId userId, Long rolId, boolean isPrimary);
-    static UserRolAssignment assignTemporary(UserId userId, Long rolId, LocalDate from, LocalDate to);
+    static UserRolAssignment assignPermanent(UserId userIdentityId, Long rolId, boolean isPrimary);
+    static UserRolAssignment assignTemporary(UserId userIdentityId, Long rolId, LocalDate from, LocalDate to);
     
     // Queries
     boolean isActiveAt(LocalDate date);
@@ -90,14 +90,14 @@ public class UserRolAssignment {
 public class UserRolService {
     
     // Queries
-    List<Rol> getActiveRoles(UserId userId);
-    Rol getPrimaryRole(UserId userId);
+    List<Rol> getActiveRoles(UserId userIdentityId);
+    Rol getPrimaryRole(UserId userIdentityId);
     
     // Commands
-    UserRolAssignment assignRole(UserId userId, Long rolId, boolean isPrimary);
-    UserRolAssignment assignTemporaryRole(UserId userId, Long rolId, LocalDate from, LocalDate to);
-    void revokeRole(UserId userId, Long rolId);
-    void revokeAllRoles(UserId userId);
+    UserRolAssignment assignRole(UserId userIdentityId, Long rolId, boolean isPrimary);
+    UserRolAssignment assignTemporaryRole(UserId userIdentityId, Long rolId, LocalDate from, LocalDate to);
+    void revokeRole(UserId userIdentityId, Long rolId);
+    void revokeAllRoles(UserId userIdentityId);
 }
 ```
 
@@ -242,7 +242,7 @@ RESULTADO: ✓ Autorizado (al menos un rol permitió)
 public void updatePatient(UpdatePatientCommand cmd, Rol activeRol) {
     // Registrar qué rol usó
     auditService.record(new AuditEvent(
-        userId: cmd.userId(),
+        userIdentityId: cmd.userIdentityId(),
         rolUsed: activeRol.getRolEnum(),  // ← GUARDIAN
         action: "UPDATE_PATIENT",
         resourceId: cmd.patientId()
@@ -283,15 +283,15 @@ public void updatePatient(UpdatePatientCommand cmd, Rol activeRol) {
 ```java
 // Cache de roles por usuario
 @Cacheable("user-roles")
-public List<Rol> getActiveRoles(UserId userId) { ... }
+public List<Rol> getActiveRoles(UserId userIdentityId) { ... }
 ```
 
 **Complejidad:**
 ```java
 // Helpers para casos comunes
-userRolService.assignPermanent(userId, rolId, isPrimary);
+userRolService.assignPermanent(userIdentityId, rolId, isPrimary);
 // vs
-new UserRolAssignment(userId, rolId, LocalDate.now(), null, isPrimary);
+new UserRolAssignment(userIdentityId, rolId, LocalDate.now(), null, isPrimary);
 ```
 
 ---

@@ -65,8 +65,8 @@ public record OutcomeDetail(
 ┌─────────────────────────────────────────────────────────────────┐
 │  APPLICATION SERVICE (Capa de Aplicación)                       │
 │                                                                 │
-│  public void deactivateUser(UserId userId) {                   │
-│      UserIdentity user = userRepo.findById(userId);            │
+│  public void deactivateUser(UserId userIdentityId) {                   │
+│      UserIdentity user = userRepo.findById(userIdentityId);            │
 │                                                                 │
 │      // 1. Invocar policy (orquestador)                        │
 │      Outcome<Void> validation =                                │
@@ -272,10 +272,10 @@ public class DeactivateUserUseCase {
     private final UserRepository userRepo;
     private final UserDeactivationPolicy deactivationPolicy;
     
-    public void execute(UserId userId) {
+    public void execute(UserId userIdentityId) {
         // 1. Obtener usuario
-        UserIdentity user = userRepo.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException(userId));
+        UserIdentity user = userRepo.findById(userIdentityId)
+            .orElseThrow(() -> new UserNotFoundException(userIdentityId));
         
         // 2. Validar con policy (acumula TODOS los errores)
         Outcome<Void> validation = deactivationPolicy.validate(user);

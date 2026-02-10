@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.model.U
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.UserRolAssignmentRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.UserRolAssignmentId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.authorization.UserRolAssignmentJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.authorization.UserRolAssignmentEntityMapper;
 
@@ -37,8 +37,8 @@ public class UserRolAssignmentAdapter implements UserRolAssignmentRepository {
 
 
     @Override
-    public Optional<UserRolAssignment> findByUserIdAndIsPrimary(UserId userId, boolean isPrimary) {
-        return jpaRepository.findByUserIdAndPrimary(userId.getValue(), isPrimary)
+    public Optional<UserRolAssignment> findByUserIdAndIsPrimary(UserIdentityId userIdentityId, boolean isPrimary) {
+        return jpaRepository.findByUserIdAndPrimary(userIdentityId.value(), isPrimary)
                 .map(mapper::toDomain);
     }
 
@@ -53,14 +53,14 @@ public class UserRolAssignmentAdapter implements UserRolAssignmentRepository {
     }
 
     @Override
-    public List<UserRolAssignment> findByUserId(UserId userId) {
-        return jpaRepository.findByUserId(userId.getValue())
+    public List<UserRolAssignment> findByUserId(UserIdentityId userIdentityId) {
+        return jpaRepository.findByUserId(userIdentityId.value())
                 .stream().map(mapper::toDomain).toList();
     }
 
 
     @Override
-    public List<UserRolAssignment> findByUserIdAndRolId(UserId userId, RolId rolId) {
-        return  jpaRepository.findByUserIdAndRolId(userId.getValue(), rolId.getValue())
+    public List<UserRolAssignment> findByUserIdAndRolId(UserIdentityId userIdentityId, RolId rolId) {
+        return  jpaRepository.findByUserIdAndRolId(userIdentityId.value(), rolId.getValue())
                 .stream().map(mapper::toDomain).toList(); }
 }

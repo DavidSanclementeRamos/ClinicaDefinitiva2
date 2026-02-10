@@ -102,7 +102,7 @@ SecurityContext.builder(Permission.update(ResourceCatalog.of(RECEPCIONISTA)), re
 
 **Ejemplo correcto: editar usuario**
 ```java
-User user = userRepository.findByUserId(UserId.of(userId));
+User user = userIdentityRepository.findByUserId(UserId.of(userIdentityId));
 UserId requesterId = SecurityUtils.getCurrentUserId();
 
 SecurityContext context = SecurityContext

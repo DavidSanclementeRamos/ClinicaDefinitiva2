@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Secu
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.policies.PermissionPolicy;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 
 /**
  * Política de propiedad - usuarios solo pueden operar sobre sus propios recursos
@@ -44,18 +44,18 @@ public class OwnershipPolicy implements PermissionPolicy {
     }
 
     private boolean checkOwnership(SecurityContext context) {
-        UserId requestingUserId = context.getRequestingUserId();
-        UserId resourceOwnerId = context.getAttribute("resourceOwnerId", UserId.class).orElse(null);
+        UserIdentityId requestingUserIdentityId = context.getRequestingUserId();
+        UserIdentityId resourceOwnerId = context.getAttribute("resourceOwnerId", UserIdentityId.class).orElse(null);
 
-        if (requestingUserId == null || resourceOwnerId == null) {
+        if (requestingUserIdentityId == null || resourceOwnerId == null) {
             return false; // Sin información suficiente, denegar
         }
 
-        return requestingUserId.equals(resourceOwnerId);
+        return requestingUserIdentityId.equals(resourceOwnerId);
     }
 
     private boolean checkGuardianship(SecurityContext context) {
-        Long requestingGuardianId = context.getRequestingUserId().getValue();
+        Long requestingGuardianId = context.getRequestingUserId().value();
         Long patientGuardianId = context.getAttribute("patientGuardianId", Long.class).orElse(null);
 
         if (patientGuardianId == null) {

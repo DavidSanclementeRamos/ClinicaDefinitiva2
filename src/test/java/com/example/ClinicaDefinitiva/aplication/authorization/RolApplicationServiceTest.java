@@ -19,7 +19,7 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.Authori
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -80,7 +80,7 @@ class RolApplicationServiceTest {
     private RolApplicationService service;
 
     // Test Data
-    private UserId requesterId;
+    private UserIdentityId requesterId;
     private RolId requesterRolId;
     private RolId targetRoleId;
     private Receptionist receptionist;
@@ -90,7 +90,7 @@ class RolApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
-        requesterId = UserId.from(1L);
+        requesterId = UserIdentityId.from(1L);
         requesterRolId = RolId.of(1L);
         targetRoleId = RolId.of(2L);
 

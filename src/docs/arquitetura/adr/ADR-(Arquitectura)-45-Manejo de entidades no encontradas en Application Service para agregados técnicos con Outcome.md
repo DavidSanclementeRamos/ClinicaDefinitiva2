@@ -62,10 +62,10 @@ Ejemplo en `UserApplicationService`:
 
 ```java
 @Override
-public ReadUserIdentityDto recordSuccessfulLogin(Long userId) {
-    UserIdentity user = userRepository.findIdentity(UserId.from(userId));
+public ReadUserIdentityDto recordSuccessfulLogin(Long userIdentityId) {
+    UserIdentity user = userIdentityRepository.findIdentity(UserId.from(userIdentityId));
     if (user == null) {
-        throw new AggregateNotFoundException("UserIdentity not found with id " + userId);
+        throw new AggregateNotFoundException("UserIdentity not found with id " + userIdentityId);
     }
 
     Outcome<UserIdentity> outcome = user.recordSuccessfulLogin(Instant.now());
@@ -73,7 +73,7 @@ public ReadUserIdentityDto recordSuccessfulLogin(Long userId) {
         throw new AggregateBusinessRuleViolationException(outcome.getDetalles());
     }
 
-    userRepository.save(user);
+    userIdentityRepository.save(user);
     return readMapper.toDto(user);
 }
 ```

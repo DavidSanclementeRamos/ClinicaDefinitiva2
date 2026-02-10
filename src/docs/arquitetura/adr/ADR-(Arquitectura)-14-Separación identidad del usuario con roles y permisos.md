@@ -31,14 +31,14 @@ Positivas
 
 Negativas
 - Mayor complejidad inicial en la arquitectura.
-- Necesidad de sincronizar datos entre módulos (userId como referencia).
+- Necesidad de sincronizar datos entre módulos (userIdentityId como referencia).
 - Requiere documentación y formación adicional para el equipo.
 
 ## Plan de implementación
 1. Crear módulo Identity con entidad UserIdentity y servicios de autenticación.
 2. Crear módulo Administración con entidades Role, UserRoleAssignment, PermissionPolicy.
 3. Implementar AuthorizationService que evalúe permisos según rol y contexto.
-4. Sincronizar userId como referencia entre módulos.
+4. Sincronizar userIdentityId como referencia entre módulos.
 5. Documentar separación en docs/arquitectura/identity-vs-administration.md.
 6. Añadir pruebas unitarias para autenticación y autorización por separado.
 
@@ -46,7 +46,7 @@ Negativas
 ```java
 // Identity
 public final class UserIdentity {
-private final String userId;
+private final String userIdentityId;
 private final String username;
 private final String passwordHash;
 private final boolean active;
@@ -54,7 +54,7 @@ private final boolean active;
 
 // Administración
 public final class UserRoleAssignment {
-private final String userId;
+private final String userIdentityId;
 private final Role role;
 }
 ```

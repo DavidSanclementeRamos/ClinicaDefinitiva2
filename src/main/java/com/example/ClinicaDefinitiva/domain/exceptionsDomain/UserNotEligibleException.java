@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 
 import java.util.List;
@@ -14,12 +14,12 @@ import java.util.List;
 public class UserNotEligibleException extends DomainAggregateException {
 
 
-    private final UserId userId;
+    private final UserIdentityId userIdentityId;
     private final String reason;
     private final List<OutcomeDetail> details;
 
     public UserNotEligibleException(
-            UserId userId,
+            UserIdentityId userIdentityId,
             String reason,
             EntityContext context,
             List<OutcomeDetail> details
@@ -29,13 +29,13 @@ public class UserNotEligibleException extends DomainAggregateException {
                 context
 
         );
-        this.userId = userId;
+        this.userIdentityId = userIdentityId;
         this.reason = reason;
         this.details = details;
     }
 
-    public UserId getUserId() {
-        return userId;
+    public UserIdentityId getUserId() {
+        return userIdentityId;
     }
 
     public String getReason() {

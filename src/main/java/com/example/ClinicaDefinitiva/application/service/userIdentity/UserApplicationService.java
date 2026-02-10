@@ -10,15 +10,15 @@ import com.example.ClinicaDefinitiva.application.mapper.UserIndentityMapper.User
 import com.example.ClinicaDefinitiva.application.portsInput.userIdentity.SecurityPolicy;
 import com.example.ClinicaDefinitiva.application.portsInput.userIdentity.UserIdentityUseCase;
 import com.example.ClinicaDefinitiva.domain.Email;
+import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.AggregateBusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.authentication.UserRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.service.UserDeactivationPolicy;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserName;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserApplicationService implements UserIdentityUseCase {
-    private final UserRepository userRepository;
+    private final UserIdentityRepository userIdentityRepository;
     private final UserDeactivationPolicy userDeactivationPolicy;
     private final UserIdentityReadMapper readMapper;
     private final UserIdentityWriteMapper writeMapper;
@@ -42,11 +42,11 @@ public class UserApplicationService implements UserIdentityUseCase {
     // de donde probiene el password encoder
     private final PasswordEncoder passwordEncoder;
 
-    public UserApplicationService(UserRepository userRepository,
+    public UserApplicationService(UserIdentityRepository userIdentityRepository,
                                   UserDeactivationPolicy userDeactivationPolicy,
                                   UserIdentityReadMapper readMapper,
                                   UserIdentityWriteMapper writeMapper, SecurityPolicy securityPolicy, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+        this.userIdentityRepository = userIdentityRepository;
         this.userDeactivationPolicy = userDeactivationPolicy;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
@@ -56,16 +56,16 @@ public class UserApplicationService implements UserIdentityUseCase {
 
     @Override
     public ReadUserIdentityDto findById(Long id) {
-        UserIdentity user = userRepository.findById(UserId.from(id))
+        UserIdentity user = userIdentityRepository.findById(UserIdentityId.from(id))
                 .orElseThrow(() -> new UserIdentityNoFoundException(UserIdentityError
-                        .ERR_USER_NOT_FOUND, EntityContext.USUARIO, UserId.from(id)));
+                        .ERR_USER_NOT_FOUND, EntityContext.USUARIO, UserIdentityId.from(id)));
 
         return readMapper.toDto(user);
     }
 
     @Override
     public Page<PageUserIdentityDto> findAll(Pageable pageable) {
-        Page<UserIdentity> users = userRepository.findAll(pageable);
+        Page<UserIdentity> users = userIdentityRepository.findAll(pageable);
         if(users.isEmpty()){
             throw new UserIdentityNoFoundException(UserIdentityError
                     .ERR_USER_NOT_FOUND, EntityContext.USUARIO, null);
@@ -75,7 +75,7 @@ public class UserApplicationService implements UserIdentityUseCase {
 
     @Override
     public Optional<PageUserIdentityDto> findByEmail(String email) {
-        UserIdentity users = userRepository.findByEmail(email)
+        UserIdentity users = userIdentityRepository.findByEmail(email)
                 .orElseThrow(() -> new UserIdentityNoFoundException(
                         UserIdentityError.ERR_USER_NOT_FOUND,
                         EntityContext.USUARIO,
@@ -88,7 +88,7 @@ public class UserApplicationService implements UserIdentityUseCase {
 
     @Override
     public Page<PageUserIdentityDto> findByEmailAndStatus(String email, String status, Pageable pageable) {
-        Page<UserIdentity> users = userRepository.findByEmailAndStatus(email, status, pageable);
+        Page<UserIdentity> users = userIdentityRepository.findByEmailAndStatus(email, status, pageable);
         if (users.isEmpty()) {
             throw new UserIdentityNoFoundException(
                     UserIdentityError.ERR_USER_NOT_FOUND,
@@ -101,7 +101,7 @@ public class UserApplicationService implements UserIdentityUseCase {
 
     @Override
     public Page<PageUserIdentityDto> findByIdAndStatus(Long id, String status, Pageable pageable) {
-        Page<UserIdentity> users = userRepository.findByIdAndStatus(id, status, pageable);
+        Page<UserIdentity> users = userIdentityRepository.findByIdAndStatus(id, status, pageable);
         if (users.isEmpty()) {
             throw new UserIdentityNoFoundException(
                     UserIdentityError.ERR_USER_NOT_FOUND,
@@ -117,35 +117,35 @@ public class UserApplicationService implements UserIdentityUseCase {
     @Override
     public ReadUserIdentityDto register(CreateUserIdentityDto dto) {
         UserIdentity user = writeMapper.dtoCreateToUserIdentity(dto);
-        userRepository.save(user);
+        userIdentityRepository.save(user);
         return readMapper.toDto(user);
     }
 
     @Override
     public ReadUserIdentityDto recordSuccessfulLogin(Long userId) {
-        UserIdentity user = userRepository.findById(UserId.from(userId))
+        UserIdentity user = userIdentityRepository.findById(UserIdentityId.from(userId))
         .orElseThrow(() -> new UserIdentityNoFoundException(
                 UserIdentityError
                 .ERR_USER_NOT_FOUND,
                 EntityContext.USUARIO,
-                UserId.from(userId)));
+                UserIdentityId.from(userId)));
 
         Outcome<UserIdentity> outcome = user.recordSuccessfulLogin(Instant.now());
         if (outcome.isFailure()) {
             throw new AggregateBusinessRuleViolationException(outcome.getDetalles());
         }
-        userRepository.save(user);
+        userIdentityRepository.save(user);
         return readMapper.toDto(user);
     }
 
     @Override
     public ReadUserIdentityDto recordFailedLogin(Long userId) {
-        UserIdentity user = userRepository.findById(UserId.from(userId))
+        UserIdentity user = userIdentityRepository.findById(UserIdentityId.from(userId))
                 .orElseThrow(() -> new UserIdentityNoFoundException(
                 UserIdentityError
                         .ERR_USER_NOT_FOUND,
                 EntityContext.USUARIO,
-                UserId.from(userId)));
+                UserIdentityId.from(userId)));
 
         Outcome<UserIdentity> outcome = user.recordFailedLogin(
                 Instant.now(),
@@ -155,22 +155,22 @@ public class UserApplicationService implements UserIdentityUseCase {
         if (outcome.isFailure() && outcome.getDetalles().stream().anyMatch(d -> d.getSeverity() == Severity.ERROR)) {
             throw new AggregateBusinessRuleViolationException(outcome.getDetalles());
         }
-        userRepository.save(user);
+        userIdentityRepository.save(user);
         return readMapper.toDto(user);
     }
 
     @Override
     public ReadUserIdentityDto editUserData(UpdateUserIdentityDto dto, Long id) {
-        UserIdentity user = userRepository.findById(UserId.from(id))
+        UserIdentity user = userIdentityRepository.findById(UserIdentityId.from(id))
                 .orElseThrow(() -> new UserIdentityNoFoundException(
                         UserIdentityError
                                 .ERR_USER_NOT_FOUND,
                         EntityContext.USUARIO,
-                        UserId.from(id)));
+                        UserIdentityId.from(id)));
 
 
         Outcome<UserIdentity> outcome = user.editUserData(
-                new UserName(dto.name()),
+                new UserIdentityName(dto.name()),
                 new Email(dto.email()),
                 new HashedPassword(dto.password()),
                 Instant.now()
@@ -180,71 +180,71 @@ public class UserApplicationService implements UserIdentityUseCase {
             throw new AggregateBusinessRuleViolationException(outcome.getDetalles());
         }
 
-        userRepository.save(user);
+        userIdentityRepository.save(user);
         return readMapper.toDto(user);
     }
 
 
     @Override
     public ReadUserIdentityDto verify(Long userId) {
-        UserIdentity user = userRepository.findById(UserId.from(userId))
+        UserIdentity user = userIdentityRepository.findById(UserIdentityId.from(userId))
                 .orElseThrow(() -> new UserIdentityNoFoundException(
                         UserIdentityError
                                 .ERR_USER_NOT_FOUND,
                         EntityContext.USUARIO,
-                        UserId.from(userId)));
+                        UserIdentityId.from(userId)));
 
         Outcome<UserIdentity> outcome = user.verify();
         if (outcome.isFailure()) {
             throw new AggregateBusinessRuleViolationException(outcome.getDetalles());
         }
-        userRepository.save(user);
+        userIdentityRepository.save(user);
         return readMapper.toDto(user);
     }
 
     @Override
     public ReadUserIdentityDto deactivate(Long userId, String reason) {
-        UserIdentity user = userRepository.findById(UserId.from(userId))
+        UserIdentity user = userIdentityRepository.findById(UserIdentityId.from(userId))
                 .orElseThrow(() -> new UserIdentityNoFoundException(
                         UserIdentityError
                                 .ERR_USER_NOT_FOUND,
                         EntityContext.USUARIO,
-                        UserId.from(userId)));
+                        UserIdentityId.from(userId)));
 
 
         Outcome<UserIdentity> outcome = user.deactivate(userDeactivationPolicy, Instant.now(), reason);
         if (outcome.isFailure()) {
             throw new AggregateBusinessRuleViolationException(outcome.getDetalles());
         }
-        userRepository.save(user);
+        userIdentityRepository.save(user);
         return readMapper.toDto(user);
     }
 
     @Override
     public ReadUserIdentityDto suspend(Long userId, String reason) {
-        UserIdentity user = userRepository.findById(UserId.from(userId))
+        UserIdentity user = userIdentityRepository.findById(UserIdentityId.from(userId))
                 .orElseThrow(() -> new UserIdentityNoFoundException(
                         UserIdentityError
                                 .ERR_USER_NOT_FOUND,
                         EntityContext.USUARIO,
-                        UserId.from(userId)));
+                        UserIdentityId.from(userId)));
 
         Outcome<UserIdentity> outcome = user.suspend(reason, Instant.now());
         if (outcome.isFailure()) {
             throw new AggregateBusinessRuleViolationException(outcome.getDetalles());
         }
-        userRepository.save(user);
+        userIdentityRepository.save(user);
         return readMapper.toDto(user);
     }
 
     @Override
     public ReadUserIdentityDto canPerformSensitiveAction(Long userId) {
-        UserIdentity user = userRepository.findById(UserId.from(userId))
+        UserIdentity user = userIdentityRepository.findById(UserIdentityId.from(userId))
                 .orElseThrow(() -> new UserIdentityNoFoundException(
                         UserIdentityError
                                 .ERR_USER_NOT_FOUND,
                         EntityContext.USUARIO,
-                        UserId.from(userId)));
+                        UserIdentityId.from(userId)));
 
         Outcome<UserIdentity> outcome = user.canPerformSensitiveAction(Instant.now());
         if (outcome.isFailure()) {
@@ -255,7 +255,7 @@ public class UserApplicationService implements UserIdentityUseCase {
 
     @Override
     public ReadUserIdentityDto authenticate(String email, String rawPassword) {
-        UserIdentity user = userRepository.findByEmail(email)
+        UserIdentity user = userIdentityRepository.findByEmail(email)
                 .orElseThrow(() -> new UserIdentityNoFoundException(
                         UserIdentityError.ERR_USER_NOT_FOUND,
                         EntityContext.USUARIO,
@@ -264,7 +264,7 @@ public class UserApplicationService implements UserIdentityUseCase {
         // Validar password
         if (!passwordEncoder.matches(rawPassword, user.getHashedPassword().toString())) {
             user.recordFailedLogin(Instant.now(), 3, Duration.ofMinutes(5));
-            userRepository.save(user);
+            userIdentityRepository.save(user);
             throw new AggregateBusinessRuleViolationException(
                     List.of(new OutcomeDetail(UserIdentityError.ERR_USER_INVALID_CREDENTIALS,
                             Severity.ERROR, Category.TECNICO, EntityContext.USUARIO)));
@@ -278,7 +278,7 @@ public class UserApplicationService implements UserIdentityUseCase {
 
         // Login exitoso
         user.recordSuccessfulLogin(Instant.now());
-        userRepository.save(user);
+        userIdentityRepository.save(user);
 
         return readMapper.toDto(user);
     }

@@ -9,7 +9,7 @@ public class UpdateInvoiceRequest {
     public LocalDateTime dueDate;          // opcional: si null se recalcula según política
     public String notes;                   // opcional
     public String contractId;                // opcional
-    public List<ServiceRenderedDto> services; // lista completa para reemplazar items
+   // public List<ServiceRenderedDto> services; // lista completa para reemplazar items
 
     // opcionales: permitir actualizar payer/status según reglas de negocio
     public String payer;
@@ -18,14 +18,15 @@ public class UpdateInvoiceRequest {
     public UpdateInvoiceRequest() {
     }
 
-    public UpdateInvoiceRequest(String contractId, LocalDateTime dueDate, String invoiceId, LocalDateTime issuedAt, String notes, String payer, List<ServiceRenderedDto> services, String status) {
+    public UpdateInvoiceRequest(String contractId, LocalDateTime dueDate, String invoiceId, LocalDateTime issuedAt, String notes, String payer, //List<ServiceRenderedDto> services,
+                                String status) {
         this.contractId = contractId;
         this.dueDate = dueDate;
         this.invoiceId = invoiceId;
         this.issuedAt = issuedAt;
         this.notes = notes;
         this.payer = payer;
-        this.services = services;
+       // this.services = services;
         this.status = status;
     }
 
@@ -53,9 +54,9 @@ public class UpdateInvoiceRequest {
         this.payer = payer;
     }
 
-    public void setServices(List<ServiceRenderedDto> services) {
-        this.services = services;
-    }
+    //public void setServices(List<ServiceRenderedDto> services) {
+       // this.services = services;
+    //}
 
     public void setStatus(String status) {
         this.status = status;

@@ -8,8 +8,8 @@ public final class DentalServiceValidation {
 
     private DentalServiceValidation() {}
 
-    public static void validateCreateDto(CreateProvidedServiceDto dto) {
-        String type = dto.serviceType == null ? (dto.catalog.category == null ? null : dto.catalog.category).toUpperCase())dto.serviceType.toUpperCase();
+    /**public static void validateCreateDto(CreateProvidedServiceDto dto) {
+        //String type = dto.serviceType == null ? (dto.catalog.category == null ? null : dto.catalog.category).toUpperCase())dto.serviceType.toUpperCase();
 
         switch (type) {
             case "ORTHODONTIC" -> {
@@ -35,7 +35,7 @@ public final class DentalServiceValidation {
                 // no-op: allow generic services with no details
             }
         }
-    }
+    }*/
 
     public static void validateUpdateDto(UpdateProvidedServiceDto dto) {
         // Si trae detail parcial, valida su coherencia mínima

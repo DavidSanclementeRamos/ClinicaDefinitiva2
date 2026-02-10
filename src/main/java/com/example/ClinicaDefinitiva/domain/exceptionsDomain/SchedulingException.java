@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+//import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 
 /**
  * Excepción lanzada cuando ocurre un conflicto en la programación

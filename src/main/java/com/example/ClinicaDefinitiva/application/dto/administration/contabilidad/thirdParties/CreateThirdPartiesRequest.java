@@ -2,11 +2,11 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 
 public record CreateThirdPartiesRequest(
         String companyId,
-        NameDto name,
+        //NameDto name,
         String typeDocument,
         String documentNumber,
-        String typeThirdParties,
-        AddressDto address,
-        PhoneNumberDto phoneNumber,
-        EmailDto email
+        String typeThirdParties
+        //AddressDto address,
+        //PhoneNumberDto phoneNumber,
+        //EmailDto email
 ) {}

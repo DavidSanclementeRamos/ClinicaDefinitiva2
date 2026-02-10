@@ -6,12 +6,12 @@ import com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMappe
 import com.example.ClinicaDefinitiva.application.portsInput.actor.DentistUseCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.schedule.service.ScheduleQueryService;
 import com.example.ClinicaDefinitiva.domain.actor.service.DentistAvailabilityService;
 import com.example.ClinicaDefinitiva.domain.authentication.service.UserAccessValidator;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,15 +25,16 @@ import java.time.Instant;
 @Transactional
 public class DentistApplicationService implements DentistUseCase {
     private final DentistRepository dentistRepository;
-    private final ScheduleRepository scheduleRepository;
+   // private final ScheduleRepository scheduleRepository;
     private final DentistAvailabilityService availabilityService;
     private final DentistReadMapper dentistReadMapper;
     private final DentistWriteMapper dentistWriteMapper;
     private final UserAccessValidator userAccessValidator;
 
-    public DentistApplicationService(DentistRepository dentistRepository, ScheduleRepository scheduleRepository, DentistAvailabilityService availabilityService, DentistReadMapper dentistReadMapper, DentistWriteMapper dentistWriteMapper, UserAccessValidator userAccessValidator) {
+    public DentistApplicationService(DentistRepository dentistRepository,// ScheduleRepository scheduleRepository,
+                                     DentistAvailabilityService availabilityService, DentistReadMapper dentistReadMapper, DentistWriteMapper dentistWriteMapper, UserAccessValidator userAccessValidator) {
         this.dentistRepository = dentistRepository;
-        this.scheduleRepository = scheduleRepository;
+       // this.scheduleRepository = scheduleRepository;
         this.availabilityService = availabilityService;
         this.dentistReadMapper = dentistReadMapper;
         this.dentistWriteMapper = dentistWriteMapper;
@@ -62,7 +63,7 @@ public class DentistApplicationService implements DentistUseCase {
     public ReadDentistDto save(CreateDentistDto createDentistDto) {
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(createDentistDto.user()),
+                UserIdentityId.from(createDentistDto.user()),
                 now,
                 EntityContext.PATIENT  // Contexto para errores más descriptivos
         );
@@ -78,7 +79,7 @@ public class DentistApplicationService implements DentistUseCase {
 
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.PATIENT  // Contexto para errores más descriptivos
         );
@@ -94,7 +95,7 @@ public class DentistApplicationService implements DentistUseCase {
 
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.PATIENT  // Contexto para errores más descriptivos
         );
@@ -105,12 +106,32 @@ public class DentistApplicationService implements DentistUseCase {
 
     @Override
     public ReadDentistDto updateStatus(UpdateDentistStatusDto updateDentistStatusDto, Long id) {
+        return null;
+    }
+
+    @Override
+    public Page<PageDentistDto> findByAvailability(String status, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<PageDentistDto> findBySpecialty(String specialty, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+    }
+
+   /* @Override
+    public ReadDentistDto updateStatus(UpdateDentistStatusDto updateDentistStatusDto, Long id) {
         Dentist dentist = dentistRepository.findById(DentistId.from(id))
                 .orElseThrow(() -> new IllegalArgumentException("No found"));
 
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.USUARIO  // Contexto para errores más descriptivos
         );
@@ -151,10 +172,10 @@ public class DentistApplicationService implements DentistUseCase {
         }
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.PATIENT  // Contexto para errores más descriptivos
         );
         dentistRepository.deleteById(DentistId.from(id));
-    }
+    }*/
 }

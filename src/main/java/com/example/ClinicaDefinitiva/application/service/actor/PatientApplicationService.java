@@ -8,10 +8,10 @@ import com.example.ClinicaDefinitiva.application.exceptions.actorException.Patie
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.service.UserAccessValidator;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -59,7 +59,7 @@ public class PatientApplicationService implements PatientUserCase {
         // PASO 1: Validar acceso del usuario
         // Esta validación lanza excepciones si el usuario no cumple requisitos
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(createPatientDto.userId()),
+                UserIdentityId.from(createPatientDto.userId()),
                 now,
                 EntityContext.USUARIO  // Contexto para errores más descriptivos
         );
@@ -76,7 +76,7 @@ public class PatientApplicationService implements PatientUserCase {
 
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.PATIENT
         );
@@ -95,7 +95,7 @@ public class PatientApplicationService implements PatientUserCase {
 
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.PATIENT
         );
@@ -132,7 +132,7 @@ public class PatientApplicationService implements PatientUserCase {
 
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.PATIENT  // Contexto para errores más descriptivos
         );

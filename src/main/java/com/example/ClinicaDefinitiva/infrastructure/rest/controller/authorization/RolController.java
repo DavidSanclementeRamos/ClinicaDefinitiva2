@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.administration.authorizatio
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.PermissionDto;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.authorization.RolUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.PageResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.autorization.rol.*;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.authorization.rol.RolReadMapper;
@@ -48,10 +48,10 @@ public class RolController {
             @PathVariable Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        return rolUseCase.findById(RolId.of(id), userId, rolId)
+        return rolUseCase.findById(RolId.of(id), userIdentityId, rolId)
                 .map(rolReadMapper::toResponse) // ← Mapper de aplicación → REST
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -62,10 +62,10 @@ public class RolController {
             @PathVariable String rolEnum,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        return rolUseCase.findByRolEnum(rolEnum, userId, rolId)
+        return rolUseCase.findByRolEnum(rolEnum, userIdentityId, rolId)
                 .map(rolReadMapper::toResponse)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -77,10 +77,10 @@ public class RolController {
             @RequestParam(defaultValue = "10") int size,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        Page<PageRolDto> rolPage = rolUseCase.findAll(PageRequest.of(page, size), userId, rolId);
+        Page<PageRolDto> rolPage = rolUseCase.findAll(PageRequest.of(page, size), userIdentityId, rolId);
 
         List<RolPageResponse> content = rolPage.getContent()
                 .stream()
@@ -104,10 +104,10 @@ public class RolController {
             @RequestParam(defaultValue = "10") int size,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        Page<PageRolDto> rolPage = rolUseCase.findByEditable(editable, PageRequest.of(page, size), userId, rolId);
+        Page<PageRolDto> rolPage = rolUseCase.findByEditable(editable, PageRequest.of(page, size), userIdentityId, rolId);
 
         List<RolPageResponse> content = rolPage.getContent()
                 .stream()
@@ -131,11 +131,11 @@ public class RolController {
             @Valid @RequestBody RolCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
         CreateRolDto dto = rolWriteMapper.toCreateDto(request);
-        return rolReadMapper.toResponse(rolUseCase.createCustom(dto, userId, rolId));
+        return rolReadMapper.toResponse(rolUseCase.createCustom(dto, userIdentityId, rolId));
     }
 
     @PostMapping("/{id}/clone")
@@ -144,10 +144,10 @@ public class RolController {
             @Valid @RequestBody String newDescription,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        return rolReadMapper.toResponse(rolUseCase.cloneRole(RolId.of(id), newDescription, userId, rolId));
+        return rolReadMapper.toResponse(rolUseCase.cloneRole(RolId.of(id), newDescription, userIdentityId, rolId));
     }
 
     @PostMapping("/{id}/permissions")
@@ -157,11 +157,11 @@ public class RolController {
             @Valid @RequestBody PermissionRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
         PermissionDto dto = rolWriteMapper.toPermissionDto(request);
-        rolUseCase.addPermission(RolId.of(id), dto, userId, rolId);
+        rolUseCase.addPermission(RolId.of(id), dto, userIdentityId, rolId);
     }
 
     @DeleteMapping("/{id}/permissions")
@@ -171,11 +171,11 @@ public class RolController {
             @Valid @RequestBody PermissionRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
         PermissionDto dto = rolWriteMapper.toPermissionDto(request);
-        rolUseCase.removePermission(RolId.of(id), dto, userId, rolId);
+        rolUseCase.removePermission(RolId.of(id), dto, userIdentityId, rolId);
     }
 
     @PutMapping("/{id}/permissions")
@@ -185,14 +185,14 @@ public class RolController {
             @Valid @RequestBody Set<PermissionRequest> requests,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
         Set<PermissionDto> dtos = requests.stream()
                 .map(rolWriteMapper::toPermissionDto)
                 .collect(Collectors.toSet());
 
-        rolUseCase.setPermissions(RolId.of(id), dtos, userId, rolId);
+        rolUseCase.setPermissions(RolId.of(id), dtos, userIdentityId, rolId);
     }
 
     @GetMapping("/{id}/permissions/check")
@@ -201,11 +201,11 @@ public class RolController {
             @Valid @RequestBody PermissionRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
         PermissionDto dto = rolWriteMapper.toPermissionDto(request);
-        boolean hasPermission = rolUseCase.hasPermission(RolId.of(id), dto, userId, rolId);
+        boolean hasPermission = rolUseCase.hasPermission(RolId.of(id), dto, userIdentityId, rolId);
 
         return ResponseEntity.ok(new PermissionCheckResponse(hasPermission));
     }
@@ -216,10 +216,10 @@ public class RolController {
             @PathVariable Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        rolUseCase.deleteById(RolId.of(id), userId, rolId);
+        rolUseCase.deleteById(RolId.of(id), userIdentityId, rolId);
     }
 
     @PostMapping("/{id}/activate")
@@ -229,10 +229,10 @@ public class RolController {
             @Valid @RequestBody ReasonRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        rolUseCase.activate(RolId.of(id), request.reason(), userId, rolId);
+        rolUseCase.activate(RolId.of(id), request.reason(), userIdentityId, rolId);
     }
 
     @PostMapping("/{id}/deactivate")
@@ -242,10 +242,10 @@ public class RolController {
             @Valid @RequestBody ReasonRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        rolUseCase.deactivate(RolId.of(id), request.reason(), userId, rolId);
+        rolUseCase.deactivate(RolId.of(id), request.reason(), userIdentityId, rolId);
     }
 
     @PostMapping("/{id}/suspend")
@@ -255,10 +255,10 @@ public class RolController {
             @Valid @RequestBody ReasonRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        rolUseCase.suspend(RolId.of(id), request.reason(), userId, rolId);
+        rolUseCase.suspend(RolId.of(id), request.reason(), userIdentityId, rolId);
     }
 
     @PostMapping("/{id}/mark-deleted")
@@ -268,9 +268,9 @@ public class RolController {
             @Valid @RequestBody ReasonRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId userId = userDetails.getId();
+        UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        rolUseCase.markDeleted(RolId.of(id), request.reason(), userId, rolId);
+        rolUseCase.markDeleted(RolId.of(id), request.reason(), userIdentityId, rolId);
     }
 }

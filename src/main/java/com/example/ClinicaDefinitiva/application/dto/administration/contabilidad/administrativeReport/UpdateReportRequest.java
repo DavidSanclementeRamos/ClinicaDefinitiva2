@@ -2,6 +2,6 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 
 
 public record UpdateReportRequest(
-        NameDto title,
+        //NameDto title,
         String notes
 ) {}

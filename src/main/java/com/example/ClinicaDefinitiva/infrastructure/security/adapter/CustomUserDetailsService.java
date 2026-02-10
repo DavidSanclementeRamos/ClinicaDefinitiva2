@@ -4,9 +4,9 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.model.R
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.UserRolAssignmentRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.UserRolAssignmentService;
-import com.example.ClinicaDefinitiva.domain.authentication.UserRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserStatus;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityStatus;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,20 +20,20 @@ import java.util.List;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserIdentityRepository userIdentityRepository;
     private final UserRolAssignmentRepository assignmentRepository;
     private final UserRolAssignmentService userRolService;
 
-    public CustomUserDetailsService(UserRepository userRepository,
+    public CustomUserDetailsService(UserIdentityRepository userIdentityRepository,
                                     UserRolAssignmentRepository assignmentRepository, UserRolAssignmentService userRolService) {
-        this.userRepository = userRepository;
+        this.userIdentityRepository = userIdentityRepository;
         this.assignmentRepository = assignmentRepository;
         this.userRolService = userRolService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserIdentity user = userRepository.findByEmail(email)
+        UserIdentity user = userIdentityRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
 
         if (user.isLocked(Instant.now())) {
@@ -42,7 +42,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (!user.isVerified()) {
             throw new DisabledException("Usuario no verificado");
         }
-        if (user.getStatus().getState() != UserStatus.State.ACTIVE) {
+        if (user.getStatus().getState() != UserIdentityStatus.State.ACTIVE) {
             throw new DisabledException("Usuario inactivo o suspendido");
         }
 

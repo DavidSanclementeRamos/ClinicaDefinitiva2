@@ -86,20 +86,20 @@ public boolean canDeactivateUser() {
 
 ```java
 // Application Service
-public void deactivateUser(UserId userId) {
+public void deactivateUser(UserId userIdentityId) {
     // 1. Validar acceso (ADR-023)
-    userAccessValidator.validateUserCanPerformSensitiveAction(userId, now);
+    userAccessValidator.validateUserCanPerformSensitiveAction(userIdentityId, now);
     
     // 2. Validar restricciones de desactivación (ADR-008)
-    Outcome validation = userDeactivationPolicy.validate(userId);
+    Outcome validation = userDeactivationPolicy.validate(userIdentityId);
     if (validation.isFailure()) {
         throw new AggregateBusinessRuleViolationException(validation.getDetails());
     }
     
     // 3. Ejecutar acción en el agregado
-    UserIdentity user = userRepository.findById(userId).orElseThrow();
+    UserIdentity user = userIdentityRepository.findById(userIdentityId).orElseThrow();
     user.deactivate();
-    userRepository.save(user);
+    userIdentityRepository.save(user);
 }
 ```
 

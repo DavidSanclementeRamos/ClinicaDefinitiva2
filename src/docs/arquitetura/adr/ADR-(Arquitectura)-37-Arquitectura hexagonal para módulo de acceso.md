@@ -87,7 +87,7 @@ public interface EditUserUseCase {
 }
 
 public interface GetUserByIdUseCase {
-    Optional<UserDto> execute(UserId userId);
+    Optional<UserDto> execute(UserId userIdentityId);
 }
 ```
 
@@ -101,7 +101,7 @@ public interface UserRepositoryPort {
 }
 
 public interface TokenServicePort {
-    String createToken(UserId userId, Set<Role> roles);
+    String createToken(UserId userIdentityId, Set<Role> roles);
     Optional<UserId> validateToken(String token);
     void revokeToken(String token);
 }
@@ -166,26 +166,26 @@ public class AuthenticationController {
 @Transactional
 public class AuthenticationService implements AuthenticateUserUseCase {
     
-    private final UserRepositoryPort userRepository;
+    private final UserRepositoryPort userIdentityRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenServicePort tokenService;
     
     @Override
     public AuthenticationResult execute(AuthenticateCommand command) {
         // Obtener usuario
-        UserIdentity user = userRepository.findByEmail(command.email())
+        UserIdentity user = userIdentityRepository.findByEmail(command.email())
             .orElseThrow(() -> new InvalidCredentialsException());
         
         // Validar contraseña
         if (!passwordEncoder.matches(command.password(), user.getHashedPassword())) {
             user.recordFailedLogin(Instant.now());
-            userRepository.save(user);
+            userIdentityRepository.save(user);
             throw new InvalidCredentialsException();
         }
         
         // Registrar login exitoso
         user.recordSuccessfulLogin(Instant.now());
-        userRepository.save(user);
+        userIdentityRepository.save(user);
         
         // Crear token
         String token = tokenService.createToken(user.getId(), user.getRoles());

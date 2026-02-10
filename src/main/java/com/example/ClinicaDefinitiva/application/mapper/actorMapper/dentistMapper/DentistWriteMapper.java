@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapp
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -40,7 +40,7 @@ public class DentistWriteMapper {
                         new PhoneNumber(dto.phoneNumber())
                 ),
                 new Specialties(specialtiesSet),
-                UserId.from(dto.user()),
+                UserIdentityId.from(dto.user()),
                 new WorkingHours(dto.start(), dto.end(),
                         dto.dayOfWeek(), dto.declaredHoursPerWeek()),
                 dto.lastUpdate()

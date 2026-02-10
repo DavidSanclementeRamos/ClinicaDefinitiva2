@@ -131,7 +131,7 @@ Cuando se refactorizó el módulo de autenticación según **ADR-(User)-02**, se
 **Implementación de `UserAccessValidator`:**
 ```java
 public class UserAccessValidator {
-    private final UserIdentityRepository userRepository;
+    private final UserIdentityRepository userIdentityRepository;
 
     /**
      * Valida que un usuario existe y puede realizar acciones sensibles.
@@ -143,15 +143,15 @@ public class UserAccessValidator {
      * - El usuario está inactivo/suspendido
      */
     public void validateUserCanPerformSensitiveAction(
-            UserId userId,
+            UserId userIdentityId,
             Instant now,
             EntityContext requesterContext
     ) {
         // 1. Obtener usuario
-        UserIdentity user = userRepository.findById(userId)
+        UserIdentity user = userIdentityRepository.findById(userIdentityId)
                 .orElseThrow(() -> new UserIdentityNoFoundException(
                         UserIdentityError.ERR_USER_NOT_FOUND,
-                        requesterContext, userId
+                        requesterContext, userIdentityId
                 ));
 
         // 2. Validar elegibilidad (retorna Outcome del módulo técnico)
@@ -160,7 +160,7 @@ public class UserAccessValidator {
         // 3. Traducir Outcome a Exception (anti-corruption layer)
         if (!eligibility.isSuccess()) {
             throw translateToBusinessException(
-                    userId,
+                    userIdentityId,
                     eligibility.getDetalles(),
                     requesterContext
             );
@@ -168,7 +168,7 @@ public class UserAccessValidator {
     }
     
     private UserNotEligibleException translateToBusinessException(
-            UserId userId,
+            UserId userIdentityId,
             List<OutcomeDetail> details,
             EntityContext requesterContext
     ) {
@@ -176,7 +176,7 @@ public class UserAccessValidator {
         String reason = buildReasonMessage(primaryDetail);
         
         return new UserNotEligibleException(
-                userId,
+                userIdentityId,
                 reason,
                 requesterContext,
                 details
@@ -619,7 +619,7 @@ Según **ADR-47 (RBAC/ABAC híbrido)**, la autorización se compone de:
 // ✅ AUTENTICACIÓN: Valida estado una sola vez
 @PostMapping("/login")
 public AuthResponse login(LoginRequest request) {
-    UserIdentity user = userRepository.findByEmail(request.email());
+    UserIdentity user = userIdentityRepository.findByEmail(request.email());
     
     // 1. Validar credenciales
     if (!passwordEncoder.matches(request.password(), user.getHashedPassword())) {
@@ -659,7 +659,7 @@ public Object checkPermission(ProceedingJoinPoint joinPoint, RequiresPermission 
     // Construir contexto con datos del request
     SecurityContext context = SecurityContext.builder()
         .permission(Permission.of(requiredPermission))
-        .requestingUserId(userDetails.getUserId())
+        .requestingUserIdentityId(userDetails.getUserId())
         .build();
     
     // Validar: al menos UNO de los roles permite
@@ -1123,7 +1123,7 @@ public Object checkPermission(ProceedingJoinPoint joinPoint, RequiresPermission 
     // Construir contexto
     SecurityContext context = SecurityContext.builder()
         .permission(Permission.of(operation))
-        .requestingUserId(userDetails.getUserId())
+        .requestingUserIdentityId(userDetails.getUserId())
         .attribute("resourceOwnerId", extractPatientId(joinPoint))
         .build();
     

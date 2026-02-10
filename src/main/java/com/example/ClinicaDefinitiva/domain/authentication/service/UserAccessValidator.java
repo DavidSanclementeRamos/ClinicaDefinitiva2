@@ -1,14 +1,14 @@
 package com.example.ClinicaDefinitiva.domain.authentication.service;
 
 import com.example.ClinicaDefinitiva.application.exceptions.UserIdentityNoFoundException;
+import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.UserNotEligibleException;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-
 import java.time.Instant;
 import java.util.List;
 
@@ -42,31 +42,28 @@ public class UserAccessValidator {
      * - El usuario está bloqueado
      * - El usuario está inactivo/suspendido
      *
-     * @param userId ID del usuario a validar
+     * @param userIdentityId ID del usuario a validar
      * @param now Instante actual para validaciones temporales (bloqueos)
      * @param requesterContext Contexto de la entidad que solicita la validación
      * @throws UserIdentityNoFoundException si el usuario no existe
      * @throws UserNotEligibleException si el usuario no cumple los requisitos
      */
     public void validateUserCanPerformSensitiveAction(
-            UserId userId,
+            UserIdentityId userIdentityId,
             Instant now,
             EntityContext requesterContext
     ) {
-        // 1. Obtener usuario
-        UserIdentity user = userRepository.findById(userId)
+        UserIdentity user = userRepository.findById(userIdentityId)
                 .orElseThrow(() -> new UserIdentityNoFoundException(
                         UserIdentityError.ERR_USER_NOT_FOUND,
-                        requesterContext, userId
+                        requesterContext, userIdentityId
                 ));
 
-        // 2. Validar elegibilidad (retorna Outcome del módulo técnico)
         Outcome<UserIdentity> eligibility = user.canPerformSensitiveAction(now);
 
-        // 3. Traducir Outcome a Exception (anti-corruption layer)
         if (!eligibility.isSuccess()) {
             throw translateToBusinessException(
-                    userId,
+                    userIdentityId,
                     eligibility.getDetalles(),
                     requesterContext
             );
@@ -85,19 +82,17 @@ public class UserAccessValidator {
      * estilos de manejo de errores de cada bounded context.
      */
     private UserNotEligibleException translateToBusinessException(
-            UserId userId,
+            UserIdentityId userIdentityId,
             List<OutcomeDetail> details,
             EntityContext requesterContext
     ) {
-        // Extraer información del primer detalle (más relevante)
         OutcomeDetail primaryDetail = details.get(0);
 
-        // Crear mensaje descriptivo
+
         String reason = buildReasonMessage(primaryDetail);
 
-        // Crear excepción con contexto completo
         return new UserNotEligibleException(
-                userId,
+                userIdentityId,
                 reason,
                 requesterContext,
                 details

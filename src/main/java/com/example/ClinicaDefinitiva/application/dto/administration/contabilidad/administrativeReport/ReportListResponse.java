@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ReportS
 
 public record ReportListResponse(
         String id,
-        NameDto title,
+        //NameDto title,
         PeriodDto period,
         ReportStatus status,
         String createdAt,

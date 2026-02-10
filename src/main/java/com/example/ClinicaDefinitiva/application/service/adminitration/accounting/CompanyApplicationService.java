@@ -2,12 +2,9 @@ package com.example.ClinicaDefinitiva.application.service.adminitration.accounti
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.*;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.AddressMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.CompanyMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NameMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NitMapper;
-import com.example.ClinicaDefinitiva.application.mapper.EmailMapper;
-import com.example.ClinicaDefinitiva.application.mapper.PhoneNumberMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.CompanyUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;

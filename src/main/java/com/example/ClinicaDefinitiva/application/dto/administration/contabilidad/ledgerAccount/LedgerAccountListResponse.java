@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 public record LedgerAccountListResponse(
         String id,
         String code,
-        NameDto name,
+        //NameDto name,
         String nature,
         boolean active,
         int level

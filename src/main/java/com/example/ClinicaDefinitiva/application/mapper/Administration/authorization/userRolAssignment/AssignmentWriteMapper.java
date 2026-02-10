@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.application.dto.administration.authorizatio
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.UserRolAssignment.CreateAssignmentTemporaryDto;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,7 +12,7 @@ public class AssignmentWriteMapper {
 
     public  UserRolAssignment fromCreatePermanent(CreateAssignmentPermanentDto dto) {
         return UserRolAssignment.assignPermanent(
-                UserId.from(dto.userId()),             // Long → UserId VO
+                UserIdentityId.from(dto.userId()),             // Long → UserId VO
                 RolId.of(dto.rolId()),               // Long → RolId VO
                 dto.isPrimary()
         );
@@ -20,7 +20,7 @@ public class AssignmentWriteMapper {
 
     public  UserRolAssignment fromCreateTemporary(CreateAssignmentTemporaryDto dto) {
         return UserRolAssignment.assignTemporary(
-                UserId.from(dto.userId()),
+                UserIdentityId.from(dto.userId()),
                 RolId.of(dto.rolId()),
                 dto.validFrom(),
                 dto.validTo()

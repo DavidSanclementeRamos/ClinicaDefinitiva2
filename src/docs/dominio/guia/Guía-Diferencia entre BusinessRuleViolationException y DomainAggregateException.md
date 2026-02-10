@@ -228,7 +228,7 @@ public void updateAvailability(WeeklyAvailability newAvailability) {
 ```java
 public static Patient create(
     PersonalInfo personalInfo,
-    UserId userId,
+    UserId userIdentityId,
     GuardianId guardianId  // puede ser null si es mayor de edad
 ) {
     // Validación de invariantes
@@ -240,7 +240,7 @@ public static Patient create(
         );
     }
     
-    if (userId == null) {
+    if (userIdentityId == null) {
         throw new DomainAggregateException(
             ErrorCatalog.ERR_PATIENT_REQUIRES_USER,
             Severity.ERROR,
@@ -258,7 +258,7 @@ public static Patient create(
         );
     }
     
-    return new Patient(personalInfo, userId, guardianId);
+    return new Patient(personalInfo, userIdentityId, guardianId);
 }
 ```
 

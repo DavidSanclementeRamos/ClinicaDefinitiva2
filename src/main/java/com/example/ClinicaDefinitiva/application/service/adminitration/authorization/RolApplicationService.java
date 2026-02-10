@@ -16,6 +16,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.output.
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.RolService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.PermissionError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
@@ -23,7 +24,6 @@ import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +56,7 @@ public class RolApplicationService implements RolUseCase {
     @Transactional
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.VIEW_ROLE)
     @Override
-    public Optional<ReadRolDto> findById(RolId targetRoleId  , UserId requesterId, RolId requesterRolId) {
+    public Optional<ReadRolDto> findById(RolId targetRoleId  , UserIdentityId requesterId, RolId requesterRolId) {
         // 1. Validar permiso base con @RequiresPermission ya lo hizo
         // 2. Buscar rol
         Optional<Rol> rolOpt = repository.findById(targetRoleId);
@@ -78,7 +78,7 @@ public class RolApplicationService implements RolUseCase {
     @Transactional
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.VIEW_ROLE)
     @Override
-    public Optional<ReadRolDto> findByRolEnum(String rolEnum,UserId requesterId, RolId requesterRolId) {
+    public Optional<ReadRolDto> findByRolEnum(String rolEnum, UserIdentityId requesterId, RolId requesterRolId) {
         return repository.findByRolEnum(RolEnum.valueOf(rolEnum))
                 .map(readMapper::toReadDto);
     }
@@ -86,7 +86,7 @@ public class RolApplicationService implements RolUseCase {
     @Transactional
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.VIEW_ROLE)
     @Override
-    public Page<PageRolDto> findAll(Pageable pageable,UserId requesterId, RolId requesterRolId) {
+    public Page<PageRolDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
         return repository.findAll(pageable)
                 .map(readMapper::toPageDto);
     }
@@ -94,7 +94,7 @@ public class RolApplicationService implements RolUseCase {
     @Transactional
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.VIEW_ROLE)
     @Override
-    public Page<PageRolDto> findByEditable(boolean editable, Pageable pageable,UserId requesterId, RolId requesterRolId) {
+    public Page<PageRolDto> findByEditable(boolean editable, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
         return repository.findByEditable(editable, pageable)
                 .map(readMapper::toPageDto);
     }
@@ -102,7 +102,7 @@ public class RolApplicationService implements RolUseCase {
     @Transactional
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.CREATE_CUSTOM_ROLE)
     @Override
-    public ReadRolDto createCustom(CreateRolDto dto, UserId requesterId, RolId requesterRolId) {
+    public ReadRolDto createCustom(CreateRolDto dto, UserIdentityId requesterId, RolId requesterRolId) {
 
         Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -133,7 +133,7 @@ public class RolApplicationService implements RolUseCase {
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.CLONE_ROLE)
     @Override
     public ReadRolDto cloneRole(RolId sourceRolId, String newDescription,
-                                UserId requesterId, RolId requesterRolId) {
+                                UserIdentityId requesterId, RolId requesterRolId) {
         // 1. Buscar rol fuente
         Rol sourceRol = repository.findById(sourceRolId)
                 .orElseThrow(() -> new RolNotFoundException("Rol not found: " + sourceRolId));
@@ -177,7 +177,7 @@ public class RolApplicationService implements RolUseCase {
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PERMISSION, action = ActionCatalog.BasicAction.ADD_PERMISSION)
     @Override
     public void addPermission(RolId targetRoleId , PermissionDto permissionDto,
-                              UserId requesterId, RolId requesterRolId) {
+                              UserIdentityId requesterId, RolId requesterRolId) {
         // 1. Buscar rol
         Rol rol = repository.findById(targetRoleId)
                 .orElseThrow(() -> new RolNotFoundException("Rol not found: " + targetRoleId));
@@ -221,7 +221,7 @@ public class RolApplicationService implements RolUseCase {
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PERMISSION, action = ActionCatalog.BasicAction.REMOVE_PERMISSION)
     @Override
     public void removePermission(RolId targetRoleId , PermissionDto permissionDto,
-                                 UserId requesterId, RolId requesterRolId) {
+                                 UserIdentityId requesterId, RolId requesterRolId) {
         // 1. Buscar rol
         Rol rol = repository.findById(targetRoleId)
                 .orElseThrow(() -> new IllegalArgumentException("Rol not found: " ));
@@ -265,8 +265,8 @@ public class RolApplicationService implements RolUseCase {
     @Transactional
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PERMISSION, action = ActionCatalog.BasicAction.SET_PERMISSIONS)
     @Override
-    public void setPermissions( RolId targetRoleId, Set<PermissionDto> permissionDtos,
-                               UserId requesterId, RolId requesterRolId) {
+    public void setPermissions(RolId targetRoleId, Set<PermissionDto> permissionDtos,
+                               UserIdentityId requesterId, RolId requesterRolId) {
         // 1. Buscar rol
         Rol rol = repository.findById(requesterRolId)
                 .orElseThrow(() -> new RolNotFoundException("Rol not found: " ));
@@ -314,8 +314,8 @@ public class RolApplicationService implements RolUseCase {
     @Transactional
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PERMISSION, action = ActionCatalog.BasicAction.CHECK_PERMISSION)
     @Override
-    public boolean hasPermission( RolId targetRoleId, PermissionDto permissionDto,
-                                 UserId requesterId, RolId requesterRolId) {
+    public boolean hasPermission(RolId targetRoleId, PermissionDto permissionDto,
+                                 UserIdentityId requesterId, RolId requesterRolId) {
         // 1. Buscar rol
         Rol rol = repository.findById(requesterRolId)
                 .orElseThrow(() -> new RolNotFoundException("Rol not found: " ));
@@ -357,7 +357,7 @@ public class RolApplicationService implements RolUseCase {
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE,
             action = ActionCatalog.BasicAction.ACTIVATE_ROLE)
     public void activate(RolId targetRoleId, String reason,
-                         UserId requesterId, RolId requesterRolId) {
+                         UserIdentityId requesterId, RolId requesterRolId) {
         Rol rol = repository.findById(targetRoleId)
                 .orElseThrow(() -> new RolNotFoundException(""));
 
@@ -390,7 +390,7 @@ public class RolApplicationService implements RolUseCase {
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE,
             action = ActionCatalog.BasicAction.DEACTIVATE_ROLE)
     public void deactivate(RolId targetRoleId, String reason,
-                           UserId requesterId, RolId requesterRolId) {
+                           UserIdentityId requesterId, RolId requesterRolId) {
         Rol rol = repository.findById(targetRoleId)
                 .orElseThrow(() -> new RolNotFoundException(""));
 
@@ -423,7 +423,7 @@ public class RolApplicationService implements RolUseCase {
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE,
             action = ActionCatalog.BasicAction.SUSPEND_ROLE)
     public void suspend(RolId targetRoleId, String reason,
-                        UserId requesterId, RolId requesterRolId) {
+                        UserIdentityId requesterId, RolId requesterRolId) {
         Rol rol = repository.findById(targetRoleId)
                 .orElseThrow(() -> new RolNotFoundException(""));
         // 2. Validar sector
@@ -455,7 +455,7 @@ public class RolApplicationService implements RolUseCase {
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE,
             action = ActionCatalog.BasicAction.MARK_DELETED_ROLE)
     public void markDeleted(RolId targetRoleId, String reason,
-                            UserId requesterId, RolId requesterRolId) {
+                            UserIdentityId requesterId, RolId requesterRolId) {
         Rol rol = repository.findById(targetRoleId)
                 .orElseThrow(() -> new RolNotFoundException(""));
 
@@ -487,7 +487,7 @@ public class RolApplicationService implements RolUseCase {
     @Transactional
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.DELETE_ROLE)
     @Override
-    public void deleteById( RolId targetRoleId, UserId requesterId, RolId requesterRolId) {
+    public void deleteById(RolId targetRoleId, UserIdentityId requesterId, RolId requesterRolId) {
         // 1. Buscar rol
         Rol rol = repository.findById(requesterRolId)
                 .orElseThrow(() -> new RolNotFoundException("Rol not found: " ));

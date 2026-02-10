@@ -1,11 +1,12 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.TreatmentId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.DentistError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +18,7 @@ public class Dentist   {
     private Specialties specialties;
     private DentistAvailabilityStatus availabilityStatus;
     private WorkingHours workingHours;
-    private final  UserId userId;
+    private final UserIdentityId userIdentityId;
     private final List<TreatmentId> treatmentId;
     private LocalDateTime lastUpdate;
     private  LocalDateTime vacationStart;
@@ -32,14 +33,14 @@ public class Dentist   {
     public Dentist(DentistId dentistId,
                    Person personData,
                    Specialties specialties,
-                   UserId userId,
+                   UserIdentityId userIdentityId,
                    WorkingHours workingHours,
                    LocalDateTime lastUpdate,
                    List<TreatmentId> treatmentId){
         this.dentistId = dentistId;
         this.personData = personData;
         this.specialties = specialties;
-        this.userId = userId;
+        this.userIdentityId = userIdentityId;
         this.workingHours = workingHours;
         this.availabilityStatus =  DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.AVAILABLE);
         this.lastUpdate = lastUpdate;
@@ -49,7 +50,7 @@ public class Dentist   {
     public static Dentist registerDentist(
                                           Person data,
                                           Specialties specialties,
-                                          UserId userId,
+                                          UserIdentityId userIdentityId,
                                           WorkingHours workingHours,
                                           LocalDateTime lastUpdate
                                            ) {
@@ -59,7 +60,7 @@ public class Dentist   {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
         }
 
-        return new Dentist(null, data, specialties, userId, workingHours,
+        return new Dentist(null, data, specialties, userIdentityId, workingHours,
 
                 lastUpdate, List.of());
 
@@ -117,7 +118,7 @@ public class Dentist   {
     public Specialties getSpecialties() { return specialties; }
     public DentistAvailabilityStatus getAvailabilityStatus() { return availabilityStatus; }
     public WorkingHours getWorkingHours() { return workingHours; }
-    public UserId getUserId() { return userId; }
+    public UserIdentityId getUserId() { return userIdentityId; }
     public LocalDateTime getLastUpdate() { return lastUpdate; }
 
 

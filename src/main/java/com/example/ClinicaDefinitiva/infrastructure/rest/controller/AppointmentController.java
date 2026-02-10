@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller;
 
-import com.example.ClinicaDefinitiva.application.mapper.AppointmentMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.AppointmentUseCase;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import jakarta.validation.constraints.NotNull;

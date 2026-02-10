@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMap
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.DentistEntity;
 
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public class DentistReadEntityMapper {
                         .collect(Collectors.toSet()))
                 .orElse(Collections.emptySet());
 
-        return new Dentist(
+        /**return new Dentist(
                 new DentistId(entity.getDentistId()),
                 new Person(
                         new Address(entity.getStreet(), entity.getCity(), entity.getState(),
@@ -42,14 +42,16 @@ public class DentistReadEntityMapper {
                         new PhoneNumber(entity.getPhoneNumber())
                 ),
                 new Specialties(specialtiesSet),
-                new UserId(entity.getUser()),
+               // new UserIdentityId(entity.getUser()),
                 new WorkingHours(entity.getStart(), entity.getEnd(),
                         entity.getDayOfWeek(), entity.getDeclaredHoursPerWeek()),
-                DentistAvailabilityStatus.from(
+                DentistAvailabilityStatus.of(
                         DentistAvailabilityStatus.Status.valueOf(entity.getAvailabilityStatus())
                 ),
                 entity.getLastUpdate(),
 
-                , , , , , );
+               // , , , , , );
+    }*/
+        return null;
     }
 }

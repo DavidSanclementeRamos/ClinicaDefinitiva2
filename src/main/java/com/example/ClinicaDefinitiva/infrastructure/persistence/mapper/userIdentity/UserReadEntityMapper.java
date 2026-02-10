@@ -3,8 +3,8 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.userIden
 import com.example.ClinicaDefinitiva.domain.Email;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserName;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.userIdentity.UserEntity;
 
 public class UserReadEntityMapper {
@@ -16,10 +16,10 @@ public class UserReadEntityMapper {
         }
 
         return new UserIdentity(
-                UserId.from(entity.getId()),
+                UserIdentityId.from(entity.getId()),
                 new Email(entity.getEmail()),
                 new HashedPassword(entity.getHashedPassword()),
-                new UserName(entity.getName()),
+                new UserIdentityName(entity.getName()),
                 entity.getCreatedAt()
 
         );

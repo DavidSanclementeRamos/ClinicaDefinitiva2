@@ -4,10 +4,10 @@ import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.*;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUserCase;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.service.UserAccessValidator;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class ReceptionApplicationService implements ReceptionUserCase {
         Receptionist reception = writeMapper.dtoCreateToReception(dto);
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(Long.valueOf(dto.user())),
+                UserIdentityId.from(Long.valueOf(dto.user())),
                 now,
                 EntityContext.RECEPTIONIST
         );
@@ -69,7 +69,7 @@ public class ReceptionApplicationService implements ReceptionUserCase {
 
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.RECEPTIONIST
         );
@@ -84,7 +84,7 @@ public class ReceptionApplicationService implements ReceptionUserCase {
                 .orElseThrow(() -> new RuntimeException("Receptionist not found with id " + id));
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.RECEPTIONIST);
         writeMapper.dtoUpdateSensitiveToReception(dto, reception);
@@ -108,7 +108,7 @@ public class ReceptionApplicationService implements ReceptionUserCase {
         }
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.RECEPTIONIST);
         receptionRepository.deleteById(ReceptionId.fromLong(id));

@@ -6,7 +6,7 @@ import com.example.ClinicaDefinitiva.application.dto.actor.Patient.UpdatePatient
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,7 +29,7 @@ public class PatientWriteMapper {
                         new PhoneNumber(dto.phoneNumber())
                 ),
 
-                UserId.from( dto.userId()),
+                UserIdentityId.from( dto.userId()),
                 GuardianId.fromLong(dto.guardianId()),
                 ContractId.fromLong(dto.contractId())
         );

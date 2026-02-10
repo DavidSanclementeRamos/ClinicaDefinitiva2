@@ -27,7 +27,7 @@ public class DentistReadMapper {
                 dentist.getPersonData().getDateOfBirth().asDate(),
                 dentist.getPersonData().getBloodType().getValue(),
                 dentist.getPersonData().getDocumentoEPS(),
-                dentist.getUserId().getValue().toString(),
+                dentist.getUserId().value().toString(),
                 dentist.getLastUpdate(),
                 dentist.getPersonData().getAddress().Street(),
                 dentist.getPersonData().getAddress().City(),

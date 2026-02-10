@@ -1,10 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.GuardianError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import com.example.ClinicaDefinitiva.domain.util.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,23 +14,23 @@ public class Guardian  {
     private final GuardianId guardianId;
     private Person person;
     private TypeGuardian typeGuardian;
-    private UserId userId;
+    private UserIdentityId userIdentityId;
     private List<PatientId> patientList;
     private LocalDateTime lastUpdate;
 
-    public Guardian(GuardianId guardianId, LocalDateTime lastUpdate, List<PatientId> patientList, Person person, TypeGuardian typeGuardian, UserId userId) {
+    public Guardian(GuardianId guardianId, LocalDateTime lastUpdate, List<PatientId> patientList, Person person, TypeGuardian typeGuardian, UserIdentityId userIdentityId) {
         this.guardianId = guardianId;
         this.lastUpdate = lastUpdate;
         this.patientList = patientList;
         this.person = person;
         this.typeGuardian = typeGuardian;
-        this.userId = userId;
+        this.userIdentityId = userIdentityId;
     }
 
 
     public static Guardian registerGuardian(
             Person data,
-            UserId userId,
+            UserIdentityId userIdentityId,
             TypeGuardian typeGuardian) {
 
 
@@ -44,7 +44,7 @@ public class Guardian  {
                 null,
                 data,
                 typeGuardian,
-                userId);
+                userIdentityId);
     }
 
     public void updateContactData(Address address, PhoneNumber phoneNumber
@@ -121,8 +121,8 @@ public class Guardian  {
         return guardianId;
     }
 
-    public UserId getUserId() {
-        return userId;
+    public UserIdentityId getUserId() {
+        return userIdentityId;
     }
 
     public LocalDateTime getLastUpdate() {

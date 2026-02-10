@@ -247,7 +247,7 @@ permissions.add(Permission.read(INVOICE));
 ┌─────────────────────────────────────────────────────────────┐
 │ SecurityContext (Builder Pattern)                           │
 │ - permission: Permission                                     │
-│ - requestingUserId: UserId                                   │
+│ - requestingUserIdentityId: UserId                                   │
 │ - attributes: Map<String, Object>                           │
 │   * resourceOwnerId                                          │
 │   * sector                                                   │
@@ -277,12 +277,12 @@ permissions.add(Permission.read(INVOICE));
 ### Flujo de Evaluación
 
 ```
-Request: UPDATE_PATIENT (userId=123, patientId=123)
+Request: UPDATE_PATIENT (userIdentityId=123, patientId=123)
     │
     ↓
 SecurityContext {
     permission: UPDATE_PATIENT
-    userId: 123
+    userIdentityId: 123
     resourceOwnerId: 123
 }
     │
@@ -294,7 +294,7 @@ AuthorizationService.isAuthorized(PATIENT_ROLE, context)
     │
     ├─→ OwnershipPolicy.appliesTo(context)? → true
     │   OwnershipPolicy.isAllowed(PATIENT, context)? 
-    │   → userId == resourceOwnerId? → 123 == 123 → true ✓
+    │   → userIdentityId == resourceOwnerId? → 123 == 123 → true ✓
     │
     └─→ SectorPolicy.appliesTo(context)? → false (no DELETE DENTIST)
         → SKIP
@@ -535,7 +535,7 @@ RoleBasedPolicy.java
 
 ### Fase 3: Políticas ABAC (Completado)
 ```java
-OwnershipPolicy.java       // userId == resourceOwnerId
+OwnershipPolicy.java       // userIdentityId == resourceOwnerId
 SectorBasedPolicy.java     // sector validation
 SpecialtyBasedPolicy.java  // specialty validation
 ```

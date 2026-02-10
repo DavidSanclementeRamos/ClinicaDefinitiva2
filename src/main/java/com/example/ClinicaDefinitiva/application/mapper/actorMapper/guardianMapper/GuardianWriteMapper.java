@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.application.dto.actor.guardian.UpdateGuardi
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.UpdateGuardianSensitiveDto;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,7 +25,7 @@ public class GuardianWriteMapper {
                         new FullName(dto.first(), dto.lastName()),
                         new PhoneNumber(dto.phoneNumber())
                 ),
-                UserId.from(dto.userId()),
+                UserIdentityId.from(dto.userId()),
                 new TypeGuardian(dto.code(),dto.description())
         );
     }

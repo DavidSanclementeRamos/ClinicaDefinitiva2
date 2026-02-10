@@ -10,6 +10,6 @@ public record CreateJournalEntryRequest(
         String companyId,
         LocalDate date,
         String documentNumber,
-        String description,
-        List<JournalEntryLineRequest> lines
+        String description
+        //List<JournalEntryLineRequest> lines
 ) {}

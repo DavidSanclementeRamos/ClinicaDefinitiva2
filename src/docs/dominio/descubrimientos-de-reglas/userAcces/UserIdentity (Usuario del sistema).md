@@ -249,8 +249,8 @@ Cuando módulos de negocio (Patient, Appointment, etc.) necesitan validar usuari
 public class UserAccessValidator {
     
     // Consume Outcome (módulo técnico)
-    public void validateUserCanPerformSensitiveAction(UserId userId, Instant now) {
-        UserIdentity user = userRepo.findById(userId)...;
+    public void validateUserCanPerformSensitiveAction(UserId userIdentityId, Instant now) {
+        UserIdentity user = userRepo.findById(userIdentityId)...;
         
         Outcome eligibility = user.canPerformSensitiveAction(now);
         

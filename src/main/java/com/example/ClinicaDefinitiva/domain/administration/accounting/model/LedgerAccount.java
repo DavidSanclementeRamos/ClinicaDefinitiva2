@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.Natura
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+//import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -98,7 +98,7 @@ public final class LedgerAccount {
      */
     public void activate() {
         if (this.active) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_ALREADY_ACTIVE, EntityContext.LEDGERACCOUNT);
+           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_ALREADY_ACTIVE, EntityContext.LEDGERACCOUNT);
         }
         this.active = true;
     }
@@ -108,10 +108,10 @@ public final class LedgerAccount {
      */
     public void inactivate(String reason) {
         if (!this.active) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_ALREADY_ACTIVE, EntityContext.LEDGERACCOUNT);
+            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_ALREADY_ACTIVE, EntityContext.LEDGERACCOUNT);
         }
         if (reason == null || reason.isBlank()) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_INACTIVATION_REQUIRES_REASON, EntityContext.LEDGERACCOUNT);
+          //  throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_INACTIVATION_REQUIRES_REASON, EntityContext.LEDGERACCOUNT);
         }
         this.active = false;
     }
@@ -190,10 +190,10 @@ public final class LedgerAccount {
      */
     public void validateMovementRequirements(boolean hasThirdParty, boolean hasDocument) {
         if (this.requiresThirdParty && !hasThirdParty) {
-            throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_REQUIRES_THIRD_PARTY, EntityContext.LEDGERACCOUNT);
+          //  throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_REQUIRES_THIRD_PARTY, EntityContext.LEDGERACCOUNT);
         }
         if (this.requiresDocument && !hasDocument) {
-            throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_REQUIRES_DOCUMENT, EntityContext.LEDGERACCOUNT);
+          //  throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_REQUIRES_DOCUMENT, EntityContext.LEDGERACCOUNT);
         }
     }
 
@@ -222,7 +222,7 @@ public final class LedgerAccount {
 
     private void ensureActive() {
         if (!this.active) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_NOT_EDITABLE, EntityContext.LEDGERACCOUNT);
+           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_NOT_EDITABLE, EntityContext.LEDGERACCOUNT);
         }
     }
 
@@ -232,10 +232,10 @@ public final class LedgerAccount {
 
 
         if (code == null || code.isBlank()) {
-            throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_MISSING_CODE, EntityContext.LEDGERACCOUNT);
+           // throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_MISSING_CODE, EntityContext.LEDGERACCOUNT);
         }
         if (nature == null) {
-            throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_MISSING_NATURE, EntityContext.LEDGERACCOUNT);
+            //throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_MISSING_NATURE, EntityContext.LEDGERACCOUNT);
         }
     }
 
@@ -244,17 +244,17 @@ public final class LedgerAccount {
         String cleanCode = code.trim();
 
         if (cleanCode.isEmpty() || cleanCode.length() > MAX_CODE_LENGTH) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_INVALID_CODE_LENGTH, EntityContext.LEDGERACCOUNT);
+            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_INVALID_CODE_LENGTH, EntityContext.LEDGERACCOUNT);
         }
 
         if (!ACCOUNT_CODE_PATTERN.matcher(cleanCode).matches()) {
-            throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_INVALID_CODE_FORMAT, EntityContext.LEDGERACCOUNT);
+            //throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_INVALID_CODE_FORMAT, EntityContext.LEDGERACCOUNT);
         }
 
         // Validar niveles permitidos (1, 2, 4, 6, 8 dígitos)
         int length = cleanCode.length();
         if (length != 1 && length != 2 && length != 4 && length != 6 && length != 8) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_INVALID_CODE_LENGTH, EntityContext.LEDGERACCOUNT);
+           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_ACCOUNT_INVALID_CODE_LENGTH, EntityContext.LEDGERACCOUNT);
         }
     }
 

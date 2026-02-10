@@ -130,7 +130,7 @@ Gestionar el sistema de autorización híbrido RBAC/ABAC de la clínica dental, 
 - Si no pasa RBAC, deniega inmediatamente.
 
 ### Evaluación ABAC Contextual (Capa 2)
-- **OwnershipPolicy**: Verifica que userId == resourceOwnerId.
+- **OwnershipPolicy**: Verifica que userIdentityId == resourceOwnerId.
 - **SectorBasedPolicy**: Solo RECEPTIONIST de RECURSOS_HUMANOS puede DELETE DENTIST.
 - **SpecialtyBasedPolicy**: DENTIST solo ve servicios de su especialidad.
 - Cada política tiene prioridad (100-300), evalúa en orden descendente.
@@ -331,7 +331,7 @@ Gestionar el sistema de autorización híbrido RBAC/ABAC de la clínica dental, 
 
 **RN-ASSIGNMENT-001**
 - **Descripción**: Un usuario no puede tener dos asignaciones del mismo rol activas.
-- **Condición**: exists active UserRolAssignment(userId, rolId)
+- **Condición**: exists active UserRolAssignment(userIdentityId, rolId)
 - **Consecuencia**: Se rechaza asignación.
 - **Error asociado**: ERR_ASSIGNMENT_DUPLICATE_ACTIVE
 
@@ -355,7 +355,7 @@ Gestionar el sistema de autorización híbrido RBAC/ABAC de la clínica dental, 
 
 **RN-ASSIGNMENT-005**
 - **Descripción**: No puede revocar el único rol activo de un usuario.
-- **Condición**: UserRolAssignment.countActive(userId) == 1
+- **Condición**: UserRolAssignment.countActive(userIdentityId) == 1
 - **Consecuencia**: Se rechaza revocación.
 - **Error asociado**: ERR_ASSIGNMENT_CANNOT_REVOKE_LAST
 
@@ -399,13 +399,13 @@ Gestionar el sistema de autorización híbrido RBAC/ABAC de la clínica dental, 
 
 **RN-AUTH-002**
 - **Descripción**: PATIENT solo puede UPDATE sus propios datos.
-- **Condición**: rolEnum=PATIENT && resource=PATIENT && userId != resourceOwnerId
+- **Condición**: rolEnum=PATIENT && resource=PATIENT && userIdentityId != resourceOwnerId
 - **Consecuencia**: Se rechaza operación.
 - **Error asociado**: ERR_AUTH_OWNERSHIP_REQUIRED
 
 **RN-AUTH-003**
 - **Descripción**: GUARDIAN solo puede UPDATE pacientes bajo su tutela.
-- **Condición**: rolEnum=GUARDIAN && resource=PATIENT && patientGuardianId != userId
+- **Condición**: rolEnum=GUARDIAN && resource=PATIENT && patientGuardianId != userIdentityId
 - **Consecuencia**: Se rechaza operación.
 - **Error asociado**: ERR_AUTH_GUARDIANSHIP_REQUIRED
 
@@ -475,7 +475,7 @@ Gestionar el sistema de autorización híbrido RBAC/ABAC de la clínica dental, 
 
 ### SecurityContext (Builder)
 - **permission**: Permission
-- **requestingUserId**: UserId
+- **requestingUserIdentityId**: UserId
 - **attributes**: Map<String, Object>
 - Builder pattern para construcción fluida
 - Atributos opcionales: resourceOwnerId, sector, specialty, resourceId
@@ -498,7 +498,7 @@ rolRepository.save(receptionistRRHH);
 
 // ========== ASIGNAR ROL A USUARIO ==========
 UserRolAssignment assignment = UserRolAssignment.assignPermanent(
-    userId: UserId.of(42L),
+    userIdentityId: UserId.of(42L),
     rolId: receptionistRRHH.getId(),
     isPrimary: true
 );

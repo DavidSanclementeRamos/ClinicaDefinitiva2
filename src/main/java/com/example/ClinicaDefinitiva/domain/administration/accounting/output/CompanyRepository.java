@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.output;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
+//import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
 import org.springframework.data.domain.Page;

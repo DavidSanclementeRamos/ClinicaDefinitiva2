@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public record CreateContractRequest(
         String companyId,
         String thirdPartiesId,
-        NameDto name,
+        //NameDto name,
         String description,
         String origin,
         LocalDate endDate,

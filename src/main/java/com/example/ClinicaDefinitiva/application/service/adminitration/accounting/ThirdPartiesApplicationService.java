@@ -3,11 +3,8 @@ package com.example.ClinicaDefinitiva.application.service.adminitration.accounti
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.*;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ThirdPartiesNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.AddressMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NameMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.ThirdPartiesMapper;
-import com.example.ClinicaDefinitiva.application.mapper.EmailMapper;
-import com.example.ClinicaDefinitiva.application.mapper.PhoneNumberMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.ThirdPartiesUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;

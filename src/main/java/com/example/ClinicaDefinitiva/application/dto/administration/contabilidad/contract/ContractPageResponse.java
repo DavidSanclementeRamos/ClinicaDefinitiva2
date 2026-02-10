@@ -9,7 +9,7 @@ import java.time.LocalDate;
  */
 public record ContractPageResponse(
         String id,
-        NameDto name,
+        //NameDto name,
         String thirdPartiesName,
         String coverageType,
         Double coverageRate,

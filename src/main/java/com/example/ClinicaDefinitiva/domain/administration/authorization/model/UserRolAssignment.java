@@ -2,11 +2,11 @@ package com.example.ClinicaDefinitiva.domain.administration.authorization.model;
 
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.UserRolAssignmentId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.UserRolAssignmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 
 import java.time.LocalDate;
 
@@ -16,17 +16,17 @@ import java.time.LocalDate;
  */
 public class UserRolAssignment {
     private UserRolAssignmentId id;
-    private final UserId userId;
+    private final UserIdentityId userIdentityId;
     private final RolId rolId;
     private final LocalDate validFrom;
     private LocalDate validTo;
     private final boolean isPrimary; // Rol principal para UI
 
-    private UserRolAssignment(UserRolAssignmentId id, UserId userId, RolId rolId,
-                             LocalDate validFrom, LocalDate validTo, boolean isPrimary) {
+    private UserRolAssignment(UserRolAssignmentId id, UserIdentityId userIdentityId, RolId rolId,
+                              LocalDate validFrom, LocalDate validTo, boolean isPrimary) {
         validateDates(validFrom, validTo);
         this.id = id;
-        this.userId = userId;
+        this.userIdentityId = userIdentityId;
         this.rolId = rolId;
         this.validFrom = validFrom;
         this.validTo = validTo;
@@ -34,10 +34,10 @@ public class UserRolAssignment {
     }
 
 
-    public static UserRolAssignment assignPermanent(UserId userId, RolId rolId, boolean isPrimary) {
+    public static UserRolAssignment assignPermanent(UserIdentityId userIdentityId, RolId rolId, boolean isPrimary) {
         return new UserRolAssignment(
                 null,
-                userId,
+                userIdentityId,
                 rolId,
                 LocalDate.now(),
                 null, // Sin fecha de expiración
@@ -46,7 +46,7 @@ public class UserRolAssignment {
     }
 
 
-    public static UserRolAssignment assignTemporary(UserId userId, RolId rolId,
+    public static UserRolAssignment assignTemporary(UserIdentityId userIdentityId, RolId rolId,
                                                     LocalDate validFrom, LocalDate validTo,
                                                     boolean isPrimary) {
         if (isPrimary) {
@@ -59,7 +59,7 @@ public class UserRolAssignment {
 
         return new UserRolAssignment(
                 null,
-                userId,
+                userIdentityId,
                 rolId,
                 validFrom,
                 validTo,
@@ -107,7 +107,7 @@ public class UserRolAssignment {
     }
 
     public UserRolAssignmentId getId() { return id; }
-    public UserId getUserId() { return userId; }
+    public UserIdentityId getUserId() { return userIdentityId; }
     public RolId getRolId() { return rolId; }
     public LocalDate getValidFrom() { return validFrom; }
     public LocalDate getValidTo() { return validTo; }

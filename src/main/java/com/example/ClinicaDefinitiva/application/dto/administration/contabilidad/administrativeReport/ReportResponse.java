@@ -6,7 +6,7 @@ import java.util.List;
 
 public record ReportResponse(
         String id,
-        NameDto title,
+        //NameDto title,
         PeriodDto period,
         String createdAt,
         String createdBy,

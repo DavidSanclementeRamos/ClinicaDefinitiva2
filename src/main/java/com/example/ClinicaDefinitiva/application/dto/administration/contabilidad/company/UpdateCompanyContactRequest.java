@@ -5,9 +5,9 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
  * DTO para actualizar información de contacto
  */
 public record UpdateCompanyContactRequest(
-        NameDto name,
-        String legalRepresentative,
-        AddressDto address,
-        PhoneNumberDto phoneNumber,
-        EmailDto email
+        //NameDto name,
+        String legalRepresentative
+        //AddressDto address,
+       // PhoneNumberDto phoneNumber,
+       // EmailDto email
 ) {}

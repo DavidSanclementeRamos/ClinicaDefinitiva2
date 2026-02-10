@@ -7,7 +7,6 @@ import com.example.ClinicaDefinitiva.application.exceptions.actorException.Appoi
 import com.example.ClinicaDefinitiva.application.exceptions.DentalServiceNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.PatientNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.AppointmentMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.AppointmentUseCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;

@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 
 public record ThirdPartiesListResponse(
         String id,
-        NameDto name,
+        //NameDto name,
         String documentNumber,
         String typeThirdParties,
         boolean active

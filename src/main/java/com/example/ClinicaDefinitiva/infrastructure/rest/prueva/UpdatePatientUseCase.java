@@ -1,10 +1,12 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.prueva;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
+import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.SecurityContext;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +24,14 @@ public class UpdatePatientUseCase {
 
     @Transactional
     @RequiresPermission(resource = Resources.PATIENT, action = Actions.UPDATE)
-    public void execute(UpdatePatientCommand command, Rol userRol, UserId userId) {
+    public void execute(UpdatePatientCommand command, Rol userRol, UserIdentityId userIdentityId) {
         // 1. Buscar paciente
         Patient patient = patientRepository.findById(command.patientId())
                 .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
 
         // 2. Crear contexto de seguridad con ownership
         SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), userId)
+                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), userIdentityId)
                 .withResourceOwnerId(patient.getUser())
                 .build();
 

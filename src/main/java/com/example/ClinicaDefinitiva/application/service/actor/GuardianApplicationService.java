@@ -7,10 +7,10 @@ import com.example.ClinicaDefinitiva.application.portsInput.actor.GuardianUserCa
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.GuardianNoFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.actor.output.GuardianRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.service.UserAccessValidator;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -64,7 +64,7 @@ public class GuardianApplicationService implements GuardianUserCase {
     public ReadGuardianDto save(CreateGuardianDto createGuardianDto) {
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(createGuardianDto.userId()),
+                UserIdentityId.from(createGuardianDto.userId()),
                 now,
                 EntityContext.GUARDIAN  // Contexto para errores más descriptivos
         );
@@ -80,7 +80,7 @@ public class GuardianApplicationService implements GuardianUserCase {
 
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.GUARDIAN  // Contexto para errores más descriptivos
         );
@@ -97,7 +97,7 @@ public class GuardianApplicationService implements GuardianUserCase {
 
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.GUARDIAN
         );
@@ -113,7 +113,7 @@ public class GuardianApplicationService implements GuardianUserCase {
         }
         Instant now = Instant.now();
         userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserId.from(id),
+                UserIdentityId.from(id),
                 now,
                 EntityContext.GUARDIAN
         );

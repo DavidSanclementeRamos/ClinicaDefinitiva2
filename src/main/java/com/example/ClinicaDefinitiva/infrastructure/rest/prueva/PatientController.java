@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.prueva;
 
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -22,7 +22,7 @@ public class PatientController {
 
         // Obtener rol primario del usuario
         Rol primaryRole = userDetails.getPrimaryRole();
-        UserId userId = userDetails.getUserId();
+        UserIdentityId userIdentityId = userDetails.getUserId();
 
         // Ejecutar use case
         UpdatePatientCommand command = new UpdatePatientCommand(
@@ -31,7 +31,7 @@ public class PatientController {
                 request.userIdentity()
         );
 
-        updatePatientUseCase.execute(command, primaryRole, userId);
+        updatePatientUseCase.execute(command, primaryRole, userIdentityId);
 
         return ResponseEntity.ok().build();
     }

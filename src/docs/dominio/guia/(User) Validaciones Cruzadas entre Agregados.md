@@ -144,11 +144,11 @@ public class UserDeactivationPolicy {
 ┌─────────────────────────────────────────────────────────────┐
 │  Application Service (Capa de Aplicación)                  │
 │                                                             │
-│  public void deactivateUser(UserId userId) {               │
-│      UserIdentity user = userRepo.findById(userId);        │
+│  public void deactivateUser(UserId userIdentityId) {               │
+│      UserIdentity user = userRepo.findById(userIdentityId);        │
 │                                                             │
 │      // 1. Validar acceso (técnico)                        │
-│      userAccessValidator.validate(userId, now);            │
+│      userAccessValidator.validate(userIdentityId, now);            │
 │      ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  │
 │                                                             │
 │      // 2. Validar restricciones de desactivación          │
@@ -248,14 +248,14 @@ public class Dentist {
 // MAL: Lógica de negocio en capa de aplicación
 public class DeactivateUserUseCase {
     
-    public void execute(UserId userId) {
+    public void execute(UserId userIdentityId) {
         // Validaciones directas en el use case
-        Dentist dentist = dentistRepo.findByUserId(userId);
+        Dentist dentist = dentistRepo.findByUserId(userIdentityId);
         if (dentist != null && dentist.hasPendingAppointments()) {
             throw new Exception("Dentist has pending appointments");
         }
         
-        Patient patient = patientRepo.findByUserId(userId);
+        Patient patient = patientRepo.findByUserId(userIdentityId);
         if (patient != null && patient.hasActiveTreatments()) {
             throw new Exception("Patient has active treatments");
         }
@@ -314,10 +314,10 @@ public class UserDeactivationPolicy {
 
 // 4. Application Service: coordina todo
 @Transactional
-public void deactivateUser(UserId userId) {
-    UserIdentity user = userRepo.findById(userId);
+public void deactivateUser(UserId userIdentityId) {
+    UserIdentity user = userRepo.findById(userIdentityId);
     
-    userAccessValidator.validate(userId, now);
+    userAccessValidator.validate(userIdentityId, now);
     
     Outcome validation = userDeactivationPolicy.validate(user);
     if (validation.isFailure()) {

@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 import java.math.BigDecimal;
 
 public record AddIndicatorToReportRequest(
-        NameDto name,
+        //NameDto name,
         BigDecimal value,
         String unit,
         String description,

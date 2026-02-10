@@ -10,7 +10,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePe
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+//import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -54,7 +54,7 @@ public final class Company {
 
         validateIncorporationDate(incorporationDate);
         if (Objects.isNull(typePerson)) {
-            throw new DomainAggregateException(ErrorCatalogXD.ERR_COMPANY_MISSING_PERSON_TYPE, EntityContext.COMPANY);
+           // throw new DomainAggregateException(ErrorCatalogXD.ERR_COMPANY_MISSING_PERSON_TYPE, EntityContext.COMPANY);
         }
 
 
@@ -128,7 +128,7 @@ public final class Company {
 
         if (Objects.equals(this.status, CompanyStatus.of(CompanyStatus.Status.INACTIVE)) &&
                 newStatus.equals(CompanyStatus.of(CompanyStatus.Status.ACTIVE))) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_COMPANY_CANNOT_REACTIVATE_DIRECTLY, EntityContext.COMPANY);
+           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_COMPANY_CANNOT_REACTIVATE_DIRECTLY, EntityContext.COMPANY);
         }
 
         this.status = newStatus;
@@ -157,19 +157,19 @@ public final class Company {
 
     private void ensureEditable() {
         if (!status.isEditable()) {
-            throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_COMPANY_NOT_EDITABLE, EntityContext.COMPANY);
+            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_COMPANY_NOT_EDITABLE, EntityContext.COMPANY);
         }
     }
 
     private void validateIncorporationDate(LocalDate date) {
         if (Objects.isNull(incorporationDate)) {
-            throw new TemporalValidationException(ErrorCatalogXD.ERR_COMPANY_MISSING_INCORPORATION_DATE, EntityContext.COMPANY);
+           // throw new TemporalValidationException(ErrorCatalogXD.ERR_COMPANY_MISSING_INCORPORATION_DATE, EntityContext.COMPANY);
         }
         if (incorporationDate.isAfter(LocalDate.now())) {
-            throw new TemporalValidationException(ErrorCatalogXD.ERR_COMPANY_FUTURE_INCORPORATION_DATE, EntityContext.COMPANY);
+            //throw new TemporalValidationException(ErrorCatalogXD.ERR_COMPANY_FUTURE_INCORPORATION_DATE, EntityContext.COMPANY);
         }
         if (date.isBefore(LocalDate.of(1800, 1, 1))) {
-            throw new TemporalValidationException(ErrorCatalogXD.ERR_COMPANY_INVALID_INCORPORATION_DATE, EntityContext.COMPANY);
+           // throw new TemporalValidationException(ErrorCatalogXD.ERR_COMPANY_INVALID_INCORPORATION_DATE, EntityContext.COMPANY);
         }
     }
 

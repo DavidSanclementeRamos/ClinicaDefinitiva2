@@ -1,10 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.output;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
+//import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.AdministrativeReportId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ReportStatus;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,7 +15,7 @@ public interface ReportRepository {
     AdministrativeReport save(AdministrativeReport report);
     Optional<AdministrativeReport> findById(AdministrativeReportId id);
     Page<AdministrativeReport> findByPeriod(Pageable pageable, LocalDate star, LocalDate end );
-    Page<AdministrativeReport> findByCreator(Pageable pageable, UserId createdBy);
+    Page<AdministrativeReport> findByCreator(Pageable pageable, UserIdentityId createdBy);
     Page<AdministrativeReport> findByStatus(Pageable pageable, ReportStatus status);
     Page<AdministrativeReport> findPublishedReports();
     Page<AdministrativeReport> findDraftReports();

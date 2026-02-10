@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMap
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.PatientEntity;
 
 import java.time.LocalDate;
@@ -49,7 +49,7 @@ public class PatientReadEntityMapper {
                 PatientId.fromLong(entity.getPatientId()),
                 person,
                 guardianId,
-                new UserId(entity.getUser()),
+                new UserIdentityId(entity.getUser()),
                 entity.getLastUpdate(),
                 contractId
         );

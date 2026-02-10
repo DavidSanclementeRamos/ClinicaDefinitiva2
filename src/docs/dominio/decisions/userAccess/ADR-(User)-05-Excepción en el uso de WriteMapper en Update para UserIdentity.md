@@ -59,7 +59,7 @@ En su lugar, el Application Service invocará directamente los métodos de domin
 ```java
 @Override
 public ReadUserIdentityDto editUserData(UpdateUserIdentityDto dto) {
-    UserIdentity user = userRepository.findIdentity(UserId.from(dto.id()));
+    UserIdentity user = userIdentityRepository.findIdentity(UserId.from(dto.id()));
 
     Outcome<UserIdentity> outcome = user.editUserData(
         new UserName(dto.name()),
@@ -72,7 +72,7 @@ public ReadUserIdentityDto editUserData(UpdateUserIdentityDto dto) {
         throw new AggregateBusinessRuleViolationException(outcome.getDetalles());
     }
 
-    userRepository.save(user);
+    userIdentityRepository.save(user);
     return readMapper.toDto(user);
 }
 ```

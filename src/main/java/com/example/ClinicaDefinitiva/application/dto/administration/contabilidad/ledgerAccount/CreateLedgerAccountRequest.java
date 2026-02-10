@@ -3,7 +3,8 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 public record CreateLedgerAccountRequest(
         String companyId,
         String code,
-        NameDto name,
+
+        //NameDto name,
         String nature,
         boolean requiresThirdParty,
         boolean requiresDocument

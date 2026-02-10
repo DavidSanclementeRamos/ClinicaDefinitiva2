@@ -2,12 +2,12 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.TreatmentId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.PatientError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import com.example.ClinicaDefinitiva.domain.util.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ import java.util.List;
 public class Patient  {
 
     private final PatientId patientId;
-    private final UserId userId;
+    private final UserIdentityId userIdentityId;
     private final GuardianId guardianId;
     private LocalDateTime lastUpdate;
     private ContractId contractId;
@@ -24,19 +24,19 @@ public class Patient  {
     private Person person;
 
 
-    public Patient(ContractId contractId, LocalDateTime lastUpdate, GuardianId guardianId, Person person, List<TreatmentId> treatments, UserId userId, PatientId patientId) {
+    public Patient(ContractId contractId, LocalDateTime lastUpdate, GuardianId guardianId, Person person, List<TreatmentId> treatments, UserIdentityId userIdentityId, PatientId patientId) {
         this.contractId = contractId;
         this.lastUpdate = lastUpdate;
         this.guardianId = guardianId;
         this.person = person;
         this.treatments = treatments;
-        this.userId = userId;
+        this.userIdentityId = userIdentityId;
         this.patientId = patientId;
     }
 
     public static Patient registerPatient(
                                           Person data,
-                                          UserId userId,
+                                          UserIdentityId userIdentityId,
                                           GuardianId guardianId,
                                           ContractId contractId) {
 
@@ -48,7 +48,7 @@ public class Patient  {
             throw new BusinessRuleViolationException(PatientError.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
 
-        return new Patient(contractId,  LocalDate.now().atStartOfDay(), guardianId, data, null, userId, null);
+        return new Patient(contractId,  LocalDate.now().atStartOfDay(), guardianId, data, null, userIdentityId, null);
     }
 
     public void updatePatientContact( Address address, PhoneNumber phoneNumber) {
@@ -113,7 +113,7 @@ public class Patient  {
     public PatientId getPatientId() { return patientId; }
     public Person getPerson() { return person; }
     public GuardianId getGuardianId() { return guardianId; }
-    public UserId getUser() { return userId; }
+    public UserIdentityId getUser() { return userIdentityId; }
     public LocalDateTime getLastUpdate() { return lastUpdate; }
     public ContractId getContractId() { return contractId; }
 

@@ -9,8 +9,8 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.output.Jou
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ReportRepository;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.*;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+//import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,8 +28,48 @@ public class ReportApplicationService implements ReportUseCase {
         this.mapper = mapper;
     }
 
+    @Override
+    public ReportResponse findReportById(String id) {
+        return null;
+    }
 
     @Override
+    public Page<ReportListResponse> listReportsByPeriod(Pageable pageable, LocalDate star, LocalDate end) {
+        return null;
+    }
+
+    @Override
+    public ReportResponse createAdministrativeReport(CreateReportRequest request) {
+        return null;
+    }
+
+    @Override
+    public ReportResponse updateReportInformation(String id, UpdateReportRequest request) {
+        return null;
+    }
+
+    @Override
+    public ReportResponse addJournalEntryToReport(String reportId, AddJournalEntryToReportRequest request) {
+        return null;
+    }
+
+    @Override
+    public ReportResponse addIndicatorToReport(String reportId, AddIndicatorToReportRequest request) {
+        return null;
+    }
+
+    @Override
+    public ReportResponse addAttachmentToReport(String reportId, AddAttachmentToReportRequest request) {
+        return null;
+    }
+
+    @Override
+    public ReportResponse approveReport(String reportId, ApproveReportRequest request) {
+        return null;
+    }
+
+
+    /** @Override
     public ReportResponse findReportById(String id) {
         AdministrativeReportId reportId = AdministrativeReportId.fromString(id);
         AdministrativeReport report =  repository.findById(reportId)
@@ -53,7 +93,7 @@ public class ReportApplicationService implements ReportUseCase {
         AdministrativeReport report = AdministrativeReport.create(
                 NameMapper.fromDto(dto.title()),
                mapper.fromDto( dto.periodType()),
-                UserId.fromString(dto.createdBy())
+                UserIdentityId.fromString(dto.createdBy())
         );
                 repository.save(report);
 
@@ -122,11 +162,11 @@ public class ReportApplicationService implements ReportUseCase {
         AdministrativeReport report =  repository.findById(reportId)
                 .orElseThrow(()-> new AdministrativeReportNotFoundException("No se encontró el reporte:" + reportId));
 
-        UserId userId = UserId.fromString(request.approveId());
-        report.approve(userId);
+        UserIdentityId userIdentityId = UserIdentityId.fromString(request.approveId());
+        report.approve(userIdentityId);
 
         repository.save(report);
 
         return mapper.toResponse(report);
-    }
+    }*/
 }

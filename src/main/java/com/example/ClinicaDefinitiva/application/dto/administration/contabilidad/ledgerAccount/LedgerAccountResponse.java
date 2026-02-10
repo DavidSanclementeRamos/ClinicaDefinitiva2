@@ -4,7 +4,7 @@ public record LedgerAccountResponse(
         String id,
         String companyId,
         String code,
-        NameDto name,
+        //NameDto name,
         String nature,
         boolean requiresThirdParty,
         boolean requiresDocument,

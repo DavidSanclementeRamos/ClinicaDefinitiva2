@@ -2,7 +2,8 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+
 import java.time.LocalDateTime;
 
 public class Receptionist   {
@@ -11,12 +12,12 @@ public class Receptionist   {
     private final ShiftId shiftId;
     private Person person;
     private Sector sector;
-    private final UserId userId;
+    private final UserIdentityId userIdentityId;
     private LocalDateTime lastUpdate;
 
-    public Receptionist(LocalDateTime lastUpdate, UserId userId, Sector sector, Person person, ShiftId shiftId, ReceptionId id) {
+    public Receptionist(LocalDateTime lastUpdate, UserIdentityId userIdentityId, Sector sector, Person person, ShiftId shiftId, ReceptionId id) {
         this.lastUpdate = lastUpdate;
-        this.userId = userId;
+        this.userIdentityId = userIdentityId;
         this.sector = sector;
         this.person = person;
         this.shiftId = shiftId;
@@ -25,10 +26,10 @@ public class Receptionist   {
 
     public static Receptionist registerReceptionist(
             Person data,
-            UserId userId,
+            UserIdentityId userIdentityId,
             Sector sector,
             ShiftId shiftId) {
-        return new Receptionist(LocalDateTime.now(), userId , sector, data,shiftId, null);
+        return new Receptionist(LocalDateTime.now(), userIdentityId, sector, data,shiftId, null);
     }
 
 

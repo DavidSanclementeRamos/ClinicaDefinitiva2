@@ -6,7 +6,7 @@ import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.UpdateRe
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,7 +27,7 @@ public class ReceptionWriteMapper {
                         new FullName(dto.first(), dto.lastName()),
                         new PhoneNumber(dto.phoneNumber())
                 ),
-               UserId.from( dto.user()),
+               UserIdentityId.from( dto.user()),
                 new Sector(dto.sector()),
                 ShiftId.from(dto.shiftId())
         );

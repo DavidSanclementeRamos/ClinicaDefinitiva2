@@ -1,19 +1,18 @@
 package com.example.ClinicaDefinitiva.domain.authentication.model;
 
 import com.example.ClinicaDefinitiva.domain.Email;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.authentication.service.UserDeactivationPolicy;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserName;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserStatus;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityStatus;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 import com.example.ClinicaDefinitiva.domain.util.Severity;
-
 import java.time.Duration;
 import java.time.Instant;
 
@@ -36,29 +35,29 @@ import java.time.Instant;
  * - Contador de intentos fallidos solo se resetea en login exitoso
  */
 public class UserIdentity {
-    private final UserId id;
+    private final UserIdentityId id;
     private Email email;
     private HashedPassword hashedPassword;
-    private UserName name;
+    private UserIdentityName name;
     private final Instant createdAt;
     private Instant lastLoginAt;
     private int failedLoginAttempts;
     private Instant lockedUntil;
     private boolean verified;
-    private UserStatus status;
+    private UserIdentityStatus status;
     private long version;
 
-    public UserIdentity(UserId id, Email email, HashedPassword hashedPassword, UserName name, Instant createdAt) {
+    public UserIdentity(UserIdentityId id, Email email, HashedPassword hashedPassword, UserIdentityName name, Instant createdAt) {
         this.id = id;
         this.email = email;
         this.hashedPassword = hashedPassword;
         this.name = name;
         this.createdAt = createdAt;
-        this.status = UserStatus.of(UserStatus.State.ACTIVE);
+        this.status = UserIdentityStatus.of(UserIdentityStatus.State.ACTIVE);
         this.verified = false;
     }
 
-    public static UserIdentity register( Email email, HashedPassword hashedPassword, UserName name, Instant now) {
+    public static UserIdentity register(Email email, HashedPassword hashedPassword, UserIdentityName name, Instant now) {
         return new UserIdentity(null, email, hashedPassword, name, now);
     }
 
@@ -80,9 +79,8 @@ public class UserIdentity {
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
-    public Outcome<UserIdentity> editUserData(UserName newName, Email newEmail, HashedPassword newPassword, Instant now) {
+    public Outcome<UserIdentity> editUserData(UserIdentityName newName, Email newEmail, HashedPassword newPassword, Instant now) {
 
-        // Verificar elegibilidad primero
         Outcome<UserIdentity> eligibility = canPerformSensitiveAction(now);
         if (!eligibility.isSuccess()) {
             return eligibility;
@@ -125,13 +123,12 @@ public class UserIdentity {
     }
 
     public Outcome<UserIdentity> deactivate(UserDeactivationPolicy policy, Instant now, String reason) {
-        // Verificar elegibilidad primero
+
         Outcome<UserIdentity> eligibility = canPerformSensitiveAction(now);
         if (!eligibility.isSuccess()) {
             return eligibility;
         }
 
-        // Validar que exista una razón
         if (reason == null || reason.isBlank()) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_DEACTIVATION_REASON_REQUIRED,
@@ -140,16 +137,13 @@ public class UserIdentity {
                     EntityContext.USUARIO));
         }
 
-        // Validar restricciones de negocio con la policy
         Outcome<Void> validation = policy.validate(this);
         if (validation.isFailure()) {
             return Outcome.fail(validation.getDetalles());
         }
 
-        // Cambiar estado a INACTIVO
-        this.status = UserStatus.of(UserStatus.State.INACTIVE);
+        this.status = UserIdentityStatus.of(UserIdentityStatus.State.INACTIVE);
 
-        // Retornar nuevo agregado con estado actualizado
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
@@ -184,7 +178,7 @@ public class UserIdentity {
             ));
         }
 
-        if (status.getState() != UserStatus.State.ACTIVE) {
+        if (status.getState() != UserIdentityStatus.State.ACTIVE) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_INACTIVE,
                     Severity.ERROR,
@@ -205,7 +199,7 @@ public class UserIdentity {
      * @return Outcome indicando éxito o fallo
      */
     public Outcome<UserIdentity> suspend(String reason, Instant now) {
-        if (status.getState() == UserStatus.State.SUSPENDED) {
+        if (status.getState() == UserIdentityStatus.State.SUSPENDED) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_ALREADY_SUSPENDED,
                     Severity.INFO,
@@ -223,7 +217,7 @@ public class UserIdentity {
             ));
         }
 
-        this.status = UserStatus.of(UserStatus.State.SUSPENDED);
+        this.status = UserIdentityStatus.of(UserIdentityStatus.State.SUSPENDED);
 
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
@@ -236,7 +230,7 @@ public class UserIdentity {
      * @return Outcome indicando éxito o fallo
      */
     public Outcome<UserIdentity> reactivate(Instant now) {
-        if (status.getState() == UserStatus.State.ACTIVE) {
+        if (status.getState() == UserIdentityStatus.State.ACTIVE) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_ALREADY_ACTIVE,
                     Severity.INFO,
@@ -256,17 +250,17 @@ public class UserIdentity {
         }
 
         // Limpiar bloqueos al reactivar
-        this.status = UserStatus.of(UserStatus.State.ACTIVE);
+        this.status = UserIdentityStatus.of(UserIdentityStatus.State.ACTIVE);
         this.failedLoginAttempts = 0;
         this.lockedUntil = null;
 
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
 
-    public UserId getId() { return id; }
+    public UserIdentityId getId() { return id; }
     public Email getEmail() { return email; }
     public HashedPassword getHashedPassword() { return hashedPassword; }
-    public UserName getName() { return name; }
+    public UserIdentityName getName() { return name; }
     public Instant getLastLoginAt() { return lastLoginAt; }
 
     public boolean isVerified() {
@@ -289,7 +283,7 @@ public class UserIdentity {
         return version;
     }
 
-    public UserStatus getStatus() {
+    public UserIdentityStatus getStatus() {
         return status;
     }
 

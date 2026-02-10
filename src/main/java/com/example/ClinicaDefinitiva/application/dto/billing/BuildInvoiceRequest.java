@@ -7,7 +7,7 @@ public class BuildInvoiceRequest {
     public String patientId;
     public String contractId;
     public String providerId;
-    public List<ServiceRenderedDto> services;
+    //public List<ServiceRenderedDto> services;
     public LocalDateTime issuedAt;
     public LocalDateTime dueDate;
 

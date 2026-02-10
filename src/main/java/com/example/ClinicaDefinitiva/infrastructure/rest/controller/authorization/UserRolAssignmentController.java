@@ -6,7 +6,7 @@ import com.example.ClinicaDefinitiva.application.dto.administration.authorizatio
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.authorization.UserRolAssignmentUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.UserRolAssignmentId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.autorization.UserRolAssignment.CreateAssignmentPermanentRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.autorization.UserRolAssignment.CreateAssignmentTemporaryRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.autorization.UserRolAssignment.ReadAssignmentResponse;
@@ -48,7 +48,7 @@ public class UserRolAssignmentController {
             @PathVariable Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
         return useCase.findById(UserRolAssignmentId.of(id), requesterId, requesterRolId)
@@ -62,10 +62,10 @@ public class UserRolAssignmentController {
             @PathVariable Long userId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
-        List<ReadAssignmentDto> assignments = useCase.findByUserId(UserId.from(userId), requesterId, requesterRolId);
+        List<ReadAssignmentDto> assignments = useCase.findByUserId(UserIdentityId.from(userId), requesterId, requesterRolId);
         return ResponseEntity.ok(
                 assignments.stream()
                         .map(readMapper::toRest)
@@ -79,10 +79,10 @@ public class UserRolAssignmentController {
             @PathVariable Long rolId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
-        return useCase.findByUserIdAndRolId(UserId.from(userId), RolId.of(rolId), requesterId, requesterRolId)
+        return useCase.findByUserIdAndRolId(UserIdentityId.from(userId), RolId.of(rolId), requesterId, requesterRolId)
                 .map(readMapper::toRest)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -93,10 +93,10 @@ public class UserRolAssignmentController {
             @PathVariable Long userId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
-        return useCase.findByUserIdAndIsPrimary(UserId.from(userId), true, requesterId, requesterRolId)
+        return useCase.findByUserIdAndIsPrimary(UserIdentityId.from(userId), true, requesterId, requesterRolId)
                 .map(readMapper::toRest)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -109,7 +109,7 @@ public class UserRolAssignmentController {
             @Valid @RequestBody CreateAssignmentPermanentRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
         CreateAssignmentPermanentDto dto = writeMapper.toServicePermanent(request);
@@ -122,7 +122,7 @@ public class UserRolAssignmentController {
             @Valid @RequestBody CreateAssignmentTemporaryRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
         CreateAssignmentTemporaryDto dto = writeMapper.toServiceTemporary(request);
@@ -137,7 +137,7 @@ public class UserRolAssignmentController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
         boolean result = useCase.isActiveAt(UserRolAssignmentId.of(id), date, requesterId, requesterRolId);
@@ -149,7 +149,7 @@ public class UserRolAssignmentController {
             @PathVariable Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
         boolean result = useCase.isCurrentlyActive(UserRolAssignmentId.of(id), requesterId, requesterRolId);
@@ -163,7 +163,7 @@ public class UserRolAssignmentController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate newValidTo,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
         useCase.extend(UserRolAssignmentId.of(id), newValidTo, requesterId, requesterRolId);
@@ -179,10 +179,10 @@ public class UserRolAssignmentController {
             @PathVariable Long userId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
-        useCase.revokeAllRol(UserId.from(userId), requesterId, requesterRolId);
+        useCase.revokeAllRol(UserIdentityId.from(userId), requesterId, requesterRolId);
     }
 
     @DeleteMapping("/user/{userId}/roles/{rolId}")
@@ -192,10 +192,10 @@ public class UserRolAssignmentController {
             @PathVariable Long rolId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserId requesterId = userDetails.getId();
+        UserIdentityId requesterId = userDetails.getId();
         RolId requesterRolId = userDetails.getActiveRolId();
 
-        useCase.revokeRol(UserId.from(userId), RolId.of(rolId), requesterId, requesterRolId);
+        useCase.revokeRol(UserIdentityId.from(userId), RolId.of(rolId), requesterId, requesterRolId);
     }
 }
 

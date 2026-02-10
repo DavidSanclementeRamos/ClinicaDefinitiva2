@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.EdadNoPermitidaExce
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.ErrorResponse;
 import com.example.ClinicaDefinitiva.util.ErrorCodeResolver;
 import com.example.ClinicaDefinitiva.util.ErrorHandlerUtils;
-import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
+import com.example.ClinicaDefinitiva.util.RequestIdFilter;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
-import static com.example.ClinicaDefinitiva.web.filter.RequestIdFilter.getRequestId;
+import static com.example.ClinicaDefinitiva.util.RequestIdFilter.getRequestId;
 
 
 @RestControllerAdvice

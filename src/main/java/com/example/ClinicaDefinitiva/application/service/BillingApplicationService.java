@@ -2,29 +2,16 @@ package com.example.ClinicaDefinitiva.application.service;
 
 import com.example.ClinicaDefinitiva.application.dto.billing.BuildInvoiceRequest;
 import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceDto;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ServiceRendered;
 import com.example.ClinicaDefinitiva.application.dto.billing.UpdateInvoiceRequest;
-import com.example.ClinicaDefinitiva.application.mapper.InvoiceMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.BillingUseCase;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceId;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
+//import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.InvoiceRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
-import com.example.ClinicaDefinitiva.domain.service.InvoiceFactoryDomainService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.time.LocalDateTime;
-import java.util.*;
 
 @Service
 @Transactional
@@ -37,7 +24,39 @@ public class BillingApplicationService implements BillingUseCase {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceMapper mapper;
 
-    public BillingApplicationService(ContractRepository contractRepository,
+    public BillingApplicationService(ContractRepository contractRepository, RateRepository rateRepository, InvoiceRepository invoiceRepository, InvoiceMapper mapper) {
+        this.contractRepository = contractRepository;
+        this.rateRepository = rateRepository;
+        this.invoiceRepository = invoiceRepository;
+        this.mapper = mapper;
+    }
+
+    @Override
+    public InvoiceDto buildInvoice(BuildInvoiceRequest request) {
+        return null;
+    }
+
+    @Override
+    public InvoiceDto findId(Long invoiceId) {
+        return null;
+    }
+
+    @Override
+    public InvoiceDto update(UpdateInvoiceRequest invoiceRequest) {
+        return null;
+    }
+
+    @Override
+    public Page<InvoiceDto> findAll(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public void deleById(Long id) {
+
+    }
+
+    /** public BillingApplicationService(ContractRepository contractRepository,
                                      RateRepository rateRepository,
                                      InvoiceRepository invoiceRepository,
                                      InvoiceMapper mapper) {
@@ -47,7 +66,7 @@ public class BillingApplicationService implements BillingUseCase {
         this.mapper = mapper;
     }
 
-    @Override
+    /**@Override
     public InvoiceDto buildInvoice(BuildInvoiceRequest request) {
         // convierto una vez el contractId del request a VO
         ContractId contractId = ContractId.fromString(request.contractId);
@@ -165,7 +184,7 @@ public class BillingApplicationService implements BillingUseCase {
         // convertir Long -> InvoiceId VO y delegar al repo que usa VO
         InvoiceId invoiceId = InvoiceId.fromString(String.valueOf(id));
         invoiceRepository.deleteById(invoiceId);
-    }
+    }*/
 }
 
 

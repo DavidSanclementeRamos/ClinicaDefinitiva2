@@ -13,11 +13,11 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.output.
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.UserRolAssignmentService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -76,9 +76,9 @@ class UserRolAssignmentApplicationServiceTest {
     private UserRolAssignmentApplicationService service;
 
     // Test Data
-    private UserId requesterId;
+    private UserIdentityId requesterId;
     private RolId requesterRolId;
-    private UserId targetUserId;
+    private UserIdentityId targetUserIdentityId;
     private RolId targetRolId;
     private UserRolAssignmentId assignmentId;
     private Receptionist receptionist;
@@ -89,9 +89,9 @@ class UserRolAssignmentApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
-        requesterId = UserId.from(1L);
+        requesterId = UserIdentityId.from(1L);
         requesterRolId = RolId.of(1L);
-        targetUserId = UserId.from(2L);
+        targetUserIdentityId = UserIdentityId.from(2L);
         targetRolId = RolId.of(2L);
         assignmentId = UserRolAssignmentId.of(1L);
 
@@ -102,7 +102,7 @@ class UserRolAssignmentApplicationServiceTest {
         when(receptionist.getSector()).thenReturn(sector);
 
         // Setup Assignment
-        assignment = UserRolAssignment.assignPermanent(targetUserId, targetRolId, true);
+        assignment = UserRolAssignment.assignPermanent(targetUserIdentityId, targetRolId, true);
         assignment.setId(assignmentId);
 
         // Setup DTOs
@@ -125,7 +125,7 @@ class UserRolAssignmentApplicationServiceTest {
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
             when(writeMapper.fromCreatePermanent(createPermanentDto)).thenReturn(assignment);
-            when(userRolService.assignRole(targetUserId, targetRolId, true)).thenReturn(assignment);
+            when(userRolService.assignRole(targetUserIdentityId, targetRolId, true)).thenReturn(assignment);
             when(readMapper.toReadDto(assignment)).thenReturn(readAssignmentDto);
 
             // When
@@ -137,7 +137,7 @@ class UserRolAssignmentApplicationServiceTest {
 
             verify(receptionRepository).findByUserId(requesterId);
             verify(authorizationService).isAuthorized(eq(requesterRolId), any(SecurityContext.class));
-            verify(userRolService).assignRole(targetUserId, targetRolId, true);
+            verify(userRolService).assignRole(targetUserIdentityId, targetRolId, true);
             verify(readMapper).toReadDto(assignment);
         }
 
@@ -220,13 +220,13 @@ class UserRolAssignmentApplicationServiceTest {
         void saveTemporary_WhenAuthorized_ShouldCreateTemporaryAssignment() {
             // Given
             UserRolAssignment tempAssignment = UserRolAssignment.assignTemporary(
-                    targetUserId, targetRolId, validFrom, validTo, false);
+                    targetUserIdentityId, targetRolId, validFrom, validTo, false);
             tempAssignment.setId(assignmentId);
 
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
             when(writeMapper.fromCreateTemporary(createTemporaryDto)).thenReturn(tempAssignment);
-            when(userRolService.assignTemporaryRole(targetUserId, targetRolId, validFrom, validTo)).thenReturn(tempAssignment);
+            when(userRolService.assignTemporaryRole(targetUserIdentityId, targetRolId, validFrom, validTo)).thenReturn(tempAssignment);
             when(readMapper.toReadDto(tempAssignment)).thenReturn(readAssignmentDto);
 
             // When
@@ -238,7 +238,7 @@ class UserRolAssignmentApplicationServiceTest {
 
             verify(receptionRepository).findByUserId(requesterId);
             verify(authorizationService).isAuthorized(eq(requesterRolId), any(SecurityContext.class));
-            verify(userRolService).assignTemporaryRole(targetUserId, targetRolId, validFrom, validTo);
+            verify(userRolService).assignTemporaryRole(targetUserIdentityId, targetRolId, validFrom, validTo);
         }
 
         @Test
@@ -275,7 +275,7 @@ class UserRolAssignmentApplicationServiceTest {
         void saveTemporary_ShouldBuildSecurityContextWithCreateTemporaryAction() {
             // Given
             UserRolAssignment tempAssignment = UserRolAssignment.assignTemporary(
-                    targetUserId, targetRolId, validFrom, validTo, false);
+                    targetUserIdentityId, targetRolId, validFrom, validTo, false);
 
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
@@ -504,15 +504,15 @@ class UserRolAssignmentApplicationServiceTest {
 
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
-            when(repository.findByUserIdAndRolId(targetUserId, targetRolId)).thenReturn(assignments);
-            doNothing().when(userRolService).revokeRole(targetUserId, targetRolId);
+            when(repository.findByUserIdAndRolId(targetUserIdentityId, targetRolId)).thenReturn(assignments);
+            doNothing().when(userRolService).revokeRole(targetUserIdentityId, targetRolId);
 
             // When
-            service.revokeAllRol(targetUserId, targetRolId, requesterId, requesterRolId);
+            service.revokeAllRol(targetUserIdentityId, targetRolId, requesterId, requesterRolId);
 
             // Then
-            verify(repository).findByUserIdAndRolId(targetUserId, targetRolId);
-            verify(userRolService).revokeRole(targetUserId, targetRolId);
+            verify(repository).findByUserIdAndRolId(targetUserIdentityId, targetRolId);
+            verify(userRolService).revokeRole(targetUserIdentityId, targetRolId);
         }
 
         @Test
@@ -521,10 +521,10 @@ class UserRolAssignmentApplicationServiceTest {
             // Given
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
-            when(repository.findByUserIdAndRolId(targetUserId, targetRolId)).thenReturn(Collections.emptyList());
+            when(repository.findByUserIdAndRolId(targetUserIdentityId, targetRolId)).thenReturn(Collections.emptyList());
 
             // When & Then
-            assertThatThrownBy(() -> service.revokeAllRol(targetUserId, targetRolId, requesterId, requesterRolId))
+            assertThatThrownBy(() -> service.revokeAllRol(targetUserIdentityId, targetRolId, requesterId, requesterRolId))
                     .isInstanceOf(UserRolAssignmentNotFoundException.class);
 
             verify(userRolService, never()).revokeRole(any(), any());
@@ -538,7 +538,7 @@ class UserRolAssignmentApplicationServiceTest {
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(false);
 
             // When & Then
-            assertThatThrownBy(() -> service.revokeAllRol(targetUserId, targetRolId, requesterId, requesterRolId))
+            assertThatThrownBy(() -> service.revokeAllRol(targetUserIdentityId, targetRolId, requesterId, requesterRolId))
                     .isInstanceOf(BusinessRuleViolationException.class)
                     .hasFieldOrPropertyWithValue("errorCode", AuthorizationError.ERR_ASSIGNMENT_UNAUTHORIZED_REVOKE);
 
@@ -599,16 +599,16 @@ class UserRolAssignmentApplicationServiceTest {
 
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
-            when(repository.findByUserId(targetUserId)).thenReturn(assignments);
+            when(repository.findByUserId(targetUserIdentityId)).thenReturn(assignments);
             when(readMapper.toReadDto(any(UserRolAssignment.class))).thenReturn(readAssignmentDto);
 
             // When
-            List<ReadAssignmentDto> result = service.findByUserId(targetUserId, requesterId, requesterRolId);
+            List<ReadAssignmentDto> result = service.findByUserId(targetUserIdentityId, requesterId, requesterRolId);
 
             // Then
             assertThat(result).hasSize(2);
 
-            verify(repository).findByUserId(targetUserId);
+            verify(repository).findByUserId(targetUserIdentityId);
             verify(readMapper, times(2)).toReadDto(any(UserRolAssignment.class));
         }
 
@@ -618,15 +618,15 @@ class UserRolAssignmentApplicationServiceTest {
             // Given
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
-            when(repository.findByUserId(targetUserId)).thenReturn(Collections.emptyList());
+            when(repository.findByUserId(targetUserIdentityId)).thenReturn(Collections.emptyList());
 
             // When
-            List<ReadAssignmentDto> result = service.findByUserId(targetUserId, requesterId, requesterRolId);
+            List<ReadAssignmentDto> result = service.findByUserId(targetUserIdentityId, requesterId, requesterRolId);
 
             // Then
             assertThat(result).isEmpty();
 
-            verify(repository).findByUserId(targetUserId);
+            verify(repository).findByUserId(targetUserIdentityId);
             verify(readMapper, never()).toReadDto(any());
         }
 
@@ -635,19 +635,19 @@ class UserRolAssignmentApplicationServiceTest {
         void findByUserIdAndIsPrimary_ShouldReturnPrimaryAssignment() {
             // Given
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
-            when(repository.findByUserIdAndIsPrimary(targetUserId, true)).thenReturn(Optional.of(assignment));
+            when(repository.findByUserIdAndIsPrimary(targetUserIdentityId, true)).thenReturn(Optional.of(assignment));
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
             when(readMapper.toReadDto(assignment)).thenReturn(readAssignmentDto);
 
             // When
             Optional<ReadAssignmentDto> result = service.findByUserIdAndIsPrimary(
-                    targetUserId, true, requesterId, requesterRolId);
+                    targetUserIdentityId, true, requesterId, requesterRolId);
 
             // Then
             assertThat(result).isPresent();
             assertThat(result.get()).isEqualTo(readAssignmentDto);
 
-            verify(repository, times(2)).findByUserIdAndIsPrimary(targetUserId, true);
+            verify(repository, times(2)).findByUserIdAndIsPrimary(targetUserIdentityId, true);
             verify(readMapper).toReadDto(assignment);
         }
 
@@ -656,12 +656,12 @@ class UserRolAssignmentApplicationServiceTest {
         void findByUserIdAndIsPrimary_WhenNoPrimary_ShouldReturnEmpty() {
             // Given
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
-            when(repository.findByUserIdAndIsPrimary(targetUserId, true)).thenReturn(Optional.empty());
+            when(repository.findByUserIdAndIsPrimary(targetUserIdentityId, true)).thenReturn(Optional.empty());
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
 
             // When
             Optional<ReadAssignmentDto> result = service.findByUserIdAndIsPrimary(
-                    targetUserId, true, requesterId, requesterRolId);
+                    targetUserIdentityId, true, requesterId, requesterRolId);
 
             // Then
             assertThat(result).isEmpty();
@@ -735,17 +735,17 @@ class UserRolAssignmentApplicationServiceTest {
         @DisplayName("Debe manejar múltiples asignaciones del mismo usuario")
         void shouldHandleMultipleAssignmentsForSameUser() {
             // Given
-            UserRolAssignment assignment1 = UserRolAssignment.assignPermanent(targetUserId, targetRolId, true);
-            UserRolAssignment assignment2 = UserRolAssignment.assignPermanent(targetUserId, RolId.of(3L), false);
+            UserRolAssignment assignment1 = UserRolAssignment.assignPermanent(targetUserIdentityId, targetRolId, true);
+            UserRolAssignment assignment2 = UserRolAssignment.assignPermanent(targetUserIdentityId, RolId.of(3L), false);
             List<UserRolAssignment> assignments = Arrays.asList(assignment1, assignment2);
 
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
-            when(repository.findByUserId(targetUserId)).thenReturn(assignments);
+            when(repository.findByUserId(targetUserIdentityId)).thenReturn(assignments);
             when(readMapper.toReadDto(any(UserRolAssignment.class))).thenReturn(readAssignmentDto);
 
             // When
-            List<ReadAssignmentDto> result = service.findByUserId(targetUserId, requesterId, requesterRolId);
+            List<ReadAssignmentDto> result = service.findByUserId(targetUserIdentityId, requesterId, requesterRolId);
 
             // Then
             assertThat(result).hasSize(2);
@@ -758,7 +758,7 @@ class UserRolAssignmentApplicationServiceTest {
             // Given
             LocalDate pastDate = LocalDate.now().minusDays(30);
             UserRolAssignment expiredAssignment = UserRolAssignment.assignTemporary(
-                    targetUserId, targetRolId, pastDate.minusDays(60), pastDate, false);
+                    targetUserIdentityId, targetRolId, pastDate.minusDays(60), pastDate, false);
             expiredAssignment.setId(assignmentId);
 
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
@@ -849,17 +849,17 @@ class UserRolAssignmentApplicationServiceTest {
             List<UserRolAssignment> largeList = new ArrayList<>();
             for (int i = 0; i < 100; i++) {
                 UserRolAssignment ass = UserRolAssignment.assignPermanent(
-                        targetUserId, RolId.of((long) i), false);
+                        targetUserIdentityId, RolId.of((long) i), false);
                 largeList.add(ass);
             }
 
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(receptionist));
             when(authorizationService.isAuthorized(eq(requesterRolId), any(SecurityContext.class))).thenReturn(true);
-            when(repository.findByUserId(targetUserId)).thenReturn(largeList);
+            when(repository.findByUserId(targetUserIdentityId)).thenReturn(largeList);
             when(readMapper.toReadDto(any(UserRolAssignment.class))).thenReturn(readAssignmentDto);
 
             // When
-            List<ReadAssignmentDto> result = service.findByUserId(targetUserId, requesterId, requesterRolId);
+            List<ReadAssignmentDto> result = service.findByUserId(targetUserIdentityId, requesterId, requesterRolId);
 
             // Then
             assertThat(result).hasSize(100);

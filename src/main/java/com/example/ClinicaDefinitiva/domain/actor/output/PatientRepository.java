@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -20,5 +20,5 @@ public interface PatientRepository {
     boolean existsById( PatientId id);
     void deleteById( PatientId id);
 
-    Patient findByUserId(UserId id);
+    Patient findByUserId(UserIdentityId id);
 }

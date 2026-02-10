@@ -22,7 +22,7 @@ public class PatientReadMapper {
                 patient.getPerson().getDateOfBirth().asDate(),
                 patient.getPerson().getBloodType().getValue(),
                 patient.getPerson().getDocumentoEPS(),
-                patient.getUser().getValue(),
+                patient.getUser().value(),
                 patient.getLastUpdate(),
                 patient.getPerson().getAddress().Street(),
                 patient.getPerson().getAddress().City(),
@@ -37,7 +37,7 @@ public class PatientReadMapper {
         return new PagePatientDto(
                 patient.getPatientId().getValue(),
                 patient.getContractId().asLong(),
-                patient.getUser().getValue(),
+                patient.getUser().value(),
                 patient.getPerson().getDni().toString(),
                 patient.getPerson().getFullname().FirstName(),
                 patient.getPerson().getFullname().LastName(),

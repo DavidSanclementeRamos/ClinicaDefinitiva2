@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.administration.authorization.vo;
 
 
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,17 +13,17 @@ import java.util.Optional;
  */
 public class SecurityContext {
     private final Permission permission;
-    private final UserId requestingUserId;
+    private final UserIdentityId requestingUserIdentityId;
     private final Map<String, Object> attributes;
 
     private SecurityContext(Builder builder) {
         this.permission = builder.permission;
-        this.requestingUserId = builder.requestingUserId;
+        this.requestingUserIdentityId = builder.requestingUserIdentityId;
         this.attributes = builder.attributes;
     }
 
     public Permission getPermission() { return permission; }
-    public UserId getRequestingUserId() { return requestingUserId; }
+    public UserIdentityId getRequestingUserId() { return requestingUserIdentityId; }
 
     public <T> Optional<T> getAttribute(String key, Class<T> type) {
         Object value = attributes.get(key);
@@ -33,18 +33,18 @@ public class SecurityContext {
         return Optional.empty();
     }
 
-    public static Builder builder(Permission permission, UserId userId) {
-        return new Builder(permission, userId);
+    public static Builder builder(Permission permission, UserIdentityId userIdentityId) {
+        return new Builder(permission, userIdentityId);
     }
 
     public static class Builder {
         private final Permission permission;
-        private final UserId requestingUserId;
+        private final UserIdentityId requestingUserIdentityId;
         private final Map<String, Object> attributes = new HashMap<>();
 
-        public Builder(Permission permission, UserId userId) {
+        public Builder(Permission permission, UserIdentityId userIdentityId) {
             this.permission = permission;
-            this.requestingUserId = userId;
+            this.requestingUserIdentityId = userIdentityId;
         }
 
         public Builder withAttribute(String key, Object value) {
@@ -53,7 +53,7 @@ public class SecurityContext {
         }
 
         // Atributos comunes para ABAC
-        public Builder withResourceOwnerId(UserId ownerId) {
+        public Builder withResourceOwnerId(UserIdentityId ownerId) {
             return withAttribute("resourceOwnerId", ownerId);
         }
 

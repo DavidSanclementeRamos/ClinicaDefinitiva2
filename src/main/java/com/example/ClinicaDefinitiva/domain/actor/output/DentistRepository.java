@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.actor.output;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,5 +19,5 @@ public interface DentistRepository {
     void deleteById(DentistId id);
     boolean existsById(Long id);
 
-    Dentist findByUserId(UserId id);
+    Dentist findByUserId(UserIdentityId id);
 }

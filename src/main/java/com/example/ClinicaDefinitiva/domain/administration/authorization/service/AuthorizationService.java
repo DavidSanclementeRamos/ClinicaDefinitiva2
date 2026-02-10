@@ -11,7 +11,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.policie
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -77,9 +77,9 @@ public class AuthorizationService {
     /**
      * Método de conveniencia para permisos simples sin contexto ABAC
      */
-    public boolean hasPermission(RolId rol, UserId userId, ResourceCatalog resource, ActionCatalog action) {
+    public boolean hasPermission(RolId rol, UserIdentityId userIdentityId, ResourceCatalog resource, ActionCatalog action) {
         Permission permission = Permission.of(resource, action);
-        SecurityContext context = SecurityContext.builder(permission, userId).build();
+        SecurityContext context = SecurityContext.builder(permission, userIdentityId).build();
         return isAuthorized(rol, context);
     }
 }

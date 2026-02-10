@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMap
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.ReceptionistEntity;
 
 import java.time.LocalDate;
@@ -50,7 +50,7 @@ public class ReceptionReadEntityMapper {
                 receptionId,
                 person,
                 sector,
-                new UserId(entity.getUser()),
+                new UserIdentityId(entity.getUser()),
                 entity.getLastUpdate()
         );
     }

@@ -3,12 +3,12 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 public record ThirdPartiesResponse(
         String id,
         String companyId,
-        NameDto name,
+        //NameDto name,
         String typeDocument,
         String documentNumber,
         String typeThirdParties,
-        AddressDto address,
-        PhoneNumberDto phoneNumber,
-        EmailDto email,
+       //// AddressDto address,
+        //PhoneNumberDto phoneNumber,
+        //EmailDto email,
         boolean active
 ) {}

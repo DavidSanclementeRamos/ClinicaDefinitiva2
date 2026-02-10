@@ -1,9 +1,8 @@
 package com.example.ClinicaDefinitiva.util;
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.ErrorResponse;
-import com.example.ClinicaDefinitiva.web.filter.RequestIdFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +32,7 @@ public class ErrorHandlerUtils {
         return RequestIdFilter.getRequestId();
     }
 
-    public static ErrorResponse construirError(ErrorCatalogXD error,
+    /**public static ErrorResponse construirError(ErrorCatalogXD error,
                                                EntityContext contexto,
                                                String mensajeDetalle,
                                                HttpStatus status) {
@@ -65,6 +64,6 @@ public class ErrorHandlerUtils {
                 LocalDateTime.now(),
                 getRequestId()
         );
-    }
+    }*/
 
 }

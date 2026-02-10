@@ -96,13 +96,13 @@ Extraer la validación de acceso de usuarios a un **Domain Service** dedicado: `
 │                                                          │
 │  RegisterPatientUseCase.execute(command)                │
 │       │                                                  │
-│       ├─→ UserAccessValidator.validate(userId, now)    │
+│       ├─→ UserAccessValidator.validate(userIdentityId, now)    │
 │       │        │                                         │
-│       │        ├─→ userRepo.findById(userId)           │
+│       │        ├─→ userRepo.findById(userIdentityId)           │
 │       │        ├─→ user.canPerformSensitiveAction()    │
 │       │        └─→ translate Outcome → Exception        │
 │       │                                                  │
-│       └─→ Patient.registerPatient(userId)              │
+│       └─→ Patient.registerPatient(userIdentityId)              │
 │                  (solo recibe ID)                        │
 │                                                          │
 │  ✅ Patient desacoplado de UserIdentity                 │
@@ -119,7 +119,7 @@ Extraer la validación de acceso de usuarios a un **Domain Service** dedicado: `
 @Service
 public class UserAccessValidator {
     
-    private final UserIdentityRepository userRepository;
+    private final UserIdentityRepository userIdentityRepository;
     
     /**
      * Valida que un usuario puede realizar acciones sensibles.
@@ -134,14 +134,14 @@ public class UserAccessValidator {
      * 4. Proveer contexto del agregado solicitante
      */
     public void validateUserCanPerformSensitiveAction(
-        UserId userId,
+        UserId userIdentityId,
         Instant now,
         EntityContext requesterContext
     ) {
         // 1. Obtener usuario
-        UserIdentity user = userRepository.findById(userId)
+        UserIdentity user = userIdentityRepository.findById(userIdentityId)
             .orElseThrow(() -> new UserNotFoundException(
-                userId, 
+                userIdentityId, 
                 requesterContext
             ));
         
@@ -151,7 +151,7 @@ public class UserAccessValidator {
         // 3. Traducir Outcome → Exception (para módulos de negocio)
         if (!eligibility.isSuccess()) {
             throw translateToBusinessException(
-                userId,
+                userIdentityId,
                 eligibility.getDetails(),
                 requesterContext
             );
@@ -159,7 +159,7 @@ public class UserAccessValidator {
     }
     
     private UserNotEligibleException translateToBusinessException(
-        UserId userId,
+        UserId userIdentityId,
         List<OutcomeDetail> details,
         EntityContext context
     ) {
@@ -210,7 +210,7 @@ public static Patient registerPatient(
 ```java
 public static Patient registerPatient(
     Person data,
-    UserId userId,          // ← Solo ID
+    UserId userIdentityId,          // ← Solo ID
     GuardianId guardian
 ) {
     // NO valida usuario - es responsabilidad del use case
@@ -219,7 +219,7 @@ public static Patient registerPatient(
         throw new BusinessRuleViolationException(...);
     }
     
-    return new Patient(..., userId, ...);
+    return new Patient(..., userIdentityId, ...);
 }
 ```
 
@@ -275,8 +275,8 @@ Patient.registerPatient(user) {
 
 // CORRECTO
 RegisterPatientUseCase.execute(cmd) {
-    validator.validate(userId);      // ← Coordina entre agregados
-    Patient.registerPatient(userId); // ← Solo reglas propias
+    validator.validate(userIdentityId);      // ← Coordina entre agregados
+    Patient.registerPatient(userIdentityId); // ← Solo reglas propias
 }
 ```
 
@@ -285,7 +285,7 @@ RegisterPatientUseCase.execute(cmd) {
 ```java
 // Sin Domain Service:
 // Thread 1:
-UserIdentity user = userRepo.findById(userId);
+UserIdentity user = userRepo.findById(userIdentityId);
 if (!user.canPerformSensitiveAction()) throw... // ✅ OK
 
 // Thread 2: (entre líneas anteriores)
@@ -298,8 +298,8 @@ new Patient(..., user.getId(), ...) // 💥 Paciente con usuario inactivo
 // Con Domain Service + @Transactional:
 @Transactional // ← Lock para toda la operación
 RegisterPatientUseCase.execute() {
-    validator.validate(userId);    // ← Lee con lock
-    Patient.register(userId);      // ← Crea con lock
+    validator.validate(userIdentityId);    // ← Lee con lock
+    Patient.register(userIdentityId);      // ← Crea con lock
     patientRepo.save(patient);     // ← Guarda con lock
 } // COMMIT - todo atómico
 ```

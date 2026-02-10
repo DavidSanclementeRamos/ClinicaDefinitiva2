@@ -25,7 +25,7 @@ public class GuardianReadMapper {
                 guardian.getPerson().getDateOfBirth().asDate(),
                 guardian.getPerson().getBloodType().getValue(),
                 guardian.getPerson().getDocumentoEPS(),
-                guardian.getUserId().getValue(),
+                guardian.getUserId().value(),
                 guardian.getLastUpdate(),
                 guardian.getPerson().getAddress().Street(),
                 guardian.getPerson().getAddress().City(),

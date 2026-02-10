@@ -13,13 +13,13 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.output.
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.UserRolAssignmentService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -54,7 +54,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
             action = ActionCatalog.BasicAction.CREATE)
     public ReadAssignmentDto savePermanent(CreateAssignmentPermanentDto dto,
-                                           UserId requesterId,
+                                           UserIdentityId requesterId,
                                            RolId requesterRolId) {
 
         Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
@@ -85,7 +85,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
             action = ActionCatalog.BasicAction.CREATE_TEMPORARY)
     public ReadAssignmentDto saveTemporary(CreateAssignmentTemporaryDto dto,
-                                           UserId requesterId,
+                                           UserIdentityId requesterId,
                                            RolId requesterRolId) {
 
 
@@ -120,7 +120,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
             action = ActionCatalog.BasicAction.IS_ACTIVE_AT)
     public boolean isActiveAt(UserRolAssignmentId targetId,
                               LocalDate date,
-                              UserId requesterId,
+                              UserIdentityId requesterId,
                               RolId requesterRolId) {
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
@@ -152,7 +152,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
             action = ActionCatalog.BasicAction.IS_CURRENTLY_ACTIVE)
     public boolean isCurrentlyActive(UserRolAssignmentId targetId,
-                                     UserId requesterId,
+                                     UserIdentityId requesterId,
                                      RolId requesterRolId) {
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
@@ -185,7 +185,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
             action = ActionCatalog.BasicAction.EXTEND_ASSIGNMENT)
     public void extend(UserRolAssignmentId targetId,
                        LocalDate newValidTo,
-                       UserId requesterId,
+                       UserIdentityId requesterId,
                        RolId requesterRolId) {
 
        Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
@@ -218,8 +218,8 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
             action =  ActionCatalog.BasicAction.REVOKE_ALL)
-    public void revokeAllRol(UserId targetUserId,
-                             UserId requesterId,
+    public void revokeAllRol(UserIdentityId targetUserIdentityId,
+                             UserIdentityId requesterId,
                              RolId requesterRolId) {
 
 
@@ -232,26 +232,26 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
         SecurityContext context = SecurityContext
                 .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT), ActionCatalog.of(ActionCatalog.BasicAction.REVOKE_ALL)), requesterId)
                 .withSector(receptionist.getSector().Value())
-                .withResourceId(targetUserId.getValue())
+                .withResourceId(targetUserIdentityId.value())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
             throw new BusinessRuleViolationException(AuthorizationError.ERR_ASSIGNMENT_UNAUTHORIZED_REVOKE, VOContext.AUTHORIZATION);
         }
 
-        List<UserRolAssignment> assignments = repository.findByUserId(targetUserId);
+        List<UserRolAssignment> assignments = repository.findByUserId(targetUserIdentityId);
         if (assignments.isEmpty()) {
             throw new UserRolAssignmentNotFoundException("");
         }
-        userRolService.revokeAllRoles(targetUserId);
+        userRolService.revokeAllRoles(targetUserIdentityId);
     }
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
             action = ActionCatalog.BasicAction.REVOKE)
-    public void revokeRol(UserId targetUserId,
+    public void revokeRol(UserIdentityId targetUserIdentityId,
                           RolId targetRolId,
-                          UserId requesterId,
+                          UserIdentityId requesterId,
                           RolId requesterRolId) {
 
 
@@ -272,12 +272,12 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
             throw new BusinessRuleViolationException(AuthorizationError.ERR_ASSIGNMENT_UNAUTHORIZED_REVOKE, VOContext.AUTHORIZATION);
         }
 
-        List<UserRolAssignment> assignments = repository.findByUserIdAndRolId(targetUserId, targetRolId);
+        List<UserRolAssignment> assignments = repository.findByUserIdAndRolId(targetUserIdentityId, targetRolId);
         if (assignments.isEmpty()) {
-            throw new UserRolAssignmentNotFoundException("" + targetUserId + targetRolId);
+            throw new UserRolAssignmentNotFoundException("" + targetUserIdentityId + targetRolId);
         }
 
-        userRolService.revokeRole(targetUserId,targetRolId);
+        userRolService.revokeRole(targetUserIdentityId,targetRolId);
 
     }
 
@@ -287,7 +287,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
             action = ActionCatalog.BasicAction.VIEW_ASSIGNMENT)
     public Optional<ReadAssignmentDto> findById(UserRolAssignmentId targetId ,
-                                                UserId requesterId,
+                                                UserIdentityId requesterId,
                                                 RolId requesterRolId) {
 
 
@@ -318,9 +318,9 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
             action = ActionCatalog.BasicAction.VIEW_ASSIGNMENT)
-    public List<ReadAssignmentDto> findByUserId(UserId targeUserId   ,
-                                                    UserId requesterId,
-                                                    RolId requesterRolId) {
+    public List<ReadAssignmentDto> findByUserId(UserIdentityId targeUserIdentityId,
+                                                UserIdentityId requesterId,
+                                                RolId requesterRolId) {
 
         Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -332,7 +332,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
                 .withSector(receptionist.getSector().Value())
-                .withResourceId(targeUserId.getValue())
+                .withResourceId(targeUserIdentityId.value())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -342,15 +342,15 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
             );
         }
 
-        return repository.findByUserId(targeUserId)
+        return repository.findByUserId(targeUserIdentityId)
                 .stream().map(readMapper::toReadDto).toList();
     }
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
             action = ActionCatalog.BasicAction.VIEW_ASSIGNMENT)
-    public Optional<ReadAssignmentDto> findByUserIdAndRolId(UserId targeUserId  , RolId  targeRolId,
-                                                            UserId requesterId,
+    public Optional<ReadAssignmentDto> findByUserIdAndRolId(UserIdentityId targeUserIdentityId, RolId  targeRolId,
+                                                            UserIdentityId requesterId,
                                                             RolId requesterRolId) {
 
 
@@ -374,16 +374,16 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
             );
         }
 
-        return repository.findByUserIdAndRolId(UserId.from(targeRolId.getValue()), RolId.of(targeRolId.getValue()))
+        return repository.findByUserIdAndRolId(UserIdentityId.from(targeRolId.getValue()), RolId.of(targeRolId.getValue()))
                 .stream().map(readMapper::toReadDto).findFirst();
     }
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
             action = ActionCatalog.BasicAction.VIEW_ASSIGNMENT)
-    public Optional<ReadAssignmentDto> findByUserIdAndIsPrimary(UserId targetUuserId,
+    public Optional<ReadAssignmentDto> findByUserIdAndIsPrimary(UserIdentityId targetUuserIdentityId,
                                                                 boolean isPrimary,
-                                                                UserId requesterId,
+                                                                UserIdentityId requesterId,
                                                                 RolId requesterRolId) {
 
 
@@ -393,7 +393,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                         VOContext.AUTHORIZATION
                 ));
 
-         Optional<UserRolAssignment> assignment = repository.findByUserIdAndIsPrimary(targetUuserId,isPrimary);
+         Optional<UserRolAssignment> assignment = repository.findByUserIdAndIsPrimary(targetUuserIdentityId,isPrimary);
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
@@ -408,7 +408,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
             );
         }
 
-        return repository.findByUserIdAndIsPrimary(targetUuserId, isPrimary)
+        return repository.findByUserIdAndIsPrimary(targetUuserIdentityId, isPrimary)
                 .map(readMapper::toReadDto);
     }
 

@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Company
  */
 public record CompanyPageResponse(
         String id,
-        NameDto name,
-        NitDto taxIdentificationNumber,
+        //NameDto name,
+        //NitDto taxIdentificationNumber,
         CompanyStatus.Status status
 ) {}

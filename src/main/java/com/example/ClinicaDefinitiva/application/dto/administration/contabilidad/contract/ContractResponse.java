@@ -12,7 +12,7 @@ public record ContractResponse(
         String companyId,
         String thirdPartiesId,
         String thirdPartiesName,
-        NameDto name,
+        //NameDto name,
         String description,
         String origin,
         LocalDate startDate,

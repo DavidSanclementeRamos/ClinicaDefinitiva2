@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.policie
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final UserId id;
+    private final UserIdentityId id;
     private final String username;
     private final String password;
     private final Set<GrantedAuthority> authorities;
@@ -75,6 +75,6 @@ public class CustomUserDetails implements UserDetails {
         return activeRolId;
     }
 
-    public UserId getId() { return id; }
+    public UserIdentityId getId() { return id; }
 }
 
