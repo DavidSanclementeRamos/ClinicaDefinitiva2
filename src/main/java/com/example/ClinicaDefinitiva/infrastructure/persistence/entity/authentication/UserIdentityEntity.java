@@ -1,11 +1,11 @@
-package com.example.ClinicaDefinitiva.infrastructure.persistence.entity.userIdentity;
+package com.example.ClinicaDefinitiva.infrastructure.persistence.entity.authentication;
 
 import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
 @Table(name = "usuarios_identidad")
-public class UserEntity {
+public class UserIdentityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,10 +45,10 @@ public class UserEntity {
     @Column(name = "version")
     private long version;
 
-    protected UserEntity() {}
+    protected UserIdentityEntity() {}
 
-    public UserEntity(String email, String hashedPassword, String name, Instant createdAt,
-                      boolean verified, String status) {
+    public UserIdentityEntity(String email, String hashedPassword, String name, Instant createdAt,
+                              boolean verified, String status) {
         this.email = email;
         this.hashedPassword = hashedPassword;
         this.name = name;

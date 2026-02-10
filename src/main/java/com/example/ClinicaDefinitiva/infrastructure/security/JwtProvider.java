@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.security;
 
-import com.example.ClinicaDefinitiva.application.dto.user.ReadUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.authentication.ReadUserIdentityDto;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

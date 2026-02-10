@@ -1,0 +1,150 @@
+commit 85df08d94b6bbb32a3ee628ea591c6136a5faf7e (HEAD -> master, origin/master)
+Author: DavidSanclementeRamos <davidrsmos434@gmail.com>
+Date:   Mon Feb 9 19:32:13 2026 -0500
+
+    chore(refactor): eliminar clases obsoletas tras migración a hexagonal
+
+    - Se eliminan clases heredadas del diseño anterior 'en español' que ya no tienen soporte
+      ni uso dentro del nuevo núcleo hexagonal.
+    - Estas clases fueron reemplazadas por nuevas implementaciones en el dominio, aplicación
+      e infraestructura, rescatando únicamente aquellas con valor clínico real.
+    - La presencia de clases antiguas impedía la ejecución de pruebas unitarias y generaba
+      confusión en la estructura de paquetes.
+    - Decisión respaldada en ADR-01 'Arquitectura': Migración progresiva a arquitectura
+      hexagonal, donde se acordó construir nuevos módulos en paralelo y refactorizar
+      gradualmente.
+
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enum/Especialidades.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enum/Estado.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enum/Permisos.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enum/Roles.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enum/Sector.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enum/TipoResponsable.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/AfeccionValido.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/EspecialidadesValido.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/EstadoValido.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/RolValido.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/SectorValido.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/TipoResponsableValido.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/TipoSangreValido.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/impl/AfeccionValidator.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/impl/EspecialidadesValidator.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/impl/EstadoValidator.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/impl/RolValidator.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/impl/SectorValidator.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/impl/TipoResponsableValidator.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/Enumvalidation/impl/TipoSangreValidator.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/application/mapper/AddressMapper.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/application/mapper/AppointmentMapper.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/application/mapper/EmailMapper.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/application/mapper/InvoiceMapper.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/application/mapper/PhoneNumberMapper.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/application/mapper/ProvidedServiceMapper.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/application/service/DesactivarActorService.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/config/EdadMinimaConfig.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/config/RolesFactory.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/domain/actor/output/ActorRepository.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/mapper/HorarioMapperResponse.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/mapper/MapperAuxiliarOdontologo.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/mapper/MapperAuxiliarPaciente.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/mapper/OdontologoMapperResponse.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/mapper/PacienteMapperResponse.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/mapper/ResponsableMapperResponse.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/mapper/RolesMapper.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/mapper/SecretarioMapperResponse.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/mapper/TurnoMapperResponse.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/mapper/UsuarioMapperResponse.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/HorarioDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/RolesDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/TurnoDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/odontologoDto/CreateOdontologoDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/odontologoDto/ReadOdontologoDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/odontologoDto/UpdateOdontologoDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/pacienteDto/CreatePacienteDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/pacienteDto/ReadPacienteDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/pacienteDto/UpdatePacienteDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/responsableDto/CambioResponsableDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/responsableDto/CreateEndReadResponsableDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/responsableDto/UpdateResponsableDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/secretarioDto/CreateSecretarioDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/secretarioDto/ReadSecretarioDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/secretarioDto/UpdateSecretarioDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/usuarioDto/CreateUsuarioDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/usuarioDto/ReadUsuarioDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/dto/usuarioDto/UpdateUsuarioDto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Cita.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Disponibilidad.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/DocumentoClinico.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/EventoClinico.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Facturacion.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/HistorialCambioResponsable.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/HistorialClinico.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Odontologo.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Paciente.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Pago.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/PermissionEntityxd.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Persona.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Responsable.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/RolesEntity.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Secretario.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Servicio.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Turno.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/persistence/entity/Usuario.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/repository/HorarioRepository.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/repository/OdontologoRepository.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/repository/PacienteRepository.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/repository/ResponsableRepository.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/repository/RolesEntityRepository.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/repository/SecretarioRepository.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/repository/TurnoRepository.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/repository/UsuarioRepository.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/security/validator/CustomUserDetailsService.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/security/validator/SecurityConfig.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/HorarioService.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/OdontologoService.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/PacienteServise.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/ResponsableService.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/SecretarioService.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/TurnoService.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/UsuarioService.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/impl/HorarioImpl.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/impl/OdontologoImpl.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/impl/PacienteImpl.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/impl/ResponsableImpl.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/impl/SecretarioImpl.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/impl/TurnoImpl.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/services/impl/UsuarioImpl.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/util/Paginacion.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/util/ValidarEdades.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/vo/Direccion.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/vo/Dni.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/vo/Edad.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/vo/Email.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/vo/EstadoCita.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/vo/EstadoHorario.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/vo/EstadoTurno.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/vo/NombreCompleto.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/vo/Telefono.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/web/controller/HorarioController.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/web/controller/OdontologoController.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/web/controller/PacienteController.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/web/controller/ResponsableController.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/web/controller/SecretarioController.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/web/controller/TurnoController.java
+ delete mode 100644 src/main/java/com/example/ClinicaDefinitiva/web/controller/UsuarioController.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/TestDataFactory.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/builder/HorarioBuilder.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/builder/IBuilder.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/builder/OdontologoBuilder.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/builder/PatientBuild.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/builder/TurnoBuilder.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/builder/UsuarioBuilder.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/repository/TestDisponibilidadRepository.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/repository/TestOdontologoRespository.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/repository/TestPacienteRepository.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/repository/TestResponsableRepository.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/repository/TestSecretarioRepository.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/repository/TestTurnoRepository.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/repository/TestUsuarioRepository.java
+ delete mode 100644 src/test/java/com/example/ClinicaDefinitiva/service/UsuarioImplTest.java
+(END)

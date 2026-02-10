@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse;
 
 import java.time.Instant;
 
-public record UserIdentityReadResponse(
+public record ReadUserIdentityResponse(
         Long id,
         String email,
         String name,

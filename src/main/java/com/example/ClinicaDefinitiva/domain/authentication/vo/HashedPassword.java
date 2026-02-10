@@ -38,7 +38,7 @@ public final class HashedPassword implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_PASSWORD_HASH_NULL,
                     Severity.ERROR,
-                    Category.TECNICO, EntityContext.USUARIO
+                    Category.TECNICO, EntityContext.USER_IDENTITY
             ));
         }
 
@@ -46,7 +46,7 @@ public final class HashedPassword implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_PASSWORD_HASH_EMPTY,
                     Severity.ERROR,
-                    Category.TECNICO,EntityContext.USUARIO
+                    Category.TECNICO,EntityContext.USER_IDENTITY
             ));
         }
 

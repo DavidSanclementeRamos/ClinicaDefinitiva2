@@ -1,15 +1,15 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.userIdentity;
 
-import com.example.ClinicaDefinitiva.application.dto.user.PageUserIdentityDto;
-import com.example.ClinicaDefinitiva.application.dto.user.ReadUserIdentityDto;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse.UserIdentityPageResponse;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse.UserIdentityReadResponse;
+import com.example.ClinicaDefinitiva.application.dto.authentication.PageUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.authentication.ReadUserIdentityDto;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse.PageUserIdentityResponse;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse.ReadUserIdentityResponse;
 
-public class UserServiceToRestMapper {
+public class UserIdentityRestReadMapper {
 
     // De DTO de aplicación de lectura → DTO REST de respuesta
-    public UserIdentityReadResponse toRestDto(ReadUserIdentityDto dto) {
-        return new UserIdentityReadResponse(
+    public ReadUserIdentityResponse toRestRead(ReadUserIdentityDto dto) {
+        return new ReadUserIdentityResponse(
                 dto.id(),
                 dto.email(),
                 dto.name(),
@@ -24,8 +24,8 @@ public class UserServiceToRestMapper {
     }
 
     // De DTO de aplicación de página → DTO REST de respuesta de página
-    public UserIdentityPageResponse toRestDto(PageUserIdentityDto dto) {
-        return new UserIdentityPageResponse(
+    public PageUserIdentityResponse toRestPage(PageUserIdentityDto dto) {
+        return new PageUserIdentityResponse(
                 dto.id(),
                 dto.email(),
                 dto.name(),

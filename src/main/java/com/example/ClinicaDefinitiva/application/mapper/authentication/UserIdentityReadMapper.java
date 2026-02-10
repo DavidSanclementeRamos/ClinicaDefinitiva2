@@ -1,7 +1,7 @@
-package com.example.ClinicaDefinitiva.application.mapper.UserIndentityMapper;
+package com.example.ClinicaDefinitiva.application.mapper.authentication;
 
-import com.example.ClinicaDefinitiva.application.dto.user.PageUserIdentityDto;
-import com.example.ClinicaDefinitiva.application.dto.user.ReadUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.authentication.PageUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.authentication.ReadUserIdentityDto;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class UserIdentityReadMapper {
 
     // dominio → DTO de lectura completo
-    public ReadUserIdentityDto toDto(UserIdentity user) {
+    public ReadUserIdentityDto toReadDto(UserIdentity user) {
         return new ReadUserIdentityDto(
                 user.getId().value(),
                 user.getEmail().value(),
@@ -25,7 +25,7 @@ public class UserIdentityReadMapper {
     }
 
     // dominio → DTO resumido (ej. para listados/paginación)
-    public PageUserIdentityDto pageToDto(UserIdentity user) {
+    public PageUserIdentityDto toPageDto(UserIdentity user) {
         return new PageUserIdentityDto(
                 user.getId().value(),
                 user.getEmail().value(),

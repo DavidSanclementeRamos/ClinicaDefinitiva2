@@ -6,7 +6,7 @@ public enum EntityContext implements DomainContext {
     RECEPTIONIST(CodeEntity.REC02),
     GUARDIAN(CodeEntity.GUA03),
     PATIENT(CodeEntity.PAT04),
-    USUARIO(CodeEntity.USR05),
+    USER_IDENTITY(CodeEntity.USR05),
     HORARIO(CodeEntity.HOR06),
     SHIFT(CodeEntity.SHI07),
     ROL(CodeEntity.ROL08),

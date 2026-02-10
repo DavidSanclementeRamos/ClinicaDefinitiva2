@@ -1,16 +1,16 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.userIdentity;
 
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.userIdentity.UserEntity;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.authentication.UserIdentityEntity;
 
 public class UserWriteEntityMapper {
     // Mapea de UserIdentity a UserEntity
-    public UserEntity toEntity(UserIdentity domain) {
+    public UserIdentityEntity toEntity(UserIdentity domain) {
         if (domain == null) {
             return null;
         }
 
-        UserEntity entity = new UserEntity(
+        UserIdentityEntity entity = new UserIdentityEntity(
                 domain.getEmail().value(),
                 domain.getHashedPassword().getHash(),
                 domain.getName().getValue(),

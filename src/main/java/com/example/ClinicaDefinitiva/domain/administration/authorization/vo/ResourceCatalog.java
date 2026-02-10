@@ -16,7 +16,7 @@ public final class ResourceCatalog {
         THIRD_PARTIES, ADMINISTRATIVE_REPORT, OPENING_BALANCE,
 
         // Security module
-        ROLE, PERMISSION, ASSIGNMENT
+        ROLE, PERMISSION, ASSIGNMENT, USER_IDENTITY
     }
 
     private final String code;

@@ -1,6 +1,6 @@
-package com.example.ClinicaDefinitiva.application.dto.user;
+package com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse;
 
-public record UpdateUserIdentityDto(
+public record UpdateUserIdentityRequest(
         String email,
         String name,
         boolean verified,

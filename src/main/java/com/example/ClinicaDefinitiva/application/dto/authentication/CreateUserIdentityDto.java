@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.user;
+package com.example.ClinicaDefinitiva.application.dto.authentication;
 
 public record CreateUserIdentityDto(
         String email,

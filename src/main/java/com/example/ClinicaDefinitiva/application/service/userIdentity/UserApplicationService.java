@@ -1,14 +1,14 @@
 package com.example.ClinicaDefinitiva.application.service.userIdentity;
 
-import com.example.ClinicaDefinitiva.application.dto.user.CreateUserIdentityDto;
-import com.example.ClinicaDefinitiva.application.dto.user.PageUserIdentityDto;
-import com.example.ClinicaDefinitiva.application.dto.user.ReadUserIdentityDto;
-import com.example.ClinicaDefinitiva.application.dto.user.UpdateUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.authentication.CreateUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.authentication.PageUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.authentication.ReadUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.authentication.UpdateUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.exceptions.UserIdentityNoFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.UserIndentityMapper.UserIdentityReadMapper;
-import com.example.ClinicaDefinitiva.application.mapper.UserIndentityMapper.UserIdentityWriteMapper;
-import com.example.ClinicaDefinitiva.application.portsInput.userIdentity.SecurityPolicy;
-import com.example.ClinicaDefinitiva.application.portsInput.userIdentity.UserIdentityUseCase;
+import com.example.ClinicaDefinitiva.application.mapper.authentication.UserIdentityReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.authentication.UserIdentityWriteMapper;
+import com.example.ClinicaDefinitiva.application.portsInput.authentication.SecurityPolicy;
+import com.example.ClinicaDefinitiva.application.portsInput.authentication.UserIdentityUseCase;
 import com.example.ClinicaDefinitiva.domain.Email;
 import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;

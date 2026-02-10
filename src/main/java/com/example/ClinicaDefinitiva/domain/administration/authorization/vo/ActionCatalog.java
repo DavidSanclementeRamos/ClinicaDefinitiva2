@@ -5,10 +5,10 @@ public final class ActionCatalog {
     public enum BasicAction {
         CREATE, READ, UPDATE, DELETE,
         APPROVE, CANCEL, CONFIRM, COMPLETE,
-        DEACTIVATE, ACTIVATE, ASSIGN, SCHEDULE,
-        RESCHEDULE, POST, REVERSE,
+        DEACTIVATE, REACTIVATE, ASSIGN, SCHEDULE,
+        RESCHEDULE, POST, REVERSE,SUSPEND,
 
-
+        AUTHENTICATE,
         //ROL PERMISIONES
 
         VIEW_ROLE,

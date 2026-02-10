@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.userId
 import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.userIdentity.UserEntity;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.authentication.UserIdentityEntity;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.userIdentity.UserIdentityJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.userIdentity.UserReadEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.userIdentity.UserWriteEntityMapper;
@@ -58,8 +58,8 @@ public class UserIdentityAdapter implements UserIdentityRepository {
 
     @Override
     public UserIdentity save(UserIdentity user) {
-        UserEntity entity = writeMapper.toEntity(user);
-        UserEntity saved = userJpaRepository.save(entity);
+        UserIdentityEntity entity = writeMapper.toEntity(user);
+        UserIdentityEntity saved = userJpaRepository.save(entity);
         return readMapper.toDomain(saved);
     }
 }

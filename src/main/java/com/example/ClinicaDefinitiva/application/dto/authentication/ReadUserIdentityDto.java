@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.user;
+package com.example.ClinicaDefinitiva.application.dto.authentication;
 
 import java.time.Instant;
 

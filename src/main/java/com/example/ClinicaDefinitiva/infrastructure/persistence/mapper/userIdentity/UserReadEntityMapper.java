@@ -5,12 +5,12 @@ import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.userIdentity.UserEntity;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.authentication.UserIdentityEntity;
 
 public class UserReadEntityMapper {
 
     // Mapea de UserEntity a UserIdentity
-    public UserIdentity toDomain(UserEntity entity) {
+    public UserIdentity toDomain(UserIdentityEntity entity) {
         if (entity == null) {
             return null;
         }

@@ -1,7 +1,7 @@
-package com.example.ClinicaDefinitiva.application.mapper.UserIndentityMapper;
+package com.example.ClinicaDefinitiva.application.mapper.authentication;
 
-import com.example.ClinicaDefinitiva.application.dto.user.CreateUserIdentityDto;
-import com.example.ClinicaDefinitiva.application.dto.user.UpdateUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.authentication.CreateUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.authentication.UpdateUserIdentityDto;
 import com.example.ClinicaDefinitiva.domain.Email;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
@@ -14,7 +14,7 @@ import java.time.Instant;
 public class UserIdentityWriteMapper {
 
     // DTO de creación → dominio
-    public UserIdentity dtoCreateToUserIdentity(CreateUserIdentityDto dto) {
+    public UserIdentity fromCreateDto(CreateUserIdentityDto dto) {
         return UserIdentity.register(
                  // se genera nuevo ID
                 new Email(dto.email()),
@@ -25,8 +25,8 @@ public class UserIdentityWriteMapper {
     }
 
     // DTO de actualización → dominio (aplica cambios sobre agregado existente)
-    public void dtoUpdateToUserIdentity(UpdateUserIdentityDto dto, UserIdentity user) {
-        user.editUserData(
+    public void updateFromDto(UpdateUserIdentityDto dto, UserIdentity user) {
+        user.update(
                 new UserIdentityName(dto.name()),
 
                 new Email(dto.email()),

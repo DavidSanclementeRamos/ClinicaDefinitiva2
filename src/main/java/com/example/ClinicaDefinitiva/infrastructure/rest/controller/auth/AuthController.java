@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller.auth;
 
 
-import com.example.ClinicaDefinitiva.application.dto.user.ReadUserIdentityDto;
-import com.example.ClinicaDefinitiva.application.portsInput.userIdentity.UserIdentityUseCase;
+import com.example.ClinicaDefinitiva.application.dto.authentication.ReadUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.portsInput.authentication.UserIdentityUseCase;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.login.LoginRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.login.LoginResponse;
 import org.springframework.http.ResponseEntity;

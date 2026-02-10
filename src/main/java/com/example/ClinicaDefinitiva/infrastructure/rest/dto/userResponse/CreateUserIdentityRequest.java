@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse;
 
-public record UserIdentityCreateRequest(
+public record CreateUserIdentityRequest(
         String email,
         String password,
         String name

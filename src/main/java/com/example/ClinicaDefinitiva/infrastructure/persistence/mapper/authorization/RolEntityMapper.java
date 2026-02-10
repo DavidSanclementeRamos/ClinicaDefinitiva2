@@ -4,6 +4,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.model.R
 import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.policies.RoleBasedPolicy;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.service.RolService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.authorization.RolEntity;
@@ -16,7 +17,7 @@ public class RolEntityMapper {
 
     // Entity → Dominio
     public  Rol toDomain(RolEntity entity) {
-      return   Rol.createCustom(
+      return new RolService(
                 RolEnum.valueOf(entity.getRolEnum()),   // String → Enum
                 entity.getDescription(),
               new HashSet<>());
