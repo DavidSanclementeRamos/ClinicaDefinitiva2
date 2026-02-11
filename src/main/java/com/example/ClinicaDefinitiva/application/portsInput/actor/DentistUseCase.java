@@ -1,19 +1,33 @@
 package com.example.ClinicaDefinitiva.application.portsInput.actor;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+
 public interface DentistUseCase {
-    ReadDentistDto findById(Long id);
-    Page<PageDentistDto> findAll(Pageable pageable );
-    ReadDentistDto save(CreateDentistDto createDentistDto);
-    ReadDentistDto updateContactData(UpdateDentistContactDto updateDentistDto, Long id);
-    ReadDentistDto updateSensitiveData(UpdateDentistSensitiveDto updateDentistDto, Long id);
-    ReadDentistDto updateStatus(UpdateDentistStatusDto updateDentistStatusDto, Long id);
-    Page<PageDentistDto> findByAvailability(String status, Pageable pageable);
-    Page<PageDentistDto> findBySpecialty(String specialty, Pageable pageable);
 
-    void deleteById(Long id);
 
+    ReadDentistDto findById(DentistId id, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PageDentistDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PageDentistDto> findByAvailability(String status, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PageDentistDto> findBySpecialty(String specialty, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+
+    ReadDentistDto save(CreateDentistDto createDentistDto, UserIdentityId requesterId, RolId requesterRolId);
+    ReadDentistDto updateContactData(UpdateDentistContactDto updateDentistDto, Long id, UserIdentityId requesterId, RolId requesterRolId);
+    ReadDentistDto updateSensitiveData(UpdateDentistSensitiveDto updateDentistDto, Long id, UserIdentityId requesterId, RolId requesterRolId);
+
+
+    void applyVacation(LocalDateTime start, LocalDateTime end, UserIdentityId requesterId, RolId requesterRolId);
+    void applyIncapacity(LocalDateTime start, LocalDateTime end, String note, UserIdentityId requesterId, RolId requesterRolId);
+    void returnToAvailable(UserIdentityId requesterId, RolId requesterRolId);
+
+
+    void deleteById(DentistId id, UserIdentityId requesterId, RolId requesterRolId);
 }
+
