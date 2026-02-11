@@ -1,9 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.service;
 
 import com.example.ClinicaDefinitiva.domain.InvoiceItemBuilder;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ServiceRendered;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
+
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.InvoiceFactory;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.InvoiceItem;
@@ -29,7 +30,7 @@ public class BillingDomainService {
      * Construye y valida una factura lista para persistir.
      * No persiste nada; la capa de aplicación debe abrir la transacción y guardar.
      */
-    public Invoice buildInvoice(Patient patient, String providerId, List<ServiceRendered> services, LocalDateTime issuedAt) {
+   /** public Invoice buildInvoice(Patient patient, String providerId, List<ServiceRendered> services, LocalDateTime issuedAt) {
         //No aseguramos de la existencia de un convenio relacionado con ese paciente
        // Long contractId
         Contract contract = contractRepo.findById(patient.getContractId())
@@ -53,12 +54,12 @@ public class BillingDomainService {
             throw new IllegalArgumentException("Rate not valid at performedAt for service " + first.getServiceCode());
         }
 
-        final Price invoiceCurrency = firstRate.getCurrency();
+       // final Price invoiceCurrency = firstRate.getCurrency();
         final String invoicePayer = firstRate.getPayer_type();
 
 
         //  Invoice InvoiceFactory;
-        Invoice invoice = InvoiceFactory.createDraft(patient.getId(), providerId, issuedAt, patient.getContractId(), invoiceCurrency, invoicePayer);
+        //Invoice invoice = InvoiceFactory.createDraft(patient.getId(), providerId, issuedAt, patient.getContractId(), invoiceCurrency, invoicePayer);
 
         for (ServiceRendered s : services) {
             Rate rate = rateRepo.findActiveRateForService(s.getServiceCode(), patient.getContractId())
@@ -100,5 +101,5 @@ public class BillingDomainService {
         return invoice;
 
 
-    }
+    }*/
 }

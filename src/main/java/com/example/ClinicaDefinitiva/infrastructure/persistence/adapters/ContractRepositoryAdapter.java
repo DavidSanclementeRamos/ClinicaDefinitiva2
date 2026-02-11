@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters;
 
-import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
+
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.ContractEntity;
@@ -14,9 +15,11 @@ import static org.hibernate.internal.util.BytesHelper.asLong;
 import static org.hibernate.internal.util.BytesHelper.fromLong;
 
 // Adaptador que implementa ContractRepository del dominio
-public class ContractRepositoryAdapter implements ContractRepository {
+public class ContractRepositoryAdapter
+       // implements ContractRepository
+{
 
-    private final ContractJpaRepository jpa;
+   /** private final ContractJpaRepository jpa;
 
     public ContractRepositoryAdapter(ContractJpaRepository jpa) {
         this.jpa = jpa;
@@ -29,7 +32,7 @@ public class ContractRepositoryAdapter implements ContractRepository {
     }
 
     @Override
-    public List<Contract> findAll() {
+    public List<com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract> findAll() {
         return jpa.findAll().stream().map(this::toDomain).collect(Collectors.toList());
     }
 
@@ -59,7 +62,7 @@ public class ContractRepositoryAdapter implements ContractRepository {
   Su contraparte es toEntity que mapea el dominio a la entidad para guardar en
   la BD. Ambos métodos pertenecen al adapter (infraestructura) y no al repositorio de dominio*/
     // ---------- Mapping helpers ----------
-    private Contract toDomain(ContractEntity e) {
+   /** private Contract toDomain(ContractEntity e) {
         // mapear ContractEntity -> Contract (dominio)
         // convierte Long -> ContractId VO
         ContractId cid = e.getId() == null ? null : ContractId.fromLong(e.getId());
@@ -94,7 +97,7 @@ public class ContractRepositoryAdapter implements ContractRepository {
         e.setCoverageRate(c.getCoverageRate());
         e.setStatus(c.getStatus().name());
         return e;
-    }
+    }*/
 }
 
 

@@ -24,7 +24,9 @@ public class ReceptionReadMapperRest {
                 dto.dateOfBirth(),
                 dto.bloodType(),
                 dto.documentEPS(),
-                dto.user(),
+                //dto.user(),
+                dto.receptionist(),
+
                 dto.lastUpdate(),
                 dto.street(),
                 dto.city(),

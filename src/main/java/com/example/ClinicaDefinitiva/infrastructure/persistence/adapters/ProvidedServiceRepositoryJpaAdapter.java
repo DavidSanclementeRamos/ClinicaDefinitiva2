@@ -19,9 +19,11 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Component
-public class ProvidedServiceRepositoryJpaAdapter implements ProvidedServiceRepository {
+public class ProvidedServiceRepositoryJpaAdapter
+        //implements ProvidedServiceRepository
+{
 
-    private final SpringDataProvidedServiceJpaRepository repo;
+   /** private final SpringDataProvidedServiceJpaRepository repo;
     private final ProvidedServiceMapper providedServiceMapper;
 
     public ProvidedServiceRepositoryJpaAdapter(SpringDataProvidedServiceJpaRepository repo, ProvidedServiceMapper providedServiceMapper) {
@@ -218,5 +220,5 @@ public class ProvidedServiceRepositoryJpaAdapter implements ProvidedServiceRepos
             }
         });
         return e;
-    }
+    }*/
 }

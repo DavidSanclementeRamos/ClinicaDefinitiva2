@@ -23,7 +23,7 @@ public class PatientDeactivationValidator {
     public Outcome<Void> validate(PatientId patientId) {
         ScheduleQueryService schedule = scheduleRepository.findByPatientId(patientId);
 
-        if (schedule != null && schedule.hasAppointmentsWithin(daysToBlockDeactivation)) {
+        if (schedule != null && schedule.hasAppointmentsWithin(patientId,daysToBlockDeactivation)) {
             return Outcome.fail(new OutcomeDetail(
                     PatientError.ERR_PATIENT_ACTIVE_SERVICES,
                     Severity.INFO,

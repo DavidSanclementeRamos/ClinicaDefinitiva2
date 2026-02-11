@@ -20,10 +20,7 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolErro
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
@@ -36,7 +33,9 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.*;
+//import static org.assertj.core.api.Assertions.*;
+//import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -128,6 +127,7 @@ class RolApplicationServiceTest {
             Optional<ReadRolDto> result = service.findById(targetRoleId, requesterId, requesterRolId);
 
             // Then
+            Assertions.asser
             assertThat(result).isPresent();
             assertThat(result.get()).isEqualTo(readRolDto);
 

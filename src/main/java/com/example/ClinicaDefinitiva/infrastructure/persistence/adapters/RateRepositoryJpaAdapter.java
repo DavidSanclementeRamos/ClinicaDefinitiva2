@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class RateRepositoryJpaAdapter implements RateRepository {
+public class RateRepositoryJpaAdapter
+        //implements RateRepository
+{
 
-    private final RateJpaRepository jpa;
+    /**private final RateJpaRepository jpa;
     private final RateEntityMapper mapper;
 
     public RateRepositoryJpaAdapter(RateJpaRepository jpa, RateEntityMapper mapper) {
@@ -50,7 +52,7 @@ public class RateRepositoryJpaAdapter implements RateRepository {
     @Override
     public void deleteById(RateId id) {
 
-    }
+    }*/
 }
 
 

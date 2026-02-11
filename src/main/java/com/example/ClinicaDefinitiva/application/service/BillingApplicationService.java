@@ -22,13 +22,15 @@ public class BillingApplicationService implements BillingUseCase {
     private final ContractRepository contractRepository;
     private final RateRepository rateRepository;
     private final InvoiceRepository invoiceRepository;
-    private final InvoiceMapper mapper;
+   // private final InvoiceMapper mapper;
 
-    public BillingApplicationService(ContractRepository contractRepository, RateRepository rateRepository, InvoiceRepository invoiceRepository, InvoiceMapper mapper) {
+    public BillingApplicationService(ContractRepository contractRepository, RateRepository rateRepository, InvoiceRepository invoiceRepository
+                                    // InvoiceMapper mapper
+    ) {
         this.contractRepository = contractRepository;
         this.rateRepository = rateRepository;
         this.invoiceRepository = invoiceRepository;
-        this.mapper = mapper;
+       // this.mapper = mapper;
     }
 
     @Override

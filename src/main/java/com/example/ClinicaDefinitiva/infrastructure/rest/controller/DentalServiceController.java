@@ -24,7 +24,7 @@ import java.util.Optional;
 @RequestMapping("/api/dental-services")
 public class DentalServiceController {
 
-    private final ProvidedServiceUseCase service;
+   /** private final ProvidedServiceUseCase service;
     private final ProvidedServiceMapper mapper;
 
     public DentalServiceController(ProvidedServiceUseCase service, ProvidedServiceMapper mapper) {
@@ -106,5 +106,5 @@ public class DentalServiceController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") String id) {
         service.delete(id);
-    }
+    }*/
 }

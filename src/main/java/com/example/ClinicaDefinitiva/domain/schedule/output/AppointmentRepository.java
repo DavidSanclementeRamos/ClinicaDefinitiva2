@@ -63,6 +63,13 @@ public interface AppointmentRepository {
             LocalDateTime startOfDay,
             LocalDateTime endOfDay, Pageable pageable
     );
+    List<Appointment> findByPatientBetween(
+            PatientId patientId,
+            LocalDateTime start,
+            LocalDateTime end,
+            Pageable pageable
+    );
+
 
     void delete(AppointmentId id);
 

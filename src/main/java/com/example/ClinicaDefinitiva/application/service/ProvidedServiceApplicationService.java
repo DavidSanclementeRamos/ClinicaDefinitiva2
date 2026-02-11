@@ -13,8 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-public class ProvidedServiceApplicationService  implements ProvidedServiceUseCase {
-    private final ProvidedServiceRepository repository;
+public class ProvidedServiceApplicationService
+       // implements ProvidedServiceUseCase
+{
+  /**  private final ProvidedServiceRepository repository;
     private final ProvidedServiceMapper providedServiceMapper;
 
     public ProvidedServiceApplicationService(ProvidedServiceRepository repository, ProvidedServiceMapper providedServiceMapper) {
@@ -131,7 +133,7 @@ public class ProvidedServiceApplicationService  implements ProvidedServiceUseCas
     public void delete(String id) {
         if (id == null || id.isBlank()) throw new IllegalArgumentException("id required");
         repository.deleteById(ServiceId.fromString(id));
-    }
+    }*/
 
 
 

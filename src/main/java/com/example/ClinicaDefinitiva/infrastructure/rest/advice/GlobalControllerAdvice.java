@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.advice;
 
 
-import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ClinicaDefinitivaException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.EdadNoPermitidaException;
+
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.ErrorResponse;
 import com.example.ClinicaDefinitiva.util.ErrorCodeResolver;
 import com.example.ClinicaDefinitiva.util.ErrorHandlerUtils;
@@ -32,7 +32,7 @@ import static com.example.ClinicaDefinitiva.util.RequestIdFilter.getRequestId;
 
 @RestControllerAdvice
 public class GlobalControllerAdvice {
-    private static final Logger logger = LoggerFactory.getLogger(GlobalControllerAdvice.class);
+   /** private static final Logger logger = LoggerFactory.getLogger(GlobalControllerAdvice.class);
 
     // ERRORES DE NOT FOUND
 
@@ -40,7 +40,7 @@ public class GlobalControllerAdvice {
     (como OdontologoNotfountException) será capturada por este método sin necesidad
     de crear un handler por cada tipo.*/
 
-    @ExceptionHandler(ClinicaDefinitivaException.class)
+    /**@ExceptionHandler(ClinicaDefinitivaException.class)
     public ResponseEntity<ErrorResponse> manejarExcepciones(ClinicaDefinitivaException ex) {
 
         /*Esta línea extrae el usuario activo si estás usando Spring Security.
@@ -48,7 +48,7 @@ public class GlobalControllerAdvice {
          No es obligatorio, pero prepara tu sistema para auditoría futura.
          */
 
-        String usuario = ErrorHandlerUtils.getUsuarioActual();
+       /** String usuario = ErrorHandlerUtils.getUsuarioActual();
 
         // 🔍 Registrar el error en logs
         logger.error("Error capturado [requestId={}]: código={}, contexto={}, usuario={}, detalle={}",
@@ -61,7 +61,7 @@ public class GlobalControllerAdvice {
 
         /*Este objeto encapsula TODO lo que un frontend moderno, un logger estructurado
         o una herramienta de monitoreo necesita para entender el error*/
-        ErrorResponse response = new ErrorResponse(
+       /** ErrorResponse response = new ErrorResponse(
 
                 ex.getCatalogo().getCode(),                   // Código estandarizado (ERR_DENTIST_NOT_FOUND)
                 ex.getContexto().getCodigoEntidad().name(),   // Código lógico del módulo (OD01)
@@ -127,14 +127,14 @@ public class GlobalControllerAdvice {
         String usuario = ErrorHandlerUtils.getUsuarioActual();
         String requestId = getRequestId();
 
-        logger.error("El tipo de contenido no es compatible [usuario={}," + " requestId={}]: {}",
+      /*  logger.error("El tipo de contenido no es compatible [usuario={}," + " requestId={}]: {}",
                 usuario,
                 requestId,
                 ex.getMessage());
 
 
 
-        ErrorResponse response = new ErrorResponse(
+       /** ErrorResponse response = new ErrorResponse(
                 ErrorCatalogXD.UNSUPPORTED_MEDIA_TYPE.getCode(), // Código estandarizado (UNSUPPORTED_MEDIA_TYPE)
                 "UNSUPPORTED",// Código lógico del módulo (OD01)
                 "EXCEPTION",  // Contexto semántico ("EXCEPTION")
@@ -365,7 +365,7 @@ public class GlobalControllerAdvice {
         ).map(auth -> auth.getName()).orElse("anonimo");*/
 
         // 🔍 Registrar el error en logs
-        logger.error("Error capturado [requestId={}]: código={}, contexto={}, usuario={}, detalle={}",
+       /** logger.error("Error capturado [requestId={}]: código={}, contexto={}, usuario={}, detalle={}",
                 ex.getRequestId(),
                 ex.getCatalogo().getCode(),
                 ex.getContexto().name(),
@@ -385,6 +385,6 @@ public class GlobalControllerAdvice {
                 ex.getRequestId()                             // ID único de la solicitud (para trazabilidad)
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
+    }*/
 
 }

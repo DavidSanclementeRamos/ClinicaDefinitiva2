@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.domain.payment.doiman;
 
-import com.example.ClinicaDefinitiva.Enum.Estado;
 
 import java.time.LocalDateTime;
 

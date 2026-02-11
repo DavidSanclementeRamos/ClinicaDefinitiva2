@@ -44,7 +44,7 @@ public final class UserIdentityName implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_NULL,
                     Severity.ERROR,
-                    Category.TECNICO,EntityContext.USUARIO
+                    Category.TECNICO,EntityContext.USER_IDENTITY
             ));
         }
 
@@ -52,7 +52,7 @@ public final class UserIdentityName implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_EMPTY,
                     Severity.ERROR,
-                    Category.TECNICO, EntityContext.USUARIO
+                    Category.TECNICO, EntityContext.USER_IDENTITY
             ));
         }
 
@@ -62,7 +62,7 @@ public final class UserIdentityName implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_TOO_SHORT,
                     Severity.ERROR,
-                    Category.TECNICO,EntityContext.USUARIO
+                    Category.TECNICO,EntityContext.USER_IDENTITY
             ));
         }
 
@@ -70,7 +70,7 @@ public final class UserIdentityName implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_TOO_LONG,
                     Severity.ERROR,
-                    Category.TECNICO,EntityContext.USUARIO
+                    Category.TECNICO,EntityContext.USER_IDENTITY
             ));
         }
 

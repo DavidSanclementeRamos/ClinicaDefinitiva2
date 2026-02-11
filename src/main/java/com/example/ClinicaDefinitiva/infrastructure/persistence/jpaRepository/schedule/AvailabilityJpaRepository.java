@@ -3,5 +3,5 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.s
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 
 public interface AvailabilityJpaRepository {
-    Availability findByDentistId(DentistId dentistId);
+    //Availability findByDentistId(DentistId dentistId);
 }
