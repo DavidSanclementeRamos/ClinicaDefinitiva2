@@ -54,6 +54,13 @@ public class Receptionist   {
         this.sector = sector;
     }
 
+    public ShiftId getShiftId() {
+        return shiftId;
+    }
+
+    public UserIdentityId getUserIdentityId() {
+        return userIdentityId;
+    }
 
     public void setPerson(Person person) {
         this.person = person;

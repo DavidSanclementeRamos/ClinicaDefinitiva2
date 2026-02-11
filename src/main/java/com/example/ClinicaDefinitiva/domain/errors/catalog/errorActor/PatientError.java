@@ -72,7 +72,13 @@ public enum PatientError implements ErrorCatalog {
     ERR_PATIENT_ACTIVE_TREATMENT(
             "RN-PATIENT-013",
             "error.patient.activeTreatment",
-            "El paciente tiene tratamientos activos y no puede ser desactivado" );
+            "El paciente tiene tratamientos activos y no puede ser desactivado" ),
+    ERR_PATIENT_CONTRACT_INVALID(
+            "RN-PATIENT-014",
+            "error.patient.contractInvalid",
+            "El contrato asignado al paciente no está activo o se encuentra vencido"
+    );
+
 
     private final String code;
     private final String messageKey;

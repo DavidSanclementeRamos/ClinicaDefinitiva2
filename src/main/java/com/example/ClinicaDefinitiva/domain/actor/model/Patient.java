@@ -12,6 +12,7 @@ import com.example.ClinicaDefinitiva.domain.util.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class Patient  {
 
@@ -19,7 +20,7 @@ public class Patient  {
     private final UserIdentityId userIdentityId;
     private final GuardianId guardianId;
     private LocalDateTime lastUpdate;
-    private final ContractId contractId;
+    private  ContractId contractId;
     private final List<TreatmentId> treatments;
     private Person person;
 
@@ -37,8 +38,8 @@ public class Patient  {
     public static Patient registerPatient(
                                           Person data,
                                           UserIdentityId userIdentityId,
-                                          GuardianId guardianId,
-                                          ContractId contractId) {
+                                          GuardianId guardianId
+                                          ) {
 
         if (!data.getAge().isEligibleForRegistration()) {
             throw new DomainAggregateException(PatientError.ERR_PATIENT_INVALID_AGE, EntityContext.PATIENT);
@@ -48,7 +49,7 @@ public class Patient  {
             throw new BusinessRuleViolationException(PatientError.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
         }
 
-        return new Patient(contractId,  LocalDate.now().atStartOfDay(), guardianId, data, null, userIdentityId, null);
+        return new Patient(null,  LocalDate.now().atStartOfDay(), guardianId, data, null, userIdentityId, null);
     }
 
     public void updatePatientContact( Address address, PhoneNumber phoneNumber) {
@@ -88,6 +89,15 @@ public class Patient  {
         this.lastUpdate = LocalDateTime.now();
     }
 
+    public void assignContract(ContractId contractId) {
+        this.contractId = Objects.requireNonNull(contractId, "ContractId cannot be null");
+    }
+
+    public void removeContract() {
+        this.contractId = null;
+    }
+
+
 
     private void validateGuardian() {
         if (requiereResponsable() && !hasGuardian()) {
@@ -120,6 +130,9 @@ public class Patient  {
     public List<TreatmentId> getTreatments() {
         return treatments;
     }
+
+
+
 
 
 
