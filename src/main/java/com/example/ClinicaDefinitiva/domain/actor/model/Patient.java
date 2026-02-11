@@ -19,7 +19,7 @@ public class Patient  {
     private final UserIdentityId userIdentityId;
     private final GuardianId guardianId;
     private LocalDateTime lastUpdate;
-    private ContractId contractId;
+    private final ContractId contractId;
     private final List<TreatmentId> treatments;
     private Person person;
 
