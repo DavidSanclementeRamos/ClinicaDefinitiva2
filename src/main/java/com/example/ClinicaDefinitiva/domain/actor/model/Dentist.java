@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.TreatmentId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.DentistError;
@@ -14,6 +15,7 @@ import java.util.List;
 public class Dentist   {
 
     private final DentistId dentistId;
+    private final ShiftId shiftId;
     private Person personData;
     private Specialties specialties;
     private DentistAvailabilityStatus availabilityStatus;
@@ -30,7 +32,7 @@ public class Dentist   {
 
 
 
-    public Dentist(DentistId dentistId,
+    public Dentist(DentistId dentistId, ShiftId shiftId,
                    Person personData,
                    Specialties specialties,
                    UserIdentityId userIdentityId,
@@ -38,6 +40,7 @@ public class Dentist   {
                    LocalDateTime lastUpdate,
                    List<TreatmentId> treatmentId){
         this.dentistId = dentistId;
+        this.shiftId = shiftId;
         this.personData = personData;
         this.specialties = specialties;
         this.userIdentityId = userIdentityId;
@@ -60,7 +63,7 @@ public class Dentist   {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
         }
 
-        return new Dentist(null, data, specialties, userIdentityId, workingHours,
+        return new Dentist(null, null, data, specialties, userIdentityId, workingHours,
 
                 lastUpdate, List.of());
 
