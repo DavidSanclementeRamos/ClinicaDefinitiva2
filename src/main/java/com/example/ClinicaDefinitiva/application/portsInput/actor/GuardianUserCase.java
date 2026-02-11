@@ -8,6 +8,8 @@ public interface GuardianUserCase {
     ReadGuardianDto findById(Long id);
     Page<PageGuardianDto> findAll(Pageable pageable);
     Page<PageGuardianDto> findByPatientId(Long patientId, Pageable pageable);
+
+
     ReadGuardianDto save(CreateGuardianDto createGuardianDto);
     ReadGuardianDto updateContactData(UpdateGuardianContactDto updateGuardian, Long id);
     ReadGuardianDto updateSensitiveData(UpdateGuardianSensitiveDto updateGuardian, Long id);

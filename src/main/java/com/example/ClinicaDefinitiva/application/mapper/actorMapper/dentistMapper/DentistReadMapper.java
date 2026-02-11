@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class DentistReadMapper {
 
     // dominio → DTO de lectura
-    public ReadDentistDto toDto(Dentist dentist) {
+    public ReadDentistDto toReadDto(Dentist dentist) {
         return new ReadDentistDto(
                 dentist.getDentistId().getValue(),
                 dentist.getSpecialties().toString(),
@@ -38,7 +38,7 @@ public class DentistReadMapper {
     }
 
     // dominio → DTO de lectura
-    public PageDentistDto pageToDto(Dentist dentist) {
+    public PageDentistDto toPageDto(Dentist dentist) {
         return new PageDentistDto(
                 dentist.getDentistId().getValue(),
                 dentist.getSpecialties().toString(),

@@ -1,0 +1,80 @@
+public interface GuardianUseCase {
+
+    // Queries
+    ReadGuardianDto findById(Long id, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PageGuardianDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PageGuardianDto> findByPatientId(Long patientId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    // Commands
+    ReadGuardianDto save(CreateGuardianDto createGuardianDto, UserIdentityId requesterId, RolId requesterRolId);
+    ReadGuardianDto updateContactData(UpdateGuardianContactDto updateGuardian, Long id, UserIdentityId requesterId, RolId requesterRolId);
+    ReadGuardianDto updateSensitiveData(UpdateGuardianSensitiveDto updateGuardian, Long id, UserIdentityId requesterId, RolId requesterRolId);
+
+    // Deletion
+    void deleteById(Long id, UserIdentityId requesterId, RolId requesterRolId);
+}
+
+refactor(guardian-usecase): añadir parámetros de autorización explícita en todas las firmas
+
+- Se incluyeron los parámetros UserIdentityId requesterId y RolId requesterRolId en todos los métodos de GuardianUseCase.
+- Con este cambio, los casos de uso reciben identidad y rol del solicitante directamente desde el controller, siguiendo ADR-48.
+- Se preserva la arquitectura hexagonal y la testabilidad, evitando acoplar el dominio a utilidades de seguridad o infraestructura.
+- Las firmas ahora son más largas, pero honestas y exhibibles: muestran explícitamente qué necesita cada caso de uso para validar autorización.
+
+
+package com.example.ClinicaDefinitiva.application.portsInput.actor;
+
+import com.example.ClinicaDefinitiva.application.dto.actor.Patient.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+public interface PatientUseCase {
+
+    // Queries
+    ReadPatientDto findById(Long id, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PagePatientDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PagePatientDto> findByContractId(Long contractId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PagePatientDto> findByGuardianId(Long guardianId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    // Commands
+    ReadPatientDto save(CreatePatientDto createPatientDto, UserIdentityId requesterId, RolId requesterRolId);
+    ReadPatientDto updateContactData(UpdatePatientContactDto updatePatientDto, Long id, UserIdentityId requesterId, RolId requesterRolId);
+    ReadPatientDto updateSensitiveData(UpdatePatientSensitiveDto updatePatientDto, Long id, UserIdentityId requesterId, RolId requesterRolId);
+
+    // Deletion
+    void deleteById(Long id, UserIdentityId requesterId, RolId requesterRolId);
+}
+
+refactor(patient-usecase): añadir parámetros de autorización explícita en todas las firmas
+
+- Se incluyeron los parámetros UserIdentityId requesterId y RolId requesterRolId en todos los métodos de PatientUseCase.
+- Con este cambio, los casos de uso reciben identidad y rol del solicitante directamente desde el controller, siguiendo ADR-48.
+- Se preserva la arquitectura hexagonal y la testabilidad, evitando acoplar el dominio a utilidades de seguridad o infraestructura.
+- Las firmas ahora son más largas, pero honestas y exhibibles: muestran explícitamente qué necesita cada caso de uso para validar autorización.
+
+
+
+public interface ReceptionUseCase {
+
+    // Queries
+    ReadReceptionistDto findById(Long id, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PageReceptionistDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PageReceptionistDto> findBySector(String sector, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    // Commands
+    ReadReceptionistDto save(CreateReceptionistDto dto, UserIdentityId requesterId, RolId requesterRolId);
+    ReadReceptionistDto updateContact(UpdateReceptionistContactDto dto, Long id, UserIdentityId requesterId, RolId requesterRolId);
+    ReadReceptionistDto updateSensitive(UpdateReceptionistSensitiveDto dto, Long id, UserIdentityId requesterId, RolId requesterRolId);
+
+    // Deletion
+    void deleteById(Long id, UserIdentityId requesterId, RolId requesterRolId);
+}
+
+
+
+refactor(reception-usecase): añadir parámetros de autorización explícita en todas las firmas
+
+- Se incluyeron los parámetros UserIdentityId requesterId y RolId requesterRolId en todos los métodos de ReceptionUseCase.
+- Con este cambio, los casos de uso reciben identidad y rol del solicitante directamente desde el controller, siguiendo ADR-48.
+- Se preserva la arquitectura hexagonal y la testabilidad, evitando acoplar el dominio a utilidades de seguridad o infraestructura.
+- Las firmas ahora son más largas, pero honestas y exhibibles: muestran explícitamente qué necesita cada caso de uso para validar autorización.

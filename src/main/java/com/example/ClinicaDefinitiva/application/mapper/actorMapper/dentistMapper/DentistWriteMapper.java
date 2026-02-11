@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class DentistWriteMapper {
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public Dentist dtoCreateToDentist(CreateDentistDto dto  ) {
+    public Dentist fromCreateDto(CreateDentistDto dto  ) {
 
         // specialties seguro contra null
         Set<Specialty> specialtiesSet = Optional.ofNullable(dto.specialties())
@@ -49,7 +49,7 @@ public class DentistWriteMapper {
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public void dtoUpdateSensitiveToDentist(UpdateDentistSensitiveDto dto, Dentist dentist) {
+    public void updateSensitiveFromDto(UpdateDentistSensitiveDto dto, Dentist dentist) {
         Set<Specialty> specialtiesSet = Optional.ofNullable(dto.specialties())
                 .map(s -> Arrays.stream(s.split(","))
                         .map(String::trim)
@@ -71,7 +71,7 @@ public class DentistWriteMapper {
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public void dtoUpdateContactToDentist(UpdateDentistContactDto dto, Dentist dentist) {
+    public void updateContactFromDto(UpdateDentistContactDto dto, Dentist dentist) {
 
         dentist.updateContactData(
                 new Address(dto.street(), dto.city(), dto.state(),

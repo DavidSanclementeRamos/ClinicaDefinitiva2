@@ -19,5 +19,5 @@ public interface DentistRepository {
     void deleteById(DentistId id);
     boolean existsById(Long id);
 
-    Dentist findByUserId(UserIdentityId id);
+    Optional<Dentist> findByUserId(UserIdentityId id);
 }

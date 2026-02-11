@@ -5,3 +5,4 @@ public class DentistNotFoundException extends RuntimeException {
         super(message);
     }
 }
+
