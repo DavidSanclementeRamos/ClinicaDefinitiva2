@@ -14,8 +14,8 @@ public class Guardian  {
     private final GuardianId guardianId;
     private Person person;
     private TypeGuardian typeGuardian;
-    private UserIdentityId userIdentityId;
-    private List<PatientId> patientList;
+    private final UserIdentityId userIdentityId;
+    private final List<PatientId> patientList;
     private LocalDateTime lastUpdate;
 
     public Guardian(GuardianId guardianId, LocalDateTime lastUpdate, List<PatientId> patientList, Person person, TypeGuardian typeGuardian, UserIdentityId userIdentityId) {
