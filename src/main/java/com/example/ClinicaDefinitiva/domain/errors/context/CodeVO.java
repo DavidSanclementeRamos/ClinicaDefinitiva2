@@ -43,7 +43,8 @@ public enum CodeVO {
     SCA39,
     USE40,
     PER41,
-    AUT42
+    AUT42,
+    COP43
 
 }
 

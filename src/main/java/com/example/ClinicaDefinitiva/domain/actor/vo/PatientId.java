@@ -12,7 +12,7 @@ public final class PatientId {
         this.value = value;
     }
 
-    public static PatientId fromLong(Long value) {
+    public static PatientId of(Long value) {
         if (value == null) {
             throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.PATIENT_ID);
 

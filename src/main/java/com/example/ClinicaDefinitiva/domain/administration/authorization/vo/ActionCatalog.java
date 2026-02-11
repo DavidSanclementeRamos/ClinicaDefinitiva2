@@ -7,6 +7,7 @@ public final class ActionCatalog {
         APPROVE, CANCEL, CONFIRM, COMPLETE,
         DEACTIVATE, REACTIVATE, ASSIGN, SCHEDULE,
         RESCHEDULE, POST, REVERSE,SUSPEND,
+        MARK_AS_NO_SHOW,
 
         AUTHENTICATE,
         //ROL PERMISIONES

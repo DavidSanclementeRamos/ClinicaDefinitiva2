@@ -40,7 +40,8 @@ public enum VOContext implements DomainContext {
     SERVICE_CATALOG(CodeVO.SCA39),
     USER_ID(CodeVO.USE40),
     PERMISSION(CodeVO.PER41),
-    AUTHORIZATION(CodeVO.AUT42);
+    AUTHORIZATION(CodeVO.AUT42),
+    COMPLETION(CodeVO.COP43);
 
 
 

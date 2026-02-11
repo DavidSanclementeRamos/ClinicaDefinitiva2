@@ -8,6 +8,7 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentE
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentCompletion;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
@@ -31,11 +32,9 @@ public class Appointment {
     private AppointmentStatus status;
     private String reason;
     private AppointmentType appointmentType;
-    private String clinicalNotes;
-    private ServiceDuration actualDuration;
-    private String attendedBy;
     private LocalDateTime creationDate;
     private LocalDateTime lastUpdated;
+    private AppointmentCompletion completion;
 
     private static final Duration CANCELLATION_WINDOW = Duration.ofHours(24);
 
@@ -50,11 +49,9 @@ public class Appointment {
         this.status = builder.status;
         this.reason = builder.reason;
         this.appointmentType = builder.appointmentType;
-        this.clinicalNotes = builder.clinicalNotes;
-        this.actualDuration = builder.actualDuration;
-        this.attendedBy = builder.attendedBy;
         this.creationDate = LocalDateTime.now();
         this.lastUpdated = LocalDateTime.now();
+        this.completion = builder.completion;
     }
 
 
@@ -62,14 +59,14 @@ public class Appointment {
     /**
      * RN-APPT-006: Solo puede confirmarse si está en estado SCHEDULED
      */
-    public void confirm() {
+   /** public void confirm() {
         if (!status.isScheduled()) {
             throw new BusinessRuleViolationException(
                     AppointmentError.ERR_APPT_NOT_EDITABLE, EntityContext.APPOINTMENT);
         }
         this.status = this.status.transitionTo(AppointmentStatus.Status.CONFIRMED);
         this.lastUpdated = LocalDateTime.now();
-    }
+    }*/
 
     /**
      * RN-APPT-007: No puede cancelarse dentro de las 24h previas
@@ -80,7 +77,6 @@ public class Appointment {
             throw new BusinessRuleViolationException(
                     AppointmentError.ERR_APPT_MISSING_REASON, EntityContext.APPOINTMENT);
         }
-
         LocalDateTime now = LocalDateTime.now();
         if (start.minus(CANCELLATION_WINDOW).isBefore(now)) {
             throw new BusinessRuleViolationException(
@@ -88,41 +84,42 @@ public class Appointment {
         }
 
         this.status = this.status.transitionTo(AppointmentStatus.Status.CANCELLED);
-        this.clinicalNotes = (this.clinicalNotes == null ? "" : this.clinicalNotes + "\n")
-                + "Cancelación: " + cancellationReason;
         this.lastUpdated = LocalDateTime.now();
     }
 
     /**
      * RN-APPT-005: Solo puede finalizarse si tiene duración real y notas clínicas
      */
-    public void complete(ServiceDuration actualDuration, String clinicalNotes, String attendedBy) {
-        if (actualDuration == null || actualDuration.getMinutes() <= 0) {
-            throw new BusinessRuleViolationException(
-                    AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, EntityContext.APPOINTMENT);
-        }
-        if (clinicalNotes == null || clinicalNotes.isBlank()) {
-            throw new BusinessRuleViolationException(
-                    AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, EntityContext.APPOINTMENT);
-        }
 
-        this.status = this.status.transitionTo(AppointmentStatus.Status.COMPLETED);
-        this.actualDuration = actualDuration;
-        this.clinicalNotes = clinicalNotes;
-        this.attendedBy = attendedBy;
+
+    public void complete(AppointmentCompletion completion,DentistId dentist) {
+        if (completion == null) {
+            throw new BusinessRuleViolationException(
+                    AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION,
+                    EntityContext.APPOINTMENT
+            );
+        }
+        this.status = AppointmentStatus.from(AppointmentStatus.Status.COMPLETED);
+        this.completion = completion;
         this.lastUpdated = LocalDateTime.now();
+
     }
 
-    public void markAsNoShow(String notes) {
+
+
+    public void markAsNoShow(String reason) {
+        if (reason == null || reason.isBlank()) {
+            throw new BusinessRuleViolationException(
+                    AppointmentError.ERR_APPT_MISSING_REASON, EntityContext.APPOINTMENT);
+        }
         this.status = this.status.transitionTo(AppointmentStatus.Status.NO_SHOW);
-        this.clinicalNotes = "No Show: " + (notes != null ? notes : "Sin observaciones");
         this.lastUpdated = LocalDateTime.now();
     }
 
-    public void markAsRescheduled() {
+    /**public void markAsRescheduled() {
         this.status = this.status.transitionTo(AppointmentStatus.Status.RESCHEDULED);
         this.lastUpdated = LocalDateTime.now();
-    }
+    }*/
 
 
 
@@ -148,15 +145,13 @@ public class Appointment {
     public AppointmentId getId() { return id; }
     public DentistId getDentistId() { return dentist; }
     public PatientId getPatientId() { return patient; }
-    public ServiceId getServiceId() { return serviceId; } // ✅ AÑADIDO
+    public ServiceId getServiceId() { return serviceId; }
     public LocalDateTime getStart() { return start; }
     public LocalDateTime getEnd() { return end; }
     public AppointmentStatus getStatus() { return status; }
     public String getReason() { return reason; }
     public AppointmentType getAppointmentType() { return appointmentType; }
-    public String getClinicalNotes() { return clinicalNotes; }
-    public ServiceDuration getActualDuration() { return actualDuration; }
-    public String getAttendedBy() { return attendedBy; }
+    public AppointmentCompletion getCompletion() { return completion; }
     public LocalDateTime getCreationDate() { return creationDate; }
     public LocalDateTime getLastUpdated() { return lastUpdated; }
 
@@ -172,9 +167,7 @@ public class Appointment {
         private AppointmentStatus status = AppointmentStatus.scheduled();
         private String reason;
         private AppointmentType appointmentType;
-        private String clinicalNotes;
-        private ServiceDuration actualDuration;
-        private String attendedBy;
+        private AppointmentCompletion completion;
 
         public Builder withId(AppointmentId id) {
             this.id = id;
@@ -222,20 +215,11 @@ public class Appointment {
             return this;
         }
 
-        public Builder withClinicalNotes(String notes) {
-            this.clinicalNotes = notes;
+        public Builder withCompletion(AppointmentCompletion completion) {
+            this.completion = completion;
             return this;
         }
 
-        public Builder withServiceDuration(ServiceDuration duration) {
-            this.actualDuration = duration;
-            return this;
-        }
-
-        public Builder withAttendedBy(String attendedBy) {
-            this.attendedBy = attendedBy;
-            return this;
-        }
 
 
         public Appointment build() {

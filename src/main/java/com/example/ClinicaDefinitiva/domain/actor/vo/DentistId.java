@@ -12,7 +12,7 @@ public final class  DentistId {
     }
 
     // Nuevo: parsea/valida un Long y devuelve el VO
-    public static DentistId from(Long value) {
+    public static DentistId of(Long value) {
         if (value == null) {
             throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.DENTIST_ID);
         }

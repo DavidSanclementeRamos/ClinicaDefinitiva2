@@ -16,6 +16,7 @@ import com.example.ClinicaDefinitiva.domain.schedule.output.AppointmentRepositor
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.Shift;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
+import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import java.time.LocalDateTime;
@@ -51,26 +52,26 @@ public class AppointmentSchedulingService {
      * 4. Detectar conflictos con lock
      */
     public Appointment scheduleAppointment(
-            Dentist dentist,
-            Patient patient,
+            DentistId dentistId,
+            PatientId patientId,
             LocalDateTime start,
             LocalDateTime end,
             AppointmentType type,
             String reason,
-            ProvidedService service
+            ServiceId serviceId
              ) {
 
 
-        Shift shift = ensureShiftCoverage(dentist.getDentistId(), start, end);
+        Shift shift = ensureShiftCoverage(dentistId, start, end);
 
 
-        ensureNoConflicts(dentist.getDentistId(), patient.getPatientId(), start, end);
+        ensureNoConflicts(dentistId, patientId, start, end);
 
         // 4. Crear cita
         Appointment appointment = buildAppointment(
-                dentist.getDentistId(),
-                patient.getPatientId(),
-                service.getId(),
+                dentistId,
+                patientId,
+                serviceId,
                 start,
                 end,
                 type,
@@ -85,8 +86,8 @@ public class AppointmentSchedulingService {
      */
     public Appointment rescheduleAppointment(
             Appointment original,
-            Dentist dentist,
-            Patient patient,
+            DentistId dentistId,
+            PatientId patientId,
             LocalDateTime newStart,
             LocalDateTime newEnd
              ) {
@@ -102,22 +103,19 @@ public class AppointmentSchedulingService {
         }
 
 
-        ensureShiftCoverage(dentist.getDentistId(), newStart, newEnd);
+        ensureShiftCoverage(dentistId, newStart, newEnd);
 
         ensureNoConflictsExcluding(
                 original.getId(),
-                dentist.getDentistId(),
-                patient.getPatientId(),
+                dentistId,
+                patientId,
                 newStart,
                 newEnd
         );
 
-        original.markAsRescheduled();
-        appointmentRepository.save(original);
-
         Appointment newAppointment = buildAppointment(
-                dentist.getDentistId(),
-                patient.getPatientId(),
+                dentistId,
+                patientId,
                 original.getServiceId(),
                 newStart,
                 newEnd,
@@ -142,7 +140,7 @@ public class AppointmentSchedulingService {
      * Y que el turno pueda acomodar la cita (sin bloques excluidos)
      */
     private Shift ensureShiftCoverage(
-            com.example.ClinicaDefinitiva.domain.actor.vo.DentistId dentistId,
+            DentistId dentistId,
             LocalDateTime start,
             LocalDateTime end) {
 
@@ -167,8 +165,8 @@ public class AppointmentSchedulingService {
      * RN-APPT-004, RN-APPT-009: Coordina conflictos entre Appointments CON LOCK
      */
     private void ensureNoConflicts(
-            com.example.ClinicaDefinitiva.domain.actor.vo.DentistId dentistId,
-            com.example.ClinicaDefinitiva.domain.actor.vo.PatientId patientId,
+            DentistId dentistId,
+            PatientId patientId,
             LocalDateTime start,
             LocalDateTime end) {
 
@@ -194,8 +192,8 @@ public class AppointmentSchedulingService {
      */
     private void ensureNoConflictsExcluding(
             AppointmentId excludeId,
-            com.example.ClinicaDefinitiva.domain.actor.vo.DentistId dentistId,
-            com.example.ClinicaDefinitiva.domain.actor.vo.PatientId patientId,
+            DentistId dentistId,
+            PatientId patientId,
             LocalDateTime start,
             LocalDateTime end) {
 
@@ -243,7 +241,7 @@ public class AppointmentSchedulingService {
                 .withEnd(end)
                 .withAppointmentType(type)
                 .withReason(reason)
-                .withServiceDuration(duration)
+               // .withServiceDuration(duration)
                 .build();
     }
 }

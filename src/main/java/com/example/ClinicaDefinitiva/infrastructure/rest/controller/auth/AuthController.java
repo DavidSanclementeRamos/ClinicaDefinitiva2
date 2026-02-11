@@ -5,6 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.authentication.ReadUserIden
 import com.example.ClinicaDefinitiva.application.portsInput.authentication.UserIdentityUseCase;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.login.LoginRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.login.LoginResponse;
+import com.example.ClinicaDefinitiva.infrastructure.security.JwtProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,12 +27,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         // Caso de uso valida credenciales con el agregado
-        ReadUserIdentityDto user = useCase.authenticate(request.email(), request.password());
+        //ReadUserIdentityDto user = useCase.authenticate(request.email(), request.password());
 
         // Generar token JWT
-        String token = jwtProvider.generateToken(user);
+       // String token = jwtProvider.generateToken(user);
 
-        return ResponseEntity.ok(new LoginResponse(token));
+        return null;//ResponseEntity.ok(new LoginResponse(token));
     }
 }
 
