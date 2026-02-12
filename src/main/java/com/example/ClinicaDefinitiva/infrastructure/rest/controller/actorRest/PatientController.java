@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller.actorRest;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.PagePatientDto;
-import com.example.ClinicaDefinitiva.application.portsInput.actor.PatientUserCase;
+import com.example.ClinicaDefinitiva.application.portsInput.actor.PatientUseCase;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.PageResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.*;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.patientRestMapper.PatientReadMapperRest;
@@ -24,11 +24,11 @@ public class PatientController {
 
     private final PatientReadMapperRest readMapperRest;
     private final PatientWriteMapperRest writeMapperRest;
-    private final PatientUserCase patientUserCase;
+    private final PatientUseCase patientUserCase;
 
     public PatientController(PatientReadMapperRest readMapperRest,
                              PatientWriteMapperRest writeMapperRest,
-                             PatientUserCase patientUserCase) {
+                             PatientUseCase patientUserCase) {
         this.readMapperRest = readMapperRest;
         this.writeMapperRest = writeMapperRest;
         this.patientUserCase = patientUserCase;
