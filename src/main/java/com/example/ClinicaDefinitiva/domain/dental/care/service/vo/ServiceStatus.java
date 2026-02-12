@@ -6,6 +6,7 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidati
 
 public final class ServiceStatus {
 
+
     /**
      * Enum interno que define los estados permitidos
      */
