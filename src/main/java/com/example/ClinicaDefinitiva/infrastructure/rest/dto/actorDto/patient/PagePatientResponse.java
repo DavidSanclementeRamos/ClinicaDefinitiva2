@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient;
 
-public record PatientPageResponse(
+public record PagePatientResponse(
         Long patientId,
         Long contractId,
         String dni,

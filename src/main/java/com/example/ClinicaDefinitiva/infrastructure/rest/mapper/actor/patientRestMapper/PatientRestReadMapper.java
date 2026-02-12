@@ -3,18 +3,18 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.patientRe
 
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.PagePatientDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.ReadPatientDto;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.PatientPageResponse;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.PatientReadResponse;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.PagePatientResponse;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.ReadPatientResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PatientReadMapperRest {
+public class PatientRestReadMapper {
 
     // De DTO de aplicación → DTO REST completo (detalle)
-    public PatientReadResponse toResponse(ReadPatientDto dto) {
+    public ReadPatientResponse toRest(ReadPatientDto dto) {
         if (dto == null) return null;
 
-        return new PatientReadResponse(
+        return new ReadPatientResponse(
                 dto.patientId(),
                 dto.guardianId(),
                 dto.contractId(),
@@ -37,10 +37,10 @@ public class PatientReadMapperRest {
     }
 
     // De DTO de aplicación → DTO REST simplificado (listados/paginación)
-    public PatientPageResponse toPageResponse(PagePatientDto dto) {
+    public PagePatientResponse toPageRest(PagePatientDto dto) {
         if (dto == null) return null;
 
-        return new PatientPageResponse(
+        return new PagePatientResponse(
                 dto.patientId(),
                 dto.contractId(),
                 dto.dni(),

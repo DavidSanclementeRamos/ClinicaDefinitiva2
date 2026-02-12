@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient;
 
-public record PatientUpdateContactRequest(
+public record UpdatePatientContactRequest(
         // Address
         String street,
         String city,

@@ -3,8 +3,7 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public record PatientReadResponse(
-        Long patientId,
+public record CreatePatientRequest(
         Long guardianId,
         Long contractId,
         // Person
@@ -17,7 +16,7 @@ public record PatientReadResponse(
         LocalDate dateOfBirth,
         String bloodType,
         String documentEPS,
-        String user,
+        Long user,
         LocalDateTime lastUpdate,
 
         // Address

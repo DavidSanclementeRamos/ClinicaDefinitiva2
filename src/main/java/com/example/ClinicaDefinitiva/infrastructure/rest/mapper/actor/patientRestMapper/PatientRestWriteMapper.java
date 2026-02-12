@@ -3,21 +3,22 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.patientRe
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.CreatePatientDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.UpdatePatientContactDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.UpdatePatientSensitiveDto;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.PatientCreateRequest;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.PatientUpdateContactRequest;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.PatientUpdateSensitiveRequest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.CreatePatientRequest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.UpdatePatientContactRequest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.patient.UpdatePatientSensitiveRequest;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PatientWriteMapperRest {
+public class PatientRestWriteMapper {
 
     // De REST → DTO de aplicación (crear)
-    public CreatePatientDto toCreateDto(PatientCreateRequest request) {
+    public CreatePatientDto toServiceCreate(CreatePatientRequest request) {
         if (request == null) return null;
 
         return new CreatePatientDto(
                 request.guardianId(),
                 request.contractId(),
+                request.user(),
                 request.dni(),
                 request.first(),
                 request.lastName(),
@@ -26,7 +27,6 @@ public class PatientWriteMapperRest {
                 request.dateOfBirth(),
                 request.bloodType(),
                 request.documentEPS(),
-                request.user(),
                 request.lastUpdate(),
                 request.street(),
                 request.city(),
@@ -37,7 +37,7 @@ public class PatientWriteMapperRest {
     }
 
     // De REST → DTO de aplicación (actualizar)
-    public UpdatePatientContactDto toUpdateContactDto(PatientUpdateContactRequest request) {
+    public UpdatePatientContactDto toServiceUpdateContact(UpdatePatientContactRequest request) {
         if (request == null) return null;
 
         return new UpdatePatientContactDto(
@@ -50,7 +50,7 @@ public class PatientWriteMapperRest {
         );
     }
 
-    public UpdatePatientSensitiveDto toUpdateSensitiveDto(PatientUpdateSensitiveRequest request) {
+    public UpdatePatientSensitiveDto toServiceUpdateSensitive(UpdatePatientSensitiveRequest request) {
         if (request == null) return null;
 
         return new UpdatePatientSensitiveDto(
