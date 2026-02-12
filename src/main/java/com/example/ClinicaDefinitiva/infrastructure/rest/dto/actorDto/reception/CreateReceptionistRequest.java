@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.reception
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public record ReceptionCreateRequest(
+public record CreateReceptionistRequest(
         String sector,
         // Person
         String dni,
@@ -15,7 +15,7 @@ public record ReceptionCreateRequest(
         LocalDate dateOfBirth,
         String bloodType,
         String documentEPS,
-        String user,
+        Long user,
         LocalDateTime lastUpdate,
 
         // Address

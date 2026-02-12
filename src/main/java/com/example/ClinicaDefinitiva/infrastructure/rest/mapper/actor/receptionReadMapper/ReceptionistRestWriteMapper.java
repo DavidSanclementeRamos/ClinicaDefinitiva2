@@ -3,16 +3,16 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.reception
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.CreateReceptionistDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.UpdateReceptionistContactDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.UpdateReceptionistSensitiveDto;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.reception.ReceptionCreateRequest;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.reception.ReceptionUpdateContactRequest;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.reception.ReceptionUpdateSensitiveRequest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.reception.CreateReceptionistRequest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.reception.UpdateReceptionistContactRequest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.reception.UpdateReceptionistSensitiveRequest;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReceptionWriteMapperRest {
+public class ReceptionistRestWriteMapper {
 
     // De REST → DTO de aplicación (crear)
-    public CreateReceptionistDto toCreateDto(ReceptionCreateRequest request) {
+    public CreateReceptionistDto toServiceCreate(CreateReceptionistRequest request) {
         if (request == null) return null;
 
         return new CreateReceptionistDto(
@@ -36,7 +36,7 @@ public class ReceptionWriteMapperRest {
     }
 
     // De REST → DTO de aplicación (actualizar)
-    public UpdateReceptionistContactDto toUpdateContactDto(ReceptionUpdateContactRequest request) {
+    public UpdateReceptionistContactDto toServiceUpdateContact(UpdateReceptionistContactRequest request) {
         if (request == null) return null;
 
         return new UpdateReceptionistContactDto(
@@ -49,7 +49,7 @@ public class ReceptionWriteMapperRest {
         );
     }
 
-    public UpdateReceptionistSensitiveDto toUpdateSensitiveDto(ReceptionUpdateSensitiveRequest request) {
+    public UpdateReceptionistSensitiveDto toServiceUpdateSensitive(UpdateReceptionistSensitiveRequest request) {
         if (request == null) return null;
 
         return new UpdateReceptionistSensitiveDto(

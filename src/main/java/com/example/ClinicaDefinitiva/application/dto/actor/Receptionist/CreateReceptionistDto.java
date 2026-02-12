@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 
 public record CreateReceptionistDto (
         String sector,
-        Long shiftId,
         // Person
         String dni,
         String first,

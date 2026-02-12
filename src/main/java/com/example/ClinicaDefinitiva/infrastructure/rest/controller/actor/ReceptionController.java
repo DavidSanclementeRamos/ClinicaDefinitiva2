@@ -1,113 +1,164 @@
+
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller.actor;
 
-import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.PageReceptionistDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.*;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUseCase;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.PageResponse;
+import com.example.ClinicaDefinitiva.domain.actor.vo.ReceptionId;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.reception.*;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.receptionReadMapper.ReceptionReadMapperRest;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.receptionReadMapper.ReceptionWriteMapperRest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.receptionReadMapper.ReceptionistRestReadMapper;
+import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.receptionReadMapper.ReceptionistRestWriteMapper;
+import com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @Validated
-@RequestMapping("/api/v1/receptions")
+@RequestMapping("/api/v1/receptionists")
 public class ReceptionController {
 
-    private final ReceptionReadMapperRest readMapperRest;
-    private final ReceptionWriteMapperRest writeMapperRest;
-    private final ReceptionUseCase receptionUserCase;
+    private final ReceptionUseCase useCase;
+    private final ReceptionistRestReadMapper readMapper;
+    private final ReceptionistRestWriteMapper writeMapper;
 
-    public ReceptionController(ReceptionReadMapperRest readMapperRest,
-                               ReceptionWriteMapperRest writeMapperRest,
-                               ReceptionUseCase receptionUserCase) {
-        this.readMapperRest = readMapperRest;
-        this.writeMapperRest = writeMapperRest;
-        this.receptionUserCase = receptionUserCase;
+    public ReceptionController(ReceptionUseCase useCase,
+                               ReceptionistRestReadMapper readMapper,
+                               ReceptionistRestWriteMapper writeMapper) {
+        this.useCase = useCase;
+        this.readMapper = readMapper;
+        this.writeMapper = writeMapper;
     }
 
-    @GetMapping
-    public PageResponse<ReceptionPageResponse> findAll(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Page<PageReceptionistDto> receptionPage = receptionUserCase.findAll(PageRequest.of(page, size));
-
-        List<ReceptionPageResponse> content = receptionPage.getContent()
-                .stream()
-                .map(readMapperRest::toPageResponse)
-                .collect(Collectors.toList());
-
-        return new PageResponse<>(
-                content,
-                receptionPage.getNumber(),
-                receptionPage.getSize(),
-                receptionPage.getTotalElements(),
-                receptionPage.getTotalPages(),
-                receptionPage.isLast()
-        );
-    }
-
+    /**
+     * Buscar receptionist por ID
+     */
     @GetMapping("/{id}")
-    public ReceptionReadResponse findById(@PathVariable Long id) {
-        return readMapperRest.toResponse(receptionUserCase.findById(id));
+    public ResponseEntity<ReadReceptionistResponse> findById(
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        ReadReceptionistDto dto = useCase.findById(ReceptionId.of(id), requesterId, requesterRolId);
+        return ResponseEntity.ok(readMapper.toRest(dto));
     }
 
+    /**
+     * Listar todos los receptionists con paginación
+     */
+    @GetMapping
+    public ResponseEntity<Page<PageReceptionistResponse>> findAll(
+            @PageableDefault(size = 20) Pageable pageable,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        Page<PageReceptionistDto> receptionists = useCase.findAll(pageable, requesterId, requesterRolId);
+        Page<PageReceptionistResponse> response = receptionists.map(readMapper::toPageRest);
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Buscar receptionists por sector
+     */
     @GetMapping("/sector/{sector}")
-    public PageResponse<ReceptionPageResponse> findBySector(
+    public ResponseEntity<Page<PageReceptionistResponse>> findBySector(
             @PathVariable String sector,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @PageableDefault(size = 20) Pageable pageable,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        Page<PageReceptionistDto> receptionistPage = receptionUserCase.findBySector(sector, PageRequest.of(page, size));
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
 
-        List<ReceptionPageResponse> content = receptionistPage.getContent()
-                .stream()
-                .map(readMapperRest::toPageResponse)
-                .collect(Collectors.toList());
-
-        return new PageResponse<>(
-                content,
-                receptionistPage.getNumber(),
-                receptionistPage.getSize(),
-                receptionistPage.getTotalElements(),
-                receptionistPage.getTotalPages(),
-                receptionistPage.isLast()
+        Page<PageReceptionistDto> receptionists = useCase.findBySector(
+                sector,
+                pageable,
+                requesterId,
+                requesterRolId
         );
+        Page<PageReceptionistResponse> response = receptionists.map(readMapper::toPageRest);
+
+        return ResponseEntity.ok(response);
     }
 
+    /**
+     * Crear un nuevo receptionist
+     */
     @PostMapping
-    public ResponseEntity<ReceptionReadResponse> save(@Valid @RequestBody ReceptionCreateRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(readMapperRest.toResponse(
-                        receptionUserCase.save(writeMapperRest.toCreateDto(request))));
+    public ResponseEntity<ReadReceptionistResponse> create(
+            @Valid @RequestBody CreateReceptionistRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        CreateReceptionistDto dto = writeMapper.toServiceCreate(request);
+        ReadReceptionistDto created = useCase.save(dto, requesterId, requesterRolId);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(readMapper.toRest(created));
     }
 
-    @PutMapping("/{id}/contact")
-    public ReceptionReadResponse updateContact(@PathVariable Long id,
-                                               @Valid @RequestBody ReceptionUpdateContactRequest request) {
-        return readMapperRest.toResponse(
-                receptionUserCase.updateContact(writeMapperRest.toUpdateContactDto(request), id));
+    /**
+     * Actualizar datos de contacto del receptionist
+     */
+    @PatchMapping("/{id}/contact")
+    public ResponseEntity<ReadReceptionistResponse> updateContact(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateReceptionistContactRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        UpdateReceptionistContactDto dto = writeMapper.toServiceUpdateContact(request);
+        ReadReceptionistDto updated = useCase.updateContact(dto, ReceptionId.of(id), requesterId, requesterRolId);
+
+        return ResponseEntity.ok(readMapper.toRest(updated));
     }
 
-    @PutMapping("/{id}/sensitive")
-    public ReceptionReadResponse updateSensitive(@PathVariable Long id,
-                                                 @Valid @RequestBody ReceptionUpdateSensitiveRequest request) {
-        return readMapperRest.toResponse(
-                receptionUserCase.updateSensitive(writeMapperRest.toUpdateSensitiveDto(request), id));
+    /**
+     * Actualizar datos sensibles del receptionist
+     */
+    @PatchMapping("/{id}/sensitive")
+    public ResponseEntity<ReadReceptionistResponse> updateSensitive(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateReceptionistSensitiveRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        UpdateReceptionistSensitiveDto dto = writeMapper.toServiceUpdateSensitive(request);
+        ReadReceptionistDto updated = useCase.updateSensitive(dto, ReceptionId.of(id), requesterId, requesterRolId);
+
+        return ResponseEntity.ok(readMapper.toRest(updated));
     }
 
+    /**
+     * Eliminar receptionist
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        receptionUserCase.deleteById(id);
-        return ResponseEntity.noContent().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        useCase.deleteById(ReceptionId.of(id), requesterId, requesterRolId);
     }
 }

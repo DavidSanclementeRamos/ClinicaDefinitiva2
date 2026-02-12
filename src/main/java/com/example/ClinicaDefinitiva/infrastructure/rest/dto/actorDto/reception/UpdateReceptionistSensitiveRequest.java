@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.reception
 
 import java.time.LocalDate;
 
-public record ReceptionUpdateSensitiveRequest(
+public record UpdateReceptionistSensitiveRequest(
         String sector,
         // Person
         String dni,
