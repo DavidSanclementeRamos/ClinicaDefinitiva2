@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.portsOutput;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

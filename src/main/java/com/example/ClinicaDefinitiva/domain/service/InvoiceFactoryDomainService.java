@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.service;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ServiceRendered;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ServiceRendered;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;

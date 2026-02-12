@@ -2,8 +2,7 @@ package com.example.ClinicaDefinitiva.domain.schedule.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceDuration;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;

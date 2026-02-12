@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.JournalEntryNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.JournalEntryMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.JournalEntryUseCase;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.JournalEntryId;

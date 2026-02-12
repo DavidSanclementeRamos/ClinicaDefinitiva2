@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.dental.care.services.vo;
+package com.example.ClinicaDefinitiva.domain.dental.care.service.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
@@ -12,13 +12,14 @@ public class TreatmentId {
     }
 
 
-    public static TreatmentId fromLong(Long value) {
+    private static TreatmentId fromLong(Long value) {
         if (value == null) {
             throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_ID_NULL, VOContext.SERVICE_ID);
         }
         return new TreatmentId(value);
     }
+    private static TreatmentId of(Long value){return new TreatmentId(value);}
     public Long getValue() {
-        return Long.valueOf(value);
+        return value;
     }
 }

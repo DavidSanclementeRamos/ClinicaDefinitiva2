@@ -1,22 +1,7 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.num.ServiceType;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.model.*;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.*;
-import com.example.ClinicaDefinitiva.domain.portsOutput.ProvidedServiceRepository;
 
-
-import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.providedService.*;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.SpringDataProvidedServiceJpaRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Component
 public class ProvidedServiceRepositoryJpaAdapter

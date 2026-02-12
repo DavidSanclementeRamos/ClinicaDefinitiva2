@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.dental.care.services;
+package com.example.ClinicaDefinitiva.domain.dental.care.service;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.services.model.*;
 

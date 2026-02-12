@@ -1,8 +1,9 @@
-package com.example.ClinicaDefinitiva.domain.dental.care.services.model;
+package com.example.ClinicaDefinitiva.domain.dental.care.service.model;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.num.ServiceType;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.*;
+import com.example.ClinicaDefinitiva.domain.dental.care.vo.*;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;

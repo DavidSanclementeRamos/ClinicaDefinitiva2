@@ -1,21 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.service;
 
-import com.example.ClinicaDefinitiva.domain.InvoiceItemBuilder;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ServiceRendered;
-import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.InvoiceFactory;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.InvoiceItem;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
 public class BillingDomainService {
     private final ContractRepository contractRepo;

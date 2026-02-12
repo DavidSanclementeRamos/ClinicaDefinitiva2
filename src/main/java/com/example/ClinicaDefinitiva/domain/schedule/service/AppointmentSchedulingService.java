@@ -1,13 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.schedule.service;
 
-import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
-import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftRepository;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ProvidedService;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceDuration;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
@@ -16,9 +13,8 @@ import com.example.ClinicaDefinitiva.domain.schedule.output.AppointmentRepositor
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.Shift;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
-import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
-import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
+
 import java.time.LocalDateTime;
 import java.util.List;
 

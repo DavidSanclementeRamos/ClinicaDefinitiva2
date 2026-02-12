@@ -1,7 +1,7 @@
-package com.example.ClinicaDefinitiva.domain.dental.care.services.model;
+package com.example.ClinicaDefinitiva.domain.dental.care.service.model;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.ServiceDetails;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetails;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.AestheticError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;

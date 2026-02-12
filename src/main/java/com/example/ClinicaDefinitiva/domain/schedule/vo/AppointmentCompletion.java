@@ -1,8 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.schedule.vo;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceDuration;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 

@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
 
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.providedService.ProvidedServiceEntity;
 import org.springframework.data.domain.Page;

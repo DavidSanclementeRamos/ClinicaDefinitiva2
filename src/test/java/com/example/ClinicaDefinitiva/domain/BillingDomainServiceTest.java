@@ -1,24 +1,11 @@
 package com.example.ClinicaDefinitiva.domain;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.model.ServiceRendered;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
 import com.example.ClinicaDefinitiva.domain.service.BillingDomainService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class BillingDomainServiceTest {
 

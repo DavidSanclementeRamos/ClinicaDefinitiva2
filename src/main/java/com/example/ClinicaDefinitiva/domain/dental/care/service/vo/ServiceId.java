@@ -1,11 +1,8 @@
-package com.example.ClinicaDefinitiva.domain.dental.care.services.vo;
+package com.example.ClinicaDefinitiva.domain.dental.care.service.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
-
-import java.util.Objects;
-import java.util.UUID;
 
 public final class ServiceId {
 

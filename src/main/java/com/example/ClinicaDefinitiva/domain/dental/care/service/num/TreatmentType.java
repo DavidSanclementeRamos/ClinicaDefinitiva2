@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.dental.care.services.num;
+package com.example.ClinicaDefinitiva.domain.dental.care.service.num;
 
 public enum TreatmentType {
     ORTODONCIA,

@@ -1,10 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.schedule.output;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.services.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 
-import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 import java.util.Optional;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
