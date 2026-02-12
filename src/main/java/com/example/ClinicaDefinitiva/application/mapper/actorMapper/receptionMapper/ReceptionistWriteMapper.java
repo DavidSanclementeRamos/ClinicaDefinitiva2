@@ -10,10 +10,10 @@ import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReceptionWriteMapper {
+public class ReceptionistWriteMapper {
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public Receptionist dtoCreateToReception(CreateReceptionistDto dto) {
+    public Receptionist fromCreateDto(CreateReceptionistDto dto) {
 
         return Receptionist.registerReceptionist(
                 new Person(
@@ -34,7 +34,7 @@ public class ReceptionWriteMapper {
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public void dtoUpdateSensitiveToReception(UpdateReceptionistSensitiveDto dto, Receptionist reception) {
+    public void updateSensitiveFromDto(UpdateReceptionistSensitiveDto dto, Receptionist reception) {
 
         reception.updateSensitiveData(
                 new Age(new DateOfBirth(dto.dateOfBirth())),
@@ -49,7 +49,7 @@ public class ReceptionWriteMapper {
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public void dtoUpdateContactToReception(UpdateReceptionistContactDto dto, Receptionist reception) {
+    public void updateContactFromDto(UpdateReceptionistContactDto dto, Receptionist reception) {
 
         reception.updateContactData(
                 new Address(dto.street(), dto.city(), dto.state(),

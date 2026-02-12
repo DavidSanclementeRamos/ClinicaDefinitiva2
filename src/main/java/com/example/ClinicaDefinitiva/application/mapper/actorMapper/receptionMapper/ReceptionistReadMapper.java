@@ -6,10 +6,10 @@ import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReceptionReadMapper {
+public class ReceptionistReadMapper {
 
     // dominio → DTO de lectura
-    public ReadReceptionistDto toDto(Receptionist reception) {
+    public ReadReceptionistDto toReadDto(Receptionist reception) {
         return new ReadReceptionistDto(
                 reception.getId().getValue(),
 
@@ -35,7 +35,7 @@ public class ReceptionReadMapper {
     }
 
     // dominio → DTO de lectura resumido (ej. para paginación)
-    public PageReceptionistDto pageToDto(Receptionist reception) {
+    public PageReceptionistDto toPageDto(Receptionist reception) {
         return new PageReceptionistDto(
                 reception.getSector().toString(),
                 reception.getId().getValue(),
