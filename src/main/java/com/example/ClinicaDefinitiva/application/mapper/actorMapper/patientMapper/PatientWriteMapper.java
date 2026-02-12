@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class PatientWriteMapper {
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public Patient dtoCreateToPatient(CreatePatientDto dto) {
+    public Patient fromCreateDto(CreatePatientDto dto) {
 
         return Patient.registerPatient(
 
@@ -36,7 +36,7 @@ public class PatientWriteMapper {
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public void dtoUpdateSensitiveToPatient(UpdatePatientSensitiveDto dto, Patient patient) {
+    public void updateSensitiveFromDto(UpdatePatientSensitiveDto dto, Patient patient) {
 
         patient.updateSensitiveData(
                 new Age(new DateOfBirth(dto.dateOfBirth())),
@@ -51,7 +51,7 @@ public class PatientWriteMapper {
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public void dtoUpdateContactToPatient(UpdatePatientContactDto dto, Patient patient) {
+    public void updateContactFromDto(UpdatePatientContactDto dto, Patient patient) {
 
         patient.updatePatientContact(
                 new Address(dto.street(), dto.city(), dto.state(),

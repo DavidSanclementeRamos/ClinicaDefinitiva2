@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class PatientReadMapper {
 
     // dominio → DTO de lectura
-    public ReadPatientDto toDto(Patient patient) {
+    public ReadPatientDto toReadDto(Patient patient) {
         return new ReadPatientDto(
                 patient.getPatientId().getValue(),
                 patient.getGuardianId().getValue(),
@@ -33,7 +33,7 @@ public class PatientReadMapper {
     }
 
     // dominio → DTO de lectura resumido (ej. para paginación)
-    public PagePatientDto pageToDto(Patient patient) {
+    public PagePatientDto toPageDto(Patient patient) {
         return new PagePatientDto(
                 patient.getPatientId().getValue(),
                 patient.getContractId().asLong(),

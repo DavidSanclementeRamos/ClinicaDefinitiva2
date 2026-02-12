@@ -15,7 +15,7 @@ public interface PatientRepository {
     Page<Patient> findAll(Pageable pageable);
     Page<Patient> findByContractId (ContractId contractId, Pageable pageable);
     Page<Patient>findByGuardianId( GuardianId guardianId, Pageable pageable);
-    void save(Patient patient);
+    Patient save(Patient patient);
     Patient update(PatientId id);
     boolean existsById( PatientId id);
     void deleteById( PatientId id);

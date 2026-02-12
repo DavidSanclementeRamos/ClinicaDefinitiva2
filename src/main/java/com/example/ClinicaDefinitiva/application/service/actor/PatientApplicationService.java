@@ -1,141 +1,321 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
+
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.*;
+import com.example.ClinicaDefinitiva.application.exceptions.actorException.PatientNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.patientMapper.PatientReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.patientMapper.PatientWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.PatientUseCase;
-import com.example.ClinicaDefinitiva.application.exceptions.actorException.PatientNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
+import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
-import com.example.ClinicaDefinitiva.domain.authentication.service.UserAccessValidator;
+import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+
+import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
+
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
+import org.hibernate.query.sqm.PathElementException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
 
 @Service
 @Transactional
 public class PatientApplicationService implements PatientUseCase {
 
     private final PatientRepository patientRepository;
-    private final PatientReadMapper readMapper ;
-    private final PatientWriteMapper writeMapper ;
-    private final UserAccessValidator userAccessValidator;
+    private final ReceptionRepository receptionRepository;
+    private final PatientReadMapper readMapper;
+    private final PatientWriteMapper writeMapper;
+    private final AuthorizationService authorizationService;
 
-
-    public PatientApplicationService(PatientRepository patientRepository, PatientReadMapper readMapper, PatientWriteMapper writeMapper, UserAccessValidator userAccessValidator) {
+    public PatientApplicationService(PatientRepository patientRepository,
+                                     ReceptionRepository receptionRepository,
+                                     PatientReadMapper readMapper,
+                                     PatientWriteMapper writeMapper,
+                                     AuthorizationService authorizationService) {
         this.patientRepository = patientRepository;
+        this.receptionRepository = receptionRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
-        this.userAccessValidator = userAccessValidator;
+        this.authorizationService = authorizationService;
     }
 
     @Override
-    public ReadPatientDto findById(Long id) {
-        Patient patient = patientRepository.findById(PatientId.fromLong(id))
-                .orElseThrow(() -> new PatientNotFoundException("Patient not found with id " + id));
-        return readMapper.toDto(patient);
-    }
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+            action = ActionCatalog.BasicAction.READ)
+    public ReadPatientDto findById(PatientId id,
+                                   UserIdentityId requesterId,
+                                   RolId requesterRolId) {
 
-    @Override
-    public Page<PagePatientDto> findAll(Pageable pageable) {
-        Page<Patient> patients = patientRepository.findAll(pageable);
-        if (patients.isEmpty()) {
-            throw new PatientNotFoundException("No patients found");
-        }
-        return patients.map(readMapper::pageToDto);
-    }
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException("Not fount"));
 
-    @Override
-    public ReadPatientDto save(CreatePatientDto createPatientDto) {
-        Instant now = Instant.now();
+        // Construir contexto con ownership y guardianship
+        SecurityContext.Builder contextBuilder = SecurityContext
+                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+                .withResourceId(id.getValue())
+                .withResourceOwnerId(patient.getUser());
 
-        // PASO 1: Validar acceso del usuario
-        // Esta validación lanza excepciones si el usuario no cumple requisitos
-        userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserIdentityId.from(createPatientDto.userId()),
-                now,
-                EntityContext.USUARIO  // Contexto para errores más descriptivos
-        );
-        Patient patient = writeMapper.dtoCreateToPatient(createPatientDto);
-        patientRepository.save(patient);
-        return readMapper.toDto(patient);
-    }
-
-    @Override
-    public ReadPatientDto updateContactData(UpdatePatientContactDto updatePatientDto, Long id) {
-
-        Patient patient = patientRepository.findById(PatientId.fromLong(id))
-                .orElseThrow(() -> new PatientNotFoundException("Patient not found with id " + id));
-
-        Instant now = Instant.now();
-        userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserIdentityId.from(id),
-                now,
-                EntityContext.PATIENT
-        );
-
-        writeMapper.dtoUpdateContactToPatient(updatePatientDto, patient);
-        patientRepository.save(patient);
-        return readMapper.toDto(patient);
-    }
-
-
-
-    @Override
-    public ReadPatientDto updateSensitiveData(UpdatePatientSensitiveDto updatePatientDto, Long id) {
-        Patient patient = patientRepository.findById(PatientId.fromLong(id))
-                .orElseThrow(() -> new PatientNotFoundException("Patient not found with id " + id));
-
-        Instant now = Instant.now();
-        userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserIdentityId.from(id),
-                now,
-                EntityContext.PATIENT
-        );
-        writeMapper.dtoUpdateSensitiveToPatient(updatePatientDto, patient);
-        patientRepository.save(patient);
-        return readMapper.toDto(patient);
-    }
-
-    @Override
-    public Page<PagePatientDto> findByContractId(Long contractId, Pageable pageable) {
-        Page<Patient> patients = patientRepository.findByContractId(ContractId.fromLong(contractId), pageable);
-        if(patients.isEmpty()) {
-            throw new PatientNotFoundException("No patients found for contract id " + contractId);
-        }
-        return patients.map(readMapper::pageToDto);
-    }
-
-    @Override
-    public Page<PagePatientDto> findByGuardianId(Long guardianId, Pageable pageable) {
-
-        Page<Patient> patients = patientRepository.findByGuardianId(GuardianId.fromLong(guardianId), pageable);
-        if(patients.isEmpty()) {
-            throw new PatientNotFoundException("No patients found for guardian id " + guardianId);
-        }
-        return patients.map(readMapper::pageToDto);
-
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        if (!patientRepository.existsById(PatientId.fromLong(id))) {
-            throw new PatientNotFoundException("Patient with id " + id + " not found");
+        // Si el paciente tiene guardian, agregar al contexto para GuardianshipPolicy
+        if (patient.getGuardianId() != null) {
+            contextBuilder.withPatientGuardianId(patient.getGuardianId().getValue());
         }
 
-        Instant now = Instant.now();
-        userAccessValidator.validateUserCanPerformSensitiveAction(
-                UserIdentityId.from(id),
-                now,
-                EntityContext.PATIENT  // Contexto para errores más descriptivos
+        // Si es receptionist, agregar sector
+        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
+                contextBuilder.withSector(receptionist.getSector().Value())
         );
-        patientRepository.deleteById(PatientId.fromLong(id));
+
+        SecurityContext context = contextBuilder.build();
+
+        if (!authorizationService.isAuthorized(requesterRolId, context)) {
+            throw new BusinessRuleViolationException(
+                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
+                    VOContext.AUTHORIZATION
+            );
+        }
+
+        return readMapper.toReadDto(patient);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+            action = ActionCatalog.BasicAction.READ)
+    public Page<PagePatientDto> findAll(Pageable pageable,
+                                        UserIdentityId requesterId,
+                                        RolId requesterRolId) {
+
+        SecurityContext.Builder contextBuilder = SecurityContext
+                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId);
+
+        // Si es receptionist, agregar sector
+        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
+                contextBuilder.withSector(receptionist.getSector().Value())
+        );
+
+        SecurityContext context = contextBuilder.build();
+
+        if (!authorizationService.isAuthorized(requesterRolId, context)) {
+            throw new BusinessRuleViolationException(
+                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
+                    VOContext.AUTHORIZATION
+            );
+        }
+
+        return patientRepository.findAll(pageable)
+                .map(readMapper::toPageDto);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+            action = ActionCatalog.BasicAction.READ)
+    public Page<PagePatientDto> findByContractId(ContractId contractId,
+                                                 Pageable pageable,
+                                                 UserIdentityId requesterId,
+                                                 RolId requesterRolId) {
+
+        SecurityContext.Builder contextBuilder = SecurityContext
+                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+                .withResourceId(contractId.asLong());
+
+        // Si es receptionist, agregar sector
+        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
+                contextBuilder.withSector(receptionist.getSector().Value())
+        );
+
+        SecurityContext context = contextBuilder.build();
+
+        if (!authorizationService.isAuthorized(requesterRolId, context)) {
+            throw new BusinessRuleViolationException(
+                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
+                    VOContext.AUTHORIZATION
+            );
+        }
+
+        return patientRepository.findByContractId(contractId, pageable)
+                .map(readMapper::toPageDto);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+            action = ActionCatalog.BasicAction.READ)
+    public Page<PagePatientDto> findByGuardianId(GuardianId guardianId,
+                                                 Pageable pageable,
+                                                 UserIdentityId requesterId,
+                                                 RolId requesterRolId) {
+
+        SecurityContext.Builder contextBuilder = SecurityContext
+                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+                .withPatientGuardianId(guardianId.getValue()); // Para GuardianshipPolicy
+
+        // Si es receptionist, agregar sector
+        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
+                contextBuilder.withSector(receptionist.getSector().Value())
+        );
+
+        SecurityContext context = contextBuilder.build();
+
+        if (!authorizationService.isAuthorized(requesterRolId, context)) {
+            throw new BusinessRuleViolationException(
+                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
+                    VOContext.AUTHORIZATION
+            );
+        }
+
+        return patientRepository.findByGuardianId(guardianId, pageable)
+                .map(readMapper::toPageDto);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+            action = ActionCatalog.BasicAction.CREATE)
+    public ReadPatientDto save(CreatePatientDto createPatientDto,
+                               UserIdentityId requesterId,
+                               RolId requesterRolId) {
+
+        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
+                .orElseThrow(() -> new BusinessRuleViolationException(
+                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
+                        VOContext.AUTHORIZATION
+                ));
+
+        SecurityContext context = SecurityContext
+                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+                .withSector(receptionist.getSector().Value())
+                .build();
+
+        if (!authorizationService.isAuthorized(requesterRolId, context)) {
+            throw new BusinessRuleViolationException(
+                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
+                    VOContext.AUTHORIZATION
+            );
+        }
+
+        Patient patient = writeMapper.fromCreateDto(createPatientDto);
+        Patient saved = patientRepository.save(patient);
+
+        return readMapper.toReadDto(saved);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+            action = ActionCatalog.BasicAction.UPDATE)
+    public ReadPatientDto updateContactData(UpdatePatientContactDto updatePatientDto,
+                                            PatientId id,
+                                            UserIdentityId requesterId,
+                                            RolId requesterRolId) {
+
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException(" Not found"));
+
+        // Construir contexto con ownership y guardianship
+        SecurityContext.Builder contextBuilder = SecurityContext
+                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+                .withResourceId(id.getValue())
+                .withResourceOwnerId(patient.getUser());
+
+        // Si tiene guardian, agregarlo para GuardianshipPolicy
+        if (patient.getGuardianId() != null) {
+            contextBuilder.withPatientGuardianId(patient.getGuardianId().getValue());
+        }
+
+        // Si es receptionist, agregar sector
+        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
+                contextBuilder.withSector(receptionist.getSector().Value())
+        );
+
+        SecurityContext context = contextBuilder.build();
+
+        if (!authorizationService.isAuthorized(requesterRolId, context)) {
+            throw new BusinessRuleViolationException(
+                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
+                    VOContext.AUTHORIZATION
+            );
+        }
+
+        writeMapper.updateContactFromDto(updatePatientDto, patient);
+        Patient updated = patientRepository.save(patient);
+
+        return readMapper.toReadDto(updated);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+            action = ActionCatalog.BasicAction.UPDATE)
+    public ReadPatientDto updateSensitiveData(UpdatePatientSensitiveDto updatePatientDto,
+                                              PatientId id,
+                                              UserIdentityId requesterId,
+                                              RolId requesterRolId) {
+
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException("Not found"));
+
+        // Para datos sensibles, requiere sector (receptionist)
+        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
+                .orElseThrow(() -> new BusinessRuleViolationException(
+                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
+                        VOContext.AUTHORIZATION
+                ));
+
+        SecurityContext context = SecurityContext
+                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+                .withResourceId(id.getValue())
+                .withSector(receptionist.getSector().Value())
+                .withResourceOwnerId(patient.getUser())
+                .build();
+
+        if (!authorizationService.isAuthorized(requesterRolId, context)) {
+            throw new BusinessRuleViolationException(
+                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
+                    VOContext.AUTHORIZATION
+            );
+        }
+
+        writeMapper.updateSensitiveFromDto(updatePatientDto, patient);
+        Patient updated = patientRepository.save(patient);
+
+        return readMapper.toReadDto(updated);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+            action = ActionCatalog.BasicAction.DELETE)
+    public void deleteById(PatientId id,
+                           UserIdentityId requesterId,
+                           RolId requesterRolId) {
+
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new PathElementException("No found"));
+
+        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
+                .orElseThrow(() -> new BusinessRuleViolationException(
+                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
+                        VOContext.AUTHORIZATION
+                ));
+
+        SecurityContext context = SecurityContext
+                .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+                .withResourceId(id.getValue())
+                .withSector(receptionist.getSector().Value())
+                .build();
+
+        if (!authorizationService.isAuthorized(requesterRolId, context)) {
+            throw new BusinessRuleViolationException(
+                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
+                    VOContext.AUTHORIZATION
+            );
+        }
+
+        patientRepository.deleteById(patient.getPatientId());
     }
 }
