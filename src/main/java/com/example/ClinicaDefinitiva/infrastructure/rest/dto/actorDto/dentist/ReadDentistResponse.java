@@ -8,7 +8,7 @@ import java.time.LocalTime;
 /**
  * DTO de respuesta para Dentist
  */
-public record DentistReadResponse(
+public record ReadDentistResponse(
         Long dentistId,
         String specialties,
         String availabilityStatus,

@@ -6,7 +6,7 @@ import java.time.LocalTime;
 /**
  * DTO para actualizar información sensible
  */
-public record DentistUpdateSensitiveRequest (
+public record UpdateDentistSensitiveRequest(
         Long dentistId,
         String specialties,
         // WorkingHours de horas laborales

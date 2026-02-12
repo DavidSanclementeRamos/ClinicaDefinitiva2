@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist;
 /**
  * DTO para actualizar información de contacto
  */
-public record DentistUpdateContactRequest(
+public record UpdateDentistContactRequest(
         Long dentistId,
         // Address
         String street,

@@ -2,10 +2,12 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.dentistRe
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist.*;
+import org.springframework.stereotype.Component;
 
-public class DentistWriteRestMapper {
+@Component
+public class DentistRestWriteMapper {
     // De REST → DTO de aplicación (crear)
-    public CreateDentistDto toCreateDto(DentistCreateRequest request) {
+    public CreateDentistDto toServiceCreate(CreateDentistRequest request) {
         if (request == null) return null;
 
         return new CreateDentistDto(
@@ -37,7 +39,7 @@ public class DentistWriteRestMapper {
     }
 
     // De REST → DTO de aplicación (actualizar)
-    public UpdateDentistContactDto toUpdateContactDto(DentistUpdateContactRequest request) {
+    public UpdateDentistContactDto toServiceUpdateContact(UpdateDentistContactRequest request) {
         if (request == null) return null;
 
         return new UpdateDentistContactDto(
@@ -51,7 +53,7 @@ public class DentistWriteRestMapper {
     }
 
     // De REST → DTO de aplicación (actualizar)
-    public UpdateDentistSensitiveDto toUpdateSensitiveDto(DentistUpdateSensitiveRequest request) {
+    public UpdateDentistSensitiveDto toServiceUpdateSensitive(UpdateDentistSensitiveRequest request) {
         if (request == null) return null;
 
         return new UpdateDentistSensitiveDto(

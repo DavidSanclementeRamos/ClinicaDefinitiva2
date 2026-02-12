@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.controller.actorRest;
+package com.example.ClinicaDefinitiva.infrastructure.rest.controller.actor;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.PageReceptionistDto;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUseCase;

@@ -25,8 +25,7 @@ public class ReceptionistWriteMapper {
                         PhoneNumber.of(dto.phoneNumber())
                 ),
                 UserIdentityId.from(dto.user()),
-                Sector.of(dto.sector()),
-                ShiftId.from(dto.shiftId())
+                Sector.of(dto.sector())
         );
     }
 

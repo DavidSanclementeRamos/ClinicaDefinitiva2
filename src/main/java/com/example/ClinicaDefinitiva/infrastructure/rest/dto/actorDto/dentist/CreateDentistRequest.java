@@ -9,7 +9,7 @@ import java.time.LocalTime;
 /**
  * DTO para crear un nuevo Odontólogo
  */
-public record DentistCreateRequest (
+public record CreateDentistRequest(
 
      String specialties,
      String availabilityStatus,
@@ -30,7 +30,7 @@ public record DentistCreateRequest (
      LocalDate dateOfBirth,
      String bloodType,
      String documentoEPS,
-     String user,
+     Long user,
      LocalDateTime lastUpdate,
 
     // Address

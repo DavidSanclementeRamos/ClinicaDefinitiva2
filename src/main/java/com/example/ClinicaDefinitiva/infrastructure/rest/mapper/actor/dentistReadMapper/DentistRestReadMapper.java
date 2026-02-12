@@ -2,20 +2,19 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.dentistRe
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.PageDentistDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.ReadDentistDto;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist.DentistPageResponse;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist.DentistReadResponse;
-import org.springframework.data.domain.Page;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist.PageDentistResponse;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist.ReadDentistResponse;
 import org.springframework.stereotype.Component;
 
 @Component
 
-public class DentistReadRestMapper {
+public class DentistRestReadMapper {
 
     // De DTO de aplicación → DTO REST completo (detalle)
-    public DentistReadResponse toResponse(ReadDentistDto dto) {
+    public ReadDentistResponse toRest(ReadDentistDto dto) {
         if (dto == null) return null;
 
-        return new DentistReadResponse(
+        return new ReadDentistResponse(
                 dto.dentistId(),
                 dto.specialties(),
                 dto.availabilityStatus(),
@@ -41,10 +40,10 @@ public class DentistReadRestMapper {
     }
 
     // De DTO de aplicación → DTO REST simplificado (listados/paginación)
-    public DentistPageResponse toPageResponse(PageDentistDto dto) {
+    public PageDentistResponse toPageRest(PageDentistDto dto) {
         if (dto == null) return null;
 
-        return new DentistPageResponse(
+        return new PageDentistResponse(
                 dto.dentistId(),
                 dto.specialties(),
                 dto.dni(),
