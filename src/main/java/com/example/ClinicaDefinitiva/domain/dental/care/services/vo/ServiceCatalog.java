@@ -12,7 +12,7 @@ public final class ServiceCatalog {
     private final String name;
     private final String category;
 
-    public ServiceCatalog(ServiceId id, String name, String category) {
+    private ServiceCatalog(ServiceId id, String name, String category) {
 
         if (name == null || name.isBlank()) throw new ValueObjectValidationException(ServiceVOError
                 .ERR_SERVICE_NAME_NULL_OR_BLANK, VOContext.SERVICE_CATALOG);
@@ -46,20 +46,69 @@ public final class ServiceCatalog {
         return Objects.hash(id);
     }
 
-    // 🔗 Enum interno opcional como catálogo base
+
+
     public enum Defaults {
-        GENERAL_CONSULTATION(new ServiceCatalog(ServiceId.GENERAL_CONSULTATION, "General Consultation", "General")),
-        PROPHYLAXIS_CLEANING(new ServiceCatalog(ServiceId.PROPHYLAXIS_CLEANING, "Prophylaxis & Cleaning", "General")),
-        ORTHO_METAL_BRACKETS(new ServiceCatalog(ServiceId.ORTHO_METAL_BRACKETS, "Metal Brackets", "Orthodontics")),
-        ORTHO_CLEAR_ALIGNERS(new ServiceCatalog(ServiceId.ORTHO_CLEAR_ALIGNERS, "Clear Aligners", "Orthodontics")),
-        SURG_WISDOM_EXTRACTION(new ServiceCatalog(ServiceId.SURG_WISDOM_EXTRACTION, "Wisdom Tooth Extraction", "Surgery")),
-        SURG_SOFT_TISSUE_GRAFT(new ServiceCatalog(ServiceId.SURG_SOFT_TISSUE_GRAFT, "Soft Tissue Graft", "Surgery")),
-        PED_SEALANTS_FLUORIDE(new ServiceCatalog(ServiceId.PED_SEALANTS_FLUORIDE, "Sealants & Fluoride", "Pediatrics")),
-        PED_RESIN_RESTORATION(new ServiceCatalog(ServiceId.PED_RESIN_RESTORATION, "Resin Restoration", "Pediatrics")),
-        AES_IN_OFFICE_WHITENING(new ServiceCatalog(ServiceId.AES_IN_OFFICE_WHITENING, "In-Office Whitening", "Aesthetics")),
-        AES_PORCELAIN_VENEER(new ServiceCatalog(ServiceId.AES_PORCELAIN_VENEER, "Porcelain Veneer", "Aesthetics")),
-        IMP_SINGLE_IMPLANT(new ServiceCatalog(ServiceId.IMP_SINGLE_IMPLANT, "Single Implant", "Implantology")),
-        PRO_PORCELAIN_CROWN(new ServiceCatalog(ServiceId.PRO_PORCELAIN_CROWN, "Porcelain Crown", "Prosthetics"));
+        GENERAL_CONSULTATION(new ServiceCatalog(
+                ServiceId.of(1L),
+                "General Consultation",
+                "General"
+        )),
+        PROPHYLAXIS_CLEANING(new ServiceCatalog(
+                ServiceId.of(2L),
+                "Prophylaxis & Cleaning",
+                "General"
+        )),
+        ORTHO_METAL_BRACKETS(new ServiceCatalog(
+                ServiceId.of(3L),
+                "Metal Brackets",
+                "Orthodontics"
+        )),
+        ORTHO_CLEAR_ALIGNERS(new ServiceCatalog(
+                ServiceId.of(4L),
+                "Clear Aligners",
+                "Orthodontics"
+        )),
+        SURG_WISDOM_EXTRACTION(new ServiceCatalog(
+                ServiceId.of(5L),
+                "Wisdom Tooth Extraction",
+                "Surgery"
+        )),
+        SURG_SOFT_TISSUE_GRAFT(new ServiceCatalog(
+                ServiceId.of(6L),
+                "Soft Tissue Graft",
+                "Surgery"
+        )),
+        PED_SEALANTS_FLUORIDE(new ServiceCatalog(
+                ServiceId.of(7L),
+                "Sealants & Fluoride",
+                "Pediatrics"
+        )),
+        PED_RESIN_RESTORATION(new ServiceCatalog(
+                ServiceId.of(8L),
+                "Resin Restoration",
+                "Pediatrics"
+        )),
+        AES_IN_OFFICE_WHITENING(new ServiceCatalog(
+                ServiceId.of(9L),
+                "In-Office Whitening",
+                "Aesthetics"
+        )),
+        AES_PORCELAIN_VENEER(new ServiceCatalog(
+                ServiceId.of(10L),
+                "Porcelain Veneer",
+                "Aesthetics"
+        )),
+        IMP_SINGLE_IMPLANT(new ServiceCatalog(
+                ServiceId.of(11L),
+                "Single Implant",
+                "Implantology"
+        )),
+        PRO_PORCELAIN_CROWN(new ServiceCatalog(
+                ServiceId.of(12L),
+                "Porcelain Crown",
+                "Prosthetics"
+        ));
 
         private final ServiceCatalog catalog;
 
@@ -71,6 +120,7 @@ public final class ServiceCatalog {
             return catalog;
         }
     }
+
 
 
 }
