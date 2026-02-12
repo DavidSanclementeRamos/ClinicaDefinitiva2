@@ -1,8 +1,7 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller.actorRest;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.PageReceptionistDto;
-import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.ReadReceptionistDto;
-import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUserCase;
+import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUseCase;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.PageResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.reception.*;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.receptionReadMapper.ReceptionReadMapperRest;
@@ -25,11 +24,11 @@ public class ReceptionController {
 
     private final ReceptionReadMapperRest readMapperRest;
     private final ReceptionWriteMapperRest writeMapperRest;
-    private final ReceptionUserCase receptionUserCase;
+    private final ReceptionUseCase receptionUserCase;
 
     public ReceptionController(ReceptionReadMapperRest readMapperRest,
                                ReceptionWriteMapperRest writeMapperRest,
-                               ReceptionUserCase receptionUserCase) {
+                               ReceptionUseCase receptionUserCase) {
         this.readMapperRest = readMapperRest;
         this.writeMapperRest = writeMapperRest;
         this.receptionUserCase = receptionUserCase;

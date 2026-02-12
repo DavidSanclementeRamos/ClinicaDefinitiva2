@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.service.actor;
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.*;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionWriteMapper;
-import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUserCase;
+import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUseCase;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
@@ -19,7 +19,7 @@ import java.time.Instant;
 
 @Service
 @Transactional
-public class ReceptionApplicationService implements ReceptionUserCase {
+public class ReceptionApplicationService implements ReceptionUseCase {
 
     private final ReceptionRepository receptionRepository;
     private final ReceptionReadMapper  readMapper;
