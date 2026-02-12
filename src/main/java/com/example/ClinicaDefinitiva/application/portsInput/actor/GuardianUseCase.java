@@ -2,6 +2,7 @@ package com.example.ClinicaDefinitiva.application.portsInput.actor;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.*;
 import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
@@ -12,7 +13,7 @@ public interface GuardianUseCase {
 
     ReadGuardianDto findById(GuardianId id, UserIdentityId requesterId, RolId requesterRolId);
     Page<PageGuardianDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
-    Page<PageGuardianDto> findByPatientId(Long patientId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PageGuardianDto> findByPatientId(PatientId patientId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
 
 
     ReadGuardianDto save(CreateGuardianDto createGuardianDto, UserIdentityId requesterId, RolId requesterRolId);

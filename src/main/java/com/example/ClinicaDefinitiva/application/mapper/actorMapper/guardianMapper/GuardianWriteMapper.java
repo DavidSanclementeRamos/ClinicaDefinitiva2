@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class GuardianWriteMapper {
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public Guardian dtoCreateToGuardian(CreateGuardianDto dto) {
+    public Guardian fromCreateDto(CreateGuardianDto dto) {
 
         return Guardian.registerGuardian(
                 new Person(
@@ -31,7 +31,7 @@ public class GuardianWriteMapper {
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public void dtoUpdateSensitiveToGuardian(UpdateGuardianSensitiveDto dto, Guardian guardian) {
+    public void updateSensitiveFromDto(UpdateGuardianSensitiveDto dto, Guardian guardian) {
 
         guardian.updateSensitiveData(
                 new Age(new DateOfBirth(dto.dateOfBirth())),
@@ -45,7 +45,7 @@ public class GuardianWriteMapper {
     }
 
     // DTO de entrada → dominio (VOs/Agregado).
-    public void dtoUpdateContactToGuardian(UpdateGuardianContactDto dto, Guardian guardian) {
+    public void updateContactFromDto(UpdateGuardianContactDto dto, Guardian guardian) {
 
         guardian.updateContactData(
                 new Address(dto.street(), dto.city(), dto.state(),

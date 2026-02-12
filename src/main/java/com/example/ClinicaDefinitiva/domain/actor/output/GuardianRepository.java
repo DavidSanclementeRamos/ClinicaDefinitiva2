@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface GuardianRepository {
     Optional<Guardian> findById(GuardianId guardianId);
     Page<Guardian> findAll(Pageable pageable);
-    void save(Guardian guardian);
+    Guardian save(Guardian guardian);
     Guardian update(GuardianId guardianId);
     Guardian deleteById(GuardianId guardianId);
     Page<Guardian> findByPatientId(PatientId patientId, Pageable pageable);

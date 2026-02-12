@@ -11,7 +11,7 @@ import java.util.Collections;
 public class GuardianReadMapper {
 
     // dominio → DTO de lectura
-    public ReadGuardianDto toDto(Guardian guardian) {
+    public ReadGuardianDto toReadDto(Guardian guardian) {
         return new ReadGuardianDto(
                 guardian.getGuardianId().getValue(),
                 guardian.getTypeGuardian().getCode(),
@@ -38,7 +38,7 @@ public class GuardianReadMapper {
     }
 
     // dominio → DTO de lectura resumido (ej. para paginación)
-    public PageGuardianDto pageToDto(Guardian guardian) {
+    public PageGuardianDto toPageDto(Guardian guardian) {
         return new PageGuardianDto(
                 guardian.getGuardianId().getValue(),
                 guardian.getTypeGuardian().getCode(),
