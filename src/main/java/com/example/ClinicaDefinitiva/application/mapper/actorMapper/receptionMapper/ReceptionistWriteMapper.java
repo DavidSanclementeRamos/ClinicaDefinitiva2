@@ -12,52 +12,41 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReceptionistWriteMapper {
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public Receptionist fromCreateDto(CreateReceptionistDto dto) {
-
         return Receptionist.registerReceptionist(
-                new Person(
-                        new Address(dto.street(), dto.city(), dto.state(),
-                                dto.country(), dto.postalCode()),
-                        new Age(new DateOfBirth(dto.dateOfBirth())),
+                Person.of(
+                        Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
+                        Age.of(DateOfBirth.of(dto.dateOfBirth())),
                         BloodType.fromLabel(dto.bloodType()),
-                        new DateOfBirth(dto.dateOfBirth()),
-                        new Document(dto.dni()),
+                        DateOfBirth.of(dto.dateOfBirth()),
+                        Document.of(dto.dni()),
                         dto.documentEPS(),
-                        new FullName(dto.first(), dto.lastName()),
-                        new PhoneNumber(dto.phoneNumber())
+                        FullName.of(dto.first(), dto.lastName()),
+                        PhoneNumber.of(dto.phoneNumber())
                 ),
-               UserIdentityId.from( dto.user()),
-                new Sector(dto.sector()),
+                UserIdentityId.from(dto.user()),
+                Sector.of(dto.sector()),
                 ShiftId.from(dto.shiftId())
         );
     }
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public void updateSensitiveFromDto(UpdateReceptionistSensitiveDto dto, Receptionist reception) {
-
         reception.updateSensitiveData(
-                new Age(new DateOfBirth(dto.dateOfBirth())),
+                Age.of(DateOfBirth.of(dto.dateOfBirth())),
                 BloodType.fromLabel(dto.bloodType()),
-                new DateOfBirth(dto.dateOfBirth()),
-                new Document(dto.dni()),
+                DateOfBirth.of(dto.dateOfBirth()),
+                Document.of(dto.dni()),
                 dto.documentEPS(),
-                new FullName(dto.first(), dto.lastName()),
-                new Sector(dto.sector())
-
+                FullName.of(dto.first(), dto.lastName()),
+                Sector.of(dto.sector())
         );
     }
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public void updateContactFromDto(UpdateReceptionistContactDto dto, Receptionist reception) {
-
         reception.updateContactData(
-                new Address(dto.street(), dto.city(), dto.state(),
-                        dto.country(), dto.postalCode()),
-                new PhoneNumber(dto.phoneNumber())
-
+                Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
+                PhoneNumber.of(dto.phoneNumber())
         );
     }
-
 }
 

@@ -15,76 +15,63 @@ import java.util.stream.Collectors;
 @Component
 public class DentistWriteMapper {
 
-    // DTO de entrada → dominio (VOs/Agregado).
-    public Dentist fromCreateDto(CreateDentistDto dto  ) {
+    public Dentist fromCreateDto(CreateDentistDto dto) {
 
-        // specialties seguro contra null
         Set<Specialty> specialtiesSet = Optional.ofNullable(dto.specialties())
                 .map(s -> Arrays.stream(s.split(","))
                         .map(String::trim)
                         .filter(str -> !str.isEmpty())
-                        .map(Specialty::new)
+                        .map(Specialty::of) // uso de método estático
                         .collect(Collectors.toSet()))
                 .orElse(Collections.emptySet());
 
         return Dentist.registerDentist(
-                new Person(
-                        new Address(dto.street(), dto.city(), dto.state(),
+                Person.of(
+                        Address.of(dto.street(), dto.city(), dto.state(),
                                 dto.country(), dto.postalCode()),
-                        new Age(new DateOfBirth(dto.dateOfBirth())),
+                        Age.of(DateOfBirth.of(dto.dateOfBirth())),
                         BloodType.fromLabel(dto.bloodType()),
-                        new DateOfBirth(dto.dateOfBirth()),
-                        new Document(dto.dni()),
+                        DateOfBirth.of(dto.dateOfBirth()),
+                        Document.of(dto.dni()),
                         dto.documentoEPS(),
-                        new FullName(dto.first(), dto.lastName()),
-                        new PhoneNumber(dto.phoneNumber())
+                        FullName.of(dto.first(), dto.lastName()),
+                        PhoneNumber.of(dto.phoneNumber())
                 ),
-                new Specialties(specialtiesSet),
+                Specialties.of(specialtiesSet),
                 UserIdentityId.from(dto.user()),
-                new WorkingHours(dto.start(), dto.end(),
+                WorkingHours.of(dto.start(), dto.end(),
                         dto.dayOfWeek(), dto.declaredHoursPerWeek()),
                 dto.lastUpdate()
         );
-
     }
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public void updateSensitiveFromDto(UpdateDentistSensitiveDto dto, Dentist dentist) {
         Set<Specialty> specialtiesSet = Optional.ofNullable(dto.specialties())
                 .map(s -> Arrays.stream(s.split(","))
                         .map(String::trim)
                         .filter(str -> !str.isEmpty())
-                        .map(Specialty::new)
+                        .map(Specialty::of)
                         .collect(Collectors.toSet()))
                 .orElse(Collections.emptySet());
 
         dentist.updateSensitiveData(
-                new Age(new DateOfBirth(dto.dateOfBirth())),
+                Age.of(DateOfBirth.of(dto.dateOfBirth())),
                 BloodType.fromLabel(dto.bloodType()),
-                new DateOfBirth(dto.dateOfBirth()),
-                new Document(dto.dni()),
+                DateOfBirth.of(dto.dateOfBirth()),
+                Document.of(dto.dni()),
                 dto.documentEPS(),
-                new FullName(dto.first(), dto.lastName()),
-                new Specialties(specialtiesSet),
-                new WorkingHours(dto.start(), dto.end(), dto.dayOfWeek(), dto.declaredHoursPerWeek())
+                FullName.of(dto.first(), dto.lastName()),
+                Specialties.of(specialtiesSet),
+                WorkingHours.of(dto.start(), dto.end(), dto.dayOfWeek(), dto.declaredHoursPerWeek())
         );
     }
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public void updateContactFromDto(UpdateDentistContactDto dto, Dentist dentist) {
-
         dentist.updateContactData(
-                new Address(dto.street(), dto.city(), dto.state(),
+                Address.of(dto.street(), dto.city(), dto.state(),
                         dto.country(), dto.postalCode()),
-
-                new PhoneNumber(dto.phoneNumber())
-
+                PhoneNumber.of(dto.phoneNumber())
         );
     }
-    // DTO de entrada → dominio (VOs/Agregado).
-    public DentistAvailabilityStatus toAvailabilityStatus(UpdateDentistStatusDto request) {
-        return DentistAvailabilityStatus.from(DentistAvailabilityStatus.Status.valueOf(request.availabilityStatus())); }
-
-
 
 }

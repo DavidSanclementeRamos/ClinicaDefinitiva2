@@ -10,50 +10,39 @@ import org.springframework.stereotype.Component;
 @Component
 public class GuardianWriteMapper {
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public Guardian fromCreateDto(CreateGuardianDto dto) {
-
         return Guardian.registerGuardian(
-                new Person(
-                        new Address(dto.street(), dto.city(), dto.state(),
-                                dto.country(), dto.postalCode()),
-                        new Age(new DateOfBirth(dto.dateOfBirth())),
+                Person.of(
+                        Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
+                        Age.of(DateOfBirth.of(dto.dateOfBirth())),
                         BloodType.fromLabel(dto.bloodType()),
-                        new DateOfBirth(dto.dateOfBirth()),
-                        new Document(dto.dni()),
+                        DateOfBirth.of(dto.dateOfBirth()),
+                        Document.of(dto.dni()),
                         dto.documentEPS(),
-                        new FullName(dto.first(), dto.lastName()),
-                        new PhoneNumber(dto.phoneNumber())
+                        FullName.of(dto.first(), dto.lastName()),
+                        PhoneNumber.of(dto.phoneNumber())
                 ),
                 UserIdentityId.from(dto.userId()),
-                new TypeGuardian(dto.code(),dto.description())
+                TypeGuardian.of(dto.code(), dto.description())
         );
     }
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public void updateSensitiveFromDto(UpdateGuardianSensitiveDto dto, Guardian guardian) {
-
         guardian.updateSensitiveData(
-                new Age(new DateOfBirth(dto.dateOfBirth())),
+                Age.of(DateOfBirth.of(dto.dateOfBirth())),
                 BloodType.fromLabel(dto.bloodType()),
-                new DateOfBirth(dto.dateOfBirth()),
-                new Document(dto.dni()),
+                DateOfBirth.of(dto.dateOfBirth()),
+                Document.of(dto.dni()),
                 dto.documentEPS(),
-                new FullName(dto.first(), dto.lastName()),
-             new TypeGuardian(dto.code(),dto.description())
+                FullName.of(dto.first(), dto.lastName()),
+                TypeGuardian.of(dto.code(), dto.description())
         );
     }
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public void updateContactFromDto(UpdateGuardianContactDto dto, Guardian guardian) {
-
         guardian.updateContactData(
-                new Address(dto.street(), dto.city(), dto.state(),
-                        dto.country(), dto.postalCode()),
-                new PhoneNumber(dto.phoneNumber())
-
+                Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
+                PhoneNumber.of(dto.phoneNumber())
         );
     }
-
 }
-

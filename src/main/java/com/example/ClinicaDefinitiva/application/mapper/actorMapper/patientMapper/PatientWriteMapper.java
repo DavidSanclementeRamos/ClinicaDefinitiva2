@@ -12,52 +12,38 @@ import org.springframework.stereotype.Component;
 @Component
 public class PatientWriteMapper {
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public Patient fromCreateDto(CreatePatientDto dto) {
-
         return Patient.registerPatient(
-
-                new Person(
-                        new Address(dto.street(), dto.city(), dto.state(),
-                                dto.country(), dto.postalCode()),
-                        new Age(new DateOfBirth(dto.dateOfBirth())),
+                Person.of(
+                        Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
+                        Age.of(DateOfBirth.of(dto.dateOfBirth())),
                         BloodType.fromLabel(dto.bloodType()),
-                        new DateOfBirth(dto.dateOfBirth()),
-                        new Document(dto.dni()),
+                        DateOfBirth.of(dto.dateOfBirth()),
+                        Document.of(dto.dni()),
                         dto.documentEPS(),
-                        new FullName(dto.first(), dto.lastName()),
-                        new PhoneNumber(dto.phoneNumber())
+                        FullName.of(dto.first(), dto.lastName()),
+                        PhoneNumber.of(dto.phoneNumber())
                 ),
-
-                UserIdentityId.from( dto.userId()),
-                GuardianId.fromLong(dto.guardianId()),
-                ContractId.fromLong(dto.contractId())
+                UserIdentityId.from(dto.userId()),
+                GuardianId.fromLong(dto.guardianId())
         );
     }
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public void updateSensitiveFromDto(UpdatePatientSensitiveDto dto, Patient patient) {
-
         patient.updateSensitiveData(
-                new Age(new DateOfBirth(dto.dateOfBirth())),
+                Age.of(DateOfBirth.of(dto.dateOfBirth())),
                 BloodType.fromLabel(dto.bloodType()),
-                new DateOfBirth(dto.dateOfBirth()),
-                new Document(dto.dni()),
+                DateOfBirth.of(dto.dateOfBirth()),
+                Document.of(dto.dni()),
                 dto.documentEPS(),
-                new FullName(dto.first(), dto.lastName())
-
-
+                FullName.of(dto.first(), dto.lastName())
         );
     }
 
-    // DTO de entrada → dominio (VOs/Agregado).
     public void updateContactFromDto(UpdatePatientContactDto dto, Patient patient) {
-
         patient.updatePatientContact(
-                new Address(dto.street(), dto.city(), dto.state(),
-                        dto.country(), dto.postalCode()),
-                new PhoneNumber(dto.phoneNumber())
-
+                Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
+                PhoneNumber.of(dto.phoneNumber())
         );
     }
 }
