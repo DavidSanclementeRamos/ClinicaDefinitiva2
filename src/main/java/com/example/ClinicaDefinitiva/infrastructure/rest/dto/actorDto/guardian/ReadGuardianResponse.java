@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record GuardianReadResponse (
+public record ReadGuardianResponse(
         Long guardianId,
         // TypeGuardian
         String code,
@@ -21,7 +21,7 @@ public record GuardianReadResponse (
         LocalDate dateOfBirth,
         String bloodType,
         String documentEPS,
-        String user,
+        Long user,
         LocalDateTime lastUpdate,
 
         // Address

@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian;
 
-public record GuardianPageResponse (
+public record PageGuardianResponse(
         Long guardianId,
         // TypeGuardian
         String code,

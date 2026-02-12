@@ -2,18 +2,18 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.guardianR
 
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.PageGuardianDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.ReadGuardianDto;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.GuardianPageResponse;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.GuardianReadResponse;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.PageGuardianResponse;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.ReadGuardianResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GuardianReadMapperRest {
+public class GuardianRestReadMapper {
 
     // De DTO de aplicación → DTO REST completo (detalle)
-    public GuardianReadResponse toResponse(ReadGuardianDto dto) {
+    public ReadGuardianResponse toRest(ReadGuardianDto dto) {
         if (dto == null) return null;
 
-        return new GuardianReadResponse(
+        return new ReadGuardianResponse(
                 dto.guardianId(),
                 dto.code(),
                 dto.description(),
@@ -37,10 +37,10 @@ public class GuardianReadMapperRest {
     }
 
     // De DTO de aplicación → DTO REST simplificado (listados/paginación)
-    public GuardianPageResponse toPageResponse(PageGuardianDto dto) {
+    public PageGuardianResponse toPageRest(PageGuardianDto dto) {
         if (dto == null) return null;
 
-        return new GuardianPageResponse(
+        return new PageGuardianResponse(
                 dto.guardianId(),
                 dto.code(),
                 dto.description(),

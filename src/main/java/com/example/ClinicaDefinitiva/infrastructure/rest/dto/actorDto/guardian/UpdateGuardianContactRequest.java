@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian;
 
-public record GuardianUpdateContactRequest (
+public record UpdateGuardianContactRequest(
         // Address
         String street,
         String city,

@@ -1,95 +1,164 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller.actor;
 
-import com.example.ClinicaDefinitiva.application.dto.actor.guardian.PageGuardianDto;
+import com.example.ClinicaDefinitiva.application.dto.actor.guardian.*;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.GuardianUseCase;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.PageResponse;
+import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.*;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.guardianRestMapper.GuardianReadMapperRest;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.guardianRestMapper.GuardianWriteMapperRest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.guardianRestMapper.GuardianRestReadMapper;
+import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.guardianRestMapper.GuardianRestWriteMapper;
+import com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @Validated
 @RequestMapping("/api/v1/guardians")
 public class GuardianController {
 
-    private final GuardianReadMapperRest readMapperRest;
-    private final GuardianWriteMapperRest writeMapperRest;
-    private final GuardianUseCase guardianUserCase;
+    private final GuardianUseCase useCase;
+    private final GuardianRestReadMapper readMapper;
+    private final GuardianRestWriteMapper writeMapper;
 
-    public GuardianController(GuardianReadMapperRest readMapperRest,
-                              GuardianWriteMapperRest writeMapperRest,
-                              GuardianUseCase guardianUserCase) {
-        this.readMapperRest = readMapperRest;
-        this.writeMapperRest = writeMapperRest;
-        this.guardianUserCase = guardianUserCase;
+    public GuardianController(GuardianUseCase useCase,
+                              GuardianRestReadMapper readMapper,
+                              GuardianRestWriteMapper writeMapper) {
+        this.useCase = useCase;
+        this.readMapper = readMapper;
+        this.writeMapper = writeMapper;
     }
 
-    @GetMapping
-    public PageResponse<GuardianPageResponse> findAll(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Page<PageGuardianDto> guardianPage = guardianUserCase.findAll(PageRequest.of(page, size));
-
-        List<GuardianPageResponse> content = guardianPage.getContent()
-                .stream()
-                .map(readMapperRest::toPageResponse)
-                .collect(Collectors.toList());
-
-        return new PageResponse<>(
-                content,
-                guardianPage.getNumber(),
-                guardianPage.getSize(),
-                guardianPage.getTotalElements(),
-                guardianPage.getTotalPages(),
-                guardianPage.isLast()
-        );
-    }
-
+    /**
+     * Buscar guardian por ID
+     */
     @GetMapping("/{id}")
-    public GuardianReadResponse findById(@PathVariable Long id) {
-        return readMapperRest.toResponse(guardianUserCase.findById(id));
+    public ResponseEntity<ReadGuardianResponse> findById(
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        ReadGuardianDto dto = useCase.findById(GuardianId.fromLong(id), requesterId, requesterRolId);
+        return ResponseEntity.ok(readMapper.toRest(dto));
     }
 
+    /**
+     * Listar todos los guardians con paginación
+     */
+    @GetMapping
+    public ResponseEntity<Page<PageGuardianResponse>> findAll(
+            @PageableDefault(size = 20) Pageable pageable,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        Page<PageGuardianDto> guardians = useCase.findAll(pageable, requesterId, requesterRolId);
+        Page<PageGuardianResponse> response = guardians.map(readMapper::toPageRest);
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Buscar guardians por ID de paciente
+     */
     @GetMapping("/patient/{patientId}")
-    public GuardianReadResponse findByPatientId(@PathVariable Long patientId) {
-        return readMapperRest.toResponse(guardianUserCase.findByPatientId(patientId));
+    public ResponseEntity<Page<PageGuardianResponse>> findByPatientId(
+            @PathVariable Long patientId,
+            @PageableDefault(size = 20) Pageable pageable,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        Page<PageGuardianDto> guardians = useCase.findByPatientId(
+                PatientId.of(patientId),
+                pageable,
+                requesterId,
+                requesterRolId
+        );
+        Page<PageGuardianResponse> response = guardians.map(readMapper::toPageRest);
+
+        return ResponseEntity.ok(response);
     }
 
+    /**
+     * Crear un nuevo guardian
+     */
     @PostMapping
-    public ResponseEntity<GuardianReadResponse> save(@Valid @RequestBody GuardianCreateRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(readMapperRest.toResponse(
-                        guardianUserCase.save(writeMapperRest.toCreateDto(request))));
+    public ResponseEntity<ReadGuardianResponse> create(
+            @Valid @RequestBody CreateGuardianRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        CreateGuardianDto dto = writeMapper.toServiceCreate(request);
+        ReadGuardianDto created = useCase.save(dto, requesterId, requesterRolId);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(readMapper.toRest(created));
     }
 
-    @PutMapping("/{id}/contact")
-    public GuardianReadResponse updateContact(@PathVariable Long id,
-                                              @Valid @RequestBody GuardianUpdateContactRequest request) {
-        return readMapperRest.toResponse(
-                guardianUserCase.updateContactData(writeMapperRest.toUpdateContactDto(request), id));
+    /**
+     * Actualizar datos de contacto del guardian
+     */
+    @PatchMapping("/{id}/contact")
+    public ResponseEntity<ReadGuardianResponse> updateContact(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateGuardianContactRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        UpdateGuardianContactDto dto = writeMapper.toServiceUpdateContact(request);
+        ReadGuardianDto updated = useCase.updateContactData(dto, GuardianId.fromLong(id), requesterId, requesterRolId);
+
+        return ResponseEntity.ok(readMapper.toRest(updated));
     }
 
-    @PutMapping("/{id}/sensitive")
-    public GuardianReadResponse updateSensitive(@PathVariable Long id,
-                                                @Valid @RequestBody GuardianUpdateSensitiveRequest request) {
-        return readMapperRest.toResponse(
-                guardianUserCase.updateSensitiveData(writeMapperRest.toUpdateSensitiveDto(request), id));
+    /**
+     * Actualizar datos sensibles del guardian (solo RECEPTIONIST)
+     */
+    @PatchMapping("/{id}/sensitive")
+    public ResponseEntity<ReadGuardianResponse> updateSensitive(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateGuardianSensitiveRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        UpdateGuardianSensitiveDto dto = writeMapper.toServiceUpdateSensitive(request);
+        ReadGuardianDto updated = useCase.updateSensitiveData(dto, GuardianId.fromLong(id), requesterId, requesterRolId);
+
+        return ResponseEntity.ok(readMapper.toRest(updated));
     }
 
+    /**
+     * Eliminar guardian (solo RECEPTIONIST)
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        guardianUserCase.deleteById(id);
-        return ResponseEntity.noContent().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserIdentityId requesterId = userDetails.getId();
+        RolId requesterRolId = userDetails.getActiveRolId();
+
+        useCase.deleteById(GuardianId.fromLong(id), requesterId, requesterRolId);
     }
 }

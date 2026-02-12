@@ -3,16 +3,16 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.guardianR
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.CreateGuardianDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.UpdateGuardianContactDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.UpdateGuardianSensitiveDto;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.GuardianCreateRequest;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.GuardianUpdateContactRequest;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.GuardianUpdateSensitiveRequest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.CreateGuardianRequest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.UpdateGuardianContactRequest;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.UpdateGuardianSensitiveRequest;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GuardianWriteMapperRest {
+public class GuardianRestWriteMapper {
 
     // De REST → DTO de aplicación (crear)
-    public CreateGuardianDto toCreateDto(GuardianCreateRequest request) {
+    public CreateGuardianDto toServiceCreate(CreateGuardianRequest request) {
         if (request == null) return null;
 
         return new CreateGuardianDto(
@@ -38,7 +38,7 @@ public class GuardianWriteMapperRest {
     }
 
     // De REST → DTO de aplicación (actualizar)
-    public UpdateGuardianContactDto toUpdateContactDto(GuardianUpdateContactRequest request) {
+    public UpdateGuardianContactDto toServiceUpdateContact(UpdateGuardianContactRequest request) {
         if (request == null) return null;
 
         return new UpdateGuardianContactDto(
@@ -51,7 +51,7 @@ public class GuardianWriteMapperRest {
         );
     }
 
-    public UpdateGuardianSensitiveDto toUpdateSensitiveDto(GuardianUpdateSensitiveRequest request) {
+    public UpdateGuardianSensitiveDto toServiceUpdateSensitive(UpdateGuardianSensitiveRequest request) {
         if (request == null) return null;
 
         return new UpdateGuardianSensitiveDto(

@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public record GuardianCreateRequest(
+public record CreateGuardianRequest(
 
         //TypeGuardian
         String code,
@@ -23,7 +23,7 @@ public record GuardianCreateRequest(
              LocalDate dateOfBirth,
              String bloodType,
              String documentoEPS,
-             String user,
+             Long user,
              LocalDateTime lastUpdate,
 
              // Address
