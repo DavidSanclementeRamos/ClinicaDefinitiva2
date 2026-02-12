@@ -41,7 +41,7 @@ public interface ServiceDetails {
          * @return Valor normalizado en mayúsculas.
          * @throws ValueObjectValidationException si el valor es nulo, vacío o no está en la lista de válidos.
          */
-        protected static String normalizeAndValidate(
+        public static String normalizeAndValidate(
                 String value,
                 Set<String> validValues,
                 ErrorCatalog errorCatalog,
@@ -70,7 +70,7 @@ public interface ServiceDetails {
          * @param context   Contexto para el reporte de error.
          * @throws ValueObjectValidationException si el valor está fuera del rango.
          */
-        protected static void validateRange(
+        public static void validateRange(
                 Integer value,
                 int min,
                 int max,
@@ -91,7 +91,7 @@ public interface ServiceDetails {
          * @param context   Contexto para el reporte de error.
          * @throws ValueObjectValidationException si la cadena es más corta que la longitud mínima.
          */
-        protected static void validateMinLength(
+        public static void validateMinLength(
                 String value,
                 int minLength,
                 ErrorCatalog errorCatalog,
