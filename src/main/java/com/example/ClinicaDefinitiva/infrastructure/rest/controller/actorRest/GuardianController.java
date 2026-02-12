@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller.actorRest;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.PageGuardianDto;
-import com.example.ClinicaDefinitiva.application.portsInput.actor.GuardianUserCase;
+import com.example.ClinicaDefinitiva.application.portsInput.actor.GuardianUseCase;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.PageResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.guardian.*;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.guardianRestMapper.GuardianReadMapperRest;
@@ -24,11 +24,11 @@ public class GuardianController {
 
     private final GuardianReadMapperRest readMapperRest;
     private final GuardianWriteMapperRest writeMapperRest;
-    private final GuardianUserCase guardianUserCase;
+    private final GuardianUseCase guardianUserCase;
 
     public GuardianController(GuardianReadMapperRest readMapperRest,
                               GuardianWriteMapperRest writeMapperRest,
-                              GuardianUserCase guardianUserCase) {
+                              GuardianUseCase guardianUserCase) {
         this.readMapperRest = readMapperRest;
         this.writeMapperRest = writeMapperRest;
         this.guardianUserCase = guardianUserCase;

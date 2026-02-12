@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.service.actor;
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.*;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.guardianMapper.GuardianReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.guardianMapper.GuardianWriteMapper;
-import com.example.ClinicaDefinitiva.application.portsInput.actor.GuardianUserCase;
+import com.example.ClinicaDefinitiva.application.portsInput.actor.GuardianUseCase;
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.GuardianNoFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
@@ -20,7 +20,7 @@ import java.time.Instant;
 
 @Service
 @Transactional
-public class GuardianApplicationService implements GuardianUserCase {
+public class GuardianApplicationService implements GuardianUseCase {
     private final GuardianRepository guardianRepository;
     private final GuardianReadMapper readMapper;
     private final GuardianWriteMapper  writeMapper;
