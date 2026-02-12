@@ -19,17 +19,23 @@ public final class Price {
 
 
             if (amount == null) {
-                throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_PRICE_AMOUNT_REQUIRED, VOContext.SERVICE_PRICE);
+                throw new ValueObjectValidationException(
+                        ServiceVOError.ERR_SERVICE_PRICE_AMOUNT_REQUIRED,
+                        VOContext.SERVICE_PRICE);
             }
             if (currency == null) {
-                throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_PRICE_CURRENCY_REQUIRED,VOContext.SERVICE_PRICE);
+                throw new ValueObjectValidationException(
+                        ServiceVOError.ERR_SERVICE_PRICE_CURRENCY_REQUIRED,
+                        VOContext.SERVICE_PRICE);
             }
 
             this.amount = amount.setScale(2, RoundingMode.HALF_UP);
             this.currency = currency;
 
             if (this.amount.compareTo(BigDecimal.ZERO) < 0) {
-                throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_PRICE_NEGATIVE,VOContext.SERVICE_PRICE);
+                throw new ValueObjectValidationException(
+                        ServiceVOError.ERR_SERVICE_PRICE_NEGATIVE,
+                        VOContext.SERVICE_PRICE);
             }
     }
 
