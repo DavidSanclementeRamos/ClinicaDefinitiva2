@@ -21,10 +21,10 @@ public final class Specialty {
 
     private final String value;
 
-    public  Specialty(String value) {
-       /* if (isBlank(value)) {
+    private   Specialty(String value) {
+        if (isBlank(value)) {
             throw new IllegalArgumentException("Specialty must not be empty.");
-        }*/
+        }
         String normalized = value.trim();
         if (!VALID_SPECIALTIES.contains(normalized)) {
             throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.SPECIALTY);
@@ -32,9 +32,8 @@ public final class Specialty {
         this.value = normalized;
     }
 
-   // public Specialty(String value) {
-     //   this.value = value;
-   // }
+
+    public static Specialty of(String value){return new Specialty(value);}
 
     // methods semantic
     public boolean is(String expected) {

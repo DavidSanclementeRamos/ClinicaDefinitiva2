@@ -10,7 +10,7 @@ import java.util.Objects;
 public final class DateOfBirth {
     private final LocalDate value;
 
-    public DateOfBirth(LocalDate value) {
+    private DateOfBirth(LocalDate value) {
         if (value == null) {
             throw new ValueObjectValidationException(VoActorError.ERR_BIRTHDATE_NULL, VOContext.DATE_OF_BIRTH);
         }
@@ -23,6 +23,7 @@ public final class DateOfBirth {
         }
         this.value = value;
     }
+    public static DateOfBirth of(LocalDate value) { return new DateOfBirth(value); }
 
     // methods semantic
     public LocalDate asDate() {

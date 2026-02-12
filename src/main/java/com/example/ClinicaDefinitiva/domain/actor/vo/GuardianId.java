@@ -9,7 +9,7 @@ import java.util.Objects;
 public final class GuardianId {
     private final  Long value;
 
-    public GuardianId(Long value) {
+    private GuardianId(Long value) {
         this.value = Objects.requireNonNull(value);
     }
     public static GuardianId fromLong(Long value) {

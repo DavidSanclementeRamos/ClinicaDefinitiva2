@@ -22,11 +22,9 @@ public final class Sector {
 
     private final String value;
 
-   // private Sector(String value) {
-     //   this.value = value;
-   // }
 
-    public  Sector (String value) {
+
+    private    Sector (String value) {
         if (value == null ) {
             throw new ValueObjectValidationException(VoActorError.ERR_SECTOR_NULL, VOContext.SECTOR);
         }
@@ -44,6 +42,8 @@ public final class Sector {
         //return new Sector(normalized);
         this.value=normalized;
     }
+
+    public static Sector of(String value){return new Sector(value);}
 
     // methods semantic
     public boolean is(String expected) {

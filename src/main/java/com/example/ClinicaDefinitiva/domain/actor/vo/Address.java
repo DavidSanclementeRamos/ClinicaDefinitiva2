@@ -13,7 +13,7 @@ public final class Address {
     private final String postalCode;
 
 
-    public Address(String street, String city, String state, String country, String postalCode) {
+    private Address(String street, String city, String state, String country, String postalCode) {
         if (street == null || city == null || state == null || country == null || postalCode == null) {
             throw new ValueObjectValidationException(VoActorError.ERR_ADDRESS_NULL, VOContext.ADDRESS );
         }
@@ -26,6 +26,10 @@ public final class Address {
         this.state = state.trim();
         this.country = country.trim();
         this.postalCode = postalCode.trim();
+    }
+
+    public static Address of(String street, String city, String state, String country, String postalCode) {
+        return new Address(street, city, state, country, postalCode);
     }
 
     //  methods semantic

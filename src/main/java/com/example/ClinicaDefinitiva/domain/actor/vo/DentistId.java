@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidati
 public final class  DentistId {
     private final Long value;
 
-    public DentistId(Long value) {
+    private DentistId(Long value) {
         this.value = value;
     }
 

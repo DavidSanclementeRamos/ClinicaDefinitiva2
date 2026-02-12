@@ -9,11 +9,11 @@ import java.util.Objects;
 public final class ReceptionId {
 private final Long value;
 
-    public ReceptionId(Long value) {
+    private ReceptionId(Long value) {
         this.value = Objects.requireNonNull(value);
     }
 
-    public static ReceptionId fromLong(Long value) {
+    public static ReceptionId of(Long value) {
         if (value == null) {
             throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.RECEPTION_ID);
 

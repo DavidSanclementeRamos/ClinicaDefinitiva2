@@ -19,7 +19,7 @@ public final class Document {
     private final String value;
 
 
-    public Document(String raw) {
+    private Document(String raw) {
         if (raw == null) {
             throw new ValueObjectValidationException(VoActorError.ERR_DOCUMENT_NULL, VOContext.DOCUMENT_ID);
         }

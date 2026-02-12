@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.service;
+package com.example.ClinicaDefinitiva.application.service.schedule;
 
 import com.example.ClinicaDefinitiva.application.dto.sheduled.AppointmentCompletionDTO;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.CreateAppointmentDto;

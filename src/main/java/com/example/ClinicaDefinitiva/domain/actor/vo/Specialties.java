@@ -13,13 +13,14 @@ import java.util.Set;
 public final class Specialties {
     private final Set<Specialty> values;
 
-    public Specialties(Set<Specialty> values) {
+    private Specialties(Set<Specialty> values) {
         if (values == null || values.isEmpty()){
             throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.SPECIALTY  );
         }
 
         this.values = Collections.unmodifiableSet(new HashSet<>(values));
     }
+    public static Specialties of(Set<Specialty> values){return new Specialties(values);}
 
     // methods semantic
     public boolean contains(Specialty specialty) {
@@ -31,7 +32,7 @@ public final class Specialties {
     }
 
     public boolean allowsSurgicalProcedures() {
-        return contains(new Specialty("Oral Surgery"));
+        return contains( Specialty.of("Oral Surgery"));
     }
 
     public Set<Specialty> asSet() {

@@ -5,7 +5,7 @@ package com.example.ClinicaDefinitiva.domain.actor.vo;
 
 public final class Person {
 
-    private Document dni;
+    private  Document dni;
     private FullName fullname;
     private PhoneNumber phoneNumber;
     private Address address;
@@ -17,7 +17,7 @@ public final class Person {
     public Person() {
     }
 
-    public Person(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni, String documentoEPS, FullName fullname, PhoneNumber phoneNumber) {
+    private Person(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni, String documentoEPS, FullName fullname, PhoneNumber phoneNumber) {
         this.address = address;
         this.age = age;
         this.bloodType = bloodType;
@@ -29,6 +29,7 @@ public final class Person {
         this.phoneNumber = phoneNumber;
     }
 
+    public static Person of(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni, String documentoEPS, FullName fullname, PhoneNumber phoneNumber) { return new Person(address, age, bloodType, dateOfBirth, dni, documentoEPS, fullname, phoneNumber); }
     public String getDocumentoEPS() {
         return documentoEPS;
     }

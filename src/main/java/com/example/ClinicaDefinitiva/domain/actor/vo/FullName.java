@@ -10,7 +10,7 @@ public final class FullName {
     private final String firstName;
     private final String lastName;
 
-    public FullName(String firstName, String lastName) {
+    private FullName(String firstName, String lastName) {
         if(firstName == null || lastName == null){
             throw new ValueObjectValidationException(VoActorError.ERR_FULLNAME_NULL, VOContext.FULL_NAME);
         }
@@ -20,6 +20,8 @@ public final class FullName {
         this.firstName = firstName.trim();
         this.lastName = lastName.trim();
     }
+
+    public static FullName of(String firstName, String lastName){return new FullName(firstName,lastName);}
 
     // methods semantic
     public String asText() {

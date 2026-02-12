@@ -10,13 +10,14 @@ public final class Age {
 
     private final int value;
 
-    public Age(DateOfBirth dateOfBirth) {
+    private Age(DateOfBirth dateOfBirth) {
         this.value = Period.between(dateOfBirth.asDate(), LocalDate.now()).getYears();
         if (value < 0 || value > 130) {
             throw new ValueObjectValidationException(VoActorError.ERR_AGE_OUT_OF_RANGE, VOContext.AGE);
         }
     }
 
+    public static Age of(DateOfBirth dateOfBirth) { return new Age(dateOfBirth); }
 
     // methods semantice
     public boolean isAdult() {

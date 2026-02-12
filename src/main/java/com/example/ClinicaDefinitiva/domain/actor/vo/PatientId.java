@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidati
 public final class PatientId {
     private final Long value;
 
-    public PatientId(Long value) {
+    private PatientId(Long value) {
         this.value = value;
     }
 

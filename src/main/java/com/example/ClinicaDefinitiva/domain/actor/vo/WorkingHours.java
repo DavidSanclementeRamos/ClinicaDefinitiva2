@@ -15,7 +15,7 @@ public final class WorkingHours {
     private final DayOfWeek dayOfWeek;
     private final int declaredHoursPerWeek; //cumplimiento laboral declarado
 
-    public WorkingHours(LocalTime start, LocalTime end, DayOfWeek dayOfWeek, int declaredHoursPerWeek) {
+    private WorkingHours(LocalTime start, LocalTime end, DayOfWeek dayOfWeek, int declaredHoursPerWeek) {
         // Validación de nulidad
         if (start == null || end == null || dayOfWeek == null) {
             throw new ValueObjectValidationException(
@@ -46,6 +46,10 @@ public final class WorkingHours {
         this.dayOfWeek = dayOfWeek;
         this.declaredHoursPerWeek = declaredHoursPerWeek;
     }
+    public static WorkingHours of (LocalTime start, LocalTime end, DayOfWeek dayOfWeek, int declaredHoursPerWeek){
+        return new WorkingHours(start,end,dayOfWeek,declaredHoursPerWeek);
+    }
+
     // verifica que dateTime cae dentro de un intervalo de tiempo específico en un día concreto de la semana
     public boolean isWithin(LocalDateTime dateTime) {
         if (dateTime == null) return false;

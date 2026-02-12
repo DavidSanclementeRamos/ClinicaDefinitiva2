@@ -11,7 +11,7 @@ public final class PhoneNumber {
 
     private final String value;
 
-    public PhoneNumber(String value) {
+    private PhoneNumber(String value) {
         if (value == null) {
             throw new ValueObjectValidationException(VoActorError.ERR_PHONE_NULL, VOContext.PHONE_NUMBER);
         }
@@ -24,6 +24,7 @@ public final class PhoneNumber {
         }
         this.value = normalized;
     }
+    public static PhoneNumber of(String value){return new PhoneNumber(value);}
 
     // methods semantic
     public boolean isInternational() {
