@@ -364,7 +364,7 @@ public class ProvidedService {
             this.details = details;
             return this;
         }
-        
+
         public ProvidedService build() {
             return new ProvidedService(this);
         }
