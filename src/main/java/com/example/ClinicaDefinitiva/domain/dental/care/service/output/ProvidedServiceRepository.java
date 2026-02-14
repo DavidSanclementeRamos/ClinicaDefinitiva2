@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.portsOutput;
+package com.example.ClinicaDefinitiva.domain.dental.care.service.output;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
@@ -6,7 +6,6 @@ import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.nio.channels.FileChannel;
 import java.util.Optional;
 
 public interface ProvidedServiceRepository {
