@@ -28,7 +28,7 @@ public interface ProvidedServiceUseCase {
 
 
 
-    ReadServiceDto create(CreateServiceDto dto, ServiceId id, UserIdentityId requesterId, RolId requesterRolId);
+    ReadServiceDto create(CreateServiceDto dto,  UserIdentityId requesterId, RolId requesterRolId);
     ReadServiceDto updateInformation(UpdateServiceInfoDto dto, ServiceId id, UserIdentityId requesterId, RolId requesterRolId);
     ReadServiceDto updateRate(UpdateServiceRateDto dto, ServiceId id, UserIdentityId requesterId, RolId requesterRolId);
     ReadServiceDto updateDetails(UpdateServiceDetailsDto dto, ServiceId id, UserIdentityId requesterId, RolId requesterRolId);

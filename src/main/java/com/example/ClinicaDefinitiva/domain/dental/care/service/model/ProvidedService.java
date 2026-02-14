@@ -2,11 +2,12 @@ package com.example.ClinicaDefinitiva.domain.dental.care.service.model;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.*;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.service.ServiceRatePolicy;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ import java.util.Optional;
  * - RN-SERVICE-015: La desactivación requiere un motivo detallado
  *
  * @see ServiceDetails para detalles específicos por especialidad
- * @see ServiceError para catálogo de errores
+ * @see ProvidedServiceError para catálogo de errores
  */
 public class ProvidedService {
 
@@ -103,7 +104,6 @@ public class ProvidedService {
                 .build();
     }
 
-    // ========== OPERACIONES DE DOMINIO ==========
 
     /**
      * Actualiza información común del servicio.
@@ -148,7 +148,7 @@ public class ProvidedService {
 
         if (justification == null || justification.isBlank()) {
             throw new BusinessRuleViolationException(
-                    ServiceError.ERR_SERVICE_RATE_CHANGE_REQUIRES_JUSTIFICATION,
+                    ProvidedServiceError.ERR_SERVICE_RATE_CHANGE_REQUIRES_JUSTIFICATION,
                     EntityContext.DENTAL_SERVICE
             );
         }
@@ -173,7 +173,7 @@ public class ProvidedService {
         if (this.details != null &&
                 !this.details.serviceType().equals(newDetails.serviceType())) {
             throw new BusinessRuleViolationException(
-                    ServiceError.ERR_SERVICE_TYPE_IMMUTABLE,
+                    ProvidedServiceError.ERR_SERVICE_TYPE_IMMUTABLE,
                     EntityContext.DENTAL_SERVICE
             );
         }
@@ -194,7 +194,7 @@ public class ProvidedService {
 
         if (reason == null || reason.length() < MIN_DEACTIVATION_REASON_LENGTH) {
             throw new BusinessRuleViolationException(
-                    ServiceError.ERR_SERVICE_DEACTIVATION_REASON_REQUIRED,
+                    ProvidedServiceError.ERR_SERVICE_DEACTIVATION_REASON_REQUIRED,
                     EntityContext.DENTAL_SERVICE
             );
         }
@@ -230,7 +230,7 @@ public class ProvidedService {
     private void ensureEditable() {
         if (!status.isActive()) {
             throw new BusinessRuleViolationException(
-                    ServiceError.ERR_SERVICE_INACTIVE,
+                    ProvidedServiceError.ERR_SERVICE_INACTIVE,
                     EntityContext.DENTAL_SERVICE
             );
         }
@@ -248,7 +248,7 @@ public class ProvidedService {
 
         if (!matches) {
             throw new BusinessRuleViolationException(
-                    ServiceError.ERR_SERVICE_CATEGORY_MISMATCH,
+                    ProvidedServiceError.ERR_SERVICE_CATEGORY_MISMATCH,
                     EntityContext.DENTAL_SERVICE
             );
         }
@@ -299,6 +299,7 @@ public class ProvidedService {
     public Optional<ServiceDetails> getDetails() {
         return Optional.ofNullable(details);
     }
+
 
 
     public static class Builder {

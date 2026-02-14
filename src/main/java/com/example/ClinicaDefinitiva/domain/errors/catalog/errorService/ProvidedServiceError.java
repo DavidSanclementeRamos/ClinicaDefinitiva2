@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.errors.catalog.errorService;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
-public enum ServiceError implements ErrorCatalog {
+public enum ProvidedServiceError implements ErrorCatalog {
 
     // RN-SERVICE-001
     ERR_SERVICE_INVALID_RATE(// eliminar
@@ -54,14 +54,14 @@ public enum ServiceError implements ErrorCatalog {
     ),
 
     // RN-SERVICE-008
-    ERR_SERVICE_RATE_CHANGE_REQUIRES_JUSTIFICATION(
+    ERR_SERVICE_RATE_CHANGE_REQUIRES_JUSTIFICATION(// EVALUAR
             "RN-SERVICE-008",
             "error.service.rate.justification.required",
             "Cambios en tarifa requieren justificación si hay citas programadas"
     ),
 
     // RN-SERVICE-009
-    ERR_SERVICE_MISSING_REQUIRED_FIELDS(
+    ERR_SERVICE_MISSING_REQUIRED_FIELDS(// ELIMINAR
             "RN-SERVICE-009",
             "error.service.fields.required",
             "El nombre y descripción no pueden estar en blanco"
@@ -75,35 +75,35 @@ public enum ServiceError implements ErrorCatalog {
     ),
 
     // RN-SERVICE-011
-    ERR_SERVICE_RATE_CHANGE_OUT_OF_RANGE(
+    ERR_SERVICE_RATE_CHANGE_OUT_OF_RANGE(// FALTA
             "RN-SERVICE-011",
             "error.service.rate.outofrange",
             "El cambio de tarifa debe estar dentro del rango razonable (50%-300% del valor actual)"
     ),
 
     // RN-SERVICE-012
-    ERR_SERVICE_HAS_PENDING_INVOICES(
+    ERR_SERVICE_HAS_PENDING_INVOICES(// FALTA
             "RN-SERVICE-012",
             "error.service.invoices.pending",
             "No puede desactivarse porque tiene facturas pendientes"
     ),
 
     // RN-SERVICE-013
-    ERR_SERVICE_INVALID_CODE_FORMAT(
+    ERR_SERVICE_INVALID_CODE_FORMAT(// HECHO
             "RN-SERVICE-013",
             "error.service.code.format",
             "El código de servicio debe tener entre 4 y 15 caracteres alfanuméricos"
     ),
 
     // RN-SERVICE-014
-    ERR_SERVICE_DESCRIPTION_TOO_SHORT(
+    ERR_SERVICE_DESCRIPTION_TOO_SHORT(// HECHO
             "RN-SERVICE-014",
             "error.service.description.short",
             "La descripción debe tener al menos 20 caracteres"
     ),
 
     // RN-SERVICE-015
-    ERR_SERVICE_DEACTIVATION_REASON_REQUIRED(
+    ERR_SERVICE_DEACTIVATION_REASON_REQUIRED(// HECHO
             "RN-SERVICE-015",
             "error.service.deactivation.reason",
             "Debe registrar motivo de desactivación con mínimo 10 caracteres"
@@ -114,7 +114,7 @@ public enum ServiceError implements ErrorCatalog {
     private final String messageKey;
     private final String defaultMessage;
 
-    ServiceError(String code, String messageKey, String defaultMessage) {
+    ProvidedServiceError(String code, String messageKey, String defaultMessage) {
         this.code = code;
         this.messageKey = messageKey;
         this.defaultMessage = defaultMessage;

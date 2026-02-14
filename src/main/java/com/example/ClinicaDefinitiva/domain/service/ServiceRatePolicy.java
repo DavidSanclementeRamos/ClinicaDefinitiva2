@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.service;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 
@@ -25,7 +25,7 @@ public final class ServiceRatePolicy {
 
         if (newAmount.compareTo(minAllowed) < 0 || newAmount.compareTo(maxAllowed) > 0) {
             throw new BusinessRuleViolationException(
-                    ServiceError.ERR_SERVICE_RATE_CHANGE_OUT_OF_RANGE, EntityContext.DENTAL_SERVICE
+                    ProvidedServiceError.ERR_SERVICE_RATE_CHANGE_OUT_OF_RANGE, EntityContext.DENTAL_SERVICE
             );
         }
     }

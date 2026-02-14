@@ -23,6 +23,8 @@ public final class ServiceCatalog {
         this.name = name;
         this.category = category;
     }
+    public static ServiceCatalog of(ServiceId id, String name , String category ){
+        return new ServiceCatalog(id,name,category);}
 
     public ServiceId getId() { return id; }
     public String getName() { return name; }

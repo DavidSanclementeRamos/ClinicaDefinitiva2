@@ -6,11 +6,12 @@ import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.nio.channels.FileChannel;
 import java.util.Optional;
 
 public interface ProvidedServiceRepository {
     Optional<ProvidedService> findById(ServiceId id);
-    void save(ProvidedService providedService);
+    ProvidedService save(ProvidedService providedService);
     void deleteById(ServiceId id);
     boolean existsByCode(String code);
 
@@ -22,6 +23,12 @@ public interface ProvidedServiceRepository {
     Page<ProvidedService> findByOrthodonticTreatmentDurationMonths(Integer months, Pageable pageable);
     Page<ProvidedService> findByProstheticUnits(Integer units, Pageable pageable);
     Page<ProvidedService> findByImplantHealingTimeMonths(Integer months, Pageable pageable);
+
+    Page<ProvidedService> findByCategory(String category, Pageable pageable);
+
+    Page<ProvidedService> findByStatus(String status, Pageable pageable);
+
+    Page<ProvidedService> findByType(String serviceType, Pageable pageable);
     // Puedes añadir más métodos específicos según futuros requisitos
 
 

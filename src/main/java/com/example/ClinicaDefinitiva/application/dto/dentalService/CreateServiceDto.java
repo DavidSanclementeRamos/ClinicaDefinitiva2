@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public record CreateServiceDto(
         String name,
-        String categoryId,
+        Long categoryId,
         String categoryName,
         String categoryType,
         String code,

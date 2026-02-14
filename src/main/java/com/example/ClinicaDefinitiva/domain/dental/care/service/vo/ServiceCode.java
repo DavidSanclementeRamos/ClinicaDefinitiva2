@@ -24,6 +24,8 @@ public final class ServiceCode {
                     .ERR_SERVICE_CODE_LENGTH_INVALID,VOContext.SERVICE_CODE);}
         this.value = value;
     }
+
+    public static ServiceCode of(String code){return new ServiceCode(code);}
     public void ensureUniqueCode(boolean exists) {
         if (exists) {
             throw new ValueObjectValidationException(

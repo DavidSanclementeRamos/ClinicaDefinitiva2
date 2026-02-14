@@ -6,7 +6,7 @@ package com.example.ClinicaDefinitiva.application.dto.dentalService;
  */
 public record UpdateServiceInfoDto(
         String name,
-        String categoryId,
+        Long categoryId,
         String categoryName,
         String categoryType,
         Integer durationMinutes,

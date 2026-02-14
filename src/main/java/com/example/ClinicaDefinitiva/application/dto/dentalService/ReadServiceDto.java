@@ -22,9 +22,9 @@ public record ReadServiceDto(
         String serviceType,
 
         // Detalles específicos del servicio (serializados como JSON)
-        String detailsJson,
+        String detailsJson
 
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+       // LocalDateTime createdAt,
+       // LocalDateTime updatedAt
 ) {}
 
