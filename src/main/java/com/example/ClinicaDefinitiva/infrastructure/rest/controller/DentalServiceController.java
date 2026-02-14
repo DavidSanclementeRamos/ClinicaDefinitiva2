@@ -3,21 +3,11 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.controller;
 
 
 
-import com.example.ClinicaDefinitiva.application.dto.service.CreateProvidedServiceDto;
-import com.example.ClinicaDefinitiva.application.dto.service.ReadProvidedServiceDto;
-import com.example.ClinicaDefinitiva.application.dto.service.UpdateProvidedServiceDto;
-import com.example.ClinicaDefinitiva.application.portsInput.ProvidedServiceUseCase;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.DentalServiceValidation;
-import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
+import com.example.ClinicaDefinitiva.application.dto.dentalService.CreateProvidedServiceDto;
+import com.example.ClinicaDefinitiva.application.dto.dentalService.ReadProvidedServiceDto;
+import com.example.ClinicaDefinitiva.application.dto.dentalService.UpdateProvidedServiceDto;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
 
 @Validated
 @RestController

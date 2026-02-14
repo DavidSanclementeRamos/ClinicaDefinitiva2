@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.application.exceptions.AppointmentNotFoundE
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.ReceptionistNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.schedule.AppointmentReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.schedule.AppointmentWriteMapper;
-import com.example.ClinicaDefinitiva.application.portsInput.AppointmentUseCase;
+import com.example.ClinicaDefinitiva.application.portsInput.schedule.AppointmentUseCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;

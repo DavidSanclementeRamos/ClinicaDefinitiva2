@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.application.dto.sheduled.AppointmentComplet
 import com.example.ClinicaDefinitiva.application.dto.sheduled.CreateAppointmentDto;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.ReadAppointmentDto;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.UpdateAppointmentDto;
-import com.example.ClinicaDefinitiva.application.portsInput.AppointmentUseCase;
+import com.example.ClinicaDefinitiva.application.portsInput.schedule.AppointmentUseCase;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentStatus;

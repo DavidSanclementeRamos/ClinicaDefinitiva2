@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.mapper;
 
 
-import com.example.ClinicaDefinitiva.application.dto.service.CreateProvidedServiceDto;
-import com.example.ClinicaDefinitiva.application.dto.service.UpdateProvidedServiceDto;
+import com.example.ClinicaDefinitiva.application.dto.dentalService.CreateProvidedServiceDto;
+import com.example.ClinicaDefinitiva.application.dto.dentalService.UpdateProvidedServiceDto;
 
 public final class DentalServiceValidation {
 

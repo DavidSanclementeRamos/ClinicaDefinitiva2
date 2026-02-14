@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.portsInput;
+package com.example.ClinicaDefinitiva.application.portsInput.schedule;
 
 import com.example.ClinicaDefinitiva.application.dto.sheduled.AppointmentCompletionDTO;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.ReadAppointmentDto;
