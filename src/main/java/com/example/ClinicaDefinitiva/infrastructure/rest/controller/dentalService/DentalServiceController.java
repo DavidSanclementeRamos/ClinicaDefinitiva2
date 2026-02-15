@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.controller;
+package com.example.ClinicaDefinitiva.infrastructure.rest.controller.dentalService;
 
 
 
