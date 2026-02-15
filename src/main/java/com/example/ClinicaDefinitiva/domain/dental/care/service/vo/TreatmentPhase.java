@@ -12,7 +12,7 @@ public class TreatmentPhase {
     private final PhaseStatus status;
     private final String notes;
 
-    private TreatmentPhase(String name, LocalDate scheduledDate, PhaseStatus status, String notes) {
+    public TreatmentPhase(String name, LocalDate scheduledDate, PhaseStatus status, String notes) {
         Objects.requireNonNull(name, "Phase name cannot be null");
         Objects.requireNonNull(status, "Phase status cannot be null");
 
@@ -27,7 +27,7 @@ public class TreatmentPhase {
 
     public String getName() { return name; }
     public LocalDate getScheduledDate() { return scheduledDate; }
-    public PhaseStatus getStatus() { return status; }
+    public String getStatus() { return status; }
     public String getNotes() { return notes; }
 }
 

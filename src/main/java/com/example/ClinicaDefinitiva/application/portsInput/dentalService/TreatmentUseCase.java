@@ -57,7 +57,7 @@ public interface TreatmentUseCase {
             UserIdentityId requesterId,
             RolId requesterRolId
     );
-    
+
     TreatmentDto cancel(
             TreatmentId id,
             String reason,

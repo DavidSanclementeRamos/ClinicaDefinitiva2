@@ -8,15 +8,15 @@ import java.util.List;
  * Contiene todos los detalles del tratamiento, incluyendo fechas y estado.
  */
 public record TreatmentDto(
-        String id,
-        String patientId,
-        String dentistId,
-        String serviceId,
+        Long id,
+        Long patientId,
+        Long dentistId,
+        Long serviceId,
         String status,
         LocalDate startDate,
         LocalDate expectedEndDate,
         LocalDate actualEndDate,
         List<TreatmentPhaseDto> phases,
         String notes,
-        String rateId
+        Long rateId
 ) {}

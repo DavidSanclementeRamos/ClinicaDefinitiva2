@@ -8,6 +8,6 @@ import java.time.LocalDate;
 public record TreatmentPhaseDto(
         String name,
         LocalDate startDate,
-        LocalDate endDate,
+        String status,
         String description
 ) {}

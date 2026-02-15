@@ -4,22 +4,18 @@ import java.util.Objects;
 import java.util.UUID;
 
 public final class RateId {
-    private final String value;
+    private final Long value;
 
-    public RateId(String value) {
+    public RateId(Long value) {
         this.value = Objects.requireNonNull(value);
     }
-    public RateId generate(){
-        return new RateId(UUID.randomUUID().toString());
-    }
     // Nuevo: parsea/valida una cadena y devuelve el VO
-    public static RateId fromString(String value) {
+    public static RateId of(Long value) {
         if (value == null) return null; // decisión: devuelve null si no hay valor; cambia a throw si prefieres
-        String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("InvoiceId string is empty");
-        return new RateId(trimmed);
+
+        return new RateId(value);
     }
-    public String getValue() {
+    public Long getValue() {
         return value;
     }
 }

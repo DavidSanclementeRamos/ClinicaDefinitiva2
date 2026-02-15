@@ -8,14 +8,14 @@ import java.util.List;
  * Contiene toda la información requerida para inicializar un tratamiento clínico.
  */
 public record CreateTreatmentDto(
-        String patientId,
-        String dentistId,
-        String serviceId,
+        Long patientId,
+        Long dentistId,
+        Long serviceId,
         LocalDate startDate,
         LocalDate expectedEndDate,
         List<TreatmentPhaseDto> phases,
         String notes,
-        String rateId
+        Long rateId
 ) {}
 
 

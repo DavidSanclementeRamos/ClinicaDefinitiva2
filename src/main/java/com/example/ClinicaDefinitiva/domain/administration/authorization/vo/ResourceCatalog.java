@@ -6,7 +6,7 @@ public final class ResourceCatalog {
         // Actor module
         DENTIST, PATIENT, GUARDIAN, RECEPTIONIST,
         // Dental Care Services
-        PROVIDED_SERVICE,
+        PROVIDED_SERVICE, TREATMENT,
         // Schedule module
         APPOINTMENT, AVAILABILITY, SHIFT,
         // Billing module

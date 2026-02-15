@@ -155,6 +155,18 @@ public class Treatment {
     public LocalDate getActualEndDate() { return actualEndDate; }
     public List<TreatmentPhase> getPhases() { return phases; }
     public String getNotes() { return notes; }
+
+    public TreatmentId getId() {
+        return id;
+    }
+
+    public PatientId getPatientId() {
+        return patientId;
+    }
+
+    public DentistId getDentistId() {
+        return dentistId;
+    }
 }
 
 

@@ -18,7 +18,7 @@ public class TreatmentId {
         }
         return new TreatmentId(value);
     }
-    private static TreatmentId of(Long value){return new TreatmentId(value);}
+    public static TreatmentId of(Long value){return new TreatmentId(value);}
     public Long getValue() {
         return value;
     }
