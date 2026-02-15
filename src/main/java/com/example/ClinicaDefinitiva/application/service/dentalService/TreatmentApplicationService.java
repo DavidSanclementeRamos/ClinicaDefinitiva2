@@ -96,7 +96,7 @@ public class TreatmentApplicationService implements TreatmentUseCase {
 
 
          Patient patient = patientRepository.findByUserId(requesterId);
-         
+
          contextBuilder.withPatientGuardianId(patient.getGuardianId().getValue());
 
 
