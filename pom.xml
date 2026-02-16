@@ -22,17 +22,8 @@
 		<java.version>17</java.version>
 	</properties>
 
-	<!-- BOM de JUnit -->
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.junit</groupId>
-				<artifactId>junit-bom</artifactId>
-				<version>5.12.2</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
 			<!-- Forzar versiones seguras en transitivas -->
 			<dependency>
 				<groupId>org.assertj</groupId>
@@ -40,9 +31,6 @@
 				<version>3.25.3</version>
 				<scope>test</scope>
 			</dependency>
-
-
-
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-core</artifactId>
@@ -75,7 +63,7 @@
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
-			<version>8.4.0</version> <!-- versión segura -->
+			<version>8.4.0</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -84,27 +72,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- JUnit 5 -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Mockito -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-junit-jupiter</artifactId>
-			<version>5.12.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Spring Boot Test -->
+		<!-- JUnit 5 (Spring Boot ya gestiona versiones) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -117,6 +85,20 @@
 			</exclusions>
 		</dependency>
 
+		<!-- AssertJ -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Mockito -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>5.12.0</version>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- MapStruct + Lombok -->
 		<dependency>
