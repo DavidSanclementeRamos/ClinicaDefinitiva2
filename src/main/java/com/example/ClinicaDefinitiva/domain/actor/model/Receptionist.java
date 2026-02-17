@@ -33,15 +33,15 @@ public class Receptionist   {
 
 
     public void updateContactData(Address address, PhoneNumber phoneNumber) {
-        Person data = new Person();
-        this.person = data.updateContact(address, phoneNumber);
+
+        this.person = person.withContactData(address, phoneNumber);
         this.lastUpdate = LocalDateTime.now();
     }
 
     public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
                                     String documentoEPS, FullName fullname, Sector sector) {
-        Person data = new Person();
-        this.person = data.updateSensitive(
+
+        this.person = person.withSensitiveData(
                 age,
                 bloodType,
                 dateOfBirth,

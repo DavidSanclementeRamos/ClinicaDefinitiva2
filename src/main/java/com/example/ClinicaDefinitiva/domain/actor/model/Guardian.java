@@ -50,8 +50,7 @@ public class Guardian  {
     public void updateContactData(Address address, PhoneNumber phoneNumber
                                    ) {
 
-        Person data = new Person();
-        this.person = data.updateContact(address, phoneNumber);
+        this.person = person.withContactData(address, phoneNumber);
          this.lastUpdate = LocalDateTime.now();
     }
 
@@ -79,8 +78,7 @@ public class Guardian  {
             if (!age.isBetween(22, 60)) {
                 throw new BusinessRuleViolationException(GuardianError.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
             }
-            Person data = new Person();
-            this.person = data.updateSensitive(
+            this.person = person.withSensitiveData(
                     age,
                     bloodType,
                     dateOfBirth,

@@ -54,8 +54,8 @@ public class Patient  {
 
     public void updatePatientContact( Address address, PhoneNumber phoneNumber) {
 
-        Person data = new Person();
-        this.person = data.updateContact(address, phoneNumber);
+
+        this.person = person.withContactData(address, phoneNumber);
         this.lastUpdate = LocalDateTime.now();
     }
 
@@ -75,8 +75,8 @@ public class Patient  {
          }**/
 
 
-        Person data = new Person();
-        this.person = data.updateSensitive(
+
+        this.person = person.withSensitiveData(
                 age,
                 bloodType,
                 dateOfBirth,

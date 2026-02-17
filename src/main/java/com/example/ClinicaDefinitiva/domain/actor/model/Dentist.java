@@ -75,8 +75,8 @@ public class Dentist   {
         if (!age.isBetween(25, 130)) {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
         }
-        Person data = new Person();
-        this.personData = data.updateSensitive(age, bloodType,
+
+        this.personData = personData.withSensitiveData(age, bloodType,
                 dateOfBirth,dni, documentoEPS, fullname);
         this.specialties = specialties;
         this.workingHours = workingHours;
@@ -84,8 +84,8 @@ public class Dentist   {
     }
 
     public void updateContactData(Address address, PhoneNumber phoneNumber) {
-        Person data = new Person();
-        this.personData = data.updateContact(address,phoneNumber);
+
+        this.personData = personData.withContactData(address,phoneNumber);
         this.lastUpdate = LocalDateTime.now();
     }
 

@@ -11,13 +11,11 @@ public final class Person {
     private final Address address;
     private final DateOfBirth dateOfBirth;
     private final BloodType bloodType;
-    private final Age age ;
+    private final Age age;
     private final String documentoEPS;
 
-
-
-
-    private Person(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni, String documentoEPS, FullName fullname, PhoneNumber phoneNumber) {
+    private Person(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth,
+                   Document dni, String documentoEPS, FullName fullname, PhoneNumber phoneNumber) {
         this.address = address;
         this.age = age;
         this.bloodType = bloodType;
@@ -25,14 +23,27 @@ public final class Person {
         this.dni = dni;
         this.documentoEPS = documentoEPS;
         this.fullname = fullname;
-
         this.phoneNumber = phoneNumber;
     }
 
-    public static Person of(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni, String documentoEPS, FullName fullname, PhoneNumber phoneNumber) { return new Person(address, age, bloodType, dateOfBirth, dni, documentoEPS, fullname, phoneNumber); }
-    public String getDocumentoEPS() {
-        return documentoEPS;
+    public static Person of(Address address, Age age, BloodType bloodType, DateOfBirth dateOfBirth,
+                            Document dni, String documentoEPS, FullName fullname, PhoneNumber phoneNumber) {
+        return new Person(address, age, bloodType, dateOfBirth, dni, documentoEPS, fullname, phoneNumber);
     }
+
+    public  Person withSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth,
+                                    Document dni, String documentoEPS, FullName fullname) {
+        return new Person(this.address, age, bloodType, dateOfBirth, dni, documentoEPS, fullname, this.phoneNumber);
+    }
+
+    public  Person withContactData(Address address, PhoneNumber phoneNumber) {
+        return new Person(address, this.age, this.bloodType, this.dateOfBirth, this.dni,
+                this.documentoEPS, this.fullname, phoneNumber);
+    }
+
+
+
+
 
     public Document getDni() {
         return dni;
