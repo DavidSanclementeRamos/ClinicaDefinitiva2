@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.billing.doiman;
+package com.example.ClinicaDefinitiva.domain.billing;
 
 public class InvoiceFactory {
    /** public static Invoice createDraft(String patientId,

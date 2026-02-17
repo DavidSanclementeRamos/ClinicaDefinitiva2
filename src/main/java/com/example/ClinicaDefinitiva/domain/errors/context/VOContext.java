@@ -41,7 +41,10 @@ public enum VOContext implements DomainContext {
     USER_ID(CodeVO.USE40),
     PERMISSION(CodeVO.PER41),
     AUTHORIZATION(CodeVO.AUT42),
-    COMPLETION(CodeVO.COP43);
+    COMPLETION(CodeVO.COP43),
+    INVOICE_ID(CodeVO.INV44),
+    INVOICE_ITEM_ID(CodeVO.INT45),
+    RATE_ID(CodeVO.RAT46);
 
 
 

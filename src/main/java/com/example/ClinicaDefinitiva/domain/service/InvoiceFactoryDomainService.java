@@ -4,11 +4,11 @@ import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ServiceRen
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Invoice;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.InvoiceItem;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceId;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceItemId;
+import com.example.ClinicaDefinitiva.domain.billing.model.Invoice;
+import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
+import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
+import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceId;
+import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceItemId;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

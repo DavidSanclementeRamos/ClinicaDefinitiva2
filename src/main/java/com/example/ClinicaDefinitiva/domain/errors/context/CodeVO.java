@@ -44,7 +44,10 @@ public enum CodeVO {
     USE40,
     PER41,
     AUT42,
-    COP43
+    COP43,
+    INV44,
+    INT45,
+    RAT46
 
 }
 

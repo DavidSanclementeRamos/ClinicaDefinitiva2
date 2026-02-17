@@ -4,7 +4,7 @@ package com.example.ClinicaDefinitiva.application.mapper.dentalService.treatment
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.CreateTreatmentDto;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
+import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.model.Treatment;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.num.PhaseStatus;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;

@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
+import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
 import com.example.ClinicaDefinitiva.domain.service.BillingDomainService;

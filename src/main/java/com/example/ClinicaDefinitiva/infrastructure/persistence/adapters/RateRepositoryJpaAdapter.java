@@ -1,15 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters;
 
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
-import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.RateJpaRepository;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Component
 public class RateRepositoryJpaAdapter

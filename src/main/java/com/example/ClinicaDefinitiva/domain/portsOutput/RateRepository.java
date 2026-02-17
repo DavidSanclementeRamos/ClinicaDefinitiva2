@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.portsOutput;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
+import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
+import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
 
 import java.util.List;
 import java.util.Optional;

@@ -72,4 +72,8 @@ public final class Person {
     public Age getAge() {
         return age;
     }
+
+    public String getDocumentoEPS() {
+        return documentoEPS;
+    }
 }
