@@ -1,5 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.errors.context;
 
+import org.aspectj.apache.bcel.classfile.Code;
+
 public enum VOContext implements DomainContext {
 
     FULL_NAME( CodeVO.FUL02),
@@ -44,7 +46,8 @@ public enum VOContext implements DomainContext {
     COMPLETION(CodeVO.COP43),
     INVOICE_ID(CodeVO.INV44),
     INVOICE_ITEM_ID(CodeVO.INT45),
-    RATE_ID(CodeVO.RAT46);
+    RATE_ID(CodeVO.RAT46),
+    BILLING_QUANTITY(CodeVO.QUA47);
 
 
 

@@ -1,10 +1,11 @@
-package com.example.ClinicaDefinitiva.domain.billing.doiman.model;
+package com.example.ClinicaDefinitiva.domain.billing.model;
 
+import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceId;
+import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceItemId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.doiman.enu.InvoiceStatus;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
@@ -42,7 +43,7 @@ public class Invoice {
     private InvoiceStatus status;                 // Estado: Draft, Pending, Paid, Cancelled Vo
     private Long invoiceNumber; // Número consecutivo DIAN
 
-    private final List<InvoiceItem> items = new ArrayList<>();    // Lista de ítems facturados
+    private final List<InvoiceItemId> items = new ArrayList<>();    // Lista de ítems facturados
     private Price subtotal;               // Suma de los ítems antes de impuestos
     private Price tax;                  // Impuestos aplicados
     private Price total;                // Total a pagar
@@ -94,19 +95,20 @@ public class Invoice {
                     InvoiceError
                             .ERR_INVOICE_MISSING_REQUIRED_FIELDS, EntityContext.INVOICE);
         }
-    }
+    }// VALIDAD QUE LA PERSONA QUE EMITE LA FACTURA Y EL PACIENTE NO SEAN NULOS
+
 
     private void validateDateRange(LocalDateTime issuedAt, LocalDateTime dueDate) {
         if (dueDate != null && !dueDate.isAfter(issuedAt)) {
             throw new BusinessRuleViolationException(
                     InvoiceError.ERR_INVOICE_INVALID_DUE_DATE,EntityContext.INVOICE);
         }
-    }
+    }// VALIDAD QUE EL FORMATO DE FECHA SEA VALIDAD
 
     /**
      * Agrega un ítem a la factura con validaciones completas.
      */
-    public void addItem(InvoiceItem item) {
+    public void addItem(InvoiceItemId item) {
         validateItemNotNull(item);
         ensureEditable(); // RN-INVOICE-004
         validateItemBasics(item);
@@ -114,7 +116,7 @@ public class Invoice {
 
         items.add(item);
         recalcTotals();
-    }
+    } // SE SUPONE QUE ES LO QUE SE UTILIZA PARA AGREGAR UN ITEM A UNA FACTURA
 
     /**
      * Reemplaza todos los ítems con validaciones.
@@ -123,7 +125,7 @@ public class Invoice {
      * - RN-INVOICE-010: No permite modificar si está PAID o CANCELLED
      *
      */
-    public void replaceAllItems(List<InvoiceItem> newItems) {
+    public void replaceAllItems(List<InvoiceItemId> newItems) {
         if (status.isPaid() || status.isCancelled()) {
             throw new BusinessRuleViolationException(
                     InvoiceError.ERR_INVOICE_IMMUTABLE_AFTER_EMISSION,EntityContext.INVOICE);
@@ -131,29 +133,29 @@ public class Invoice {
         }
 
         items.clear();
-        for (InvoiceItem item : newItems) {
+        for (InvoiceItemId item : newItems) {
             validateItemNotNull(item);
             validateItemBasics(item);
             validateCurrencyMatch(item);
             items.add(item);
         }
         recalcTotals();
-    }
+    }//
 
-    private void validateItemNotNull(InvoiceItem item) {
+    private void validateItemNotNull(InvoiceItemId item) {
         if (item == null) {
             throw new IllegalArgumentException("Invoice item cannot be null");
         }
-    }
+    }// ESTA VALIDACION DEBERIA ESTAR AGRUPADA CON LA CREACION DE FACTURA
 
-    private void validateItemBasics(InvoiceItem item) {
+    private void validateItemBasics(InvoiceItemId item) {
         if (item.getQuantity() <= 0) {
             throw new IllegalArgumentException(
                     "Item quantity must be positive. Item: " + item.getDescription()
             );
         }
 
-    }
+    }//  REPLAZAR POR VO
 
     /**
      * RN-INVOICE-008: Todos los ítems deben tener la misma moneda.
@@ -163,7 +165,7 @@ public class Invoice {
             throw new BusinessRuleViolationException(
                     InvoiceError.ERR_INVOICE_CURRENCY_MISMATCH,EntityContext.INVOICE);
         }
-    }
+    } // MUY COMPLEJO ?? TALVES DEBERIA IR EN UN DOMAIN SERVICE Y QUE SE DELEGUE A ITEM
 
     /**
      * RN-INVOICE-004: Solo puede editarse en estado DRAFT o PENDING.
@@ -173,7 +175,7 @@ public class Invoice {
             throw new BusinessRuleViolationException(
                     InvoiceError.ERR_INVOICE_CANNOT_ADD_ITEM,EntityContext.INVOICE);
         }
-    }
+    }// ESO ESTA OK
 
     // ========================================
     // CÁLCULO DE TOTALES
