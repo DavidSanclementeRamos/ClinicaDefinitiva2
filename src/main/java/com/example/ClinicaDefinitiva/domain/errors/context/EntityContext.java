@@ -43,9 +43,6 @@ public enum EntityContext implements DomainContext {
         return code;
     }
 
-    @Override
-    public CodeVO getCodeVo() {
-        return null;
-    }
+
 }
 

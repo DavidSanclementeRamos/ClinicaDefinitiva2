@@ -10,7 +10,7 @@ public final class InvoiceId {
 
     private InvoiceId(Long value) {
         if (value == null) {
-            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_ID_NULL, VOContext.INVOICE_ID);
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_ID_NULL, VOContext.BILLING);
         }
         this.value = value;
     }
