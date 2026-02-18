@@ -107,6 +107,12 @@ public enum RateError implements ErrorCatalog {
             "AUX-RATE-001",
             "No existe tarifa vigente para Servicio: {serviceCode}, Pagador: {payerType}, Fecha: {date}",
             "Rate"
+    ),
+
+    ERR_RATE_NOT_VALID_AT_DATE(
+            "RN-RATE-016",
+            "error.rate.not.valid.at.date",
+            "La tarifa no es válida en la fecha solicitada"
     );
 
     private final String code;

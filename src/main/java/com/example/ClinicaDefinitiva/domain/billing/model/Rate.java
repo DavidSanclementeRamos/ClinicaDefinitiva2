@@ -5,6 +5,8 @@ import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.RateError;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 
 import java.time.LocalDateTime;
@@ -31,27 +33,27 @@ import java.util.Objects;
  */
 public final class Rate {
 
-    // Identidad
+
     private final RateId id;
 
-    // Relación con servicio
+
     private final ProvidedService service;
 
-    // Información de pagador
-    private final PayerType payerType;
-    private final ContractId contractId;  // Obligatorio para EPS
 
-    // Precio
+    private final PayerType payerType;
+    private final ContractId contractId;
+
+
     private final Price amount;
 
-    // Vigencia
-    private final LocalDateTime validFrom;
-    private final LocalDateTime validTo;  // null = indefinida
 
-    // Estado
+    private final LocalDateTime validFrom;
+    private final LocalDateTime validTo;
+
+
     private boolean active;
 
-    // Constructor privado (usar Builder o Factory)
+
     private Rate(Builder builder) {
         this.id = Objects.requireNonNull(builder.id, "Rate ID no puede ser nulo");
         this.service = Objects.requireNonNull(builder.service, "Service no puede ser nulo");
@@ -65,7 +67,7 @@ public final class Rate {
         validateBusinessRules();
     }
 
-    // ========== MÉTODOS FACTORY ==========
+
 
     public static Rate create(
             RateId id,
@@ -89,29 +91,19 @@ public final class Rate {
         return new Builder();
     }
 
-    // ========== VALIDACIONES DE NEGOCIO ==========
 
     private void validateBusinessRules() {
-        // RN-RATE-004: Contrato obligatorio para EPS
-        if (payerType == PayerType.EPS && contractId == null) {
-            throw new BusinessRuleViolationException(
-                    BillingError.ERR_RATE_EPS_REQUIRES_CONTRACT,
-                    EntityContext.RATE,
-                    "Las tarifas EPS deben tener contrato asociado"
-            );
-        }
 
         // Validación de vigencia
         if (validTo != null && validTo.isBefore(validFrom)) {
             throw new BusinessRuleViolationException(
-                    BillingError.ERR_RATE_INVALID_VALIDITY_PERIOD,
+                    RateError.ERR_RATE_INVALID_VALIDITY_RANGE,
                     EntityContext.RATE
 
             );
         }
     }
 
-    // ========== OPERACIONES DE DOMINIO ==========
 
     /** Verifica si la tarifa es válida en una fecha específica (RN-RATE-002). */
     public boolean isValidAt(LocalDateTime when) {
@@ -125,7 +117,7 @@ public final class Rate {
     public void ensureValidAt(LocalDateTime when) {
         if (!isValidAt(when)) {
             throw new BusinessRuleViolationException(
-                    BillingError.ERR_RATE_NOT_VALID_AT_DATE,
+                    RateError.ERR_RATE_NOT_VALID_AT_DATE,
                     EntityContext.RATE
             );
         }
@@ -140,22 +132,22 @@ public final class Rate {
     public void endValidityAt(LocalDateTime endDate) {
         if (endDate.isBefore(validFrom)) {
             throw new BusinessRuleViolationException(
-                    BillingError.ERR_RATE_INVALID_END_DATE,
+                    RateError.ERR_RATE_INVALID_VALIDITY_RANGE,
                     EntityContext.RATE
 
             );
         }
-        // TODO: Crear nueva instancia con endDate para mantener inmutabilidad
+
     }
 
-    // ========== CONSULTAS ==========
+
     public boolean isActive() { return active; }
     public boolean isCurrentlyValid() { return isValidAt(LocalDateTime.now()); }
     public boolean hasExpired() { return validTo != null && LocalDateTime.now().isAfter(validTo); }
     public boolean isIndefinite() { return validTo == null; }
     public boolean isForEPS() { return payerType == PayerType.EPS; }
 
-    // ========== GETTERS ==========
+
     public RateId getId() { return id; }
     public ProvidedService getService() { return service; }
     public PayerType getPayerType() { return payerType; }
@@ -164,7 +156,7 @@ public final class Rate {
     public LocalDateTime getValidFrom() { return validFrom; }
     public LocalDateTime getValidTo() { return validTo; }
 
-    // ========== BUILDER ==========
+
     public static class Builder {
         private RateId id;
         private ProvidedService service;
@@ -187,7 +179,7 @@ public final class Rate {
         public Rate build() { return new Rate(this); }
     }
 
-    // ========== ENUM ==========
+
     public enum PayerType {
         EPS, PRIVATE, INSURANCE, ARL, SOAT, PREPAID
     }

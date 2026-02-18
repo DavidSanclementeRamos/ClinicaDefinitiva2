@@ -22,7 +22,8 @@ public enum EntityContext implements DomainContext {
     DENTAL_SERVICE(CodeEntity.SER18),
     INVOICE(CodeEntity.INV19),
     ASSIGNMENT(CodeEntity.ASS20),
-    TREATMENT(CodeEntity.TRA21);
+    TREATMENT(CodeEntity.TRA21),
+    RATE(CodeEntity.RAT22);
 
 
 
