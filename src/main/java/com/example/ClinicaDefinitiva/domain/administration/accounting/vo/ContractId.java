@@ -29,6 +29,7 @@ public class ContractId {
         return new ContractId(trimmed);
     }
 
+
     public Long asLong() {
         return Long.valueOf(this.value);
     }

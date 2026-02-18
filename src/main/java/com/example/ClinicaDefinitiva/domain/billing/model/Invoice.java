@@ -40,7 +40,6 @@ public final class Invoice {
     private final PatientId patientId;
     private final DentistId dentistId;
     private final ProviderId providerId; // Clínica/emisor oficial obligatorio
-    private final Payer payer;
     private final ContractId contractId;
 
 
@@ -65,7 +64,6 @@ public final class Invoice {
         this.patientId = Objects.requireNonNull(builder.patientId, "Patient ID is required");
         this.dentistId = Objects.requireNonNull(builder.dentistId, "Dentist ID is required");
         this.providerId = Objects.requireNonNull(builder.providerId, "ProviderId is required");
-        this.payer = Objects.requireNonNull(builder.payer, "Payer is required");
         this.contractId = builder.contractId;
         this.currency = Objects.requireNonNull(builder.currency, "Currency is required");
         this.notes = builder.notes;
@@ -83,27 +81,46 @@ public final class Invoice {
 
 
 
-    public static Invoice createDraft(
+    public static Invoice createInstitutional(
             InvoiceId id,
-            PatientId patientId,
-            DentistId dentistId,
-            Payer payer,
             ContractId contractId,
+            ProviderId providerId,
+            DentistId dentistId,
             CurrencyCode currency,
             Notes notes,
             LocalDateTime dueDate) {
-
+        // Factura institucional: requiere contrato
         return new Builder()
                 .id(id)
-                .patientId(patientId)
-                .dentistId(dentistId)
-                .payer(payer)
                 .contractId(contractId)
+                .providerId(providerId)
+                .dentistId(dentistId)
                 .currency(currency)
                 .notes(notes)
                 .dueDate(dueDate)
                 .build();
     }
+
+    public static Invoice createParticular(
+            InvoiceId id,
+            PatientId patientId,
+            ProviderId providerId,
+            DentistId dentistId,
+            CurrencyCode currency,
+            Notes notes,
+            LocalDateTime dueDate) {
+        // Factura particular: no requiere contrato
+        return new Builder()
+                .id(id)
+                .patientId(patientId)
+                .providerId(providerId)
+                .dentistId(dentistId)
+                .currency(currency)
+                .notes(notes)
+                .dueDate(dueDate)
+                .build();
+    }
+
 
 
     public void addItem(InvoiceItem item) {
@@ -198,13 +215,7 @@ public final class Invoice {
 
             );
         }
-        if (payer.requiresContract() && contractId == null) {
-            throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_MISSING_CONTRACT,
-                    EntityContext.INVOICE
 
-            );
-        }
     }
 
     private void ensureEditable() {
@@ -238,13 +249,73 @@ public final class Invoice {
         }
     }
 
+    public InvoiceId getId() {
+        return id;
+    }
+
+    public PatientId getPatientId() {
+        return patientId;
+    }
+
+    public DentistId getDentistId() {
+        return dentistId;
+    }
+
+    public ProviderId getProviderId() {
+        return providerId;
+    }
+
+
+
+    public ContractId getContractId() {
+        return contractId;
+    }
+
+    public InvoiceNumber getNumber() {
+        return number;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
+    public InvoiceStatus getStatus() {
+        return status;
+    }
+
+    public List<InvoiceItem> getItems() {
+        return items;
+    }
+
+    public CurrencyCode getCurrency() {
+        return currency;
+    }
+
+    public Price getSubtotal() {
+        return subtotal;
+    }
+
+    public Price getTax() {
+        return tax;
+    }
+
+    public Price getTotal() {
+        return total;
+    }
+
+    public Notes getNotes() {
+        return notes;
+    }
 
     public static class Builder {
         private InvoiceId id;
         private PatientId patientId;
         private DentistId dentistId;
         private ProviderId providerId;
-        private Payer payer;
         private ContractId contractId;
         private CurrencyCode currency = CurrencyCode.of("COP");
         private Notes notes;
@@ -266,10 +337,7 @@ public final class Invoice {
         }
         public Builder providerId(ProviderId providerId) { this.providerId = providerId; return this; }
 
-        public Builder payer(Payer payer) {
-            this.payer = payer;
-            return this;
-        }
+
         public Builder contractId(ContractId contractId) {
             this.contractId = contractId;
             return this;

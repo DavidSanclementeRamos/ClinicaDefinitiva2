@@ -148,4 +148,75 @@ feat(billing): Refactorización completa de Invoice y VO asociados
 - Se creó catálogo de errores BillingVOError/BillingError con claves internacionalizables
   (ej. ERR_INVOICE_PAYER_REQUIRED, ERR_INVOICE_NUMBER_INVALID_FORMAT, ERR_INVOICE_NOT_EDITABLE).
 
+
+
+
+
+
+
+
+
+
+refactor(billing-rate): Evolución del agregado Rate con reglas de negocio explícitas
+
+- Se transformó la entidad Rate inicial (campos planos, validaciones mínimas)
+  en un agregado robusto con VOs y reglas de negocio claras.
+- Se reemplazó payer_type String por enum PayerType (EPS, PRIVATE, INSURANCE, ARL, SOAT, PREPAID).
+- Se añadieron métodos de dominio:
+  - isValidAt(), ensureValidAt(), deactivate(), endValidityAt().
+- Se creó Factory Method Rate.create(...) para instanciar tarifas activas con semántica clara.
+- Se integró Builder para construcción flexible y legible.
+
+----------------------------------------------------------------------------------------
+
+INVOIC------
+
+CREACION :Debe tener un paciente (PatientId) válido asociado.-> se cumple
+Debe tener un profesional/clínica (DentistId/ProviderId) que emite la factura. -> ya se cumple 
+
+
+
+
+feat(invoice): Creación de InvoiceDomainService para validaciones externas
+
+- Se creó el Domain Service InvoiceDomainService.
+- Centraliza validaciones externas al agregado Invoice:
+  - RN-INVOICE-003: Tarifas vigentes.
+  - RN-INVOICE-007: Pagadores institucionales requieren contrato.
+  - RN-INVOICE-015: El contrato debe estar asociado al pagador institucional.
+- Se integró ContractRepository y RateRepository para validar asociación y vigencia.
+- Se añadieron errores ERR_INVOICE_CONTRACT_NOT_ASSOCIATED y ERR_INVOICE_NO_ACTIVE_RATE.
+
+Impacto:
+El modelo ahora mantiene el agregado Invoice puro, delegando validaciones
+que requieren acceso a repositorios a un Domain Service especializado.
+Esto asegura cumplimiento legal y trazabilidad sin acoplar VOs a infraestructura.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   

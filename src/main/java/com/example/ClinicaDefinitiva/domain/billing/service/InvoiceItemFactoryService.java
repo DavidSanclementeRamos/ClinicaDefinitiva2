@@ -1,9 +1,9 @@
-package com.example.ClinicaDefinitiva.domain.billing;
+package com.example.ClinicaDefinitiva.domain.billing.service;
 
 
 import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceItemId;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.Quantity;
+import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
+import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
 
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ public class InvoiceItemFactoryService {
     public InvoiceItem createFromRateSnapshot(
             InvoiceItemId id,
             ProvidedService service,
-            com.example.ClinicaDefinitiva.domain.billing.doiman.model.Rate rate,
+            Rate rate,
             Quantity quantity,
             LocalDateTime performedAt) {
 
@@ -44,5 +44,8 @@ public class InvoiceItemFactoryService {
                 .performedAt(performedAt)
                 .build();
     }
+
+
+
 }
 

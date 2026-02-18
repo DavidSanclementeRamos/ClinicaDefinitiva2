@@ -14,4 +14,5 @@ public interface RateRepository {
     Rate update(RateId id,Rate rate );
     void save(Rate rate);
     void deleteById(RateId id);
+
 }
