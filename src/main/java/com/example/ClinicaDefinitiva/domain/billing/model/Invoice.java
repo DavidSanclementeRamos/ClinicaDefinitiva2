@@ -39,6 +39,7 @@ public final class Invoice {
 
     private final PatientId patientId;
     private final DentistId dentistId;
+    private final ProviderId providerId; // Clínica/emisor oficial obligatorio
     private final Payer payer;
     private final ContractId contractId;
 
@@ -63,6 +64,7 @@ public final class Invoice {
         this.id = Objects.requireNonNull(builder.id, "Invoice ID is required");
         this.patientId = Objects.requireNonNull(builder.patientId, "Patient ID is required");
         this.dentistId = Objects.requireNonNull(builder.dentistId, "Dentist ID is required");
+        this.providerId = Objects.requireNonNull(builder.providerId, "ProviderId is required");
         this.payer = Objects.requireNonNull(builder.payer, "Payer is required");
         this.contractId = builder.contractId;
         this.currency = Objects.requireNonNull(builder.currency, "Currency is required");
@@ -241,6 +243,7 @@ public final class Invoice {
         private InvoiceId id;
         private PatientId patientId;
         private DentistId dentistId;
+        private ProviderId providerId;
         private Payer payer;
         private ContractId contractId;
         private CurrencyCode currency = CurrencyCode.of("COP");
@@ -261,6 +264,7 @@ public final class Invoice {
             this.dentistId = dentistId;
             return this;
         }
+        public Builder providerId(ProviderId providerId) { this.providerId = providerId; return this; }
 
         public Builder payer(Payer payer) {
             this.payer = payer;

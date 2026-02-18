@@ -105,7 +105,16 @@ public enum BillingVOError implements ErrorCatalog {
             "RN-INVOICE-008",
             "error.invoice.currency.invalid",
             "Código de moneda inválido. Debe ser un código ISO 4217 (ej. COP, USD, EUR)"
+    ),
+
+    ERR_INVOICE_PROVIDER_REQUIRED(
+            "RN-INVOICE-014",
+            "error.invoice.provider.required",
+            "La factura debe tener un proveedor válido como emisor oficial"
     );
+
+
+
 
 
 
