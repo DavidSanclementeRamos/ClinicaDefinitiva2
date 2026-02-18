@@ -19,7 +19,7 @@ public final class ServiceStatus {
 
     public ServiceStatus(State value) {
         if (value == null) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_STATUS_NULL, VOContext.SERVICE_STATUS);
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_STATUS_NULL, VOContext.DENTAL_SERVICES);
         }
         this.value = value;
     }

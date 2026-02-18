@@ -15,9 +15,9 @@ public final class ServiceCatalog {
     private ServiceCatalog(ServiceId id, String name, String category) {
 
         if (name == null || name.isBlank()) throw new ValueObjectValidationException(ServiceVOError
-                .ERR_SERVICE_NAME_NULL_OR_BLANK, VOContext.SERVICE_CATALOG);
+                .ERR_SERVICE_NAME_NULL_OR_BLANK, VOContext.DENTAL_SERVICES);
         if (category == null || category.isBlank()) throw new ValueObjectValidationException(ServiceVOError
-                .ERR_SERVICE_CATEGORY_NULL_OR_BLANK, VOContext.SERVICE_CATALOG);
+                .ERR_SERVICE_CATEGORY_NULL_OR_BLANK, VOContext.DENTAL_SERVICES);
 
         this.id = id;
         this.name = name;

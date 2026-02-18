@@ -15,7 +15,7 @@ public final class ServiceDescription {
 
     private ServiceDescription(String description) {
         if (description == null || description.trim().length() < 20) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DESCRIPTION_INVALID, VOContext.SERVICE_DESCRIPTION);
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DESCRIPTION_INVALID, VOContext.DENTAL_SERVICES);
         }
         this.description = description.trim();
     }

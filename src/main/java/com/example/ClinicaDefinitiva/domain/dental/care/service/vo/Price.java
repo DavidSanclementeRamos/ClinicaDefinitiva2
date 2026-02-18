@@ -21,12 +21,12 @@ public final class Price {
             if (amount == null) {
                 throw new ValueObjectValidationException(
                         ServiceVOError.ERR_SERVICE_PRICE_AMOUNT_REQUIRED,
-                        VOContext.SERVICE_PRICE);
+                        VOContext.DENTAL_SERVICES);
             }
             if (currency == null) {
                 throw new ValueObjectValidationException(
                         ServiceVOError.ERR_SERVICE_PRICE_CURRENCY_REQUIRED,
-                        VOContext.SERVICE_PRICE);
+                        VOContext.DENTAL_SERVICES);
             }
 
             this.amount = amount.setScale(2, RoundingMode.HALF_UP);
@@ -35,7 +35,7 @@ public final class Price {
             if (this.amount.compareTo(BigDecimal.ZERO) < 0) {
                 throw new ValueObjectValidationException(
                         ServiceVOError.ERR_SERVICE_PRICE_NEGATIVE,
-                        VOContext.SERVICE_PRICE);
+                        VOContext.DENTAL_SERVICES);
             }
     }
 
@@ -89,7 +89,7 @@ public final class Price {
     // Validación de moneda
     private void requireSameCurrency(Price other) {
         if (!this.currency.equals(other.currency)) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_PRICE_CURRENCY_MISMATCH,VOContext.SERVICE_PRICE);
+            throw new ValueObjectValidationException(ServiceVOError.ERR_PRICE_CURRENCY_MISMATCH,VOContext.DENTAL_SERVICES);
         }
     }
 

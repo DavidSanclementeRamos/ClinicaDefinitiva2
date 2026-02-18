@@ -11,7 +11,7 @@ public final class AppointmentCompletion {
 
     public AppointmentCompletion(ServiceDuration actualDuration, String clinicalNotes) {
         if (actualDuration == null || actualDuration.getMinutes() <= 0) {
-            throw new ValueObjectValidationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, VOContext.COMPLETION);
+            throw new ValueObjectValidationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, VOContext.A);
         }
         if (clinicalNotes == null || clinicalNotes.isBlank()) {
             throw new ValueObjectValidationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, VOContext.COMPLETION);

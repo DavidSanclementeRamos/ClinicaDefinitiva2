@@ -36,7 +36,7 @@ public final class ServiceName {
 
     public static ServiceName custom(String customName) {
         if (customName == null || customName.trim().length() < 3) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_NAME_CUSTOM_INVALID, VOContext.SERVICE_NAME);
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_NAME_CUSTOM_INVALID, VOContext.DENTAL_SERVICES);
         }
         return new ServiceName(DentalServiceName.OTHER, customName.trim());
     }

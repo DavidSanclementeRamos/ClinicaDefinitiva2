@@ -12,7 +12,7 @@ public final class ServiceId {
 
     private ServiceId( Long id) {
         if (id == null) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_ID_NULL, VOContext.SERVICE_ID);
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_ID_NULL, VOContext.DENTAL_SERVICES);
         }
         this.id = id;
     }
@@ -20,7 +20,7 @@ public final class ServiceId {
 
     public static ServiceId of(Long id) {
         if (id == null) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_ID_NULL, VOContext.SERVICE_ID);
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_ID_NULL, VOContext.DENTAL_SERVICES);
         }
         return new ServiceId( id);
     }

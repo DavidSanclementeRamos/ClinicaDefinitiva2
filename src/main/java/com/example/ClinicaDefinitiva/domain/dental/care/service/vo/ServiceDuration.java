@@ -46,10 +46,10 @@ public final class ServiceDuration {
      */
     public static ServiceDuration between(LocalDateTime start, LocalDateTime end) {
         if (start == null || end == null) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DURATION_START_END_REQUIRED, VOContext.SERVICE_DURATION);
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DURATION_START_END_REQUIRED, VOContext.DENTAL_SERVICES);
         }
         if (!start.isBefore(end)) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DURATION_START_BEFORE_END,VOContext.SERVICE_DURATION);
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DURATION_START_BEFORE_END,VOContext.DENTAL_SERVICES);
         }
 
         long minutes = Duration.between(start, end).toMinutes();
@@ -61,7 +61,7 @@ public final class ServiceDuration {
      */
     public static ServiceDuration from(Duration duration) {
         if (duration == null) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DURATION_REQUIRED,VOContext.SERVICE_DURATION);
+            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_DURATION_REQUIRED,VOContext.DENTAL_SERVICES);
         }
         return new ServiceDuration((int) duration.toMinutes());
     }
@@ -71,18 +71,18 @@ public final class ServiceDuration {
     private void validateDuration(int minutes) {
         if (minutes <= 0) {
             throw new ValueObjectValidationException(ServiceVOError
-                    .ERR_SERVICE_DURATION_POSITIVE,VOContext.SERVICE_DURATION
+                    .ERR_SERVICE_DURATION_POSITIVE,VOContext.DENTAL_SERVICES
             );
         }
 
         if (minutes < MIN_DURATION_MINUTES) {
             throw new ValueObjectValidationException(ServiceVOError
-                    .ERR_SERVICE_DURATION_MINIMUM,VOContext.SERVICE_DURATION);
+                    .ERR_SERVICE_DURATION_MINIMUM,VOContext.DENTAL_SERVICES);
         }
 
         if (minutes > MAX_DURATION_MINUTES) {
             throw new ValueObjectValidationException(ServiceVOError
-                    .ERR_SERVICE_DURATION_MAXIMUM,VOContext.SERVICE_DURATION);
+                    .ERR_SERVICE_DURATION_MAXIMUM,VOContext.DENTAL_SERVICES);
         }
     }
 
@@ -102,7 +102,7 @@ public final class ServiceDuration {
         int result = this.minutes - other.minutes;
         if (result <= 0) {
             throw new ValueObjectValidationException(ServiceVOError
-                    .ERR_SERVICE_DURATION_RESULT_POSITIVE,VOContext.SERVICE_DURATION
+                    .ERR_SERVICE_DURATION_RESULT_POSITIVE,VOContext.DENTAL_SERVICES
             );
         }
         return new ServiceDuration(result);
@@ -114,7 +114,7 @@ public final class ServiceDuration {
     public ServiceDuration multiply(int factor) {
         if (factor <= 0) {
             throw new ValueObjectValidationException(ServiceVOError
-                    .ERR_SERVICE_DURATION_FACTOR_POSITIVE,VOContext.SERVICE_DURATION);
+                    .ERR_SERVICE_DURATION_FACTOR_POSITIVE,VOContext.DENTAL_SERVICES);
         }
         return new ServiceDuration(this.minutes * factor);
     }
