@@ -10,13 +10,13 @@ public final class InvoiceItemId {
 
    private InvoiceItemId(Long value) {
        if (value == null) {
-           throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_ITEM_ID_NULL, VOContext.INVOICE_ITEM_ID);
+           throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_ITEM_ID_NULL, VOContext.BILLING);
        }
         this.value = value;
     }
     public static InvoiceItemId of(Long value) {
         if (value == null) {
-            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_ITEM_ID_NULL, VOContext.INVOICE_ITEM_ID);
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_ITEM_ID_NULL, VOContext.BILLING);
         }
        return new InvoiceItemId(value);
     }

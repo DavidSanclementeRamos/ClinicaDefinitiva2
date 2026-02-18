@@ -2,6 +2,10 @@ package com.example.ClinicaDefinitiva.domain.billing.valueObject;
 
 
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.BillingVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -31,10 +35,10 @@ public final class InvoiceNumberGenerator {
 
     public InvoiceNumberGenerator(String prefix, long initialSequence) {
         if (prefix == null || prefix.isBlank()) {
-            throw new IllegalArgumentException("Prefix cannot be null or blank");
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_NUMBER_PREFIX_REQUIRED, VOContext.BILLING);
         }
         if (initialSequence < 0) {
-            throw new IllegalArgumentException("Initial sequence cannot be negative");
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_NUMBER_INITIAL_SEQUENCE_NEGATIVE,VOContext.BILLING);
         }
         this.prefix = prefix.toUpperCase();
         this.sequence = new AtomicLong(initialSequence);
@@ -66,7 +70,7 @@ public final class InvoiceNumberGenerator {
      */
     public void reset(long newValue) {
         if (newValue < 0) {
-            throw new IllegalArgumentException("Sequence reset value cannot be negative");
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_NUMBER_RESET_NEGATIVE,VOContext.BILLING);
         }
         sequence.set(newValue);
     }

@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.billing.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.BillingVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.Optional;
 
 /**
@@ -14,7 +18,7 @@ public final class Notes {
 
     private Notes(String value) {
         if (value != null && value.trim().length() < 3) {
-            throw new IllegalArgumentException("Notes must have at least 3 characters");
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_NOTES_TOO_SHORT, VOContext.BILLING);
         }
         this.value = value != null ? value.trim() : null;
     }

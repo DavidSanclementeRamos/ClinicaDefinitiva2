@@ -77,7 +77,7 @@ public final class InvoiceStatus {
 
     public InvoiceStatus transitionTo(Status next) {
         if (!canTransitionTo(next)) {
-            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_INVALID_STATUS_TRANSITION, VOContext.INVOICE_STATUS
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_INVALID_STATUS_TRANSITION, VOContext.BILLING
 
 
             );

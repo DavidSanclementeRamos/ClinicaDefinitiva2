@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.billing.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.BillingVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.Currency;
 
 /**
@@ -14,12 +18,12 @@ public final class CurrencyCode {
 
     private CurrencyCode(String code) {
         if (code == null || code.isBlank()) {
-            throw new IllegalArgumentException("Currency is required");
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_CURRENCY_REQUIRED, VOContext.BILLING);
         }
         try {
             Currency.getInstance(code.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid currency code: " + code);
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_INVALID_CURRENCY , VOContext.BILLING);
         }
         this.code = code.toUpperCase();
     }

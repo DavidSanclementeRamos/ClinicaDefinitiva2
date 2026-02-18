@@ -27,7 +27,7 @@ public final class ProviderId {
         if (value <= 0) {
             throw new ValueObjectValidationException(
                     BillingVOError.ERR_INVOICE_PROVIDER_REQUIRED,
-                    VOContext.BILLING_PROVIDER
+                    VOContext.BILLING
             );
         }
         this.value = value;

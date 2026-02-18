@@ -48,13 +48,13 @@ public final class Quantity {
         if (value < MIN_QUANTITY) {
             throw new ValueObjectValidationException(
                     BillingVOError.ERR_QUANTITY_MUST_BE_POSITIVE,
-                    VOContext.BILLING_QUANTITY);
+                    VOContext.BILLING);
         }
 
         if (value > MAX_QUANTITY) {
             throw new ValueObjectValidationException(
                     BillingVOError.ERR_QUANTITY_EXCEEDS_MAXIMUM,
-                    VOContext.BILLING_QUANTITY);
+                    VOContext.BILLING);
         }
     }
 

@@ -54,7 +54,7 @@ public final class InvoiceNumber {
         if (prefix == null || prefix.isBlank()) {
             throw new ValueObjectValidationException(
                     BillingVOError.ERR_INVOICE_NUMBER_PREFIX_REQUIRED,
-                    VOContext.BILLING_INVOICE_NUMBER
+                    VOContext.BILLING
 
             );
         }
@@ -62,7 +62,7 @@ public final class InvoiceNumber {
         if (sequence < 0) {
             throw new ValueObjectValidationException(
                     BillingVOError.ERR_INVOICE_NUMBER_NEGATIVE,
-                    VOContext.BILLING_INVOICE_NUMBER
+                    VOContext.BILLING
 
             );
         }
@@ -78,7 +78,7 @@ public final class InvoiceNumber {
         if (value == null || value.isBlank()) {
             throw new ValueObjectValidationException(
                     BillingVOError.ERR_INVOICE_NUMBER_REQUIRED,
-                    VOContext.BILLING_INVOICE_NUMBER
+                    VOContext.BILLING
 
             );
         }
@@ -88,7 +88,7 @@ public final class InvoiceNumber {
         if (!VALID_PATTERN.matcher(normalized).matches()) {
             throw new ValueObjectValidationException(
                     BillingVOError.ERR_INVOICE_NUMBER_INVALID_FORMAT,
-                    VOContext.BILLING_INVOICE_NUMBER
+                    VOContext.BILLING
             );
         }
     }

@@ -17,7 +17,7 @@ public final class InvoiceId {
 
     public static InvoiceId of(Long value) {
         if (value == null) {
-            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_ID_NULL, VOContext.INVOICE_ID);
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_ID_NULL, VOContext.BILLING);
         }
        return new InvoiceId(value);
     }

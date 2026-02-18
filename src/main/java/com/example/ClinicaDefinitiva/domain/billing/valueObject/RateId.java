@@ -9,13 +9,13 @@ public final class RateId {
 
     private RateId(Long value) {
         if (value == null) {
-            throw new ValueObjectValidationException(BillingVOError.ERR_RATE_ID_NULL, VOContext.RATE_ID);
+            throw new ValueObjectValidationException(BillingVOError.ERR_RATE_ID_NULL, VOContext.BILLING);
         }
         this.value = value;
     }
     public static RateId of(Long value) {
         if (value == null) {
-            throw new ValueObjectValidationException(BillingVOError.ERR_RATE_ID_NULL, VOContext.RATE_ID);
+            throw new ValueObjectValidationException(BillingVOError.ERR_RATE_ID_NULL, VOContext.BILLING);
         }
 
         return new RateId(value);
