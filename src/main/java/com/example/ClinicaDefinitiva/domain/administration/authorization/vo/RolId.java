@@ -1,5 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.administration.authorization.vo;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationVoError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 /**
  * VO RolId - Identificador único del agregado Rol
  */
@@ -9,7 +13,7 @@ public final class RolId {
 
     private RolId(Long value) {
         if (value == null || value <= 0) {
-            throw new IllegalArgumentException("RolId must be a positive number");
+            throw new ValueObjectValidationException(AuthorizationVoError.ERR_ROL_ID_NULL, VOContext.AUTHORIZATION);
         }
         this.value = value;
     }

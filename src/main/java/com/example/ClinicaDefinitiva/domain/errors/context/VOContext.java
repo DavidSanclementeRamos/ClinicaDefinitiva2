@@ -12,7 +12,7 @@ package com.example.ClinicaDefinitiva.domain.errors.context;
  */
 public enum VOContext   {
 
-    PERSON("PERSON"),
+    AUTHORIZATION ("AUTHORIZATION"),
     SCHEDULING("SCHEDULING"),
     BILLING("BILLING"),
     DENTAL_SERVICES("DENTAL_SERVICES"),
