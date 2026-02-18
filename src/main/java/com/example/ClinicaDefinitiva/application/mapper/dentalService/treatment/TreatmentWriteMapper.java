@@ -5,11 +5,11 @@ import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.Cre
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.Treatment;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.num.PhaseStatus;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.model.Treatment;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.PhaseStatus;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.TreatmentId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.TreatmentPhase;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentPhase;
 
 import java.util.stream.Collectors;
 

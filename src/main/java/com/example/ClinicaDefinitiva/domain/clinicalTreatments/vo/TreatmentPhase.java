@@ -1,7 +1,7 @@
-package com.example.ClinicaDefinitiva.domain.dental.care.service.vo;
+package com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo;
 
 
-import com.example.ClinicaDefinitiva.domain.dental.care.service.num.PhaseStatus;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.PhaseStatus;
 
 import java.time.LocalDate;
 import java.util.Objects;

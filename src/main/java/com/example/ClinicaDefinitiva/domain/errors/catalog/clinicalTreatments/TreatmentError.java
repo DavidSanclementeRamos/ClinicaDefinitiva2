@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorService;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments;
 
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;

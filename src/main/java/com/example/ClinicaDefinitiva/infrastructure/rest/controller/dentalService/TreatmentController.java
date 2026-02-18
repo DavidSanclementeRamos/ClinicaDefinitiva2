@@ -5,8 +5,8 @@ import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.Tre
 import com.example.ClinicaDefinitiva.application.portsInput.dentalService.TreatmentUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.num.TreatmentStatus;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.TreatmentId;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.TreatmentStatus;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.dentalService.CreateTreatmentRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.dentalService.ReadTreatmentResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.dentalService.TreatmentRestReadMapper;

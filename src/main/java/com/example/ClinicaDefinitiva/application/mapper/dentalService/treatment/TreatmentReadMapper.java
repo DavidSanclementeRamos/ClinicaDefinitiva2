@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.mapper.dentalService.treatment
 
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.TreatmentDto;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.TreatmentPhaseDto;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.Treatment;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.model.Treatment;
 
 
 import java.util.stream.Collectors;

@@ -1,10 +1,10 @@
-package com.example.ClinicaDefinitiva.domain.dental.care.service.output;
+package com.example.ClinicaDefinitiva.domain.clinicalTreatments.output;
 
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.Treatment;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.num.TreatmentStatus;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.TreatmentId;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.model.Treatment;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.TreatmentStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

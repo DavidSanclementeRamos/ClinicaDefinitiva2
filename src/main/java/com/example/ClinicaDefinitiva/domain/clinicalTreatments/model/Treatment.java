@@ -1,13 +1,13 @@
-package com.example.ClinicaDefinitiva.domain.dental.care.service.model;
+package com.example.ClinicaDefinitiva.domain.clinicalTreatments.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.num.TreatmentStatus;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentPhase;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.TreatmentStatus;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.TreatmentId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.TreatmentPhase;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.TreatmentError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments.TreatmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 

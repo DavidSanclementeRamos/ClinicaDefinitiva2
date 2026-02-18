@@ -209,7 +209,7 @@ Las validaciones externas se delegan al Domain Service, manteniendo el agregado 
 
 
 
-refactor(person): aplicar ADR-50 (Arquitectura): Simplificación de VOContext y Eliminación de CodeVO, simplificación de VOContext
+refactor(schedule )aplicar ADR-50 (Arquitectura): Simplificación de VOContext y Eliminación de CodeVO, simplificación de VOContext
 
 
 
@@ -222,6 +222,12 @@ refactor(domain-errors-catalog): aplicar ADR-50 (Arquitectura): Simplificación 
 
 
 
+refactor(domain): creación de módulo independiente Clinical Treatments
+
+- Se movió el agregado Treatment fuera de Dental Services.
+- Se creó el módulo Clinical Treatments para modelar procesos clínicos (diagnóstico, evolución, estado).
+- Se actualizó VOContext: Treatment → VOContext.CLINICAL_TREATMENTS.
+- Impacto: separación clara entre catálogo de servicios odontológicos y procesos clínicos, alineado con ADR-05 y ADR-50.
 
 
 
