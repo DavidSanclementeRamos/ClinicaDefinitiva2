@@ -4,68 +4,191 @@ package com.example.ClinicaDefinitiva.domain.billing.model;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+
 /**
- * Agregado: Rate (Tarifa de Servicios)
+ * Agregado: Rate (Tarifa de Servicios Odontológicos)
  *
  * Representa la tarifa aplicable a un servicio odontológico según:
- * - Tipo de pagador (EPS, particular, aseguradora, ARL, SOAT)
- * - Vigencia contractual (valid_from, valid_to)
- * - Contrato asociado (obligatorio para EPSs)
+ * - Tipo de pagador (EPS, particular, aseguradora, ARL, SOAT, medicina prepagada)
+ * - Vigencia contractual (validFrom, validTo)
+ * - Contrato asociado (obligatorio para EPS en Colombia)
  *
- * Reglas críticas implementadas:
- * - RN-RATE-003:  isValidAt() - Solo facturar con tarifa vigente
- * - RN-RATE-004: Sin vigencias solapadas para mismo servicio + pagador
- * - RN-RATE-005: Contrato obligatorio para EPSs (requisito legal Colombia)
- * - RN-RATE-008: Ajustes de monto con justificación auditable
+ * Reglas de negocio implementadas:
+ * - RN-RATE-001: La tarifa debe estar activa para poder usarse.
+ * - RN-RATE-002: La tarifa debe ser válida en la fecha de facturación.
+ * - RN-RATE-003: No pueden existir vigencias solapadas para el mismo servicio + pagador.
+ * - RN-RATE-004: El contrato es obligatorio para tarifas EPS.
+ *
+ * Decisiones de diseño:
+ * - El periodo de vigencia puede ser indefinido (validTo = null).
+ * - Una tarifa usada en facturación no se elimina, solo se desactiva.
+ * - Los ajustes de monto generan nuevas tarifas, preservando historial.
  */
-public class Rate {
-    //Define la tarifa aplicable a un servicio, según convenio o EPS
+public final class Rate {
 
-    private final RateId id;                   // Identificador único
-    private final ProvidedService service_id;           // Referencia al servicio
-    private final String payer_type;           // Tipo de pagador (private, EPS, insurer)
-    private final ContractId contract_id;          // Referencia a contrato/convenio (opcional)
-    private final Price amount;             // Valor de la tarifa
-    private String currency;             // Moneda (ej. COP, USD)
-    private final LocalDateTime valid_from;          // Vigencia inicial
-    private final LocalDateTime valid_to;            // Vigencia final
-    private final boolean is_active;           // Estado de la tarifa
+    // Identidad
+    private final RateId id;
 
-    public Rate(Price amount, RateId id, ProvidedService service_id, String payer_type, ContractId contract_id, String currency, LocalDateTime valid_from, LocalDateTime valid_to, boolean is_active) {
-        this.amount = amount;
-        this.id = id;
-        this.service_id = service_id;
-        this.payer_type = payer_type;
-        this.contract_id = contract_id;
-        this.currency = currency;
-        this.valid_from = valid_from;
-        this.valid_to = valid_to;
-        this.is_active = is_active;
+    // Relación con servicio
+    private final ProvidedService service;
+
+    // Información de pagador
+    private final PayerType payerType;
+    private final ContractId contractId;  // Obligatorio para EPS
+
+    // Precio
+    private final Price amount;
+
+    // Vigencia
+    private final LocalDateTime validFrom;
+    private final LocalDateTime validTo;  // null = indefinida
+
+    // Estado
+    private boolean active;
+
+    // Constructor privado (usar Builder o Factory)
+    private Rate(Builder builder) {
+        this.id = Objects.requireNonNull(builder.id, "Rate ID no puede ser nulo");
+        this.service = Objects.requireNonNull(builder.service, "Service no puede ser nulo");
+        this.amount = Objects.requireNonNull(builder.amount, "Amount no puede ser nulo");
+        this.payerType = Objects.requireNonNull(builder.payerType, "PayerType no puede ser nulo");
+        this.validFrom = Objects.requireNonNull(builder.validFrom, "ValidFrom no puede ser nulo");
+        this.validTo = builder.validTo;
+        this.contractId = builder.contractId;
+        this.active = builder.active;
+
+        validateBusinessRules();
     }
+
+    // ========== MÉTODOS FACTORY ==========
+
+    public static Rate create(
+            RateId id,
+            ProvidedService service,
+            Price amount,
+            PayerType payerType,
+            ContractId contractId) {
+
+        return builder()
+                .id(id)
+                .service(service)
+                .amount(amount)
+                .payerType(payerType)
+                .contractId(contractId)
+                .validFrom(LocalDateTime.now())
+                .active(true)
+                .build();
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    // ========== VALIDACIONES DE NEGOCIO ==========
+
+    private void validateBusinessRules() {
+        // RN-RATE-004: Contrato obligatorio para EPS
+        if (payerType == PayerType.EPS && contractId == null) {
+            throw new BusinessRuleViolationException(
+                    BillingError.ERR_RATE_EPS_REQUIRES_CONTRACT,
+                    EntityContext.RATE,
+                    "Las tarifas EPS deben tener contrato asociado"
+            );
+        }
+
+        // Validación de vigencia
+        if (validTo != null && validTo.isBefore(validFrom)) {
+            throw new BusinessRuleViolationException(
+                    BillingError.ERR_RATE_INVALID_VALIDITY_PERIOD,
+                    EntityContext.RATE
+
+            );
+        }
+    }
+
+    // ========== OPERACIONES DE DOMINIO ==========
+
+    /** Verifica si la tarifa es válida en una fecha específica (RN-RATE-002). */
     public boolean isValidAt(LocalDateTime when) {
-        if (!is_active) return false;
-        if (valid_from != null && when.isBefore(valid_from)) return false;
-        if (valid_to != null && when.isAfter(valid_to)) return false;
+        if (!active) return false;
+        if (when.isBefore(validFrom)) return false;
+        if (validTo != null && when.isAfter(validTo)) return false;
         return true;
     }
 
-    public Price getAmount() {return amount;}
-    public ProvidedService getServiceId() {
-        return service_id;
+    /** Garantiza que la tarifa sea válida en una fecha, lanza excepción si no lo es. */
+    public void ensureValidAt(LocalDateTime when) {
+        if (!isValidAt(when)) {
+            throw new BusinessRuleViolationException(
+                    BillingError.ERR_RATE_NOT_VALID_AT_DATE,
+                    EntityContext.RATE
+            );
+        }
     }
-    public String getCurrency() {
-        return currency;
+
+    /** Desactiva la tarifa (cuando es reemplazada por otra). */
+    public void deactivate() {
+        this.active = false;
     }
-    public ContractId getContract_id() {
-        return contract_id;
+
+    /** Finaliza la vigencia de la tarifa. */
+    public void endValidityAt(LocalDateTime endDate) {
+        if (endDate.isBefore(validFrom)) {
+            throw new BusinessRuleViolationException(
+                    BillingError.ERR_RATE_INVALID_END_DATE,
+                    EntityContext.RATE
+
+            );
+        }
+        // TODO: Crear nueva instancia con endDate para mantener inmutabilidad
     }
-    public RateId getId() {return id;}
-    public boolean isIs_active() {return is_active;}
-    public String getPayer_type() {return payer_type;}
-    public LocalDateTime getValid_from() {return valid_from;}
-    public LocalDateTime getValid_to() {return valid_to;}
+
+    // ========== CONSULTAS ==========
+    public boolean isActive() { return active; }
+    public boolean isCurrentlyValid() { return isValidAt(LocalDateTime.now()); }
+    public boolean hasExpired() { return validTo != null && LocalDateTime.now().isAfter(validTo); }
+    public boolean isIndefinite() { return validTo == null; }
+    public boolean isForEPS() { return payerType == PayerType.EPS; }
+
+    // ========== GETTERS ==========
+    public RateId getId() { return id; }
+    public ProvidedService getService() { return service; }
+    public PayerType getPayerType() { return payerType; }
+    public ContractId getContractId() { return contractId; }
+    public Price getAmount() { return amount; }
+    public LocalDateTime getValidFrom() { return validFrom; }
+    public LocalDateTime getValidTo() { return validTo; }
+
+    // ========== BUILDER ==========
+    public static class Builder {
+        private RateId id;
+        private ProvidedService service;
+        private Price amount;
+        private PayerType payerType;
+        private ContractId contractId;
+        private LocalDateTime validFrom;
+        private LocalDateTime validTo;
+        private boolean active = true;
+
+        public Builder id(RateId id) { this.id = id; return this; }
+        public Builder service(ProvidedService service) { this.service = service; return this; }
+        public Builder amount(Price amount) { this.amount = amount; return this; }
+        public Builder payerType(PayerType payerType) { this.payerType = payerType; return this; }
+        public Builder contractId(ContractId contractId) { this.contractId = contractId; return this; }
+        public Builder validFrom(LocalDateTime validFrom) { this.validFrom = validFrom; return this; }
+        public Builder validTo(LocalDateTime validTo) { this.validTo = validTo; return this; }
+        public Builder active(boolean active) { this.active = active; return this; }
+
+        public Rate build() { return new Rate(this); }
+    }
+
+    // ========== ENUM ==========
+    public enum PayerType {
+        EPS, PRIVATE, INSURANCE, ARL, SOAT, PREPAID
+    }
 }

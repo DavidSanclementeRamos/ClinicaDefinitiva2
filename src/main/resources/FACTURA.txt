@@ -46,4 +46,106 @@ public void emit(InvoiceNumberGenerator generator) {
             this.updatedAt
     ));
 }
+
+
+// Application Service
+public class InvoiceApplicationService {
+
+    private final InvoiceRepository repository;
+    private final InvoiceNumberGenerator generator;
+
+    public InvoiceApplicationService(InvoiceRepository repository) {
+        this.repository = repository;
+        this.generator = new InvoiceNumberGenerator("FAC", 0); // Prefijo FAC, secuencia inicial 0
+    }
+
+    public void emitInvoice(Invoice invoice) {
+        invoice.emit(generator);
+        repository.save(invoice);
+        invoice.getEvents().forEach(eventPublisher::publish);
+    }
+}
+
+
+public final class Rate {
+    private final RateId id;
+    private final LocalDateTime validFrom;
+    private final LocalDateTime validUntil;
+
+    public boolean isValidAt(LocalDateTime date) {
+        return (date.isEqual(validFrom) || date.isAfter(validFrom))
+               && (validUntil == null || date.isBefore(validUntil));
+    }
+}
+
+
+public final class InvoiceDomainService {
+
+    private final RateRepository rateRepository;
+
+    public InvoiceDomainService(RateRepository rateRepository) {
+        this.rateRepository = rateRepository;
+    }
+
+    public void validateNoExpiredRates(Invoice invoice) {
+        for (InvoiceItem item : invoice.getItems()) {
+            Rate rate = rateRepository.findById(item.getRateId())
+                .orElseThrow(() -> new BusinessRuleViolationException(
+                    BillingError.ERR_RATE_NOT_FOUND,
+                    EntityContext.INVOICE,
+                    "Rate not found for item: " + item.getId()
+                ));
+
+            if (!rate.isValidAt(invoice.getIssuedAt())) {
+                throw new BusinessRuleViolationException(
+                    BillingError.ERR_INVOICE_EXPIRED_RATE,
+                    EntityContext.INVOICE,
+                    "Invoice contains expired rate for item: " + item.getId()
+                );
+            }
+        }
+    }
+}
+
+
+invoiceDomainService.validateNoExpiredRates(invoice);
+invoice.emit(generator);
+
+
+
+
+
+
+
+
+
+
+
+
+feat(billing): Refactorización completa de Invoice y VO asociados
+
+- Se introdujo el VO InvoiceNumber con validación de formato PREFIJO-NÚMERO.
+- Se creó el servicio InvoiceNumberGenerator para manejar secuencias
+  de numeración, delegando la validación al VO.
+- Se integró InvoiceNumberGenerator en el agregado Invoice para emisión
+  de facturas con números válidos y trazables.
+- Se añadieron Value Objects:
+  - Payer: encapsula reglas de pagadores institucionales y contrato requerido (RN-INVOICE-007).
+  - CurrencyCode: valida códigos ISO 4217 y asegura consistencia de moneda (RN-INVOICE-008).
+  - Notes: valida longitud mínima de observaciones (RN-INVOICE-009).
+- Se refactorizó InvoiceItem para incluir getTotalPrice() = unitPrice × quantity,
+  permitiendo cálculo correcto de subtotal, impuestos y total (RN-INVOICE-011).
+- Se reforzaron validaciones en Invoice:
+  - RN-INVOICE-001: al menos un ítem.
+  - RN-INVOICE-002: total > 0.
+  - RN-INVOICE-004: solo editable en estado BORRADOR.
+  - RN-INVOICE-006: fecha de vencimiento posterior a emisión.
+  - RN-INVOICE-007: contrato requerido para aseguradoras/EPS/prepagadas.
+  - RN-INVOICE-008: moneda de ítems debe coincidir con la factura.
+  - RN-INVOICE-009: cancelación requiere motivo ≥ 10 caracteres.
+  - RN-INVOICE-010: factura emitida no puede modificarse.
+  - RN-INVOICE-011: invariante Subtotal + Tax = Total.
+- Se creó catálogo de errores BillingVOError/BillingError con claves internacionalizables
+  (ej. ERR_INVOICE_PAYER_REQUIRED, ERR_INVOICE_NUMBER_INVALID_FORMAT, ERR_INVOICE_NOT_EDITABLE).
+
   
