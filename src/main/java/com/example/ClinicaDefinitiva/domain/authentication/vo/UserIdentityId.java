@@ -10,7 +10,7 @@ public record UserIdentityId(Long value) {
 
     public static UserIdentityId from(Long value) {
         if (value == null) {
-            throw new ValueObjectValidationException(VoAccesError.ERR_USER_ID_INVALID, VOContext.USER_ID);
+            throw new ValueObjectValidationException(VoAccesError.ERR_USER_ID_INVALID, VOContext.AUTHENTICATION);
         }
 
         return new UserIdentityId(value);

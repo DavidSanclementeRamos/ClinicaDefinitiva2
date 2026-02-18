@@ -10,14 +10,14 @@ package com.example.ClinicaDefinitiva.domain.errors.context;
  * - El ErrorCatalog provee la especificidad del campo.
  * - Reduce fricción y evita duplicación.
  */
-public enum VOContext   {
+public enum VOContext  implements DomainContext {
 
     AUTHORIZATION ("AUTHORIZATION"),
     SCHEDULING("SCHEDULING"),
     BILLING("BILLING"),
     DENTAL_SERVICES("DENTAL_SERVICES"),
     ACCOUNTING("ACCOUNTING"),
-    USER_MANAGEMENT("USER_MANAGEMENT"),
+    AUTHENTICATION("AUTHENTICATION"),
     CLINICAL_TREATMENTS("CLINICAL_TREATMENTS"),
     ACTORS("ACTORS");
 
@@ -30,6 +30,11 @@ public enum VOContext   {
 
     public String getCode() {
         return code;
+    }
+
+    @Override
+    public CodeEntity getCodeEntity() {
+        return null;
     }
 }
 

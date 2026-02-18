@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.domain.authentication.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
@@ -44,7 +45,7 @@ public final class UserIdentityName implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_NULL,
                     Severity.ERROR,
-                    Category.TECNICO,EntityContext.USER_IDENTITY
+                    Category.TECNICO,VOContext.AUTHENTICATION
             ));
         }
 
@@ -52,8 +53,7 @@ public final class UserIdentityName implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_EMPTY,
                     Severity.ERROR,
-                    Category.TECNICO, EntityContext.USER_IDENTITY
-            ));
+                    Category.TECNICO, VOContext.AUTHENTICATION));
         }
 
         String trimmed = raw.trim();
@@ -62,7 +62,7 @@ public final class UserIdentityName implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_TOO_SHORT,
                     Severity.ERROR,
-                    Category.TECNICO,EntityContext.USER_IDENTITY
+                    Category.TECNICO,VOContext.AUTHENTICATION
             ));
         }
 
@@ -70,7 +70,7 @@ public final class UserIdentityName implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_TOO_LONG,
                     Severity.ERROR,
-                    Category.TECNICO,EntityContext.USER_IDENTITY
+                    Category.TECNICO, VOContext.AUTHENTICATION
             ));
         }
 
