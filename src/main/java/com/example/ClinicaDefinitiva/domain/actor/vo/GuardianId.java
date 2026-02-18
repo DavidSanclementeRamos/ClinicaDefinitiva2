@@ -14,7 +14,7 @@ public final class GuardianId {
     }
     public static GuardianId fromLong(Long value) {
         if (value == null)   {
-            throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.GUARDIAN_ID);
+            throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.ACTORS);
         }
 
 

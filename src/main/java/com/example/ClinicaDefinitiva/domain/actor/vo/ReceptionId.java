@@ -15,7 +15,7 @@ private final Long value;
 
     public static ReceptionId of(Long value) {
         if (value == null) {
-            throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.RECEPTION_ID);
+            throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.ACTORS);
 
         }
 

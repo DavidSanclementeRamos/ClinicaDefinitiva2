@@ -21,14 +21,14 @@ public final class Document {
 
     private Document(String raw) {
         if (raw == null) {
-            throw new ValueObjectValidationException(VoActorError.ERR_DOCUMENT_NULL, VOContext.DOCUMENT_ID);
+            throw new ValueObjectValidationException(VoActorError.ERR_DOCUMENT_NULL, VOContext.ACTORS);
         }
         String normalized = raw.trim();
         if (normalized.isBlank()) {
-            throw new ValueObjectValidationException(VoActorError.ERR_DOCUMENT_BLANK, VOContext.DOCUMENT_ID);
+            throw new ValueObjectValidationException(VoActorError.ERR_DOCUMENT_BLANK, VOContext.ACTORS);
         }
         if (!DOCUMENT_PATTERN.matcher(normalized).matches()) {
-            throw new ValueObjectValidationException(VoActorError.ERR_DOCUMENT_INVALID_FORMAT, VOContext.DOCUMENT_ID);
+            throw new ValueObjectValidationException(VoActorError.ERR_DOCUMENT_INVALID_FORMAT, VOContext.ACTORS);
         }
         this.value = normalized;
     }

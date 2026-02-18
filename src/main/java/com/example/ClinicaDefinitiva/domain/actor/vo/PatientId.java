@@ -14,7 +14,7 @@ public final class PatientId {
 
     public static PatientId of(Long value) {
         if (value == null) {
-            throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.PATIENT_ID);
+            throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.ACTORS);
 
         }
 

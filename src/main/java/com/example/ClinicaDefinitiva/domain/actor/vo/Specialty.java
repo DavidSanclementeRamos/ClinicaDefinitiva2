@@ -27,7 +27,7 @@ public final class Specialty {
         }
         String normalized = value.trim();
         if (!VALID_SPECIALTIES.contains(normalized)) {
-            throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.SPECIALTY);
+            throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.ACTORS);
         }
         this.value = normalized;
     }

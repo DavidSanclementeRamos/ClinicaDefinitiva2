@@ -26,17 +26,17 @@ public final class Sector {
 
     private    Sector (String value) {
         if (value == null ) {
-            throw new ValueObjectValidationException(VoActorError.ERR_SECTOR_NULL, VOContext.SECTOR);
+            throw new ValueObjectValidationException(VoActorError.ERR_SECTOR_NULL, VOContext.ACTORS);
         }
 
         String trimmed = value.trim();
         if (trimmed.isEmpty()) {
-            throw new ValueObjectValidationException(VoActorError.ERR_SECTOR_BLANK, VOContext.SECTOR);
+            throw new ValueObjectValidationException(VoActorError.ERR_SECTOR_BLANK, VOContext.ACTORS);
         }
         String normalized = value.trim().toUpperCase();
 
         if (!ALLOWED_VALUES.contains(normalized)) {
-            throw new ValueObjectValidationException(VoActorError.ERR_SECTOR_NOT_ALLOWED, VOContext.SECTOR);
+            throw new ValueObjectValidationException(VoActorError.ERR_SECTOR_NOT_ALLOWED, VOContext.ACTORS);
         }
 
         //return new Sector(normalized);

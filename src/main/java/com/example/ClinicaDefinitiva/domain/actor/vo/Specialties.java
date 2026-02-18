@@ -15,7 +15,7 @@ public final class Specialties {
 
     private Specialties(Set<Specialty> values) {
         if (values == null || values.isEmpty()){
-            throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.SPECIALTY  );
+            throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.ACTORS  );
         }
 
         this.values = Collections.unmodifiableSet(new HashSet<>(values));

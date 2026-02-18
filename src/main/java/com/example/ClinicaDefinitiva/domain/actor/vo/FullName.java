@@ -12,10 +12,10 @@ public final class FullName {
 
     private FullName(String firstName, String lastName) {
         if(firstName == null || lastName == null){
-            throw new ValueObjectValidationException(VoActorError.ERR_FULLNAME_NULL, VOContext.FULL_NAME);
+            throw new ValueObjectValidationException(VoActorError.ERR_FULLNAME_NULL, VOContext.ACTORS);
         }
         if (isBlank(firstName) || isBlank(lastName)) {
-            throw new ValueObjectValidationException(VoActorError.ERR_FULLNAME_BLANK, VOContext.FULL_NAME);
+            throw new ValueObjectValidationException(VoActorError.ERR_FULLNAME_BLANK, VOContext.ACTORS);
         }
         this.firstName = firstName.trim();
         this.lastName = lastName.trim();

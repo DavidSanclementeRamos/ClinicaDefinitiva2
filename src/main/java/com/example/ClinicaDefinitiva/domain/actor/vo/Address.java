@@ -15,10 +15,10 @@ public final class Address {
 
     private Address(String street, String city, String state, String country, String postalCode) {
         if (street == null || city == null || state == null || country == null || postalCode == null) {
-            throw new ValueObjectValidationException(VoActorError.ERR_ADDRESS_NULL, VOContext.ADDRESS );
+            throw new ValueObjectValidationException(VoActorError.ERR_ADDRESS_NULL, VOContext.ACTORS );
         }
         if (street.isBlank() || city.isBlank() || state.isBlank() || country.isBlank() || postalCode.isBlank()) {
-            throw new ValueObjectValidationException(VoActorError.ERR_ADDRESS_BLANK, VOContext.ADDRESS);
+            throw new ValueObjectValidationException(VoActorError.ERR_ADDRESS_BLANK, VOContext.ACTORS);
         }
 
         this.street = street.trim();

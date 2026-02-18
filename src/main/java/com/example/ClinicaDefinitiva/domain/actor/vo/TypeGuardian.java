@@ -22,24 +22,24 @@ public final class TypeGuardian {
         // Validar código
         if (code == null) {
             throw new ValueObjectValidationException(
-                    VoActorError.ERR_TYPE_GUARDIAN_CODE_NULL, VOContext.TYPE_GUARDIAN);
+                    VoActorError.ERR_TYPE_GUARDIAN_CODE_NULL, VOContext.ACTORS);
         }
 
         String normalizedCode = code.trim().toUpperCase();
         if (normalizedCode.isEmpty()) {
             throw new ValueObjectValidationException(
-                    VoActorError.ERR_TYPE_GUARDIAN_CODE_BLANK, VOContext.TYPE_GUARDIAN);
+                    VoActorError.ERR_TYPE_GUARDIAN_CODE_BLANK, VOContext.ACTORS);
         }
 
         if (!VALID_CODES.contains(normalizedCode)) {
             throw new ValueObjectValidationException(
-                    VoActorError.ERR_TYPE_GUARDIAN_CODE_INVALID,VOContext.TYPE_GUARDIAN);
+                    VoActorError.ERR_TYPE_GUARDIAN_CODE_INVALID,VOContext.ACTORS);
         }
 
         // Validar descripción
         if (description == null || description.trim().isEmpty()) {
             throw new ValueObjectValidationException(
-                    VoActorError.ERR_TYPE_GUARDIAN_DESCRIPTION_BLANK, VOContext.TYPE_GUARDIAN);
+                    VoActorError.ERR_TYPE_GUARDIAN_DESCRIPTION_BLANK, VOContext.ACTORS);
         }
 
         this.code = normalizedCode;

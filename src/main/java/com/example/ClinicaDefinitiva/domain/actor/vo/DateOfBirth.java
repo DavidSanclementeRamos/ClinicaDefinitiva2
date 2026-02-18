@@ -12,14 +12,14 @@ public final class DateOfBirth {
 
     private DateOfBirth(LocalDate value) {
         if (value == null) {
-            throw new ValueObjectValidationException(VoActorError.ERR_BIRTHDATE_NULL, VOContext.DATE_OF_BIRTH);
+            throw new ValueObjectValidationException(VoActorError.ERR_BIRTHDATE_NULL, VOContext.ACTORS);
         }
 
         if (value.isAfter(LocalDate.now())) {
-            throw new ValueObjectValidationException(VoActorError.ERR_BIRTHDATE_FUTURE, VOContext.DATE_OF_BIRTH);
+            throw new ValueObjectValidationException(VoActorError.ERR_BIRTHDATE_FUTURE, VOContext.ACTORS);
         }
         if (Period.between(value, LocalDate.now()).getYears() > 130) {
-            throw new ValueObjectValidationException(VoActorError.ERR_BIRTHDATE_INVALID_RANGE, VOContext.DATE_OF_BIRTH);
+            throw new ValueObjectValidationException(VoActorError.ERR_BIRTHDATE_INVALID_RANGE, VOContext.ACTORS);
         }
         this.value = value;
     }

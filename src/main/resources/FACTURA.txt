@@ -171,48 +171,54 @@ refactor(billing-rate): Evolución del agregado Rate con reglas de negocio expl�
 
 INVOIC------
 
-CREACION :Debe tener un paciente (PatientId) válido asociado.-> se cumple
+CREACION --------
+Debe tener un paciente (PatientId) válido asociado.-> se cumple
 Debe tener un profesional/clínica (DentistId/ProviderId) que emite la factura. -> ya se cumple 
+Debe especificar tipo de pagador (EPS, aseguradora, particular).-> se cumple
+Si el pagador es EPS, debe tener ContractId asociado (convenio vigente). -> se cumple 
+Debe registrar fecha de emisión (issuedAt) y fecha de vencimiento (dueDate). -> se cumple
+La fecha de vencimiento debe ser posterior a la fecha de emisión. -> se cumple
+Debe tener moneda válida (COP para Colombia). -> se cumple
 
 
+SUGERECIAS ------------------------
+
+CurrencyCode ese vo debe ser global para Price
 
 
-feat(invoice): Creación de InvoiceDomainService para validaciones externas
+refactor(billing-invoice): creación de InvoiceDomainService, eliminación de VO Payer y factories diferenciados
 
-- Se creó el Domain Service InvoiceDomainService.
-- Centraliza validaciones externas al agregado Invoice:
-  - RN-INVOICE-003: Tarifas vigentes.
-  - RN-INVOICE-007: Pagadores institucionales requieren contrato.
-  - RN-INVOICE-015: El contrato debe estar asociado al pagador institucional.
-- Se integró ContractRepository y RateRepository para validar asociación y vigencia.
-- Se añadieron errores ERR_INVOICE_CONTRACT_NOT_ASSOCIATED y ERR_INVOICE_NO_ACTIVE_RATE.
+- Se creó el Domain Service InvoiceDomainService para centralizar validaciones externas:
+  - tarifas vigentes
+  - facturas institucionales requieren contrato
+  - contrato debe estar activo y vigente
+- Se eliminó el VO Payer del agregado Invoice.
+- Se adoptó ContractId como referencia directa al contrato institucional (EPS, aseguradora, empresa).
+- Se añadieron dos métodos factory en Invoice:
+  - createInstitutional(): para facturas institucionales con contrato.
+  - createParticular(): para facturas particulares sin contrato.
+- Razón: el contrato ya representa la entidad pagadora institucional; mantener Payer era redundante.
+  Además, se requiere flexibilidad para modelar facturas particulares sin contrato.
 
 Impacto:
-El modelo ahora mantiene el agregado Invoice puro, delegando validaciones
-que requieren acceso a repositorios a un Domain Service especializado.
-Esto asegura cumplimiento legal y trazabilidad sin acoplar VOs a infraestructura.
+El modelo ahora refleja con claridad la diferencia entre facturas institucionales y particulares,
+asegurando trazabilidad contractual en institucionales y flexibilidad en particulares.
+Las validaciones externas se delegan al Domain Service, manteniendo el agregado Invoice puro.
+
+----------------------------------------------
 
 
 
+refactor(person): aplicar ADR-50 (Arquitectura): Simplificación de VOContext y Eliminación de CodeVO, simplificación de VOContext
 
 
 
+refactor(domain-errors-catalog): aplicar ADR-50 (Arquitectura): Simplificación de VOContext y Eliminación de CodeVO, simplificación de VOContext y eliminación de CodeVO
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- Se eliminó CodeVO.java (no aportaba valor semántico).
+- Se simplificó VOContext a 8 categorías por módulo (PERSON, BILLING, SCHEDULING, etc.).
+- Razón: el esquema anterior era over-engineering, requería 3 modificaciones por cada VO nuevo y duplicaba información.
+- Impacto: reducción de fricción en desarrollo, menos conflictos de merge, trazabilidad preservada mediante ErrorCatalog específico.
 
 
 

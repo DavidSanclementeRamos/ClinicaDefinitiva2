@@ -13,14 +13,14 @@ public final class PhoneNumber {
 
     private PhoneNumber(String value) {
         if (value == null) {
-            throw new ValueObjectValidationException(VoActorError.ERR_PHONE_NULL, VOContext.PHONE_NUMBER);
+            throw new ValueObjectValidationException(VoActorError.ERR_PHONE_NULL, VOContext.ACTORS);
         }
         if (isBlank(value)) {
-            throw new ValueObjectValidationException(VoActorError.ERR_PHONE_BLANK, VOContext.PHONE_NUMBER);
+            throw new ValueObjectValidationException(VoActorError.ERR_PHONE_BLANK, VOContext.ACTORS);
         }
         String normalized = value.trim().replaceAll("\\s+", "");
         if (!VALID_PATTERN.matcher(normalized).matches()) {
-            throw new ValueObjectValidationException(VoActorError.ERR_PHONE_INVALID_FORMAT, VOContext.PHONE_NUMBER);
+            throw new ValueObjectValidationException(VoActorError.ERR_PHONE_INVALID_FORMAT, VOContext.ACTORS);
         }
         this.value = normalized;
     }

@@ -19,7 +19,7 @@ public final class BloodType {
 
     private BloodType(String value) {
         if (!VALID_TYPES.contains(value.toUpperCase())) {
-            throw new ValueObjectValidationException(VoActorError.ERR_BLOODTYPE_INVALID, VOContext.BLOOD_TYPE);
+            throw new ValueObjectValidationException(VoActorError.ERR_BLOODTYPE_INVALID, VOContext.ACTORS);
         }
         this.value = value.toUpperCase();
     }

@@ -19,26 +19,26 @@ public final class WorkingHours {
         // Validación de nulidad
         if (start == null || end == null || dayOfWeek == null) {
             throw new ValueObjectValidationException(
-                    VoActorError.ERR_WORKING_HOURS_NULL, VOContext.WORKING_HOURS);
+                    VoActorError.ERR_WORKING_HOURS_NULL, VOContext.ACTORS);
         }
 
         // Validación de orden temporal
         if (!start.isBefore(end)) {
             throw new ValueObjectValidationException(
-                    VoActorError.ERR_WORKING_HOURS_INVALID_RANGE, VOContext.WORKING_HOURS);
+                    VoActorError.ERR_WORKING_HOURS_INVALID_RANGE, VOContext.ACTORS);
         }
 
         // Validación de horas declaradas
         if (declaredHoursPerWeek <= 0) {
             throw new ValueObjectValidationException(
                     VoActorError.ERR_WORKING_HOURS_INVALID_DECLARED,
-                    VOContext.WORKING_HOURS);
+                    VOContext.ACTORS);
         }
 
         // Validación de horas máximas (jornada laboral legal)
         if (declaredHoursPerWeek > 48) {
             throw new ValueObjectValidationException(
-                    VoActorError.ERR_WORKING_HOURS_EXCEEDS_LEGAL_LIMIT, VOContext.WORKING_HOURS);
+                    VoActorError.ERR_WORKING_HOURS_EXCEEDS_LEGAL_LIMIT, VOContext.ACTORS);
         }
 
         this.start = start;
