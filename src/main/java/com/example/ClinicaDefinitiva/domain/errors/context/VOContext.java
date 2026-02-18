@@ -47,7 +47,8 @@ public enum VOContext implements DomainContext {
     INVOICE_ID(CodeVO.INV44),
     INVOICE_ITEM_ID(CodeVO.INT45),
     RATE_ID(CodeVO.RAT46),
-    BILLING_QUANTITY(CodeVO.QUA47);
+    BILLING_QUANTITY(CodeVO.QUA47),
+    INVOICE_STATUS(CodeVO.IST48);
 
 
 

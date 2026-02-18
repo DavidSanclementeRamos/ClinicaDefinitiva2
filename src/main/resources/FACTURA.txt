@@ -1,0 +1,49 @@
+Validación en Invoice
+
+En lugar de if (payer.isEPS() && contractId == null), ahora sería:
+
+private void validateContractRequirement() {
+    if (payer.requiresContract() && contractId == null) {
+        throw new BusinessRuleViolationException(
+                BillingError.ERR_INVOICE_MISSING_CONTRACT,
+                EntityContext.INVOICE,
+                "Invoices for institutional payers (EPS, insurers, prepaid) require a contract"
+        );
+    }
+}
+
+
+
+/**
+ * Emite la factura: transiciona de BORRADOR → PENDIENTE.
+ *
+ * Reglas aplicadas:
+ * - RN-INVOICE-001: Debe tener al menos un ítem
+ * - RN-INVOICE-002: Total mayor a cero
+ * - RN-INVOICE-007: Contrato requerido para aseguradoras/EPS
+ * - RN-INVOICE-010: Factura emitida no puede modificarse
+ *
+ * Uso del generador:
+ * - Se obtiene un número de factura válido desde InvoiceNumberGenerator.
+ * - Se asigna al agregado y se registra el evento de emisión.
+ */
+public void emit(InvoiceNumberGenerator generator) {
+    Objects.requireNonNull(generator, "InvoiceNumberGenerator is required");
+
+    validateBeforeEmit();
+
+    String previousState = this.status.getName();
+    this.number = generator.next(); // Genera y valida el número de factura
+    this.status = this.status.transitionTo(InvoiceStatus.Status.PENDING);
+    this.updatedAt = LocalDateTime.now();
+
+    // Evento de dominio enriquecido
+    events.add(new EventosFacturacion.InvoiceStateChanged(
+            this.id.toString(),
+            previousState,
+            this.status.getName(),
+            this.number.getValue(),
+            this.updatedAt
+    ));
+}
+  

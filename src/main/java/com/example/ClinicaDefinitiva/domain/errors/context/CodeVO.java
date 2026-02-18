@@ -48,7 +48,8 @@ public enum CodeVO {
     INV44,
     INT45,
     RAT46,
-    QUA47
+    QUA47,
+    IST48
 
 }
 

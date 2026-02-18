@@ -1,5 +1,7 @@
-package com.example.ClinicaDefinitiva.domain.billing.doiman.enu;
+package com.example.ClinicaDefinitiva.domain.billing.valueObject;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.BillingVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 import java.util.EnumMap;
@@ -64,16 +66,6 @@ public final class InvoiceStatus {
         return new InvoiceStatus(status);
     }
 
-    public static InvoiceStatus fromString(String statusString) {
-        try {
-            Status status = Status.valueOf(statusString.toUpperCase());
-            return new InvoiceStatus(status);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(
-                    String.format("Invalid status: %s. Valid values: DRAFT, PENDING, PAID, CANCELLED", statusString)
-            );
-        }
-    }
 
     public boolean canTransitionTo(Status next) {
         Set<Status> allowedTransitions = VALID_TRANSITIONS.getOrDefault(
@@ -83,24 +75,11 @@ public final class InvoiceStatus {
         return allowedTransitions.contains(next);
     }
 
-    /**
-     * Transiciona a un nuevo estado con validación.
-     *
-     * Este es el método PRINCIPAL para cambiar estados.
-     * Lanza excepción si la transición no es válida.
-     */
     public InvoiceStatus transitionTo(Status next) {
         if (!canTransitionTo(next)) {
-            throw new ValueObjectValidationException(
-                    this.value.name(),
-                    next.name(),
-                    String.format(
-                            "Transición inválida: %s → %s. Transiciones válidas desde %s: %s",
-                            this.value,
-                            next,
-                            this.value,
-                            VALID_TRANSITIONS.get(this.value)
-                    )
+            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_INVALID_STATUS_TRANSITION, VOContext.INVOICE_STATUS
+
+
             );
         }
         return new InvoiceStatus(next);

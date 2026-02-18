@@ -107,7 +107,13 @@ public enum InvoiceError implements ErrorCatalog {
             "RN-INVOICE-013",
             "Número de factura no consecutivo. Último número emitido: {lastNumber}, Número solicitado: {requestedNumber}. Verificar resolución DIAN",
             "Invoice"
+    ),
+    ERR_INVOICE_NOT_EDITABLE(
+            "RN-INVOICE-014",
+            "La factura no puede modificarse en el estado actual. Solo se permiten cambios en estado BORRADOR.",
+            "Invoice"
     );
+
 
     private final String code;
     private final String messageKey;

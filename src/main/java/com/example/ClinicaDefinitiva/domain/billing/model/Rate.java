@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.billing.doiman.model;
+package com.example.ClinicaDefinitiva.domain.billing.model;
 
 
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;

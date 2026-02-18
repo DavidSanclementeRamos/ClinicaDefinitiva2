@@ -70,6 +70,9 @@ public final class InvoiceItem {
                 .performedAt(performedAt)
                 .build();
     }
+    public Price getTotalPrice() {
+        return unitPrice.multiply(quantity.getValue());
+    }
 
 
     public static Builder builder() {

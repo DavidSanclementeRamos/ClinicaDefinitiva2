@@ -1,12 +1,13 @@
 package com.example.ClinicaDefinitiva.domain.billing.model;
 
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceId;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceItemId;
+import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceStatus;
+import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.doiman.enu.InvoiceStatus;
+
+
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
@@ -17,482 +18,279 @@ import java.util.*;
 /**
  * Agregado raíz: Invoice (Factura Clínica)
  *
- * Representa una factura por servicios odontológicos prestados, asegurando:
- * - Cumplimiento normativo colombiano (DIAN, resolución de facturación)
- * - Coherencia entre servicios prestados y montos facturados
- * - Protección contra facturas con tarifas vencidas
- *
- * Reglas críticas implementadas:
- * - RN-INVOICE-003: Validación de tarifas vigentes (previene glosas EPSs)
- * - RN-INVOICE-007: Contrato obligatorio para EPSs (requisito legal Colombia)
- * - RN-INVOICE-010: Inmutabilidad tras emisión (auditoría DIAN)
- * - RN-INVOICE-011: Invariante matemático (Subtotal + Tax = Total)
+ * Reglas de negocio implementadas:
+ * - RN-INVOICE-001: Debe tener al menos un ítem
+ * - RN-INVOICE-002: Total debe ser mayor a cero
+ * - RN-INVOICE-003: Tarifas vigentes (delegado a Domain Service)
+ * - RN-INVOICE-004: Solo editable en estado BORRADOR
+ * - RN-INVOICE-005: Factura PAGADA no puede cancelarse directamente
+ * - RN-INVOICE-006: Fecha de vencimiento posterior a emisión
+ * - RN-INVOICE-007: Pagadores institucionales (EPS, aseguradoras, prepagadas) requieren contrato
+ * - RN-INVOICE-008: Moneda de ítems debe coincidir con la factura
+ * - RN-INVOICE-009: Cancelación requiere motivo mínimo 10 caracteres
+ * - RN-INVOICE-010: Factura emitida no puede modificarse
+ * - RN-INVOICE-011: Invariante matemático Subtotal + Tax = Total
  */
-public class Invoice {
-    // no facturar si no hay al menos un ítem válido”
-    // o “no emitir factura si algún ítem tiene tarifa vencida”.
-    private final InvoiceId id;                     // Identificador único de la factura
-    private final PatientId patientId;             // Referencia al paciente (Patient)
-    private final DentistId providerId;  // Profesional o clínica que emite la factura
-
-    private final LocalDateTime issuedAt;       // Fecha de emisión
-    private final LocalDateTime dueDate;   // Fecha de vencimiento
-    private final LocalDateTime createdAt;                    // Fecha de creación en el sistema
-    private LocalDateTime updatedAt;            // Última actualización
-
-    private InvoiceStatus status;                 // Estado: Draft, Pending, Paid, Cancelled Vo
-    private Long invoiceNumber; // Número consecutivo DIAN
-
-    private final List<InvoiceItemId> items = new ArrayList<>();    // Lista de ítems facturados
-    private Price subtotal;               // Suma de los ítems antes de impuestos
-    private Price tax;                  // Impuestos aplicados
-    private Price total;                // Total a pagar
-    private final String currency;               // Moneda (ej. COP, USD)
-
-    private final String payer;                  // EPS, aseguradora o paciente particular
-    private final ContractId contractId;            // Referencia a contrato/convenio (opcional)
-
-    private final String notes;                                 // Observaciones adicionales
-
-  public Invoice(
-          InvoiceId id,
-          PatientId patientId,
-          DentistId providerId,
-          LocalDateTime issuedAt,
-          LocalDateTime dueDate,
-          String currency,
-          String payer,
-          ContractId contractId,
-          String notes) {
-
-      // RN-INVOICE-015: Validar campos obligatorios
-      validateRequiredFields(patientId, providerId);
-
-      // RN-INVOICE-006: Validar coherencia de fechas
-      validateDateRange(issuedAt, dueDate);
-
-      this.id = id;
-      this.patientId = patientId;
-      this.providerId = providerId;
-      this.issuedAt = issuedAt;
-      this.dueDate = dueDate;
-      this.currency = currency;
-      this.payer = payer;
-      this.contractId = contractId;
-      this.notes = notes;
-      this.status = InvoiceStatus.draft(); // Estado inicial
-      this.createdAt = LocalDateTime.now();
-      this.updatedAt = this.createdAt;
-      this.subtotal = Price.zero(Currency.getInstance(currency));
-      this.tax = Price.zero(Currency.getInstance(currency));
-      this.total = Price.zero(Currency.getInstance(currency));
-  }
+public final class Invoice {
 
 
-    private void validateRequiredFields(PatientId patientId, DentistId providerId) {
-        if (patientId == null || providerId == null) {
-            throw new BusinessRuleViolationException(
-                    InvoiceError
-                            .ERR_INVOICE_MISSING_REQUIRED_FIELDS, EntityContext.INVOICE);
-        }
-    }// VALIDAD QUE LA PERSONA QUE EMITE LA FACTURA Y EL PACIENTE NO SEAN NULOS
+    private final InvoiceId id;
 
 
-    private void validateDateRange(LocalDateTime issuedAt, LocalDateTime dueDate) {
-        if (dueDate != null && !dueDate.isAfter(issuedAt)) {
-            throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_INVALID_DUE_DATE,EntityContext.INVOICE);
-        }
-    }// VALIDAD QUE EL FORMATO DE FECHA SEA VALIDAD
+    private final PatientId patientId;
+    private final DentistId dentistId;
+    private final Payer payer;
+    private final ContractId contractId;
 
-    /**
-     * Agrega un ítem a la factura con validaciones completas.
-     */
-    public void addItem(InvoiceItemId item) {
-        validateItemNotNull(item);
-        ensureEditable(); // RN-INVOICE-004
-        validateItemBasics(item);
-        validateCurrencyMatch(item); // RN-INVOICE-008
+
+    private InvoiceNumber number;
+
+    private LocalDateTime updatedAt;
+    private final LocalDateTime dueDate;
+
+    private InvoiceStatus status;
+
+    private final List<InvoiceItem> items;
+    private final CurrencyCode currency;
+    private Price subtotal;
+    private Price tax;
+    private Price total;
+
+    private final Notes notes;
+
+
+    private Invoice(Builder builder) {
+        this.id = Objects.requireNonNull(builder.id, "Invoice ID is required");
+        this.patientId = Objects.requireNonNull(builder.patientId, "Patient ID is required");
+        this.dentistId = Objects.requireNonNull(builder.dentistId, "Dentist ID is required");
+        this.payer = Objects.requireNonNull(builder.payer, "Payer is required");
+        this.contractId = builder.contractId;
+        this.currency = Objects.requireNonNull(builder.currency, "Currency is required");
+        this.notes = builder.notes;
+        this.dueDate = builder.dueDate;
+        LocalDateTime createdAt = LocalDateTime.now();
+        this.updatedAt = createdAt;
+        this.status = InvoiceStatus.draft();
+        this.items = new ArrayList<>();
+        this.subtotal = Price.zero(currency.toJavaCurrency());
+        this.tax = Price.zero(currency.toJavaCurrency());
+        this.total = Price.zero(currency.toJavaCurrency());
+
+        validateDates(createdAt, this.dueDate);
+    }
+
+
+
+    public static Invoice createDraft(
+            InvoiceId id,
+            PatientId patientId,
+            DentistId dentistId,
+            Payer payer,
+            ContractId contractId,
+            CurrencyCode currency,
+            Notes notes,
+            LocalDateTime dueDate) {
+
+        return new Builder()
+                .id(id)
+                .patientId(patientId)
+                .dentistId(dentistId)
+                .payer(payer)
+                .contractId(contractId)
+                .currency(currency)
+                .notes(notes)
+                .dueDate(dueDate)
+                .build();
+    }
+
+
+    public void addItem(InvoiceItem item) {
+        Objects.requireNonNull(item, "Item cannot be null");
+        ensureEditable();
+        validateCurrencyMatch(item);
 
         items.add(item);
         recalcTotals();
-    } // SE SUPONE QUE ES LO QUE SE UTILIZA PARA AGREGAR UN ITEM A UNA FACTURA
+    }
 
-    /**
-     * Reemplaza todos los ítems con validaciones.
-     *
-     * Validaciones aplicadas:
-     * - RN-INVOICE-010: No permite modificar si está PAID o CANCELLED
-     *
-     */
-    public void replaceAllItems(List<InvoiceItemId> newItems) {
-        if (status.isPaid() || status.isCancelled()) {
-            throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_IMMUTABLE_AFTER_EMISSION,EntityContext.INVOICE);
-
-        }
-
-        items.clear();
-        for (InvoiceItemId item : newItems) {
-            validateItemNotNull(item);
-            validateItemBasics(item);
-            validateCurrencyMatch(item);
-            items.add(item);
-        }
-        recalcTotals();
-    }//
-
-    private void validateItemNotNull(InvoiceItemId item) {
-        if (item == null) {
-            throw new IllegalArgumentException("Invoice item cannot be null");
-        }
-    }// ESTA VALIDACION DEBERIA ESTAR AGRUPADA CON LA CREACION DE FACTURA
-
-    private void validateItemBasics(InvoiceItemId item) {
-        if (item.getQuantity() <= 0) {
-            throw new IllegalArgumentException(
-                    "Item quantity must be positive. Item: " + item.getDescription()
-            );
-        }
-
-    }//  REPLAZAR POR VO
-
-    /**
-     * RN-INVOICE-008: Todos los ítems deben tener la misma moneda.
-     */
-    private void validateCurrencyMatch(InvoiceItem item) {
-        if (!item.getTotalPrice().getCurrency().equals(this.currency)) {
-            throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_CURRENCY_MISMATCH,EntityContext.INVOICE);
-        }
-    } // MUY COMPLEJO ?? TALVES DEBERIA IR EN UN DOMAIN SERVICE Y QUE SE DELEGUE A ITEM
-
-    /**
-     * RN-INVOICE-004: Solo puede editarse en estado DRAFT o PENDING.
-     */
-    private void ensureEditable() {
-        if (!status.isDraft() && !status.isPending()) {
-            throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_CANNOT_ADD_ITEM,EntityContext.INVOICE);
-        }
-    }// ESO ESTA OK
-
-    // ========================================
-    // CÁLCULO DE TOTALES
-    // ========================================
-
-    /**
-     * Recalcula subtotal, impuestos y total.
-     *
-     * Validaciones aplicadas:
-     * - RN-INVOICE-011: Valida invariante matemático (Subtotal + Tax = Total)
-     */
-    public void recalcTotals() {
-        Price sum = Price.zero(Currency.getInstance(currency));
+    private void recalcTotals() {
+        Price sum = Price.zero(currency.toJavaCurrency());
         for (InvoiceItem item : items) {
             sum = sum.add(item.getTotalPrice());
         }
+
         this.subtotal = sum;
         this.tax = computeTax(this.subtotal);
         this.total = this.subtotal.add(this.tax);
-
-        // RN-INVOICE-011: Validar invariante matemático (anti-corrupción)
-        validateTotalIntegrity();
-
         this.updatedAt = LocalDateTime.now();
+
+        validateTotalsInvariant();
     }
 
-    /**
-     * RN-INVOICE-011: Valida que Subtotal + Tax = Total.
-     *
-     * Esta validación previene corrupción de datos por bugs en cálculos.
-     * Si falla, indica un problema grave en la lógica de negocio.
-     */
-    private void validateTotalIntegrity() {
+    private Price computeTax(Price base) {
+        // Delegar a TaxPolicy en producción
+        return Price.zero(currency.toJavaCurrency());
+    }
+
+    private void validateTotalsInvariant() {
         Price expectedTotal = this.subtotal.add(this.tax);
         if (!this.total.equals(expectedTotal)) {
-            throw new IllegalStateException(
-                    String.format(
-                            "Corrupción de datos detectada: Subtotal + Tax ≠ Total. " +
-                                    "Subtotal: %s, Tax: %s, Total esperado: %s, Total actual: %s",
-                            this.subtotal, this.tax, expectedTotal, this.total
-                    )
+            throw new IllegalStateException("Invariant broken: Subtotal + Tax ≠ Total");
+        }
+    }
+
+    public void emit(InvoiceNumberGenerator generator) {
+        Objects.requireNonNull(generator, "InvoiceNumberGenerator is required");
+
+        validateBeforeEmit();
+
+        String previousState = this.status.toString();
+        this.number = generator.next();
+        this.status = this.status.transitionTo(InvoiceStatus.Status.PENDING);
+        this.updatedAt = LocalDateTime.now();
+
+
+    }
+
+    public void cancel(String reason) {
+        validateCancellationReason(reason);
+
+        if (status.isPaid()) {
+            throw new BusinessRuleViolationException(
+                    InvoiceError.ERR_INVOICE_CANNOT_CANCEL_PAID,
+                    EntityContext.INVOICE
+
+            );
+        }
+
+        String previousState = this.status.toString();
+        this.status = this.status.transitionTo(InvoiceStatus.Status.CANCELLED);
+        this.updatedAt = LocalDateTime.now();
+
+
+    }
+
+
+    private void validateDates(LocalDateTime createdAt, LocalDateTime dueDate) {
+        if (dueDate != null && !dueDate.isAfter(createdAt)) {
+            throw new BusinessRuleViolationException(
+                    InvoiceError.ERR_INVOICE_INVALID_DUE_DATE,
+                    EntityContext.INVOICE
+
             );
         }
     }
 
-    /**
-     * Calcula impuestos según política colombiana.
-     *
-     */
-    private Price computeTax(Price base) {
-        // TODO v2.0: Diferenciar IVA por tipo de servicio
-        // - Estética: 19%
-        // - Salud general: 0%
-        return base.multiply(0.19);
-    }
-
-    // ========================================
-    // VALIDACIONES ANTES DE EMISIÓN
-    // ========================================
-
-    /**
-     * Valida todas las reglas de negocio antes de emitir factura.
-     *
-     * Validaciones críticas aplicadas:
-     * - RN-INVOICE-001: Al menos un ítem válido
-     * - RN-INVOICE-002: Total > 0
-     * - RN-INVOICE-003: ⭐ Sin tarifas vencidas (previene glosas EPSs)
-     * - RN-INVOICE-007: ⭐ Contrato obligatorio para EPSs (requisito legal Colombia)
-     * - RN-INVOICE-014: Servicios activos (delegado a ProvidedService)
-     *
-
-     */
-    public void validateBeforeEmit() {
-        validateHasItems(); // RN-INVOICE-001
-        validatePositiveTotal(); // RN-INVOICE-002
-        validateContractIfEPS(); // RN-INVOICE-007
-
-        // RN-INVOICE-003: ⭐⭐⭐⭐⭐ VALIDACIÓN CRÍTICA
-        // Esta validación previene glosas de EPSs y rechazo de pago
-        // TODO: Implementar en Domain Service con acceso a RateRepository
-        // validateNoExpiredRates();
-
-        // RN-INVOICE-014: Validar servicios activos
-        // TODO: Implementar en Domain Service con acceso a ServiceRepository
-        // validateActiveServices();
-    }
-
-    /**
-     * RN-INVOICE-001: Debe tener al menos un ítem válido.
-     */
-    private void validateHasItems() {
+    private void validateBeforeEmit() {
         if (items.isEmpty()) {
             throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_NO_ITEMS,EntityContext.INVOICE);
-        }
-    }
+                    InvoiceError.ERR_INVOICE_NO_ITEMS,
+                    EntityContext.INVOICE
 
-    /**
-     * RN-INVOICE-002: Total debe ser mayor a cero.
-     */
-    private void validatePositiveTotal() {
+            );
+        }
         if (total.isNegativeOrZero()) {
             throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_ZERO_TOTAL,EntityContext.INVOICE);
-        }
-    }
+                    InvoiceError.ERR_INVOICE_ZERO_TOTAL,
+                    EntityContext.INVOICE
 
-    /**
-     * RN-INVOICE-007: Si pagador es EPS, debe tener contrato asociado.
-     *
-     * Contexto Colombia:
-     * - EPSs: Sura, Salud Total, Nueva EPS, Compensar, etc.
-     * - Facturación requiere contrato vigente
-     * - Sin contrato → Rechazo de factura → No pago
-     */
-    private void validateContractIfEPS() {
-        if (payer.toUpperCase().contains("EPS") && contractId == null) {
+            );
+        }
+        if (payer.requiresContract() && contractId == null) {
             throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_MISSING_CONTRACT,EntityContext.INVOICE);
+                    InvoiceError.ERR_INVOICE_MISSING_CONTRACT,
+                    EntityContext.INVOICE
+
+            );
         }
     }
 
-    // ========================================
-    // TRANSICIONES DE ESTADO
-    // ========================================
-
-    /**
-     * Transiciona de DRAFT a PENDING (emisión oficial).
-     *
-     * Validaciones aplicadas:
-     * - Todas las validaciones de validateBeforeEmit()
-     * - RN-INVOICE-013: Numeración consecutiva DIAN (básica en v1.0)
-     *
-     * Efectos:
-     * - Crea snapshot inmutable de ítems
-     * - Asigna número de factura consecutivo
-     * - Estado cambia a PENDING
-     * - Factura emitida NO puede modificarse (RN-INVOICE-010)
-     *
-     * @throws BusinessRuleViolationException si validaciones fallan
-     */
-    public void markPending() {
-        validateBeforeEmit();
-
-        // TODO v1.0: Validar consecutivo (requiere InvoiceRepository)
-        // validateInvoiceNumberSequence();
-
-        // TODO v2.0: Integración DIAN completa
-        // - Obtener número de resolución DIAN
-        // - Firmar digitalmente
-        // - Transmitir a plataforma MUISCA
-
-        this.status = this.status.transitionTo(InvoiceStatus.Status.PENDING);
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    /**
-     * RN-INVOICE-013: Valida numeración consecutiva DIAN (básico v1.0).
-     *
-     * TODO v1.0: Implementar con acceso a InvoiceRepository
-     * TODO v2.0: Integrar con API DIAN para resolución autorizada
-     */
-    private void validateInvoiceNumberSequence() {
-        // TODO: Implementar
-        // Long lastNumber = invoiceRepository.findLastInvoiceNumber();
-        // if (this.invoiceNumber != lastNumber + 1) {
-        //     throw ERR_INVOICE_INVALID_NUMBER_SEQUENCE
-        // }
-    }
-
-    /**
-     * Transiciona de PENDING a PAID.
-     *
-     * Validaciones aplicadas:
-     * - RN-INVOICE-012: Requiere pago registrado (v2.0 con módulo Payments)
-     *
-     * @throws BusinessRuleViolationException si no hay pago registrado
-     */
-    public void markPaid() {
-        // TODO v2.0: Validar pago registrado
-        // if (payments.isEmpty() || payments.sum() < this.total) {
-        //     throw ERR_INVOICE_UNPAID
-        // }
-
-        this.status = this.status.transitionTo(InvoiceStatus.Status.PAID);
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // ========================================
-    // CANCELACIÓN
-    // ========================================
-
-    /**
-     * Cancela la factura con motivo obligatorio.
-     *
-     * Validaciones aplicadas:
-     * - RN-INVOICE-005: No puede cancelarse si está PAID (v2.0 requiere nota crédito)
-     * - RN-INVOICE-009: Motivo obligatorio (mínimo 10 caracteres)
-     *
-     * @param reason Motivo de cancelación (mínimo 10 caracteres)
-     * @throws BusinessRuleViolationException si validaciones fallan
-     */
-    public void cancel(String reason) {
-        validateCancellationReason(reason); // RN-INVOICE-009
-
-        // RN-INVOICE-005: No puede cancelarse si está pagada
-        if (status.isPaid()) {
+    private void ensureEditable() {
+        if (!status.isDraft()) {
             throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_CANNOT_CANCEL_PAID,EntityContext.INVOICE);
+                    InvoiceError.ERR_INVOICE_NOT_EDITABLE,
+                    EntityContext.INVOICE
+
+            );
         }
-
-        this.status = this.status.transitionTo(InvoiceStatus.Status.CANCELLED);
-        this.updatedAt = LocalDateTime.now();
-
-        // TODO v1.0: Registrar motivo en auditoría
-        // auditService.registerCancellation(this.id, reason);
     }
 
-    /**
-     * RN-INVOICE-009: Cancelación requiere motivo obligatorio (mínimo 10 caracteres).
-     */
+    private void validateCurrencyMatch(InvoiceItem item) {
+        String itemCurrency = item.getUnitPrice().getCurrency().getCurrencyCode();
+        if (!currency.getCode().equals(itemCurrency)) {
+            throw new BusinessRuleViolationException(
+                    InvoiceError.ERR_INVOICE_CURRENCY_MISMATCH,
+                    EntityContext.INVOICE
+
+            );
+        }
+    }
+
     private void validateCancellationReason(String reason) {
-        if (reason == null || reason.isBlank()) {
+        if (reason == null || reason.isBlank() || reason.trim().length() < 10) {
             throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_CANCELLATION_REQUIRES_REASON,EntityContext.INVOICE);
-        }
-        if (reason.length() < 10) {
-            throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_CANCELLATION_REQUIRES_REASON,EntityContext.INVOICE);
+                    InvoiceError.ERR_INVOICE_CANCELLATION_REQUIRES_REASON,
+                    EntityContext.INVOICE
 
+            );
         }
     }
 
-    // ========================================
-    // GETTERS (Inmutabilidad Protegida)
-    // ========================================
 
-    public InvoiceId getId() {
-        return id;
-    }
+    public static class Builder {
+        private InvoiceId id;
+        private PatientId patientId;
+        private DentistId dentistId;
+        private Payer payer;
+        private ContractId contractId;
+        private CurrencyCode currency = CurrencyCode.of("COP");
+        private Notes notes;
+        private LocalDateTime dueDate;
 
-    public PatientId getPatientId() {
-        return patientId;
-    }
+        public Builder id(InvoiceId id) {
+            this.id = id;
+            return this;
+        }
 
-    public DentistId getProviderId() {
-        return providerId;
-    }
+        public Builder patientId(PatientId patientId) {
+            this.patientId = patientId;
+            return this;
+        }
 
-    public LocalDateTime getIssuedAt() {
-        return issuedAt;
-    }
+        public Builder dentistId(DentistId dentistId) {
+            this.dentistId = dentistId;
+            return this;
+        }
 
-    public LocalDateTime getDueDate() {
-        return dueDate;
-    }
+        public Builder payer(Payer payer) {
+            this.payer = payer;
+            return this;
+        }
+        public Builder contractId(ContractId contractId) {
+            this.contractId = contractId;
+            return this;
+        }
 
-    public InvoiceStatus getStatus() {
-        return status;
-    }
+        public Builder currency(CurrencyCode currency) {
+            this.currency = currency;
+            return this;
+        }
 
-    public Long getInvoiceNumber() {
-        return invoiceNumber;
-    }
+        public Builder notes(Notes notes){
+            this.notes = notes;
+            return this;
+        }
 
-    /**
-     * Retorna copia inmutable de ítems para proteger invariantes.
-     */
-    public List<InvoiceItem> getItems() {
-        return Collections.unmodifiableList(items);
-    }
+        public Builder dueDate(LocalDateTime dueDate) {
+            this.dueDate = dueDate;
+            return this;
+        }
 
-    public Price getSubtotal() {
-        return subtotal;
-    }
+        public Invoice build() {
+            return new Invoice(this);
+        }
 
-    public Price getTax() {
-        return tax;
-    }
-
-    public Price getTotal() {
-        return total;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public String getPayer() {
-        return payer;
-    }
-
-    public ContractId getContractId() {
-        return contractId;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    // ========================================
-    // OPERACIONES DE CONSULTA
-    // ========================================
-
-    /**
-     * Verifica si la factura puede agregar ítems (estado editable).
-     */
-    public boolean canAddItems() {
-        return status.isDraft() || status.isPending();
     }
 
 }
+

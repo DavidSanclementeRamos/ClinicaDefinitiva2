@@ -28,7 +28,86 @@ public enum BillingVOError implements ErrorCatalog {
     ERR_QUANTITY_EXCEEDS_MAXIMUM(
             "RN-BILLING-002",
             "error.billing.quantity.exceeds.maximum",
-            "La cantidad no puede exceder 1000 ítems por línea de factura" );
+            "La cantidad no puede exceder 1000 ítems por línea de factura" ),
+    ERR_INVOICE_INVALID_STATUS_TRANSITION(
+            "RN-INVOICE-002",
+            "Transición de estado inválida. Estado actual: {currentStatus}, Estado solicitado: {requestedStatus}. Verifique la máquina de estados definida para Invoice.",
+            "InvoiceStatus"
+    ),
+
+
+
+    // Payer
+    ERR_INVOICE_PAYER_REQUIRED(
+            "RN-INVOICE-007",
+            "error.invoice.payer.required",
+            "El pagador es obligatorio y no puede ser nulo o vacío"
+    ),
+
+    // Notes
+    ERR_INVOICE_NOTES_TOO_SHORT(
+            "RN-INVOICE-009",
+            "error.invoice.notes.too.short",
+            "Las notas deben tener al menos 3 caracteres si se especifican"
+    ),
+
+    // InvoiceNumberGenerator - prefijo requerido
+    ERR_INVOICE_NUMBER_PREFIX_REQUIRED(
+            "RN-BILLING-011",
+            "error.invoice.number.prefix.required",
+            "El prefijo del número de factura es obligatorio y no puede ser nulo o vacío"
+    ),
+
+    // InvoiceNumberGenerator - secuencia inicial negativa
+    ERR_INVOICE_NUMBER_INITIAL_SEQUENCE_NEGATIVE(
+            "RN-BILLING-012",
+            "error.invoice.number.initial.sequence.negative",
+            "La secuencia inicial del número de factura no puede ser negativa"
+    ),
+
+    // InvoiceNumberGenerator - reset con valor negativo
+    ERR_INVOICE_NUMBER_RESET_NEGATIVE(
+            "RN-BILLING-012",
+            "error.invoice.number.reset.negative",
+            "El valor de reinicio de la secuencia no puede ser negativo"
+    ),
+
+    // InvoiceNumber - número requerido
+    ERR_INVOICE_NUMBER_REQUIRED(
+            "RN-BILLING-010",
+            "error.invoice.number.required",
+            "El número de factura no puede ser nulo o vacío"
+    ),
+
+    // InvoiceNumber - formato inválido
+    ERR_INVOICE_NUMBER_INVALID_FORMAT(
+            "RN-BILLING-010",
+            "error.invoice.number.invalid.format",
+            "El número de factura debe seguir el formato PREFIJO-NÚMERO (ej. FAC-0001)"
+    ),
+
+    // InvoiceNumber - secuencia negativa
+    ERR_INVOICE_NUMBER_NEGATIVE(
+            "RN-BILLING-012",
+            "error.invoice.number.negative",
+            "El número secuencial de la factura no puede ser negativo"
+    ),
+
+    // CurrencyCode - requerido
+    ERR_INVOICE_CURRENCY_REQUIRED(
+            "RN-INVOICE-008",
+            "error.invoice.currency.required",
+            "La moneda es obligatoria y no puede ser nula o vacía"
+    ),
+
+    // CurrencyCode - inválida
+    ERR_INVOICE_INVALID_CURRENCY(
+            "RN-INVOICE-008",
+            "error.invoice.currency.invalid",
+            "Código de moneda inválido. Debe ser un código ISO 4217 (ej. COP, USD, EUR)"
+    );
+
+
 
 
     private final String code;
