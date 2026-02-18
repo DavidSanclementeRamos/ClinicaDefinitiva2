@@ -1,5 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.administration.Operations.vo;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.OperationsVoError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.ScheduleVOError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Set;
@@ -37,14 +42,15 @@ public class ShiftStatus {
 
     public ShiftStatus complete() {
         if (!canTransitionTo(Status.COMPLETED)) {
-            throw new IllegalStateException("Cannot complete shift in current state: " + value);
+
+            throw new ValueObjectValidationException(OperationsVoError.ERR_SHIFT_INVALID_COMPLETION, VOContext.OPERATIONS);
         }
         return new ShiftStatus(Status.COMPLETED);
     }
 
     public ShiftStatus cancel() {
         if (!canTransitionTo(Status.CANCELLED)) {
-            throw new IllegalStateException("Cannot cancel shift in current state: " + value);
+            throw new ValueObjectValidationException(OperationsVoError.ERR_SHIFT_INVALID_CANCELLATION, VOContext.OPERATIONS);
         }
         return new ShiftStatus(Status.CANCELLED);
     }

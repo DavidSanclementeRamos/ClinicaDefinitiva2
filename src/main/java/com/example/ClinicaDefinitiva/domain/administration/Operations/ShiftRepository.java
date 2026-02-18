@@ -4,6 +4,7 @@ package com.example.ClinicaDefinitiva.domain.administration.Operations;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.ReceptionId;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.model.Shift;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftId;
 
 import java.time.LocalDate;

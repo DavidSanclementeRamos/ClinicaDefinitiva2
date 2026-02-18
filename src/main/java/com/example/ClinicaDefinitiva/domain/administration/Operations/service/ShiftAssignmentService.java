@@ -5,10 +5,10 @@ import com.example.ClinicaDefinitiva.application.exceptions.DentalServiceNotFoun
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.Shift;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.model.Shift;
 import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftRepository;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftType;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.ShiftError;
+import com.example.ClinicaDefinitiva.domain.administration.Operations.enu.ShiftType;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 
