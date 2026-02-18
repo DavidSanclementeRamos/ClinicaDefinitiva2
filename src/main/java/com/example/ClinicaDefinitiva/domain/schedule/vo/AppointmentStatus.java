@@ -36,7 +36,7 @@ public final class AppointmentStatus {
         if (value == null) {
             throw new ValueObjectValidationException(
                     ScheduleVOError.ERR_APPOINTMENT_STATUS_REQUIRED,
-                    VOContext.AVAILABILITY_STATUS
+                    VOContext.SCHEDULE
             );
         }
         this.value = value;
@@ -59,7 +59,7 @@ public final class AppointmentStatus {
         if (!canTransitionTo(next)) {
             throw new ValueObjectValidationException(
                     ScheduleVOError.ERR_APPOINTMENT_STATUS_INVALID_TRANSITION,
-                    VOContext.AVAILABILITY_STATUS
+                    VOContext.SCHEDULE
             );
         }
         return new AppointmentStatus(next);

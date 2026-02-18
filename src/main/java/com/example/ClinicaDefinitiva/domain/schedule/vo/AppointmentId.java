@@ -11,7 +11,7 @@ public final class AppointmentId {
 
     public AppointmentId(Long value) {
         if (value == null){
-            throw new ValueObjectValidationException(ScheduleVOError.ERR_APPOINTMENT_ID_REQUIRED, VOContext.APPOINTMENT_ID);
+            throw new ValueObjectValidationException(ScheduleVOError.ERR_APPOINTMENT_ID_REQUIRED, VOContext.SCHEDULE);
         }
 
         this.value = value ;

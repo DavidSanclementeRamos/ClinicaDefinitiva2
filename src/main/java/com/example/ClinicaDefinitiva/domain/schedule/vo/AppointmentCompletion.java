@@ -11,10 +11,10 @@ public final class AppointmentCompletion {
 
     public AppointmentCompletion(ServiceDuration actualDuration, String clinicalNotes) {
         if (actualDuration == null || actualDuration.getMinutes() <= 0) {
-            throw new ValueObjectValidationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, VOContext.A);
+            throw new ValueObjectValidationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, VOContext.SCHEDULE);
         }
         if (clinicalNotes == null || clinicalNotes.isBlank()) {
-            throw new ValueObjectValidationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, VOContext.COMPLETION);
+            throw new ValueObjectValidationException(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION, VOContext.SCHEDULE);
         }
         this.actualDuration = actualDuration;
         this.clinicalNotes = clinicalNotes;
