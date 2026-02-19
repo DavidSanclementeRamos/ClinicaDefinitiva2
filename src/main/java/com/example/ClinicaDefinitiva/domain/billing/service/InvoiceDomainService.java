@@ -16,8 +16,6 @@ import java.time.LocalDateTime;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 
-import java.time.LocalDateTime;
-
 /**
  * Domain Service: InvoiceDomainService
  *
@@ -51,8 +49,7 @@ public final class InvoiceDomainService {
             if (!contract.isActiveAndValid()) {
                 throw new BusinessRuleViolationException(
                         InvoiceError.ERR_INVOICE_CONTRACT_NOT_VALID,
-                        EntityContext.INVOICE,
-                        "El contrato está vencido o inactivo"
+                        EntityContext.INVOICE
                 );
             }
         }
@@ -65,7 +62,7 @@ public final class InvoiceDomainService {
         for (InvoiceItem item : invoice.getItems()) {
             Rate rate = rateRepository.findActiveRateForService(item.getServiceCode(), invoice.getContractId())
                     .orElseThrow(() -> new BusinessRuleViolationException(
-                            InvoiceError.ERR_INVOICE_NO_ACTIVE_RATE,
+                            InvoiceError.ERR_INVOICE_EXPIRED_RATE,
                             EntityContext.INVOICE
                     ));
 

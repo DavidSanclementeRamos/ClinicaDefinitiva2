@@ -5,6 +5,7 @@ import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.RateError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
@@ -37,7 +38,7 @@ public final class Rate {
     private final RateId id;
 
 
-    private final ProvidedService service;
+    private final ServiceId serviceId;
 
 
     private final PayerType payerType;
@@ -56,7 +57,7 @@ public final class Rate {
 
     private Rate(Builder builder) {
         this.id = Objects.requireNonNull(builder.id, "Rate ID no puede ser nulo");
-        this.service = Objects.requireNonNull(builder.service, "Service no puede ser nulo");
+        this.serviceId = Objects.requireNonNull(builder.serviceId, "Service no puede ser nulo");
         this.amount = Objects.requireNonNull(builder.amount, "Amount no puede ser nulo");
         this.payerType = Objects.requireNonNull(builder.payerType, "PayerType no puede ser nulo");
         this.validFrom = Objects.requireNonNull(builder.validFrom, "ValidFrom no puede ser nulo");
@@ -70,15 +71,13 @@ public final class Rate {
 
 
     public static Rate create(
-            RateId id,
-            ProvidedService service,
+            ServiceId serviceId,
             Price amount,
             PayerType payerType,
             ContractId contractId) {
 
         return builder()
-                .id(id)
-                .service(service)
+                .serviceId(serviceId)
                 .amount(amount)
                 .payerType(payerType)
                 .contractId(contractId)
@@ -149,7 +148,7 @@ public final class Rate {
 
 
     public RateId getId() { return id; }
-    public ProvidedService getService() { return service; }
+    public ServiceId getServiceId() { return serviceId; }
     public PayerType getPayerType() { return payerType; }
     public ContractId getContractId() { return contractId; }
     public Price getAmount() { return amount; }
@@ -159,7 +158,7 @@ public final class Rate {
 
     public static class Builder {
         private RateId id;
-        private ProvidedService service;
+        private ServiceId serviceId;
         private Price amount;
         private PayerType payerType;
         private ContractId contractId;
@@ -168,7 +167,7 @@ public final class Rate {
         private boolean active = true;
 
         public Builder id(RateId id) { this.id = id; return this; }
-        public Builder service(ProvidedService service) { this.service = service; return this; }
+        public Builder serviceId(ServiceId serviceId) { this.serviceId = serviceId; return this; }
         public Builder amount(Price amount) { this.amount = amount; return this; }
         public Builder payerType(PayerType payerType) { this.payerType = payerType; return this; }
         public Builder contractId(ContractId contractId) { this.contractId = contractId; return this; }

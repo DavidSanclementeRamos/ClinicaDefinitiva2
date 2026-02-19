@@ -7,26 +7,20 @@ import java.util.Objects;
  * Inmutable y con validaciones de negocio.
  */
 public class ContractId {
-    private final String value; // conserva String para flexibilidad
+    private final Long value; // conserva String para flexibilidad
 
-    public ContractId(String value) {
+    public ContractId(Long value) {
 
         this.value = Objects.requireNonNull(value, "ContractId value cannot be null");
     }
 
-    public static ContractId fromLong(Long id) {
-        if (id == null) return null;
-        return new ContractId(String.valueOf(id));
-    }
 
     /**
      * Parsea/validad una cadena y devuelve el VO.
      */
-    public static ContractId fromString(String value) {
+    public static ContractId of(Long value) {
         if (value == null) throw new IllegalArgumentException("ContractId string is null");
-        String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("ContractId string is empty");
-        return new ContractId(trimmed);
+        return new ContractId(value);
     }
 
 
@@ -34,7 +28,7 @@ public class ContractId {
         return Long.valueOf(this.value);
     }
 
-    public String getValue() {
+    public Long getValue() {
         return value;
     }
 

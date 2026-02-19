@@ -112,6 +112,11 @@ public enum InvoiceError implements ErrorCatalog {
             "RN-INVOICE-014",
             "La factura no puede modificarse en el estado actual. Solo se permiten cambios en estado BORRADOR.",
             "Invoice"
+    ),
+    ERR_INVOICE_CONTRACT_NOT_VALID(
+            "RN-INVOICE-015",
+            "error.invoice.contract.not.valid",
+            "El contrato asociado está vencido o inactivo"
     );
 
 
