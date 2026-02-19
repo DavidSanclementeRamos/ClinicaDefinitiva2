@@ -1,39 +1,32 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 
-import java.util.Objects;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-/**
- * Value Object que representa el ID de ThirdParties.
- * Inmutable y con validaciones de negocio.
- */
-public class OpeningBalanceId {
-    private final String value; // conserva String para flexibilidad
+public final class OpeningBalanceId {
 
-    public OpeningBalanceId(String value) {
-        this.value = Objects.requireNonNull(value, "OpeningBalanceId value cannot be null");
+    private final Long value;
+
+    private OpeningBalanceId(Long value) {
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_OPENING_BALANCE_ID_NULL,
+                    VOContext.ACCOUNTING
+            );
+        }
+        if (value <= 0) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_OPENING_BALANCE_ID_INVALID,
+                    VOContext.ACCOUNTING
+            );
+        }
+        this.value = value;
     }
 
-    public static OpeningBalanceId fromLong(Long id) {
-        if (id == null) return null;
-        return new OpeningBalanceId(String.valueOf(id));
+    public static OpeningBalanceId of(Long value) {
+        return new OpeningBalanceId(value);
     }
 
-    /**
-     * Parsea/validad una cadena y devuelve el VO.
-     */
-    public static OpeningBalanceId fromString(String value) {
-        if (value == null) throw new IllegalArgumentException("OpeningBalanceId string is null");
-        String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("OpeningBalanceId string is empty");
-        return new OpeningBalanceId(trimmed);
-    }
-
-    public Long asLong() {
-        return Long.valueOf(this.value);
-    }
-
-    public String getValue() {
-        return value;
-    }
-
+    public Long getValue() { return value; }
 }

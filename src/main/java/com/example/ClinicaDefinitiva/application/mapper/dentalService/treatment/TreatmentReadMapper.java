@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.application.mapper.dentalService.treatment
 
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.TreatmentDto;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.TreatmentPhaseDto;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.PhaseStatus;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.model.Treatment;
 
 
@@ -24,7 +25,7 @@ public class TreatmentReadMapper {
                         .map(phase -> new TreatmentPhaseDto(
                                 phase.getName(),
                                 phase.getScheduledDate(),
-                                 phase.getStatus(),
+                                   phase.getStatus().name(),
                                 phase.getNotes()
                         ))
                         .collect(Collectors.toList()),

@@ -1,32 +1,43 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-/**
- * Value Object que representa un nombre para agregados contables.
- * Inmutable y con validaciones de negocio.
- */
 public final class Name {
+
     private static final int MAX_NAME_LENGTH = 255;
+    private final String value;
 
-    private String name;
-
-    public Name(String name) {
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("El nombre del documento es obligatorio");
-        }
-        if (name.trim().length() > MAX_NAME_LENGTH) {
-            throw new IllegalArgumentException(
-                    String.format("El nombre no puede exceder %d caracteres", MAX_NAME_LENGTH)
+    private Name(String value) {
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_NAME_NULL,
+                    VOContext.ACCOUNTING
             );
         }
-        this.name = name.trim();
+        String normalized = value.trim();
+        if (normalized.isEmpty()) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_NAME_BLANK,
+                    VOContext.ACCOUNTING
+            );
+        }
+        if (normalized.length() > MAX_NAME_LENGTH) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_NAME_TOO_LONG,
+                    VOContext.ACCOUNTING
+            );
+        }
+        this.value = normalized;
     }
 
-    public String getName() {
-        return name;
+    public static Name of(String value) {
+        return new Name(value);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getValue() { return value; }
+
+    @Override
+    public String toString() { return value; }
 }

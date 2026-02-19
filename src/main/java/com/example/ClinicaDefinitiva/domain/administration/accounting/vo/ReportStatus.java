@@ -1,19 +1,31 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-/**
- * Value Object que representa el estado de un reporte administrativo.
- * Inmutable y con validaciones de negocio.
- */
 public final class ReportStatus {
+
+
+
+    public enum Status {
+        DRAFT, UNDER_REVIEW, PUBLISHED, ARCHIVED
+    }
 
     private final Status status;
 
     private ReportStatus(Status status) {
         if (status == null) {
-            throw new IllegalArgumentException("El estado no puede ser nulo");
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_REPORT_STATUS_NULL,
+                    VOContext.ACCOUNTING
+            );
         }
         this.status = status;
+    }
+
+    public static ReportStatus of(Status status) {
+        return new ReportStatus(status);
     }
 
     public static ReportStatus draft() {
@@ -32,9 +44,6 @@ public final class ReportStatus {
         return new ReportStatus(Status.ARCHIVED);
     }
 
-    public static ReportStatus of(Status status) {
-        return new ReportStatus(status);
-    }
 
     public boolean isDraft() {
         return status == Status.DRAFT;
@@ -81,15 +90,7 @@ public final class ReportStatus {
         };
     }
 
-    public Status getStatus() {
-        return status;
-    }
+    public Status getStatus() { return status; }
 
 
-    public enum Status {
-        DRAFT,
-        UNDER_REVIEW,
-        PUBLISHED,
-        ARCHIVED
-    }
 }

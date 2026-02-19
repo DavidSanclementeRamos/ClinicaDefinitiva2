@@ -1,31 +1,51 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.Objects;
 
-/**
- * Value Object que representa el ID de un reporte administrativo.
- * Inmutable y con validaciones de negocio.
- */
-public class AdministrativeReportId {
-    private final String value;
+public final class AdministrativeReportId {
 
-    public AdministrativeReportId(String value) {
-        this.value = Objects.requireNonNull(value, " AdministrativeReportId value cannot be null");
+    private final Long value;
+
+    private AdministrativeReportId(Long value) {
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_ADMINREPORT_ID_NULL,
+                    VOContext.ACCOUNTING
+            );
+        }
+        if (value <= 0) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_ADMINREPORT_ID_INVALID,
+                    VOContext.ACCOUNTING
+            );
+        }
+        this.value = value;
     }
 
-    /**
-     * Parsea/validad una cadena y devuelve el VO.
-     */
-    public static AdministrativeReportId fromString(String value) {
-        if (value == null) throw new IllegalArgumentException("AdministrativeReportId string is null");
-        String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("AdministrativeReportId string is empty");
-        return new AdministrativeReportId(trimmed);
+    public static AdministrativeReportId of(Long value) {
+        return new AdministrativeReportId(value);
     }
 
-
-    public String getValue() {
+    public Long getValue() {
         return value;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof AdministrativeReportId other) && value.equals(other.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 }

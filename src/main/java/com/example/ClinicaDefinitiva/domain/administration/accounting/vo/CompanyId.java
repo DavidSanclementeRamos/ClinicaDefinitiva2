@@ -1,36 +1,52 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.Objects;
-import java.util.UUID;
 
+public final class CompanyId {
 
-/**
- * Value Object que representa el ID de una empresa.
- * Inmutable y con validaciones de negocio.
- */
-public class CompanyId {
-    private final String value;
+    private final Long value;
 
-    public CompanyId(String value) {
-        this.value = Objects.requireNonNull(value);
-    }
-    public static CompanyId generate (){
-        return new CompanyId(UUID.randomUUID().toString());
-    }
-
-    /**
-     * Parsea/validad una cadena y devuelve el VO.
-     */
-    public static CompanyId fromString(String value) {
-        if (value == null) throw new IllegalArgumentException("InvoiceId string is null");
-        String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("InvoiceId string is empty");
-        return new CompanyId(trimmed);
+    private CompanyId(Long value) {
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_COMPANY_ID_NULL,
+                    VOContext.ACCOUNTING
+            );
+        }
+        if (value <= 0) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_COMPANY_ID_INVALID,
+                    VOContext.ACCOUNTING
+            );
+        }
+        this.value = value;
     }
 
+    public static CompanyId of(Long value) {
+        return new CompanyId(value);
+    }
 
-
-    public String getValue() {
+    public Long getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof CompanyId other) && value.equals(other.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 }
+

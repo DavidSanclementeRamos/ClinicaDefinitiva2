@@ -1,40 +1,32 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 
-import java.util.Objects;
-/**
- * Value Object que representa el ID de un registro accounting.
- * Inmutable y con validaciones de negocio.
- */
-public class JournalEntryId {
-    // si son registros contables journal entries, si son operaciones transactions, movimiento accounting
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-    private final String value; // conserva String para flexibilidad
+public final class JournalEntryId {
 
-    public JournalEntryId(String value) {
-        this.value = Objects.requireNonNull(value, "JournalEntryId value cannot be null");
+    private final Long value;
+
+    private JournalEntryId(Long value) {
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_JOURNAL_ENTRY_ID_NULL,
+                    VOContext.ACCOUNTING
+            );
+        }
+        if (value <= 0) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_JOURNAL_ENTRY_ID_INVALID,
+                    VOContext.ACCOUNTING
+            );
+        }
+        this.value = value;
     }
 
-    public static JournalEntryId fromLong(Long id) {
-        if (id == null) return null;
-        return new JournalEntryId(String.valueOf(id));
+    public static JournalEntryId of(Long value) {
+        return new JournalEntryId(value);
     }
 
-    /**
-     * Parsea/validad una cadena y devuelve el VO.
-     */
-    public static JournalEntryId fromString(String value) {
-        if (value == null) throw new IllegalArgumentException("JournalEntryId string is null");
-        String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("JournalEntryId string is empty");
-        return new JournalEntryId(trimmed);
-    }
-
-    public Long asLong() {
-        return Long.valueOf(this.value);
-    }
-
-    public String getValue() {
-        return value;
-    }
-
+    public Long getValue() { return value; }
 }

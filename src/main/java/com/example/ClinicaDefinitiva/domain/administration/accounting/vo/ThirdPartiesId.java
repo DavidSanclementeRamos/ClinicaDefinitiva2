@@ -1,40 +1,32 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 
-import java.util.Objects;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-/**
- * Value Object que representa el ID de un tercero.
- * Inmutable y con validaciones de negocio.
- */
-public class ThirdPartiesId {
+public final class ThirdPartiesId {
 
-    private final String value;
+    private final Long value;
 
-    public ThirdPartiesId(String value) {
-        this.value = Objects.requireNonNull(value, "ThirdPartiesId value cannot be null");
+    private ThirdPartiesId(Long value) {
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_THIRDPARTIES_ID_NULL,
+                    VOContext.ACCOUNTING
+            );
+        }
+        if (value <= 0) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_THIRDPARTIES_ID_INVALID,
+                    VOContext.ACCOUNTING
+            );
+        }
+        this.value = value;
     }
 
-    public static ThirdPartiesId fromLong(Long id) {
-        if (id == null) return null;
-        return new ThirdPartiesId(String.valueOf(id));
+    public static ThirdPartiesId of(Long value) {
+        return new ThirdPartiesId(value);
     }
 
-    /**
-     * Parsea/validad una cadena y devuelve el VO.
-     */
-    public static ThirdPartiesId fromString(String value) {
-        if (value == null)  throw new IllegalArgumentException("ThirdPartiesId string is null");
-        String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("ThirdPartiesId string is empty");
-        return new ThirdPartiesId(trimmed);
-    }
-
-    public Long asLong() {
-        return Long.valueOf(this.value);
-    }
-
-    public String getValue() {
-        return value;
-    }
-
+    public Long getValue() { return value; }
 }

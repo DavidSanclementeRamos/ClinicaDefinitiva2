@@ -1,54 +1,39 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 
 
-//import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-import java.io.Serial;
-import java.io.Serializable;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+
 import java.util.regex.Pattern;
 
-/**
- * Value Object para representar un NIT.
- */
-public final class Nit implements Serializable {
+public final class Nit {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
-
-    // Regex: números con opcional guion y dígito de verificación
     private static final Pattern NIT_PATTERN = Pattern.compile("^\\d{5,12}(-\\d)?$");
-
     private final String value;
 
-    public Nit(String value) {
-        this.value = value;
-    }
-
-    /**
-     * Fábrica segura para crear un NIT válido.
-     *
-     * @param rawNIT   cadena con el NIT
-     * @return instancia válida de Nit
-     * @throws ValueObjectValidationException si el NIT no cumple formato
-     */
-    public static Nit of(String rawNIT) {
-        if (rawNIT == null || rawNIT.trim().isEmpty()) {
-           // throw new ValueObjectValidationException(ErrorCatalogXD.ERR_COMPANY_MISSING_TAX_ID, EntityContext.COMPANY);
+    private Nit(String value) {
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_NIT_NULL,
+                    VOContext.ACCOUNTING
+            );
         }
-
-        String normalized = rawNIT.trim();
-
+        String normalized = value.trim();
         if (!NIT_PATTERN.matcher(normalized).matches()) {
-          //  throw new ValueObjectValidationException(ErrorCatalogXD.ERR_COMPANY_MISSING_TAX_ID, EntityContext.COMPANY);
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_NIT_INVALID_FORMAT,
+                    VOContext.ACCOUNTING
+            );
         }
-
-        return new Nit(normalized);
+        this.value = normalized;
     }
 
-    public String value() {
-        return value;
+    public static Nit of(String value) {
+        return new Nit(value);
     }
 
+    public String getValue() { return value; }
 }

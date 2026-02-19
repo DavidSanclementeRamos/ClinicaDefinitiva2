@@ -1,21 +1,27 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 
 import java.time.LocalDate;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-/**
- * Representa el intervalo de tiempo de un reporte administrativo.
- */
 public final class Period {
 
     private final LocalDate startDate;
     private final LocalDate endDate;
 
-    public Period(LocalDate startDate, LocalDate endDate) {
+    private Period(LocalDate startDate, LocalDate endDate) {
         if (startDate == null || endDate == null) {
-            throw new IllegalArgumentException("Las fechas de inicio y fin son obligatorias");
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_PERIOD_NULL,
+                    VOContext.ACCOUNTING
+            );
         }
         if (endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_PERIOD_INVALID,
+                    VOContext.ACCOUNTING
+            );
         }
         this.startDate = startDate;
         this.endDate = endDate;
@@ -25,13 +31,10 @@ public final class Period {
         return new Period(startDate, endDate);
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
+    public LocalDate getStartDate() { return startDate; }
+    public LocalDate getEndDate() { return endDate; }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
+
     /**
      * Verifica si la fecha actual está dentro del período.
      */
@@ -47,7 +50,6 @@ public final class Period {
         LocalDate today = LocalDate.now();
         return endDate.isBefore(today);
     }
-
 
     /**
      * Permite verificar si una fecha está dentro del periodo.

@@ -1,49 +1,33 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 
-import java.util.Objects;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-public class ExpenseId {
-    private final String value; // conserva String para flexibilidad
+public final class ExpenseId {
 
-    public ExpenseId(String value) {
-        this.value = Objects.requireNonNull(value, "ExpenseId value cannot be null");
+    private final Long value;
+
+    private ExpenseId(Long value) {
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_EXPENSE_ID_NULL,
+                    VOContext.ACCOUNTING
+            );
+        }
+        if (value <= 0) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_EXPENSE_ID_INVALID,
+                    VOContext.ACCOUNTING
+            );
+        }
+        this.value = value;
     }
 
-    public static ExpenseId fromLong(Long id) {
-        if (id == null) return null;
-        return new ExpenseId(String.valueOf(id));
+    public static ExpenseId of(Long value) {
+        return new ExpenseId(value);
     }
 
-    // Nuevo: parsea/valida una cadena y devuelve el VO
-    public static ExpenseId fromString(String value) {
-        if (value == null) return null; // decisión: devuelve null si no hay valor; cambia a throw si prefieres
-        String trimmed = value.trim();
-        if (trimmed.isEmpty()) throw new IllegalArgumentException("ContractId string is empty");
-        return new ExpenseId(trimmed);
-    }
-
-    public Long asLong() {
-        if (this.value == null) return null;
-        return Long.valueOf(this.value);
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object o) { /* usual */
-        return o instanceof ExpenseId && value.equals(((ExpenseId) o).getValue());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value);
-    }
-
+    public Long getValue() { return value; }
 }
+
