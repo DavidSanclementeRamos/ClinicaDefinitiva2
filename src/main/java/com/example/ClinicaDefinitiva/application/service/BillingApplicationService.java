@@ -1,8 +1,6 @@
 package com.example.ClinicaDefinitiva.application.service;
 
-import com.example.ClinicaDefinitiva.application.dto.billing.BuildInvoiceRequest;
-import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceDto;
-import com.example.ClinicaDefinitiva.application.dto.billing.UpdateInvoiceRequest;
+import com.example.ClinicaDefinitiva.application.dto.billing.invoice.ReadInvoiceDto;
 import com.example.ClinicaDefinitiva.application.portsInput.BillingUseCase;
 //import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
@@ -34,22 +32,22 @@ public class BillingApplicationService implements BillingUseCase {
     }
 
     @Override
-    public InvoiceDto buildInvoice(BuildInvoiceRequest request) {
+    public ReadInvoiceDto buildInvoice(BuildInvoiceRequest request) {
         return null;
     }
 
     @Override
-    public InvoiceDto findId(Long invoiceId) {
+    public ReadInvoiceDto findId(Long invoiceId) {
         return null;
     }
 
     @Override
-    public InvoiceDto update(UpdateInvoiceRequest invoiceRequest) {
+    public ReadInvoiceDto update(UpdateInvoiceRequest invoiceRequest) {
         return null;
     }
 
     @Override
-    public Page<InvoiceDto> findAll(Pageable pageable) {
+    public Page<ReadInvoiceDto> findAll(Pageable pageable) {
         return null;
     }
 

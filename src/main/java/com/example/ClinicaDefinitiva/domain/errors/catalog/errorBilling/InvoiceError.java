@@ -117,7 +117,13 @@ public enum InvoiceError implements ErrorCatalog {
             "RN-INVOICE-015",
             "error.invoice.contract.not.valid",
             "El contrato asociado está vencido o inactivo"
+    ),
+    ERR_INVOICE_MUST_BE_PENDING_TO_PAY(
+            "RN-INVOICE-016",
+            "error.invoice.must.be.pending.to.pay",
+            "La factura debe estar en estado PENDING para poder registrarse como pagada"
     );
+
 
 
     private final String code;

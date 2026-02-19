@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller;
 
-import com.example.ClinicaDefinitiva.application.dto.billing.BuildInvoiceRequest;
-import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceDto;
+import com.example.ClinicaDefinitiva.application.dto.billing.invoice.ReadInvoiceDto;
 import com.example.ClinicaDefinitiva.application.portsInput.BillingUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +22,8 @@ public class BillingController {
     }
 
     @PostMapping
-    public ResponseEntity<InvoiceDto> buildInvoice(@Valid @RequestBody BuildInvoiceRequest request) {
-        InvoiceDto invoice = billingUseCase.buildInvoice(request);
+    public ResponseEntity<ReadInvoiceDto> buildInvoice(@Valid @RequestBody BuildInvoiceRequest request) {
+        ReadInvoiceDto invoice = billingUseCase.buildInvoice(request);
         return ResponseEntity.ok(invoice);
     }
 }

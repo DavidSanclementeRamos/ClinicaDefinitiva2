@@ -1,17 +1,15 @@
 package com.example.ClinicaDefinitiva.application.portsInput;
 
-import com.example.ClinicaDefinitiva.application.dto.billing.BuildInvoiceRequest;
-import com.example.ClinicaDefinitiva.application.dto.billing.InvoiceDto;
-import com.example.ClinicaDefinitiva.application.dto.billing.UpdateInvoiceRequest;
+import com.example.ClinicaDefinitiva.application.dto.billing.invoice.ReadInvoiceDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BillingUseCase {
    // save
-    InvoiceDto buildInvoice(BuildInvoiceRequest request);
-    InvoiceDto findId(Long invoiceId);
-    InvoiceDto update(UpdateInvoiceRequest invoiceRequest);
-    Page<InvoiceDto> findAll(Pageable pageable);
+    ReadInvoiceDto buildInvoice(BuildInvoiceRequest request);
+    ReadInvoiceDto findId(Long invoiceId);
+    ReadInvoiceDto update(UpdateInvoiceRequest invoiceRequest);
+    Page<ReadInvoiceDto> findAll(Pageable pageable);
     void deleById(Long id);
     // otras búsquedas????
 

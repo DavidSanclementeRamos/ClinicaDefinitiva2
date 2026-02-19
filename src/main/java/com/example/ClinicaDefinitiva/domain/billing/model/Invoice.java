@@ -82,7 +82,6 @@ public final class Invoice {
 
 
     public static Invoice createInstitutional(
-            InvoiceId id,
             ContractId contractId,
             ProviderId providerId,
             DentistId dentistId,
@@ -91,7 +90,6 @@ public final class Invoice {
             LocalDateTime dueDate) {
         // Factura institucional: requiere contrato
         return new Builder()
-                .id(id)
                 .contractId(contractId)
                 .providerId(providerId)
                 .dentistId(dentistId)
@@ -102,7 +100,6 @@ public final class Invoice {
     }
 
     public static Invoice createParticular(
-            InvoiceId id,
             PatientId patientId,
             ProviderId providerId,
             DentistId dentistId,
@@ -111,7 +108,6 @@ public final class Invoice {
             LocalDateTime dueDate) {
         // Factura particular: no requiere contrato
         return new Builder()
-                .id(id)
                 .patientId(patientId)
                 .providerId(providerId)
                 .dentistId(dentistId)
