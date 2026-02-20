@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.ContractStatus;
 //import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.ContractError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -20,16 +21,16 @@ public final class Contract {
 
     private static final int EXPIRATION_WARNING_DAYS = 30;
 
-    private ContractId contractId;
-    private CompanyId companyId;
-    private ThirdPartiesId thirdPartiesId;
+    private final ContractId contractId;
+    private final CompanyId companyId;
+    private final ThirdPartiesId thirdPartiesId;
     private Name name;
     private String description;
     private String origin;
-    private LocalDate startDate;
+    private final LocalDate startDate;
     private LocalDate endDate;
     private String coverageType;
-    private Double coverageRate;
+    private final Double coverageRate;
     private ContractStatus status;
     private AuditoriaInfo audit;
 
@@ -121,13 +122,13 @@ public final class Contract {
         ensureEditable();
 
         if (newEndDate == null) {
-            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_CONTRACT_MISSING_NEW_END_DATE, EntityContext.CONTRACT);
+            throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_MISSING_NEW_END_DATE, EntityContext.CONTRACT);
         }
         if (newEndDate.isBefore(this.endDate)) {
-           // throw new TemporalValidationException(ErrorCatalogXD.ERR_CONTRACT_INVALID_DATES, EntityContext.CONTRACT);
+            throw new TemporalValidationException(ContractError.ERR_CONTRACT_INVALID_DATES, EntityContext.CONTRACT);
         }
         if (newEndDate.isBefore(LocalDate.now())) {
-           // throw new TemporalValidationException(ErrorCatalogXD.ERR_CONTRACT_NEW_END_DATE_IN_PAST, EntityContext.CONTRACT);
+            throw new TemporalValidationException(ContractError.ERR_CONTRACT_NEW_END_DATE_IN_PAST, EntityContext.CONTRACT);
         }
 
         this.endDate = newEndDate;
@@ -138,11 +139,11 @@ public final class Contract {
      */
     public void suspend(String reason) {
         if (this.status != ContractStatus.ACTIVE) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_CONTRACT_CANNOT_SUSPEND, EntityContext.CONTRACT
-           // );
+            throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_CANNOT_SUSPEND, EntityContext.CONTRACT
+            );
         }
         if (reason == null || reason.isBlank()) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_CONTRACT_TERMINATION_REQUIRES_REASON, EntityContext.CONTRACT);
+            throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_TERMINATION_REQUIRES_REASON, EntityContext.CONTRACT);
         }
         this.status = ContractStatus.SUSPENDED;
     }
@@ -152,12 +153,12 @@ public final class Contract {
      */
     public void reactivate() {
         if (this.status != ContractStatus.SUSPENDED) {
-          //  throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_CONTRACT_CANNOT_REACTIVATE, EntityContext.CONTRACT
-           // );
+            throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_CANNOT_REACTIVATE, EntityContext.CONTRACT
+            );
         }
         if (isExpired()) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_CONTRACT_EXPIRED_CANNOT_REACTIVATE, EntityContext.CONTRACT
-           // );
+            throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_EXPIRED_CANNOT_REACTIVATE, EntityContext.CONTRACT
+            );
         }
         this.status = ContractStatus.ACTIVE;
     }
@@ -167,10 +168,10 @@ public final class Contract {
      */
     public void terminate(String reason) {
         if (this.status == ContractStatus.TERMINATED) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_CONTRACT_ALREADY_TERMINATED, EntityContext.CONTRACT);
+            throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_ALREADY_TERMINATED, EntityContext.CONTRACT);
         }
         if (reason == null || reason.isBlank()) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_CONTRACT_TERMINATION_REQUIRES_REASON, EntityContext.CONTRACT);
+            throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_TERMINATION_REQUIRES_REASON, EntityContext.CONTRACT);
         }
         this.status = ContractStatus.TERMINATED;
     }
@@ -217,11 +218,11 @@ public final class Contract {
 
     private void ensureEditable() {
         if (this.status != ContractStatus.ACTIVE) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_CONTRACT_NOT_EDITABLE, EntityContext.CONTRACT
-           // );
+            throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_NOT_EDITABLE, EntityContext.CONTRACT
+            );
         }
         if (isExpired()) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_CONTRACT_EXPIRED_NOT_EDITABLE, EntityContext.CONTRACT);
+            throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_EXPIRED_NOT_EDITABLE, EntityContext.CONTRACT);
         }
     }
 
@@ -235,10 +236,10 @@ public final class Contract {
         validateCoverageType(coverageType);
 
         if (startDate == null) {
-           // throw new DomainAggregateException(ErrorCatalogXD.ERR_CONTRACT_MISSING_START_DATE, EntityContext.CONTRACT);
+            throw new DomainAggregateException(ContractError.ERR_CONTRACT_MISSING_START_DATE, EntityContext.CONTRACT);
         }
         if (endDate == null) {
-           // throw new DomainAggregateException(ErrorCatalogXD.ERR_CONTRACT_MISSING_END_DATE, EntityContext.CONTRACT);
+            throw new DomainAggregateException(ContractError.ERR_CONTRACT_MISSING_END_DATE, EntityContext.CONTRACT);
         }
     }
 
@@ -246,14 +247,14 @@ public final class Contract {
 
     private void validateCoverageType(String coverageType) {
         if (coverageType == null || coverageType.isBlank()) {
-           // throw new DomainAggregateException(ErrorCatalogXD.ERR_CONTRACT_MISSING_COVERAGE_TYPE, EntityContext.CONTRACT);
+            throw new DomainAggregateException(ContractError.ERR_CONTRACT_MISSING_COVERAGE_TYPE, EntityContext.CONTRACT);
         }
     }
 
 
     private void validateDates(LocalDate startDate, LocalDate endDate) {
         if (endDate.isBefore(startDate)) {
-            //throw new TemporalValidationException(ErrorCatalogXD.ERR_CONTRACT_INVALID_DATES, EntityContext.CONTRACT);
+            throw new TemporalValidationException(ContractError.ERR_CONTRACT_INVALID_DATES, EntityContext.CONTRACT);
         }
 
 
@@ -272,5 +273,4 @@ public final class Contract {
     public ContractStatus getStatus() { return status; }
     public AuditoriaInfo getAudit() { return audit; }
 
-    public void setContractId(ContractId contractId) { this.contractId = contractId; }
 }
