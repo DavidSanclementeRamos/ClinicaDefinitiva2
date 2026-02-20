@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-//import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.AdministrativeReportError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -19,16 +19,16 @@ import java.util.Objects;
  */
 public final class AdministrativeReport {
 
-    private AdministrativeReportId id;
+    private final AdministrativeReportId id;
     private Name title;
-    private Period period;
-    private LocalDateTime createdAt;
-    private UserIdentityId createdBy;
+    private final Period period;
+    private final LocalDateTime createdAt;
+    private final UserIdentityId createdBy;
     private ReportStatus status;
-    private List<JournalEntryId> journalEntryReferences; // Referencias a asientos contables
-    private List<Indicator> indicators;
+    private final List<JournalEntryId> journalEntryReferences; // Referencias a asientos contables
+    private final List<Indicator> indicators;
     private String notes;
-    private List<Document> attachments;
+    private final List<Document> attachments;
     private LocalDateTime lastUpdate;
     private UserIdentityId approvedBy;
 
@@ -46,11 +46,14 @@ public final class AdministrativeReport {
             LocalDateTime lastUpdate,
             UserIdentityId approvedBy) {
 
-        this.id = id;
-        this.title = title;
-        this.period = period;
+        // Obligatorios (fail fast)
+        this.id = Objects.requireNonNull(id, "ReportId cannot be null");
+        this.title = Objects.requireNonNull(title, "Title cannot be null");
+        this.period = Objects.requireNonNull(period, "Period cannot be null");
+        this.createdBy = Objects.requireNonNull(createdBy, "CreatedBy cannot be null");
+
+        // Opcionales con defaults
         this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
-        this.createdBy = createdBy;
         this.status = status != null ? status : ReportStatus.draft();
         this.journalEntryReferences = journalEntryReferences != null ? new ArrayList<>(journalEntryReferences) : new ArrayList<>();
         this.indicators = indicators != null ? new ArrayList<>(indicators) : new ArrayList<>();
@@ -58,6 +61,7 @@ public final class AdministrativeReport {
         this.attachments = attachments != null ? new ArrayList<>(attachments) : new ArrayList<>();
         this.lastUpdate = lastUpdate != null ? lastUpdate : LocalDateTime.now();
         this.approvedBy = approvedBy;
+
     }
 
     /**
@@ -91,7 +95,7 @@ public final class AdministrativeReport {
         ensureEditable();
 
         if (this.journalEntryReferences.contains(journalEntryId)) {
-            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_DUPLICATE_JOURNAL_ENTRY, EntityContext.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_DUPLICATE_JOURNAL_ENTRY, EntityContext.ADMINISTRATIVEREPORT);
         }
 
         this.journalEntryReferences.add(journalEntryId);
@@ -105,7 +109,7 @@ public final class AdministrativeReport {
         ensureEditable();
 
         if (!this.journalEntryReferences.remove(journalEntryId)) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_JOURNAL_ENTRY_NOT_FOUND, EntityContext.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_JOURNAL_ENTRY_NOT_FOUND, EntityContext.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -116,11 +120,13 @@ public final class AdministrativeReport {
     public void addIndicator(Indicator indicator) {
         ensureEditable();
 
-        if(indicator == null){
-          //  throw new DomainAggregateException(ErrorCatalogXD.ERR_REPORT_INDICATOR_NULL, EntityContext.ADMINISTRATIVEREPORT);
-
+        if (indicators.size() > 1) {
+            throw new DomainAggregateException(
+                    AdministrativeReportError.ERR_REPORT_TOO_MANY_INDICATORS,
+                    EntityContext.ADMINISTRATIVEREPORT
+            );
         }
-        this.indicators.add(indicator);
+            this.indicators.add(indicator);
         this.lastUpdate = LocalDateTime.now();
     }
 
@@ -130,12 +136,8 @@ public final class AdministrativeReport {
     public void removeIndicator(Indicator indicator) {
         ensureEditable();
 
-        if(indicator == null){
-           // throw new DomainAggregateException(ErrorCatalogXD.ERR_REPORT_INDICATOR_NULL, EntityContext.ADMINISTRATIVEREPORT);
-
-        }
         if (!this.indicators.remove(indicator)) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_INDICATOR_NOT_FOUND, EntityContext.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_INDICATOR_NOT_FOUND, EntityContext.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -158,11 +160,8 @@ public final class AdministrativeReport {
         ensureNotArchived();
 
         if (!this.attachments.remove(document)) {
-            if(document == null){
-              //  throw new DomainAggregateException(ErrorCatalogXD.ERR_REPORT_ATTACHMENT_NULL, EntityContext.ADMINISTRATIVEREPORT);
 
-            }
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_ATTACHMENT_NOT_FOUND, EntityContext.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_ATTACHMENT_NOT_FOUND, EntityContext.ADMINISTRATIVEREPORT);
         }
         this.lastUpdate = LocalDateTime.now();
     }
@@ -183,7 +182,7 @@ public final class AdministrativeReport {
      */
     public void submitForReview() {
         if (!this.status.canBeSubmittedForReview()) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_CANNOT_SUBMIT, EntityContext.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_CANNOT_SUBMIT, EntityContext.ADMINISTRATIVEREPORT);
         }
 
         validateReportCompleteness();
@@ -197,9 +196,7 @@ public final class AdministrativeReport {
      */
     public void approve(UserIdentityId approver) {
         if (!this.status.canBeApproved()) {
-            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_CANNOT_APPROVE, EntityContext.ADMINISTRATIVEREPORT
-
-           // );
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_CANNOT_APPROVE, EntityContext.ADMINISTRATIVEREPORT);
         }
 
         Objects.requireNonNull(approver, "El aprobador es obligatorio");
@@ -214,11 +211,11 @@ public final class AdministrativeReport {
      */
     public void reject(String reason) {
         if (!this.status.canBeRejected()) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_CANNOT_REJECT, EntityContext.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_CANNOT_REJECT, EntityContext.ADMINISTRATIVEREPORT);
         }
 
         if (reason == null || reason.isBlank()) {
-          //  throw new DomainAggregateException(ErrorCatalogXD.ERR_REPORT_REJECTION_REQUIRES_REASON, EntityContext.ADMINISTRATIVEREPORT);
+            throw new DomainAggregateException(AdministrativeReportError.ERR_REPORT_REJECTION_REQUIRES_REASON, EntityContext.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.draft();
@@ -232,7 +229,7 @@ public final class AdministrativeReport {
      */
     public void archive() {
         if (!this.status.canBeArchived()) {
-            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_CANNOT_ARCHIVE, EntityContext.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_CANNOT_ARCHIVE, EntityContext.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.archived();
@@ -244,7 +241,7 @@ public final class AdministrativeReport {
      */
     public void unarchive() {
         if (!this.status.isArchived()) {
-            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_CANNOT_UNARCHIVE, EntityContext.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_CANNOT_UNARCHIVE, EntityContext.ADMINISTRATIVEREPORT);
         }
 
         this.status = ReportStatus.draft();
@@ -310,21 +307,21 @@ public final class AdministrativeReport {
 
     private void ensureEditable() {
         if (!isEditable()) {
-            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_NOT_EDITABLE, EntityContext.ADMINISTRATIVEREPORT);
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_NOT_EDITABLE, EntityContext.ADMINISTRATIVEREPORT);
         }
     }
 
     private void ensureNotArchived() {
         if (this.status.isArchived()) {
-            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_CANNOT_UNARCHIVE, EntityContext.ADMINISTRATIVEREPORT
-           // );
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_CANNOT_UNARCHIVE, EntityContext.ADMINISTRATIVEREPORT
+            );
         }
     }
 
     private void validateReportCompleteness() {
         if (!isComplete()) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_REPORT_MISSING_APPROVER, EntityContext.ADMINISTRATIVEREPORT
-          //  );
+            throw new BusinessRuleViolationException(AdministrativeReportError.ERR_REPORT_MISSING_APPROVER, EntityContext.ADMINISTRATIVEREPORT
+            );
         }
     }
 
@@ -338,5 +335,4 @@ public final class AdministrativeReport {
     public LocalDateTime getLastUpdate() { return lastUpdate; }
     public UserIdentityId getApprovedBy() { return approvedBy; }
 
-    public void setId(AdministrativeReportId id) { this.id = id; }
 }

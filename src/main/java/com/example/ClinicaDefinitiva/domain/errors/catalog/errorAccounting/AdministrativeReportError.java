@@ -27,8 +27,37 @@ public enum AdministrativeReportError implements ErrorCatalog {
     ERR_REPORT_CANNOT_UNARCHIVE("RN-ADMINREPORT-008", "error.report.cannotUnarchive",
             "Solo puede desarchivarse si está archivado"),
 
-    ERR_REPORT_MISSING_APPROVER("RN-ADMINREPORT-011", "error.report.missingApprover",
-            "La aprobación requiere usuario aprobador válido");
+    ERR_REPORT_MISSING_APPROVER("RN-ADMINREPORT-009", "error.report.missingApprover",
+            "La aprobación requiere usuario aprobador válido"),
+
+    ERR_REPORT_DUPLICATE_JOURNAL_ENTRY(
+            "RN-ADMINREPORT-010",
+            "error.report.duplicateJournalEntry",
+            "El reporte contiene un asiento contable duplicado"
+    ),
+
+    ERR_REPORT_JOURNAL_ENTRY_NOT_FOUND(
+            "RN-ADMINREPORT-011",
+            "error.report.journalEntryNotFound",
+            "El asiento contable referenciado no existe en el reporte"
+    ),
+
+    ERR_REPORT_TOO_MANY_INDICATORS(
+            "RN-ADMINREPORT-012",
+            "error.report.tooManyIndicators",
+            "El reporte excede el número máximo permitido de indicadores"
+    ),
+
+    ERR_REPORT_ATTACHMENT_NOT_FOUND(
+            "RN-ADMINREPORT-013",
+            "error.report.attachmentNotFound",
+            "El documento adjunto especificado no se encuentra en el reporte"
+    ),
+    ERR_REPORT_INDICATOR_NOT_FOUND(
+            "RN-ADMINREPORT-014",
+            "error.report.indicatorNotFound",
+            "El indicador especificado no se encuentra en el reporte"
+    );
 
 
     private final String code;
