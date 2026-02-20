@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeTh
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
-//import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.ThirdPartiesError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -21,12 +21,12 @@ public final class ThirdParties {
     private static final int MIN_DOCUMENT_LENGTH = 5;
     private static final int MAX_DOCUMENT_LENGTH = 20;
 
-    private ThirdPartiesId partiesId;
-    private CompanyId companyId;
+    private final ThirdPartiesId partiesId;
+    private final CompanyId companyId;
     private Name name;
-    private String typeDocument;
-    private String documentNumber;
-    private TypeThirdParties typeThirdParties;
+    private final String typeDocument;
+    private final String documentNumber;
+    private final TypeThirdParties typeThirdParties;
     private Address address;
     private PhoneNumber phoneNumber;
     private Email email;
@@ -111,7 +111,7 @@ public final class ThirdParties {
      */
     public void activate() {
         if (this.active) {
-           // throw new DomainAggregateException(ErrorCatalogXD.ERR_THIRD_PARTY_ALREADY_ACTIVE, EntityContext.THISPARTIES);
+            throw new DomainAggregateException(ThirdPartiesError.ERR_THIRD_PARTY_ALREADY_ACTIVE, EntityContext.THISPARTIES);
         }
         this.active = true;
     }
@@ -121,10 +121,10 @@ public final class ThirdParties {
      */
     public void inactivate(String reason) {
         if (!this.active) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_THIRD_PARTY_ALREADY_INACTIVE, EntityContext.THISPARTIES);
+            throw new BusinessRuleViolationException(ThirdPartiesError.ERR_THIRD_PARTY_ALREADY_INACTIVE, EntityContext.THISPARTIES);
         }
         if (reason == null || reason.isBlank()) {
-          //  throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_THIRD_PARTY_INACTIVATION_REQUIRES_REASON, EntityContext.THISPARTIES);
+            throw new DomainAggregateException(ThirdPartiesError.ERR_THIRD_PARTY_INACTIVATION_REQUIRES_REASON, EntityContext.THISPARTIES);
         }
         this.active = false;
     }
@@ -160,7 +160,7 @@ public final class ThirdParties {
 
     private void ensureActive() {
         if (!this.active) {
-            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_THIRD_PARTY_NOT_EDITABLE, EntityContext.THISPARTIES);
+            throw new BusinessRuleViolationException(ThirdPartiesError.ERR_THIRD_PARTY_NOT_EDITABLE, EntityContext.THISPARTIES);
         }
     }
 
@@ -171,20 +171,18 @@ public final class ThirdParties {
 
 
         if (typeDocument == null || typeDocument.isBlank()) {
-           // throw new DomainAggregateException(ErrorCatalogXD.ERR_THIRD_PARTY_MISSING_DOCUMENT_TYPE, EntityContext.THISPARTIES);
+            throw new DomainAggregateException(ThirdPartiesError.ERR_THIRD_PARTY_MISSING_DOCUMENT_TYPE, EntityContext.THISPARTIES);
         }
         if (documentNumber == null || documentNumber.isBlank()) {
-           // throw new DomainAggregateException(ErrorCatalogXD.ERR_THIRD_PARTY_MISSING_DOCUMENT_NUMBER, EntityContext.THISPARTIES);
+            throw new DomainAggregateException(ThirdPartiesError.ERR_THIRD_PARTY_MISSING_DOCUMENT_NUMBER, EntityContext.THISPARTIES);
         }
-        if (typeThirdParties == null) {
-           // throw new DomainAggregateException(ErrorCatalogXD.ERR_THIRD_PARTY_MISSING_TYPE, EntityContext.THISPARTIES);
-        }
+
     }
 
     private void validateDocumentNumber(String documentNumber) {
         String cleanDocument = documentNumber.trim().replaceAll("[^0-9A-Za-z]", "");
         if (cleanDocument.length() < MIN_DOCUMENT_LENGTH || cleanDocument.length() > MAX_DOCUMENT_LENGTH) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH, EntityContext.THISPARTIES);
+            throw new BusinessRuleViolationException(ThirdPartiesError.ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH, EntityContext.THISPARTIES);
         }
     }
 
@@ -199,5 +197,4 @@ public final class ThirdParties {
     public Email getEmail() { return email; }
     public boolean isActive() { return active; }
 
-    public void setPartiesId(ThirdPartiesId partiesId) { this.partiesId = partiesId; }
 }

@@ -3,6 +3,11 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.JournalEntryError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.JournalEntryLineError;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 //import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 
 
@@ -12,12 +17,12 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPa
  */
 public final class JournalEntryLine {
 
-    private LedgerAccountId ledgerAccountId;
-    private ThirdPartiesId thirdPartiesId;
-    private String description;
-    private Price amount;
-    private boolean isDebit;
-    private String documentReference;
+    private final LedgerAccountId ledgerAccountId;
+    private final ThirdPartiesId thirdPartiesId;
+    private final String description;
+    private final Price amount;
+    private final boolean isDebit;
+    private final String documentReference;
 
     private JournalEntryLine(
             LedgerAccountId ledgerAccountId,
@@ -169,16 +174,16 @@ public final class JournalEntryLine {
 
 
         if (description == null || description.isBlank()) {
-          //  throw new DomainAggregateException(ErrorCatalogXD.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD, EntityContext.JOURNALENTRY);
+            throw new DomainAggregateException(JournalEntryError.ERR_JOURNALENTRY_MISSING_DESCRIPTION_FIELD, EntityContext.JOURNALENTRY);
         }
         if (amount == null) {
-           // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_JOURNALENTRY_MISSING_AMOUNT, EntityContext.JOURNALENTRY);
+            throw new DomainAggregateException(JournalEntryError.ERR_JOURNALENTRY_MISSING_AMOUNT, EntityContext.JOURNALENTRY);
         }
     }
 
     private void validateAmount(Price amount) {
         if (amount.isNegativeOrZero()) {
-            //throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_JOURNALENTRY_INVALID_AMOUNT, EntityContext.JOURNALENTRY);
+            throw new BusinessRuleViolationException(JournalEntryError.ERR_JOURNALENTRY_INVALID_AMOUNT, EntityContext.JOURNALENTRY);
         }
     }
 

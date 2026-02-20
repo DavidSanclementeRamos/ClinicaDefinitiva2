@@ -4,6 +4,10 @@ import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.OpeningBalanceId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.OpeningBalanceError;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 //import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 
 import java.time.LocalDate;
@@ -17,7 +21,7 @@ public class OpeningBalance { // saldo inicial
     private final LocalDate date;
 
 
-    public OpeningBalance(OpeningBalanceId openingBalanceId, ThirdPartiesId companyId, LedgerAccountId cuentaId, ThirdPartiesId thirdPartiesId, Price amount, LocalDate date) {
+    private  OpeningBalance(OpeningBalanceId openingBalanceId, ThirdPartiesId companyId, LedgerAccountId cuentaId, ThirdPartiesId thirdPartiesId, Price amount, LocalDate date) {
 
         validateMandatoryFields(amount, date);
         this.openingBalanceId = openingBalanceId;
@@ -51,13 +55,13 @@ public class OpeningBalance { // saldo inicial
 
   private void validateMandatoryFields(Price amount, LocalDate date) {
     if (amount.isNegativeOrZero()) {
-       // throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_OPENING_BALANCE_INVALID_AMOUNT, EntityContext.OPENINGBALANCE);
+        throw new BusinessRuleViolationException(OpeningBalanceError.ERR_OPENING_BALANCE_INVALID_AMOUNT, EntityContext.OPENINGBALANCE);
     }
     if (amount == null) {
-       // throw new DomainAggregateException(ErrorCatalogXD.ERR_OPENING_BALANCE_MISSING_AMOUNT, EntityContext.OPENINGBALANCE);
+        throw new DomainAggregateException(OpeningBalanceError.ERR_OPENING_BALANCE_MISSING_AMOUNT, EntityContext.OPENINGBALANCE);
     }
       if (date == null) {
-          //throw new DomainAggregateException(ErrorCatalogXD.ERR_OPENING_BALANCE_MISSING_DATE, EntityContext.OPENINGBALANCE);
+          throw new DomainAggregateException(OpeningBalanceError.ERR_OPENING_BALANCE_MISSING_DATE, EntityContext.OPENINGBALANCE);
       }
   }
 
