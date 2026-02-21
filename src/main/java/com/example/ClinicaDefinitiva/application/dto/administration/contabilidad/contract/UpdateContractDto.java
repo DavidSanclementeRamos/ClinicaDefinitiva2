@@ -3,8 +3,8 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 /**
  * DTO para actualizar información del contrato
  */
-public record UpdateContractRequest(
-        //NameDto name,
+public record UpdateContractDto(
+        String name,
         String description,
         String origin,
         String coverageType

@@ -5,10 +5,10 @@ import java.time.LocalDate;
 /**
  * DTO para crear un nuevo contrato
  */
-public record CreateContractRequest(
-        String companyId,
-        String thirdPartiesId,
-        //NameDto name,
+public record CreateContractDto(
+        Long companyId,
+        Long thirdPartiesId,
+        String name,
         String description,
         String origin,
         LocalDate endDate,

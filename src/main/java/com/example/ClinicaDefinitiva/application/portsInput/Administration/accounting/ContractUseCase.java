@@ -1,20 +1,40 @@
 package com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.*;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 
 public interface ContractUseCase {
-    ContractResponse findContractByI(String id);
-    Page<ContractPageResponse> istActiveContracts(LocalDate beforeDate);
-    Page<ContractPageResponse> findExpiringContracts(LocalDate beforeDate);
-    ContractResponse registerContract(CreateContractRequest request);
-    ContractResponse updateContract(String contractId, UpdateContractRequest request);
-    ContractResponse extendContract(String contractId, ExtendContractRequest request);
-    ContractResponse suspendContract(String contractId, SuspendContractRequest request);
-    ContractResponse reactivateContract(String contractId);
-    ContractResponse terminateContract(String contractId, TerminateContractRequest request);
+    ReadContractDto findById(ContractId id, UserIdentityId requesterId, RolId requesterRolId);
+
+    Page<PageContractDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    Page<PageContractDto> findByCompany(CompanyId companyId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    Page<PageContractDto> findByThirdParty(ThirdPartiesId thirdPartyId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    Page<PageContractDto> findByStatus(String status, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    Page<PageContractDto> findExpiringSoon(int days, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    ReadContractDto createContract(CreateContractDto dto, UserIdentityId requesterId, RolId requesterRolId);
+
+    ReadContractDto updateInformation(ContractId id, UpdateContractDto dto, UserIdentityId requesterId, RolId requesterRolId);
+
+    ReadContractDto extendContract(ContractId id, java.time.LocalDate newEndDate, UserIdentityId requesterId, RolId requesterRolId);
+
+    void suspend(ContractId id, String reason, UserIdentityId requesterId, RolId requesterRolId);
+
+    void reactivate(ContractId id, UserIdentityId requesterId, RolId requesterRolId);
+
+    void terminate(ContractId id, String reason, UserIdentityId requesterId, RolId requesterRolId);
 
 
 

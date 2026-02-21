@@ -68,8 +68,8 @@ public final class Contract {
      * Factory method para registrar un nuevo contrato.
      */
     public static Contract registerContract(
-            Company company,
-            ThirdParties thirdParties,
+            CompanyId company,
+            ThirdPartiesId thirdParties,
             Name name,
             String description,
             String origin,
@@ -81,8 +81,8 @@ public final class Contract {
 
         return new Contract(
                 null,
-                company.getId(),
-                thirdParties.getPartiesId(),
+                company,
+                thirdParties,
                 name,
                 description,
                 origin,

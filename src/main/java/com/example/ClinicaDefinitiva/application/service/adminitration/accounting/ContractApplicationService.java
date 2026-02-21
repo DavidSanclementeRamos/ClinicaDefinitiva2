@@ -3,19 +3,24 @@ package com.example.ClinicaDefinitiva.application.service.adminitration.accounti
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.*;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ContractNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ThirdPartiesNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.ContractMapper;
+import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract.ContractReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NameMapper;
+import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract.ContractWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.ContractUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.CompanyRepository;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ThirdPartiesRepository;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.service.ContractDomainService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,136 +34,76 @@ import java.time.LocalDate;
 public class ContractApplicationService implements ContractUseCase {
 
     private final ContractRepository contractRepository;
-    private final ContractMapper mapper;
+    private final ContractReadMapper readMapper;
+    private final ContractWriteMapper writeMapper;
     private final ThirdPartiesRepository thirdPartiesRepository;
     private final CompanyRepository companyRepository;
 
-
-    public ContractApplicationService(ContractRepository contractRepository, ContractMapper mapper, ThirdPartiesRepository thirdPartiesRepository, CompanyRepository companyRepository) {
+    public ContractApplicationService(ContractRepository contractRepository, ContractReadMapper readMapper, ContractWriteMapper writeMapper, ThirdPartiesRepository thirdPartiesRepository, CompanyRepository companyRepository) {
         this.contractRepository = contractRepository;
-        this.mapper = mapper;
+        this.readMapper = readMapper;
+        this.writeMapper = writeMapper;
         this.thirdPartiesRepository = thirdPartiesRepository;
         this.companyRepository = companyRepository;
     }
 
     @Override
-    public ContractResponse findContractByI(String id) {
-        ContractId contractId = ContractId.fromString(String.valueOf(id));
-        Contract contract = contractRepository.findById(contractId)
-                .orElseThrow(() -> new ContractNotFoundException("No se encontro el ID:" + contractId));
-        ThirdParties thirdParties = thirdPartiesRepository.findById(contract.getThirdPartiesId()).orElse(null);
-
-        return mapper.toResponse(contract,thirdParties);
-    }
-
-
-    @Override
-    public Page<ContractPageResponse> istActiveContracts(LocalDate beforeDate) {
+    public ReadContractDto findById(ContractId id, UserIdentityId requesterId, RolId requesterRolId) {
         return null;
     }
 
     @Override
-    public Page<ContractPageResponse> findExpiringContracts(LocalDate beforeDate) {
-          Page<Contract> contractPage = contractRepository.findExpiredContracts(beforeDate);
-
-        if(contractPage.isEmpty()){
-            throw new ContractNotFoundException(" ");
-        }
-        return contractPage.map(mapper::toListResponse);
-    }
-
-
-    @Override
-    public ContractResponse registerContract(CreateContractRequest request) {
-
-
-
-        ThirdPartiesId partiesId = ThirdPartiesId.fromString(request.thirdPartiesId());
-        ThirdParties parties = thirdPartiesRepository.findById(partiesId)
-                .orElseThrow(() -> new ThirdPartiesNotFoundException(""));
-
-        Contract contract = ContractDomainService.registerContract(
-                null,
-                parties,
-                NameMapper.fromDto(request.name()),
-                request.description(),
-                request.origin(),
-                request.endDate(),
-                request.coverageType(),
-                request.coverageRate()
-        );
-
-        return mapper.toResponse(contract, parties);
-
+    public Page<PageContractDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public ContractResponse updateContract(String contractId, UpdateContractRequest request) {
-        ContractId id = ContractId.fromString(contractId);
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(()-> new ContractNotFoundException(""));
-        contract.updateInformation(
-                NameMapper.fromDto(request.name()),
-                request.description(),
-                request.origin(),
-                request.coverageType()
-        );
-        contractRepository.save(contract);
-        ThirdParties thirdParties = thirdPartiesRepository.findById(contract.getThirdPartiesId()).orElse(null);
-
-        return mapper.toResponse(contract, thirdParties);
+    public Page<PageContractDto> findByCompany(CompanyId companyId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public ContractResponse extendContract(String contractId, ExtendContractRequest request) {
-        ContractId id = ContractId.fromString(contractId);
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(()-> new ContractNotFoundException(""));
-
-        contract.extendContract(request.newEndDate());
-
-        contractRepository.save(contract);
-        ThirdParties thirdParties = thirdPartiesRepository.findById(contract.getThirdPartiesId()).orElse(null);
-        return mapper.toResponse(contract, thirdParties);
+    public Page<PageContractDto> findByThirdParty(ThirdPartiesId thirdPartyId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public ContractResponse suspendContract(String contractId, SuspendContractRequest request) {
-
-        ContractId id = ContractId.fromString(contractId);
-        Contract contract = contractRepository.findById(id)
-                        .orElseThrow(()-> new ContractNotFoundException(""));
-          contract.suspend(
-                request.reason()
-        );
-
-          contractRepository.save(contract);
-        ThirdParties thirdParties = thirdPartiesRepository.findById(contract.getThirdPartiesId()).orElse(null);
-        return mapper.toResponse(contract, thirdParties);
+    public Page<PageContractDto> findByStatus(String status, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public ContractResponse reactivateContract(String contractId) {
-        ContractId id = ContractId.fromString(contractId);
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(()-> new ContractNotFoundException(""));
-        contract.reactivate();
-        contractRepository.save(contract);
-        ThirdParties thirdParties = thirdPartiesRepository.findById(contract.getThirdPartiesId()).orElse(null);
-        return mapper.toResponse(contract, thirdParties);
+    public Page<PageContractDto> findExpiringSoon(int days, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public ContractResponse terminateContract(String contractId, TerminateContractRequest request) {
-        ContractId id = ContractId.fromString(contractId);
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(()-> new ContractNotFoundException(""));
-        contract.terminate(request.reason());
-
-        contractRepository.save(contract);
-
-        ThirdParties thirdParties = thirdPartiesRepository.findById(contract.getThirdPartiesId()).orElse(null);
-        return mapper.toResponse(contract, thirdParties);
+    public ReadContractDto createContract(CreateContractDto dto, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
+    @Override
+    public ReadContractDto updateInformation(ContractId id, UpdateContractDto dto, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
+    }
+
+    @Override
+    public ReadContractDto extendContract(ContractId id, LocalDate newEndDate, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
+    }
+
+    @Override
+    public void suspend(ContractId id, String reason, UserIdentityId requesterId, RolId requesterRolId) {
+
+    }
+
+    @Override
+    public void reactivate(ContractId id, UserIdentityId requesterId, RolId requesterRolId) {
+
+    }
+
+    @Override
+    public void terminate(ContractId id, String reason, UserIdentityId requesterId, RolId requesterRolId) {
+
+    }
 }

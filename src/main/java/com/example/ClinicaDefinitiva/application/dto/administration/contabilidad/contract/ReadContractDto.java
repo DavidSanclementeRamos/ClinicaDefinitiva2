@@ -7,12 +7,11 @@ import java.time.LocalDate;
 /**
  * DTO de respuesta para Contract
  */
-public record ContractResponse(
-        String id,
-        String companyId,
-        String thirdPartiesId,
-        String thirdPartiesName,
-        //NameDto name,
+public record ReadContractDto(
+        Long id,
+        Long companyId,
+        Long thirdPartiesId,
+        String name,
         String description,
         String origin,
         LocalDate startDate,

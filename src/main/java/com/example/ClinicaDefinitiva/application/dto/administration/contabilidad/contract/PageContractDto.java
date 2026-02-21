@@ -7,10 +7,10 @@ import java.time.LocalDate;
 /**
  * DTO simplificado para listados
  */
-public record ContractPageResponse(
-        String id,
-        //NameDto name,
-        String thirdPartiesName,
+public record PageContractDto(
+        Long id,
+        String name,
+        Long thirdPartiesId,
         String coverageType,
         Double coverageRate,
         LocalDate endDate,

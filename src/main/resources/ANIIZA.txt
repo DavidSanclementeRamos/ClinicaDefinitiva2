@@ -404,3 +404,63 @@ public final class AuthorizationHelper {
 ---
 
 Si quieres, implemento ahora el **PolicyEngine** completo y adapto `AuthorizationHelper` en el proyecto `CompanyApplicationService` y en los siguientes agregados. También puedo generar tests unitarios de ejemplo para `OwnershipPolicy` y `SectorBasedPolicy`. ¿Qué prefieres que haga a continuación?
+
+
+
+
+
+
+
+
+
+
+
+- cambiar nombre de ReporUseCse a AdministrativeReportUseCase, y refactorizar los metodos 
+Eliminar dto:
+ - eliminar AddJournalEntryToReportRequest, Rzon: basta con pasar el vo id deJournalEntry, no es necesario un record para un solo atributo
+ - elimnara record RejectReportRequest, razon: basta con pasar un String en el caso de uso para la razon del rechazo de un reporte.
+ - eliminar record ApproveReportRequest, Razon no es nesesario, basat con pasar el vo userId en el caso de uso para representar a la persona que ejecuta la accion
+ 
+ - elimina record AddIndicatorToReportRequest, Razon estaba duplicado con IndicatorDto.
+ - eliminar record AddAttachmentToReportRequest, Razon : esta dublicado con DocumentDto.
+
+- Cambiar nombre de dto para mejorar la sematica: 
+
+ - de UpdateReportRequest a UpdateAdministrativeReportDto
+ - de ReportListResponse a PageAdministrativeReportDto
+ - de CreateReportRequest a CreateAdministrativeReportDto 
+- Cambiar nombre de ReportApplicationService a AdministrativeReportApplicationService, y refactrizar con los nuevo metodos que implementa
+
+- cambiar nombre   ReportMapper a AdministrativeReportReadMapper ycrear AdministrativeReportWriteMapper
+
+
+feat(application-administrativereport): refactoriza nombres y elimina DTOs redundantes en casos de uso administrativos
+
+- Renombra `ReportUseCase` a `AdministrativeReportUseCase` y ajusta sus métodos.
+- Elimina DTOs innecesarios:
+  - `AddJournalEntryToReportRequest`: reemplazado por el VO `JournalEntryId`.
+  - `RejectReportRequest`: reemplazado por un `String` con la razón del rechazo.
+  - `ApproveReportRequest`: reemplazado por el VO `UserId` del ejecutor.
+  - `AddIndicatorToReportRequest`: duplicado funcional de `IndicatorDto`.
+  - `AddAttachmentToReportRequest`: duplicado funcional de `DocumentDto`.
+- Renombra DTOs para mejorar la semántica:
+  - `UpdateReportRequest` → `UpdateAdministrativeReportDto`
+  - `ReportListResponse` → `PageAdministrativeReportDto`
+  - `CreateReportRequest` → `CreateAdministrativeReportDto`
+- Renombra `ReportApplicationService` a `AdministrativeReportApplicationService` y refactoriza con los nuevos métodos.
+- Renombra `ReportMapper` a `AdministrativeReportReadMapper` y crea `AdministrativeReportWriteMapper` para separar responsabilidades de lectura y escritura.
+
+
+feat(application-company): refactoriza casos de uso y DTOs con nueva semántica
+
+- Refactoriza `CompanyUseCase` para incluir atributos de autorización según el ADR-(Arquitectura)-48-Obtención de UserId y RolId en casos de uso.md
+- Cambia nombres de DTOs para mayor claridad semántica:
+  - `CompanyResponse` → `ReadCompanyDto`
+  - `CompanyPageResponse` → `PageCompanyDto`
+  - `CreateCompanyRequest` → `CreateCompanyDto`
+  - `UpdateCompanyContactRequest` → `UpdateCompanyContactDto`
+  - `UpdateCompanyTaxRequest` → `UpdateCompanyTaxDto`
+- Elimina `UpdateCompanyStatusRequest` por obsolescencia.
+- Cambia `CompanyMapper` → `CompanyReadMapper`.
+- Crea `CompanyWriteMapper` para operaciones de escritura.
+- Refactoriza `CompanyApplicationService` con las nuevas implementaciones de casos de uso.

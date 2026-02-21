@@ -1,21 +1,21 @@
-package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting;
+package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.ContractPageResponse;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.ContractResponse;
+import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.PageContractDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.ReadContractDto;
+import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NameMapper;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ContractMapper {
+public class ContractReadMapper {
 
-    public ContractResponse toResponse(Contract contract, ThirdParties thirdParties) {
-        return new ContractResponse(
+    public ReadContractDto toReadDto(Contract contract, ThirdParties thirdParties) {
+        return new ReadContractDto(
                 contract.getContractId() != null ? contract.getContractId().getValue() : null,
                 contract.getCompanyId() != null ? contract.getCompanyId().getValue() : null,
                 contract.getThirdPartiesId() != null ? contract.getThirdPartiesId().getValue() : null,
-                thirdParties != null ? thirdParties.getName().getName() : null,
-                NameMapper.toName(contract.getName()),
+                contract.getName().getValue(),
                 contract.getDescription(),
                 contract.getOrigin(),
                 contract.getStartDate(),
@@ -29,10 +29,10 @@ public class ContractMapper {
         );
     }
 
-    public ContractPageResponse toListResponse(Contract contract) {
-        return new ContractPageResponse(
+    public PageContractDto toPageDto(Contract contract) {
+        return new PageContractDto(
                 contract.getContractId() != null ? contract.getContractId().getValue() : null,
-                NameMapper.toName(contract.getName()),
+                contract.getName().getValue(),
                 contract.getThirdPartiesId().getValue(),
                 contract.getCoverageType(),
                 contract.getCoverageRate(),
