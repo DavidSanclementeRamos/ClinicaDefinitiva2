@@ -2,11 +2,14 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ReportStatus;
 
-public record ReportListResponse(
-        String id,
-        //NameDto title,
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public record PageAdministrativeReportDto(
+        Long id,
+        String title,
         PeriodDto period,
         ReportStatus status,
-        String createdAt,
+        LocalDateTime createdAt,
         int totalItems
 ) {}

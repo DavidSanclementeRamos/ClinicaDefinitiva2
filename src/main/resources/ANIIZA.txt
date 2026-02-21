@@ -1,0 +1,406 @@
+refactor (accounting): implementar catálogo de errores específico
+ - En los siguientes agregados 
+  - JournalEntry
+  - JournalEntryLine
+  - LedgerAccount
+  - OpeningBalance
+  - ThirdParties
+
+ y eliminar validaciones redundantes
+
+Se aplica ADR-(accounting-AdministrativeReport)-12-Validación de Null en Agregados vs Value Objects, al agregado AdministrativeReport:
+
+- Se crean mas catalogos semánticos:
+  - ERR_REPORT_DUPLICATE_JOURNAL_ENTRY (RN-ADMINREPORT-010)
+  - ERR_REPORT_JOURNAL_ENTRY_NOT_FOUND (RN-ADMINREPORT-011)
+  - ERR_REPORT_TOO_MANY_INDICATORS (RN-ADMINREPORT-012)
+  - ERR_REPORT_ATTACHMENT_NOT_FOUND (RN-ADMINREPORT-013)
+  - ERR_REPORT_INDICATOR_NOT_FOUND (RN-ADMINREPORT-014)
+
+- Se refactorizan métodos del agregado:
+  - `addIndicator()` confía en la invarianza del VO `Indicator` y valida solo reglas del agregado (editable, máximo de indicadores).
+  - `removeIndicator()` valida existencia interna y lanza error semántico si el indicador no está presente.
+  - `attachDocument()` valida existencia de adjuntos y lanza error si no se encuentra.
+  - Se eliminan validaciones redundantes de null en VOs, alineado con ADR‑12.
+
+
+package com.example.clinicadefinitiva.application.service.shared;
+
+import com.example.clinicadefinitiva.domain.actor.model.Receptionist;
+import com.example.clinicadefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.clinicadefinitiva.domain.administration.authorization.service.AuthorizationService;
+import com.example.clinicadefinitiva.domain.administration.authorization.vo.*;
+import com.example.clinicadefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.clinicadefinitiva.domain.errors.catalog.authorization.AuthorizationError;
+import com.example.clinicadefinitiva.domain.errors.context.VOContext;
+import com.example.clinicadefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import java.util.Optional;
+
+public final class AuthorizationHelper {
+
+    private final ReceptionRepository receptionRepository;
+    private final AuthorizationService authorizationService;
+
+    public AuthorizationHelper(ReceptionRepository receptionRepository,
+                               AuthorizationService authorizationService) {
+        this.receptionRepository = receptionRepository;
+        this.authorizationService = authorizationService;
+    }
+
+    /**
+     * Construye y valida el SecurityContext para la operación solicitada.
+     *
+     * @param requesterId id del usuario que solicita
+     * @param requesterRolId rol activo del usuario
+     * @param resource recurso (ej. ResourceCatalog.BasicResource.COMPANY)
+     * @param action acción (ej. ActionCatalog.BasicAction.CREATE)
+     * @param optionalResourceId id del recurso objetivo (puede ser null)
+     */
+    public void authorize(UserIdentityId requesterId,
+                          RolId requesterRolId,
+                          ResourceCatalog.BasicResource resource,
+                          ActionCatalog.BasicAction action,
+                          String optionalResourceId) {
+
+        // 1. Validar que exista receptionist y obtener sector
+        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
+                .orElseThrow(() -> new BusinessRuleViolationException(
+                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
+                        VOContext.AUTHORIZATION
+                ));
+
+        // 2. Construir Permission
+        Permission permission = Permission.of(
+                ResourceCatalog.of(resource),
+                ActionCatalog.of(action)
+        );
+
+        // 3. Construir SecurityContext con sector y resourceId si aplica
+        SecurityContext.Builder builder = SecurityContext
+                .builder(permission, requesterId)
+                .withSector(receptionist.getSector().Value());
+
+        if (optionalResourceId != null) {
+            builder.withResourceId(optionalResourceId);
+        }
+
+        SecurityContext context = builder.build();
+
+        // 4. Validar autorización
+        if (!authorizationService.isAuthorized(requesterRolId, context)) {
+            throw new BusinessRuleViolationException(
+                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
+                    VOContext.AUTHORIZATION
+            );
+        }
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+### Corrección y patrón definitivo para la validación de autorización
+
+He revisado tu fragmento y las inconsistencias. Abajo te dejo un **patrón reutilizable, seguro y consistente** para construir el `SecurityContext` y validar la autorización según tu **Sector‑Based Policy** y la **Ownership Policy**. Incluye:
+
+- **Obtención y validación del receptionist** (no repetir comprobaciones redundantes).  
+- **Construcción de `Permission`** usando `ResourceCatalog` y `ActionCatalog`.  
+- **Construcción de `SecurityContext`** con `withSector(...)` y `withResourceId(...)` cuando aplique.  
+- **Chequeo final con `authorizationService.isAuthorized(...)`** y lanzamiento de excepción estándar.
+
+Usa este helper en todos los `ApplicationService` para mantener la política uniforme.
+
+---
+
+### Helper de autorización (reutilizable)
+```java
+package com.example.clinicadefinitiva.application.service.shared;
+
+import com.example.clinicadefinitiva.domain.actor.model.Receptionist;
+import com.example.clinicadefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.clinicadefinitiva.domain.administration.authorization.service.AuthorizationService;
+import com.example.clinicadefinitiva.domain.administration.authorization.vo.*;
+import com.example.clinicadefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.clinicadefinitiva.domain.errors.catalog.authorization.AuthorizationError;
+import com.example.clinicadefinitiva.domain.errors.context.VOContext;
+import com.example.clinicadefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import java.util.Optional;
+
+public final class AuthorizationHelper {
+
+    private final ReceptionRepository receptionRepository;
+    private final AuthorizationService authorizationService;
+
+    public AuthorizationHelper(ReceptionRepository receptionRepository,
+                               AuthorizationService authorizationService) {
+        this.receptionRepository = receptionRepository;
+        this.authorizationService = authorizationService;
+    }
+
+    /**
+     * Construye y valida el SecurityContext para la operación solicitada.
+     *
+     * @param requesterId id del usuario que solicita
+     * @param requesterRolId rol activo del usuario
+     * @param resource recurso (ej. ResourceCatalog.BasicResource.COMPANY)
+     * @param action acción (ej. ActionCatalog.BasicAction.CREATE)
+     * @param optionalResourceId id del recurso objetivo (puede ser null)
+     */
+    public void authorize(UserIdentityId requesterId,
+                          RolId requesterRolId,
+                          ResourceCatalog.BasicResource resource,
+                          ActionCatalog.BasicAction action,
+                          String optionalResourceId) {
+
+        // 1. Validar que exista receptionist y obtener sector
+        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
+                .orElseThrow(() -> new BusinessRuleViolationException(
+                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
+                        VOContext.AUTHORIZATION
+                ));
+
+        // 2. Construir Permission
+        Permission permission = Permission.of(
+                ResourceCatalog.of(resource),
+                ActionCatalog.of(action)
+        );
+
+        // 3. Construir SecurityContext con sector y resourceId si aplica
+        SecurityContext.Builder builder = SecurityContext
+                .builder(permission, requesterId)
+                .withSector(receptionist.getSector().Value());
+
+        if (optionalResourceId != null) {
+            builder.withResourceId(optionalResourceId);
+        }
+
+        SecurityContext context = builder.build();
+
+        // 4. Validar autorización
+        if (!authorizationService.isAuthorized(requesterRolId, context)) {
+            throw new BusinessRuleViolationException(
+                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
+                    VOContext.AUTHORIZATION
+            );
+        }
+    }
+}
+```
+
+---
+
+### Ejemplo aplicado en `CompanyApplicationService` (createCompany y updateContact)
+```java
+// inyectar AuthorizationHelper en el service
+private final AuthorizationHelper authorizationHelper;
+
+public CompanyApplicationService(..., AuthorizationHelper authorizationHelper) {
+    this.companyRepository = companyRepository;
+    this.receptionRepository = receptionRepository;
+    this.readMapper = readMapper;
+    this.writeMapper = writeMapper;
+    this.authorizationService = authorizationService;
+    this.authorizationHelper = authorizationHelper;
+}
+
+@Override
+public ReadCompanyDto createCompany(CreateCompanyDto dto, UserIdentityId requesterId, RolId requesterRolId) {
+    // autorización: CREATE sobre COMPANY (helper lanza si no autorizado)
+    authorizationHelper.authorize(requesterId, requesterRolId,
+            ResourceCatalog.BasicResource.COMPANY,
+            ActionCatalog.BasicAction.CREATE,
+            null);
+
+    // validaciones de negocio...
+    if (dto.incorporationDate() != null && dto.incorporationDate().isAfter(LocalDate.now())) {
+        throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_INVALID_INCORPORATION_DATE, EntityContext.COMPANY);
+    }
+    if (companyRepository.existsByNit(dto.nit())) {
+        throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_DUPLICATE_NIT, EntityContext.COMPANY);
+    }
+
+    Company company = writeMapper.fromCreateDto(dto);
+    Company saved = companyRepository.save(company);
+    return readMapper.toDto(saved);
+}
+
+@Override
+public ReadCompanyDto updateContactInformation(CompanyId id, UpdateCompanyContactDto dto, UserIdentityId requesterId, RolId requesterRolId) {
+    Company company = companyRepository.findById(id)
+            .orElseThrow(() -> new BusinessRuleViolationException(CompanyError.ERR_COMPANY_NOT_FOUND, EntityContext.COMPANY));
+
+    // Solo editable en ACTIVE
+    if (company.getStatus() != Status.ACTIVE) {
+        throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_NOT_EDITABLE, EntityContext.COMPANY);
+    }
+
+    // autorización: UPDATE sobre COMPANY con resourceId = companyId
+    authorizationHelper.authorize(requesterId, requesterRolId,
+            ResourceCatalog.BasicResource.COMPANY,
+            ActionCatalog.BasicAction.UPDATE,
+            id.getValue());
+
+    company.updateContactInformation(dto.email(), dto.phone(), dto.address());
+    Company updated = companyRepository.save(company);
+    return readMapper.toDto(updated);
+}
+```
+
+---
+
+### Consideraciones adicionales y reglas especiales
+- **No uses `orElseThrow` y luego `if (receptionist == null)`**: eso es redundante. El helper lanza la excepción correcta si no hay receptionist.  
+- **Ownership Policy**: para agregados con ownership (ej. `AdministrativeReport`, `JournalEntry` antes de post), añade una verificación adicional **después** de la autorización sectorial:
+  - Recupera `creatorId` o `ownerId` del agregado y compara con `requesterId`. Si no coincide, lanza `BusinessRuleViolationException` con un error específico (ej. `AuthorizationError.ERR_AUTH_OWNERSHIP_REQUIRED`).  
+- **ResourceId en SecurityContext**: úsalo siempre que la autorización dependa del recurso (editar, actualizar, desactivar). Para operaciones globales (findAll, create) pasa `null`.  
+- **Permisos y acciones**: centraliza la creación de `Permission` con `Permission.of(ResourceCatalog.of(...), ActionCatalog.of(...))` para evitar inconsistencias.
+
+---
+
+### Siguiente paso
+Aplico este patrón **idéntico** en el resto de `ApplicationService` (LedgerAccount, ThirdParties, Contract, OpeningBalance, JournalEntry, AdministrativeReport). Si quieres, continúo ahora con **LedgerAccount** y te entrego los 8 archivos completos aplicando exactamente este helper y la Ownership Policy donde corresponda. Confirmo que seguiré la convención `createXxx` y que todos los DTOs serán `record`.
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+### Comparación rápida de enfoques (atributos clave)
+
+| Enfoque | **Modularidad** | **Extensibilidad** | **Simplicidad** | **Trazabilidad / Auditoría** |
+|---|---:|---:|---:|---:|
+| **Un único helper monolítico** | Baja | Baja | Alta | Media |
+| **Helpers por política (uno por tipo)** | Alta | Alta | Media | Alta |
+| **Enfoque híbrido: helper central + motor de políticas** | Alta | Muy alta | Alta | Muy alta |
+
+---
+
+### Recomendación profesional (resumen)
+Usa **un helper central ligero** que construya el `SecurityContext` y delegue la evaluación a un **Policy Engine** que gestione políticas modulares. Este patrón combina la simplicidad de un punto de entrada con la flexibilidad, testabilidad y trazabilidad necesarias en entornos profesionales.
+
+---
+
+### Por qué el enfoque híbrido es el mejor en producción
+- **Separación de responsabilidades**: el helper solo arma contexto y orquesta; las políticas encapsulan reglas ABAC, RBAC y ownership.  
+- **Escalabilidad**: nuevas políticas se añaden sin tocar servicios de aplicación.  
+- **Prioridad y composición**: el motor puede ordenar políticas por prioridad y combinar resultados determinísticos.  
+- **Observabilidad**: el motor puede registrar qué política permitió o denegó, facilitando auditoría y debugging.  
+- **Pruebas**: cada política se prueba aislada; el motor se prueba con combinaciones.  
+- **Rendimiento**: se puede cachear decisiones por contexto y rol para evitar evaluaciones repetidas.
+
+---
+
+### Diseño propuesto (componentes y flujo)
+1. **AuthorizationHelper** central  
+   - Construye `SecurityContext` con atributos ABAC.  
+   - Llama al `PolicyEngine.authorize(requesterRolId, securityContext)`.  
+2. **PolicyEngine**  
+   - Mantiene un registro de `PermissionPolicy` ordenadas por prioridad.  
+   - Para cada política: si `appliesTo(context)` es true, invoca `isAllowed(rol, context)`.  
+   - Decide con reglas claras: primera denegación con prioridad alta deniega, o usar agregación por prioridad.  
+3. **PermissionPolicy** (interfaz)  
+   - Métodos `appliesTo(SecurityContext)` y `isAllowed(Rol, SecurityContext)` y `getPriority()`.  
+4. **Políticas concretas**  
+   - `OwnershipPolicy`, `SectorBasedPolicy`, `SpecialtyBasedPolicy`, etc.  
+   - Cada política solo conoce lo que necesita del `SecurityContext`.  
+5. **Observabilidad y caching**  
+   - Registrar evaluación por política con resultado y razón.  
+   - Cachear decisiones por clave derivada de permiso+rol+atributos inmutables.
+
+---
+
+### Ejemplo de implementación (esqueleto Java)
+
+```java
+public interface PermissionPolicy {
+    boolean appliesTo(SecurityContext context);
+    boolean isAllowed(Rol rol, SecurityContext context);
+    int getPriority();
+}
+
+public class PolicyEngine {
+    private final List<PermissionPolicy> policies;
+    private final Cache<String, Boolean> decisionCache;
+
+    public PolicyEngine(List<PermissionPolicy> policies, Cache<String, Boolean> cache) {
+        this.policies = policies.stream()
+            .sorted(Comparator.comparingInt(PermissionPolicy::getPriority).reversed())
+            .collect(Collectors.toList());
+        this.decisionCache = cache;
+    }
+
+    public AuthorizationResult authorize(Rol rol, SecurityContext context) {
+        String cacheKey = buildCacheKey(rol, context);
+        Optional<Boolean> cached = Optional.ofNullable(decisionCache.getIfPresent(cacheKey));
+        if (cached.isPresent()) {
+            return new AuthorizationResult(cached.get(), "cached");
+        }
+
+        for (PermissionPolicy policy : policies) {
+            if (!policy.appliesTo(context)) continue;
+            boolean allowed = policy.isAllowed(rol, context);
+            logEvaluation(policy, rol, context, allowed);
+            if (!allowed) {
+                decisionCache.put(cacheKey, false);
+                return new AuthorizationResult(false, policy.getClass().getSimpleName());
+            }
+        }
+
+        decisionCache.put(cacheKey, true);
+        return new AuthorizationResult(true, "all-policies-passed");
+    }
+
+    private void logEvaluation(PermissionPolicy policy, Rol rol, SecurityContext context, boolean allowed) {
+        // registrar política, rol, atributos relevantes y resultado
+    }
+}
+```
+
+```java
+public final class AuthorizationHelper {
+    private final ReceptionRepository receptionRepository;
+    private final PolicyEngine policyEngine;
+
+    public void authorize(UserIdentityId requesterId, RolId requesterRolId,
+                          ResourceCatalog.BasicResource resource, ActionCatalog.BasicAction action,
+                          Map<String, Object> extraAttributes) {
+
+        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
+            .orElseThrow(() -> new BusinessRuleViolationException(AuthorizationError.ERR_AUTH_SECTOR_REQUIRED, VOContext.AUTHORIZATION));
+
+        Permission permission = Permission.of(ResourceCatalog.of(resource), ActionCatalog.of(action));
+        SecurityContext context = SecurityContext.builder(permission, requesterId)
+            .withSector(receptionist.getSector().Value())
+            .build();
+
+        extraAttributes.forEach(context::withAttribute);
+
+        Rol rol = Rol.fromId(requesterRolId);
+        AuthorizationResult result = policyEngine.authorize(rol, context);
+        if (!result.isAllowed()) {
+            throw new BusinessRuleViolationException(AuthorizationError.ERR_AUTH_PERMISSION_DENIED, VOContext.AUTHORIZATION);
+        }
+    }
+}
+```
+
+---
+
+### Buenas prácticas operativas
+- **Política por responsabilidad única**: cada `PermissionPolicy` debe ser pequeña y enfocada.  
+- **Prioridades explícitas**: define prioridades y documenta por qué una política tiene mayor peso.  
+- **Registro estructurado**: guarda logs con política, rol, atributos clave y razón de decisión.  
+- **Pruebas unitarias y de integración**: casos positivos y negativos por política y combinaciones.  
+- **Revisión de seguridad**: auditoría periódica de políticas y atributos usados en `SecurityContext`.  
+- **Fallback seguro**: si falta información en el contexto, denegar por defecto.  
+- **Documentación**: catálogo de políticas, atributos esperados y ejemplos de `SecurityContext`.
+
+---
+
+Si quieres, implemento ahora el **PolicyEngine** completo y adapto `AuthorizationHelper` en el proyecto `CompanyApplicationService` y en los siguientes agregados. También puedo generar tests unitarios de ejemplo para `OwnershipPolicy` y `SectorBasedPolicy`. ¿Qué prefieres que haga a continuación?

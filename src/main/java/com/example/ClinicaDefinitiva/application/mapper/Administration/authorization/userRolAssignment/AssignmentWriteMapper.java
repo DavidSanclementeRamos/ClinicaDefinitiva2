@@ -23,7 +23,8 @@ public class AssignmentWriteMapper {
                 UserIdentityId.from(dto.userId()),
                 RolId.of(dto.rolId()),
                 dto.validFrom(),
-                dto.validTo()
+                dto.validTo(),
+                dto.isPrimary()
         );
     }
 }

@@ -1,5 +1,7 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport;
 
-public record RejectReportRequest(
-        String reason
+
+public record UpdateAdministrativeReportDto(
+        String title,
+        String notes
 ) {}
