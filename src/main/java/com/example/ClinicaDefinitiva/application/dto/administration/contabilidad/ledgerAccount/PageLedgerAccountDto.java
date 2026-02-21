@@ -1,9 +1,9 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount;
 
-public record LedgerAccountListResponse(
-        String id,
+public record PageLedgerAccountDto(
+        Long id,
         String code,
-        //NameDto name,
+        String name,
         String nature,
         boolean active,
         int level

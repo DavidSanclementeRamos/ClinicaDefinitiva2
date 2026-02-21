@@ -1,7 +1,5 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.LedgerAccountResponse;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;

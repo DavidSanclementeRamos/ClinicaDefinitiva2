@@ -1,7 +1,7 @@
-package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting;
+package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.LedgerAccount;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.LedgerAccountListResponse;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.LedgerAccountResponse;
+import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.PageLedgerAccountDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.ReadLedgerAccountDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
 import org.springframework.stereotype.Component;
 
@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
  * Mapper: LedgerAccount (Domain → DTO)
  */
 @Component
-public class LedgerAccountMapper {
+public class LedgerAccountReadMapper {
 
-    public LedgerAccountResponse toResponse(LedgerAccount account) {
-        return new LedgerAccountResponse(
+    public ReadLedgerAccountDto toReadDto(LedgerAccount account) {
+        return new ReadLedgerAccountDto(
                 account.getId() != null ? account.getId().getValue() : null,
                 account.getCompanyId() != null ? account.getCompanyId().getValue() : null,
                 account.getCode(),
-                NameMapper.toName(account.getName()),
+                account.getName().getValue(),
                 account.getNature().name(),
                 account.isRequiresThirdParty(),
                 account.isRequiresDocument(),
@@ -30,11 +30,11 @@ public class LedgerAccountMapper {
         );
     }
 
-    public LedgerAccountListResponse toListResponse(LedgerAccount account) {
-        return new LedgerAccountListResponse(
+    public PageLedgerAccountDto toPageDto(LedgerAccount account) {
+        return new PageLedgerAccountDto(
                 account.getId() != null ? account.getId().getValue() : null,
                 account.getCode(),
-                NameMapper.toName(account.getName()),
+                account.getName().getValue(),
                 account.getNature().name(),
                 account.isActive(),
                 account.getAccountLevel()

@@ -1,10 +1,9 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.UpdateContractDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.AddJournalEntryLineDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.CreateJournalEntryDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.UpdateJournalEntryDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.LedgerAccountResponse;
+import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.ReadLedgerAccountDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntry;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 
@@ -26,8 +25,8 @@ public class JournalEntryWriteMapper {
         );
     }
 
-    public LedgerAccountResponse toAddLineDto(AddJournalEntryLineDto dto){
-        return new LedgerAccountResponse(
+    public ReadLedgerAccountDto toAddLineDto(AddJournalEntryLineDto dto){
+        return new ReadLedgerAccountDto(
                 dto.id(),
                 dto.thirdPartyId(),
                 dto.description(),

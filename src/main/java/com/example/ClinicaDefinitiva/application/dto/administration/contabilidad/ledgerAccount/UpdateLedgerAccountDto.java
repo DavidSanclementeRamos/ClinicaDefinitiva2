@@ -1,11 +1,7 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount;
 
-public record CreateLedgerAccountRequest(
-        String companyId,
-        String code,
-
-        //NameDto name,
-        String nature,
+public record UpdateLedgerAccountDto(
+        String name,
         boolean requiresThirdParty,
         boolean requiresDocument
 ) {}

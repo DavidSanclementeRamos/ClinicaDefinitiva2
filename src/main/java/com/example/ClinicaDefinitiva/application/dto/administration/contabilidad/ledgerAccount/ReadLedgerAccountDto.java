@@ -1,12 +1,10 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount;
 
-import java.math.BigDecimal;
-
-public record LedgerAccountResponse(
-        String id,
-        String companyId,
+public record ReadLedgerAccountDto(
+        Long id,
+        Long companyId,
         String code,
-        //NameDto name,
+        String name,
         String nature,
         boolean requiresThirdParty,
         boolean requiresDocument,
