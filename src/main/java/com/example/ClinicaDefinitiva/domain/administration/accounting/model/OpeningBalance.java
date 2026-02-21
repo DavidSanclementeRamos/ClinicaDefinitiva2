@@ -1,5 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.OpeningBalanceId;
@@ -12,16 +13,16 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateExce
 
 import java.time.LocalDate;
 
-public class OpeningBalance { // saldo inicial
+public class OpeningBalance {
     private final OpeningBalanceId openingBalanceId;
-    private final ThirdPartiesId companyId;
+    private final CompanyId companyId;
     private final LedgerAccountId cuentaId;
     private final ThirdPartiesId thirdPartiesId; // opcional
     private final Price amount;
     private final LocalDate date;
 
 
-    private  OpeningBalance(OpeningBalanceId openingBalanceId, ThirdPartiesId companyId, LedgerAccountId cuentaId, ThirdPartiesId thirdPartiesId, Price amount, LocalDate date) {
+    private  OpeningBalance(OpeningBalanceId openingBalanceId, CompanyId companyId, LedgerAccountId cuentaId, ThirdPartiesId thirdPartiesId, Price amount, LocalDate date) {
 
         validateMandatoryFields(amount, date);
         this.openingBalanceId = openingBalanceId;
@@ -33,15 +34,14 @@ public class OpeningBalance { // saldo inicial
     }
 
     public static OpeningBalance registerOpeningBalance(
-            OpeningBalanceId openingBalanceId,
-            ThirdPartiesId companyId,
+            CompanyId companyId,
             LedgerAccountId cuentaId,
             ThirdPartiesId thirdPartiesId,
             Price amount
             ) {
 
         return new OpeningBalance(
-                openingBalanceId,
+                null,
                 companyId,
                 cuentaId,
                 thirdPartiesId,
@@ -65,7 +65,7 @@ public class OpeningBalance { // saldo inicial
       }
   }
 
-    public ThirdPartiesId getCompanyId() {
+    public CompanyId getCompanyId() {
         return companyId;
     }
 

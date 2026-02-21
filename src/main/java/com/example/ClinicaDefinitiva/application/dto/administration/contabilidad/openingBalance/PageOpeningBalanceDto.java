@@ -2,10 +2,8 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 
 import java.math.BigDecimal;
 
-public record CreateOpeningBalanceRequest(
-        String companyId,
-        String accountId,
-        String thirdPartiesId,
+public record PageOpeningBalanceDto(
+        Long id,
         BigDecimal amount,
         String currency
 ) {}

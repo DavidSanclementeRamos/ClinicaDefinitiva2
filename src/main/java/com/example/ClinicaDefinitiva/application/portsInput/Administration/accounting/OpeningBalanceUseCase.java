@@ -1,22 +1,28 @@
 package com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.CreateOpeningBalanceRequest;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.OpeningBalanceListResponse;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.OpeningBalanceResponse;
+import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.CreateOpeningBalanceDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.PageOpeningBalanceDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.ReadOpeningBalanceDto;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.OpeningBalanceId;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface OpeningBalanceUseCase {
-    // Registrar un nuevo saldo inicial
-    OpeningBalanceResponse registerOpeningBalance(CreateOpeningBalanceRequest request);
+    ReadOpeningBalanceDto findById(OpeningBalanceId id, UserIdentityId requesterId, RolId requesterRolId);
 
-    // Buscar un saldo inicial por su ID
-    OpeningBalanceResponse findOpeningBalanceById(String openingBalanceId);
+    Page<PageOpeningBalanceDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
 
-    // Listar saldos iniciales de una compañía
-    Page<OpeningBalanceListResponse> listOpeningBalancesByCompany(String companyId);
+    Page<PageOpeningBalanceDto> findByAccount(LedgerAccountId accountId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
 
-    // Listar saldos iniciales de una cuenta
-    Page<OpeningBalanceListResponse> listOpeningBalancesByAccount(String accountId);
+    Page<PageOpeningBalanceDto> findByCompany(CompanyId companyId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    ReadOpeningBalanceDto createOpeningBalance(CreateOpeningBalanceDto dto, UserIdentityId requesterId, RolId requesterRolId);
+
+    void delete(OpeningBalanceId id, UserIdentityId requesterId, RolId requesterRolId);
 
 
 }
