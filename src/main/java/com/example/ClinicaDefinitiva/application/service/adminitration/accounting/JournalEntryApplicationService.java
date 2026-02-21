@@ -1,10 +1,12 @@
 package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.JournalEntryLineRequest;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.*;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.JournalEntryNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.JournalEntryMapper;
+import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry.JournalEntryReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry.JournalEntryWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.JournalEntryUseCase;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
@@ -16,6 +18,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.output.Jou
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.LedgerAccountRepository;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ThirdPartiesRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,129 +27,79 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class JournalEntryApplicationService implements JournalEntryUseCase {
-// complejo xd
     private final JournalEntryRepository journalEntryRepository;
     private final ThirdPartiesRepository thirdPartiesRepository;
     private final LedgerAccountRepository ledgerAccountRepository;
     private final CompanyRepository companyRepository;
-    private final JournalEntryMapper mapper;
+    private final JournalEntryReadMapper readMapper;
+    private final JournalEntryWriteMapper writeMapper;
 
-
-    public JournalEntryApplicationService(JournalEntryRepository journalEntryRepository, ThirdPartiesRepository thirdPartiesRepository, LedgerAccountRepository ledgerAccountRepository, CompanyRepository companyRepository, JournalEntryMapper mapper) {
+    public JournalEntryApplicationService(JournalEntryRepository journalEntryRepository, ThirdPartiesRepository thirdPartiesRepository, LedgerAccountRepository ledgerAccountRepository, CompanyRepository companyRepository, JournalEntryReadMapper readMapper, JournalEntryWriteMapper writeMapper) {
         this.journalEntryRepository = journalEntryRepository;
         this.thirdPartiesRepository = thirdPartiesRepository;
         this.ledgerAccountRepository = ledgerAccountRepository;
         this.companyRepository = companyRepository;
-        this.mapper = mapper;
+        this.readMapper = readMapper;
+        this.writeMapper = writeMapper;
     }
 
     @Override
-    public JournalEntryResponse findJournalEntryById(String id) {
-        JournalEntryId journalEntryId = JournalEntryId.fromString(id);
-        JournalEntry journalEntry = journalEntryRepository.findById(journalEntryId)
-                .orElseThrow(()-> new JournalEntryNotFoundException(""));
-
-        return mapper.toResponse(journalEntry);
-    }
-
-    @Override
-    public Page<JournalEntryListResponse> listJournalEntriesByCompany(String companyId) {
+    public ReadJournalEntryDto findById(JournalEntryId id, UserIdentityId requesterId, RolId requesterRolId) {
         return null;
     }
 
     @Override
-    public Page<JournalEntryListResponse> listJournalEntriesByDateRange(LocalDate startDate, LocalDate endDate) {
+    public Page<PageJournalEntryDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
         return null;
     }
 
     @Override
-    public Page<JournalEntryListResponse> listPostedJournalEntries() {
+    public Page<PageJournalEntryDto> findByCompany(CompanyId companyId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
         return null;
     }
 
     @Override
-    public Page<BalanceReportResponse> GenerateBalanceReport(String companyId, LocalDate startDate, LocalDate endDate) {
+    public Page<PageJournalEntryDto> findByDateRange(LocalDate start, LocalDate end, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
         return null;
     }
 
     @Override
-    public JournalEntryResponse registerJournalEntry(CreateJournalEntryRequest request) {
-        List<JournalEntryLine> lines = request.lines().stream()
-                .map(toJournalEntryLine())
-                .collect(Collectors.toList());
-
-        JournalEntry journalEntry = JournalEntry.registerJournalEntry(
-                CompanyId.fromString(request.companyId()),
-                request.date(),
-                request.documentNumber(),
-                request.description(),
-                lines
-        );
-
-        return toResponse(journalEntry);
-    }
-
-    private JournalEntryLine toJournalEntryLine(JournalEntryLineRequest request) {
-        LedgerAccountId accountId = LedgerAccountId.fromString(request.ledgerAccountId());
-        ThirdPartiesId thirdPartiesId = request.thirdPartiesId() != null ?
-                ThirdPartiesId.fromString(request.thirdPartiesId()) : null;
-        Price amount = Price.of(request.amount(), request.currency());
-
-        if (request.isDebit()) {
-            return thirdPartiesId != null ?
-                    JournalEntryLine.debitWithThirdParty(accountId, thirdPartiesId, request.description(), amount, request.documentReference()) :
-                    JournalEntryLine.debit(accountId, request.description(), amount);
-        } else {
-            return thirdPartiesId != null ?
-                    JournalEntryLine.creditWithThirdParty(accountId, thirdPartiesId, request.description(), amount, request.documentReference()) :
-                    JournalEntryLine.credit(accountId, request.description(), amount);
-        }
-    }
-
-    private JournalEntryResponse toResponse(JournalEntry entry) {
-        Map<LedgerAccountId, LedgerAccount> accounts = entry.getLines().stream()
-                .map(JournalEntryLine::getLedgerAccountId)
-                .distinct()
-                .map(id -> ledgerAccountRepository.findById(id).orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap(LedgerAccount::getId, account -> account));
-
-        Map<ThirdPartiesId, ThirdParties> thirdParties = entry.getLines().stream()
-                .map(JournalEntryLine::getThirdPartiesId)
-                .filter(Objects::nonNull)
-                .distinct()
-                .map(id -> thirdPartiesRepository.findById(id).orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap(ThirdParties::getPartiesId, tp -> tp));
-
-        return mapper.toResponse(entry, accounts, thirdParties);
-
-    }
-
-    @Override
-    public JournalEntryResponse updateJournalEntry(UpdateJournalEntryRequest request) {
+    public Page<PageJournalEntryDto> findByAccount(LedgerAccountId accountId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
         return null;
     }
 
     @Override
-    public JournalEntryResponse addJournalEntryLine(String journalEntryId, JournalEntryLineRequest request) {
+    public Page<PageJournalEntryDto> findByThirdParty(ThirdPartiesId thirdPartyId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
         return null;
     }
 
     @Override
-    public JournalEntryResponse postJournalEntry(String id) {
-        JournalEntryId journalEntryId = JournalEntryId.fromString(id);
-        JournalEntry journalEntry = journalEntryRepository.findById(journalEntryId)
-                .orElseThrow(()-> new JournalEntryNotFoundException(""));
-        journalEntry.post();
-
-        journalEntryRepository.save(journalEntry);
-
-        return mapper.toResponse(journalEntry);
+    public ReadJournalEntryDto createJournalEntry(CreateJournalEntryDto dto, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public JournalEntryResponse reverseJournalEntry(String journalEntryId, ReverseJournalEntryRequest request) {
+    public ReadJournalEntryDto addLine(JournalEntryId id, AddJournalEntryLineDto dto, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
+    }
+
+    @Override
+    public ReadJournalEntryDto removeLine(JournalEntryId id, int lineIndex, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
+    }
+
+    @Override
+    public ReadJournalEntryDto updateInformation(JournalEntryId id, UpdateJournalEntryDto dto, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
+    }
+
+    @Override
+    public ReadJournalEntryDto post(JournalEntryId id, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
+    }
+
+    @Override
+    public ReadJournalEntryDto reverse(JournalEntryId id, String reason, UserIdentityId requesterId, RolId requesterRolId) {
         return null;
     }
 }

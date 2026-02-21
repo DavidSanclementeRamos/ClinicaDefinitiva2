@@ -62,8 +62,9 @@ public final class JournalEntry {
             CompanyId companyId,
             LocalDate date,
             String documentNumber,
-            String description,
-            List<JournalEntryLine> lines) {
+            String description
+           // List<JournalEntryLine> lines
+            ) {
 
         JournalEntry entry = new JournalEntry(
                 null,
@@ -71,7 +72,7 @@ public final class JournalEntry {
                 date,
                 documentNumber,
                 description,
-                lines
+                null
 
         );
 
@@ -190,8 +191,8 @@ public final class JournalEntry {
                 this.companyId,
                 LocalDate.now(),
                 this.documentNumber + "-REV",
-                "REVERSA: " + reason + " - " + this.description,
-                reversedLines
+                "REVERSA: " + reason + " - " + this.description
+               // reversedLines
         );
     }
 

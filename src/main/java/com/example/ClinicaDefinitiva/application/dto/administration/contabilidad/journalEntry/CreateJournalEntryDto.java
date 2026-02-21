@@ -6,10 +6,9 @@ import java.util.List;
 /**
  * DTO para crear un asiento accounting
  */
-public record CreateJournalEntryRequest(
-        String companyId,
+public record CreateJournalEntryDto(
+        Long companyId,
         LocalDate date,
         String documentNumber,
         String description
-        //List<JournalEntryLineRequest> lines
 ) {}

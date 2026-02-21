@@ -12,7 +12,7 @@ public class RateReadMapper {
                 rate.getId().getValue(),
                 rate.getServiceId().getId(),
                 rate.getPayerType().name(),
-                rate.getContractId().asLong(),
+                rate.getContractId().getValue(),
                 rate.getAmount().asBigDecimal(),
                 rate.getAmount().getCurrency().getCurrencyCode(),
                 rate.getValidFrom(),

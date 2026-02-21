@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 /**
  * DTO para actualizar asiento
  */
-public record UpdateJournalEntryRequest(
+public record UpdateJournalEntryDto(
         String description,
         String documentNumber
 ) {}

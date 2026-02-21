@@ -6,8 +6,8 @@ import java.time.LocalDate;
 /**
  * DTO simplificado para listados
  */
-public record JournalEntryListResponse(
-        String id,
+public record PageJournalEntryDto(
+        Long id,
         LocalDate date,
         String documentNumber,
         String description,

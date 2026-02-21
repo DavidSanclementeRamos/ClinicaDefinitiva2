@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.application.mapper.billing.invoice;
 
-package com.example.ClinicaDefinitiva.application.mapper.billing;
 
 import com.example.ClinicaDefinitiva.application.dto.billing.*;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.AddInvoiceItemDto;

@@ -1,5 +1,7 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount;
 
+import java.math.BigDecimal;
+
 public record LedgerAccountResponse(
         String id,
         String companyId,
@@ -15,4 +17,5 @@ public record LedgerAccountResponse(
         boolean isLiabilityAccount,
         boolean isIncomeAccount,
         boolean isExpenseAccount
+
 ) {}
