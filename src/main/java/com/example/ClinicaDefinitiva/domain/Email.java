@@ -30,7 +30,7 @@ public final class Email implements Serializable {
 
     private final String value;
 
-    public Email(String normalized) {
+    private Email(String normalized) {
         this.value = normalized;
     }
 

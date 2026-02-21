@@ -11,16 +11,23 @@ import java.time.LocalDate;
 /**
  * DTO de respuesta para Company
  */
-public record CompanyResponse(
-        String id,
-        //NameDto name,
-        //NitDto taxIdentificationNumber,
-        TypePerson typePerson,
-        TaxRegime taxRegime,
+public record ReadCompanyDto(
+        Long id,
+        String name,
+        String taxIdentificationNumber,
+        String typePerson,
+        String taxRegime,
         String legalRepresentative,
-        //AddressDto address,
-        //PhoneNumberDto phoneNumber,
-        //EmailDto email,
+
+        // ADDRESS
+        String street,
+        String city,
+        String state,
+        String country,
+        String postalCode,
+
+        String phoneNumber,
+        String email,
         LocalDate incorporationDate,
-        CompanyStatus.Status status
+        String status
 ) {}

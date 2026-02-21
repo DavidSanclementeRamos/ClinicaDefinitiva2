@@ -10,7 +10,6 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePe
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
-//import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.CompanyError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;

@@ -1,17 +1,34 @@
 package com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.*;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CompanyUseCase {
-    CompanyResponse findId(String id);
-    CompanyResponse findNit(String nit);
-    Page<CompanyPageResponse> findAll(Pageable pageable);
-    Page<CompanyPageResponse> findAllStatus(Pageable pageable, String status);
-    CompanyResponse RegisterCompany(CreateCompanyRequest request);
-    CompanyResponse updateCompanyContact(String companyId, UpdateCompanyContactRequest request);
-    CompanyResponse updateCompanyTax(String companyId, UpdateCompanyTaxRequest request);
-    CompanyResponse UpdateCompanyStatus(String companyId, UpdateCompanyStatusRequest request);
 
+    ReadCompanyDto findById(CompanyId id, UserIdentityId requesterId, RolId requesterRolId);
+
+    Page<PageCompanyDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    Page<PageCompanyDto> findByStatus(String status, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    Page<PageCompanyDto> findByTaxRegime(String regime, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+
+    ReadCompanyDto createCompany(CreateCompanyDto dto, UserIdentityId requesterId, RolId requesterRolId);
+
+    ReadCompanyDto updateContactInformation(CompanyId id, UpdateCompanyContactDto dto, UserIdentityId requesterId, RolId requesterRolId);
+
+    ReadCompanyDto updateTaxInformation(CompanyId id, UpdateCompanyTaxDto dto, UserIdentityId requesterId, RolId requesterRolId);
+
+    ReadCompanyDto updateStatus(CompanyId id, String newStatus, UserIdentityId requesterId, RolId requesterRolId);
+
+    void deactivate(CompanyId id, UserIdentityId requesterId, RolId requesterRolId);
 }
+
+

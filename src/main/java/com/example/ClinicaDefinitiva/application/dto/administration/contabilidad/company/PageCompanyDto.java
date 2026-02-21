@@ -3,8 +3,11 @@ package com.example.ClinicaDefinitiva.application.dto.administration.contabilida
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
 
 /**
- * DTO para actualizar estado
+ * DTO simplificado para listados
  */
-public record UpdateCompanyStatusRequest(
-        CompanyStatus.Status status
+public record PageCompanyDto(
+        Long id,
+        String name,
+        String taxIdentificationNumber,
+        String status
 ) {}

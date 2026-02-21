@@ -8,10 +8,10 @@ import java.time.LocalDate;
 /**
  * DTO para actualizar información fiscal
  */
-public record UpdateCompanyTaxRequest(
-        //NitDto taxIdentificationNumber,
-        TaxRegime taxRegime,
-        TypePerson typePerson,
+public record UpdateCompanyTaxDto(
+        String taxIdentificationNumber,
+        String taxRegime,
+        String typePerson,
         LocalDate incorporationDate
 ) {}
 
