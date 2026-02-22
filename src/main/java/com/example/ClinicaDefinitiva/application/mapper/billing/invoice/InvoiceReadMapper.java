@@ -3,7 +3,6 @@ package com.example.ClinicaDefinitiva.application.mapper.billing.invoice;
 
 
 
-import com.example.ClinicaDefinitiva.application.dto.billing.*;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.PageInvoiceDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.ReadInvoiceDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.item.InvoiceItemDto;

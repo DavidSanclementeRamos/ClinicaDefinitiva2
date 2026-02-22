@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller.billing;
 
 
-import com.example.ClinicaDefinitiva.application.dto.billing.*;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.CreateRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.PageRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.ReadRateDto;

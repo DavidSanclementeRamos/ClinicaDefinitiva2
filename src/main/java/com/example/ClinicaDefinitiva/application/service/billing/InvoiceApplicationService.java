@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.application.service.billing;
 
 
-import com.example.ClinicaDefinitiva.application.dto.billing.*;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.*;
 import com.example.ClinicaDefinitiva.application.exceptions.InvoiceNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
