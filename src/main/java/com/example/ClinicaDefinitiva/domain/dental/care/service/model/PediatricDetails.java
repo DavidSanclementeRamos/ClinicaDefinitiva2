@@ -46,14 +46,14 @@ public final class PediatricDetails implements ServiceDetails {
                 ageRange,
                 MIN_AGE_RANGE_LENGTH,
                 PediatricError.ERR_PEDIATRIC_AGE_RANGE_TOO_SHORT,
-                VOContext.PEDIATRIC
+                VOContext.AUTHORIZATION
         );
 
         // RN-PEDIATRIC-001: Validación de rango de edad pediátrico (0-18 años)
         if (ageRange != null && !isValidPediatricAge(ageRange)) {
             throw new ValueObjectValidationException(
                     PediatricError.ERR_PEDIATRIC_INVALID_AGE_RANGE,
-                    VOContext.PEDIATRIC
+                    VOContext.AUTHORIZATION
             );
         }
 
@@ -62,7 +62,7 @@ public final class PediatricDetails implements ServiceDetails {
                 pediatricMaterials,
                 MIN_MATERIALS_LENGTH,
                 PediatricError.ERR_PEDIATRIC_MATERIALS_TOO_SHORT,
-                VOContext.PEDIATRIC
+                VOContext.AUTHORIZATION
         );
 
         this.ageRange = ageRange;

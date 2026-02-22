@@ -54,7 +54,7 @@ public final class AestheticDetails implements ServiceDetails {
         if (aestheticType == null || aestheticType.isBlank()) {
             throw new ValueObjectValidationException(
                     AestheticError.ERR_AESTHETIC_MISSING_TYPE,
-                    VOContext.AESTHETIC
+                    VOContext.DENTAL_SERVICES
             );
         }
 
@@ -63,7 +63,7 @@ public final class AestheticDetails implements ServiceDetails {
                 aestheticType,
                 MIN_TYPE_LENGTH,
                 AestheticError.ERR_AESTHETIC_TYPE_TOO_SHORT,
-                VOContext.AESTHETIC
+                VOContext.DENTAL_SERVICES
         );
 
         // RN-AESTHETIC-002: Normalización y validación contra catálogo permitido
@@ -71,7 +71,7 @@ public final class AestheticDetails implements ServiceDetails {
                 aestheticType,
                 VALID_AESTHETIC_TYPES,
                 AestheticError.ERR_AESTHETIC_INVALID_TYPE,
-                VOContext.AESTHETIC
+                VOContext.DENTAL_SERVICES
         );
 
         // RN-AESTHETIC-004: Validación de longitud mínima del resultado esperado
@@ -79,7 +79,7 @@ public final class AestheticDetails implements ServiceDetails {
                 expectedResult,
                 MIN_RESULT_LENGTH,
                 AestheticError.ERR_AESTHETIC_RESULT_TOO_SHORT,
-                VOContext.AESTHETIC
+                VOContext.DENTAL_SERVICES
         );
 
         this.materialUsed = materialUsed;

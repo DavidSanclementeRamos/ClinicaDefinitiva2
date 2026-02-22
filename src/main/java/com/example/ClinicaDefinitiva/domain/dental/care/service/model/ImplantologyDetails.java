@@ -50,7 +50,7 @@ public final class ImplantologyDetails implements ServiceDetails {
             if (healingTimeMonths < 0) {
                 throw new ValueObjectValidationException(
                         ImplantologyError.ERR_IMPLANTOLOGY_NEGATIVE_HEALING_TIME,
-                        VOContext.IMPLANTOLOGY
+                        VOContext.DENTAL_SERVICES
                 );
             }
 
@@ -59,7 +59,7 @@ public final class ImplantologyDetails implements ServiceDetails {
                     MIN_HEALING_MONTHS,
                     MAX_HEALING_MONTHS,
                     ImplantologyError.ERR_IMPLANTOLOGY_INVALID_HEALING_TIME,
-                    VOContext.IMPLANTOLOGY
+                    VOContext.DENTAL_SERVICES
             );
         }
 
@@ -70,7 +70,7 @@ public final class ImplantologyDetails implements ServiceDetails {
                 healingTimeMonths < MIN_HEALING_WITH_GRAFT) {
             throw new ValueObjectValidationException(
                     ImplantologyError.ERR_IMPLANTOLOGY_BONE_GRAFT_HEALING_MISMATCH,
-                    VOContext.IMPLANTOLOGY
+                    VOContext.DENTAL_SERVICES
             );
         }
 
@@ -79,7 +79,7 @@ public final class ImplantologyDetails implements ServiceDetails {
                 placementSite,
                 MIN_PLACEMENT_SITE_LENGTH,
                 ImplantologyError.ERR_IMPLANTOLOGY_INVALID_PLACEMENT_SITE,
-                VOContext.IMPLANTOLOGY
+                VOContext.DENTAL_SERVICES
         );
 
         this.healingTimeMonths = healingTimeMonths;

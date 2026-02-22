@@ -46,7 +46,7 @@ public final class ProstheticDetails implements ServiceDetails {
         if (fixedOrRemovable == null || fixedOrRemovable.isBlank()) {
             throw new ValueObjectValidationException(
                     ProstheticError.ERR_PROSTHETIC_MISSING_TYPE,
-                    VOContext.PROSTHETIC
+                    VOContext.DENTAL_SERVICES
             );
         }
 
@@ -55,7 +55,7 @@ public final class ProstheticDetails implements ServiceDetails {
                 fixedOrRemovable,
                 VALID_TYPES,
                 ProstheticError.ERR_PROSTHETIC_INVALID_TYPE_VALUE,
-                VOContext.PROSTHETIC
+                VOContext.DENTAL_SERVICES
         );
 
         int unitsValue = units == null ? 0 : units;
@@ -64,7 +64,7 @@ public final class ProstheticDetails implements ServiceDetails {
         if (unitsValue < 0) {
             throw new ValueObjectValidationException(
                     ProstheticError.ERR_PROSTHETIC_INVALID_UNITS,
-                    VOContext.PROSTHETIC
+                    VOContext.DENTAL_SERVICES
             );
         }
 
@@ -72,7 +72,7 @@ public final class ProstheticDetails implements ServiceDetails {
         if ("REMOVABLE".equals(normalizedType) && unitsValue > MAX_UNITS_PER_ARCH) {
             throw new ValueObjectValidationException(
                     ProstheticError.ERR_PROSTHETIC_EXCESSIVE_UNITS,
-                    VOContext.PROSTHETIC
+                    VOContext.DENTAL_SERVICES
             );
         }
 

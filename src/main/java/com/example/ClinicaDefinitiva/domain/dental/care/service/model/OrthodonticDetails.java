@@ -52,7 +52,7 @@ public final class OrthodonticDetails implements ServiceDetails {
         if (applianceType == null || applianceType.isBlank()) {
             throw new ValueObjectValidationException(
                     OrthodonticError.ERR_ORTHODONTIC_MISSING_APPLIANCE,
-                    VOContext.ORTHODONTIC
+                    VOContext.DENTAL_SERVICES
             );
         }
 
@@ -61,7 +61,7 @@ public final class OrthodonticDetails implements ServiceDetails {
                 applianceType,
                 VALID_APPLIANCE_TYPES,
                 OrthodonticError.ERR_ORTHODONTIC_INVALID_APPLIANCE,
-                VOContext.ORTHODONTIC
+                VOContext.DENTAL_SERVICES
         );
 
         // RN-ORTHODONTIC-004 & RN-ORTHODONTIC-002: Validaciones de duración
@@ -69,7 +69,7 @@ public final class OrthodonticDetails implements ServiceDetails {
             if (treatmentDurationMonths <= 0) {
                 throw new ValueObjectValidationException(
                         OrthodonticError.ERR_ORTHODONTIC_NEGATIVE_DURATION,
-                        VOContext.ORTHODONTIC
+                        VOContext.DENTAL_SERVICES
                 );
             }
 
@@ -78,7 +78,7 @@ public final class OrthodonticDetails implements ServiceDetails {
                     MIN_DURATION_MONTHS,
                     MAX_DURATION_MONTHS,
                     OrthodonticError.ERR_ORTHODONTIC_INVALID_DURATION,
-                    VOContext.ORTHODONTIC
+                    VOContext.DENTAL_SERVICES
             );
         }
 

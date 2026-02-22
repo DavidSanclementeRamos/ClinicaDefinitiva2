@@ -54,7 +54,7 @@ public final class SurgicalDetails implements ServiceDetails {
                 surgeryType,
                 MIN_TYPE_LENGTH,
                 SurgicalError.ERR_SURGICAL_TYPE_TOO_SHORT,
-                VOContext.SURGICAL
+                VOContext.DENTAL_SERVICES
         );
 
         // RN-SURGICAL-003: Validación del nivel de complejidad
@@ -64,7 +64,7 @@ public final class SurgicalDetails implements ServiceDetails {
                     complexityLevel,
                     VALID_COMPLEXITY_LEVELS,
                     SurgicalError.ERR_SURGICAL_INVALID_COMPLEXITY,
-                    VOContext.SURGICAL
+                    VOContext.DENTAL_SERVICES
             );
         }
 
@@ -75,7 +75,7 @@ public final class SurgicalDetails implements ServiceDetails {
         if (needsAnesthesia && "LOW".equals(normalizedComplexity)) {
             throw new ValueObjectValidationException(
                     SurgicalError.ERR_SURGICAL_ANESTHESIA_COMPLEXITY_MISMATCH,
-                    VOContext.SURGICAL
+                    VOContext.DENTAL_SERVICES
             );
         }
 
@@ -84,7 +84,7 @@ public final class SurgicalDetails implements ServiceDetails {
                 (!needsAnesthesia || !needsOperatingRoom)) {
             throw new ValueObjectValidationException(
                     SurgicalError.ERR_SURGICAL_CRITICAL_MISSING_REQUIREMENTS,
-                    VOContext.SURGICAL
+                    VOContext.DENTAL_SERVICES
             );
         }
 
@@ -92,7 +92,7 @@ public final class SurgicalDetails implements ServiceDetails {
         if (needsOperatingRoom && "LOW".equals(normalizedComplexity)) {
             throw new ValueObjectValidationException(
                     SurgicalError.ERR_SURGICAL_OPERATING_ROOM_COMPLEXITY_MISMATCH,
-                    VOContext.SURGICAL
+                    VOContext.DENTAL_SERVICES
             );
         }
 
