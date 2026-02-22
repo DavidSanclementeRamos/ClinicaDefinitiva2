@@ -1,14 +1,9 @@
 package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.*;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ContractNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ThirdPartiesNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract.ContractReadMapper;
-import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NameMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract.ContractWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.ContractUseCase;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
@@ -17,7 +12,6 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.output.Con
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ThirdPartiesRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.service.ContractDomainService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

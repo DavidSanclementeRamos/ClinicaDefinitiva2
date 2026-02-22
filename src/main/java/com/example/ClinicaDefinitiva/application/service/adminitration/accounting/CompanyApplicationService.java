@@ -1,15 +1,9 @@
 package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.*;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.company.CompanyReadMapper;
-import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NameMapper;
-import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NitMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.company.CompanyWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.CompanyUseCase;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.CompanyRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;

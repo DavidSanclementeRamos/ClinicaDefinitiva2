@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.application.service;
 
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.ReadInvoiceDto;
-import com.example.ClinicaDefinitiva.application.portsInput.BillingUseCase;
 //import com.example.ClinicaDefinitiva.domain.administration.accounting.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.portsOutput.InvoiceRepository;

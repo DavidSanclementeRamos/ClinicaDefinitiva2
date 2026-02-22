@@ -2,8 +2,6 @@ package com.example.ClinicaDefinitiva.application.mapper.Administration.accounti
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.PageCompanyDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.ReadCompanyDto;
-import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NameMapper;
-import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NitMapper;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
 import org.springframework.stereotype.Component;
 
