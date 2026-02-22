@@ -45,7 +45,7 @@ public final class Email implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_NULL,
                     Severity.ERROR,
-                    Category.TECNICO, VOContext.EMAIL
+                    Category.TECNICO, VOContext.AUTHORIZATION
             ));
         }
 
@@ -54,7 +54,7 @@ public final class Email implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_EMPTY,
                     Severity.ERROR,
-                    Category.TECNICO,VOContext.EMAIL
+                    Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
 
@@ -63,7 +63,7 @@ public final class Email implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_MISSING_LOCAL_OR_DOMAIN,
                     Severity.ERROR,
-                    Category.TECNICO,VOContext.EMAIL
+                    Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
 
@@ -78,21 +78,21 @@ public final class Email implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_LENGTH_EXCEEDED,
                     Severity.ERROR,
-                    Category.TECNICO,VOContext.EMAIL
+                    Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
         if (local.length() > MAX_LOCAL) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_LOCAL_LENGTH_EXCEEDED,
                     Severity.ERROR,
-                    Category.TECNICO,VOContext.EMAIL
+                    Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
         if (domain.length() > MAX_DOMAIN) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_DOMAIN_LENGTH_EXCEEDED,
                     Severity.ERROR,
-                    Category.TECNICO,VOContext.EMAIL
+                    Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
 
@@ -101,7 +101,7 @@ public final class Email implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_INVALID_FORMAT,
                     Severity.ERROR,
-                    Category.TECNICO,VOContext.EMAIL
+                    Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
 
@@ -110,14 +110,14 @@ public final class Email implements Serializable {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_DOMAIN_INVALID_DASH,
                     Severity.ERROR,
-                    Category.TECNICO,VOContext.EMAIL
+                    Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
         if (domain.contains("..")) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_DOMAIN_CONSECUTIVE_DOTS,
                     Severity.ERROR,
-                    Category.TECNICO,VOContext.EMAIL
+                    Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
 
