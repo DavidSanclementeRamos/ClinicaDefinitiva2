@@ -21,7 +21,7 @@ public class DentistDeactivationValidator {
     public Outcome<Void> validate(DentistId dentistId) {
         ScheduleQueryService schedule = scheduleRepository.findByDentistId(dentistId);
 
-        if (schedule.hasAppointmentsWithinHours(24)) {
+        if (schedule.hasAppointmentsWithinHours(dentistId,24)) {
             return Outcome.fail(new OutcomeDetail(
                     DentistError.ERR_DENTIST_ACTIVE_APPOINTMENTS,
                     Severity.INFO,

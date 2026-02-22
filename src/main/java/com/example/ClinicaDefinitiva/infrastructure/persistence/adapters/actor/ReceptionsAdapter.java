@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.actor;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.ReceptionId;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.ReceptionistJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.receptionEntityMapper.ReceptionReadEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.receptionEntityMapper.ReceptionWriteEntityMapper;
@@ -14,14 +15,15 @@ import java.util.Optional;
 public class ReceptionsAdapter implements ReceptionRepository {
 
     private final ReceptionistJpaRepository receptionistJpaRepository;
-    private final ReceptionReadEntityMapper receptionReadEntityMapper;
-    private final ReceptionWriteEntityMapper receptionWriteEntityMapper;
+    private final ReceptionReadEntityMapper readEntityMapper;
+    private final ReceptionWriteEntityMapper writeEntityMapper;
 
-    public ReceptionsAdapter(ReceptionistJpaRepository receptionistJpaRepository, ReceptionReadEntityMapper receptionReadEntityMapper, ReceptionWriteEntityMapper receptionWriteEntityMapper) {
+    public ReceptionsAdapter(ReceptionistJpaRepository receptionistJpaRepository, ReceptionReadEntityMapper readEntityMapper, ReceptionWriteEntityMapper writeEntityMapper) {
         this.receptionistJpaRepository = receptionistJpaRepository;
-        this.receptionReadEntityMapper = receptionReadEntityMapper;
-        this.receptionWriteEntityMapper = receptionWriteEntityMapper;
+        this.readEntityMapper = readEntityMapper;
+        this.writeEntityMapper = writeEntityMapper;
     }
+
 
     @Override
     public Optional<Receptionist> findById(ReceptionId id) {
@@ -33,19 +35,19 @@ public class ReceptionsAdapter implements ReceptionRepository {
             return Optional.empty();
         }
         return receptionistJpaRepository.findById(value)
-                .map(receptionWriteEntityMapper::toDomain);
+                .map(readEntityMapper::toDomain);
     }
 
     @Override
     public Page<Receptionist> findAll(Pageable pageable) {
         return receptionistJpaRepository.findAll(pageable)
-                .map(receptionWriteEntityMapper::toDomain);
+                .map(readEntityMapper::toDomain);
     }
 
     @Override
     public void save(Receptionist receptionist) {
         if (receptionist == null) return;
-        var entity = receptionReadEntityMapper.toEntity(receptionist);
+        var entity = writeEntityMapper.toEntity(receptionist);
         receptionistJpaRepository.save(entity);
     }
 
@@ -53,10 +55,10 @@ public class ReceptionsAdapter implements ReceptionRepository {
     public Receptionist update(Receptionist receptionist) {
         if (receptionist == null || receptionist.getId() == null) return null;
         Long idVal = Long.valueOf(receptionist.getId().getValue());
-        var entity = receptionReadEntityMapper.toEntity(receptionist);
+        var entity = writeEntityMapper.toEntity(receptionist);
         entity.setReceptionistId(idVal);
         var saved = receptionistJpaRepository.save(entity);
-        return receptionWriteEntityMapper.toDomain(saved);
+        return readEntityMapper.toDomain(saved);
     }
 
     @Override
@@ -82,6 +84,11 @@ public class ReceptionsAdapter implements ReceptionRepository {
     public Page<Receptionist> findBySector(String sector, Pageable pageable) {
         // ReceptionistJpaRepository does not declare findBySector; fallback to findAll and filter
         return receptionistJpaRepository.findAll(pageable)
-                .map(receptionWriteEntityMapper::toDomain);
+                .map(readEntityMapper::toDomain);
+    }
+
+    @Override
+    public Optional<Receptionist> findByUserId(UserIdentityId id) {
+        return Optional.empty();
     }
 }

@@ -23,8 +23,8 @@ public class JpaScheduleRepository implements ScheduleRepository {
     @Override
     public ScheduleQueryService findByDentistId(DentistId dentistId) {
         List<Appointment> appointments = appointmentJpaRepository.findByDentistId(dentistId);
-        Availability availability = availabilityJpaRepository.findByDentistId(dentistId);
-        return new ScheduleQueryService(appointments, availability);
+       // Availability availability = availabilityJpaRepository.findByDentistId(dentistId);
+        return null;   //new ScheduleQueryService(appointments);
     }
 
     @Override

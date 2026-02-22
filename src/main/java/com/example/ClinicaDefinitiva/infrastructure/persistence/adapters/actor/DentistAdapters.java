@@ -4,6 +4,7 @@ import com.example.ClinicaDefinitiva.application.exceptions.actorException.Denti
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.DentistJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.dentistEntityMapper.DentistReadEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.dentistEntityMapper.DentistWriteEntityMapper;
@@ -17,43 +18,44 @@ import java.util.Optional;
 public class DentistAdapters implements DentistRepository {
 
     private final DentistJpaRepository dentistJpaRepository;
-    private final DentistWriteEntityMapper dentistEntityMapper;
-    private final DentistReadEntityMapper dentistReadEntityMapper;
+    private final DentistWriteEntityMapper writeEntityMapper;
+    private final DentistReadEntityMapper readEntityMapper;
 
-    public DentistAdapters(DentistJpaRepository dentistJpaRepository, DentistWriteEntityMapper dentistEntityMapper, DentistReadEntityMapper dentistReadEntityMapper) {
+    public DentistAdapters(DentistJpaRepository dentistJpaRepository, DentistWriteEntityMapper writeEntityMapper, DentistReadEntityMapper readEntityMapper) {
         this.dentistJpaRepository = dentistJpaRepository;
-        this.dentistEntityMapper = dentistEntityMapper;
-        this.dentistReadEntityMapper = dentistReadEntityMapper;
+        this.writeEntityMapper = writeEntityMapper;
+        this.readEntityMapper = readEntityMapper;
     }
+
 
     @Override
     public Optional<Dentist> findById(DentistId id) {
         return dentistJpaRepository.findById(id.getValue())
-                .map(dentistEntityMapper::toDomain);
+                .map(readEntityMapper::toDomain);
     }
 
     @Override
     public Page<Dentist> findAll(Pageable pageable) {
         return dentistJpaRepository.findAll(pageable)
-                .map(dentistEntityMapper::toDomain);
+                .map(readEntityMapper::toDomain);
     }
 
     @Override
     public Dentist save(Dentist dentist) {
-        return dentistEntityMapper.toDomain(dentistJpaRepository
-                .save(dentistReadEntityMapper.toEntity(dentist)));
+        return readEntityMapper.toDomain(dentistJpaRepository
+                .save(writeEntityMapper.toEntity(dentist)));
     }
 
     @Override
     public Page<Dentist> findByAvailability(String status, Pageable pageable) {
         return dentistJpaRepository.findByAvailability(status,pageable)
-                .map(dentistEntityMapper::toDomain);
+                .map(readEntityMapper::toDomain);
     }
 
     @Override
     public Page<Dentist> findBySpecialty(String specialty, Pageable pageable) {
         return dentistJpaRepository.findBySpecialty(specialty,pageable)
-                .map(dentistEntityMapper::toDomain);
+                .map(readEntityMapper::toDomain);
     }
 
     @Override
@@ -67,5 +69,10 @@ public class DentistAdapters implements DentistRepository {
     @Override
     public boolean existsById(Long id) {
         return dentistJpaRepository.existsById(id);
+    }
+
+    @Override
+    public Optional<Dentist> findByUserId(UserIdentityId id) {
+        return Optional.empty();
     }
 }

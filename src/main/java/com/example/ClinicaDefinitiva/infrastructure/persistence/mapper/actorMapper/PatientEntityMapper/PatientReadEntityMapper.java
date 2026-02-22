@@ -10,11 +10,12 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class PatientReadEntityMapper {
+
     public Patient toDomain(PatientEntity entity) {
         Objects.requireNonNull(entity, "PatientEntity must not be null");
 
         // Person: asumimos que siempre existe y está completo
-        Address address = new Address(
+         Address.of(
                 entity.getStreet(),
                 entity.getCity(),
                 entity.getState(),
@@ -22,36 +23,28 @@ public class PatientReadEntityMapper {
                 entity.getPostalCode()
         );
 
-        DateOfBirth dob = new DateOfBirth(LocalDate.parse(entity.getDateOfBirth()));
-        Age age = new Age(dob);
+        DateOfBirth.of(LocalDate.parse(entity.getDateOfBirth()));
+         Age.of(DateOfBirth.of(LocalDate.parse(entity.getDateOfBirth())));
 
-        FullName fullname = new FullName(entity.getFirst(), entity.getLastName());
-        PhoneNumber phone = new PhoneNumber(entity.getPhoneNumber());
-        BloodType bloodType = BloodType.fromLabel(entity.getBloodType());
-        Document document = new Document(entity.getDni());
+        FullName.of(entity.getFirst(), entity.getLastName());
+        PhoneNumber.of(entity.getPhoneNumber());
+        BloodType.fromLabel(entity.getBloodType());
+        Document.of(entity.getDni());
 
-        Person person = new Person(
-                address,
-                age,
-                bloodType,
-                dob,
-                document,
-                entity.getDocumentEPS(),
-                fullname,
-                phone
-        );
+
 
         // GuardianId y ContractId: asumimos que siempre existen
-        GuardianId guardianId = GuardianId.fromLong(entity.getGuardian().getGuardianId());
-        ContractId contractId = ContractId.fromString(entity.getContractId());
+       // GuardianId guardianId = GuardianId.fromLong(entity.getGuardian().getGuardianId());
+       // ContractId contractId = ContractId.fromString(entity.getContractId());
 
         return new Patient(
-                PatientId.fromLong(entity.getPatientId()),
-                person,
-                guardianId,
-                new UserIdentityId(entity.getUser()),
-                entity.getLastUpdate(),
-                contractId
+               null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
         );
     }
 }

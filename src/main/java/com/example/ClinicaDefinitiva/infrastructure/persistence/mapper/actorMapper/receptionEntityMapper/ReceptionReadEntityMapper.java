@@ -14,7 +14,7 @@ public class ReceptionReadEntityMapper {
         Objects.requireNonNull(entity, "ReceptionistEntity must not be null");
 
         // Person: asumimos que siempre existe y está completo
-        Address address = new Address(
+       /** Address address = new Address(
                 entity.getStreet(),
                 entity.getCity(),
                 entity.getState(),
@@ -44,14 +44,15 @@ public class ReceptionReadEntityMapper {
 
         // Sector y ReceptionId: asumimos que siempre existen
         ReceptionId receptionId = ReceptionId.fromLong(entity.getReceptionistId());
-        Sector sector = new Sector(entity.getSector());
+        Sector sector = new Sector(entity.getSector());*/
 
         return new Receptionist(
-                receptionId,
-                person,
-                sector,
-                new UserIdentityId(entity.getUser()),
-                entity.getLastUpdate()
+                null,
+                null,
+                null,
+                null,
+                null
+
         );
     }
 }

@@ -38,7 +38,7 @@ public class DentistWriteEntityMapper {
         entity.setEnd(domain.getWorkingHours().getEnd());
         entity.setDayOfWeek(domain.getWorkingHours().getDayOfWeek());
         // entity.setDeclaredHoursPerWeek(domain.getWorkingHours().);
-        entity.setUser(domain.getUser().getValue());
+        entity.setUser(domain.getUserId().toString());
         entity.setLastUpdate(domain.getLastUpdate());
 
         return entity;

@@ -24,7 +24,7 @@ public class TreatmentWriteMapper {
                 dto.startDate(),
                 dto.expectedEndDate(),
                 dto.phases().stream()
-                        .map(phase -> new TreatmentPhase(
+                        .map(phase -> TreatmentPhase.of(
                                 phase.name(),
                                 phase.startDate(),
                                 PhaseStatus.valueOf(   phase.status()),

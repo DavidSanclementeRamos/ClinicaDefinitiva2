@@ -39,7 +39,7 @@ public class UserDeactivationPolicy {
     public Outcome<Void> validate(UserIdentity user) {
         Outcome<Void> result = Outcome.ok();
 
-        Dentist dentist = dentistRepo.findByUserId(user.getId());
+        Dentist dentist = dentistRepo.findByUserId(user.getId()).orElseThrow();
         if (dentist != null) {
             result = result.merge(dentistValidator.validate(dentist.getDentistId()));
         }

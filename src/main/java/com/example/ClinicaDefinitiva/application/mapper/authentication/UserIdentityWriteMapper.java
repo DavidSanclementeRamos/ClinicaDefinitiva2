@@ -17,8 +17,8 @@ public class UserIdentityWriteMapper {
     public UserIdentity fromCreateDto(CreateUserIdentityDto dto) {
         return UserIdentity.register(
                  // se genera nuevo ID
-                new Email(dto.email()),
-               new HashedPassword(dto.password()),
+                Email.of(dto.email()),
+               HashedPassword.fromHash(dto.password()),
                 new UserIdentityName(dto.name()),
                 Instant.now() // fecha de creación
         );

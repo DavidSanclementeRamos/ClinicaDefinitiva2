@@ -24,7 +24,7 @@ public class DentistReadEntityMapper {
                 .map(s -> Arrays.stream(s.split(","))
                         .map(String::trim)
                         .filter(str -> !str.isEmpty())
-                        .map(Specialty::new)
+                        .map(Specialty::of)
                         .collect(Collectors.toSet()))
                 .orElse(Collections.emptySet());
 

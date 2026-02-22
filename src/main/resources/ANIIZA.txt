@@ -464,3 +464,43 @@ feat(application-company): refactoriza casos de uso y DTOs con nueva semántica
 - Cambia `CompanyMapper` → `CompanyReadMapper`.
 - Crea `CompanyWriteMapper` para operaciones de escritura.
 - Refactoriza `CompanyApplicationService` con las nuevas implementaciones de casos de uso.
+
+
+
+
+'''''''''''''''''''''''''''''
+
+
+- refactorizar el caso de uso de ThirdPartiesUseCase para agregar parametros de autorizacion segun  el ADR-(Arquitectura)-48-Obtención de UserId y RolId en casos de uso
+
+- cambiar nombre de dto para mejorar sematica:
+  - de CreateThirdPartiesRequest a CreateThirdPartyDto
+  - de ThirdPartiesListResponse a PageThirdPartyDto
+ 
+  - de ThirdPartiesRequest a ReadThirdPartyDto
+  - de UpdateThirdPartiesResponse a UpdateThirdPartyDto
+
+
+- eliminar dto por que basta con pasar el parametro en el caso de uso
+  - InactivateLedgerAccountRequest
+
+
+feat(application-thirdParties): refactoriza casos de uso y DTOs con nueva semántica
+
+- Refactoriza `ThirdPartiesUseCase` para incluir parámetros de autorización según ADR-48 (obtención de UserId y RolId en casos de uso).
+- Cambia nombres de DTOs para mayor claridad semántica:
+  - `CreateThirdPartiesRequest` → `CreateThirdPartyDto`
+  - `ThirdPartiesListResponse` → `PageThirdPartyDto`
+  - `ThirdPartiesRequest` → `ReadThirdPartyDto`
+  - `UpdateThirdPartiesResponse` → `UpdateThirdPartyDto`
+- Elimina `InactivateLedgerAccountRequest`, reemplazado por parámetro explícito en el caso de uso.
+  
+
+
+- cambiar de LedgerAccountMapper a LedgerAccountReadMapper
+- creacion de LedgerAccountWriteMapper
+- refactor de LedgerAccountApplicationService con  los nuevos casos de uso
+
+
+
+

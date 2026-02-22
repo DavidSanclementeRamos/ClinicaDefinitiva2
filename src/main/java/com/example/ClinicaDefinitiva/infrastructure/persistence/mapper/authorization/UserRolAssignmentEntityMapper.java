@@ -10,12 +10,9 @@ public class UserRolAssignmentEntityMapper {
 
     // Entity → Dominio
     public  UserRolAssignment toDomain(UserRolAssignmentEntity entity) {
-        return new UserRolAssignment(
-                UserRolAssignmentId.of(entity.getId()),   // Long → VO
+        return  UserRolAssignment.assignPermanent(
                 UserIdentityId.from(entity.getUserId()),            // Long → VO
                 RolId.of(entity.getRolId()),              // Long → VO
-                entity.getValidFrom(),
-                entity.getValidTo(),
                 entity.isPrimary()
         );
     }

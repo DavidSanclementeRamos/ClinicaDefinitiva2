@@ -60,7 +60,7 @@ public final class InvoiceDomainService {
      */
     public void validateRates(Invoice invoice, LocalDateTime emitDate) {
         for (InvoiceItem item : invoice.getItems()) {
-            Rate rate = rateRepository.findActiveRateForService(item.getServiceCode(), invoice.getContractId())
+            Rate rate = rateRepository.findActiveRateForService(item.getServiceId(), invoice.getContractId())
                     .orElseThrow(() -> new BusinessRuleViolationException(
                             InvoiceError.ERR_INVOICE_EXPIRED_RATE,
                             EntityContext.INVOICE
