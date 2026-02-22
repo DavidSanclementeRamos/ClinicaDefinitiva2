@@ -1,136 +1,75 @@
 package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.*;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ThirdPartiesNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.NameMapper;
-import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.ThirdPartiesMapper;
+import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.thirdParties.ThirdPartiesReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.thirdParties.ThirdPartiesWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.ThirdPartiesUseCase;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeThirdParties;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.CompanyRepository;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ThirdPartiesRepository;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
+
     private final ThirdPartiesRepository repository;
-    private final ThirdPartiesMapper mapper;
+    private final ThirdPartiesReadMapper readMapper;
+    private final ThirdPartiesWriteMapper writeMapper;
     private final CompanyRepository companyRepository;
 
-    public ThirdPartiesApplicationService(ThirdPartiesRepository repository, ThirdPartiesMapper mapper, CompanyRepository companyRepository) {
+    public ThirdPartiesApplicationService(ThirdPartiesRepository repository, ThirdPartiesReadMapper readMapper, ThirdPartiesWriteMapper writeMapper, CompanyRepository companyRepository) {
         this.repository = repository;
-        this.mapper = mapper;
+        this.readMapper = readMapper;
+        this.writeMapper = writeMapper;
         this.companyRepository = companyRepository;
     }
 
+
     @Override
-    public ThirdPartiesResponse registerThirdParty(CreateThirdPartiesRequest request) {
-        CompanyId companyId = CompanyId.fromString(request.companyId());
-        Company company = companyRepository.findById(companyId)
-                .orElseThrow(()-> new CompanyNotFoundException(""));
-        ThirdParties thirdParties = ThirdParties.registerThirdParties(
-                company.getId(),
-                NameMapper.fromDto(request.name()),
-                request.typeDocument(),
-                request.documentNumber(),
-                TypeThirdParties.valueOf(request.typeThirdParties()),
-                AddressMapper.fromDto(request.address()),
-                PhoneNumberMapper.fromDto(request.phoneNumber()),
-                EmailMapper.fromDto(request.email())
-
-        );
-        repository.save(thirdParties);
-
-        return mapper.toResponse(thirdParties);
+    public ReadThirdPartyDto findById(ThirdPartiesId id, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public ThirdPartiesResponse updateThirdPartyContact(String thirdPartiesId, UpdateThirdPartiesContactRequest request) {
-
-        ThirdPartiesId partiesId = ThirdPartiesId.fromString(thirdPartiesId);
-        ThirdParties parties = repository.findById(partiesId)
-                .orElseThrow(()-> new ThirdPartiesNotFoundException(""));
-
-        parties.updateContactInformation(
-                NameMapper.fromDto(request.name()),
-                AddressMapper.fromDto(request.address()),
-                PhoneNumberMapper.fromDto(request.phoneNumber()),
-                EmailMapper.fromDto(request.email())
-
-        );
-        repository.save(parties);
-
-        return mapper.toResponse(parties);
+    public Page<PageThirdPartyDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public ThirdPartiesResponse activateThirdParty(String thirdPartiesId) {
-        ThirdPartiesId partiesId = ThirdPartiesId.fromString(thirdPartiesId);
-        ThirdParties parties = repository.findById(partiesId)
-                .orElseThrow(()-> new ThirdPartiesNotFoundException(""));
-
-        parties.activate();
-        repository.save(parties);
-
-        return mapper.toResponse(parties);
+    public Page<PageThirdPartyDto> findByType(String type, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public ThirdPartiesResponse inactivateThirdParty(String thirdPartiesId, InactivateThirdPartiesRequest request) {
-        ThirdPartiesId partiesId = ThirdPartiesId.fromString(thirdPartiesId);
-        ThirdParties parties = repository.findById(partiesId)
-                .orElseThrow(()-> new ThirdPartiesNotFoundException(""));
-
-        parties.inactivate(request.reason());
-        repository.save(parties);
-
-        return mapper.toResponse(parties);
+    public ReadThirdPartyDto findByDocumentNumber(String documentNumber, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public ThirdPartiesResponse findThirdPartyById(String thirdPartiesId) {
-        ThirdPartiesId partiesId = ThirdPartiesId.fromString(thirdPartiesId);
-        ThirdParties parties = repository.findById(partiesId)
-                .orElseThrow(()-> new ThirdPartiesNotFoundException(""));
-
-        return mapper.toResponse(parties);
+    public Page<PageThirdPartyDto> findByCompany(CompanyId companyId, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public ThirdPartiesResponse findThirdPartyByDocument(String documentNumber) {
-
-        ThirdParties parties = repository.findByDocumentNumber(documentNumber)
-                .orElseThrow(()-> new ThirdPartiesNotFoundException(""));
-
-        return mapper.toResponse(parties);
+    public ReadThirdPartyDto createThirdParty(CreateThirdPartyDto dto, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public Page<ThirdPartiesListResponse> listThirdPartiesByCompany(String id) {
-        CompanyId companyId = CompanyId.fromString(id);
-        Page<ThirdParties> thirdPartiesPage = repository.findByCompanyId(companyId);
-          if(thirdPartiesPage.isEmpty()){
-                throw  new CompanyNotFoundException("");}
-        return thirdPartiesPage.map(mapper::toListResponse);
+    public ReadThirdPartyDto updateContactInformation(ThirdPartiesId id, UpdateThirdPartyDto dto, UserIdentityId requesterId, RolId requesterRolId) {
+        return null;
     }
 
     @Override
-    public Page<ThirdPartiesListResponse> listThirdPartiesByType(String type) {
-        Page<ThirdParties> thirdPartiesPage = repository.findActiveByType(TypeThirdParties.valueOf(type));
-        if(thirdPartiesPage.isEmpty()){
-            throw  new CompanyNotFoundException("");}
-        return thirdPartiesPage.map(mapper::toListResponse);
+    public void activate(ThirdPartiesId id, UserIdentityId requesterId, RolId requesterRolId) {
+
     }
 
     @Override
-    public Page<ThirdPartiesListResponse> listActiveThirdPartiesByType(String type) {
-        Page<ThirdParties> thirdPartiesPage = repository.findActiveByType(TypeThirdParties.valueOf(type));
-        if(thirdPartiesPage.isEmpty()){
-            throw  new CompanyNotFoundException("");}
-        return thirdPartiesPage.map(mapper::toListResponse);
+    public void inactivate(ThirdPartiesId id, String reason, UserIdentityId requesterId, RolId requesterRolId) {
 
     }
 }
