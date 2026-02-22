@@ -207,12 +207,12 @@ public class RolApplicationService implements RolUseCase {
 
         // 4. Validar autorización
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(PermissionError.ERR_PERMISSION_UNAUTHORIZED_ADD, VOContext.PERMISSION);
+            throw new BusinessRuleViolationException(PermissionError.ERR_PERMISSION_UNAUTHORIZED_ADD, VOContext.AUTHORIZATION);
         }
 
         // 5. Agregar permiso
-        Permission permission = writeMapper.toPermission(permissionDto);
-        rol.addPermission(permission);
+       // Permission permission = writeMapper.toPermission(permissionDto);
+        //rol.addPermission(permission);
 
         repository.save(rol);
     }
@@ -251,12 +251,12 @@ public class RolApplicationService implements RolUseCase {
 
         // 4. Validar autorización
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(PermissionError.ERR_PERMISSION_UNAUTHORIZED_REMOVE,VOContext.PERMISSION);
+            throw new BusinessRuleViolationException(PermissionError.ERR_PERMISSION_UNAUTHORIZED_REMOVE,VOContext.AUTHORIZATION);
         }
 
         // 5. Remover permiso
-        Permission permission = writeMapper.toPermission(permissionDto);
-        rol.removePermission(permission);
+        //Permission permission = writeMapper.toPermission(permissionDto);
+       // rol.removePermission(permission);
 
         repository.save(rol);
     }
@@ -297,15 +297,15 @@ public class RolApplicationService implements RolUseCase {
 
         // 4. Validar autorización
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(PermissionError.ERR_PERMISSION_UNAUTHORIZED_SET,VOContext.PERMISSION);
+            throw new BusinessRuleViolationException(PermissionError.ERR_PERMISSION_UNAUTHORIZED_SET,VOContext.AUTHORIZATION);
         }
 
         // 5. Reemplazar permisos
-        Set<Permission> permissions = permissionDtos.stream()
-                .map(writeMapper::toPermission)
-                .collect(Collectors.toSet());
+        //Set<Permission> permissions = permissionDtos.stream()
+                //.map(writeMapper::toPermission)
+//.collect(Collectors.toSet());
 
-        rol.setPermissions(permissions);
+       // rol.setPermissions(permissions);
 
         repository.save(rol);
     }

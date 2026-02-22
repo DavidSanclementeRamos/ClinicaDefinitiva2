@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.authoriz
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.policies.RoleBasedPolicy;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.RolService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
@@ -14,13 +15,16 @@ import java.util.Set;
 
 
 public class RolEntityMapper {
-
+    RolRepository Y;
     // Entity → Dominio
     public  Rol toDomain(RolEntity entity) {
-      return new RolService(
+      return new Rol(
                 RolEnum.valueOf(entity.getRolEnum()),   // String → Enum
                 entity.getDescription(),
-              new HashSet<>());
+true,
+true,
+true, null
+      );
 
 
 

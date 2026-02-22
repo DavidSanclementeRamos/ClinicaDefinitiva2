@@ -4,6 +4,7 @@ import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.actor.output.GuardianRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.GuardianJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.guardianEntityMapper.GuardianReadEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.guardianEntityMapper.GuardianWriteEntityMapper;
@@ -15,21 +16,22 @@ import java.util.Optional;
 public class GuardianAdapter implements GuardianRepository {
 
     private final GuardianJpaRepository guardianJpaRepository;
-    private final GuardianReadEntityMapper guardianReadEntityMapper;
-    private final GuardianWriteEntityMapper guardianWriteEntityMapper;
+    private final GuardianReadEntityMapper readEntityMapper;
+    private final GuardianWriteEntityMapper writeEntityMapper;
 
-    public GuardianAdapter(GuardianJpaRepository guardianJpaRepository, GuardianReadEntityMapper guardianReadEntityMapper, GuardianWriteEntityMapper guardianWriteEntityMapper) {
+    public GuardianAdapter(GuardianJpaRepository guardianJpaRepository, GuardianReadEntityMapper readEntityMapper, GuardianWriteEntityMapper writeEntityMapper) {
         this.guardianJpaRepository = guardianJpaRepository;
-        this.guardianReadEntityMapper = guardianReadEntityMapper;
-        this.guardianWriteEntityMapper = guardianWriteEntityMapper;
+        this.readEntityMapper = readEntityMapper;
+        this.writeEntityMapper = writeEntityMapper;
     }
+
 
     @Override
     public Optional<Guardian> findById(GuardianId guardianId) {
         if (guardianId == null) return Optional.empty();
         try {
             Long val = guardianId.getValue();
-            return guardianJpaRepository.findById(val).map(guardianWriteEntityMapper::toDomain);
+            return guardianJpaRepository.findById(val).map(readEntityMapper::toDomain);
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -37,14 +39,15 @@ public class GuardianAdapter implements GuardianRepository {
 
     @Override
     public Page<Guardian> findAll(Pageable pageable) {
-        return guardianJpaRepository.findAll(pageable).map(guardianWriteEntityMapper::toDomain);
+        return guardianJpaRepository.findAll(pageable).map(readEntityMapper::toDomain);
     }
 
     @Override
-    public void save(Guardian guardian) {
-        if (guardian == null) return;
-        var entity = guardianReadEntityMapper.toEntity(guardian);
+    public Guardian save(Guardian guardian) {
+        if (guardian == null) return guardian;
+        var entity = writeEntityMapper.toEntity(guardian);
         guardianJpaRepository.save(entity);
+        return guardian;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class GuardianAdapter implements GuardianRepository {
             Long val = guardianId.getValue();
             var entity = guardianJpaRepository.findById(val).orElse(null);
             if (entity == null) return null;
-            return guardianWriteEntityMapper.toDomain(guardianJpaRepository.save(entity));
+            return readEntityMapper.toDomain(guardianJpaRepository.save(entity));
         } catch (Exception e) {
             return null;
         }
@@ -68,7 +71,7 @@ public class GuardianAdapter implements GuardianRepository {
             var entity = guardianJpaRepository.findById(val).orElse(null);
             if (entity == null) return null;
             guardianJpaRepository.deleteById(val);
-            return guardianWriteEntityMapper.toDomain(entity);
+            return readEntityMapper.toDomain(entity);
         } catch (Exception e) {
             return null;
         }
@@ -79,11 +82,11 @@ public class GuardianAdapter implements GuardianRepository {
         return null;
     }
 
-    @Override
-    public Optional<Guardian> findByPatientId(Long patientId, Pageable pageable) {
+   /** @Override
+    public Page<Guardian> findByPatientId(Long patientId, Pageable pageable) {
         if (patientId == null) return Optional.empty();
         return guardianJpaRepository.findAll(pageable).stream()
-                .map(guardianWriteEntityMapper::toDomain)
+                .map(readEntityMapper::toDomain)
                 .filter(g -> {
                     if (g.getPatientList() != null) {
                         g.getPatientList().stream().anyMatch(p -> false);
@@ -91,7 +94,7 @@ public class GuardianAdapter implements GuardianRepository {
                     return false;
                 })
                 .findFirst();
-    }
+    }*/
 
     @Override
     public boolean existsById(GuardianId guardianId) {
@@ -101,6 +104,11 @@ public class GuardianAdapter implements GuardianRepository {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public Guardian findByUserId(UserIdentityId id) {
+        return null;
     }
 
 }

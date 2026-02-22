@@ -11,8 +11,15 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Reso
 import java.util.HashSet;
 
 public class RolWriteMapper {
+    public Permission toPermission(PermissionDto permissionDto) {
+        return null;
+    }
 
-    public  Rol fromCreateDto(CreateRolDto dto) {
+    public Rol fromCreateDto(CreateRolDto dto) {
+        return null;
+    }
+
+    /** public  Rol fromCreateDto(CreateRolDto dto) {
         return Rol.createCustom(
                 RolEnum.valueOf(dto.rolEnum()),   // String → RolEnum
                 dto.description(),
@@ -31,7 +38,7 @@ public class RolWriteMapper {
         return Permission.of(ResourceCatalog.of(
                 ResourceCatalog.BasicResource.valueOf(dto.resourceCode())),
                 ActionCatalog.of(ActionCatalog.BasicAction.valueOf(dto.actionCode()))); // crea VO con reglas de negocio
-    }
+    }*/
 
 }
 

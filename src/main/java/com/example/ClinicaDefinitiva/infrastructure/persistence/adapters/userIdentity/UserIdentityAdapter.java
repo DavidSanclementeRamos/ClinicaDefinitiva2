@@ -39,6 +39,26 @@ public class UserIdentityAdapter implements UserIdentityRepository {
     }
 
     @Override
+    public Optional<UserIdentity> findByEmail(String email) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<UserIdentity> findByEmailAndStatus(String email, String status) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<UserIdentity> findByIdAndStatus(UserIdentityId id, String status) {
+        return Optional.empty();
+    }
+
+    @Override
+    public UserIdentity save(UserIdentity user) {
+        return null;
+    }
+
+    /** @Override
     public Page<UserIdentity> findByEmail(String email, Pageable pageable) {
         return userJpaRepository.findByEmail(email, pageable)
                 .map(readMapper::toDomain);
@@ -61,5 +81,5 @@ public class UserIdentityAdapter implements UserIdentityRepository {
         UserIdentityEntity entity = writeMapper.toEntity(user);
         UserIdentityEntity saved = userJpaRepository.save(entity);
         return readMapper.toDomain(saved);
-    }
+    }*/
 }

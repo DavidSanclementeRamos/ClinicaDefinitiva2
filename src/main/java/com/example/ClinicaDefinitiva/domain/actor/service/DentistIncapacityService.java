@@ -6,6 +6,9 @@ import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.output.AppointmentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,7 +31,7 @@ public class DentistIncapacityService {
         dentist.applyIncapacity(start, end, medicalNote);
         dentistRepository.save(dentist);
 
-        List<Appointment> conflicts = appointmentRepository.findByDentistBetween(dentistId, start, end);
+        Page<Appointment> conflicts = appointmentRepository.findByDentistBetween(dentistId, start, end, Pageable.unpaged());
 
         for (Appointment appointment : conflicts) {
             appointment.cancel(medicalNote);

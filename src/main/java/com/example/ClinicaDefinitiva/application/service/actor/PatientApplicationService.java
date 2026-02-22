@@ -126,7 +126,7 @@ public class PatientApplicationService implements PatientUseCase {
 
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
-                .withResourceId(contractId.asLong());
+                .withResourceId(contractId.getValue());
 
         // Si es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->

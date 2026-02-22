@@ -5,15 +5,14 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.PatientJpaRepository;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.PatientEntityMapper.PatientReadEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.PatientEntityMapper.PatientWriteEntityMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class PatientAdapter implements PatientRepository {
 
@@ -32,7 +31,7 @@ public class PatientAdapter implements PatientRepository {
         if (id == null) return Optional.empty();
         try {
             Long value = Long.valueOf(id.getValue());
-            return jpaRepository.findById(value).map(writeMapper::toDomain);
+            return jpaRepository.findById(value).map(readMapper::toDomain);
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -40,7 +39,7 @@ public class PatientAdapter implements PatientRepository {
 
     @Override
     public Page<Patient> findAll(Pageable pageable) {
-        return jpaRepository.findAll(pageable).map(writeMapper::toDomain);
+        return jpaRepository.findAll(pageable).map(readMapper::toDomain);
     }
 
     @Override
@@ -53,18 +52,20 @@ public class PatientAdapter implements PatientRepository {
         return null;
     }
 
-    @Override
-    public Optional<Patient> findByContractId(ContractId contractId) {
-        if (contractId == null) return Optional.empty();
-        String val = contractId.asLong() != null ? String.valueOf(contractId.asLong()) : contractId.toString();
-        List<Patient> found = jpaRepository.findAll().stream()
-                .filter(e -> e.getContractId() != null && e.getContractId().equals(val))
-                .map(writeMapper::toDomain)
-                .collect(Collectors.toList());
-        return found.stream().findFirst();
-    }
+   /**
+    * @return
+    * @Override public Optional<Patient> findByContractId(ContractId contractId) {
+    * if (contractId == null) return Optional.empty();
+    * String val = contractId.() != null ? String.valueOf(contractId.asLong()) : contractId.toString();
+    * List<Patient> found = jpaRepository.findAll().stream()
+    * .filter(e -> e.getContractId() != null && e.getContractId().equals(val))
+    * .map(writeMapper::toDomain)
+    * .collect(Collectors.toList());
+    * return found.stream().findFirst();
+    * }
+    */
 
-    @Override
+    /*@Override
     public Optional<Patient> findByGuardianId(GuardianId guardianId) {
         if (guardianId == null) return Optional.empty();
         Long val = guardianId.getValue();
@@ -73,13 +74,14 @@ public class PatientAdapter implements PatientRepository {
                 .map(writeMapper::toDomain)
                 .collect(Collectors.toList());
         return found.stream().findFirst();
-    }
+    }*/
 
     @Override
-    public void save(Patient patient) {
-        if (patient == null) return;
-        var entity = readMapper.toEntity(patient);
+    public Patient save(Patient patient) {
+        if (patient == null) return patient;
+        var entity = writeMapper.toEntity(patient);
         jpaRepository.save(entity);
+        return patient;
     }
 
     @Override
@@ -90,7 +92,7 @@ public class PatientAdapter implements PatientRepository {
             var entity = jpaRepository.findById(val).orElse(null);
             if (entity == null) return null;
             // mapping back to domain
-            return writeMapper.toDomain(jpaRepository.save(entity));
+            return readMapper.toDomain(jpaRepository.save(entity));
         } catch (Exception e) {
             return null;
         }
@@ -113,5 +115,10 @@ public class PatientAdapter implements PatientRepository {
             jpaRepository.deleteById(Long.valueOf(id.getValue()));
         } catch (Exception ignored) {
         }
+    }
+
+    @Override
+    public Patient findByUserId(UserIdentityId id) {
+        return null;
     }
 }

@@ -16,7 +16,7 @@ public enum VoAccountingError implements ErrorCatalog {
     ERR_REPORT_INDICATOR_NULL("RN-REPORT-002", "error.report.indicator.null",
             "El indicador no puede ser nulo"),
 
-
+    ERR_REPORT_INDICATOR_INVALID("RN-REPORT-003","error.report.indicator.invalid","El formato es invalido"),
 
     // ===== CompanyId =====
     ERR_COMPANY_ID_NULL("RN-COMPANY-001", "error.company.id.null",
@@ -85,8 +85,10 @@ public enum VoAccountingError implements ErrorCatalog {
     ERR_PERIOD_NULL("RN-PERIOD-001", "error.period.null",
                             "Las fechas de inicio y fin del período no pueden ser nulas"),
     ERR_PERIOD_INVALID("RN-PERIOD-002", "error.period.invalid",
-                               "La fecha de fin no puede ser anterior a la fecha de inicio");
+                               "La fecha de fin no puede ser anterior a la fecha de inicio"),
+    ERR_DOCUMENT_NULL("","" ,"" ),
 
+    ERR_DOCUMENT_INVALID_FORMAT("","","");
 
     private final String code;
     private final String messageKey;

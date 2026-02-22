@@ -83,7 +83,7 @@ public class PatientController {
         RolId requesterRolId = userDetails.getActiveRolId();
 
         Page<PagePatientDto> patients = useCase.findByContractId(
-                ContractId.fromLong(contractId),
+                ContractId.of(contractId),
                 pageable,
                 requesterId,
                 requesterRolId

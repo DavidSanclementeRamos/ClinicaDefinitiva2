@@ -10,6 +10,9 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolati
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.output.AppointmentRepository;
 import com.example.ClinicaDefinitiva.domain.util.TimeIntervalRules;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class DentistVacationService {
             );
         }
 
-        List<Appointment> conflicts = appointmentRepository.findByDentistBetween(dentistId, start, end);
+        Page<Appointment> conflicts = appointmentRepository.findByDentistBetween(dentistId, start, end, Pageable.unpaged());
         if (!conflicts.isEmpty()) {
             throw new BusinessRuleViolationException(
                     DentistError.ERR_DENTIST_VACATION_CONFLICT, EntityContext.DENTIST

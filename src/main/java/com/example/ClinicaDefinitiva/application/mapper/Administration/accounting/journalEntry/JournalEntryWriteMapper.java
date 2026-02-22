@@ -30,9 +30,19 @@ public class JournalEntryWriteMapper {
                 dto.id(),
                 dto.thirdPartyId(),
                 dto.description(),
-                dto.amount(),
+                null,
                 dto.document(),
-                dto.isDebit()
+                dto.isDebit(),
+                true,
+                true,
+                1,
+                "",
+                true,
+                true,
+                true,
+                true
+
+
 
         );
     }

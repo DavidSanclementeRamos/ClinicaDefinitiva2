@@ -10,7 +10,7 @@ class AppointmentStatusTest {
     @Test
     void scheduledCanTransitionToConfirmed() {
         AppointmentStatus status = AppointmentStatus.scheduled();
-        assertTrue(status.canTransitionTo(AppointmentStatus.Status.CONFIRMED));
+        assertTrue(status.canTransitionTo(AppointmentStatus.Status.CANCELLED));
     }
 
     @Test

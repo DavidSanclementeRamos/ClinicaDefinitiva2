@@ -10,7 +10,7 @@ class BillingDomainServiceTest {
 
     private ContractRepository contractRepo;
     private RateRepository rateRepo;
-    private BillingDomainService billingService;
+   // private BillingDomainService billingService;
 
     private Patient patient;
    // private Contract contract;

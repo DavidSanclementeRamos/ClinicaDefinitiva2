@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ReceptionRepository {
     Optional<Receptionist> findById(ReceptionId id);
     Page<Receptionist> findAll(Pageable pageable);
-    void save(Receptionist receptionist);
+    Receptionist save(Receptionist receptionist);
     Receptionist update(Receptionist receptionist);
     boolean existsById(ReceptionId id);
     void deleteById(ReceptionId id);

@@ -13,7 +13,7 @@ public class PatientReadMapper {
         return new ReadPatientDto(
                 patient.getPatientId().getValue(),
                 patient.getGuardianId().getValue(),
-                patient.getContractId().asLong(),
+                patient.getContractId().getValue(),
                 patient.getPerson().getDni().toString(),
                 patient.getPerson().getFullname().FirstName(),
                 patient.getPerson().getFullname().LastName(),
@@ -36,7 +36,7 @@ public class PatientReadMapper {
     public PagePatientDto toPageDto(Patient patient) {
         return new PagePatientDto(
                 patient.getPatientId().getValue(),
-                patient.getContractId().asLong(),
+                patient.getContractId().getValue(),
                 patient.getUser().value(),
                 patient.getPerson().getDni().toString(),
                 patient.getPerson().getFullname().FirstName(),

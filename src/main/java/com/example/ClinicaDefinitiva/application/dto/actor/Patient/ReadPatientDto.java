@@ -26,4 +26,6 @@ public record ReadPatientDto (
         String state,
         String country,
         String postalCode
-){}
+){
+
+}

@@ -19,7 +19,7 @@ public class PatientWriteEntityMapper {
         // Identificadores: asumimos que siempre existen
         entity.setPatientId(domain.getPatientId().getValue());
         entity.setGuardian(null); // referencia nula, adapter la seteará si es necesario
-        entity.setContractId(String.valueOf(domain.getContractId().asLong()));
+        entity.setContractId(String.valueOf(domain.getContractId().getValue()));
 
         // Person: asumimos que siempre existe y está completo
         Person person = domain.getPerson();

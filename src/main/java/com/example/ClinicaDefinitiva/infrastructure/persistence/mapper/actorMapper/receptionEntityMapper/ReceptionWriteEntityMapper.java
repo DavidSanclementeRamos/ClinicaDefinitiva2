@@ -39,7 +39,7 @@ public class ReceptionWriteEntityMapper {
         entity.setDocumentEPS(person.getDocumentoEPS());
 
         // User: asumimos que siempre existe
-        entity.setUser(domain.getUser().toString());
+        entity.setUser(domain.getUserIdentityId().toString());
 
         entity.setLastUpdate(domain.getLastUpdate());
 

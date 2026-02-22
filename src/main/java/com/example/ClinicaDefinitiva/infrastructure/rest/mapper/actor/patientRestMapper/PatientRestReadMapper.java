@@ -26,7 +26,7 @@ public class PatientRestReadMapper {
                 dto.dateOfBirth(),
                 dto.bloodType(),
                 dto.documentEPS(),
-                dto.user(),
+                dto.userId(),
                 dto.lastUpdate(),
                 dto.street(),
                 dto.city(),

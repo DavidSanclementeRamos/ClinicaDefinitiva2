@@ -33,8 +33,7 @@ public final class SecurityUtils {
     public static String getCurrentUserSector() {
         UserIdentityId userIdentityId = getCurrentUserId();
 
-        Receptionist receptionist = receptionistRepository.findByUserId(userIdentityId);
-              //  .orElseThrow(() -> new IllegalStateException("Receptionist not found for user: " + userId));
+        Receptionist receptionist = receptionistRepository.findByUserId(userIdentityId).orElseThrow();       //  .orElseThrow(() -> new IllegalStateException("Receptionist not found for user: " + userId));
 
         return receptionist.getSector().toString();
     }

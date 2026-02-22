@@ -15,7 +15,7 @@ public class GuardianReadEntityMapper {
     public Guardian toDomain(GuardianEntity entity) {
         Objects.requireNonNull(entity, "GuardianEntity must not be null");
 
-        Address address = new Address(
+      /*  Address address = new Address(
                 entity.getStreet(),
                 entity.getCity(),
                 entity.getState(),
@@ -43,16 +43,17 @@ public class GuardianReadEntityMapper {
         );
 
         List<PatientId> patientIds = entity.getPatientList().stream()
-                .map(p -> PatientId.fromLong(p.getPatientId()))
-                .collect(Collectors.toList());
+                .map(p -> PatientId.of(p.getPatientId()))
+                .collect(Collectors.toList());*/
 
         return new Guardian(
                 GuardianId.fromLong(entity.getGuardianId()),
                 entity.getLastUpdate(),
-                patientIds,
-                person,
+                null,
+                null,
                 entity.getTypeGuardian(),
-                new UserIdentityId(entity.getUser())
+                //new UserIdentityId(entity.getUser())
+                null
         );
     }
    }

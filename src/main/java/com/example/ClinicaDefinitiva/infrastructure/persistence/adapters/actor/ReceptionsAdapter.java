@@ -45,10 +45,11 @@ public class ReceptionsAdapter implements ReceptionRepository {
     }
 
     @Override
-    public void save(Receptionist receptionist) {
-        if (receptionist == null) return;
+    public Receptionist save(Receptionist receptionist) {
+        if (receptionist == null) return receptionist;
         var entity = writeEntityMapper.toEntity(receptionist);
         receptionistJpaRepository.save(entity);
+        return receptionist;
     }
 
     @Override

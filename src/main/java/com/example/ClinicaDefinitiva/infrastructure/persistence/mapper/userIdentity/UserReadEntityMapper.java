@@ -5,6 +5,7 @@ import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
+import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.authentication.UserIdentityEntity;
 
 public class UserReadEntityMapper {
@@ -14,12 +15,19 @@ public class UserReadEntityMapper {
         if (entity == null) {
             return null;
         }
+        Outcome<Email> emailOutcome = Email.of(entity.getEmail());
+
+        Outcome<HashedPassword> passwordOutcome = HashedPassword.fromHash(entity.getHashedPassword());
+
+        Outcome<UserIdentityName> userNameOutcome = UserIdentityName.create(entity.getName());
+
 
         return new UserIdentity(
                 UserIdentityId.from(entity.getId()),
-                new Email(entity.getEmail()),
-                new HashedPassword(entity.getHashedPassword()),
-                new UserIdentityName(entity.getName()),
+                 emailOutcome.getValue().get(),
+                  passwordOutcome.getValue().get(),
+                  userNameOutcome.getValue().get(),
+
                 entity.getCreatedAt()
 
         );
