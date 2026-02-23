@@ -199,7 +199,7 @@ public class UserIdentity {
      * @return Outcome indicando éxito o fallo
      */
     public Outcome<UserIdentity> suspend(String reason, Instant now) {
-        if (status.getState() == UserIdentityStatus.State.SUSPENDED) {
+        if (!status.canTransitionTo(UserIdentityStatus.Status.SUSPENDED)) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_ALREADY_SUSPENDED,
                     Severity.INFO,
@@ -217,7 +217,8 @@ public class UserIdentity {
             ));
         }
 
-        this.status = UserIdentityStatus.of(UserIdentityStatus.State.SUSPENDED);
+        this.status.canTransitionTo(UserIdentityStatus.Status.SUSPENDED);
+
 
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
@@ -230,7 +231,7 @@ public class UserIdentity {
      * @return Outcome indicando éxito o fallo
      */
     public Outcome<UserIdentity> reactivate(Instant now) {
-        if (status.getState() == UserIdentityStatus.State.ACTIVE) {
+        if (!status.canTransitionTo(UserIdentityStatus.Status.ACTIVE)) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_ALREADY_ACTIVE,
                     Severity.INFO,
@@ -248,7 +249,7 @@ public class UserIdentity {
             ));
         }
 
-        this.status = UserIdentityStatus.of(UserIdentityStatus.State.ACTIVE);
+        this.status.canTransitionTo( UserIdentityStatus.Status.ACTIVE);
         this.failedLoginAttempts = 0;
         this.lockedUntil = null;
 

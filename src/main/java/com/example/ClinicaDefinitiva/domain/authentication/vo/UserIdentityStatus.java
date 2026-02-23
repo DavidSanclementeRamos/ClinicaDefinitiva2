@@ -1,97 +1,57 @@
 package com.example.ClinicaDefinitiva.domain.authentication.vo;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-public class UserIdentityStatus {
-    public final State state;
+public final class UserIdentityStatus {
 
-    public enum State {
-        ACTIVE,
-        INACTIVE,
-        SUSPENDED,
-        PENDING_VERIFICATION
+    public enum Status {
+        ACTIVE("Activo"),
+        INACTIVE("Inactivo"),
+        SUSPENDED("Suspendido"),
+        PENDING_VERIFICATION("Pendiente de verificación");
+
+        private final String description;
+        Status(String description) { this.description = description; }
+        public String getDescription() { return description; }
     }
 
-    private UserIdentityStatus(State state) {
-        this.state = state;
-    }
+    private final Status value;
 
-
-
-    public static UserIdentityStatus of(State state) {
-        return new UserIdentityStatus(state );
-    }
-
-    /**public void mustBeActive(ErrorCatalog error, EntityContext contexto) {
-        if (state != State.ACTIVE) {
-            throw new BusinessRuleViolationException(error, contexto);
+    private UserIdentityStatus(Status value) {
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    VoAccesError.ERR_USER_STATUS_NULL,
+                    VOContext.AUTHORIZATION
+            );
         }
-    }*/
-
-    public boolean isActive() {
-        return state == State.ACTIVE;
+        this.value = value;
     }
 
-    public boolean isInactive() {
-        return state == State.INACTIVE;
+    public static UserIdentityStatus of(Status status) {
+        return new UserIdentityStatus(status);
     }
 
-    public boolean isSuspended() {
-        return state == State.SUSPENDED;
-    }
+    // Queries semánticas
+    public boolean isActive() { return value == Status.ACTIVE; }
+    public boolean isInactive() { return value == Status.INACTIVE; }
+    public boolean isSuspended() { return value == Status.SUSPENDED; }
+    public boolean isPendingVerification() { return value == Status.PENDING_VERIFICATION; }
 
-    public boolean isPendingVerification() {
-        return state == State.PENDING_VERIFICATION;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    /**
-     * Valida si una transición de estado es válida.
-     *
-     * Transiciones válidas:
-     * - PENDING_VERIFICATION -> ACTIVE (después de verificar)
-     * - ACTIVE -> INACTIVE (desactivación voluntaria)
-     * - ACTIVE -> SUSPENDED (suspensión administrativa)
-     * - INACTIVE -> ACTIVE (reactivación)
-     * - SUSPENDED -> ACTIVE (levantamiento de suspensión)
-     *
-     * Transiciones inválidas:
-     * - PENDING_VERIFICATION -> SUSPENDED
-     * - INACTIVE -> SUSPENDED
-     * - Cualquier otra no listada arriba
-     *
-     * @param newState Nuevo estado al que se quiere transicionar
-     * @return true si la transición es válida, false en caso contrario
-     */
-    public boolean canTransitionTo(State newState) {
-        if (this.state == newState) {
-            return false; // No tiene sentido transicionar al mismo estado
-        }
-
-        return switch (this.state) {
-            case PENDING_VERIFICATION, INACTIVE, SUSPENDED -> newState == State.ACTIVE;
-            case ACTIVE -> newState == State.INACTIVE || newState == State.SUSPENDED;
+    // Transiciones válidas
+    public boolean canTransitionTo(Status next) {
+        if (this.value == next) return false;
+        return switch (this.value) {
+            case PENDING_VERIFICATION -> next == Status.ACTIVE;
+            case ACTIVE -> next == Status.INACTIVE || next == Status.SUSPENDED;
+            case INACTIVE, SUSPENDED -> next == Status.ACTIVE;
         };
-
-        /**
-         *
-         * switch (this.state) {
-         *             case PENDING_VERIFICATION:
-         *                 return newState == State.ACTIVE;
-         *
-         *             case ACTIVE:
-         *                 return newState == State.INACTIVE || newState == State.SUSPENDED;
-         *
-         *             case INACTIVE:
-         *                 return newState == State.ACTIVE;
-         *
-         *             case SUSPENDED:
-         *                 return newState == State.ACTIVE;
-         *
-         *             default:
-         *                 return false;
-         *         }*/
     }
+
+    public Status getValue() { return value; }
+    public String getDescription() { return value.getDescription(); }
+
+    @Override
+    public String toString() { return value.name(); }
 }

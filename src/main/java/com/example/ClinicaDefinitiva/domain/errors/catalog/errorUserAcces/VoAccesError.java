@@ -109,7 +109,7 @@ public enum VoAccesError implements ErrorCatalog {
             "RN-USER-001",
             "error.user.inactive",
             "El usuario no se encuentra activo para realizar la operación"
-    );
+    ), ERR_USER_STATUS_NULL("","" ,"" );
 
 
     private final String code;
