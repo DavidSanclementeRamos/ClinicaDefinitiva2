@@ -42,7 +42,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (!user.isVerified()) {
             throw new DisabledException("Usuario no verificado");
         }
-        if (user.getStatus().getState() != UserIdentityStatus.State.ACTIVE) {
+        if (user.getStatus().getValue()!= UserIdentityStatus.Status.ACTIVE) {
             throw new DisabledException("Usuario inactivo o suspendido");
         }
 

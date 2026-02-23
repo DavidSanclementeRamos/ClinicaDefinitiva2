@@ -39,6 +39,16 @@ public final class UserIdentityStatus {
     public boolean isSuspended() { return value == Status.SUSPENDED; }
     public boolean isPendingVerification() { return value == Status.PENDING_VERIFICATION; }
 
+    public UserIdentityStatus transitionTo(Status next) {
+        if (!canTransitionTo(next)) {
+            throw new ValueObjectValidationException(
+                    VoAccesError.ERR_USER_INVALID_TRANSITION,
+                    VOContext.AUTHENTICATION
+            );
+        }
+        return new UserIdentityStatus(next);
+    }
+
     // Transiciones válidas
     public boolean canTransitionTo(Status next) {
         if (this.value == next) return false;

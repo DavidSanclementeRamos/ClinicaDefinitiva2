@@ -53,7 +53,7 @@ public class UserIdentity {
         this.hashedPassword = hashedPassword;
         this.name = name;
         this.createdAt = createdAt;
-        this.status = UserIdentityStatus.of(UserIdentityStatus.State.ACTIVE);
+        this.status = UserIdentityStatus.of(UserIdentityStatus.Status.ACTIVE);
         this.verified = false;
     }
 
@@ -142,7 +142,7 @@ public class UserIdentity {
             return Outcome.fail(validation.getDetalles());
         }
 
-        this.status = UserIdentityStatus.of(UserIdentityStatus.State.INACTIVE);
+        this.status = status.transitionTo(UserIdentityStatus.Status.INACTIVE);
 
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
@@ -178,7 +178,7 @@ public class UserIdentity {
             ));
         }
 
-        if (status.getState() != UserIdentityStatus.State.ACTIVE) {
+        if (status.getValue()!= UserIdentityStatus.Status.ACTIVE) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_INACTIVE,
                     Severity.ERROR,
@@ -217,7 +217,7 @@ public class UserIdentity {
             ));
         }
 
-        this.status.canTransitionTo(UserIdentityStatus.Status.SUSPENDED);
+        this.status = status.transitionTo(UserIdentityStatus.Status.SUSPENDED);
 
 
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
