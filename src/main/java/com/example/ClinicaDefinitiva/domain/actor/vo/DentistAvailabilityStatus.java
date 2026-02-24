@@ -1,52 +1,52 @@
 package com.example.ClinicaDefinitiva.domain.actor.vo;
 
 
-
-
-
-import java.util.Objects;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 public final class DentistAvailabilityStatus {
 
     public enum Status {
-        AVAILABLE,      // Disponible para atender
-        SICK_LEAVE,     // Incapacidad médica
-        VACATION        // Ausencia planificada
+        AVAILABLE("Disponible"),
+        SICK_LEAVE("Incapacidad médica"),
+        VACATION("Ausencia planificada");
+
+        private final String description;
+
+        Status(String description) { this.description = description; }
+        public String getDescription() { return description; }
     }
 
-    private final Status current;
+    private final Status value;
 
-    private DentistAvailabilityStatus(Status current) {
-        this.current = Objects.requireNonNull(current, "Status cannot be null");
+    private DentistAvailabilityStatus(Status value) {
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    VoActorError.ERR_DENTIST_STATUS_NULL,
+                    VOContext.ACTORS
+            );
+        }
+        this.value = value;
     }
 
     public static DentistAvailabilityStatus of(Status status) {
         return new DentistAvailabilityStatus(status);
     }
 
-    public Status getCurrent() {
-        return current;
-    }
+    // Queries semánticas
+    public boolean isAvailable() { return value == Status.AVAILABLE; }
+    public boolean isAbsent() { return value == Status.SICK_LEAVE || value == Status.VACATION; }
 
-    public boolean isAvailable() {
-        return current == Status.AVAILABLE;
-    }
-
-    public boolean isAbsent() {
-        return current == Status.SICK_LEAVE || current == Status.VACATION;
-    }
-
+    // Reglas de negocio
     public enum Priority { NOT_ASSIGNABLE, HIGH }
-
     public Priority getPriority() {
-        return switch (current) {
-            case AVAILABLE -> Priority.HIGH;
-            default -> Priority.NOT_ASSIGNABLE;
-        };
+        return isAvailable() ? Priority.HIGH : Priority.NOT_ASSIGNABLE;
     }
+
+    public String getDescription() { return value.getDescription(); }
+    public Status getValue() { return value; }
 
     @Override
-    public String toString() {
-        return current.name();
-    }
+    public String toString() { return value.name(); }
 }
