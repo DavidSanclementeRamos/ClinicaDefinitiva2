@@ -170,7 +170,7 @@ public enum ShiftError implements ErrorCatalog {
          "RN-SHIFT-022",
          "error.shift.appointment.outsideShift",
          "La cita no está cubierta por el turno activo"
- );
+ ),
 
  /**
   * RN-SHIFT-016: Validación de turno activo (ya existente)
@@ -180,6 +180,7 @@ public enum ShiftError implements ErrorCatalog {
          "error.shift.noActiveCoverage",
          "El dentista no tiene turno activo en ese horario"
  );*/
+ ERR_SHIFT_INVALID_COMPLETION("","","");
 
     private final String code;
     private final String messageKey;

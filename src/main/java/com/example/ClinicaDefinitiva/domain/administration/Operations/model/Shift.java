@@ -213,6 +213,20 @@ public class Shift {
         this.status = this.status.cancel();
         this.cancellationReason = reason;
     }
+    
+        /**
+     * RN-SHIFT-012: Finalización del turno requiere validación de transición
+     */
+    public void complete() {
+        if (!status.canTransitionTo(ShiftStatus.Status.COMPLETED)) {
+            throw new BusinessRuleViolationException(
+                ShiftError.ERR_SHIFT_INVALID_COMPLETION,
+                EntityContext.SHIFT
+            );
+        }
+        this.status = this.status.complete();
+    }
+
 
 
 
