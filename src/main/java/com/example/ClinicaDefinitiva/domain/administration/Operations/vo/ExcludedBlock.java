@@ -1,5 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.administration.Operations.vo;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.OperationsVoError;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -14,6 +17,20 @@ public final class ExcludedBlock {
     private final String reason;
 
     public ExcludedBlock(LocalTime start, LocalTime end, String reason) {
+         if (start == null || end == null) {
+            throw new ValueObjectValidationException(
+                OperationsVoError.ERR_EXCLUDED_BLOCK_NULL_TIME,
+                VOContext.OPERATIONS
+            );
+        }
+        if (!start.isBefore(end)) {
+            throw new ValueObjectValidationException(
+                OperationsVoError.ERR_EXCLUDED_BLOCK_INVALID_RANGE,
+                VOContext.OPERATIONS
+            );
+        }
+
+
         this.start = start;
         this.end = end;
         this.reason = reason;

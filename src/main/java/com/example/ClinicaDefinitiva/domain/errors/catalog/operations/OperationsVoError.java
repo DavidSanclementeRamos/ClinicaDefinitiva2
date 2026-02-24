@@ -24,7 +24,10 @@ public enum OperationsVoError implements ErrorCatalog {
             "RN-SHIFT-004",
             "error.shift.invalid.cancellation",
             "No se puede cancelar el turno en el estado actual: {currentStatus}"
-    );
+    ),
+    ERR_EXCLUDED_BLOCK_NULL_TIME("","",""),
+    ERR_EXCLUDED_BLOCK_INVALID_RANGE("","","");
+    
 
     private final String code;
     private final String messageKey;
