@@ -128,7 +128,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
                 .withSector(receptionist.getSector().Value())
-                .withResourceId(patientId.getValue())
+                .withResourceId(patientId.value())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {

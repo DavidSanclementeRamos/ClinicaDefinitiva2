@@ -5,23 +5,13 @@ import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 
-public final class PatientId {
-    private final Long value;
+public record  PatientId(Long value) {
 
-    private PatientId(Long value) {
-        this.value = value;
-    }
-
+   
     public static PatientId of(Long value) {
         if (value == null) {
             throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.ACTORS);
-
         }
-
         return new PatientId(value);
-    }
-
-    public Long getValue() {
-        return value;
     }
 }

@@ -14,7 +14,7 @@ public class GuardianWriteEntityMapper {
 
         GuardianEntity entity = new GuardianEntity();
 
-        entity.setGuardianId(domain.getGuardianId().getValue());
+        entity.setGuardianId(domain.getGuardianId().value());
 
         entity.setTypeGuardian(domain.getTypeGuardian());
         entity.setUser(String.valueOf(domain.getUserId().value()));

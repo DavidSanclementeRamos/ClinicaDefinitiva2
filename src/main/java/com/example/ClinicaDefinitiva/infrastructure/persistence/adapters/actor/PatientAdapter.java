@@ -30,7 +30,7 @@ public class PatientAdapter implements PatientRepository {
     public Optional<Patient> findById(PatientId id) {
         if (id == null) return Optional.empty();
         try {
-            Long value = Long.valueOf(id.getValue());
+            Long value = Long.valueOf(id.value());
             return jpaRepository.findById(value).map(readMapper::toDomain);
         } catch (Exception e) {
             return Optional.empty();
@@ -88,7 +88,7 @@ public class PatientAdapter implements PatientRepository {
     public Patient update(PatientId id) {
         if (id == null) return null;
         try {
-            Long val = Long.valueOf(id.getValue());
+            Long val = Long.valueOf(id.value());
             var entity = jpaRepository.findById(val).orElse(null);
             if (entity == null) return null;
             // mapping back to domain
@@ -102,7 +102,7 @@ public class PatientAdapter implements PatientRepository {
     public boolean existsById(PatientId id) {
         if (id == null) return false;
         try {
-            return jpaRepository.existsById(Long.valueOf(id.getValue()));
+            return jpaRepository.existsById(Long.valueOf(id.value()));
         } catch (Exception e) {
             return false;
         }
@@ -112,7 +112,7 @@ public class PatientAdapter implements PatientRepository {
     public void deleteById(PatientId id) {
         if (id == null) return;
         try {
-            jpaRepository.deleteById(Long.valueOf(id.getValue()));
+            jpaRepository.deleteById(Long.valueOf(id.value()));
         } catch (Exception ignored) {
         }
     }

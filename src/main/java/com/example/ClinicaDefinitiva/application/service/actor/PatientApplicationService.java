@@ -63,12 +63,12 @@ public class PatientApplicationService implements PatientUseCase {
         // Construir contexto con ownership y guardianship
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
-                .withResourceId(id.getValue())
+                .withResourceId(id.value())
                 .withResourceOwnerId(patient.getUser());
 
         // Si el paciente tiene guardian, agregar al contexto para GuardianshipPolicy
         if (patient.getGuardianId() != null) {
-            contextBuilder.withPatientGuardianId(patient.getGuardianId().getValue());
+            contextBuilder.withPatientGuardianId(patient.getGuardianId().value());
         }
 
         // Si es receptionist, agregar sector
@@ -156,7 +156,7 @@ public class PatientApplicationService implements PatientUseCase {
 
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
-                .withPatientGuardianId(guardianId.getValue()); // Para GuardianshipPolicy
+                .withPatientGuardianId(guardianId.value()); // Para GuardianshipPolicy
 
         // Si es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
@@ -221,12 +221,12 @@ public class PatientApplicationService implements PatientUseCase {
         // Construir contexto con ownership y guardianship
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
-                .withResourceId(id.getValue())
+                .withResourceId(id.value())
                 .withResourceOwnerId(patient.getUser());
 
         // Si tiene guardian, agregarlo para GuardianshipPolicy
         if (patient.getGuardianId() != null) {
-            contextBuilder.withPatientGuardianId(patient.getGuardianId().getValue());
+            contextBuilder.withPatientGuardianId(patient.getGuardianId().value());
         }
 
         // Si es receptionist, agregar sector
@@ -269,7 +269,7 @@ public class PatientApplicationService implements PatientUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
-                .withResourceId(id.getValue())
+                .withResourceId(id.value())
                 .withSector(receptionist.getSector().Value())
                 .withResourceOwnerId(patient.getUser())
                 .build();
@@ -305,7 +305,7 @@ public class PatientApplicationService implements PatientUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
-                .withResourceId(id.getValue())
+                .withResourceId(id.value())
                 .withSector(receptionist.getSector().Value())
                 .build();
 

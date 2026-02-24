@@ -11,7 +11,7 @@ public class AppointmentReadMapper {
         return new ReadAppointmentDto(
                 appointment.getId().getValue(),
                 appointment.getDentistId().value(),
-                appointment.getPatientId().getValue(),
+                appointment.getPatientId().value(),
                 appointment.getServiceId().getId(),
                 appointment.getStart(),
                 appointment.getEnd(),

@@ -14,7 +14,7 @@ public class TreatmentReadMapper {
     public TreatmentDto toDto(Treatment treatment) {
         return new TreatmentDto(
                 treatment.getServicioId().getId(),
-                treatment.getPatientId().getValue(),
+                treatment.getPatientId().value(),
                 treatment.getDentistId().value(),
                 treatment.getServicioId().getId(),
                 treatment.getStatus().name(),

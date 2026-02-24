@@ -30,7 +30,7 @@ public class GuardianAdapter implements GuardianRepository {
     public Optional<Guardian> findById(GuardianId guardianId) {
         if (guardianId == null) return Optional.empty();
         try {
-            Long val = guardianId.getValue();
+            Long val = guardianId.value();
             return guardianJpaRepository.findById(val).map(readEntityMapper::toDomain);
         } catch (Exception e) {
             return Optional.empty();
@@ -54,7 +54,7 @@ public class GuardianAdapter implements GuardianRepository {
     public Guardian update(GuardianId guardianId) {
         if (guardianId == null) return null;
         try {
-            Long val = guardianId.getValue();
+            Long val = guardianId.value();
             var entity = guardianJpaRepository.findById(val).orElse(null);
             if (entity == null) return null;
             return readEntityMapper.toDomain(guardianJpaRepository.save(entity));
@@ -67,7 +67,7 @@ public class GuardianAdapter implements GuardianRepository {
     public Guardian deleteById(GuardianId guardianId) {
         if (guardianId == null) return null;
         try {
-            Long val = guardianId.getValue();
+            Long val = guardianId.value();
             var entity = guardianJpaRepository.findById(val).orElse(null);
             if (entity == null) return null;
             guardianJpaRepository.deleteById(val);
@@ -100,7 +100,7 @@ public class GuardianAdapter implements GuardianRepository {
     public boolean existsById(GuardianId guardianId) {
         if (guardianId == null) return false;
         try {
-            return guardianJpaRepository.existsById(guardianId.getValue());
+            return guardianJpaRepository.existsById(guardianId.value());
         } catch (Exception e) {
             return false;
         }

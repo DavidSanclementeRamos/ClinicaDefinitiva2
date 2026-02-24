@@ -13,7 +13,7 @@ public class GuardianReadMapper {
     // dominio → DTO de lectura
     public ReadGuardianDto toReadDto(Guardian guardian) {
         return new ReadGuardianDto(
-                guardian.getGuardianId().getValue(),
+                guardian.getGuardianId().value(),
                 guardian.getTypeGuardian().getCode(),
                 guardian.getTypeGuardian().getDescription(),
                 Collections.singletonList(guardian.getPatientList().toString()),
@@ -40,7 +40,7 @@ public class GuardianReadMapper {
     // dominio → DTO de lectura resumido (ej. para paginación)
     public PageGuardianDto toPageDto(Guardian guardian) {
         return new PageGuardianDto(
-                guardian.getGuardianId().getValue(),
+                guardian.getGuardianId().value(),
                 guardian.getTypeGuardian().getCode(),
                 guardian.getTypeGuardian().getDescription(),
                 guardian.getPerson().getDni().toString(),

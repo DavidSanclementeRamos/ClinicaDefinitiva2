@@ -58,7 +58,7 @@ public class GuardianApplicationService implements GuardianUseCase {
         // Construir contexto con ownership
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
-                .withResourceId(id.getValue())
+                .withResourceId(id.value())
                 .withResourceOwnerId(guardian.getUserId());
 
         // Si es receptionist, agregar sector
@@ -116,7 +116,7 @@ public class GuardianApplicationService implements GuardianUseCase {
 
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
-                .withResourceId(patientId.getValue());
+                .withResourceId(patientId.value());
 
         // Si es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
@@ -181,7 +181,7 @@ public class GuardianApplicationService implements GuardianUseCase {
         // Construir contexto con ownership
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
-                .withResourceId(id.getValue())
+                .withResourceId(id.value())
                 .withResourceOwnerId(guardian.getUserId());
 
         // Si es receptionist, agregar sector
@@ -224,7 +224,7 @@ public class GuardianApplicationService implements GuardianUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
-                .withResourceId(id.getValue())
+                .withResourceId(id.value())
                 .withSector(receptionist.getSector().Value())
                 .withResourceOwnerId(guardian.getUserId())
                 .build();
@@ -260,7 +260,7 @@ public class GuardianApplicationService implements GuardianUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
-                .withResourceId(id.getValue())
+                .withResourceId(id.value())
                 .withSector(receptionist.getSector().Value())
                 .build();
 
