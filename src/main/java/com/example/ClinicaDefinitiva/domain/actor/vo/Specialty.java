@@ -23,11 +23,12 @@ public final class Specialty {
 
     private   Specialty(String value) {
         if (isBlank(value)) {
-            throw new IllegalArgumentException("Specialty must not be empty.");
+            throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY,VOContext.ACTORS);
         }
         String normalized = value.trim();
-        if (!VALID_SPECIALTIES.contains(normalized)) {
-            throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.ACTORS);
+        if (VALID_SPECIALTIES.stream().noneMatch(s -> s.equalsIgnoreCase(normalized))) {
+          throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.ACTORS);
+
         }
         this.value = normalized;
     }

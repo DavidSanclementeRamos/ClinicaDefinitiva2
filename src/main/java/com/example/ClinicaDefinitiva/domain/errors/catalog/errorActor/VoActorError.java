@@ -163,6 +163,7 @@ public enum VoActorError implements ErrorCatalog {
     ERR_DOCUMENT_BLANK("", "", ""),
     ERR_DOCUMENT_INVALID_FORMAT("","" ,"" ),
     ERR_DENTIST_INVALID_SPECIALTY("", "", ""),
+    
     ERR_DENTIST_STATUS_NULL("","","");
 
     private final String code;

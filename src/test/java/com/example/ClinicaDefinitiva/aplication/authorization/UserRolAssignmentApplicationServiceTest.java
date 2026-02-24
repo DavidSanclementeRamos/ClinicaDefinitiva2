@@ -683,7 +683,7 @@ class UserRolAssignmentApplicationServiceTest {
             // Given - sector inválido
             Receptionist invalidReceptionist = mock(Receptionist.class);
             Sector invalidSector = mock(Sector.class);
-            when(invalidSector.Value()).thenReturn("");
+            when(invalidSector.getDescription()).thenReturn("");
             when(invalidReceptionist.getSector()).thenReturn(invalidSector);
 
             when(receptionRepository.findByUserId(requesterId)).thenReturn(Optional.of(invalidReceptionist));
