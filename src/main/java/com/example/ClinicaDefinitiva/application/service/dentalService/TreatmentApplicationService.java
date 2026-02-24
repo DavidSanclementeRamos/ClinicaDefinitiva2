@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Servicio de aplicación para Treatment (Tratamientos clínicos).
@@ -95,9 +96,9 @@ public class TreatmentApplicationService implements TreatmentUseCase {
         );
 
 
-         Patient patient = patientRepository.findByUserId(requesterId);
+         Patient patient = patientRepository.findByUserId(requesterId).orElseThrow();
 
-         contextBuilder.withPatientGuardianId(patient.getGuardianId().getValue());
+         contextBuilder.withPatientGuardianId(patient. getGuardianId().getValue());
 
 
         SecurityContext context = contextBuilder.build();

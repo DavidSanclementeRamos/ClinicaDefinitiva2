@@ -107,7 +107,7 @@ public class GuardianAdapter implements GuardianRepository {
     }
 
     @Override
-    public Guardian findByUserId(UserIdentityId id) {
+    public Optional<Guardian> findByUserId(UserIdentityId id) {
         return null;
     }
 

@@ -118,7 +118,7 @@ public class PatientAdapter implements PatientRepository {
     }
 
     @Override
-    public Patient findByUserId(UserIdentityId id) {
+    public Optional<Patient> findByUserId(UserIdentityId id) {
         return null;
     }
 }
