@@ -26,7 +26,8 @@ public enum OperationsVoError implements ErrorCatalog {
             "No se puede cancelar el turno en el estado actual: {currentStatus}"
     ),
     ERR_EXCLUDED_BLOCK_NULL_TIME("","",""),
-    ERR_EXCLUDED_BLOCK_INVALID_RANGE("","","");
+    ERR_EXCLUDED_BLOCK_INVALID_RANGE("","",""),
+    ERR_SHIFT_STATUS_NULL("","","");
     
 
     private final String code;

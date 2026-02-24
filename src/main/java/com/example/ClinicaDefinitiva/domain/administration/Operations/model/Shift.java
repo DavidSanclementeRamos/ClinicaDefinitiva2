@@ -54,7 +54,7 @@ public class Shift {
         this.startTime = startTime;
         this.endTime = endTime;
         this.type = type;
-        this.status = ShiftStatus.active();
+        this.status = ShiftStatus.of(ShiftStatus.Status.ACTIVE);
         this.excludedBlocks = new ArrayList<>();
     }
 
