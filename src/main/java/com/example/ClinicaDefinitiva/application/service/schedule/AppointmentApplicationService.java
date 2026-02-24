@@ -71,7 +71,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(appointmentId.getValue())
                 .build();
 
@@ -100,7 +100,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -127,7 +127,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(patientId.value())
                 .build();
 
@@ -156,7 +156,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -183,7 +183,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(dentistId.value())
                 .build();
 
@@ -211,7 +211,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(serviceId.getId())
                 .build();
 
@@ -239,7 +239,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -269,7 +269,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -295,7 +295,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -323,7 +323,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(dto.appointmentId())
                 .build();
 
@@ -359,7 +359,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                         ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT),
                         ActionCatalog.of(ActionCatalog.BasicAction.CANCEL)
                 ), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(id.getValue())
                 .build();
 
@@ -395,7 +395,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                         ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT),
                         ActionCatalog.of(ActionCatalog.BasicAction.COMPLETE)
                 ), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(id.getValue())
                 .build();
 
@@ -431,7 +431,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                         ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT),
                         ActionCatalog.of(ActionCatalog.BasicAction.MARK_AS_NO_SHOW)
                 ), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(id.getValue())
                 .build();
 
@@ -463,7 +463,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(id.getValue())
                 .build();
 

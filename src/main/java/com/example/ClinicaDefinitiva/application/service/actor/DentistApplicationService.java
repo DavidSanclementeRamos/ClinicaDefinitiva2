@@ -67,7 +67,7 @@ public class DentistApplicationService implements DentistUseCase {
 
         // Si el requester es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -94,7 +94,7 @@ public class DentistApplicationService implements DentistUseCase {
 
         // Si el requester es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -145,7 +145,7 @@ public class DentistApplicationService implements DentistUseCase {
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId);
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -173,7 +173,7 @@ public class DentistApplicationService implements DentistUseCase {
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId);
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -204,7 +204,7 @@ public class DentistApplicationService implements DentistUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -237,7 +237,7 @@ public class DentistApplicationService implements DentistUseCase {
                 .withResourceOwnerId(dentist.getUserId());
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -276,7 +276,7 @@ public class DentistApplicationService implements DentistUseCase {
         SecurityContext context = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
                 .withResourceId(id)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceOwnerId(dentist.getUserId())
                 .build();
 
@@ -397,7 +397,7 @@ public class DentistApplicationService implements DentistUseCase {
         SecurityContext context = SecurityContext
                 .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
                 .withResourceId(id.value())
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {

@@ -63,7 +63,7 @@ public class GuardianApplicationService implements GuardianUseCase {
 
         // Si es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -90,7 +90,7 @@ public class GuardianApplicationService implements GuardianUseCase {
 
         // Si es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -120,7 +120,7 @@ public class GuardianApplicationService implements GuardianUseCase {
 
         // Si es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -151,7 +151,7 @@ public class GuardianApplicationService implements GuardianUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -186,7 +186,7 @@ public class GuardianApplicationService implements GuardianUseCase {
 
         // Si es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -225,7 +225,7 @@ public class GuardianApplicationService implements GuardianUseCase {
         SecurityContext context = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
                 .withResourceId(id.value())
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceOwnerId(guardian.getUserId())
                 .build();
 
@@ -261,7 +261,7 @@ public class GuardianApplicationService implements GuardianUseCase {
         SecurityContext context = SecurityContext
                 .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
                 .withResourceId(id.value())
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {

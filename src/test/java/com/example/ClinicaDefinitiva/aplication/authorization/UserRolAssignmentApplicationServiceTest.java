@@ -98,7 +98,7 @@ class UserRolAssignmentApplicationServiceTest {
         // Setup Receptionist
         receptionist = mock(Receptionist.class);
         Sector sector = mock(Sector.class);
-        when(sector.Value()).thenReturn("RECURSOS_HUMANOS");
+        when(sector.getDescription()).thenReturn("RECURSOS_HUMANOS");
         when(receptionist.getSector()).thenReturn(sector);
 
         // Setup Assignment

@@ -110,7 +110,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
 
         // Receptionist sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -136,7 +136,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId);
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -168,7 +168,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                 .withResourceOwnerId(patient.getUser());
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -200,7 +200,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                 .withAttribute("assignedDentistUserId", dentist.getUserId());
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -228,7 +228,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId);
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -270,7 +270,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId);
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -304,7 +304,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -335,7 +335,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -371,7 +371,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                 .withResourceId(invoiceId.getValue());
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -406,7 +406,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                 .withResourceId(id.getValue());
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -444,7 +444,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                 .withResourceId(id.getValue());
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -479,7 +479,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                 .withResourceId(id.getValue());
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();

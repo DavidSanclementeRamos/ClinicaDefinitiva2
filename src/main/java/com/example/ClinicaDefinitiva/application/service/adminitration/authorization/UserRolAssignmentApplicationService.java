@@ -65,7 +65,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -97,7 +97,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT), ActionCatalog.of(ActionCatalog.BasicAction.CREATE_TEMPORARY)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -131,7 +131,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ROLE),ActionCatalog.of(ActionCatalog.BasicAction.IS_ACTIVE_AT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(targetId.getValue())
                 .build();
 
@@ -163,7 +163,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ROLE),ActionCatalog.of(ActionCatalog.BasicAction.IS_CURRENTLY_ACTIVE)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(targetId.getValue())
                 .build();
 
@@ -196,7 +196,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT), ActionCatalog.of(ActionCatalog.BasicAction.EXTEND_ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(targetId.getValue())
                 .build();
 
@@ -231,7 +231,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT), ActionCatalog.of(ActionCatalog.BasicAction.REVOKE_ALL)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(targetUserIdentityId.value())
                 .build();
 
@@ -264,7 +264,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT), ActionCatalog.of(ActionCatalog.BasicAction.REVOKE)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(targetRolId.getValue())
                 .build();
 
@@ -300,7 +300,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(targetId.getValue())
                 .build();
 
@@ -331,7 +331,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(targeUserIdentityId.value())
                 .build();
 
@@ -363,7 +363,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(targeRolId.getValue())
                 .build();
 
@@ -397,7 +397,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(assignment.stream().count())
                 .build();
 

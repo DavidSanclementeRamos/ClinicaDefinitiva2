@@ -92,7 +92,7 @@ public class TreatmentApplicationService implements TreatmentUseCase {
 
         // Si es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
 
@@ -125,7 +125,7 @@ public class TreatmentApplicationService implements TreatmentUseCase {
 
         // Si es receptionist, agregar sector
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -157,7 +157,7 @@ public class TreatmentApplicationService implements TreatmentUseCase {
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.TREATMENT)), requesterId);
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -193,7 +193,7 @@ public class TreatmentApplicationService implements TreatmentUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.TREATMENT)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -231,7 +231,7 @@ public class TreatmentApplicationService implements TreatmentUseCase {
         }
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();
@@ -271,7 +271,7 @@ public class TreatmentApplicationService implements TreatmentUseCase {
         }
 
         receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().Value())
+                contextBuilder.withSector(receptionist.getSector().getDescription())
         );
 
         SecurityContext context = contextBuilder.build();

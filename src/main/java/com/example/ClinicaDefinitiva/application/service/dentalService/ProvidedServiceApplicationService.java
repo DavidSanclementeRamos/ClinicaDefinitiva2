@@ -152,7 +152,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
 
         SecurityContext context = SecurityContext
                 .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE)), requesterId)
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -196,7 +196,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
         SecurityContext context = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE)), requesterId)
                 .withResourceId(id.getId())
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -232,7 +232,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
         SecurityContext context = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE)), requesterId)
                 .withResourceId(id.getId())
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -268,7 +268,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
         SecurityContext context = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE)), requesterId)
                 .withResourceId(id.getId())
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -309,7 +309,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                         ActionCatalog.of(ActionCatalog.BasicAction.DEACTIVATE)
                 ), requesterId)
                 .withResourceId(id.getId())
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -346,7 +346,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                         ActionCatalog.of(ActionCatalog.BasicAction.REACTIVATE)
                 ), requesterId)
                 .withResourceId(id.getId())
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -382,7 +382,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
         SecurityContext context = SecurityContext
                 .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE)), requesterId)
                 .withResourceId(id.getId())
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {

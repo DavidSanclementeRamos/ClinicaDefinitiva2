@@ -59,7 +59,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
                 .withResourceId(id.getValue())
-                .withSector(requester.getSector().Value())
+                .withSector(requester.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -87,7 +87,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
-                .withSector(requester.getSector().Value())
+                .withSector(requester.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -121,7 +121,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
-                .withSector(requester.getSector().Value())
+                .withSector(requester.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -150,7 +150,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
-                .withSector(requester.getSector().Value())
+                .withSector(requester.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -186,7 +186,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         SecurityContext context = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
                 .withResourceId(id.getValue())
-                .withSector(requester.getSector().Value())
+                .withSector(requester.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -222,7 +222,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         SecurityContext context = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
                 .withResourceId(id.getValue())
-                .withSector(requester.getSector().Value())
+                .withSector(requester.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {
@@ -257,7 +257,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         SecurityContext context = SecurityContext
                 .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
                 .withResourceId(id.getValue())
-                .withSector(requester.getSector().Value())
+                .withSector(requester.getSector().getDescription())
                 .build();
 
         if (!authorizationService.isAuthorized(requesterRolId, context)) {

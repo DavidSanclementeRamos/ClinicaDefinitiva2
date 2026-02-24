@@ -111,7 +111,7 @@ public class RolApplicationService implements RolUseCase {
                 ));
         SecurityContext context = SecurityContext
                 .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.ROLE)), requesterId)
-                .withSector(receptionist.getSector().Value()) // atributo contextual del recurso
+                .withSector(receptionist.getSector().getDescription()) // atributo contextual del recurso
                 //.withResourceId(rol.getValue())
                 .build();
 
@@ -157,7 +157,7 @@ public class RolApplicationService implements RolUseCase {
                         ),
                         requesterId
                 )
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(sourceRol.getId().getValue())
                 .build();
 
@@ -201,7 +201,7 @@ public class RolApplicationService implements RolUseCase {
                         ),
                         requesterId
                 )
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(rol.getId().getValue())
                 .build();
 
@@ -245,7 +245,7 @@ public class RolApplicationService implements RolUseCase {
                         ),
                         requesterId
                 )
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(rol.getId().getValue())
                 .build();
 
@@ -291,7 +291,7 @@ public class RolApplicationService implements RolUseCase {
                         ),
                         requesterId
                 )
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(rol.getId().getValue())
                 .build();
 
@@ -339,7 +339,7 @@ public class RolApplicationService implements RolUseCase {
                         ),
                         requesterId
                 )
-               .withSector(receptionist.getSector().Value())
+               .withSector(receptionist.getSector().getDescription())
                 .withResourceId(rol.getId().getValue())
                 .build();
 
@@ -376,7 +376,7 @@ public class RolApplicationService implements RolUseCase {
                         ),
                         requesterId
                 )
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(rol.getId().getValue())
                 .build();
 
@@ -409,7 +409,7 @@ public class RolApplicationService implements RolUseCase {
                         ),
                         requesterId
                 )
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(rol.getId().getValue())
                 .build();
 
@@ -441,7 +441,7 @@ public class RolApplicationService implements RolUseCase {
                         ),
                         requesterId
                 )
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(rol.getId().getValue())
                 .build();
 
@@ -474,7 +474,7 @@ public class RolApplicationService implements RolUseCase {
                         ),
                         requesterId
                 )
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(rol.getId().getValue())
                 .build();
 
@@ -508,7 +508,7 @@ public class RolApplicationService implements RolUseCase {
                         Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.ROLE)),
                         requesterId
                 )
-                .withSector(receptionist.getSector().Value())
+                .withSector(receptionist.getSector().getDescription())
                 .withResourceId(rol.getId().getValue())
                 .build();
 

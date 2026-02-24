@@ -26,7 +26,7 @@ public class ReceptionistWriteMapper {
                         PhoneNumber.of(dto.phoneNumber())
                 ),
                 UserIdentityId.from(dto.user()),
-                Sector.of(dto.sector())
+                Sector.fromString(dto.sector())
         );
     }
 
@@ -38,7 +38,7 @@ public class ReceptionistWriteMapper {
                 Document.of(dto.dni()),
                 dto.documentEPS(),
                 FullName.of(dto.first(), dto.lastName()),
-                Sector.of(dto.sector())
+                Sector.fromString(dto.sector())
         );
     }
 
