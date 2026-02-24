@@ -39,13 +39,7 @@ public final class CompanyStatus {
         this.status = status;
     }
 
-    public static CompanyStatus of(Status status) {
-        if (status == null) {
-            throw new ValueObjectValidationException(
-                    VoAccountingError.ERR_COMPANY_STATUS_NULL,
-                    VOContext.ACCOUNTING
-            );
-        }
+    public static CompanyStatus of(Status status) {     
         return new CompanyStatus(status);
     }
 
