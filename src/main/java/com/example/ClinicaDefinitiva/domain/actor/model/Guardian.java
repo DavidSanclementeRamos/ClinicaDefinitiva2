@@ -37,7 +37,7 @@ public class Guardian  {
             TypeGuardian typeGuardian) {
 
 
-        if (data.getAge().isBetween(22, 60)) {
+        if (!data.getAge().isBetween(22, 60)) {
             throw new BusinessRuleViolationException(GuardianError.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
         }
 
