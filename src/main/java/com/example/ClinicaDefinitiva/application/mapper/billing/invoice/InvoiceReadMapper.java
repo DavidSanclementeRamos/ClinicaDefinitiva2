@@ -32,7 +32,7 @@ public class InvoiceReadMapper {
 
                 invoice.getPatientId() != null ? invoice.getPatientId().getValue() : null,
 
-                invoice.getDentistId() != null ? invoice.getDentistId().getValue() : null,
+                invoice.getDentistId() != null ? invoice.getDentistId().value() : null,
 
                 invoice.getProviderId() != null ? invoice.getProviderId().getValue() : null,
 
@@ -69,7 +69,7 @@ public class InvoiceReadMapper {
                 invoice.getId().getValue(),
                 invoice.getNumber() != null ? invoice.getNumber().getValue() : null,
                 invoice.getPatientId() != null ? invoice.getPatientId().getValue() : null,
-                invoice.getDentistId() != null ? invoice.getDentistId().getValue() : null,
+                invoice.getDentistId() != null ? invoice.getDentistId().value() : null,
                 invoice.getStatus().getValue().name(),
                 invoice.getTotal().asBigDecimal(),
                 invoice.getCurrency().getCode(),

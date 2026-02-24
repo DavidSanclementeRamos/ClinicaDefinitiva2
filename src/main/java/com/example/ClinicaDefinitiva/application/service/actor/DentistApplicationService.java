@@ -62,7 +62,7 @@ public class DentistApplicationService implements DentistUseCase {
         // Construir contexto de seguridad con ownership
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
-                .withResourceId(id.getValue())
+                .withResourceId(id.value())
                 .withResourceOwnerId(dentist.getUserId());
 
         // Si el requester es receptionist, agregar sector
@@ -396,7 +396,7 @@ public class DentistApplicationService implements DentistUseCase {
 
         SecurityContext context = SecurityContext
                 .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
-                .withResourceId(id.getValue())
+                .withResourceId(id.value())
                 .withSector(receptionist.getSector().Value())
                 .build();
 

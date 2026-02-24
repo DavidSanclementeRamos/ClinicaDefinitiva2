@@ -30,7 +30,7 @@ public class DentistAdapters implements DentistRepository {
 
     @Override
     public Optional<Dentist> findById(DentistId id) {
-        return dentistJpaRepository.findById(id.getValue())
+        return dentistJpaRepository.findById(id.value())
                 .map(readEntityMapper::toDomain);
     }
 
@@ -60,10 +60,10 @@ public class DentistAdapters implements DentistRepository {
 
     @Override
     public void deleteById(DentistId id) {
-        if(dentistJpaRepository.findById(id.getValue()).isEmpty()){
+        if(dentistJpaRepository.findById(id.value()).isEmpty()){
             throw new DentistNotFoundException("");
         }
-        dentistJpaRepository.deleteById(id.getValue());
+        dentistJpaRepository.deleteById(id.value());
     }
 
     @Override

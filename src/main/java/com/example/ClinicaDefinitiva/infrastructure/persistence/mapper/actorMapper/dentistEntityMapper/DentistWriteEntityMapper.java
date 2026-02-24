@@ -13,7 +13,7 @@ public class DentistWriteEntityMapper {
         // if (domain == null) return null;
 
         DentistEntity entity = new DentistEntity();
-        entity.setDentistId(domain.getDentistId().getValue());
+        entity.setDentistId(domain.getDentistId().value());
         entity.setDni(domain.getPersonData().getDni().toString());
         // FullName
         entity.setFirst(domain.getPersonData().getFullname().FirstName());

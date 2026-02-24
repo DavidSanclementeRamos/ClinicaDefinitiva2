@@ -12,7 +12,7 @@ public class DentistReadMapper {
     // dominio → DTO de lectura
     public ReadDentistDto toReadDto(Dentist dentist) {
         return new ReadDentistDto(
-                dentist.getDentistId().getValue(),
+                dentist.getDentistId().value(),
                 dentist.getSpecialties().toString(),
                 dentist.getAvailabilityStatus().toString(),
                 dentist.getWorkingHours().getStart(),
@@ -40,12 +40,12 @@ public class DentistReadMapper {
     // dominio → DTO de lectura
     public PageDentistDto toPageDto(Dentist dentist) {
         return new PageDentistDto(
-                dentist.getDentistId().getValue(),
+                dentist.getDentistId().value(),
                 dentist.getSpecialties().toString(),
                 dentist.getPersonData().getDni().toString(),
                 dentist.getPersonData().getFullname().FirstName(),
                 dentist.getPersonData().getFullname().LastName(),
-                dentist.getPersonData().getPhoneNumber().toString(),
+                dentist.getPersonData().getPhoneNumber().Value(),
                 dentist.getAvailabilityStatus().toString()
 
                 );

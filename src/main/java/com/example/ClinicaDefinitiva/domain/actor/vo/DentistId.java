@@ -4,14 +4,8 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorErr
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-public final class  DentistId {
-    private final Long value;
+public  record   DentistId (Long value){
 
-    private DentistId(Long value) {
-        this.value = value;
-    }
-
-    // Nuevo: parsea/valida un Long y devuelve el VO
     public static DentistId of(Long value) {
         if (value == null) {
             throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.ACTORS);
@@ -20,7 +14,4 @@ public final class  DentistId {
         return new DentistId(value);
     }
 
-    public Long getValue() {
-        return value;
-    }
 }
