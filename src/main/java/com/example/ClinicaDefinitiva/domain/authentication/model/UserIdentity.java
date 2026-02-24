@@ -249,7 +249,7 @@ public class UserIdentity {
             ));
         }
 
-        this.status.canTransitionTo( UserIdentityStatus.Status.ACTIVE);
+        this.status = status.transitionTo( UserIdentityStatus.Status.ACTIVE);
         this.failedLoginAttempts = 0;
         this.lockedUntil = null;
 
