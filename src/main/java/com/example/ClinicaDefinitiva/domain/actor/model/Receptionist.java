@@ -3,6 +3,9 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.ReceptionistError;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 
@@ -29,6 +32,9 @@ public class Receptionist   {
             UserIdentityId userIdentityId,
             Sector sector
              ) {
+        if (!data.getAge().isBetween(20, 130)) {
+            throw new BusinessRuleViolationException(ReceptionistError.ERR_RECEPTIONIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
+        }
         return new Receptionist(LocalDateTime.now(), userIdentityId, sector, data, null);
     }
 

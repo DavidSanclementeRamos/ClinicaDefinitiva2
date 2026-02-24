@@ -62,7 +62,8 @@ public enum ReceptionistError implements ErrorCatalog {
     ERR_RECEPTIONIST_ASSIGNED_SHIFTS(
             "RN-RECEPTIONIST-011",
             "error.receptionist.assignedShifts",
-            "El recepcionista tiene turnos asignados y no puede ser desactivado" );
+            "El recepcionista tiene turnos asignados y no puede ser desactivado" ),
+    ERR_RECEPTIONIST_AGE_INSUFFICIENT("","","");
 
     private final String code;
     private final String messageKey;

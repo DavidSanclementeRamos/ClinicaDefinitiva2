@@ -1,5 +1,5 @@
 
-package com.example.ClinicaDefinitiva.domain.actor;
+package com.example.ClinicaDefinitiva.domain.actor.model;
 
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
