@@ -15,6 +15,8 @@ import com.example.ClinicaDefinitiva.domain.actor.service.ReceptionistDeactivati
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 
+import java.util.Optional;
+
 
 public class UserDeactivationPolicy {
     private final DentistRepository dentistRepo;
@@ -37,32 +39,33 @@ public class UserDeactivationPolicy {
 
 
     public Outcome<Void> validate(UserIdentity user) {
+
         Outcome<Void> result = Outcome.ok();
 
-        Dentist dentist = dentistRepo.findByUserId(user.getId()).orElseThrow();
-        if (dentist != null) {
-            result = result.merge(dentistValidator.validate(dentist.getDentistId()));
+        Optional<Dentist> dentistOpt = dentistRepo.findByUserId(user.getId());
+        if (dentistOpt.isPresent()) {
+            result = result.merge(dentistValidator.validate(dentistOpt.get().getDentistId()));
         }
 
-        Patient patient = patientRepo.findByUserId(user.getId());
-        if (patient != null ) {
-            result = result.merge( patientValidator.validate(patient.getPatientId()));
-           result = result.merge(patient.validateDeactivation()
-            );
+        Optional<Patient> patientOpt = patientRepo.findByUserId(user.getId());
+        if (patientOpt.isPresent()) {
+            Patient patient = patientOpt.get();
+            result = result.merge(patientValidator.validate(patient.getPatientId()));
+            result = result.merge(patient.validateDeactivation());
         }
 
-        Guardian guardian = guardianRepo.findByUserId(user.getId());
-        if (guardian != null) {
-            result = result.merge(guardian.validateDeactivation());
+        Optional<Guardian> guardianOpt = guardianRepo.findByUserId(user.getId());
+        if (guardianOpt.isPresent()) {
+            result = result.merge(guardianOpt.get().validateDeactivation());
         }
 
-
-        Receptionist receptionist = receptionistRepo.findByUserId(user.getId())
-                .orElseThrow(()-> new ReceptionNotFoundException(""));
-        if (receptionist != null) {
+        Optional<Receptionist> receptionistOpt = receptionistRepo.findByUserId(user.getId());
+        if (receptionistOpt.isPresent()) {
+            Receptionist receptionist = receptionistOpt.get();
             result = result.merge(receptionValidator.validate(receptionist.getId()));
-
         }
+
+
         return result;
     }
 }

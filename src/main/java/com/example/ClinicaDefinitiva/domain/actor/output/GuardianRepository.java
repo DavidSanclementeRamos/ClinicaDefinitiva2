@@ -18,5 +18,5 @@ public interface GuardianRepository {
     Page<Guardian> findByPatientId(PatientId patientId, Pageable pageable);
     boolean existsById(GuardianId guardianId);
 
-    Guardian findByUserId(UserIdentityId id);
+    Optional<Guardian> findByUserId(UserIdentityId id);
 }

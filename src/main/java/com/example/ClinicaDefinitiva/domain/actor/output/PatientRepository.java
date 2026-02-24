@@ -20,5 +20,5 @@ public interface PatientRepository {
     boolean existsById( PatientId id);
     void deleteById( PatientId id);
 
-    Patient findByUserId(UserIdentityId id);
+    Optional<Patient> findByUserId(UserIdentityId id);
 }
