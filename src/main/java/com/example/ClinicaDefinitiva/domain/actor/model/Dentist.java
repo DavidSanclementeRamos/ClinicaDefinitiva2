@@ -126,5 +126,10 @@ public class Dentist   {
     public UserIdentityId getUserId() { return userIdentityId; }
     public LocalDateTime getLastUpdate() { return lastUpdate; }
 
+    public String getIncapacityNote() {
+        return incapacityNote;
+    }
+    
+
 
 }

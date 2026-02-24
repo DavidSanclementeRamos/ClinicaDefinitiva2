@@ -4,6 +4,7 @@ package com.example.ClinicaDefinitiva.domain.actor.vo;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import java.util.Objects;
 
 public final class DentistAvailabilityStatus {
 
@@ -49,4 +50,17 @@ public final class DentistAvailabilityStatus {
 
     @Override
     public String toString() { return value.name(); }
+    
+    @Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof DentistAvailabilityStatus)) return false;
+    DentistAvailabilityStatus that = (DentistAvailabilityStatus) o;
+    return this.value == that.value;
+}
+
+@Override
+public int hashCode() {
+    return Objects.hash(value);
+}
 }
