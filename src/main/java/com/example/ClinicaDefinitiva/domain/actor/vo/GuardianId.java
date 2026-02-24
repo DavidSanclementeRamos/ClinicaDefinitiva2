@@ -4,25 +4,14 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorErr
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-import java.util.Objects;
 
-public final class GuardianId {
-    private final  Long value;
+public record  GuardianId(Long value) {
 
-    private GuardianId(Long value) {
-        this.value = Objects.requireNonNull(value);
-    }
+  
     public static GuardianId fromLong(Long value) {
         if (value == null)   {
             throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.ACTORS);
         }
-
-
-
         return new GuardianId(value);
-    }
-
-    public Long getValue() {
-        return value;
     }
 }
