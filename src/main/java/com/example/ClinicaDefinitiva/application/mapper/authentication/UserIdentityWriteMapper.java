@@ -2,13 +2,10 @@ package com.example.ClinicaDefinitiva.application.mapper.authentication;
 
 import com.example.ClinicaDefinitiva.application.dto.authentication.CreateUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.dto.authentication.UpdateUserIdentityDto;
-import com.example.ClinicaDefinitiva.domain.Email;
+import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import org.springframework.stereotype.Component;
 

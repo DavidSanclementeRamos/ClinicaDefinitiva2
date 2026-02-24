@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.userIdentity;
 
-import com.example.ClinicaDefinitiva.domain.Email;
+import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;

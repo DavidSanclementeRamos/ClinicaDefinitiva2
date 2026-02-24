@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.authentication.model;
 
-import com.example.ClinicaDefinitiva.domain.Email;
+import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityStatus;

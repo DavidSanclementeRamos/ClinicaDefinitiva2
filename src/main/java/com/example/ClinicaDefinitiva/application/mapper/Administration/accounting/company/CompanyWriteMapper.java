@@ -3,9 +3,9 @@ package com.example.ClinicaDefinitiva.application.mapper.Administration.accounti
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.CreateCompanyDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.UpdateCompanyContactDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.UpdateCompanyTaxDto;
-import com.example.ClinicaDefinitiva.domain.Email;
-import com.example.ClinicaDefinitiva.domain.actor.vo.Address;
-import com.example.ClinicaDefinitiva.domain.actor.vo.PhoneNumber;
+import com.example.ClinicaDefinitiva.domain.vo.Email;
+import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePerson;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;

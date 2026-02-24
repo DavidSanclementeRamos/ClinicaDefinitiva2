@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Open
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
 
 import java.util.Currency;
 

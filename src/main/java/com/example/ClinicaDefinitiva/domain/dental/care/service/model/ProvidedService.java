@@ -6,8 +6,8 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.Provided
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.service.ServiceRatePolicy;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 

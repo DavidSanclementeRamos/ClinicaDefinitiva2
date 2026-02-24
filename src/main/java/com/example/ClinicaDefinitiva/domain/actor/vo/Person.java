@@ -1,7 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.actor.vo;
 
 
-
+import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 
 public final class Person {
 

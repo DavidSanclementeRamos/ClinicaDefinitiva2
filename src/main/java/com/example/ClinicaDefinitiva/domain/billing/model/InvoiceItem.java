@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.billing.model;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceItemId;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.Quantity;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 
 

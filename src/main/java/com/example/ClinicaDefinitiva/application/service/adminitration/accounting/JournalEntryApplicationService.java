@@ -1,14 +1,11 @@
 package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.*;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.JournalEntryNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry.JournalEntryReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry.JournalEntryWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.JournalEntryUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.JournalEntryId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
@@ -21,10 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class JournalEntryApplicationService implements JournalEntryUseCase {
     private final JournalEntryRepository journalEntryRepository;

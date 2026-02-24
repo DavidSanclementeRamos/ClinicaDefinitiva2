@@ -8,6 +8,7 @@ import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TemporalValidationException;
+import com.example.ClinicaDefinitiva.domain.vo.AuditoriaInfo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

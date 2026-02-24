@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain;
+package com.example.ClinicaDefinitiva.domain.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;

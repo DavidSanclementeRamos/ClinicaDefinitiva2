@@ -9,6 +9,7 @@ import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetailsFa
 import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.*;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
 
 import java.util.Currency;
 

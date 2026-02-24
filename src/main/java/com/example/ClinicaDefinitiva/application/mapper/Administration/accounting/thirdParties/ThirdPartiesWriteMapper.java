@@ -2,9 +2,9 @@ package com.example.ClinicaDefinitiva.application.mapper.Administration.accounti
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.CreateThirdPartyDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.UpdateThirdPartyDto;
-import com.example.ClinicaDefinitiva.domain.Email;
-import com.example.ClinicaDefinitiva.domain.actor.vo.Address;
-import com.example.ClinicaDefinitiva.domain.actor.vo.PhoneNumber;
+import com.example.ClinicaDefinitiva.domain.vo.Email;
+import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;

@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
-import com.example.ClinicaDefinitiva.domain.Email;
-import com.example.ClinicaDefinitiva.domain.actor.vo.Address;
-import com.example.ClinicaDefinitiva.domain.actor.vo.PhoneNumber;
+import com.example.ClinicaDefinitiva.domain.vo.Email;
+import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;

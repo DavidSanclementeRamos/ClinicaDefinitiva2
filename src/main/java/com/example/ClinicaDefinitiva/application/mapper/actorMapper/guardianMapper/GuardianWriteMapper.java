@@ -5,6 +5,8 @@ import com.example.ClinicaDefinitiva.application.dto.actor.guardian.UpdateGuardi
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import org.springframework.stereotype.Component;
 
 @Component

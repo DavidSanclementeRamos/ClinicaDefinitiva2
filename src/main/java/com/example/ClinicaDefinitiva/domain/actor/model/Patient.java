@@ -9,6 +9,9 @@ import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.util.*;
+import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,7 +55,7 @@ public class Patient  {
         return new Patient(null,  LocalDate.now().atStartOfDay(), guardianId, data, null, userIdentityId, null);
     }
 
-    public void updatePatientContact( Address address, PhoneNumber phoneNumber) {
+    public void updatePatientContact(Address address, PhoneNumber phoneNumber) {
 
 
         this.person = person.withContactData(address, phoneNumber);

@@ -2,8 +2,8 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMap
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.PatientEntity;
 
 import java.time.LocalDate;

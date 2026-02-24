@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
+package com.example.ClinicaDefinitiva.domain.vo;
 
 import java.time.LocalDateTime;
 

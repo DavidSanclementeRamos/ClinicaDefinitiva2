@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.dental.care.service.vo;
+package com.example.ClinicaDefinitiva.domain.vo;
 
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;

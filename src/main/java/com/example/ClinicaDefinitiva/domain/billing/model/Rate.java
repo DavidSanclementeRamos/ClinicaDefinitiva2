@@ -2,9 +2,8 @@ package com.example.ClinicaDefinitiva.domain.billing.model;
 
 
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.Price;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.RateError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
