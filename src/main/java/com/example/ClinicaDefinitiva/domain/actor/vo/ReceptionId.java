@@ -6,22 +6,15 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidati
 import java.util.Objects;
 
 
-public final class ReceptionId {
-private final Long value;
+public record  ReceptionId(Long getValue) {
 
-    private ReceptionId(Long value) {
-        this.value = Objects.requireNonNull(value);
-    }
 
-    public static ReceptionId of(Long value) {
-        if (value == null) {
+
+    public static ReceptionId of(Long getValue) {
+        if (getValue == null) {
             throw new ValueObjectValidationException(VoActorError.ERR_ID_NULL, VOContext.ACTORS);
-
         }
+        return new ReceptionId(getValue);
+    }
 
-        return new ReceptionId(value);
-    }
-    public Long getValue() {
-        return value;
-    }
 }
