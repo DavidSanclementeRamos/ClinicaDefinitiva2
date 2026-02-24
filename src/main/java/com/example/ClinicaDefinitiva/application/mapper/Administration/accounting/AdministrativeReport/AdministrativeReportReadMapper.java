@@ -15,7 +15,7 @@ public class AdministrativeReportReadMapper {
 
     public ReadAdministrativeReportDto toReadDto(AdministrativeReport report) {
         return new ReadAdministrativeReportDto(
-                report.getId() != null ? report.getId().getValue() : null,
+                report.getId() != null ? report.getId().value(): null,
                 report.getTitle().toString(),
                 toPeriodDto(report.getPeriod()),
                 report.getCreatedAt(),
@@ -40,7 +40,7 @@ public class AdministrativeReportReadMapper {
 
     public PageAdministrativeReportDto toPageDto(AdministrativeReport report) {
         return new PageAdministrativeReportDto(
-                report.getId() != null ? report.getId().getValue() : null,
+                report.getId() != null ? report.getId().value(): null,
                 report.getTitle().toString(),
                 toPeriodDto(report.getPeriod()),
                 report.getStatus(),
