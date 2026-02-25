@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import java.util.Objects;
 
 public final class ReportStatus {
 
@@ -53,4 +54,18 @@ public final class ReportStatus {
 
     @Override
     public String toString() { return value.name(); }
+    
+    @Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ReportStatus)) return false;
+    ReportStatus other = (ReportStatus) o;
+    return value == other.value;
+}
+
+@Override
+public int hashCode() {
+    return Objects.hash(value);
+}
+
 }

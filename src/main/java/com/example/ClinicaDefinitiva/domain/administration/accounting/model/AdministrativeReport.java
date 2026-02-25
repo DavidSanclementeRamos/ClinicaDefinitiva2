@@ -48,7 +48,7 @@ public final class AdministrativeReport {
             UserIdentityId approvedBy) {
 
         // Obligatorios (fail fast)
-        this.id = Objects.requireNonNull(id, "ReportId cannot be null");
+        this.id = id;
         this.title = Objects.requireNonNull(title, "Title cannot be null");
         this.period = Objects.requireNonNull(period, "Period cannot be null");
         this.createdBy = Objects.requireNonNull(createdBy, "CreatedBy cannot be null");
@@ -121,12 +121,13 @@ public final class AdministrativeReport {
     public void addIndicator(Indicator indicator) {
         ensureEditable();
 
-        if (indicators.size() > 1) {
-            throw new DomainAggregateException(
-                    AdministrativeReportError.ERR_REPORT_TOO_MANY_INDICATORS,
-                    EntityContext.ADMINISTRATIVEREPORT
-            );
-        }
+       if (!indicators.isEmpty()) {
+        throw new DomainAggregateException(
+            AdministrativeReportError.ERR_REPORT_TOO_MANY_INDICATORS,
+            EntityContext.ADMINISTRATIVEREPORT
+    );
+}
+
             this.indicators.add(indicator);
         this.lastUpdate = LocalDateTime.now();
     }
@@ -325,6 +326,8 @@ public final class AdministrativeReport {
             );
         }
     }
+
+ 
 
     public AdministrativeReportId getId() { return id; }
     public Name getTitle() { return title; }
