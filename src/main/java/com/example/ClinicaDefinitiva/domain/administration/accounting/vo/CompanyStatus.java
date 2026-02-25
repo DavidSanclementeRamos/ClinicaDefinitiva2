@@ -4,6 +4,8 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import java.util.Objects;
+import static javax.management.Query.value;
 
 /**
  * Value Object que representa el estado de una empresa.
@@ -63,4 +65,29 @@ public final class CompanyStatus {
     public boolean isSuspended() {
         return status == Status.SUSPENDED;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.status);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CompanyStatus other = (CompanyStatus) obj;
+        return true;
+    }
+    
+
+
 }
