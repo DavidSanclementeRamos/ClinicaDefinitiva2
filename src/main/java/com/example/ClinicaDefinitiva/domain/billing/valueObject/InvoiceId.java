@@ -5,15 +5,9 @@ import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 
-public final class InvoiceId {
-    private final Long  value;
+public record  InvoiceId(Long getValue) {
 
-    private InvoiceId(Long value) {
-        if (value == null) {
-            throw new ValueObjectValidationException(BillingVOError.ERR_INVOICE_ID_NULL, VOContext.BILLING);
-        }
-        this.value = value;
-    }
+
 
     public static InvoiceId of(Long value) {
         if (value == null) {
@@ -22,6 +16,5 @@ public final class InvoiceId {
        return new InvoiceId(value);
     }
 
-    public Long getValue() { return value; }
 
 }
