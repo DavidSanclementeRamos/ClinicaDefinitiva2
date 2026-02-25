@@ -6,6 +6,7 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.ReadLedgerAccountDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntry;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
+import java.util.List;
 
 public class JournalEntryWriteMapper {
     public JournalEntry fromCreateDto(CreateJournalEntryDto dto){
@@ -13,7 +14,8 @@ public class JournalEntryWriteMapper {
                CompanyId.of( dto.companyId()),
                 dto.date(),
                 dto.documentNumber(),
-                dto.description()
+                dto.description(),
+                List.of()
 
         );
     }

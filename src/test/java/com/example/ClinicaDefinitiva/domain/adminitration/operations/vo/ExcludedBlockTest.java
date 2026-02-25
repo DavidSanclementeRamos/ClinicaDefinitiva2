@@ -1,7 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.adminitration.operations;
 
-import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ExcludedBlock;
+import com.example.ClinicaDefinitiva.domain.administration.operations.vo.ExcludedBlock;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.OperationsVoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
