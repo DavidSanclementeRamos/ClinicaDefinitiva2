@@ -4,23 +4,14 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.BillingV
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-public final class RateId {
-    private final Long value;
+public record  RateId(Long getValue) {
 
-    private RateId(Long value) {
-        if (value == null) {
-            throw new ValueObjectValidationException(BillingVOError.ERR_RATE_ID_NULL, VOContext.BILLING);
-        }
-        this.value = value;
-    }
+    
     public static RateId of(Long value) {
         if (value == null) {
             throw new ValueObjectValidationException(BillingVOError.ERR_RATE_ID_NULL, VOContext.BILLING);
         }
 
         return new RateId(value);
-    }
-    public Long getValue() {
-        return value;
     }
 }
