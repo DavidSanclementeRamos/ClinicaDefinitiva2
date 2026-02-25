@@ -96,7 +96,8 @@ public enum BillingVOError implements ErrorCatalog {
             "RN-BILLING-016",
             "error.invoice.provider.required",
             "La factura debe tener un proveedor válido como emisor oficial"
-    );
+    ),
+    ERR_INVOICE_STATUS_NULL("","","");
 
     private final String code;
     private final String messageKey;
