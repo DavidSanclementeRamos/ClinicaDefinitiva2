@@ -19,44 +19,17 @@ import java.util.Objects;
  * - Se encapsula en un VO para evitar el uso de longs planos.
  * - Permite extender en el futuro con validaciones adicionales (ej. NIT, resolución DIAN).
  */
-public final class ProviderId {
+public  record ProviderId(Long getValue) {
 
-    private final long value;
-
-    private ProviderId(long value) {
-        if (value <= 0) {
+    public static ProviderId of(Long value) {
+        if (value == null) {
             throw new ValueObjectValidationException(
                     BillingVOError.ERR_INVOICE_PROVIDER_REQUIRED,
                     VOContext.BILLING
             );
         }
-        this.value = value;
-    }
-
-    public static ProviderId of(long value) {
         return new ProviderId(value);
     }
 
-    public long getValue() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ProviderId)) return false;
-        ProviderId that = (ProviderId) o;
-        return value == that.value;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value);
-    }
-
-    @Override
-    public String toString() {
-        return String.valueOf(value);
-    }
-}
+   }
 
