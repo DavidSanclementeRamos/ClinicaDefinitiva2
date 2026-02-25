@@ -20,7 +20,7 @@ public class AdministrativeReportReadMapper {
                 toPeriodDto(report.getPeriod()),
                 report.getCreatedAt(),
                 report.getCreatedBy() != null ? report.getCreatedBy().value() : null,
-                report.getStatus().getDisplayName(),
+                report.getStatus().getDescription(),
                 report.getJournalEntryReferences().stream()
                         .map(JournalEntryId::getValue)
                         .collect(Collectors.toList()),

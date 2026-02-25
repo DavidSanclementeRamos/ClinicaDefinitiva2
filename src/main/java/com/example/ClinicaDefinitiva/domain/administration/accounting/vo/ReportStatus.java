@@ -6,91 +6,51 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidati
 
 public final class ReportStatus {
 
-
-
     public enum Status {
-        DRAFT, UNDER_REVIEW, PUBLISHED, ARCHIVED
+        DRAFT("Borrador"),
+        UNDER_REVIEW("En Revisión"),
+        PUBLISHED("Publicado"),
+        ARCHIVED("Archivado");
+
+        private final String description;
+        Status(String description) { this.description = description; }
+        public String getDescription() { return description; }
     }
 
-    private final Status status;
+    private final Status value;
 
-    private ReportStatus(Status status) {
-        if (status == null) {
+    private ReportStatus(Status value) {
+        if (value == null) {
             throw new ValueObjectValidationException(
-                    VoAccountingError.ERR_REPORT_STATUS_NULL,
-                    VOContext.ACCOUNTING
+                VoAccountingError.ERR_REPORT_STATUS_NULL,
+                VOContext.ACCOUNTING
             );
         }
-        this.status = status;
+        this.value = value;
     }
 
-    public static ReportStatus of(Status status) {
-        return new ReportStatus(status);
-    }
+    public static ReportStatus of(Status status) { return new ReportStatus(status); }
+    public static ReportStatus draft() { return new ReportStatus(Status.DRAFT); }
+    public static ReportStatus underReview() { return new ReportStatus(Status.UNDER_REVIEW); }
+    public static ReportStatus published() { return new ReportStatus(Status.PUBLISHED); }
+    public static ReportStatus archived() { return new ReportStatus(Status.ARCHIVED); }
 
-    public static ReportStatus draft() {
-        return new ReportStatus(Status.DRAFT);
-    }
+    // Queries semánticas
+    public boolean isDraft() { return value == Status.DRAFT; }
+    public boolean isUnderReview() { return value == Status.UNDER_REVIEW; }
+    public boolean isPublished() { return value == Status.PUBLISHED; }
+    public boolean isArchived() { return value == Status.ARCHIVED; }
 
-    public static ReportStatus underReview() {
-        return new ReportStatus(Status.UNDER_REVIEW);
-    }
+    // Reglas de negocio
+    public boolean isEditable() { return isDraft(); }
+    public boolean canBeSubmittedForReview() { return isDraft(); }
+    public boolean canBeApproved() { return isUnderReview(); }
+    public boolean canBeRejected() { return isUnderReview(); }
+    public boolean canBeArchived() { return !isArchived(); }
 
-    public static ReportStatus published() {
-        return new ReportStatus(Status.PUBLISHED);
-    }
+    public String getDescription() { return value.getDescription(); }
+    public Status getValue() { return value; }
 
-    public static ReportStatus archived() {
-        return new ReportStatus(Status.ARCHIVED);
-    }
-
-
-    public boolean isDraft() {
-        return status == Status.DRAFT;
-    }
-
-    public boolean isUnderReview() {
-        return status == Status.UNDER_REVIEW;
-    }
-
-    public boolean isPublished() {
-        return status == Status.PUBLISHED;
-    }
-
-    public boolean isArchived() {
-        return status == Status.ARCHIVED;
-    }
-
-    public boolean isEditable() {
-        return status == Status.DRAFT;
-    }
-
-    public boolean canBeSubmittedForReview() {
-        return status == Status.DRAFT;
-    }
-
-    public boolean canBeApproved() {
-        return status == Status.UNDER_REVIEW;
-    }
-
-    public boolean canBeRejected() {
-        return status == Status.UNDER_REVIEW;
-    }
-
-    public boolean canBeArchived() {
-        return status != Status.ARCHIVED;
-    }
-
-    public String getDisplayName() {
-        return switch (status) {
-            case DRAFT -> "Borrador";
-            case UNDER_REVIEW -> "En Revisión";
-            case PUBLISHED -> "Publicado";
-            case ARCHIVED -> "Archivado";
-        };
-    }
-
-    public Status getStatus() { return status; }
-
-
+    @Override
+    public String toString() { return value.name(); }
 }
