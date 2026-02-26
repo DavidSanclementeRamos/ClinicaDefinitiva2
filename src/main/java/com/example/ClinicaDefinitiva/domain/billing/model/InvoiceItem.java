@@ -48,28 +48,33 @@ public final class InvoiceItem {
     }
 
 
-
     public static InvoiceItem fromRateSnapshot(
-            InvoiceItemId id,
-            ServiceId serviceId,
-            String serviceCode,
-            String serviceDescription,
-            RateId rate,
-            Quantity quantity,
-            LocalDateTime performedAt) {
+        InvoiceItemId id,
+        ServiceId serviceId,
+        String serviceCode,
+        String serviceDescription,
+        RateId rate,
+        Price unitPrice,              
+        Quantity quantity,
+        LocalDateTime performedAt) {
 
-        Objects.requireNonNull(rate, "Rate no puede ser nulo");
+    Objects.requireNonNull(rate, "Rate no puede ser nulo");
+    Objects.requireNonNull(unitPrice, "UnitPrice no puede ser nulo");
 
-        return builder()
-                .id(id)
-                .serviceId(serviceId)
-                .serviceCode(serviceCode)
-                .serviceDescription(serviceDescription)
-                .quantity(quantity)
-                .rateId(rate)
-                .performedAt(performedAt)
-                .build();
-    }
+    return builder()
+            .id(id)
+            .serviceId(serviceId)
+            .serviceCode(serviceCode)
+            .serviceDescription(serviceDescription)
+            .unitPrice(unitPrice)       
+            .quantity(quantity)
+            .rateId(rate)
+            .performedAt(performedAt)
+            .build();
+}
+
+
+   
     public Price getTotalPrice() {
         return unitPrice.multiply(quantity.getValue());
     }
