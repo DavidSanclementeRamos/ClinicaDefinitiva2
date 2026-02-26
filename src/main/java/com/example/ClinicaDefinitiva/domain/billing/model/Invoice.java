@@ -60,8 +60,8 @@ public final class Invoice {
 
 
     private Invoice(Builder builder) {
-        this.id = Objects.requireNonNull(builder.id, "Invoice ID is required");
-        this.patientId = Objects.requireNonNull(builder.patientId, "Patient ID is required");
+        this.id =builder.id;
+        this.patientId = builder.patientId;
         this.dentistId = Objects.requireNonNull(builder.dentistId, "Dentist ID is required");
         this.providerId = Objects.requireNonNull(builder.providerId, "ProviderId is required");
         this.contractId = builder.contractId;
