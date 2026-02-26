@@ -55,7 +55,7 @@ public final class Rate {
 
 
     private Rate(Builder builder) {
-        this.id = Objects.requireNonNull(builder.id, "Rate ID no puede ser nulo");
+        this.id = builder.id;
         this.serviceId = Objects.requireNonNull(builder.serviceId, "Service no puede ser nulo");
         this.amount = Objects.requireNonNull(builder.amount, "Amount no puede ser nulo");
         this.payerType = Objects.requireNonNull(builder.payerType, "PayerType no puede ser nulo");
