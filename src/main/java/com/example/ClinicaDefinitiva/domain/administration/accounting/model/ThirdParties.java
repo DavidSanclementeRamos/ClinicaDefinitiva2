@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.ThirdPartiesError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;

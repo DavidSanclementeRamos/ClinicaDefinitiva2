@@ -4,7 +4,7 @@ package com.example.ClinicaDefinitiva.domain.adminitration.accounnting.model;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.NaturalezaCuenta;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import org.junit.jupiter.api.Test;

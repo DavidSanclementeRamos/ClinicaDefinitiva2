@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxReg
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePerson;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TemporalValidationException;

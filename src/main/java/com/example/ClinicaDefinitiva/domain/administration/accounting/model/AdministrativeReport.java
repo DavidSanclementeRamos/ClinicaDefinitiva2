@@ -1,5 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.AdministrativeReportError;

@@ -4,7 +4,7 @@ package com.example.ClinicaDefinitiva.domain.adminitration.accounnting.model;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Indicator;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.JournalEntryId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Period;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ReportStatus;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;

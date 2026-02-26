@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.billing.valueObject;
+package com.example.ClinicaDefinitiva.domain.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.BillingVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
@@ -30,6 +30,7 @@ public final class Notes {
     public Optional<String> getValue() {
         return Optional.ofNullable(value);
     }
+    
 
     @Override
     public String toString() {

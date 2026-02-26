@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.administration.accounting.vo;
+package com.example.ClinicaDefinitiva.domain.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;

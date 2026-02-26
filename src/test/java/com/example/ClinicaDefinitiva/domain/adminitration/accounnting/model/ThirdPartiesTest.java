@@ -4,7 +4,7 @@ package com.example.ClinicaDefinitiva.domain.adminitration.accounnting.model;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.vo.Address;

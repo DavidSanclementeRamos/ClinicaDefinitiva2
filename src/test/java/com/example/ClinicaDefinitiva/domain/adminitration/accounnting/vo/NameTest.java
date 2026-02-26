@@ -1,7 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.adminitration.accounnting.vo;
 
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;

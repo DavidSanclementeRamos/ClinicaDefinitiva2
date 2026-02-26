@@ -23,10 +23,10 @@ public class TreatmentReadMapper {
                 treatment.getActualEndDate(),
                 treatment.getPhases().stream()
                         .map(phase -> new TreatmentPhaseDto(
-                                phase.getName(),
+                                phase.getName().getValue(),
                                 phase.getScheduledDate(),
                                    phase.getStatus().name(),
-                                phase.getNotes()
+                                phase.getNotes().getValue().get()
                         ))
                         .collect(Collectors.toList()),
                 treatment.getNotes(),

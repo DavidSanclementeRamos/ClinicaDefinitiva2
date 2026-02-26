@@ -11,7 +11,7 @@ import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.CurrencyCode;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceItemId;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.Notes;
+import com.example.ClinicaDefinitiva.domain.vo.Notes;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.ProviderId;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.Quantity;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;

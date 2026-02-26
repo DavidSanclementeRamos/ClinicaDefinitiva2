@@ -9,7 +9,7 @@ import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePerson;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;

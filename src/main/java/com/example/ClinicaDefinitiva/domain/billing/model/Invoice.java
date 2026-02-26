@@ -1,5 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.billing.model;
 
+import com.example.ClinicaDefinitiva.domain.vo.Notes;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceStatus;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.vo.Price;

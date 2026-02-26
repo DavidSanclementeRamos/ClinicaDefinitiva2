@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.NaturalezaCuenta;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import org.springframework.stereotype.Component;
 
 @Component

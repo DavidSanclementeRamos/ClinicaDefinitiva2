@@ -4,7 +4,7 @@ package com.example.ClinicaDefinitiva.domain.adminitration.accounnting.model;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.ContractStatus;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;

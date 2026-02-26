@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper.billing.invoice;
 
 
+import com.example.ClinicaDefinitiva.domain.vo.Notes;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.AddInvoiceItemDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.CreateInstitutionalInvoiceDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.CreateParticularInvoiceDto;

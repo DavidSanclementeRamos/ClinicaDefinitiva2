@@ -1,7 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.billing.vo;
 
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.Notes;
+import com.example.ClinicaDefinitiva.domain.vo.Notes;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

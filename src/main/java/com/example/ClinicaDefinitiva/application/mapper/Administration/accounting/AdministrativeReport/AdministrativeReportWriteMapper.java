@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.mapper.Administration.accounti
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.CreateAdministrativeReportDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.UpdateAdministrativeReportDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Period;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.stereotype.Component;

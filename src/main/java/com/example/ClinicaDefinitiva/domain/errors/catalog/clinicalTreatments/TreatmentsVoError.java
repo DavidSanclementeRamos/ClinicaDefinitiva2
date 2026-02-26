@@ -8,7 +8,8 @@ public enum TreatmentsVoError implements ErrorCatalog {
             "RN-TREATMENTS_ID-001",
             "error.serviceId.null",
             "El identificador del tratamiento no puede ser nulo"
-    );
+    ),
+    ERR_TREATMENTS_PHASE_DATE_INVALID("","","");
 
     private final String code;
     private final String messageKey;

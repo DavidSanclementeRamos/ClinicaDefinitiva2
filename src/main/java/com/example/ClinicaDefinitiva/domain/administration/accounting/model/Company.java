@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Company
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePerson;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.CompanyError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;

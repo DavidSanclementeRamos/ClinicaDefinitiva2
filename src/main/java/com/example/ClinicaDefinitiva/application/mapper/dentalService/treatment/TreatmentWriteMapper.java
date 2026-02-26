@@ -10,6 +10,8 @@ import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.PhaseStatus;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentPhase;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Notes;
 
 import java.util.stream.Collectors;
 
@@ -25,10 +27,10 @@ public class TreatmentWriteMapper {
                 dto.expectedEndDate(),
                 dto.phases().stream()
                         .map(phase -> TreatmentPhase.of(
-                                phase.name(),
+                               Name.of( phase.name()),
                                 phase.startDate(),
                                 PhaseStatus.valueOf(   phase.status()),
-                                phase.description()
+                                Notes.of(phase.description())
                         ))
                         .collect(Collectors.toList()),
                 dto.notes(),
