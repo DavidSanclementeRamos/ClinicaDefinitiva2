@@ -1,5 +1,5 @@
 
-package com.example.ClinicaDefinitiva.domain.billing.vo;
+package com.example.ClinicaDefinitiva.domain.vo;
 
 import com.example.ClinicaDefinitiva.domain.vo.Notes;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;

@@ -74,13 +74,7 @@ public final class Email implements Serializable {
         String normalized = local + "@" + domain;
 
         // Validaciones de longitud
-        if (normalized.length() > MAX_LENGTH) {
-            return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_EMAIL_LENGTH_EXCEEDED,
-                    Severity.ERROR,
-                    Category.TECNICO,VOContext.AUTHORIZATION
-            ));
-        }
+       
         if (local.length() > MAX_LOCAL) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_LOCAL_LENGTH_EXCEEDED,
@@ -91,6 +85,14 @@ public final class Email implements Serializable {
         if (domain.length() > MAX_DOMAIN) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_EMAIL_DOMAIN_LENGTH_EXCEEDED,
+                    Severity.ERROR,
+                    Category.TECNICO,VOContext.AUTHORIZATION
+            ));
+        }
+        
+         if (normalized.length() > MAX_LENGTH) {
+            return Outcome.fail(new OutcomeDetail(
+                    VoAccesError.ERR_EMAIL_LENGTH_EXCEEDED,
                     Severity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
