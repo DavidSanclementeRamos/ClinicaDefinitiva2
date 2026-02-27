@@ -4,18 +4,8 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceV
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-public final class ServiceId {
+public record  ServiceId(Long getId) {
 
-
-    private final Long id;
-
-
-    private ServiceId( Long id) {
-        if (id == null) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_ID_NULL, VOContext.DENTAL_SERVICES);
-        }
-        this.id = id;
-    }
 
 
     public static ServiceId of(Long id) {
@@ -23,10 +13,6 @@ public final class ServiceId {
             throw new ValueObjectValidationException(ServiceVOError.ERR_SERVICE_ID_NULL, VOContext.DENTAL_SERVICES);
         }
         return new ServiceId( id);
-    }
-
-    public Long getId() {
-        return id;
     }
 
 }
