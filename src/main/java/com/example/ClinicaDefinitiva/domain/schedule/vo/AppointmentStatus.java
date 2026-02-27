@@ -10,10 +10,20 @@ import java.util.Set;
 public final class AppointmentStatus {
 
     public enum Status {
-        SCHEDULED,
-        COMPLETED,
-        CANCELLED,
-        NO_SHOW
+        SCHEDULED("Cita programada"),
+        COMPLETED("Cita completada"),
+        CANCELLED("Cita cancelada"),
+        NO_SHOW("Paciente no asistió");
+
+        private final String description;
+
+        Status(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 
     private Status value;
@@ -85,5 +95,7 @@ public final class AppointmentStatus {
     public Status getValue() { return value; }
 
     @Override
-    public String toString() { return value.name(); }
+    public String toString() {
+        return value.name() + " (" + value.getDescription() + ")";
+    }
 }
