@@ -40,6 +40,15 @@ public final class PediatricDetails implements ServiceDetails {
      * @param pediatricMaterials Materiales especializados para odontología pediátrica.
      */
     public PediatricDetails(String ageRange, String behaviorManagement, String pediatricMaterials) {
+        
+        
+         // RN-PEDIATRIC-001: Validación de rango de edad pediátrico (0-18 años)
+        if (ageRange != null && !isValidPediatricAge(ageRange)) {
+            throw new ValueObjectValidationException(
+                    PediatricError.ERR_PEDIATRIC_INVALID_AGE_RANGE,
+                    VOContext.AUTHORIZATION
+            );
+        }
 
         // RN-PEDIATRIC-002: Validación de longitud mínima del rango de edad
         ValidationHelper.validateMinLength(
@@ -49,13 +58,7 @@ public final class PediatricDetails implements ServiceDetails {
                 VOContext.AUTHORIZATION
         );
 
-        // RN-PEDIATRIC-001: Validación de rango de edad pediátrico (0-18 años)
-        if (ageRange != null && !isValidPediatricAge(ageRange)) {
-            throw new ValueObjectValidationException(
-                    PediatricError.ERR_PEDIATRIC_INVALID_AGE_RANGE,
-                    VOContext.AUTHORIZATION
-            );
-        }
+       
 
         // RN-PEDIATRIC-006: Validación de longitud mínima de materiales
         ValidationHelper.validateMinLength(
