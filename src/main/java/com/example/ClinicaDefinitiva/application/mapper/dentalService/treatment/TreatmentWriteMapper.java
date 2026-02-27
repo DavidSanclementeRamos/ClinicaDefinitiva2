@@ -19,7 +19,6 @@ public class TreatmentWriteMapper {
 
     public Treatment fromCreateDto(CreateTreatmentDto dto) {
         return Treatment.createNew(
-                TreatmentId.of(dto.patientId()), // aquí puedes ajustar la generación de ID
                 PatientId.of(dto.patientId()),
                 DentistId.of(dto.dentistId()),
                 ServiceId.of(dto.serviceId()),
