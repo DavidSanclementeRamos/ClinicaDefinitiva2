@@ -23,10 +23,7 @@ import java.util.regex.Pattern;
  */
 public final class PediatricDetails implements ServiceDetails {
 
-    private static final int MIN_AGE_RANGE_LENGTH = 5;
     private static final int MIN_MATERIALS_LENGTH = 5;
-    // Patrón para asegurar que el rango de edad contenga al menos un número
-    private static final Pattern AGE_PATTERN = Pattern.compile(".*\\d+.*");
 
     private final AgeRange ageRange;
     private final String behaviorManagement;
