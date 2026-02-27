@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  * Query Service: Centraliza consultas complejas sobre la agenda
@@ -124,15 +125,15 @@ public class ScheduleQueryService {
      * Verifica si un intervalo conflictúa con citas existentes
      */
     public boolean hasConflictingAppointments(
-            DentistId dentistId,
-            LocalDateTime start,
-            LocalDateTime end
-    ) {
-        List<Appointment> existing = (List<Appointment>) appointmentRepository
-                .findByDentistBetween(dentistId, start, end, Pageable.ofSize(100));
+        DentistId dentistId,
+        LocalDateTime start,
+        LocalDateTime end
+) {
+    Page<Appointment> existingPage = appointmentRepository
+            .findByDentistBetween(dentistId, start, end, Pageable.ofSize(100));
 
-        return existing.stream()
-                .filter(a -> a.getStatus().isScheduled())
-                .anyMatch(a -> a.conflictsWith(start, end));
-    }
+    return existingPage.getContent().stream()
+            .filter(a -> a.getStatus().isScheduled())
+            .anyMatch(a -> a.conflictsWith(start, end));
+}
 }
