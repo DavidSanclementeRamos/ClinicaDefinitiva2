@@ -12,6 +12,7 @@ import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,58 +47,45 @@ public class Treatment {
     private final String notes;
     private final RateId tarifaId;
 
-    private Treatment(TreatmentId id,
-                      PatientId patientId,
-                      DentistId dentistId,
-                      ServiceId servicioId,
-                      TreatmentStatus status,
-                      LocalDate startDate,
-                      LocalDate expectedEndDate,
-                      List<TreatmentPhase> phases,
-                      String notes,
-                      RateId tarifaId) {
+    // Constructor privado: solo valida reglas de negocio
+    private Treatment(Builder builder) {
+        this.id = builder.id;
+        this.patientId = builder.patientId;
+        this.dentistId = builder.dentistId;
+        this.servicioId = builder.servicioId;
+        this.status = builder.status;
+        this.startDate = builder.startDate;
+        this.expectedEndDate = builder.expectedEndDate;
+        this.phases = List.copyOf(builder.phases);
+        this.notes = builder.notes;
+        this.tarifaId = builder.tarifaId;
 
-        Objects.requireNonNull(id, "TreatmentId no puede ser nulo");
-        Objects.requireNonNull(patientId, "PatientId no puede ser nulo");
-        Objects.requireNonNull(dentistId, "DentistId no puede ser nulo");
-        Objects.requireNonNull(servicioId, "ServiceId no puede ser nulo");
-        Objects.requireNonNull(status, "TreatmentStatus no puede ser nulo");
-        Objects.requireNonNull(startDate, "StartDate no puede ser nulo");
+        validateBusinessRules();
+    }
 
+    private void validateBusinessRules() {
         if (startDate.isAfter(LocalDate.now())) {
             throw new BusinessRuleViolationException(
                     TreatmentError.ERR_TREATMENT_FUTURE_START_DATE,
                     EntityContext.TREATMENT
             );
         }
-
         if (expectedEndDate != null && expectedEndDate.isBefore(startDate)) {
             throw new BusinessRuleViolationException(
                     TreatmentError.ERR_TREATMENT_INVALID_END_DATE,
                     EntityContext.TREATMENT
             );
         }
-
         if (phases == null || phases.isEmpty()) {
             throw new BusinessRuleViolationException(
                     TreatmentError.ERR_TREATMENT_PHASES_REQUIRED,
                     EntityContext.TREATMENT
             );
         }
-
-        this.id = id;
-        this.patientId = patientId;
-        this.dentistId = dentistId;
-        this.servicioId = servicioId;
-        this.status = status;
-        this.startDate = startDate;
-        this.expectedEndDate = expectedEndDate;
-        this.phases = List.copyOf(phases);
-        this.notes = notes;
-        this.tarifaId = tarifaId;
     }
 
-    public static Treatment createNew(TreatmentId id,
+    // Método de fábrica: intención de negocio
+    public static Treatment createNew( 
                                       PatientId patientId,
                                       DentistId dentistId,
                                       ServiceId servicioId,
@@ -106,10 +94,19 @@ public class Treatment {
                                       List<TreatmentPhase> phases,
                                       String notes,
                                       RateId tarifaId) {
-        return new Treatment(id, patientId, dentistId, servicioId,
-                TreatmentStatus.ACTIVE, startDate, expectedEndDate, phases, notes, tarifaId);
+        return Treatment.builder()
+                .withPatientId(patientId)
+                .withDentistId(dentistId)
+                .withServiceId(servicioId)
+                .withStartDate(startDate)
+                .withExpectedEndDate(expectedEndDate)
+                .withPhases(phases)
+                .withNotes(notes)
+                .withRateId(tarifaId)
+                .build();
     }
 
+    // Métodos de negocio
     public boolean isActive() {
         return status == TreatmentStatus.ACTIVE;
     }
@@ -147,6 +144,10 @@ public class Treatment {
         this.status = TreatmentStatus.CANCELLED;
     }
 
+    // Getters
+    public TreatmentId getId() { return id; }
+    public PatientId getPatientId() { return patientId; }
+    public DentistId getDentistId() { return dentistId; }
     public ServiceId getServicioId() { return servicioId; }
     public RateId getTarifaId() { return tarifaId; }
     public TreatmentStatus getStatus() { return status; }
@@ -156,17 +157,33 @@ public class Treatment {
     public List<TreatmentPhase> getPhases() { return phases; }
     public String getNotes() { return notes; }
 
-    public TreatmentId getId() {
-        return id;
+    // Builder debajo de los setters/métodos de negocio
+    public static Builder builder() {
+        return new Builder();
     }
 
-    public PatientId getPatientId() {
-        return patientId;
-    }
+    public static class Builder {
+        private TreatmentId id;
+        private PatientId patientId;
+        private DentistId dentistId;
+        private ServiceId servicioId;
+        private TreatmentStatus status = TreatmentStatus.ACTIVE;
+        private LocalDate startDate;
+        private LocalDate expectedEndDate;
+        private List<TreatmentPhase> phases = new ArrayList<>();
+        private String notes;
+        private RateId tarifaId;
 
-    public DentistId getDentistId() {
-        return dentistId;
+        public Builder withId(TreatmentId id) { this.id = id; return this; }
+        public Builder withPatientId(PatientId patientId) { this.patientId = patientId; return this; }
+        public Builder withDentistId(DentistId dentistId) { this.dentistId = dentistId; return this; }
+        public Builder withServiceId(ServiceId servicioId) { this.servicioId = servicioId; return this; }
+        public Builder withStartDate(LocalDate startDate) { this.startDate = startDate; return this; }
+        public Builder withExpectedEndDate(LocalDate expectedEndDate) { this.expectedEndDate = expectedEndDate; return this; }
+        public Builder withPhases(List<TreatmentPhase> phases) { this.phases = phases; return this; }
+        public Builder withNotes(String notes) { this.notes = notes; return this; }
+        public Builder withRateId(RateId tarifaId) { this.tarifaId = tarifaId; return this; }
+
+        public Treatment build() { return new Treatment(this); }
     }
 }
-
-
