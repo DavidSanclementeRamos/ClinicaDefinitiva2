@@ -1,15 +1,18 @@
 package com.example.ClinicaDefinitiva.domain.dental.care.service.model;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetails;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.service.ServiceRatePolicy;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
+import java.util.Map;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Agregado raíz: Servicio odontológico ofrecido por la clínica.
@@ -52,14 +55,14 @@ public class ProvidedService {
     private ServiceDetails details;
 
     private ProvidedService(Builder builder) {
-        this.id = Objects.requireNonNull(builder.id, "El ID del servicio no puede ser nulo");
-        this.name = Objects.requireNonNull(builder.name, "El nombre del servicio no puede ser nulo");
-        this.category = Objects.requireNonNull(builder.category, "La categoría no puede ser nula");
-        this.code = Objects.requireNonNull(builder.code, "El código no puede ser nulo");
-        this.baseRate = Objects.requireNonNull(builder.baseRate, "La tarifa base no puede ser nula");
-        this.duration = Objects.requireNonNull(builder.duration, "La duración no puede ser nula");
-        this.description = Objects.requireNonNull(builder.description, "La descripción no puede ser nula");
-        this.status = Objects.requireNonNull(builder.status, "El estado no puede ser nulo");
+        this.id = builder.id;
+        this.name = builder.name;
+        this.category = builder.category;
+        this.code = builder.code;
+        this.baseRate = builder.baseRate;
+        this.duration = builder.duration;
+        this.description = builder.description;
+        this.status = builder.status;
         this.requiresAuthorization = builder.requiresAuthorization;
         this.details = builder.details;
 
@@ -236,28 +239,38 @@ public class ProvidedService {
         }
     }
 
-    private void validateCategoryMatch(ServiceCatalog category, ServiceDetails details) {
-        if (category == null || details == null) return;
+   private void validateCategoryMatch(ServiceCatalog category, ServiceDetails details) {
+    if (category == null || details == null) return;
 
-        String categoryName = category.getCategory().toUpperCase();
-        String detailsType = details.serviceType().name().toUpperCase();
+    String categoryName = normalizeCategory(category.getCategory());
+    ServiceType type = details.serviceType();
 
-        boolean matches = categoryName.contains(detailsType) ||
-                detailsType.contains(categoryName) ||
-                normalizeCategory(categoryName).equals(normalizeCategory(detailsType));
+    // Mapeo explícito entre ServiceType y categorías aceptadas
+    Map<ServiceType, Set<String>> allowed = Map.of(
+        ServiceType.SURGERY, Set.of("SURGERY", "Surgery"),
+        ServiceType.IMPLANTOLOGY, Set.of("IMPLANT", "Implantology"),
+        ServiceType.GENERAL, Set.of("GENERAL", "General"),
+        ServiceType.ORTHODONTIC, Set.of("ORTHODONTIC", "Orthodontics"),
+        ServiceType.PEDIATRICS, Set.of("PEDIATRICS", "Pediatrics"),
+        ServiceType.AESTHETICS, Set.of("AESTHETICS", "Aesthetics"),
+        ServiceType.PROSTHETICS, Set.of("PROSTHETICS", "Prosthetics")
+    );
 
-        if (!matches) {
-            throw new BusinessRuleViolationException(
-                    ProvidedServiceError.ERR_SERVICE_CATEGORY_MISMATCH,
-                    EntityContext.DENTAL_SERVICE
-            );
-        }
+    boolean matches = allowed.getOrDefault(type, Set.of())
+                             .contains(categoryName);
+
+    if (!matches) {
+        throw new BusinessRuleViolationException(
+            ProvidedServiceError.ERR_SERVICE_CATEGORY_MISMATCH,
+            EntityContext.DENTAL_SERVICE
+        );
     }
+}
 
-
-    private String normalizeCategory(String category) {
-        return category.replaceAll("S$", "");
-    }
+private String normalizeCategory(String raw) {
+    return raw == null ? "" : raw.trim().toUpperCase();
+}
+   
 
 
     public ServiceId getId() {

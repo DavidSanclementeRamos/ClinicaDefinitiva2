@@ -10,7 +10,7 @@ public final class ServiceCode {
 
     private final String value;
 
-    public ServiceCode(String value) {
+    private ServiceCode(String value) {
         if (value == null || value.isBlank()) {
             throw new ValueObjectValidationException(ServiceVOError
                     .ERR_SERVICE_CODE_REQUIRED, VOContext.DENTAL_SERVICES);
