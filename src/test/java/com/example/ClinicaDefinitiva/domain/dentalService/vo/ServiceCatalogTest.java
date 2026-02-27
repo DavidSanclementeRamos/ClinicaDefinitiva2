@@ -44,8 +44,8 @@ class ServiceCatalogTest {
                     null
             ))
             .isInstanceOf(ValueObjectValidationException.class)
-            .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getMessage())
-                    .contains(ServiceVOError.ERR_SERVICE_CATEGORY_NULL_OR_BLANK.name()));
+            .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
+                    .isEqualTo(ServiceVOError.ERR_SERVICE_CATEGORY_NULL_OR_BLANK));
 
             assertThatThrownBy(() -> ServiceCatalog.of(
                     sampleId,
@@ -53,8 +53,8 @@ class ServiceCatalogTest {
                     "   "
             ))
             .isInstanceOf(ValueObjectValidationException.class)
-            .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getMessage())
-                    .contains(ServiceVOError.ERR_SERVICE_CATEGORY_NULL_OR_BLANK.name()));
+            .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
+                    .isEqualTo(ServiceVOError.ERR_SERVICE_CATEGORY_NULL_OR_BLANK));
         }
     }
 
