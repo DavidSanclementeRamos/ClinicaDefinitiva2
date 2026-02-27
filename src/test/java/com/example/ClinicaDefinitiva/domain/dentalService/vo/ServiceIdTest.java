@@ -25,8 +25,8 @@ class ServiceIdTest {
     void create_null_throws() {
         assertThatThrownBy(() -> ServiceId.of(null))
                 .isInstanceOf(ValueObjectValidationException.class)
-                .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getMessage())
-                        .contains(ServiceVOError.ERR_SERVICE_ID_NULL.name()));
+                .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
+                        .isEqualTo(ServiceVOError.ERR_SERVICE_ID_NULL));
     }
 
     @Test
