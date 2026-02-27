@@ -31,7 +31,7 @@ public class ProvidedServiceWriteMapper {
         return ProvidedService.builder()
                 //.id(ServiceId.generate())
                 .name(ServiceName.custom(dto.name()))
-                .category(ServiceCatalog.of(ServiceId.of(dto.categoryId()), dto.categoryName(), dto.categoryType()))
+                .category(ServiceCatalog.of(ServiceId.of(dto.categoryId()), ServiceName.custom(dto.categoryName()), dto.categoryType()))
                 .code(ServiceCode.of(dto.code()))
                 .baseRate(Price.of(dto.baseRateAmount(), Currency.getInstance(dto.currency())))
                 .duration(ServiceDuration.of(dto.durationMinutes()))
@@ -47,7 +47,7 @@ public class ProvidedServiceWriteMapper {
         service.updateInformation(
                 dto.name() != null ? ServiceName.of(ServiceName.DentalServiceName.valueOf(dto.name())) : null,
                 dto.categoryId() != null ?
-                        ServiceCatalog.of(ServiceId.of( dto.categoryId()), dto.categoryName(), dto.categoryType()) : null,
+                        ServiceCatalog.of(ServiceId.of( dto.categoryId()),ServiceName.custom( dto.categoryName()), dto.categoryType()) : null,
                 dto.durationMinutes() != null ?
                         ServiceDuration.of(dto.durationMinutes()) : null,
                 dto.requiresAuthorization(),
