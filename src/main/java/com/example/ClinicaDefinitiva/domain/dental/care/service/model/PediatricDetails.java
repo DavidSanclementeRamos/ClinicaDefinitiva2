@@ -3,9 +3,9 @@ package com.example.ClinicaDefinitiva.domain.dental.care.service.model;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.AgeRange;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.PediatricError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -28,7 +28,7 @@ public final class PediatricDetails implements ServiceDetails {
     // Patrón para asegurar que el rango de edad contenga al menos un número
     private static final Pattern AGE_PATTERN = Pattern.compile(".*\\d+.*");
 
-    private final String ageRange;
+    private final AgeRange ageRange;
     private final String behaviorManagement;
     private final String pediatricMaterials;
 
@@ -39,26 +39,8 @@ public final class PediatricDetails implements ServiceDetails {
      * @param behaviorManagement Técnicas de manejo de comportamiento.
      * @param pediatricMaterials Materiales especializados para odontología pediátrica.
      */
-    public PediatricDetails(String ageRange, String behaviorManagement, String pediatricMaterials) {
+    public PediatricDetails(AgeRange ageRange, String behaviorManagement, String pediatricMaterials) {
         
-        
-         // RN-PEDIATRIC-001: Validación de rango de edad pediátrico (0-18 años)
-        if (ageRange != null && !isValidPediatricAge(ageRange)) {
-            throw new ValueObjectValidationException(
-                    PediatricError.ERR_PEDIATRIC_INVALID_AGE_RANGE,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        // RN-PEDIATRIC-002: Validación de longitud mínima del rango de edad
-        ValidationHelper.validateMinLength(
-                ageRange,
-                MIN_AGE_RANGE_LENGTH,
-                PediatricError.ERR_PEDIATRIC_AGE_RANGE_TOO_SHORT,
-                VOContext.AUTHORIZATION
-        );
-
-       
 
         // RN-PEDIATRIC-006: Validación de longitud mínima de materiales
         ValidationHelper.validateMinLength(
@@ -73,33 +55,15 @@ public final class PediatricDetails implements ServiceDetails {
         this.pediatricMaterials = pediatricMaterials;
     }
 
-    /**
-     * Valida que el rango de edad sea apropiado para pacientes pediátricos.
-     *
-     * Reglas:
-     * - Debe contener al menos un número.
-     * - No puede mencionar edades >= 19.
-     * - Rechaza rangos con referencias explícitas a adultos.
-     */
-    private boolean isValidPediatricAge(String ageRange) {
-        // Debe contener números
-        if (!AGE_PATTERN.matcher(ageRange).matches()) {
-            return false;
-        }
+    
 
-        String lower = ageRange.toLowerCase();
-        // Rechazar referencias explícitas a edades >= 19
-        return !lower.contains("19") &&
-                !lower.contains("20") &&
-                !lower.matches(".*[2-9]\\d+.*"); // Rechaza 20+, 30+, etc.
-    }
 
     @Override
     public ServiceType serviceType() {
         return ServiceType.PEDIATRICS;
     }
 
-    public String getAgeRange() {
+    public AgeRange getAgeRange() {
         return ageRange;
     }
 

@@ -132,7 +132,9 @@ public enum ServiceVOError implements ErrorCatalog {
             "RN-SERVICECATALOG-002",
             "error.serviceCatalog.categoryNullOrBlank",
             "La categoría del servicio no puede ser nula ni estar vacía"
-    );
+    ),
+    ERR_PEDIATRIC_INVALID_MIN_AGE("","",""),
+    ERR_PEDIATRIC_INVALID_RANGE("","","");
 
     private final String code;
     private final String messageKey;

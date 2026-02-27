@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.domain.dentalService.model;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.service.model.PediatricDetails;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.AgeRange;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.PediatricError;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,7 @@ class PediatricDetailsTest {
         @DisplayName("crear con datos válidos")
         void create_valid() {
             PediatricDetails details = new PediatricDetails(
-                    "5-12 años",
+                    AgeRange.of(6, 12),
                     "Tell-Show-Do",
                     "Resin-based sealants"
             );

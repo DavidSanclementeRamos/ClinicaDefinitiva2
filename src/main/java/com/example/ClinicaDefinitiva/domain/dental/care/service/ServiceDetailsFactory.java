@@ -2,6 +2,7 @@ package com.example.ClinicaDefinitiva.domain.dental.care.service;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.service.model.*;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.AgeRange;
 
 import java.util.Map;
 
@@ -58,7 +59,7 @@ public class ServiceDetailsFactory {
     }
 
     public static ServiceDetails createPediatric(
-            String ageRange,
+            AgeRange ageRange,
             String behaviorManagement,
             String pediatricMaterials) {
         return new PediatricDetails(ageRange, behaviorManagement, pediatricMaterials);
@@ -120,7 +121,7 @@ public class ServiceDetailsFactory {
                     (Boolean) fields.get("requiresBoneGraft")
             );
             case PEDIATRICS -> createPediatric(
-                    (String) fields.get("ageRange"),
+                    (AgeRange) fields.get("ageRange"),
                     (String) fields.get("behaviorManagement"),
                     (String) fields.get("pediatricMaterials")
             );
