@@ -2,25 +2,20 @@ package com.example.ClinicaDefinitiva.application.service.actor;
 
 
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.*;
+import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.PatientNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.patientMapper.PatientReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.patientMapper.PatientWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.PatientUseCase;
+import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
-
-import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.hibernate.query.sqm.PathElementException;
 import org.springframework.data.domain.Page;
@@ -28,6 +23,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+/**
+ * PatientApplicationService refactorizado.
+ * 
+ * POLÍTICAS:
+ * - OwnershipPolicy: Paciente solo ve sus propios datos
+ * - GuardianshipPolicy: Tutor accede a datos de pacientes bajo su tutela
+ * - SectorBasedPolicy: Receptionist por sector
+ */
 @Service
 @Transactional
 public class PatientApplicationService implements PatientUseCase {
@@ -36,18 +40,18 @@ public class PatientApplicationService implements PatientUseCase {
     private final ReceptionRepository receptionRepository;
     private final PatientReadMapper readMapper;
     private final PatientWriteMapper writeMapper;
-    private final AuthorizationService authorizationService;
+    private final AuthorizationHelper authorizationHelper;
 
     public PatientApplicationService(PatientRepository patientRepository,
                                      ReceptionRepository receptionRepository,
                                      PatientReadMapper readMapper,
                                      PatientWriteMapper writeMapper,
-                                     AuthorizationService authorizationService) {
+                                     AuthorizationHelper authorizationHelper) {
         this.patientRepository = patientRepository;
         this.receptionRepository = receptionRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
-        this.authorizationService = authorizationService;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @Override
@@ -60,30 +64,19 @@ public class PatientApplicationService implements PatientUseCase {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Not fount"));
 
-        // Construir contexto con ownership y guardianship
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+         // Ownership + Guardianship: Paciente ve sus datos, tutor ve datos de tutelados
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.PATIENT,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withResourceOwnerId(patient.getUser());
-
-        // Si el paciente tiene guardian, agregar al contexto para GuardianshipPolicy
-        if (patient.getGuardianId() != null) {
-            contextBuilder.withPatientGuardianId(patient.getGuardianId().value());
-        }
-
-        // Si es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+                .withOwnership(patient.getUser()) // ← OwnershipPolicy
+                .withPatientGuardianId(patient.getGuardianId() != null ? 
+                    patient.getGuardianId().value() : null) // ← GuardianshipPolicy
+                .build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return readMapper.toReadDto(patient);
     }
@@ -98,19 +91,14 @@ public class PatientApplicationService implements PatientUseCase {
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId);
 
-        // Si es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+        // Solo sector (receptionist ve todos)
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.PATIENT,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder().build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return patientRepository.findAll(pageable)
                 .map(readMapper::toPageDto);
@@ -124,23 +112,15 @@ public class PatientApplicationService implements PatientUseCase {
                                                  UserIdentityId requesterId,
                                                  RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
-                .withResourceId(contractId.getValue());
-
-        // Si es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.PATIENT,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder()
+                .withResourceId(contractId.getValue())
+                .build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return patientRepository.findByContractId(contractId, pageable)
                 .map(readMapper::toPageDto);
@@ -154,23 +134,16 @@ public class PatientApplicationService implements PatientUseCase {
                                                  UserIdentityId requesterId,
                                                  RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
-                .withPatientGuardianId(guardianId.value()); // Para GuardianshipPolicy
-
-        // Si es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+         // GuardianshipPolicy: Tutor solo ve pacientes bajo su tutela
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.PATIENT,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder()
+                .withPatientGuardianId(guardianId.value()) // ← GuardianshipPolicy
+                .build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return patientRepository.findByGuardianId(guardianId, pageable)
                 .map(readMapper::toPageDto);
@@ -183,23 +156,14 @@ public class PatientApplicationService implements PatientUseCase {
                                UserIdentityId requesterId,
                                RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+         // SectorBasedPolicy: Solo receptionist puede crear
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.PATIENT,
+            ActionCatalog.BasicAction.CREATE,
+            AuthorizationContext.builder().build()
+        );
 
         Patient patient = writeMapper.fromCreateDto(createPatientDto);
         Patient saved = patientRepository.save(patient);
@@ -218,30 +182,19 @@ public class PatientApplicationService implements PatientUseCase {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException(" Not found"));
 
-        // Construir contexto con ownership y guardianship
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+         // Ownership + Guardianship: Paciente edita sus datos, tutor edita datos de tutelados
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.PATIENT,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withResourceOwnerId(patient.getUser());
-
-        // Si tiene guardian, agregarlo para GuardianshipPolicy
-        if (patient.getGuardianId() != null) {
-            contextBuilder.withPatientGuardianId(patient.getGuardianId().value());
-        }
-
-        // Si es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+                .withOwnership(patient.getUser()) // ← Paciente puede editar
+                .withPatientGuardianId(patient.getGuardianId() != null ? 
+                    patient.getGuardianId().value() : null) // ← Tutor también puede editar
+                .build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         writeMapper.updateContactFromDto(updatePatientDto, patient);
         Patient updated = patientRepository.save(patient);
@@ -260,26 +213,17 @@ public class PatientApplicationService implements PatientUseCase {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Not found"));
 
-        // Para datos sensibles, requiere sector (receptionist)
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+        // Datos sensibles: Solo receptionist (SectorBasedPolicy)
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.PATIENT,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceOwnerId(patient.getUser())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+                .withOwnership(patient.getUser())
+                .build()
+        );
 
         writeMapper.updateSensitiveFromDto(updatePatientDto, patient);
         Patient updated = patientRepository.save(patient);
@@ -297,24 +241,16 @@ public class PatientApplicationService implements PatientUseCase {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new PathElementException("No found"));
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId)
+        // Solo receptionist puede eliminar
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.PATIENT,
+            ActionCatalog.BasicAction.DELETE,
+            AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+                .build()
+        );
 
         patientRepository.deleteById(patient.getPatientId());
     }
