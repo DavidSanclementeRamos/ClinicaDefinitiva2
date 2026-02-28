@@ -192,7 +192,7 @@ public class DefaultAuthorizationHelper implements AuthorizationHelper {
         
         // Agregar sector si receptionist existe
         if (receptionist != null) {
-            builder.withSector(receptionist.getSector().getValue());
+            builder.withSector(receptionist.getSector().getDescription());
         }
         
         // Agregar atributos del AuthorizationContext
