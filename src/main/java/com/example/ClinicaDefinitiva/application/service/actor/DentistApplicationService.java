@@ -39,7 +39,7 @@ public class DentistApplicationService implements DentistUseCase {
       private final DentistRepository dentistRepository;
     private final DentistReadMapper dentistReadMapper;
     private final DentistWriteMapper dentistWriteMapper;
-    private final AuthorizationHelper authorizationHelper; // ← NUEVO
+    private final AuthorizationHelper authorizationHelper; 
 
     public DentistApplicationService(
             DentistRepository dentistRepository,
