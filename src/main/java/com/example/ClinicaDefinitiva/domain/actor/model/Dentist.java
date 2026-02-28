@@ -131,5 +131,15 @@ public class Dentist   {
     }
     
 
+    // Solo para tests/simulación de persistencia
+    public static Dentist withId(
+        DentistId dentistId,
+        Person personData,
+        Specialties specialties,
+        UserIdentityId userId,
+        WorkingHours workingHours,
+        LocalDateTime lastUpdate) {
+    return new Dentist(dentistId, null, personData, specialties, userId, workingHours, lastUpdate, List.of());
+}
 
 }
