@@ -48,7 +48,8 @@ public enum AuthorizationError implements ErrorCatalog {
     ERR_ASSIGNMENT_UNAUTHORIZED_READ(
             "RN-AUTH-009",
             "error.assignment.unauthorized.read",
-            "No autorizado: el rol no puede consultar asignaciones en este sector" );
+            "No autorizado: el rol no puede consultar asignaciones en este sector" ),
+    ERR_AUTH_SYSTEM_ERROR("","","");
 
     private final String code;
     private final String messageKey;
