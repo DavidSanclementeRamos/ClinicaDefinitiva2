@@ -15,10 +15,13 @@ class JournalEntryLineTest {
 
     @Test
     void shouldCreateDebitLine() {
-        JournalEntryLine line = JournalEntryLine.debit(
+        JournalEntryLine line = JournalEntryLine.of(
                 LedgerAccountId.of(1105L),
+                null,
                 "Caja",
-                Price.of(1000, Currency.getInstance("COP"))
+                Price.of(1000, Currency.getInstance("COP")),
+                true,
+                null
         );
 
         assertTrue(line.isDebit());
@@ -29,11 +32,12 @@ class JournalEntryLineTest {
 
     @Test
     void shouldCreateCreditLineWithThirdParty() {
-        JournalEntryLine line = JournalEntryLine.creditWithThirdParty(
+        JournalEntryLine line = JournalEntryLine.of(
                 LedgerAccountId.of(2205L),
                 ThirdPartiesId.of(99L),
                 "Proveedor",
                 Price.of(500, Currency.getInstance("COP")),
+                false,
                 "FAC-123"
         );
 
@@ -46,10 +50,13 @@ class JournalEntryLineTest {
 
     @Test
     void shouldReverseLine() {
-        JournalEntryLine debitLine = JournalEntryLine.debit(
+        JournalEntryLine debitLine = JournalEntryLine.of(
                 LedgerAccountId.of(1105L),
+                null,
                 "Caja",
-                Price.of(200, Currency.getInstance("COP"))
+                Price.of(200, Currency.getInstance("COP")),
+                true,
+                null
         );
 
         JournalEntryLine reversed = debitLine.reverse();
@@ -62,10 +69,13 @@ class JournalEntryLineTest {
     @Test
     void shouldThrowExceptionForInvalidAmount() {
         assertThrows(BusinessRuleViolationException.class, () ->
-            JournalEntryLine.debit(
+            JournalEntryLine.of(
                 LedgerAccountId.of(1105L),
+                null,
                 "Caja",
-                Price.of(0, Currency.getInstance("COP"))
+                Price.of(0, Currency.getInstance("COP")),
+                true,
+                null
             )
         );
     }
@@ -73,12 +83,14 @@ class JournalEntryLineTest {
     @Test
     void shouldThrowExceptionForMissingDescription() {
         assertThrows(DomainAggregateException.class, () ->
-            JournalEntryLine.credit(
+            JournalEntryLine.of(
                 LedgerAccountId.of(2205L),
+                null,
                 "",
-                Price.of(100, Currency.getInstance("COP"))
+                Price.of(100, Currency.getInstance("COP")),
+                false,
+                null
             )
         );
     }
 }
-
