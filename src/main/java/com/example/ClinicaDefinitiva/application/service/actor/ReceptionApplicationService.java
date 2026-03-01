@@ -1,19 +1,17 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.*;
+import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.ReceptionNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionistReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionistWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUseCase;
+import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.ReceptionId;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
-import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,16 +25,16 @@ public class ReceptionApplicationService implements ReceptionUseCase {
     private final ReceptionRepository receptionRepository;
     private final ReceptionistReadMapper readMapper;
     private final ReceptionistWriteMapper writeMapper;
-    private final AuthorizationService authorizationService;
+    private final AuthorizationHelper authorizationHelper;
 
     public ReceptionApplicationService(ReceptionRepository receptionRepository,
                                        ReceptionistReadMapper readMapper,
                                        ReceptionistWriteMapper writeMapper,
-                                       AuthorizationService authorizationService) {
+                                       AuthorizationHelper authorizationHelper) {
         this.receptionRepository = receptionRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
-        this.authorizationService = authorizationService;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @Override
@@ -49,25 +47,16 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         Receptionist receptionist = receptionRepository.findById(id)
                 .orElseThrow(() -> new ReceptionNotFoundException("Not found"));
 
-        // Construir contexto con sector
-        Receptionist requester = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder()
                 .withResourceId(id.getValue())
-                .withSector(requester.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+                .withOwnership(receptionist.getUserIdentityId()) // ← OwnershipPolicy
+                .build()
+        );
 
         return readMapper.toReadDto(receptionist);
     }
@@ -79,27 +68,16 @@ public class ReceptionApplicationService implements ReceptionUseCase {
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
 
-        Receptionist requester = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
+        
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
-                .withSector(requester.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        // Opcionalmente, filtrar solo por mismo sector
-        // return receptionRepository.findBySector(requester.getSector().Value(), pageable)
-        //         .map(readMapper::toPageDto);
+         // Autorización simple (solo sector, sin ownership)
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder().build() // Sin atributos adicionales
+        );
 
         return receptionRepository.findAll(pageable)
                 .map(readMapper::toPageDto);
@@ -113,23 +91,14 @@ public class ReceptionApplicationService implements ReceptionUseCase {
                                                   UserIdentityId requesterId,
                                                   RolId requesterRolId) {
 
-        Receptionist requester = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
-                .withSector(requester.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+         // SectorBasedPolicy: Requiere sector válido
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.CREATE,
+            AuthorizationContext.builder().build()
+        );
 
         return receptionRepository.findBySector(sector, pageable)
                 .map(readMapper::toPageDto);
@@ -142,23 +111,14 @@ public class ReceptionApplicationService implements ReceptionUseCase {
                                     UserIdentityId requesterId,
                                     RolId requesterRolId) {
 
-        Receptionist requester = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
-                .withSector(requester.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+         // SectorBasedPolicy: Requiere sector válido
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.CREATE,
+            AuthorizationContext.builder().build()
+        );
 
         Receptionist receptionist = writeMapper.fromCreateDto(dto);
         Receptionist saved = receptionRepository.save(receptionist);
@@ -177,24 +137,17 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         Receptionist receptionist = receptionRepository.findById(id)
                 .orElseThrow(() -> new  ReceptionNotFoundException("Not found"));
 
-        Receptionist requester = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
+         // Sector + Ownership
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
                 .withResourceId(id.getValue())
-                .withSector(requester.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+                .withOwnership(receptionist.getUserIdentityId()) // ← OwnershipPolicy
+                .build()
+        );
 
         writeMapper.updateContactFromDto(dto, receptionist);
         Receptionist updated = receptionRepository.save(receptionist);
@@ -213,24 +166,17 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         Receptionist receptionist = receptionRepository.findById(id)
                 .orElseThrow(() -> new  ReceptionNotFoundException("Not found"));
 
-        Receptionist requester = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
+        // Datos sensibles: Solo RECEPTIONIST (validado por SectorBasedPolicy)
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
                 .withResourceId(id.getValue())
-                .withSector(requester.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+                .withOwnership(receptionist.getUserIdentityId())
+                .build()
+        );
 
         writeMapper.updateSensitiveFromDto(dto, receptionist);
         Receptionist updated = receptionRepository.save(receptionist);
@@ -248,24 +194,17 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         Receptionist receptionist = receptionRepository.findById(id)
                 .orElseThrow(() -> new ReceptionNotFoundException("Not found"));
 
-        Receptionist requester = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.RECEPTIONIST)), requesterId)
+        // SectorBasedPolicy: Solo RECEPTIONIST de RECURSOS_HUMANOS puede eliminar
+        // (Validado automáticamente por SectorBasedPolicy en el PolicyEngine)
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.DELETE,
+            AuthorizationContext.builder()
                 .withResourceId(id.getValue())
-                .withSector(requester.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+                .build()
+        );
 
         receptionRepository.deleteById(receptionist.getId());
     }
