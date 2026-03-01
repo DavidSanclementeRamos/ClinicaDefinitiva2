@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JournalEntryReadMapper {
-    public ReadJournalEntryDto toResponse(JournalEntry entry
+    public ReadJournalEntryDto toReadDto(JournalEntry entry
                                           ) {
         return new ReadJournalEntryDto(
                 entry.getId() != null ? entry.getId().getValue() : null,
@@ -30,7 +30,7 @@ public class JournalEntryReadMapper {
         );
     }
 
-    public PageJournalEntryDto toListResponse(JournalEntry entry) {
+    public PageJournalEntryDto toPageDto(JournalEntry entry) {
         return new PageJournalEntryDto(
                 entry.getId() != null ? entry.getId().getValue() : null,
                 entry.getDate(),
@@ -57,7 +57,7 @@ public class JournalEntryReadMapper {
         );
     }
 
-    public BalanceReportResponse toBalanceResponse(String accountCode, String accountName,
+    public BalanceReportResponse toBalanceDto(String accountCode, String accountName,
                                                    java.math.BigDecimal debits,
                                                    java.math.BigDecimal credits,
                                                    java.math.BigDecimal balance) {

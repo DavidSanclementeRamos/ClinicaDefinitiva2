@@ -131,7 +131,8 @@ public final class JournalEntry {
         this.posted = true;
     }
 
-    public JournalEntry reverse(String reason) {
+    /**  registra un nuevo asiento de reversa*/
+    public JournalEntry registerRverse(String reason) {
         if (!this.posted) {
             throw new BusinessRuleViolationException(JournalEntryError.ERR_JOURNALENTRY_NOT_POSTED_REVERSAL, EntityContext.JOURNALENTRY);
         }

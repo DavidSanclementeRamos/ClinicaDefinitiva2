@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 
 
 /**
@@ -17,11 +18,16 @@ import java.util.Optional;
 public interface JournalEntryRepository {
     JournalEntry save(JournalEntry journalEntry);
     Optional<JournalEntry> findById(JournalEntryId id);
-    Page<JournalEntry> findByCompanyId(CompanyId companyId);
-    Page<JournalEntry> findByDateRange(LocalDate startDate, LocalDate endDate);
-    Page<JournalEntry> findByAccount(LedgerAccountId accountId);
-    Page<JournalEntry> findByThirdParty(ThirdPartiesId thirdPartiesId);
+    Page<JournalEntry> findByCompanyId(CompanyId companyId,Pageable pageable);
+    Page<JournalEntry> findByDateRange(LocalDate startDate, LocalDate endDate,Pageable pageable);
+    Page<JournalEntry> findByAccount(LedgerAccountId accountId,Pageable pageable);
+    Page<JournalEntry> findByThirdParty(ThirdPartiesId thirdPartiesId,Pageable pageable);
     Page<JournalEntry> findUnpostedEntries();
     Page<JournalEntry> findByDocumentNumber(String documentNumber);
     boolean existsByDocumentNumber(String documentNumber);
+
+    Page<JournalEntry> findAll(Pageable pageable);
+
+
+
 }

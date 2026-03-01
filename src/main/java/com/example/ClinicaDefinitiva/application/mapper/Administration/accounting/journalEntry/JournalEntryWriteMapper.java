@@ -5,6 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.UpdateJournalEntryDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.ReadLedgerAccountDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntry;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntryLine;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import java.util.List;
 
@@ -27,8 +28,8 @@ public class JournalEntryWriteMapper {
         );
     }
 
-    public ReadLedgerAccountDto toAddLineDto(AddJournalEntryLineDto dto){
-        return new ReadLedgerAccountDto(
+    public JournalEntryLine toAddLineDto(AddJournalEntryLineDto dto){
+        return  JournalEntryLine.(
                 dto.id(),
                 dto.thirdPartyId(),
                 dto.description(),
