@@ -20,7 +20,7 @@ public class OpeningBalanceReadMapper {
         );
     }
 
-    public PageOpeningBalanceDto toPageDto(OpeningBalance balance, LedgerAccount account) {
+    public PageOpeningBalanceDto toPageDto(OpeningBalance balance) {
         return new PageOpeningBalanceDto(
                 balance.getOpeningBalanceId() != null ? balance.getOpeningBalanceId().getValue() : null,
                 balance.getValor().asBigDecimal(),
