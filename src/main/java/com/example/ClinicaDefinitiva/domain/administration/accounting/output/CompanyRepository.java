@@ -17,5 +17,9 @@ public interface CompanyRepository {
     Company save(Company company);
     boolean existsByNit(String nit);
 
+    Page<Company> findByTaxRegime(String regime, Pageable pageable);
+
+    Page<Company> findByStatus(String status, Pageable pageable);
+
 
 }

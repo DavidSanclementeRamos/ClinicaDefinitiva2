@@ -2,6 +2,7 @@ package com.example.ClinicaDefinitiva.application.portsInput.Administration.acco
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ public interface CompanyUseCase {
 
     ReadCompanyDto updateTaxInformation(CompanyId id, UpdateCompanyTaxDto dto, UserIdentityId requesterId, RolId requesterRolId);
 
-    ReadCompanyDto updateStatus(CompanyId id, String newStatus, UserIdentityId requesterId, RolId requesterRolId);
+    ReadCompanyDto updateStatus(CompanyId id, CompanyStatus newStatus, UserIdentityId requesterId, RolId requesterRolId);
 
     void deactivate(CompanyId id, UserIdentityId requesterId, RolId requesterRolId);
 }

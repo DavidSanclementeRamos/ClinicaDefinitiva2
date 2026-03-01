@@ -2,6 +2,7 @@ package com.example.ClinicaDefinitiva.application.service.adminitration.accounti
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.*;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.AdministrativeReport.AdministrativeReportReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.AdministrativeReport.AdministrativeReportWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.AdministrativeReportUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.JournalEntryRepository;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ReportRepository;
@@ -17,12 +18,14 @@ public class AdministrativeReportApplicationService implements AdministrativeRep
 
     private final ReportRepository repository;
     private final JournalEntryRepository journalEntryRepository;
-    private final AdministrativeReportReadMapper mapper;
+    private final AdministrativeReportReadMapper readMapper;
+    private final AdministrativeReportWriteMapper writeMapper;
 
-    public AdministrativeReportApplicationService(ReportRepository repository, JournalEntryRepository journalEntryRepository, AdministrativeReportReadMapper mapper) {
+    public AdministrativeReportApplicationService(ReportRepository repository, JournalEntryRepository journalEntryRepository, AdministrativeReportReadMapper readMapper,AdministrativeReportWriteMapper writeMapper) {
         this.repository = repository;
         this.journalEntryRepository = journalEntryRepository;
-        this.mapper = mapper;
+        this.readMapper = readMapper;
+        this.writeMapper = writeMapper;
     }
 
 
