@@ -7,6 +7,10 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntry;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntryLine;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
+import java.util.Currency;
 import java.util.List;
 
 public class JournalEntryWriteMapper {
@@ -29,22 +33,13 @@ public class JournalEntryWriteMapper {
     }
 
     public JournalEntryLine toAddLineDto(AddJournalEntryLineDto dto){
-        return  JournalEntryLine.(
-                dto.id(),
-                dto.thirdPartyId(),
-                dto.description(),
-                null,
-                dto.document(),
-                dto.isDebit(),
-                true,
-                true,
-                1,
-                "",
-                true,
-                true,
-                true,
-                true
-
+        return  JournalEntryLine.of(
+               LedgerAccountId.of( dto.id()),
+               ThirdPartiesId.of( dto.thirdPartyId()),
+                dto.description(), 
+               Price.of(dto.amount(), Currency.getInstance("COP")), 
+                dto.isDebit(), 
+                dto.document()
 
 
         );

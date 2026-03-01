@@ -293,7 +293,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadJournalEntryDto reverse(JournalEntryId id,
+    public ReadJournalEntryDto registerRverse(JournalEntryId id,
                                        String reason,
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
@@ -310,7 +310,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                         .build()
         );
 
-        entry.reverse(reason);
+        entry.registerRverse(reason);
         JournalEntry reversed = journalEntryRepository.save(entry);
 
         return readMapper.toReadDto(reversed);
