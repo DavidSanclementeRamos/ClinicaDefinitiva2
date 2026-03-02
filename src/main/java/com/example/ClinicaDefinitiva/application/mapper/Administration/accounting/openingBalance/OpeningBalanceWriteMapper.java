@@ -8,15 +8,24 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPa
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 
 import java.util.Currency;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OpeningBalanceWriteMapper {
-    public OpeningBalance fromCreateDto(CreateOpeningBalanceDto dto){
-        return OpeningBalance.registerOpeningBalance(
-                CompanyId.of( dto.companyId()),
-                LedgerAccountId.of(  dto.accountId()),
-                ThirdPartiesId.of(  dto.thirdPartiesId()),
-                Price.of( dto.amount(), Currency.getInstance(dto.currency()))
 
-        );
+    public CompanyId toCompanyId(CreateOpeningBalanceDto dto) {
+        return CompanyId.of(dto.companyId());
+    }
+
+    public LedgerAccountId toLedgerAccountId(CreateOpeningBalanceDto dto) {
+        return LedgerAccountId.of(dto.accountId());
+    }
+
+    public ThirdPartiesId toThirdPartiesId(CreateOpeningBalanceDto dto) {
+        return ThirdPartiesId.of(dto.thirdPartiesId());
+    }
+
+    public Price toPrice(CreateOpeningBalanceDto dto) {
+        return Price.of(dto.amount(), Currency.getInstance(dto.currency()));
     }
 }

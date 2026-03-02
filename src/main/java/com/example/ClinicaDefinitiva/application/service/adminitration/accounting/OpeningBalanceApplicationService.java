@@ -155,7 +155,13 @@ public class OpeningBalanceApplicationService implements OpeningBalanceUseCase {
                 AuthorizationContext.builder().build()
         );
 
-        OpeningBalance balance = writeMapper.fromCreateDto(dto);
+        OpeningBalance balance = OpeningBalance.registerOpeningBalance(
+            writeMapper.toCompanyId(dto),
+            writeMapper.toLedgerAccountId(dto),
+            writeMapper.toThirdPartiesId(dto),
+            writeMapper.toPrice(dto)
+        );
+
         OpeningBalance saved = openingBalanceRepository.save(balance);
 
         return readMapper.toReadDto(saved);

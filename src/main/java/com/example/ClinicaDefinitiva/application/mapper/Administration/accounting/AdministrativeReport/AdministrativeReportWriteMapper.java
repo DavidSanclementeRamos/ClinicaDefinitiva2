@@ -15,12 +15,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AdministrativeReportWriteMapper {
-    public AdministrativeReport fromCreateDto(CreateAdministrativeReportDto dto){
-        return AdministrativeReport.create(
-                Name.of( dto.title()),
-                Period.of( dto.period().star(),dto.period().end()),
-                UserIdentityId.from(dto.createdBy())
-        );
+  
+    public Name toName(CreateAdministrativeReportDto dto) {
+        return Name.of(dto.title());
+    }
+
+    public Period toPeriod(CreateAdministrativeReportDto dto) {
+        return Period.of(dto.period().star(), dto.period().end());
+    }
+
+    public UserIdentityId toUserIdentityId(CreateAdministrativeReportDto dto) {
+        return UserIdentityId.from(dto.createdBy());
     }
 
 

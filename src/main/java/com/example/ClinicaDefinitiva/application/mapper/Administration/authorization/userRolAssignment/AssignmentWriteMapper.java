@@ -5,27 +5,43 @@ import com.example.ClinicaDefinitiva.application.dto.administration.authorizatio
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AssignmentWriteMapper {
 
-    public  UserRolAssignment fromCreatePermanent(CreateAssignmentPermanentDto dto) {
-        return UserRolAssignment.assignPermanent(
-                UserIdentityId.from(dto.userId()),             // Long → UserId VO
-                RolId.of(dto.rolId()),               // Long → RolId VO
-                dto.isPrimary()
-        );
+    public UserIdentityId toUserIdentityId(CreateAssignmentPermanentDto dto) {
+        return UserIdentityId.from(dto.userId());
     }
 
-    public  UserRolAssignment fromCreateTemporary(CreateAssignmentTemporaryDto dto) {
-        return UserRolAssignment.assignTemporary(
-                UserIdentityId.from(dto.userId()),
-                RolId.of(dto.rolId()),
-                dto.validFrom(),
-                dto.validTo(),
-                dto.isPrimary()
-        );
+    public RolId toRolId(CreateAssignmentPermanentDto dto) {
+        return RolId.of(dto.rolId());
+    }
+
+    public boolean toIsPrimary(CreateAssignmentPermanentDto dto) {
+        return dto.isPrimary();
+    }
+
+    public UserIdentityId toUserIdentityId(CreateAssignmentTemporaryDto dto) {
+        return UserIdentityId.from(dto.userId());
+    }
+
+    public RolId toRolId(CreateAssignmentTemporaryDto dto) {
+        return RolId.of(dto.rolId());
+    }
+
+    public LocalDate toValidFrom(CreateAssignmentTemporaryDto dto) {
+        return dto.validFrom();
+    }
+
+    public LocalDate toValidTo(CreateAssignmentTemporaryDto dto) {
+        return dto.validTo();
+    }
+
+    public boolean toIsPrimary(CreateAssignmentTemporaryDto dto) {
+        return dto.isPrimary();
     }
 }
 

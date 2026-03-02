@@ -161,7 +161,17 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                 AuthorizationContext.builder().build()
         );
 
-        ThirdParties thirdParty = writeMapper.fromCreate(dto);
+        ThirdParties thirdParty = ThirdParties.registerThirdParties(
+            writeMapper.toCompanyId(dto),
+            writeMapper.toName(dto),
+            writeMapper.toTypeDocument(dto),
+            writeMapper.toDocumentNumber(dto),
+            writeMapper.toTypeThirdParties(dto),
+            writeMapper.toAddress(dto),
+            writeMapper.toPhoneNumber(dto),
+            writeMapper.toEmail(dto)
+        );
+
         ThirdParties saved = repository.save(thirdParty);
 
         return readMapper.toReadDto(saved);

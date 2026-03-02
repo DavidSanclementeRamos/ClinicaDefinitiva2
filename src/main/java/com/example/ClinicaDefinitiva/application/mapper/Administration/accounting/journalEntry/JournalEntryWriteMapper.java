@@ -10,20 +10,30 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Company
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
+import java.time.LocalDate;
 import java.util.Currency;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JournalEntryWriteMapper {
-    public JournalEntry fromCreateDto(CreateJournalEntryDto dto){
-        return JournalEntry.registerJournalEntry(
-               CompanyId.of( dto.companyId()),
-                dto.date(),
-                dto.documentNumber(),
-                dto.description(),
-                List.of()
 
-        );
+    public CompanyId toCompanyId(CreateJournalEntryDto dto) {
+        return CompanyId.of(dto.companyId());
     }
+
+    public LocalDate toDate(CreateJournalEntryDto dto) {
+        return dto.date();
+    }
+
+    public String toDocumentNumber(CreateJournalEntryDto dto) {
+        return dto.documentNumber();
+    }
+
+    public String toDescription(CreateJournalEntryDto dto) {
+        return dto.description();
+    }
+
 
 
     public String toDescription(UpdateJournalEntryDto dto) {

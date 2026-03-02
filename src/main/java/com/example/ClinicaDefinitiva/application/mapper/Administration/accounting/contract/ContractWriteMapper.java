@@ -6,21 +6,44 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Cont
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class ContractWriteMapper {
-    public Contract fromCreateDto(CreateContractDto dto){
-        return Contract.registerContract(
-                CompanyId.of( dto.companyId()),
-                ThirdPartiesId.of( dto.thirdPartiesId()),
-                Name.of( dto.name()),
-                dto.description(),
-                dto.origin(),
-                dto.endDate(),
-                dto.coverageType(),
-                dto.coverageRate()
-        );
+
+    public CompanyId toCompanyId(CreateContractDto dto) {
+        return CompanyId.of(dto.companyId());
+    }
+
+    public ThirdPartiesId toThirdPartiesId(CreateContractDto dto) {
+        return ThirdPartiesId.of(dto.thirdPartiesId());
+    }
+
+    public Name toName(CreateContractDto dto) {
+        return Name.of(dto.name());
+    }
+
+    public String toDescription(CreateContractDto dto) {
+        return dto.description();
+    }
+
+    public String toOrigin(CreateContractDto dto) {
+        return dto.origin();
+    }
+
+    public LocalDate toEndDate(CreateContractDto dto) {
+        return dto.endDate();
+    }
+
+    public String toCoverageType(CreateContractDto dto) {
+        return dto.coverageType();
+    }
+
+    public BigDecimal toCoverageRate(CreateContractDto dto) {
+        return dto.coverageRate();
     }
 
 

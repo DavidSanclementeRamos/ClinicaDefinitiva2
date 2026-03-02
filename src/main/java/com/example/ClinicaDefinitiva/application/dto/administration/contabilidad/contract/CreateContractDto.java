@@ -1,5 +1,6 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -13,5 +14,5 @@ public record CreateContractDto(
         String origin,
         LocalDate endDate,
         String coverageType,
-        Double coverageRate
+        BigDecimal coverageRate
 ) {}

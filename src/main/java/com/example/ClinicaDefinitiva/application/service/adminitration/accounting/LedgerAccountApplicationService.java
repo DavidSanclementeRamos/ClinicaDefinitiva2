@@ -173,7 +173,14 @@ public class LedgerAccountApplicationService implements LedgerAccountUseCase {
                 AuthorizationContext.builder().build()
         );
 
-        LedgerAccount account = writeMapper.fromCreate(dto);
+         LedgerAccount account = LedgerAccount.registerLedgerAccount(
+            writeMapper.toCompanyId(dto),
+            writeMapper.toCode(dto),
+            writeMapper.toName(dto),
+            writeMapper.toNature(dto),
+            writeMapper.toRequiresThirdParty(dto),
+            writeMapper.toRequiresDocument(dto)
+        );
         LedgerAccount saved = ledgerAccountRepository.save(account);
 
         return readMapper.toReadDto(saved);

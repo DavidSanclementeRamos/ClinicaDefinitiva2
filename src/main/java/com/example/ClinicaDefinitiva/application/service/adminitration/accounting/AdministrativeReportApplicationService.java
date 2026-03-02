@@ -163,7 +163,11 @@ public class AdministrativeReportApplicationService implements AdministrativeRep
                 AuthorizationContext.builder().build()
         );
 
-        AdministrativeReport report = writeMapper.fromCreateDto(dto);
+        AdministrativeReport report = AdministrativeReport.create(
+                writeMapper.toName(dto),
+                writeMapper.toPeriod(dto),
+                writeMapper.toUserIdentityId(dto)
+        );
         AdministrativeReport saved = repository.save(report);
 
         return readMapper.toReadDto(saved);

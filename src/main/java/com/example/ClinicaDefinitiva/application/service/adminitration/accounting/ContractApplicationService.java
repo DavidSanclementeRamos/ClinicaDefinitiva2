@@ -195,7 +195,17 @@ public class ContractApplicationService implements ContractUseCase {
                 AuthorizationContext.builder().build()
         );
 
-        Contract contract = writeMapper.fromCreateDto(dto);
+         Contract contract = Contract.registerContract(
+            writeMapper.toCompanyId(dto),
+            writeMapper.toThirdPartiesId(dto),
+            writeMapper.toName(dto),
+            writeMapper.toDescription(dto),
+            writeMapper.toOrigin(dto),
+            writeMapper.toEndDate(dto),
+           writeMapper.toCoverageType(dto),
+            writeMapper.toCoverageRate(dto)
+        );
+
         Contract saved = contractRepository.save(contract);
 
         return readMapper.toReadDto(saved);

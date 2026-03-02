@@ -72,7 +72,12 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
             throw new BusinessRuleViolationException(RolError.ERR_ROL_UNAUTHORIZED_CREATION, EntityContext.ASSIGNMENT);
         }
 
-        UserRolAssignment assignment = writeMapper.fromCreatePermanent(dto);
+        UserRolAssignment assignment = UserRolAssignment.assignPermanent(
+            writeMapper.toUserIdentityId(dto),
+            writeMapper.toRolId(dto),
+            writeMapper.toIsPrimary(dto)
+        );
+
         UserRolAssignment saved = userRolService.assignRole(
                 assignment.getUserId(),
                 assignment.getRolId(),
@@ -104,7 +109,14 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
             throw new BusinessRuleViolationException(RolError.ERR_ROL_UNAUTHORIZED_CREATION, EntityContext.ASSIGNMENT);
         }
 
-        UserRolAssignment assignment = writeMapper.fromCreateTemporary(dto);
+         UserRolAssignment assignment = UserRolAssignment.assignTemporary(
+            writeMapper.toUserIdentityId(dto),
+            writeMapper.toRolId(dto),
+            writeMapper.toValidFrom(dto),
+            writeMapper.toValidTo(dto),
+            writeMapper.toIsPrimary(dto)
+        );
+
         UserRolAssignment saved = userRolService.assignTemporaryRole(
                 assignment.getUserId(),
                 assignment.getRolId(),

@@ -132,7 +132,17 @@ public class CompanyApplicationService implements CompanyUseCase {
                 AuthorizationContext.builder().build()
         );
 
-        Company company = writeMapper.fromCreateDto(dto);
+        Company company = Company.registerCompany(
+            writeMapper.toName(dto),
+            writeMapper.toNit(dto),
+            writeMapper.toTypePerson(dto),
+            writeMapper.toTaxRegime(dto),
+            writeMapper.toLegalRepresentative(dto),
+            writeMapper.toAddress(dto),
+            writeMapper.toPhoneNumber(dto),
+            writeMapper.toEmail(dto)
+        );
+
         Company saved = repository.save(company);
 
         return readMapper.toReadDto(saved);

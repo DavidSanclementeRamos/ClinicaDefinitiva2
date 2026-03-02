@@ -18,18 +18,38 @@ import org.springframework.stereotype.Component;
 @Component
 public class ThirdPartiesWriteMapper {
 
-    public ThirdParties fromCreate(CreateThirdPartyDto dto) {
-        return ThirdParties.registerThirdParties(
-                CompanyId.of(dto.companyId()),
-                Name.of(dto.name()),
-                dto.typeDocument(),
-                dto.documentNumber(),
-                TypeThirdParties.valueOf(dto.typeThirdParties()),
-                Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
-                PhoneNumber.of(dto.phoneNumber()),
-                Email.ofOrThrow(dto.email()) // uso del nuevo método
-        );
+    public CompanyId toCompanyId(CreateThirdPartyDto dto) {
+        return CompanyId.of(dto.companyId());
     }
+
+    public Name toName(CreateThirdPartyDto dto) {
+        return Name.of(dto.name());
+    }
+
+    public String toTypeDocument(CreateThirdPartyDto dto) {
+        return dto.typeDocument();
+    }
+
+    public String toDocumentNumber(CreateThirdPartyDto dto) {
+        return dto.documentNumber();
+    }
+
+    public TypeThirdParties toTypeThirdParties(CreateThirdPartyDto dto) {
+        return TypeThirdParties.valueOf(dto.typeThirdParties());
+    }
+
+    public Address toAddress(CreateThirdPartyDto dto) {
+        return Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode());
+    }
+
+    public PhoneNumber toPhoneNumber(CreateThirdPartyDto dto) {
+        return PhoneNumber.of(dto.phoneNumber());
+    }
+
+    public Email toEmail(CreateThirdPartyDto dto) {
+        return Email.ofOrThrow(dto.email());
+    }
+
 
 
     public Name toName(UpdateThirdPartyDto dto) {

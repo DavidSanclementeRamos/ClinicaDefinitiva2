@@ -10,6 +10,7 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolati
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TemporalValidationException;
 import com.example.ClinicaDefinitiva.domain.vo.AuditoriaInfo;
+import java.math.BigDecimal;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public final class Contract {
     private final LocalDate startDate;
     private LocalDate endDate;
     private String coverageType;
-    private final Double coverageRate;
+    private final BigDecimal coverageRate;
     private ContractStatus status;
     private AuditoriaInfo audit;
 
@@ -65,7 +66,7 @@ public final class Contract {
             String origin,
             LocalDate endDate,
             String coverageType,
-            Double coverageRate) {
+            BigDecimal coverageRate) {
 
         return Contract.builder()
                 .withCompanyId(company)
@@ -167,7 +168,7 @@ public final class Contract {
     public LocalDate getStartDate() { return startDate; }
     public LocalDate getEndDate() { return endDate; }
     public String getCoverageType() { return coverageType; }
-    public Double getCoverageRate() { return coverageRate; }
+    public BigDecimal getCoverageRate() { return coverageRate; }
     public ContractStatus getStatus() { return status; }
     public AuditoriaInfo getAudit() { return audit; }
 
@@ -184,7 +185,7 @@ public final class Contract {
         private LocalDate startDate = LocalDate.now();
         private LocalDate endDate;
         private String coverageType;
-        private Double coverageRate;
+        private BigDecimal coverageRate;
         private ContractStatus status = ContractStatus.ACTIVE;
         private AuditoriaInfo audit;
 
@@ -197,7 +198,7 @@ public final class Contract {
         public Builder withStartDate(LocalDate startDate) { this.startDate = startDate; return this; }
         public Builder withEndDate(LocalDate endDate) { this.endDate = endDate; return this; }
         public Builder withCoverageType(String coverageType) { this.coverageType = coverageType; return this; }
-        public Builder withCoverageRate(Double coverageRate) { this.coverageRate = coverageRate; return this; }
+        public Builder withCoverageRate(BigDecimal coverageRate) { this.coverageRate = coverageRate; return this; }
         public Builder withStatus(ContractStatus status) { this.status = status; return this; }
         public Builder withAudit(AuditoriaInfo audit) { this.audit = audit; return this; }
 

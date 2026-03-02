@@ -21,25 +21,38 @@ import org.springframework.stereotype.Component;
 @Component
 public class CompanyWriteMapper {
 
-
-    public Company fromCreateDto(CreateCompanyDto dto){
-
-        
-
-
-        return Company.registerCompany(
-                Name.of(dto.name()),
-                Nit.of( dto.taxIdentificationNumber()),
-                TypePerson.valueOf( dto.typePerson()),
-                TaxRegime.valueOf(dto.taxRegime()),
-                dto.legalRepresentative(),
-                Address.of(dto.street(),dto.city(),dto.state(),dto.country(),dto.postalCode()),
-                PhoneNumber.of(dto.phoneNumber()),
-                Email.ofOrThrow(dto.email())
-
-        );
-
+    public Name toName(CreateCompanyDto dto) {
+        return Name.of(dto.name());
     }
+
+    public Nit toNit(CreateCompanyDto dto) {
+        return Nit.of(dto.taxIdentificationNumber());
+    }
+
+    public TypePerson toTypePerson(CreateCompanyDto dto) {
+        return TypePerson.valueOf(dto.typePerson());
+    }
+
+    public TaxRegime toTaxRegime(CreateCompanyDto dto) {
+        return TaxRegime.valueOf(dto.taxRegime());
+    }
+
+    public String toLegalRepresentative(CreateCompanyDto dto) {
+        return dto.legalRepresentative();
+    }
+
+    public Address toAddress(CreateCompanyDto dto) {
+        return Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode());
+    }
+
+    public PhoneNumber toPhoneNumber(CreateCompanyDto dto) {
+        return PhoneNumber.of(dto.phoneNumber());
+    }
+
+    public Email toEmail(CreateCompanyDto dto) {
+        return Email.ofOrThrow(dto.email());
+    }
+
 
     
     public Name toName(UpdateCompanyContactDto dto) {
