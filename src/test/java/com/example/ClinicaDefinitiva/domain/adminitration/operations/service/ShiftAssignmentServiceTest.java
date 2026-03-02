@@ -53,7 +53,7 @@ class ShiftAssignmentServiceTest {
 
         when(dentistRepository.findById(dentistId)).thenReturn(Optional.of(dentist));
 
-        Shift expectedShift = Shift.create(null, dentistId, date, start, end, ShiftType.ADMINISTRATIVE);
+        Shift expectedShift = Shift.create( dentistId, date, start, end, ShiftType.ADMINISTRATIVE);
         when(shiftRepository.save(any(Shift.class))).thenReturn(expectedShift);
 
         Shift result = service.assignShift(dentistId, date, start, end, ShiftType.CLINICAL);
