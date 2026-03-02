@@ -6,6 +6,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Cont
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ class ContractTest {
                 "Interno",
                 LocalDate.now().plusDays(60),
                 "Salud",
-                0.85
+                new BigDecimal(0.85)
         );
 
         assertEquals("Contrato de Servicios", contract.getName().getValue());
@@ -42,7 +43,7 @@ class ContractTest {
                 "Externo",
                 LocalDate.now().plusDays(30),
                 "Salud",
-                0.75
+                new BigDecimal(0.75)
         );
 
         contract.updateInformation(Name.of("Contrato Actualizado"), "Cobertura extendida", "Interno", "Dental");
@@ -63,7 +64,7 @@ class ContractTest {
                 "Interno",
                 LocalDate.now().plusDays(30),
                 "Salud",
-                0.85
+                new BigDecimal(0.85)
         );
 
         LocalDate newEndDate = LocalDate.now().plusDays(90);
@@ -82,7 +83,7 @@ class ContractTest {
                 "Interno",
                 LocalDate.now().plusDays(30),
                 "Salud",
-                0.85
+                new BigDecimal(0.85)
         );
 
         contract.suspend("Falta de pago");
@@ -102,7 +103,7 @@ class ContractTest {
                 "Interno",
                 LocalDate.now().plusDays(30),
                 "Salud",
-                0.85
+                new BigDecimal(0.85)
         );
 
         contract.terminate("Incumplimiento de cláusulas");
@@ -119,7 +120,7 @@ class ContractTest {
                 "Interno",
                 LocalDate.now().plusDays(5),
                 "Salud",
-                0.85
+                new BigDecimal(0.85)
         );
 
         LocalDateTime afterExpiration = LocalDateTime.now().plusDays(10);
@@ -139,7 +140,7 @@ class ContractTest {
                 "Interno",
                 LocalDate.now().plusDays(10),
                 "Salud",
-                0.85
+                new BigDecimal(0.85)
         );
 
         assertTrue(contract.isNearExpiration());
@@ -155,7 +156,7 @@ void shouldReturnZeroDaysRemainingWhenExpired() {
             .withStartDate(LocalDate.now().minusDays(10)) // inicio hace 10 días
             .withEndDate(LocalDate.now().minusDays(1))    // fin ayer
             .withCoverageType("Salud")
-            .withCoverageRate(0.85)
+            .withCoverageRate(new BigDecimal(0.85))
             .build();
 
     assertTrue(contract.isExpired());
