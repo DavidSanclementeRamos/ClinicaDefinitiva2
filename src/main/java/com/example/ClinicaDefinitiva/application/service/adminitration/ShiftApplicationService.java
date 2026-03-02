@@ -159,7 +159,15 @@ public class ShiftApplicationService implements ShiftUseCase {
                         .build()
         );
 
-        writeMapper.excludeBlockFromDto(dto, shift);
+        shift.excludeBlock(
+    writeMapper.toStart(dto),
+    writeMapper.toEnd(dto),
+    writeMapper.toReason(dto)
+);
+
+
+
+
         Shift updated = repository.save(shift);
 
         return readMapper.toReadDto(updated);
@@ -185,8 +193,12 @@ public class ShiftApplicationService implements ShiftUseCase {
                         .withResourceId(shiftId.value())
                         .build()
         );
+        boolean canAccommodate = shift.canAccommodateAppointment(
+    writeMapper.toAppointmentStart(dto),
+    writeMapper.toAppointmentEnd(dto)
+);
+       return  canAccommodate;
 
-        return writeMapper.canAccommodateFromDto(dto, shift);
     }
 
 
@@ -210,8 +222,15 @@ public class ShiftApplicationService implements ShiftUseCase {
                        .build()
         );
 
-        writeMapper.rescheduleFromDto(dto,shift);
-        Shift updated = repository.save(shift);
+
+shift.reschedule(
+    writeMapper.toNewDate(dto),
+    writeMapper.toNewStart(dto),
+    writeMapper.toNewEnd(dto),
+    writeMapper.toAuthorization(dto)
+); 
+
+Shift updated = repository.save(shift);
 
         return readMapper.toReadDto(updated);
     }

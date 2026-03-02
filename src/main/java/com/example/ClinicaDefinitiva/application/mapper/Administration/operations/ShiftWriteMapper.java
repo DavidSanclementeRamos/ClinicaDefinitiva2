@@ -10,42 +10,46 @@ import com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftT
 import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
 import com.example.ClinicaDefinitiva.domain.administration.operations.service.ShiftAssignmentService;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ShiftWriteMapper {
 
-    
-    
-
-
-    // Actualización: excluir bloque dentro de turno
-    public void excludeBlockFromDto(ExcludedBlockDto dto, Shift shift) {
-        shift.excludeBlock(
-                dto.start(),
-                dto.end(),
-                dto.reason()
-        );
+    public LocalTime toStart(ExcludedBlockDto dto) {
+        return dto.start();
     }
 
-    // Actualización: reagendar turno
-    public void rescheduleFromDto(RescheduleShiftDto dto, Shift shift) {
-        shift.reschedule(
-                dto.newDate(),
-                dto.newStart(),
-                dto.newEnd(),
-                dto.hasAuthorization()
-        );
+    public LocalTime toEnd(ExcludedBlockDto dto) {
+        return dto.end();
     }
 
-    
+    public String toReason(ExcludedBlockDto dto) {
+        return dto.reason();
+    }
 
-    // Verificación: puede acomodar cita
-    public boolean canAccommodateFromDto(CanAccommodateAppointmentDto dto, Shift shift) {
-        return shift.canAccommodateAppointment(
-                dto.appointmentStart(),
-                dto.appointmentEnd()
-        );
+    public LocalDate toNewDate(RescheduleShiftDto dto) {
+        return dto.newDate();
+    }
+
+    public LocalTime toNewStart(RescheduleShiftDto dto) {
+        return dto.newStart();
+    }
+
+    public LocalTime toNewEnd(RescheduleShiftDto dto) {
+        return dto.newEnd();
+    }
+
+    public boolean toAuthorization(RescheduleShiftDto dto) {
+        return dto.hasAuthorization();
+    }
+
+    public LocalDateTime toAppointmentStart(CanAccommodateAppointmentDto dto) {
+        return dto.appointmentStart();
+    }
+
+    public LocalDateTime toAppointmentEnd(CanAccommodateAppointmentDto dto) {
+        return dto.appointmentEnd();
     }
 }
