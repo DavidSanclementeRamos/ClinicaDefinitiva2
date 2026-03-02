@@ -19,7 +19,7 @@ class ShiftTest {
 
     @Test
     void shouldCreateValidShift() {
-        Shift shift = Shift.create(shiftId, dentistId,
+        Shift shift = Shift.create( dentistId,
                 LocalDate.now().plusDays(1),
                 LocalTime.of(8, 0),
                 LocalTime.of(12, 0),
@@ -32,7 +32,7 @@ class ShiftTest {
     @Test
     void shouldThrowExceptionWhenInvalidTimeRange() {
         assertThrows(BusinessRuleViolationException.class,
-            () -> Shift.create(shiftId, dentistId,
+            () -> Shift.create( dentistId,
                     LocalDate.now(),
                     LocalTime.of(12, 0),
                     LocalTime.of(10, 0),
@@ -41,7 +41,7 @@ class ShiftTest {
 
     @Test
     void shouldExcludeBlockWithinShift() {
-        Shift shift = Shift.create(shiftId, dentistId,
+        Shift shift = Shift.create( dentistId,
                 LocalDate.now().plusDays(1),
                 LocalTime.of(8, 0),
                 LocalTime.of(12, 0),
@@ -55,7 +55,7 @@ class ShiftTest {
 
     @Test
     void shouldNotAccommodateAppointmentOverlappingExcludedBlock() {
-        Shift shift = Shift.create(shiftId, dentistId,
+        Shift shift = Shift.create( dentistId,
                 LocalDate.now().plusDays(1),
                 LocalTime.of(8, 0),
                 LocalTime.of(12, 0),
@@ -72,13 +72,13 @@ class ShiftTest {
 
     @Test
     void shouldDetectOverlapBetweenShifts() {
-        Shift shift1 = Shift.create(shiftId, dentistId,
+        Shift shift1 = Shift.create( dentistId,
                 LocalDate.now().plusDays(1),
                 LocalTime.of(8, 0),
                 LocalTime.of(12, 0),
                 ShiftType.TRAINING);
 
-        Shift shift2 = Shift.create(ShiftId.from(200L), dentistId,
+        Shift shift2 = Shift.create(dentistId,
                 LocalDate.now().plusDays(1),
                 LocalTime.of(11, 0),
                 LocalTime.of(13, 0),
@@ -89,7 +89,7 @@ class ShiftTest {
 
     @Test
     void shouldCancelShiftWithReason() {
-        Shift shift = Shift.create(shiftId, dentistId,
+        Shift shift = Shift.create( dentistId,
                 LocalDate.now().plusDays(1),
                 LocalTime.of(8, 0),
                 LocalTime.of(12, 0),
@@ -103,7 +103,7 @@ class ShiftTest {
 
     @Test
     void shouldCompleteShiftSuccessfully() {
-        Shift shift = Shift.create(shiftId, dentistId,
+        Shift shift = Shift.create( dentistId,
                 LocalDate.now().plusDays(1),
                 LocalTime.of(8, 0),
                 LocalTime.of(12, 0),
@@ -116,7 +116,7 @@ class ShiftTest {
 
     @Test
     void shouldThrowExceptionWhenCompletingCancelledShift() {
-        Shift shift = Shift.create(shiftId, dentistId,
+        Shift shift = Shift.create( dentistId,
                 LocalDate.now().plusDays(1),
                 LocalTime.of(8, 0),
                 LocalTime.of(12, 0),
