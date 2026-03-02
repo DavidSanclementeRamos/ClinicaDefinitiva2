@@ -10,9 +10,16 @@ import com.example.ClinicaDefinitiva.application.portsInput.actor.DentistUseCase
 import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
+import com.example.ClinicaDefinitiva.domain.actor.vo.Age;
+import com.example.ClinicaDefinitiva.domain.actor.vo.BloodType;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DateOfBirth;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.Document;
+import com.example.ClinicaDefinitiva.domain.actor.vo.FullName;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -157,7 +164,7 @@ public class DentistApplicationService implements DentistUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
             action = ActionCatalog.BasicAction.CREATE)
-    public ReadDentistDto save(CreateDentistDto createDentistDto,
+    public ReadDentistDto save(CreateDentistDto dto,
                                UserIdentityId requesterId,
                                RolId requesterRolId) {
 
@@ -170,7 +177,17 @@ public class DentistApplicationService implements DentistUseCase {
             AuthorizationContext.builder().build()
         );
 
-        Dentist dentist = dentistWriteMapper.fromCreateDto(createDentistDto);
+        Dentist dentist = Dentist.registerDentist(
+    dentistWriteMapper.toPerson(dto),
+    dentistWriteMapper.toSpecialties(dto.specialties()),
+    dentistWriteMapper.toUserIdentityId(dto),
+    dentistWriteMapper.toWorkingHours(dto.workingHoursDto()),
+    dentistWriteMapper.toLastUpdate(dto)
+);
+
+
+
+
         Dentist saved = dentistRepository.save(dentist);
 
         return dentistReadMapper.toReadDto(saved);
@@ -179,7 +196,7 @@ public class DentistApplicationService implements DentistUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadDentistDto updateContactData(UpdateDentistContactDto updateDentistDto,
+    public ReadDentistDto updateContactData(UpdateDentistContactDto dto,
                                             Long id,
                                             UserIdentityId requesterId,
                                             RolId requesterRolId) {
@@ -199,7 +216,10 @@ public class DentistApplicationService implements DentistUseCase {
                 .build()
         );
 
-        dentistWriteMapper.updateContactFromDto(updateDentistDto, dentist);
+        dentist.updateContactData(
+    Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
+    PhoneNumber.of(dto.phoneNumber())
+);
         Dentist updated = dentistRepository.save(dentist);
 
         return dentistReadMapper.toReadDto(updated);
@@ -208,7 +228,7 @@ public class DentistApplicationService implements DentistUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadDentistDto updateSensitiveData(UpdateDentistSensitiveDto updateDentistDto,
+    public ReadDentistDto updateSensitiveData(UpdateDentistSensitiveDto dto,
                                               Long id,
                                               UserIdentityId requesterId,
                                               RolId requesterRolId) {
@@ -228,7 +248,16 @@ public class DentistApplicationService implements DentistUseCase {
                 .build()
         );
 
-        dentistWriteMapper.updateSensitiveFromDto(updateDentistDto, dentist);
+        dentist.updateSensitiveData(
+    Age.of(DateOfBirth.of(dto.dateOfBirth())),
+    BloodType.fromLabel(dto.bloodType()),
+    DateOfBirth.of(dto.dateOfBirth()),
+    Document.of(dto.dni()),
+    dto.documentEPS(),
+    FullName.of(dto.first(), dto.lastName()),
+    dentistWriteMapper.toSpecialties(dto.specialties()),
+    dentistWriteMapper.toWorkingHours(dto.workingHoursDto())
+);
         Dentist updated = dentistRepository.save(dentist);
 
         return dentistReadMapper.toReadDto(updated);

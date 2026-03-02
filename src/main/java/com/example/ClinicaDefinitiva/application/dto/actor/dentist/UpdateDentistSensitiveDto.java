@@ -9,11 +9,8 @@ import java.time.LocalTime;
 public record UpdateDentistSensitiveDto(
        // Long dentistId,
         String specialties,
-        // WorkingHours de horas laborales
-        LocalTime start,
-        LocalTime end,
-        DayOfWeek dayOfWeek,
-        int declaredHoursPerWeek,
+        
+        WorkingHoursDto workingHoursDto,
 
         // Person
         String dni,
