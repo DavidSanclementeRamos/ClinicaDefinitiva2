@@ -152,7 +152,7 @@ public class PatientApplicationService implements PatientUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
             action = ActionCatalog.BasicAction.CREATE)
-    public ReadPatientDto save(CreatePatientDto createPatientDto,
+    public ReadPatientDto save(CreatePatientDto dto,
                                UserIdentityId requesterId,
                                RolId requesterRolId) {
 
@@ -165,7 +165,12 @@ public class PatientApplicationService implements PatientUseCase {
             AuthorizationContext.builder().build()
         );
 
-        Patient patient = writeMapper.fromCreateDto(createPatientDto);
+        Patient patient = Patient.registerPatient(
+            writeMapper.toPerson(dto),
+            writeMapper.toUserIdentityId(dto),
+            writeMapper.toGuardianId(dto)
+        );
+
         Patient saved = patientRepository.save(patient);
 
         return readMapper.toReadDto(saved);
@@ -174,7 +179,7 @@ public class PatientApplicationService implements PatientUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadPatientDto updateContactData(UpdatePatientContactDto updatePatientDto,
+    public ReadPatientDto updateContactData(UpdatePatientContactDto dto,
                                             PatientId id,
                                             UserIdentityId requesterId,
                                             RolId requesterRolId) {
@@ -196,7 +201,10 @@ public class PatientApplicationService implements PatientUseCase {
                 .build()
         );
 
-        writeMapper.updateContactFromDto(updatePatientDto, patient);
+         patient.updatePatientContact(
+            writeMapper.toAddress(dto),
+            writeMapper.toPhoneNumber(dto)
+        );
         Patient updated = patientRepository.save(patient);
 
         return readMapper.toReadDto(updated);
@@ -205,7 +213,7 @@ public class PatientApplicationService implements PatientUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadPatientDto updateSensitiveData(UpdatePatientSensitiveDto updatePatientDto,
+    public ReadPatientDto updateSensitiveData(UpdatePatientSensitiveDto dto,
                                               PatientId id,
                                               UserIdentityId requesterId,
                                               RolId requesterRolId) {
@@ -225,7 +233,15 @@ public class PatientApplicationService implements PatientUseCase {
                 .build()
         );
 
-        writeMapper.updateSensitiveFromDto(updatePatientDto, patient);
+        patient.updateSensitiveData(
+            writeMapper.toAge(dto),
+            writeMapper.toBloodType(dto),
+            writeMapper.toDateOfBirth(dto),
+            writeMapper.toDocument(dto),
+            writeMapper.toDocumentEPS(dto),
+            writeMapper.toFullName(dto)
+        );
+
         Patient updated = patientRepository.save(patient);
 
         return readMapper.toReadDto(updated);
