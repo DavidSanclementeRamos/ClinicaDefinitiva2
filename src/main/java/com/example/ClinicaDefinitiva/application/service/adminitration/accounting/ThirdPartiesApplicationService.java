@@ -187,7 +187,12 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                         .build()
         );
 
-        writeMapper.toUpdate(dto, thirdParty);
+        thirdParty.updateContactInformation(
+    writeMapper.toName(dto),
+    writeMapper.toAddress(dto),
+    writeMapper.toPhoneNumber(dto),
+    writeMapper.toEmail(dto)
+);
         ThirdParties updated = repository.save(thirdParty);
 
         return readMapper.toReadDto(updated);

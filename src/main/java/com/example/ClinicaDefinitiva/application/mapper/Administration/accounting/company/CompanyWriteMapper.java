@@ -24,13 +24,7 @@ public class CompanyWriteMapper {
 
     public Company fromCreateDto(CreateCompanyDto dto){
 
-        Outcome<Email> emailOutcome = Email.of(dto.email());
-        if (emailOutcome.isFailure()) {
-            throw new DomainAggregateException(
-                    VoAccesError.valueOf(""),
-                    EntityContext.COMPANY
-            );
-        }
+        
 
 
         return Company.registerCompany(
@@ -41,7 +35,7 @@ public class CompanyWriteMapper {
                 dto.legalRepresentative(),
                 Address.of(dto.street(),dto.city(),dto.state(),dto.country(),dto.postalCode()),
                 PhoneNumber.of(dto.phoneNumber()),
-                emailOutcome.getValue().get()
+                Email.ofOrThrow(dto.email())
 
         );
 

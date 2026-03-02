@@ -18,43 +18,34 @@ import org.springframework.stereotype.Component;
 @Component
 public class ThirdPartiesWriteMapper {
 
-    public ThirdParties fromCreate(CreateThirdPartyDto dto){
-        Outcome<Email> emailOutcome = Email.of(dto.email());
-        if (emailOutcome.isFailure()) {
-            throw new DomainAggregateException(
-                    VoAccesError.valueOf(""),
-                    EntityContext.COMPANY
-            );
-        }
-
+    public ThirdParties fromCreate(CreateThirdPartyDto dto) {
         return ThirdParties.registerThirdParties(
                 CompanyId.of(dto.companyId()),
                 Name.of(dto.name()),
                 dto.typeDocument(),
                 dto.documentNumber(),
                 TypeThirdParties.valueOf(dto.typeThirdParties()),
-                Address.of(dto.street(),dto.city(),dto.state(),dto.country(),dto.postalCode()),
+                Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
                 PhoneNumber.of(dto.phoneNumber()),
-                emailOutcome.getValue().get()
-
+                Email.ofOrThrow(dto.email()) // uso del nuevo método
         );
     }
 
-    public  void toUpdate(UpdateThirdPartyDto dto, ThirdParties thirdParties){
-        Outcome<Email> emailOutcome = Email.of(dto.email());
-        if (emailOutcome.isFailure()) {
-            throw new DomainAggregateException(
-                    VoAccesError.valueOf(""),
-                    EntityContext.COMPANY
-            );
-        }
-        thirdParties.updateContactInformation(
-                Name.of(dto.name()),
-                Address.of(dto.street(),dto.street(),dto.state(), dto.country(),dto.postalCode()),
-                PhoneNumber.of(dto.phoneNumber()),
-                emailOutcome.getValue().get()
 
-
-                );
+    public Name toName(UpdateThirdPartyDto dto) {
+        return Name.of(dto.name());
     }
+
+    public Address toAddress(UpdateThirdPartyDto dto) {
+        return Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode());
+    }
+
+    public PhoneNumber toPhoneNumber(UpdateThirdPartyDto dto) {
+        return PhoneNumber.of(dto.phoneNumber());
+    }
+
+    public Email toEmail(UpdateThirdPartyDto dto) {
+        return Email.ofOrThrow(dto.email());
+    }
+
 }
