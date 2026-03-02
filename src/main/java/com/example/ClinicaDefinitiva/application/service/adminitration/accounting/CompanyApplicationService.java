@@ -158,7 +158,13 @@ public class CompanyApplicationService implements CompanyUseCase {
                         .build()
         );
 
-        writeMapper.toUpdateContactDto(dto, company);
+         company.updateContactInformation(
+                             writeMapper.toName(dto),
+                    dto.legalRepresentative(),
+                           writeMapper.toAddress(dto),
+                           writeMapper.toPhoneNumber(dto),
+                             writeMapper.toEmail(dto)
+             );
         Company updated = repository.save(company);
 
         return readMapper.toReadDto(updated);
@@ -184,7 +190,14 @@ public class CompanyApplicationService implements CompanyUseCase {
                         .build()
         );
 
-        writeMapper.toUpdateTaxDto(dto, company);
+                    company.updateTaxInformation(
+    writeMapper.toNit(dto),
+    writeMapper.toTaxRegime(dto),
+    writeMapper.toTypePerson(dto),
+    writeMapper.toIncorporationDate(dto)
+);
+
+
         Company updated = repository.save(company);
 
         return readMapper.toReadDto(updated);

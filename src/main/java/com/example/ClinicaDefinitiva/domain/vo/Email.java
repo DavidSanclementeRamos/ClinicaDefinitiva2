@@ -1,7 +1,9 @@
 package com.example.ClinicaDefinitiva.domain.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
+import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
@@ -125,6 +127,19 @@ public final class Email implements Serializable {
 
         return Outcome.ok(new Email(normalized));
     }
+    
+    // Nuevo método para agregados que requieren excepción
+    public static Email ofOrThrow(String email) {
+        Outcome<Email> outcome = of(email);
+        if (outcome.isFailure()) {
+            throw new DomainAggregateException(
+                VoAccesError.valueOf("EMAIL_INVALID"),
+                EntityContext.COMPANY
+            );
+        }
+        return outcome.getValue().get();
+    }
+
 
     public String value() {
         return value;
