@@ -198,8 +198,13 @@ public class LedgerAccountApplicationService implements LedgerAccountUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+         account.updateAccountInformation(
+                           writeMapper.toName(dto),
+                           writeMapper.toRequiresThirdParty(dto),
+                           writeMapper.toRequiresDocument(dto)
+);
 
-        writeMapper.toUpdate(dto, account);
         LedgerAccount updated = ledgerAccountRepository.save(account);
 
         return readMapper.toReadDto(updated);

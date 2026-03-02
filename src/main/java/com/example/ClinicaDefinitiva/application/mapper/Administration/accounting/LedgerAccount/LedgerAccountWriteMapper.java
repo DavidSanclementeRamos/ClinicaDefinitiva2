@@ -21,12 +21,16 @@ public class LedgerAccountWriteMapper {
         );
     }
 
-    public void toUpdate(UpdateLedgerAccountDto dto, LedgerAccount ledgerAccount){
-        ledgerAccount.updateAccountInformation(
-               Name.of( dto.name()),
-                dto.requiresThirdParty(),
-                dto.requiresDocument()
-
-        );
+    public Name toName(UpdateLedgerAccountDto dto) {
+        return Name.of(dto.name());
     }
+
+    public boolean toRequiresThirdParty(UpdateLedgerAccountDto dto) {
+        return dto.requiresThirdParty();
+    }
+
+    public boolean toRequiresDocument(UpdateLedgerAccountDto dto) {
+        return dto.requiresDocument();
+    }
+
 }
