@@ -359,7 +359,10 @@ public class AdministrativeReportApplicationService implements AdministrativeRep
                         .build()
         );
 
-        writeMapper.toUpdateDto(dto, report);
+             report.updateInformation(
+                     writeMapper.toName(dto),
+                     writeMapper.toNotes(dto)
+);
         AdministrativeReport updated = repository.save(report);
 
         return readMapper.toReadDto(updated);

@@ -23,11 +23,15 @@ public class AdministrativeReportWriteMapper {
         );
     }
 
-    public void toUpdateDto(UpdateAdministrativeReportDto dto, AdministrativeReport report){
-         report.updateInformation(
-                Name.of(dto.title()),
-                dto.notes()
-        );
+
+
+     // Actualización: el mapper devuelve objetos de dominio, no invoca métodos del agregado
+    public Name toName(UpdateAdministrativeReportDto dto) {
+        return Name.of(dto.title());
+    }
+
+    public String toNotes(UpdateAdministrativeReportDto dto) {
+        return dto.notes();
     }
 
 
