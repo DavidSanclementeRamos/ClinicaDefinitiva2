@@ -13,8 +13,8 @@ public class LedgerAccountReadMapper {
 
     public ReadLedgerAccountDto toReadDto(LedgerAccount account) {
         return new ReadLedgerAccountDto(
-                account.getId() != null ? account.getId().getValue() : null,
-                account.getCompanyId() != null ? account.getCompanyId().getValue() : null,
+                account.getId().getValue(),
+                account.getCompanyId().getValue(),
                 account.getCode(),
                 account.getName().getValue(),
                 account.getNature().name(),
@@ -32,7 +32,7 @@ public class LedgerAccountReadMapper {
 
     public PageLedgerAccountDto toPageDto(LedgerAccount account) {
         return new PageLedgerAccountDto(
-                account.getId() != null ? account.getId().getValue() : null,
+                account.getId().getValue(),
                 account.getCode(),
                 account.getName().getValue(),
                 account.getNature().name(),
