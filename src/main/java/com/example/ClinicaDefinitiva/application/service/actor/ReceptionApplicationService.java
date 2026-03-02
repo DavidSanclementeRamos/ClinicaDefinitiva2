@@ -120,7 +120,11 @@ public class ReceptionApplicationService implements ReceptionUseCase {
             AuthorizationContext.builder().build()
         );
 
-        Receptionist receptionist = writeMapper.fromCreateDto(dto);
+        Receptionist receptionist = Receptionist.registerReceptionist(
+            writeMapper.toPerson(dto),
+            writeMapper.toUserIdentityId(dto),
+            writeMapper.toSector(dto)
+        );
         Receptionist saved = receptionRepository.save(receptionist);
 
         return readMapper.toReadDto(saved);
@@ -149,7 +153,11 @@ public class ReceptionApplicationService implements ReceptionUseCase {
                 .build()
         );
 
-        writeMapper.updateContactFromDto(dto, receptionist);
+        receptionist.updateContactData(
+            writeMapper.toAddress(dto),
+            writeMapper.toPhoneNumber(dto)
+        );
+
         Receptionist updated = receptionRepository.save(receptionist);
 
         return readMapper.toReadDto(updated);
@@ -178,7 +186,15 @@ public class ReceptionApplicationService implements ReceptionUseCase {
                 .build()
         );
 
-        writeMapper.updateSensitiveFromDto(dto, receptionist);
+        receptionist.updateSensitiveData(
+            writeMapper.toAge(dto),
+            writeMapper.toBloodType(dto),
+            writeMapper.toDateOfBirth(dto),
+            writeMapper.toDocument(dto),
+            writeMapper.toDocumentEPS(dto),
+            writeMapper.toFullName(dto),
+            writeMapper.toSector(dto)
+        );
         Receptionist updated = receptionRepository.save(receptionist);
 
         return readMapper.toReadDto(updated);

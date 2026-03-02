@@ -13,40 +13,60 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReceptionistWriteMapper {
 
-    public Receptionist fromCreateDto(CreateReceptionistDto dto) {
-        return Receptionist.registerReceptionist(
-                Person.of(
-                        Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
-                        Age.of(DateOfBirth.of(dto.dateOfBirth())),
-                        BloodType.fromLabel(dto.bloodType()),
-                        DateOfBirth.of(dto.dateOfBirth()),
-                        Document.of(dto.dni()),
-                        dto.documentEPS(),
-                        FullName.of(dto.first(), dto.lastName()),
-                        PhoneNumber.of(dto.phoneNumber())
-                ),
-                UserIdentityId.from(dto.user()),
-                Sector.fromString(dto.sector())
+    public Person toPerson(CreateReceptionistDto dto) {
+        return Person.of(
+            Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
+            Age.of(DateOfBirth.of(dto.dateOfBirth())),
+            BloodType.fromLabel(dto.bloodType()),
+            DateOfBirth.of(dto.dateOfBirth()),
+            Document.of(dto.dni()),
+            dto.documentEPS(),
+            FullName.of(dto.first(), dto.lastName()),
+            PhoneNumber.of(dto.phoneNumber())
         );
     }
 
-    public void updateSensitiveFromDto(UpdateReceptionistSensitiveDto dto, Receptionist reception) {
-        reception.updateSensitiveData(
-                Age.of(DateOfBirth.of(dto.dateOfBirth())),
-                BloodType.fromLabel(dto.bloodType()),
-                DateOfBirth.of(dto.dateOfBirth()),
-                Document.of(dto.dni()),
-                dto.documentEPS(),
-                FullName.of(dto.first(), dto.lastName()),
-                Sector.fromString(dto.sector())
-        );
+    public UserIdentityId toUserIdentityId(CreateReceptionistDto dto) {
+        return UserIdentityId.from(dto.user());
     }
 
-    public void updateContactFromDto(UpdateReceptionistContactDto dto, Receptionist reception) {
-        reception.updateContactData(
-                Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
-                PhoneNumber.of(dto.phoneNumber())
-        );
+    public Sector toSector(CreateReceptionistDto dto) {
+        return Sector.fromString(dto.sector());
+    }
+
+    public Age toAge(UpdateReceptionistSensitiveDto dto) {
+        return Age.of(DateOfBirth.of(dto.dateOfBirth()));
+    }
+
+    public BloodType toBloodType(UpdateReceptionistSensitiveDto dto) {
+        return BloodType.fromLabel(dto.bloodType());
+    }
+
+    public DateOfBirth toDateOfBirth(UpdateReceptionistSensitiveDto dto) {
+        return DateOfBirth.of(dto.dateOfBirth());
+    }
+
+    public Document toDocument(UpdateReceptionistSensitiveDto dto) {
+        return Document.of(dto.dni());
+    }
+
+    public String toDocumentEPS(UpdateReceptionistSensitiveDto dto) {
+        return dto.documentEPS();
+    }
+
+    public FullName toFullName(UpdateReceptionistSensitiveDto dto) {
+        return FullName.of(dto.first(), dto.lastName());
+    }
+
+    public Sector toSector(UpdateReceptionistSensitiveDto dto) {
+        return Sector.fromString(dto.sector());
+    }
+
+    public Address toAddress(UpdateReceptionistContactDto dto) {
+        return Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode());
+    }
+
+    public PhoneNumber toPhoneNumber(UpdateReceptionistContactDto dto) {
+        return PhoneNumber.of(dto.phoneNumber());
     }
 }
-
