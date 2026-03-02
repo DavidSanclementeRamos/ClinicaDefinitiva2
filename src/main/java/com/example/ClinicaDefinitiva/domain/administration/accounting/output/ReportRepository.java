@@ -14,9 +14,13 @@ import java.util.Optional;
 public interface ReportRepository {
     AdministrativeReport save(AdministrativeReport report);
     Optional<AdministrativeReport> findById(AdministrativeReportId id);
-    Page<AdministrativeReport> findByPeriod(Pageable pageable, LocalDate star, LocalDate end );
-    Page<AdministrativeReport> findByCreator(Pageable pageable, UserIdentityId createdBy);
-    Page<AdministrativeReport> findByStatus(Pageable pageable, ReportStatus status);
+    Page<AdministrativeReport> findByPeriod( LocalDate star, LocalDate end, Pageable pageable );
+    Page<AdministrativeReport> findByCreator( UserIdentityId createdBy, Pageable pageable);
+    Page<AdministrativeReport> findByStatus(String status, Pageable pageable);
     Page<AdministrativeReport> findPublishedReports();
     Page<AdministrativeReport> findDraftReports();
+
+    Page<AdministrativeReport> findAll(Pageable pageable);
+
+
 }
