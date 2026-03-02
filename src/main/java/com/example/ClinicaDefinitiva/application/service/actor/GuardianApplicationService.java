@@ -125,7 +125,7 @@ public class GuardianApplicationService implements GuardianUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.GUARDIAN,
             action = ActionCatalog.BasicAction.CREATE)
-    public ReadGuardianDto save(CreateGuardianDto createGuardianDto,
+    public ReadGuardianDto save(CreateGuardianDto dto,
                                 UserIdentityId requesterId,
                                 RolId requesterRolId) {
 
@@ -137,7 +137,12 @@ public class GuardianApplicationService implements GuardianUseCase {
             AuthorizationContext.builder().build()
         );
 
-        Guardian guardian = writeMapper.fromCreateDto(createGuardianDto);
+          Guardian guardian = Guardian.registerGuardian(
+            writeMapper.toPerson(dto),
+            writeMapper.toUserIdentityId(dto),
+            writeMapper.toTypeGuardian(dto)
+        );
+
         Guardian saved = guardianRepository.save(guardian);
 
         return readMapper.toReadDto(saved);
@@ -146,7 +151,7 @@ public class GuardianApplicationService implements GuardianUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.GUARDIAN,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadGuardianDto updateContactData(UpdateGuardianContactDto updateGuardian,
+    public ReadGuardianDto updateContactData(UpdateGuardianContactDto dto,
                                              GuardianId id,
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
@@ -166,7 +171,11 @@ public class GuardianApplicationService implements GuardianUseCase {
                 .build()
         );
 
-        writeMapper.updateContactFromDto(updateGuardian, guardian);
+         guardian.updateContactData(
+            writeMapper.toAddress(dto),
+            writeMapper.toPhoneNumber(dto)
+        );
+
         Guardian updated = guardianRepository.save(guardian);
 
         return readMapper.toReadDto(updated);
@@ -175,7 +184,7 @@ public class GuardianApplicationService implements GuardianUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.GUARDIAN,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadGuardianDto updateSensitiveData(UpdateGuardianSensitiveDto updateGuardian,
+    public ReadGuardianDto updateSensitiveData(UpdateGuardianSensitiveDto dto,
                                                GuardianId id,
                                                UserIdentityId requesterId,
                                                RolId requesterRolId) {
@@ -194,8 +203,18 @@ public class GuardianApplicationService implements GuardianUseCase {
                 .build()
         ); 
 
-        writeMapper.updateSensitiveFromDto(updateGuardian, guardian);
-        Guardian updated = guardianRepository.save(guardian);
+          guardian.updateSensitiveData(
+            writeMapper.toAge(dto),
+            writeMapper.toBloodType(dto),
+            writeMapper.toDateOfBirth(dto),
+            writeMapper.toDocument(dto),
+            writeMapper.toDocumentEPS(dto),
+            writeMapper.toFullName(dto),
+            writeMapper.toTypeGuardian(dto)
+        );
+
+
+          Guardian updated = guardianRepository.save(guardian);
 
         return readMapper.toReadDto(updated);
     }
