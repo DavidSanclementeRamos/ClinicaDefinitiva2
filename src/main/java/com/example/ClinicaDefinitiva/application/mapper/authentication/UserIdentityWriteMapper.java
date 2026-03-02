@@ -14,39 +14,28 @@ import java.time.Instant;
 @Component
 public class UserIdentityWriteMapper {
 
-    // DTO de creación → dominio
-    public UserIdentity fromCreateDto(CreateUserIdentityDto dto) {
-
-        Outcome<Email> emailOutcome = Email.of(dto.email());
-
-        Outcome<HashedPassword> passwordOutcome = HashedPassword.fromHash(dto.password());
-
-        Outcome<UserIdentityName> userNameOutcome = UserIdentityName.create(dto.name());
-
-
-        return UserIdentity.register(
-                 // se genera nuevo ID
-                emailOutcome.getValue().get(),
-                passwordOutcome.getValue().get(),
-                userNameOutcome.getValue().get(),
-                Instant.now() // fecha de creación
-        );
+    public Outcome<Email> toEmail(CreateUserIdentityDto dto) {
+        return Email.of(dto.email());
     }
 
-    // DTO de actualización → dominio (aplica cambios sobre agregado existente)
-    public void updateFromDto(UpdateUserIdentityDto dto, UserIdentity user) {
-        Outcome<Email> emailOutcome = Email.of(dto.email());
+    public Outcome<HashedPassword> toPassword(CreateUserIdentityDto dto) {
+        return HashedPassword.fromHash(dto.password());
+    }
 
-        Outcome<HashedPassword> passwordOutcome = HashedPassword.fromHash(dto.password());
+    public Outcome<UserIdentityName> toUserName(CreateUserIdentityDto dto) {
+        return UserIdentityName.create(dto.name());
+    }
 
-        Outcome<UserIdentityName> userNameOutcome = UserIdentityName.create(dto.name());
+    public Outcome<Email> toEmail(UpdateUserIdentityDto dto) {
+        return Email.of(dto.email());
+    }
 
-        user.update(
-                userNameOutcome.getValue().get(),
-                emailOutcome.getValue().get(),
-                passwordOutcome.getValue().get(),
-                Instant.now()
-        );
+    public Outcome<HashedPassword> toPassword(UpdateUserIdentityDto dto) {
+        return HashedPassword.fromHash(dto.password());
+    }
+
+    public Outcome<UserIdentityName> toUserName(UpdateUserIdentityDto dto) {
+        return UserIdentityName.create(dto.name());
     }
 }
-
+   
