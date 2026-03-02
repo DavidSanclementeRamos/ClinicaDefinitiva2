@@ -29,7 +29,7 @@ class RolServiceTest {
         Set<Permission> permissions = new HashSet<>();
         permissions.add(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)));
 
-        Rol rol = service.createCustom(RolEnum.RECEPTIONIST, "Custom Role", permissions);
+        Rol rol = service.createCustom(RolEnum.RECEPTIONIST, "Custom Role");
 
         assertEquals("Custom Role", rol.getDescription());
         assertTrue(rol.isEditable());
@@ -45,7 +45,7 @@ class RolServiceTest {
         RolService service = new RolService(repo);
 
         assertThrows(BusinessRuleViolationException.class, () ->
-                service.createCustom(RolEnum.DENTIST, "Duplicate", new HashSet<>()));
+                service.createCustom(RolEnum.DENTIST, "Duplicate"));
     }
 
     @Test
