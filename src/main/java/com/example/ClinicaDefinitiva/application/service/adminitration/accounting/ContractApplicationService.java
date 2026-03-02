@@ -220,8 +220,14 @@ public class ContractApplicationService implements ContractUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+                   contract.updateInformation(
+    writeMapper.toName(dto),
+    writeMapper.toDescription(dto),
+    writeMapper.toOrigin(dto),
+    writeMapper.toCoverageType(dto)
+);
 
-        writeMapper.toUpdateDto(dto, contract);
         Contract updated = contractRepository.save(contract);
 
         return readMapper.toReadDto(updated);

@@ -23,14 +23,21 @@ public class ContractWriteMapper {
         );
     }
 
-    public void toUpdateDto(UpdateContractDto dto, Contract contract){
-        contract.updateInformation(
-                Name.of(dto.name()),
-                dto.description(),
-                dto.origin(),
-                dto.coverageType()
 
-
-        );
+    public Name toName(UpdateContractDto dto) {
+        return Name.of(dto.name());
     }
+
+    public String toDescription(UpdateContractDto dto) {
+        return dto.description();
+    }
+
+    public String toOrigin(UpdateContractDto dto) {
+        return dto.origin();
+    }
+
+    public String toCoverageType(UpdateContractDto dto) {
+        return dto.coverageType();
+    }
+
 }
