@@ -119,13 +119,14 @@ public class RolApplicationService implements RolUseCase {
             throw new BusinessRuleViolationException(RolError.ERR_ROL_UNAUTHORIZED_CREATION, EntityContext.ROL);
         }
 
-        Rol rol = writeMapper.fromCreateDto(dto);
 
-        Rol saved = rolService.createCustom(
-                rol.getRolEnum(),
-                rol.getDescription(),
-                rol.getPermissions()
+        Rol create = rolService.createCustom(
+              RolEnum.valueOf(  dto.rolEnum()),
+                dto.description()
+                
         );
+        
+        Rol saved = repository.save(create);
         return readMapper.toReadDto(saved);
     }
 

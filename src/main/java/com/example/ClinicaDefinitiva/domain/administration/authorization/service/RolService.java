@@ -24,7 +24,7 @@ public class RolService {
         this.rolRepository = rolRepository;
     }
 
-    public Rol createCustom(RolEnum baseType, String description, Set<Permission> permissions) {
+    public Rol createCustom(RolEnum baseType, String description) {
         validateUniqueDescription(description);
         Rol rol = new Rol(
                 baseType,
@@ -34,8 +34,7 @@ public class RolService {
                 true,   // clones son eliminables
                 RolStatus.ACTIVE
         );
-        rol.setPermissions(new HashSet<>(rol.getPermissions()));
-        return rolRepository.save(rol);
+        return rol;
     }
 
     public Rol cloneRole(Rol sourceRole, String newDescription) {
@@ -49,8 +48,7 @@ public class RolService {
                 true,   // clones son eliminables
                 RolStatus.ACTIVE
         );
-        clonedRole.setPermissions(new HashSet<>(sourceRole.getPermissions()));
-        return rolRepository.save(clonedRole);
+        return clonedRole;
     }
 
     private void validateUniqueDescription(String description) {
