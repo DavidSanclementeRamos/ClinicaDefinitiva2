@@ -25,12 +25,15 @@ public class JournalEntryWriteMapper {
         );
     }
 
-    public void toUpdateDto(UpdateJournalEntryDto dto, JournalEntry journalEntry){
-        journalEntry.updateInformation(
-                dto.description(),
-                dto.documentNumber()
-        );
+
+    public String toDescription(UpdateJournalEntryDto dto) {
+        return dto.description();
     }
+
+    public String toDocumentNumber(UpdateJournalEntryDto dto) {
+        return dto.documentNumber();
+    }
+
 
     public JournalEntryLine toAddLineDto(AddJournalEntryLineDto dto){
         return  JournalEntryLine.of(

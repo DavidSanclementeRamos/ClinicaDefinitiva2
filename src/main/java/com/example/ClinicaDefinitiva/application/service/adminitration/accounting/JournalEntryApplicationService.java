@@ -259,7 +259,10 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                         .build()
         );
 
-        writeMapper.toUpdateDto(dto, entry);
+        entry.updateInformation(
+    writeMapper.toDescription(dto),
+    writeMapper.toDocumentNumber(dto)
+);
         JournalEntry updated = journalEntryRepository.save(entry);
 
         return readMapper.toReadDto(updated);
