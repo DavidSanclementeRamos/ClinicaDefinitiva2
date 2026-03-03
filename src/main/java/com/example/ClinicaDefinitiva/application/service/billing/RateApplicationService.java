@@ -278,55 +278,7 @@ public class RateApplicationService implements RateUseCase {
         return readMapper.toDto(saved);
     }
 
-    @Override
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
-            action = ActionCatalog.BasicAction.UPDATE)
-    public ReadRateDto updateAmount(RateId id,
-                                    BigDecimal newAmount,
-                                    LocalDateTime validFrom,
-                                    UserIdentityId requesterId,
-                                    RolId requesterRolId) {
-
-        Rate currentRate = rateRepository.findById(id)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        RateError.ERR_RATE_NOT_FOUND,
-                        EntityContext.RATE
-                ));
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .withResourceId(id.getValue())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        // End validity of current rate
-        currentRate.endValidityAt(validFrom);
-        rateRepository.save(currentRate);
-
-        // Create new rate with new amount
-        Rate newRate = Rate(
-                currentRate.getServiceId(),
-                Price.of(newAmount, currentRate.getAmount().getCurrency()),
-                currentRate.getPayerType(),
-                currentRate.getContractId()
-        );
-
-        Rate savedNewRate = rateRepository.save(newRate);
-        return readMapper.toDto(savedNewRate);
-    }
+   
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,

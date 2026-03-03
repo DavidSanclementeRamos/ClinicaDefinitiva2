@@ -85,14 +85,7 @@ public interface RateUseCase {
             RolId requesterRolId
     );
 
-    ReadRateDto updateAmount(
-            RateId id,
-            java.math.BigDecimal newAmount,
-            LocalDateTime validFrom,
-            UserIdentityId requesterId,
-            RolId requesterRolId
-    );
-
+   
     ReadRateDto endValidity(
             RateId id,
             LocalDateTime endDate,
