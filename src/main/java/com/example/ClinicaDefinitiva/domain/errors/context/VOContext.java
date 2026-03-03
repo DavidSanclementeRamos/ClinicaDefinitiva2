@@ -21,7 +21,8 @@ public enum VOContext  implements DomainContext {
     CLINICAL_TREATMENTS("CLINICAL_TREATMENTS"),//
     SCHEDULE("SCHEDULE"),
     OPERATIONS("OPERATIONS"),
-    ACTORS("ACTORS");
+    ACTORS("ACTORS"),
+    PAYMENT("PAYMENT");
 
     private final String code;
 

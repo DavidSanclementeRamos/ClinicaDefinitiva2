@@ -23,7 +23,8 @@ public enum EntityContext implements DomainContext {
     INVOICE(CodeEntity.INV19),
     ASSIGNMENT(CodeEntity.ASS20),
     TREATMENT(CodeEntity.TRA21),
-    RATE(CodeEntity.RAT22);
+    RATE(CodeEntity.RAT22),
+    PAYMENT(CodeEntity.PAY23);
 
 
 
