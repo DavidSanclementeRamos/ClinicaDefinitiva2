@@ -19,6 +19,7 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.Authori
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.output.ProvidedServiceRepository;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceRatePolicy;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
@@ -55,21 +56,19 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
     private final ProvidedServiceReadMapper readMapper;
     private final ProvidedServiceWriteMapper writeMapper;
     private final AuthorizationService authorizationService;
+    private final ServiceRatePolicy serviceRatePolicy;
 
-    public ProvidedServiceApplicationService(
-            ProvidedServiceRepository serviceRepository,
-            DentistRepository dentistRepository,
-            ReceptionRepository receptionRepository,
-            ProvidedServiceReadMapper readMapper,
-            ProvidedServiceWriteMapper writeMapper,
-            AuthorizationService authorizationService) {
+    public ProvidedServiceApplicationService(ProvidedServiceRepository serviceRepository, DentistRepository dentistRepository, ReceptionRepository receptionRepository, ProvidedServiceReadMapper readMapper, ProvidedServiceWriteMapper writeMapper, AuthorizationService authorizationService, ServiceRatePolicy serviceRatePolicy) {
         this.serviceRepository = serviceRepository;
         this.dentistRepository = dentistRepository;
         this.receptionRepository = receptionRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
         this.authorizationService = authorizationService;
+        this.serviceRatePolicy = serviceRatePolicy;
     }
+
+    
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PROVIDED_SERVICE,
@@ -238,8 +237,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
 
-        ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new ProvidedServiceNotFoundException("No fount"));
+       
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -259,6 +257,16 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                     VOContext.AUTHORIZATION
             );
         }
+         ProvidedService service = serviceRepository.findById(id)
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("Not found"));
+                
+
+        Price newRate = writeMapper.toRate(dto);
+
+        // Validar con la política antes de aplicar el cambio
+        serviceRatePolicy.validateRateChange(service.getBaseRate(), newRate);
+
+
 
         service.updateRate(
                 writeMapper.toRate(dto),

@@ -6,7 +6,7 @@ import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.service.ServiceRatePolicy;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceRatePolicy;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import java.util.Map;
 
