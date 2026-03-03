@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.mapper.billing;
+package com.example.ClinicaDefinitiva.application.mapper.billing.rate;
 
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.CreateRateDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
