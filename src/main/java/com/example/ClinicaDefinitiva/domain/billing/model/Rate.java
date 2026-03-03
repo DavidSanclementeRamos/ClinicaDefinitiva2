@@ -4,6 +4,8 @@ package com.example.ClinicaDefinitiva.domain.billing.model;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
+import com.example.ClinicaDefinitiva.domain.billing.PayerType;
+import com.example.ClinicaDefinitiva.domain.billing.RateStatus;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.RateError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
@@ -33,89 +35,85 @@ import java.util.Objects;
  */
 public final class Rate {
 
-
     private final RateId id;
-
-
     private final ServiceId serviceId;
-
-
     private final PayerType payerType;
     private final ContractId contractId;
-
-
     private final Price amount;
-
-
     private final LocalDateTime validFrom;
-    private final LocalDateTime validTo;
+    private LocalDateTime validTo;
 
-
-    private boolean active;
-
+    private RateStatus status;
 
     private Rate(Builder builder) {
         this.id = builder.id;
-        this.serviceId = Objects.requireNonNull(builder.serviceId, "Service no puede ser nulo");
-        this.amount = Objects.requireNonNull(builder.amount, "Amount no puede ser nulo");
-        this.payerType = Objects.requireNonNull(builder.payerType, "PayerType no puede ser nulo");
-        this.validFrom = Objects.requireNonNull(builder.validFrom, "ValidFrom no puede ser nulo");
+        this.serviceId = builder.serviceId;
+        this.amount = builder.amount;
+        this.payerType = builder.payerType;
+        this.validFrom = builder.validFrom;
         this.validTo = builder.validTo;
         this.contractId = builder.contractId;
-        this.active = builder.active;
+        this.status = builder.status != null ? builder.status : RateStatus.ACTIVE;
 
         validateBusinessRules();
     }
 
-
-
-    public static Rate create(
-            ServiceId serviceId,
-            Price amount,
-            PayerType payerType,
-            ContractId contractId,
-            LocalDateTime validTo
-            ) {
-
+    public static Rate create(ServiceId serviceId,
+                              Price amount,
+                              PayerType payerType,
+                              ContractId contractId) {
         return builder()
                 .serviceId(serviceId)
                 .amount(amount)
                 .payerType(payerType)
                 .contractId(contractId)
                 .validFrom(LocalDateTime.now())
-                .active(true)
                 .build();
     }
-    
-    
 
     public static Builder builder() {
         return new Builder();
     }
 
-
     private void validateBusinessRules() {
-
-        // Validación de vigencia
         if (validTo != null && validTo.isBefore(validFrom)) {
             throw new BusinessRuleViolationException(
                     RateError.ERR_RATE_INVALID_VALIDITY_RANGE,
                     EntityContext.RATE
-
             );
         }
     }
 
+    /** Finaliza la vigencia de la tarifa. */
+    public void endValidityAt(LocalDateTime endDate) {
+        if (endDate.isBefore(validFrom)) {
+            throw new BusinessRuleViolationException(
+                    RateError.ERR_RATE_INVALID_VALIDITY_RANGE,
+                    EntityContext.RATE
+            );
+        }
+        this.validTo = endDate;
+        this.status = RateStatus.EXPIRED;
+    }
+
+    /** Marca la tarifa como reemplazada por otra. */
+    public void markAsReplaced() {
+        this.status = RateStatus.REPLACED;
+    }
+
+    /** Desactiva la tarifa manualmente (ej. baja administrativa). */
+    public void deactivate() {
+        this.status = RateStatus.INACTIVE;
+    }
 
     /** Verifica si la tarifa es válida en una fecha específica (RN-RATE-002). */
     public boolean isValidAt(LocalDateTime when) {
-        if (!active) return false;
+        if (status != RateStatus.ACTIVE) return false;
         if (when.isBefore(validFrom)) return false;
         if (validTo != null && when.isAfter(validTo)) return false;
         return true;
     }
 
-    /** Garantiza que la tarifa sea válida en una fecha, lanza excepción si no lo es. */
     public void ensureValidAt(LocalDateTime when) {
         if (!isValidAt(when)) {
             throw new BusinessRuleViolationException(
@@ -125,31 +123,16 @@ public final class Rate {
         }
     }
 
-    /** Desactiva la tarifa (cuando es reemplazada por otra). */
-    public void deactivate() {
-        this.active = false;
-    }
-
-    /** Finaliza la vigencia de la tarifa. */
-    public void endValidityAt(LocalDateTime endDate) {
-        if (endDate.isBefore(validFrom)) {
-            throw new BusinessRuleViolationException(
-                    RateError.ERR_RATE_INVALID_VALIDITY_RANGE,
-                    EntityContext.RATE
-
-            );
-        }
-
-    }
-
-
-    public boolean isActive() { return active; }
+    // Consultas semánticas
+    public boolean isActive() { return status == RateStatus.ACTIVE; }
+    public boolean isExpired() { return status == RateStatus.EXPIRED; }
+    public boolean isReplaced() { return status == RateStatus.REPLACED; }
+    public boolean isInactive() { return status == RateStatus.INACTIVE; }
     public boolean isCurrentlyValid() { return isValidAt(LocalDateTime.now()); }
-    public boolean hasExpired() { return validTo != null && LocalDateTime.now().isAfter(validTo); }
     public boolean isIndefinite() { return validTo == null; }
     public boolean isForEPS() { return payerType == PayerType.EPS; }
 
-
+    // Getters
     public RateId getId() { return id; }
     public ServiceId getServiceId() { return serviceId; }
     public PayerType getPayerType() { return payerType; }
@@ -157,7 +140,7 @@ public final class Rate {
     public Price getAmount() { return amount; }
     public LocalDateTime getValidFrom() { return validFrom; }
     public LocalDateTime getValidTo() { return validTo; }
-
+    public RateStatus getStatus() { return status; }
 
     public static class Builder {
         private RateId id;
@@ -167,7 +150,7 @@ public final class Rate {
         private ContractId contractId;
         private LocalDateTime validFrom;
         private LocalDateTime validTo;
-        private boolean active = true;
+        private RateStatus status = RateStatus.ACTIVE;
 
         public Builder id(RateId id) { this.id = id; return this; }
         public Builder serviceId(ServiceId serviceId) { this.serviceId = serviceId; return this; }
@@ -176,13 +159,12 @@ public final class Rate {
         public Builder contractId(ContractId contractId) { this.contractId = contractId; return this; }
         public Builder validFrom(LocalDateTime validFrom) { this.validFrom = validFrom; return this; }
         public Builder validTo(LocalDateTime validTo) { this.validTo = validTo; return this; }
-        public Builder active(boolean active) { this.active = active; return this; }
+        public Builder status(RateStatus status) { this.status = status; return this; }
 
         public Rate build() { return new Rate(this); }
     }
 
+   
 
-    public enum PayerType {
-        EPS, PRIVATE, INSURANCE, ARL, SOAT, PREPAID
-    }
+    
 }
