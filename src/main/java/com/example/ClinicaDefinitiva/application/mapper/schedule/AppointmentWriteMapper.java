@@ -11,43 +11,64 @@ import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.service.AppointmentSchedulingService;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentCompletion;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
+import java.time.LocalDateTime;
+import org.springframework.stereotype.Component;
 
 
 
+@Component
 public class AppointmentWriteMapper {
 
-    public Appointment fromCreateDto(CreateAppointmentDto dto, AppointmentSchedulingService service) {
-         return service.scheduleAppointment(
-                 DentistId.of(dto.dentistId()),
-                 PatientId.of( dto.patientId()),
-                 dto.start(),
-                 dto.end(),
-                 AppointmentType.valueOf( dto.type()),
-                 dto.reason(),
-                 ServiceId.of(dto.serviceId())
-         );
-
-
-
+    public DentistId toDentistId(CreateAppointmentDto dto) {
+        return DentistId.of(dto.dentistId());
     }
 
-    public  void updateFromDto(Appointment appointment ,AppointmentSchedulingService service, UpdateAppointmentDto dto) {
-
-         service.rescheduleAppointment(
-                appointment,
-                DentistId.of(dto.dentistId()),
-                PatientId.of( dto.patientId()),
-                dto.newStart(),
-                dto.newEnd()
-        );
-
+    public PatientId toPatientId(CreateAppointmentDto dto) {
+        return PatientId.of(dto.patientId());
     }
 
+    public LocalDateTime toStart(CreateAppointmentDto dto) {
+        return dto.start();
+    }
+
+    public LocalDateTime toEnd(CreateAppointmentDto dto) {
+        return dto.end();
+    }
+
+    public AppointmentType toType(CreateAppointmentDto dto) {
+        return AppointmentType.valueOf(dto.type());
+    }
+
+    public String toReason(CreateAppointmentDto dto) {
+        return dto.reason();
+    }
+
+    public ServiceId toServiceId(CreateAppointmentDto dto) {
+        return ServiceId.of(dto.serviceId());
+    }
+
+    // Métodos para Update DTO
+    public DentistId toDentistId(UpdateAppointmentDto dto) {
+        return DentistId.of(dto.dentistId());
+    }
+
+    public PatientId toPatientId(UpdateAppointmentDto dto) {
+        return PatientId.of(dto.patientId());
+    }
+
+    public LocalDateTime toNewStart(UpdateAppointmentDto dto) {
+        return dto.newStart();
+    }
+
+    public LocalDateTime toNewEnd(UpdateAppointmentDto dto) {
+        return dto.newEnd();
+    }
+
+    // Mapper para AppointmentCompletion
     public AppointmentCompletion toCompletion(AppointmentCompletionDTO dto) {
         return new AppointmentCompletion(
-                 ServiceDuration.of(dto.actualDurationMinutes()),
-                 dto.clinicalNotes()
+            ServiceDuration.of(dto.actualDurationMinutes()),
+            dto.clinicalNotes()
         );
     }
 }
-
