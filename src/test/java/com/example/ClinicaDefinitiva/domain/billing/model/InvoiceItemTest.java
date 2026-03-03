@@ -41,7 +41,6 @@ class InvoiceItemTest {
     @Test
     void shouldCreateInvoiceItemFromRateSnapshotSuccessfully() {
         InvoiceItem item = InvoiceItem.fromRateSnapshot(
-                InvoiceItemId.of(2L),
                 ServiceId.of(20L),
                 "SRV002",
                 "Tratamiento dental",

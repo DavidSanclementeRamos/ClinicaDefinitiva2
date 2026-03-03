@@ -118,7 +118,6 @@ class InvoiceDomainServiceTest {
         when(rateRepository.findActiveRateForService(any(), any())).thenReturn(Optional.of(rate));
 
         InvoiceItem item = InvoiceItem.fromRateSnapshot(
-                InvoiceItemId.of(1L),
                 ServiceId.of(100L),
                 "SRV001",
                 "Consulta",
@@ -146,7 +145,6 @@ class InvoiceDomainServiceTest {
         when(rateRepository.findActiveRateForService(any(), any())).thenReturn(Optional.empty());
 
         InvoiceItem item = InvoiceItem.fromRateSnapshot(
-                InvoiceItemId.of(2L),
                 ServiceId.of(200L),
                 "SRV002",
                 "Tratamiento",
@@ -182,7 +180,6 @@ class InvoiceDomainServiceTest {
         when(rateRepository.findActiveRateForService(any(), any())).thenReturn(Optional.of(rate));
 
         InvoiceItem item = InvoiceItem.fromRateSnapshot(
-                InvoiceItemId.of(3L),
                 ServiceId.of(300L),
                 "SRV003",
                 "Radiografía",
