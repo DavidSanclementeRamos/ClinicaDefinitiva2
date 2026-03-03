@@ -325,7 +325,8 @@ public class InvoiceApplicationService implements InvoiceUseCase {
             writeMapper.toNotes(dto),
             writeMapper.toDueDate(dto)
         );
-
+        
+        invoiceDomainService.validateRates(invoice, dto.dueDate());
         Invoice saved = invoiceRepository.save(invoice);
 
         return readMapper.toDto(saved);
@@ -368,6 +369,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
 
         // RN-INVOICE-007: Validate institutional contract
         invoiceDomainService.validateInstitutionalContract(invoice);
+        invoiceDomainService.validateRates(invoice, dto.dueDate());
 
         Invoice saved = invoiceRepository.save(invoice);
 
