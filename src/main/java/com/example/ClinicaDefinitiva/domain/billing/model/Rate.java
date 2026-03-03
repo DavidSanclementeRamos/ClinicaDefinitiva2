@@ -73,7 +73,9 @@ public final class Rate {
             ServiceId serviceId,
             Price amount,
             PayerType payerType,
-            ContractId contractId) {
+            ContractId contractId,
+            LocalDateTime validTo
+            ) {
 
         return builder()
                 .serviceId(serviceId)
@@ -84,6 +86,8 @@ public final class Rate {
                 .active(true)
                 .build();
     }
+    
+    
 
     public static Builder builder() {
         return new Builder();

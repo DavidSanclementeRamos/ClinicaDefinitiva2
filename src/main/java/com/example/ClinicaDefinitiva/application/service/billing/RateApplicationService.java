@@ -5,8 +5,8 @@ import com.example.ClinicaDefinitiva.application.dto.billing.rate.CreateRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.PageRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.ReadRateDto;
 import com.example.ClinicaDefinitiva.application.exceptions.RateNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.billing.RateReadMapper;
-import com.example.ClinicaDefinitiva.application.mapper.billing.RateWriteMapper;
+import com.example.ClinicaDefinitiva.application.mapper.billing.rate.RateReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.billing.rate.RateWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.billing.RateUseCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
@@ -264,7 +264,15 @@ public class RateApplicationService implements RateUseCase {
         // RN-RATE-003: Check for overlapping rates
         //validateNoOverlappingRates(dto);
 
-        Rate rate = writeMapper.fromCreateDto(dto);
+         Rate rate = Rate.create(
+                writeMapper.toServiceId(dto),
+                writeMapper.toAmount(dto),
+
+                writeMapper.toPayerType(dto),
+                writeMapper.toContractId(dto),
+                writeMapper.toValidTo(dto)
+         );
+
         Rate saved = rateRepository.save(rate);
 
         return readMapper.toDto(saved);
@@ -309,7 +317,7 @@ public class RateApplicationService implements RateUseCase {
         rateRepository.save(currentRate);
 
         // Create new rate with new amount
-        Rate newRate = Rate.create(
+        Rate newRate = Rate(
                 currentRate.getServiceId(),
                 Price.of(newAmount, currentRate.getAmount().getCurrency()),
                 currentRate.getPayerType(),
