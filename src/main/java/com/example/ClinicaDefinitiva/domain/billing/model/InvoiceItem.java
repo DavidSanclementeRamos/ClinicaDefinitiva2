@@ -49,7 +49,6 @@ public final class InvoiceItem {
 
 
     public static InvoiceItem fromRateSnapshot(
-        InvoiceItemId id,
         ServiceId serviceId,
         String serviceCode,
         String serviceDescription,
@@ -62,7 +61,6 @@ public final class InvoiceItem {
     Objects.requireNonNull(unitPrice, "UnitPrice no puede ser nulo");
 
     return builder()
-            .id(id)
             .serviceId(serviceId)
             .serviceCode(serviceCode)
             .serviceDescription(serviceDescription)

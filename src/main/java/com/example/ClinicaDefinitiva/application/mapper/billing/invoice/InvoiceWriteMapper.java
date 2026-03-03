@@ -13,6 +13,9 @@ import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceItemFactoryService;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,61 +24,86 @@ import org.springframework.stereotype.Component;
 @Component
 public class InvoiceWriteMapper {
 
-    /**
-     * Convierte CreateParticularInvoiceDto a Invoice (domain)
-     */
-    public Invoice fromCreateParticularDto(CreateParticularInvoiceDto dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        return Invoice.createParticular(
-                PatientId.of(dto.patientId()),
-                ProviderId.of(dto.providerId()),
-                DentistId.of(dto.dentistId()),
-                CurrencyCode.of(dto.currency() != null ? dto.currency() : "COP"),
-                dto.notes() != null ? Notes.of(dto.notes()) : null,
-                dto.dueDate()
-        );
+    public PatientId toPatientId(CreateParticularInvoiceDto dto) {
+        return PatientId.of(dto.patientId());
     }
 
-    /**
-     * Convierte CreateInstitutionalInvoiceDto a Invoice (domain)
-     */
-    public Invoice fromCreateInstitutionalDto(CreateInstitutionalInvoiceDto dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        return Invoice.createInstitutional(
-                ContractId.of(dto.contractId()),
-                ProviderId.of(dto.providerId()),
-                DentistId.of(dto.dentistId()),
-                CurrencyCode.of(dto.currency() != null ? dto.currency() : "COP"),
-                dto.notes() != null ? Notes.of(dto.notes()) : null,
-                dto.dueDate()
-        );
+    public ProviderId toProviderId(CreateParticularInvoiceDto dto) {
+        return ProviderId.of(dto.providerId());
     }
 
-    /**
-     * Convierte AddInvoiceItemDto a InvoiceItem usando el factory service
-     */
-    public InvoiceItem toInvoiceItem(AddInvoiceItemDto dto,
-                                     InvoiceItemFactoryService factoryService) {
-        if (dto == null) {
-            return null;
-        }
-
-        // Por ahora retornamos la estructura básica.
-        // El ApplicationService completará con el factory.
-        return InvoiceItem.builder()
-                .id(InvoiceItemId.of(dto.item()))
-                .serviceId(ServiceId.of(dto.serviceId()))
-                .rateId(RateId.of(dto.rateId()))
-                .quantity(Quantity.of(dto.quantity()))
-                .performedAt(dto.performedAt())
-                .build();
+    public DentistId toDentistId(CreateParticularInvoiceDto dto) {
+        return DentistId.of(dto.dentistId());
     }
+
+    public CurrencyCode toCurrency(CreateParticularInvoiceDto dto) {
+        return CurrencyCode.of(dto.currency());
+    }
+
+    public Notes toNotes(CreateParticularInvoiceDto dto) {
+        return Notes.of(dto.notes());
+    }
+
+    public LocalDateTime toDueDate(CreateParticularInvoiceDto dto) {
+        return dto.dueDate();
+    }
+
+    public ContractId toContractId(CreateInstitutionalInvoiceDto dto) {
+        return ContractId.of(dto.contractId());
+    }
+
+    public ProviderId toProviderId(CreateInstitutionalInvoiceDto dto) {
+        return ProviderId.of(dto.providerId());
+    }
+
+    public DentistId toDentistId(CreateInstitutionalInvoiceDto dto) {
+        return DentistId.of(dto.dentistId());
+    }
+
+    public CurrencyCode toCurrency(CreateInstitutionalInvoiceDto dto) {
+        return CurrencyCode.of(dto.currency());
+    }
+
+    public Notes toNotes(CreateInstitutionalInvoiceDto dto) {
+        return Notes.of(dto.notes());
+    }
+
+    public LocalDateTime toDueDate(CreateInstitutionalInvoiceDto dto) {
+        return dto.dueDate();
+    }
+
+    public InvoiceItemId toInvoiceItemId(AddInvoiceItemDto dto) {
+        return InvoiceItemId.of(dto.item());
+    }
+
+    public ServiceId toServiceId(AddInvoiceItemDto dto) {
+        return ServiceId.of(dto.serviceId());
+    }
+
+    public RateId toRateId(AddInvoiceItemDto dto) {
+        return RateId.of(dto.rateId());
+    }
+
+    public Quantity toQuantity(AddInvoiceItemDto dto) {
+        return Quantity.of(dto.quantity());
+    }
+
+    public LocalDateTime toPerformedAt(AddInvoiceItemDto dto) {
+        return dto.performedAt();
+    }
+   
+
+    public String toServiceCode(AddInvoiceItemDto dto) {
+        return dto.serviceCode();
+    }
+
+    public String toServiceDescription(AddInvoiceItemDto dto) {
+        return dto.serviceDescription();
+    }
+    
+    public Price toUnitPrice(AddInvoiceItemDto dto) {
+        return Price.of(dto.unitPrice(), dto.currency());
+    }
+
+
 }
-
-

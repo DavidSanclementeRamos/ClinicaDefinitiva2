@@ -24,12 +24,14 @@ import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceDomainService;
 import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceItemFactoryService;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceCode;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.portsOutput.InvoiceRepository;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Currency;
 
 
 @Service
@@ -314,7 +317,15 @@ public class InvoiceApplicationService implements InvoiceUseCase {
             );
         }
 
-        Invoice invoice = writeMapper.fromCreateParticularDto(dto);
+        Invoice invoice = Invoice.createParticular(
+            writeMapper.toPatientId(dto),
+            writeMapper.toProviderId(dto),
+            writeMapper.toDentistId(dto),
+            writeMapper.toCurrency(dto),
+            writeMapper.toNotes(dto),
+            writeMapper.toDueDate(dto)
+        );
+
         Invoice saved = invoiceRepository.save(invoice);
 
         return readMapper.toDto(saved);
@@ -345,7 +356,15 @@ public class InvoiceApplicationService implements InvoiceUseCase {
             );
         }
 
-        Invoice invoice = writeMapper.fromCreateInstitutionalDto(dto);
+
+        Invoice invoice = Invoice.createInstitutional(
+                writeMapper.toContractId(dto),
+            writeMapper.toProviderId(dto),
+            writeMapper.toDentistId(dto),
+            writeMapper.toCurrency(dto),
+            writeMapper.toNotes(dto),
+            writeMapper.toDueDate(dto)
+        );
 
         // RN-INVOICE-007: Validate institutional contract
         invoiceDomainService.validateInstitutionalContract(invoice);
@@ -384,7 +403,16 @@ public class InvoiceApplicationService implements InvoiceUseCase {
         }
 
         // RN-INVOICE-004: Only editable in DRAFT status (enforced by domain)
-        InvoiceItem item = writeMapper.toInvoiceItem(dto, invoiceItemFactoryService);
+        InvoiceItem item;
+        item = InvoiceItem.fromRateSnapshot(
+                writeMapper.toServiceId(dto),
+                writeMapper.toServiceCode(dto),
+                writeMapper.toServiceDescription(dto),
+                writeMapper.toRateId(dto),
+                writeMapper.toUnitPrice(dto),
+                writeMapper.toQuantity(dto),
+                writeMapper.toPerformedAt(dto)
+        );
         invoice.addItem(item);
 
         Invoice updated = invoiceRepository.save(invoice);
