@@ -36,9 +36,9 @@ public final class AdministrativeReport {
 
     private AdministrativeReport(Builder builder) {
         this.id = builder.id;
-        this.title = Objects.requireNonNull(builder.title, "Title cannot be null");
-        this.period = Objects.requireNonNull(builder.period, "Period cannot be null");
-        this.createdBy = Objects.requireNonNull(builder.createdBy, "CreatedBy cannot be null");
+        this.title = builder.title;
+        this.period = builder.period;
+        this.createdBy = builder.createdBy;
 
         this.createdAt = builder.createdAt != null ? builder.createdAt : LocalDateTime.now();
         this.status = builder.status != null ? builder.status : ReportStatus.draft();
@@ -50,7 +50,6 @@ public final class AdministrativeReport {
         this.approvedBy = builder.approvedBy;
     }
 
-    // -------- Factory method --------
     public static AdministrativeReport create(Name title, Period period, UserIdentityId createdBy) {
         return AdministrativeReport.builder()
                 .withTitle(title)
@@ -65,7 +64,6 @@ public final class AdministrativeReport {
                 .build();
     }
 
-    // -------- Métodos de negocio --------
     public void addJournalEntryReference(JournalEntryId journalEntryId) {
         ensureEditable();
         if (this.journalEntryReferences.contains(journalEntryId)) {

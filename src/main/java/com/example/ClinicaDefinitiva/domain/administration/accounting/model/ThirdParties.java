@@ -48,7 +48,6 @@ public final class ThirdParties {
         this.active = builder.active;
     }
 
-    // -------- Factory method --------
     public static ThirdParties registerThirdParties(
             CompanyId companyId,
             Name name,
@@ -72,7 +71,6 @@ public final class ThirdParties {
                 .build();
     }
 
-    // -------- Métodos de negocio --------
     public void updateContactInformation(
             Name name,
             Address address,

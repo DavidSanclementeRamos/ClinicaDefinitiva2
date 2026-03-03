@@ -31,7 +31,7 @@ public class Rol {
 
 
 
-    public Rol(RolEnum rolEnum, String description, boolean isDefault,
+    private Rol(RolEnum rolEnum, String description, boolean isDefault,
                boolean isEditable, boolean isDeletable, RolStatus statusRol) {
         this.rolEnum = rolEnum ;
         this.description = Objects.requireNonNull(description, "Description cannot be null");

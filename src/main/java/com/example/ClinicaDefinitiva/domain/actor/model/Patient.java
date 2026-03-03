@@ -28,7 +28,7 @@ public class Patient  {
     private Person person;
 
 
-    public Patient(ContractId contractId, LocalDateTime lastUpdate, GuardianId guardianId, Person person, List<TreatmentId> treatments, UserIdentityId userIdentityId, PatientId patientId) {
+    private Patient(ContractId contractId, LocalDateTime lastUpdate, GuardianId guardianId, Person person, List<TreatmentId> treatments, UserIdentityId userIdentityId, PatientId patientId) {
         this.contractId = contractId;
         this.lastUpdate = lastUpdate;
         this.guardianId = guardianId;

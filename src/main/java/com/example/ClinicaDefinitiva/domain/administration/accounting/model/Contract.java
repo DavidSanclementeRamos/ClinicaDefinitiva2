@@ -45,8 +45,8 @@ public final class Contract {
         this.companyId = builder.companyId;
         this.thirdPartiesId = builder.thirdPartiesId;
         this.name = builder.name;
-        this.description = builder.description != null ? builder.description.trim() : null;
-        this.origin = builder.origin != null ? builder.origin.trim() : null;
+        this.description = builder.description ;
+        this.origin = builder.origin ;
         this.startDate = builder.startDate;
         this.endDate = builder.endDate;
         this.coverageType = builder.coverageType.trim().toUpperCase();

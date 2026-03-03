@@ -49,7 +49,7 @@ public final class Company {
         this.taxIdentificationNumber = builder.taxIdentificationNumber;
         this.typePerson = builder.typePerson;
         this.taxRegime = builder.taxRegime;
-        this.legalRepresentative = builder.legalRepresentative != null ? builder.legalRepresentative.trim() : null;
+        this.legalRepresentative = builder.legalRepresentative ;
         this.address = builder.address;
         this.phoneNumber = builder.phoneNumber;
         this.email = builder.email;

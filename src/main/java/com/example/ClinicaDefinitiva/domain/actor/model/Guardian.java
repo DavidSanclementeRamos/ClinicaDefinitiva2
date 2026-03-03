@@ -21,7 +21,7 @@ public class Guardian  {
     private final List<PatientId> patientList;
     private LocalDateTime lastUpdate;
 
-    public Guardian(GuardianId guardianId, LocalDateTime lastUpdate, List<PatientId> patientList, Person person, TypeGuardian typeGuardian, UserIdentityId userIdentityId) {
+    private Guardian(GuardianId guardianId, LocalDateTime lastUpdate, List<PatientId> patientList, Person person, TypeGuardian typeGuardian, UserIdentityId userIdentityId) {
         this.guardianId = guardianId;
         this.lastUpdate = lastUpdate;
         this.patientList = patientList;

@@ -53,7 +53,7 @@ public final class Rate {
         this.validFrom = builder.validFrom;
         this.validTo = builder.validTo;
         this.contractId = builder.contractId;
-        this.status = builder.status != null ? builder.status : RateStatus.ACTIVE;
+        this.status =  RateStatus.ACTIVE;
 
         validateBusinessRules();
     }

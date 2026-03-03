@@ -19,7 +19,7 @@ public class Receptionist   {
     private final UserIdentityId userIdentityId;
     private LocalDateTime lastUpdate;
 
-    public Receptionist(LocalDateTime lastUpdate, UserIdentityId userIdentityId, Sector sector, Person person, ReceptionId id) {
+    private Receptionist(LocalDateTime lastUpdate, UserIdentityId userIdentityId, Sector sector, Person person, ReceptionId id) {
         this.lastUpdate = lastUpdate;
         this.userIdentityId = userIdentityId;
         this.sector = sector;

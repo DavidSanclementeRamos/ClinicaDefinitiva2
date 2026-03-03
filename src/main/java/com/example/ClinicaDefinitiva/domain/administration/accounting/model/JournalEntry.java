@@ -42,7 +42,7 @@ public final class JournalEntry {
         this.date = builder.date;
         this.documentNumber = builder.documentNumber.trim();
         this.description = builder.description.trim();
-        this.lines = builder.lines != null ? new ArrayList<>(builder.lines) : new ArrayList<>();
+        this.lines = builder.lines;
         this.balanced = false;
         this.posted = false;
     }

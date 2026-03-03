@@ -39,7 +39,7 @@ public final class JournalEntryLine {
         this.description = description.trim();
         this.amount = amount;
         this.isDebit = isDebit;
-        this.documentReference = documentReference != null ? documentReference.trim() : null;
+        this.documentReference = documentReference;
     }
 
     

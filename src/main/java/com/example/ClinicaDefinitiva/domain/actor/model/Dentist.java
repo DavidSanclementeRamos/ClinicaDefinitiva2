@@ -34,7 +34,7 @@ public class Dentist   {
 
 
 
-    public Dentist(DentistId dentistId, ShiftId shiftId,
+    private Dentist(DentistId dentistId, ShiftId shiftId,
                    Person personData,
                    Specialties specialties,
                    UserIdentityId userIdentityId,
