@@ -8,9 +8,8 @@ public record CreateRateDto(
         String payerType,
         Long contractId,
         BigDecimal amount,
-        String currency,
-        LocalDateTime validFrom,
-        LocalDateTime validTo
+        String currency
+        
 ) {}
 
 

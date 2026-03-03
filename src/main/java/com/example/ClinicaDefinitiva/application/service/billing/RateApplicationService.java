@@ -143,7 +143,7 @@ public class RateApplicationService implements RateUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
             action = ActionCatalog.BasicAction.READ)
-    public Page<PageRateDto> findByPayerType(Rate.PayerType payerType,
+    public Page<PageRateDto> findByPayerType(String payerType,
                                              Pageable pageable,
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
@@ -190,7 +190,7 @@ public class RateApplicationService implements RateUseCase {
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
             action = ActionCatalog.BasicAction.READ)
     public ReadRateDto findActiveRateForService(Long serviceId,
-                                                Rate.PayerType payerType,
+                                                String payerType,
                                                 Long contractId,
                                                 UserIdentityId requesterId,
                                                 RolId requesterRolId) {
@@ -269,8 +269,7 @@ public class RateApplicationService implements RateUseCase {
                 writeMapper.toAmount(dto),
 
                 writeMapper.toPayerType(dto),
-                writeMapper.toContractId(dto),
-                writeMapper.toValidTo(dto)
+                writeMapper.toContractId(dto)
          );
 
         Rate saved = rateRepository.save(rate);
@@ -283,7 +282,7 @@ public class RateApplicationService implements RateUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadRateDto endValidity(RateId id,
+    public ReadRateDto endValidityAt(RateId id,
                                    LocalDateTime endDate,
                                    UserIdentityId requesterId,
                                    RolId requesterRolId) {
@@ -356,21 +355,21 @@ public class RateApplicationService implements RateUseCase {
         rateRepository.save(rate);
     }
 
-    // RN-RATE-003: Validate no overlapping rates
-    /**private void validateNoOverlappingRates(CreateRateDto dto) {
-        boolean hasOverlap = rateRepository.hasOverlappingRates(
-                ServiceId.of(dto.getServiceId()),
-                dto.getPayerType(),
-                dto.getContractId() != null ? ContractId.of(dto.getContractId()) : null,
-                dto.getValidFrom(),
-                dto.getValidTo()
-        );
+    @Override
+    public void markAsReplaced(RateId id, UserIdentityId requesterId, RolId requesterRolId) {
+        Rate rate = rateRepository.findById(id)
+                .orElseThrow(() -> new BusinessRuleViolationException(
+                        RateError.ERR_RATE_NOT_FOUND,
+                        EntityContext.RATE
+                ));
+         
+            rate.markAsReplaced();
+                    rateRepository.save(rate);
 
-        if (hasOverlap) {
-            throw new BusinessRuleViolationException(
-                    RateError.ERR_RATE_OVERLAPPING_VALIDITY,
-                    EntityContext.RATE
-            );
-        }
-    }*/
+            
+        
+    }
+    
+
+ 
 }
