@@ -19,6 +19,7 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.Authori
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.output.ProvidedServiceRepository;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -170,7 +171,17 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
             );
         }*/
 
-        ProvidedService service = writeMapper.fromCreateDto(dto);
+
+       ProvidedService service = ProvidedService.create(
+                writeMapper.toServiceName(dto),
+                writeMapper.toServiceCategory(dto),
+           writeMapper.toServiceCode(dto),
+                writeMapper.toBaseRate(dto),
+                writeMapper.toDuration(dto),
+                writeMapper.toDescription(dto),
+                writeMapper.toDetails(dto),
+                writeMapper.toRequiresAuthorization(dto)
+        );
 
         ProvidedService saved = serviceRepository.save(service);
         return readMapper.toReadDto(saved);
@@ -206,7 +217,14 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
             );
         }
 
-        writeMapper.updateInformationFromDto(dto, service);
+         service.updateInformation(
+            writeMapper.toServiceName(dto),
+            writeMapper.toServiceCategory(dto),
+            writeMapper.toDuration(dto),
+            writeMapper.toRequiresAuthorization(dto),
+            writeMapper.toDescription(dto)
+        );
+
         ProvidedService updated = serviceRepository.save(service);
 
         return readMapper.toReadDto(updated);
@@ -242,9 +260,14 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
             );
         }
 
-        writeMapper.mapRateFromDto(dto);
-        ProvidedService updated = serviceRepository.save(service);
+        service.updateRate(
+                writeMapper.toRate(dto),
+                dto.justification()
+        );
+                
 
+
+        ProvidedService updated = serviceRepository.save(service);
         return readMapper.toReadDto(updated);
     }
 
@@ -280,7 +303,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
 
 
 
-        writeMapper.updateDetailsFromDto(dto);
+        service.updateDetails(writeMapper.toDetails(dto));
 
         ProvidedService updated = serviceRepository.save(service);
         return readMapper.toReadDto(updated);

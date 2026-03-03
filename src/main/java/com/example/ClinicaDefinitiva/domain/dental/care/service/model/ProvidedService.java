@@ -83,7 +83,6 @@ public class ProvidedService {
      * Usar builder() para mayor control sobre la construcción.
      */
     public static ProvidedService create(
-            ServiceId id,
             ServiceName name,
             ServiceCatalog category,
             ServiceCode code,
@@ -94,7 +93,6 @@ public class ProvidedService {
             boolean requiresAuthorization) {
 
         return builder()
-                .id(id)
                 .name(name)
                 .category(category)
                 .code(code)
