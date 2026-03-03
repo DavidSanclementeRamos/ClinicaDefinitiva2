@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.mapper.dentalService.treatment;
+package com.example.ClinicaDefinitiva.application.mapper.treatment;
 
 
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.TreatmentDto;

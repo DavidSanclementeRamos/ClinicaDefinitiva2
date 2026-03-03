@@ -4,8 +4,8 @@ package com.example.ClinicaDefinitiva.application.service.dentalService;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.CreateTreatmentDto;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.TreatmentDto;
 import com.example.ClinicaDefinitiva.application.exceptions.TreatmentNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.dentalService.treatment.TreatmentReadMapper;
-import com.example.ClinicaDefinitiva.application.mapper.dentalService.treatment.TreatmentWriteMapper;
+import com.example.ClinicaDefinitiva.application.mapper.treatment.TreatmentReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.treatment.TreatmentWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.dentalService.TreatmentUseCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
@@ -203,7 +203,17 @@ public class TreatmentApplicationService implements TreatmentUseCase {
             );
         }
 
-        Treatment treatment = writeMapper.fromCreateDto(dto);
+
+         Treatment treatment = Treatment.createNew(
+            writeMapper.toPatientId(dto),
+            writeMapper.toDentistId(dto),
+            writeMapper.toServiceId(dto),
+            writeMapper.toStartDate(dto),
+            writeMapper.toExpectedEndDate(dto),
+            writeMapper.toPhases(dto),
+            writeMapper.toNotes(dto),
+            writeMapper.toRateId(dto)
+        );
 
         Treatment saved = treatmentRepository.save(treatment);
         return readMapper.toDto(saved);
