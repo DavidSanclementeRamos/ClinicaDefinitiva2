@@ -1,7 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.adminitration.operations.service;
 
-import com.example.ClinicaDefinitiva.application.exceptions.DentalServiceNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
@@ -70,7 +70,7 @@ class ShiftAssignmentServiceTest {
     void shouldThrowExceptionWhenDentistNotFound() {
         when(dentistRepository.findById(dentistId)).thenReturn(Optional.empty());
 
-        assertThrows(DentalServiceNotFoundException.class,
+        assertThrows(ProvidedServiceNotFoundException.class,
             () -> service.assignShift(dentistId,
                     LocalDate.of(2026, 3, 1),
                     LocalTime.of(8, 0),

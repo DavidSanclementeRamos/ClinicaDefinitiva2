@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.service.dentalService;
 
 import com.example.ClinicaDefinitiva.application.dto.dentalService.*;
 
-import com.example.ClinicaDefinitiva.application.exceptions.DentalServiceNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.dentalService.ProvidedServiceReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.dentalService.ProvidedServiceWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.dentalService.ProvidedServiceUseCase;
@@ -79,7 +79,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                    RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No found"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
 
         return readMapper.toReadDto(service);
@@ -196,7 +196,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                             RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No fount"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No fount"));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -239,7 +239,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                      RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No fount"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No fount"));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -280,7 +280,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                         RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No found"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -318,7 +318,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                            RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No found "));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found "));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -355,7 +355,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                      RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No found"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -394,7 +394,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                            RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("Not found"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("Not found"));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(

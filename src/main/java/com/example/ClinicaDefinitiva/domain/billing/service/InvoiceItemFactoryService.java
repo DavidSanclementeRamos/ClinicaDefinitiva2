@@ -24,17 +24,14 @@ public class InvoiceItemFactoryService {
 
 
     public InvoiceItem createFromRateSnapshot(
-            InvoiceItemId id,
             ProvidedService service,
             Rate rate,
             Quantity quantity,
             LocalDateTime performedAt) {
 
-        Objects.requireNonNull(service, "El servicio no puede ser nulo");
-        Objects.requireNonNull(rate, "La tarifa no puede ser nula");
+      
 
         return InvoiceItem.builder()
-                .id(id)
                 .serviceId(service.getId())
                 .serviceCode(service.getCode().getValue())
                 .serviceDescription(service.getName().getValue())

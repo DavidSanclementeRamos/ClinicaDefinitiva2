@@ -48,30 +48,6 @@ public final class InvoiceItem {
     }
 
 
-    public static InvoiceItem fromRateSnapshot(
-        ServiceId serviceId,
-        String serviceCode,
-        String serviceDescription,
-        RateId rate,
-        Price unitPrice,              
-        Quantity quantity,
-        LocalDateTime performedAt) {
-
-    
-
-    return builder()
-            .serviceId(serviceId)
-            .serviceCode(serviceCode)
-            .serviceDescription(serviceDescription)
-            .unitPrice(unitPrice)       
-            .quantity(quantity)
-            .rateId(rate)
-            .performedAt(performedAt)
-            .build();
-}
-
-
-   
     public Price getTotalPrice() {
         return unitPrice.multiply(quantity.getValue());
     }
