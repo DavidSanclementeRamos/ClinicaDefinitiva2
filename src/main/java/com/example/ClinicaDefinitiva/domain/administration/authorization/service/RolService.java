@@ -26,29 +26,12 @@ public class RolService {
 
     public Rol createCustom(RolEnum baseType, String description) {
         validateUniqueDescription(description);
-        Rol rol = new Rol(
-                baseType,
-                description,
-                false,
-                true,   // clones son editables
-                true,   // clones son eliminables
-                RolStatus.ACTIVE
-        );
-        return rol;
+        return Rol.createDefault(baseType, description);
     }
 
     public Rol cloneRole(Rol sourceRole, String newDescription) {
         validateUniqueDescription(newDescription);
-
-        Rol clonedRole = new Rol(
-                sourceRole.getRolEnum(),
-                    newDescription,
-                false,
-                true,   // clones son editables
-                true,   // clones son eliminables
-                RolStatus.ACTIVE
-        );
-        return clonedRole;
+        return Rol.cloneFrom(sourceRole, newDescription);
     }
 
     private void validateUniqueDescription(String description) {

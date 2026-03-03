@@ -34,12 +34,24 @@ public class Rol {
     private Rol(RolEnum rolEnum, String description, boolean isDefault,
                boolean isEditable, boolean isDeletable, RolStatus statusRol) {
         this.rolEnum = rolEnum ;
-        this.description = Objects.requireNonNull(description, "Description cannot be null");
+        this.description = description;
         this.isDefault = isDefault;
         this.isEditable = isEditable;
         this.isDeletable = isDeletable;
-        this.statusRol = Objects.requireNonNull(statusRol, "Status cannot be null");
+        this.statusRol = statusRol;
         this.permissions = new HashSet<>();
+    }
+    
+        /** Crea un rol institucional/base del sistema (no editable ni eliminable). */
+    public static Rol createDefault(RolEnum baseType, String description) {
+        return new Rol(baseType, description, true, false, false, RolStatus.ACTIVE);
+    }
+
+    
+
+    /** Clona un rol existente con nueva descripción (editable y eliminable). */
+    public static Rol cloneFrom(Rol sourceRole, String newDescription) {
+        return new Rol(sourceRole.getRolEnum(), newDescription, false, true, true, RolStatus.ACTIVE);
     }
 
 
