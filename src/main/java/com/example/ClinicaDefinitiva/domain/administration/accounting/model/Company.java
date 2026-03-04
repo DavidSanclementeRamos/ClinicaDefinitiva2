@@ -40,9 +40,7 @@ public final class Company {
 
     private Company(Builder builder) {
         validateIncorporationDate(builder.incorporationDate);
-        if (Objects.isNull(builder.typePerson)) {
-            throw new DomainAggregateException(CompanyError.ERR_COMPANY_MISSING_PERSON_TYPE, EntityContext.COMPANY);
-        }
+        
 
         this.id = builder.id;
         this.name = builder.name;
@@ -54,7 +52,7 @@ public final class Company {
         this.phoneNumber = builder.phoneNumber;
         this.email = builder.email;
         this.incorporationDate = builder.incorporationDate;
-        this.status = builder.status != null ? builder.status : CompanyStatus.of(CompanyStatus.Status.ACTIVE);
+        this.status = builder.status;
     }
     
     public static Company registerCompany(
@@ -121,13 +119,13 @@ public final class Company {
 
     private void validateIncorporationDate(LocalDate date) {
         if (Objects.isNull(date)) {
-            throw new TemporalValidationException(CompanyError.ERR_COMPANY_MISSING_INCORPORATION_DATE, EntityContext.COMPANY);
+            throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_MISSING_INCORPORATION_DATE, EntityContext.COMPANY);
         }
         if (date.isAfter(LocalDate.now())) {
-            throw new TemporalValidationException(CompanyError.ERR_COMPANY_FUTURE_INCORPORATION_DATE, EntityContext.COMPANY);
+            throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_FUTURE_INCORPORATION_DATE, EntityContext.COMPANY);
         }
         if (date.isBefore(LocalDate.of(1800, 1, 1))) {
-            throw new TemporalValidationException(CompanyError.ERR_COMPANY_INVALID_INCORPORATION_DATE, EntityContext.COMPANY);
+            throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_INVALID_INCORPORATION_DATE, EntityContext.COMPANY);
         }
     }
 

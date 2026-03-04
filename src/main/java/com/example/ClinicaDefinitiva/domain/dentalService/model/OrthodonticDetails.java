@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.dentalService.model;
 
-import com.example.ClinicaDefinitiva.domain.dentalService.ServiceDetails;
-import com.example.ClinicaDefinitiva.domain.dentalService.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceDetails;
+import com.example.ClinicaDefinitiva.domain.dentalService.enu.ServiceType;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.OrthodonticError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;

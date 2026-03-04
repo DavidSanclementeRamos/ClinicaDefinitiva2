@@ -1,6 +1,12 @@
 package com.example.ClinicaDefinitiva.domain.dentalService.service;
 
-import com.example.ClinicaDefinitiva.domain.dentalService.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dentalService.enu.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.AestheticDetails;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.ImplantologyDetails;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.OrthodonticDetails;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.PediatricDetails;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.ProstheticDetails;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.SurgicalDetails;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.AgeRange;
 
 import java.util.Map;

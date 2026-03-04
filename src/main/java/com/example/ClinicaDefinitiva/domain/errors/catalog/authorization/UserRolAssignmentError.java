@@ -32,44 +32,44 @@ public enum UserRolAssignmentError implements ErrorCatalog {
      */
     // si
     ERR_ASSIGNMENT_CANNOT_REVOKE_LAST_INDIVIDUAL(
-            "RN-ASSIGNMENT-005",
+            "RN-ASSIGNMENT-006",
             "error.assignment.revoke.last.individual",
             "No puede revocar el último rol activo de un usuario de forma individual; use la opción de revocación total"
     ),
 
     // no pertenece
     ERR_ASSIGNMENT_UNAUTHORIZED(
-            "RN-ASSIGNMENT-006",
+            "RN-ASSIGNMENT-007",
             "error.assignment.unauthorized",
             "Solo RECEPTIONIST del sector RECURSOS_HUMANOS puede asignar roles"
     ),
     // no pertenece
     ERR_ASSIGNMENT_UNAUTHORIZED_REVOKE(
-            "RN-ASSIGNMENT-007",
+            "RN-ASSIGNMENT-008",
             "error.assignment.revoke.unauthorized",
             "Solo RECEPTIONIST del sector RECURSOS_HUMANOS puede revocar roles"
     ),
     // si
     ERR_ASSIGNMENT_INACTIVE_ROLE(
-            "RN-ASSIGNMENT-008",
+            "RN-ASSIGNMENT-009",
             "error.assignment.inactive.role",
             "No puede asignar rol INACTIVE"
     ),
     // si
     ERR_ASSIGNMENT_CANNOT_EXTEND_PERMANENT(
-            "RN-ASSIGNMENT-009",
+            "RN-ASSIGNMENT-010",
             "error.assignment.extend.permanent",
             "La extensión de vigencia solo aplica a roles temporales"
     ),
     // si
     ERR_ASSIGNMENT_INVALID_EXTENSION_DATE(
-            "RN-ASSIGNMENT-010",
+            "RN-ASSIGNMENT-011",
             "error.assignment.extension.date",
             "La nueva fecha fin debe ser posterior a la actual"
     ),
     // si
     ERR_ASSIGNMENT_VALID_FROM_REQUIRED(
-            "RN-ASSIGNMENT-011",
+            "RN-ASSIGNMENT-012",
             "error.assignment.valid.from.required",
             "La fecha de inicio (validFrom) no puede ser nula" );
 

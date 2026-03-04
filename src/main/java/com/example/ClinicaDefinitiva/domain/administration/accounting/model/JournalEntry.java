@@ -126,7 +126,7 @@ public final class JournalEntry {
             validateBalance();
         }
         if (this.date.isAfter(LocalDate.now())) {
-            throw new TemporalValidationException(JournalEntryError.ERR_JOURNALENTRY_FUTURE_DATE, EntityContext.JOURNALENTRY);
+            throw new BusinessRuleViolationException(JournalEntryError.ERR_JOURNALENTRY_FUTURE_DATE, EntityContext.JOURNALENTRY);
         }
         this.posted = true;
     }

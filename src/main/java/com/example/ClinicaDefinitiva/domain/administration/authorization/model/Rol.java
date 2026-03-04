@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.administration.authorization.model;
 
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
@@ -63,6 +63,10 @@ public class Rol {
 
     public void removePermission(Permission permission) {
         ensureEditable();
+        if(this.permissions.isEmpty()){
+            throw new BusinessRuleViolationException( RolError.RR_ROL_EMPTY_PERMISSIONS, EntityContext.ROL );
+            
+        }
 
         this.permissions.remove(permission);
     }
@@ -82,6 +86,12 @@ public class Rol {
         if (!isDeletable){
             throw new BusinessRuleViolationException(RolError.ERR_ROL_SYSTEM_NOT_DELETABLE, EntityContext.ROL);
         }
+         if (this.statusRol != RolStatus.DELETED) {
+        throw new BusinessRuleViolationException(
+                RolError.ERR_ROL_DELETE_NOT_MARKED,
+                EntityContext.ROL
+        );
+         }
     }
     private void ensureEditable() {
         if (!isEditable) {

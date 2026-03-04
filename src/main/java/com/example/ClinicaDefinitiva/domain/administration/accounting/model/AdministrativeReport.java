@@ -40,13 +40,13 @@ public final class AdministrativeReport {
         this.period = builder.period;
         this.createdBy = builder.createdBy;
 
-        this.createdAt = builder.createdAt != null ? builder.createdAt : LocalDateTime.now();
-        this.status = builder.status != null ? builder.status : ReportStatus.draft();
-        this.journalEntryReferences = builder.journalEntryReferences != null ? new ArrayList<>(builder.journalEntryReferences) : new ArrayList<>();
-        this.indicators = builder.indicators != null ? new ArrayList<>(builder.indicators) : new ArrayList<>();
+        this.createdAt =  LocalDateTime.now();
+        this.status = builder.status = ReportStatus.draft();
+        this.journalEntryReferences = builder.journalEntryReferences;
+        this.indicators = builder.indicators;
         this.notes = builder.notes;
-        this.attachments = builder.attachments != null ? new ArrayList<>(builder.attachments) : new ArrayList<>();
-        this.lastUpdate = builder.lastUpdate != null ? builder.lastUpdate : LocalDateTime.now();
+        this.attachments = builder.attachments; 
+        this.lastUpdate = LocalDateTime.now();
         this.approvedBy = builder.approvedBy;
     }
 

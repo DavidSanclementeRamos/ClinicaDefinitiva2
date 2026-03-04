@@ -3,11 +3,11 @@ package com.example.ClinicaDefinitiva.domain.billing.service;
 
 import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.billing.vo.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import org.hibernate.service.internal.ProvidedService;
 
 /**
  * Domain Service: InvoiceItemFactoryService

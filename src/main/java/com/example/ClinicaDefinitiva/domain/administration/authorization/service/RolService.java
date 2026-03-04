@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.administration.authorization.service;
 
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;

@@ -3,7 +3,6 @@ package com.example.ClinicaDefinitiva.domain.errors.catalog.schedule;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
 public enum ScheduleVOError implements ErrorCatalog {
-
     ERR_APPOINTMENT_ID_REQUIRED(
             "RN-APPT-001",
             "error.appointment.idRequired",

@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.administration.authorization.num;
+package com.example.ClinicaDefinitiva.domain.administration.authorization.enu;
 
 public enum RolEnum {
 

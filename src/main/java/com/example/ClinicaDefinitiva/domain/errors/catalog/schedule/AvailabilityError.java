@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
  */
 public enum AvailabilityError implements ErrorCatalog {
 
-
+// eliminar todo
     ERR_AVAIL_INVALID_TIME_RANGE(// BIEN
             "RN-AVAIL-001",
             "error.availability.invalidTimeRange",

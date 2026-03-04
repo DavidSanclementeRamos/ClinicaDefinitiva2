@@ -94,8 +94,8 @@ public final class Contract {
     public void extendContract(LocalDate newEndDate) {
         ensureEditable();
         if (newEndDate == null) throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_MISSING_NEW_END_DATE, EntityContext.CONTRACT);
-        if (newEndDate.isBefore(this.endDate)) throw new TemporalValidationException(ContractError.ERR_CONTRACT_INVALID_DATES, EntityContext.CONTRACT);
-        if (newEndDate.isBefore(LocalDate.now())) throw new TemporalValidationException(ContractError.ERR_CONTRACT_NEW_END_DATE_IN_PAST, EntityContext.CONTRACT);
+        if (newEndDate.isBefore(this.endDate)) throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_INVALID_DATES, EntityContext.CONTRACT);
+        if (newEndDate.isBefore(LocalDate.now())) throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_NEW_END_DATE_IN_PAST, EntityContext.CONTRACT);
         this.endDate = newEndDate;
     }
 
@@ -155,7 +155,7 @@ public final class Contract {
     }
 
     private void validateDates(LocalDate startDate, LocalDate endDate) {
-        if (endDate.isBefore(startDate)) throw new TemporalValidationException(ContractError.ERR_CONTRACT_INVALID_DATES, EntityContext.CONTRACT);
+        if (endDate.isBefore(startDate)) throw new BusinessRuleViolationException(ContractError.ERR_CONTRACT_INVALID_DATES, EntityContext.CONTRACT);
     }
 
     // -------- Getters --------

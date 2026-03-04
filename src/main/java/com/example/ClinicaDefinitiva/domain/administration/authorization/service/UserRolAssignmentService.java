@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.administration.authorization.servic
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.permission.RolNotFoundException;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.UserRolAssignmentRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
