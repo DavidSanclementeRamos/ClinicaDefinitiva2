@@ -1,13 +1,13 @@
-package com.example.ClinicaDefinitiva.domain.administration.Operations.service;
+package com.example.ClinicaDefinitiva.domain.administration.operations.service;
 
 
-import com.example.ClinicaDefinitiva.application.exceptions.DentalServiceNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.model.Shift;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftRepository;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.enu.ShiftType;
+import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
+import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepository;
+import com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftType;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
@@ -33,7 +33,7 @@ public class ShiftAssignmentService {
             ShiftType type) {
 
         Dentist dentist = dentistRepository.findById(dentistId)
-                .orElseThrow(() -> new DentalServiceNotFoundException(""));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException(""));
 
         DayOfWeek dayOfWeek = date.getDayOfWeek();
 
@@ -44,7 +44,6 @@ public class ShiftAssignmentService {
         }
 
         Shift shift = Shift.create(
-                null,
                 dentistId,
                 date,
                 startTime,

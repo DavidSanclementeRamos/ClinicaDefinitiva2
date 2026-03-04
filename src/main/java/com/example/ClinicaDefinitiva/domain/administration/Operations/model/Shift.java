@@ -1,10 +1,10 @@
-package com.example.ClinicaDefinitiva.domain.administration.Operations.model;
+package com.example.ClinicaDefinitiva.domain.administration.operations.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.enu.ShiftType;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ExcludedBlock;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftId;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftStatus;
+import com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftType;
+import com.example.ClinicaDefinitiva.domain.administration.operations.vo.ExcludedBlock;
+import com.example.ClinicaDefinitiva.domain.administration.operations.vo.ShiftId;
+import com.example.ClinicaDefinitiva.domain.administration.operations.vo.ShiftStatus;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
@@ -32,8 +32,8 @@ import java.util.List;
  */
 public class Shift {
 
-    private ShiftId id;
-    private DentistId dentistId;
+    private final ShiftId id;
+    private final DentistId dentistId;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
@@ -44,7 +44,6 @@ public class Shift {
     private Long version;
     private static final Duration MODIFICATION_WINDOW = Duration.ofHours(24);
 
-    protected Shift() {}
 
     private Shift(ShiftId id, DentistId dentistId, LocalDate date,
                   LocalTime startTime, LocalTime endTime, ShiftType type) {
@@ -63,7 +62,7 @@ public class Shift {
      * RN-SHIFT-001: La hora de inicio debe ser anterior a la hora de fin
      * RN-SHIFT-008: No puede tener duración negativa o cero
      */
-    public static Shift create(ShiftId id, DentistId dentistId, LocalDate date,
+    public static Shift create( DentistId dentistId, LocalDate date,
                                LocalTime startTime, LocalTime endTime, ShiftType type) {
         if (dentistId == null) {
             throw new BusinessRuleViolationException(
@@ -92,7 +91,7 @@ public class Shift {
                     ShiftError.ERR_SHIFT_ZERO_DURATION, EntityContext.SHIFT);
         }
 
-        return new Shift(id, dentistId, date, startTime, endTime, type);
+        return new Shift(null,dentistId, date, startTime, endTime, type);
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.administration.Operations.enu;
+package com.example.ClinicaDefinitiva.domain.administration.operations.enu;
 
 public enum ShiftType {
     CLINICAL,           // Turno clínico con atención de pacientes
