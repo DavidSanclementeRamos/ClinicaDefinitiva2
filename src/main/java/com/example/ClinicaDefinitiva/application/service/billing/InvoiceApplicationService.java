@@ -1,6 +1,9 @@
 package com.example.ClinicaDefinitiva.application.service.billing;
 
 
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceStatus;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceNumberGenerator;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.*;
 import com.example.ClinicaDefinitiva.application.exceptions.InvoiceNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
@@ -26,10 +29,9 @@ import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
 import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceDomainService;
 import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceItemFactoryService;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.output.ProvidedServiceRepository;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceCode;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.dentalService.output.ProvidedServiceRepository;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceCode;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;

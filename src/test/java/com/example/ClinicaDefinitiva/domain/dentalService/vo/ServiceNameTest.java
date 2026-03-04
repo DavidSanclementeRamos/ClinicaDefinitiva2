@@ -1,7 +1,6 @@
 
 package com.example.ClinicaDefinitiva.domain.dentalService.vo;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceName;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 import org.junit.jupiter.api.DisplayName;

@@ -6,7 +6,7 @@ import com.example.ClinicaDefinitiva.application.dto.billing.rate.PageRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.ReadRateDto;
 import com.example.ClinicaDefinitiva.application.portsInput.billing.RateUseCase;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.billing.*;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.RateRestReadMapper;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.RateRestWriteMapper;

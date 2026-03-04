@@ -1,8 +1,12 @@
 package com.example.ClinicaDefinitiva.domain.billing.model;
 
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceNumberGenerator;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceNumber;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.ProviderId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.CurrencyCode;
 import com.example.ClinicaDefinitiva.domain.vo.Notes;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceStatus;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceStatus;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;

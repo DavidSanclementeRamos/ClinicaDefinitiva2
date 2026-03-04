@@ -1,12 +1,12 @@
 package com.example.ClinicaDefinitiva.domain.billing.model;
 
 
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.PayerType;
-import com.example.ClinicaDefinitiva.domain.billing.RateStatus;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.billing.enu.PayerType;
+import com.example.ClinicaDefinitiva.domain.billing.enu.RateStatus;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.RateError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;

@@ -8,12 +8,12 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Contrac
 import com.example.ClinicaDefinitiva.domain.billing.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.CurrencyCode;
+import com.example.ClinicaDefinitiva.domain.billing.vo.CurrencyCode;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceItemId;
 import com.example.ClinicaDefinitiva.domain.vo.Notes;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.ProviderId;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.Quantity;
+import com.example.ClinicaDefinitiva.domain.billing.vo.Quantity;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;

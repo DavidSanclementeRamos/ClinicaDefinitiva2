@@ -6,10 +6,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetails;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProstheticDetails;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.SurgicalDetails;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Price;

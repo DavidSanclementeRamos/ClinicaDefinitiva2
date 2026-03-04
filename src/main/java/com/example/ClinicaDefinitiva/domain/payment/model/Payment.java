@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.payment.model;
 
 import com.example.ClinicaDefinitiva.domain.payment.vo.*;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.payment.PaymentError;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
