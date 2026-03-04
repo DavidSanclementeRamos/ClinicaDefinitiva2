@@ -305,7 +305,16 @@ public class AppointmentApplicationService implements AppointmentUseCase {
             );
         }
 
-        Appointment appointment = writeMapper.fromCreateDto(dto,schedulingService);
+        Appointment appointment = schedulingService.scheduleAppointment(
+            writeMapper.toDentistId(dto),
+            writeMapper.toPatientId(dto),
+            writeMapper.toStart(dto),
+            writeMapper.toEnd(dto),
+            writeMapper.toType(dto),
+            writeMapper.toReason(dto),
+            writeMapper.toServiceId(dto)
+        );
+
         Appointment saved = appointmentRepository.save(appointment);
 
         return readMapper.toReadDto(saved);
@@ -337,7 +346,14 @@ public class AppointmentApplicationService implements AppointmentUseCase {
         Appointment appointment = appointmentRepository.findById(AppointmentId.of(dto.appointmentId()))
                 .orElseThrow(() -> new AppointmentNotFoundException(""));
 
-        writeMapper.updateFromDto(appointment,schedulingService, dto);
+        schedulingService.rescheduleAppointment(
+            appointment,
+            writeMapper.toDentistId(dto),
+            writeMapper.toPatientId(dto),
+            writeMapper.toNewStart(dto),
+            writeMapper.toNewEnd(dto)
+        );
+
         Appointment updated = appointmentRepository.save(appointment);
 
         return readMapper.toReadDto(updated);

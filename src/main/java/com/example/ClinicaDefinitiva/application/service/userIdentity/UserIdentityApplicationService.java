@@ -207,13 +207,19 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                     );
                 });
 
-        UserIdentity userIdentity = writeMapper.fromCreateDto(dto);
+
+        UserIdentity user = UserIdentity.register(
+            writeMapper.toEmail(dto).getValue().get(),
+            writeMapper.toPassword(dto).getValue().get(),
+            writeMapper.toUserName(dto).getValue().get(),
+            Instant.now()
+        );
 
         // Encriptar la contraseña
         String encodedPassword = passwordEncoder.encode(dto.password());
-        userIdentity.setPassword(encodedPassword);
+        user.setPassword(encodedPassword);
 
-        UserIdentity saved = userIdentityRepository.save(userIdentity);
+        UserIdentity saved = userIdentityRepository.save(user);
         return readMapper.toReadDto(saved);
     }
 
@@ -256,7 +262,13 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                     });
         }
 
-        writeMapper.updateFromDto(dto, userIdentity);
+         userIdentity.update(
+            writeMapper.toUserName(dto).getValue().get(),
+            writeMapper.toEmail(dto).getValue().get(),
+            writeMapper.toPassword(dto).getValue().get(),
+            Instant.now()
+        );
+
 
         // Si se está actualizando la contraseña, encriptarla
         if (dto.password() != null && !dto.password().isEmpty()) {

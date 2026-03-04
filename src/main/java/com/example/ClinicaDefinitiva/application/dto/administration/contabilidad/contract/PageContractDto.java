@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.ContractStatus;
+import java.math.BigDecimal;
 
 import java.time.LocalDate;
 
@@ -12,7 +13,7 @@ public record PageContractDto(
         String name,
         Long thirdPartiesId,
         String coverageType,
-        Double coverageRate,
+        BigDecimal coverageRate,
         LocalDate endDate,
         ContractStatus status,
         boolean isExpired

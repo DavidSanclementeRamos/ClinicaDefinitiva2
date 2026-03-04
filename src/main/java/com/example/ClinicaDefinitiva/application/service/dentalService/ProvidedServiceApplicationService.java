@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.service.dentalService;
 
 import com.example.ClinicaDefinitiva.application.dto.dentalService.*;
 
-import com.example.ClinicaDefinitiva.application.exceptions.DentalServiceNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.dentalService.ProvidedServiceReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.dentalService.ProvidedServiceWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.dentalService.ProvidedServiceUseCase;
@@ -19,6 +19,8 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.Authori
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.output.ProvidedServiceRepository;
+import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceRatePolicy;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,21 +56,19 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
     private final ProvidedServiceReadMapper readMapper;
     private final ProvidedServiceWriteMapper writeMapper;
     private final AuthorizationService authorizationService;
+    private final ServiceRatePolicy serviceRatePolicy;
 
-    public ProvidedServiceApplicationService(
-            ProvidedServiceRepository serviceRepository,
-            DentistRepository dentistRepository,
-            ReceptionRepository receptionRepository,
-            ProvidedServiceReadMapper readMapper,
-            ProvidedServiceWriteMapper writeMapper,
-            AuthorizationService authorizationService) {
+    public ProvidedServiceApplicationService(ProvidedServiceRepository serviceRepository, DentistRepository dentistRepository, ReceptionRepository receptionRepository, ProvidedServiceReadMapper readMapper, ProvidedServiceWriteMapper writeMapper, AuthorizationService authorizationService, ServiceRatePolicy serviceRatePolicy) {
         this.serviceRepository = serviceRepository;
         this.dentistRepository = dentistRepository;
         this.receptionRepository = receptionRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
         this.authorizationService = authorizationService;
+        this.serviceRatePolicy = serviceRatePolicy;
     }
+
+    
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PROVIDED_SERVICE,
@@ -78,7 +78,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                    RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No found"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
 
         return readMapper.toReadDto(service);
@@ -170,7 +170,17 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
             );
         }*/
 
-        ProvidedService service = writeMapper.fromCreateDto(dto);
+
+       ProvidedService service = ProvidedService.create(
+                writeMapper.toServiceName(dto),
+                writeMapper.toServiceCategory(dto),
+           writeMapper.toServiceCode(dto),
+                writeMapper.toBaseRate(dto),
+                writeMapper.toDuration(dto),
+                writeMapper.toDescription(dto),
+                writeMapper.toDetails(dto),
+                writeMapper.toRequiresAuthorization(dto)
+        );
 
         ProvidedService saved = serviceRepository.save(service);
         return readMapper.toReadDto(saved);
@@ -185,7 +195,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                             RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No fount"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No fount"));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -206,7 +216,14 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
             );
         }
 
-        writeMapper.updateInformationFromDto(dto, service);
+         service.updateInformation(
+            writeMapper.toServiceName(dto),
+            writeMapper.toServiceCategory(dto),
+            writeMapper.toDuration(dto),
+            writeMapper.toRequiresAuthorization(dto),
+            writeMapper.toDescription(dto)
+        );
+
         ProvidedService updated = serviceRepository.save(service);
 
         return readMapper.toReadDto(updated);
@@ -220,8 +237,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
 
-        ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No fount"));
+       
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -241,10 +257,25 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                     VOContext.AUTHORIZATION
             );
         }
+         ProvidedService service = serviceRepository.findById(id)
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("Not found"));
+                
 
-        writeMapper.mapRateFromDto(dto);
+        Price newRate = writeMapper.toRate(dto);
+
+        // Validar con la política antes de aplicar el cambio
+        serviceRatePolicy.validateRateChange(service.getBaseRate(), newRate);
+
+
+
+        service.updateRate(
+                writeMapper.toRate(dto),
+                dto.justification()
+        );
+                
+
+
         ProvidedService updated = serviceRepository.save(service);
-
         return readMapper.toReadDto(updated);
     }
 
@@ -257,7 +288,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                         RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No found"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -280,7 +311,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
 
 
 
-        writeMapper.updateDetailsFromDto(dto);
+        service.updateDetails(writeMapper.toDetails(dto));
 
         ProvidedService updated = serviceRepository.save(service);
         return readMapper.toReadDto(updated);
@@ -295,7 +326,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                            RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No found "));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found "));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -332,7 +363,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                      RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("No found"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -371,7 +402,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                            RolId requesterRolId) {
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new DentalServiceNotFoundException("Not found"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("Not found"));
 
         Receptionist receptionist = receptionRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new BusinessRuleViolationException(

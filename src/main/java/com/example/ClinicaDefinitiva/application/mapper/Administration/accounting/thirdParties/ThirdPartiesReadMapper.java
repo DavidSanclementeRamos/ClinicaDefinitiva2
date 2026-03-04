@@ -13,8 +13,8 @@ public class ThirdPartiesReadMapper {
 
     public ReadThirdPartyDto toReadDto(ThirdParties thirdParties) {
         return new ReadThirdPartyDto(
-                thirdParties.getPartiesId() != null ? thirdParties.getPartiesId().getValue() : null,
-                thirdParties.getCompanyId() != null ? thirdParties.getCompanyId().getValue() : null,
+                thirdParties.getPartiesId().getValue(),
+                thirdParties.getCompanyId().getValue(),
                 thirdParties.getName().getValue(),
                 thirdParties.getTypeDocument(),
                 thirdParties.getDocumentNumber(),
@@ -32,7 +32,7 @@ public class ThirdPartiesReadMapper {
 
     public PageThirdPartyDto toPageDto(ThirdParties thirdParties) {
         return new PageThirdPartyDto(
-                thirdParties.getPartiesId() != null ? thirdParties.getPartiesId().getValue() : null,
+                thirdParties.getPartiesId().getValue(),
                 thirdParties.getName().getValue(),
                 thirdParties.getDocumentNumber(),
                 thirdParties.getTypeThirdParties().name(),

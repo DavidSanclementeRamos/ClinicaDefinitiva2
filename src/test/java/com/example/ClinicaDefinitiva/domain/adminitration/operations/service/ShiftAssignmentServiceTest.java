@@ -1,15 +1,15 @@
 
 package com.example.ClinicaDefinitiva.domain.adminitration.operations.service;
 
-import com.example.ClinicaDefinitiva.application.exceptions.DentalServiceNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.WorkingHours;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftRepository;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.enu.ShiftType;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.model.Shift;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.service.ShiftAssignmentService;
+import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepository;
+import com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftType;
+import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
+import com.example.ClinicaDefinitiva.domain.administration.operations.service.ShiftAssignmentService;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ class ShiftAssignmentServiceTest {
 
         when(dentistRepository.findById(dentistId)).thenReturn(Optional.of(dentist));
 
-        Shift expectedShift = Shift.create(null, dentistId, date, start, end, ShiftType.ADMINISTRATIVE);
+        Shift expectedShift = Shift.create( dentistId, date, start, end, ShiftType.ADMINISTRATIVE);
         when(shiftRepository.save(any(Shift.class))).thenReturn(expectedShift);
 
         Shift result = service.assignShift(dentistId, date, start, end, ShiftType.CLINICAL);
@@ -70,7 +70,7 @@ class ShiftAssignmentServiceTest {
     void shouldThrowExceptionWhenDentistNotFound() {
         when(dentistRepository.findById(dentistId)).thenReturn(Optional.empty());
 
-        assertThrows(DentalServiceNotFoundException.class,
+        assertThrows(ProvidedServiceNotFoundException.class,
             () -> service.assignShift(dentistId,
                     LocalDate.of(2026, 3, 1),
                     LocalTime.of(8, 0),

@@ -35,5 +35,5 @@ public interface JournalEntryUseCase {
 
     ReadJournalEntryDto post(JournalEntryId id, UserIdentityId requesterId, RolId requesterRolId);
 
-    ReadJournalEntryDto reverse(JournalEntryId id, String reason, UserIdentityId requesterId, RolId requesterRolId);
+    ReadJournalEntryDto registerRverse(JournalEntryId id, String reason, UserIdentityId requesterId, RolId requesterRolId);
 }

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Repositorio para OpeningBalance
@@ -15,8 +16,14 @@ import java.util.Optional;
 public interface OpeningBalanceRepository {
     OpeningBalance save(OpeningBalance openingBalance);
     Optional<OpeningBalance> findById(OpeningBalanceId id);
-    Page<OpeningBalance> findByCompanyId(CompanyId companyId);
-    Page<OpeningBalance> findByAccount(LedgerAccountId accountId);
+    Page<OpeningBalance> findByCompanyId(CompanyId companyId,Pageable pageable);
+    Page<OpeningBalance> findByAccount(LedgerAccountId accountId,Pageable pageable);
     Page<OpeningBalance> findByDate(LocalDate date);
     Optional<OpeningBalance> findByAccountAndDate(LedgerAccountId accountId, LocalDate date);
+
+    Page<OpeningBalance> findAll(Pageable pageable);
+
+
+
+    public void deleteById(OpeningBalanceId openingBalanceId);
 }

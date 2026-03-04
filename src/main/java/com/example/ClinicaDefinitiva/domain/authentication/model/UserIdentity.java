@@ -47,7 +47,7 @@ public class UserIdentity {
     private UserIdentityStatus status;
     private long version;
 
-    public UserIdentity(UserIdentityId id, Email email, HashedPassword hashedPassword, UserIdentityName name, Instant createdAt) {
+    private UserIdentity(UserIdentityId id, Email email, HashedPassword hashedPassword, UserIdentityName name, Instant createdAt) {
         this.id = id;
         this.email = email;
         this.hashedPassword = hashedPassword;

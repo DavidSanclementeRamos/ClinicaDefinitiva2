@@ -62,7 +62,7 @@ public interface AppointmentRepository {
             LocalDateTime startOfDay,
             LocalDateTime endOfDay, Pageable pageable
     );
-    List<Appointment> findByPatientBetween(
+    Page<Appointment> findByPatientBetween(
             PatientId patientId,
             LocalDateTime start,
             LocalDateTime end,

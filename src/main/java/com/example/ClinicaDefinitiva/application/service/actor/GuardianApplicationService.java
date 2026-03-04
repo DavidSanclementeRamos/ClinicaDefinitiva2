@@ -1,28 +1,34 @@
 package com.example.ClinicaDefinitiva.application.service.actor;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.guardian.*;
+import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.GuardianNoFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.guardianMapper.GuardianReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.guardianMapper.GuardianWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.GuardianUseCase;
+import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
-import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.GuardianRepository;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+/**
+ * GuardianApplicationService refactorizado.
+ * 
+ * POLÍTICAS:
+ * - OwnershipPolicy: Tutor solo ve sus propios datos
+ * - SectorBasedPolicy: Receptionist por sector
+ */
 @Service
 @Transactional
 public class GuardianApplicationService implements GuardianUseCase {
@@ -31,18 +37,18 @@ public class GuardianApplicationService implements GuardianUseCase {
     private final ReceptionRepository receptionRepository;
     private final GuardianReadMapper readMapper;
     private final GuardianWriteMapper writeMapper;
-    private final AuthorizationService authorizationService;
+    private final AuthorizationHelper authorizationHelper;
 
     public GuardianApplicationService(GuardianRepository guardianRepository,
                                       ReceptionRepository receptionRepository,
                                       GuardianReadMapper readMapper,
                                       GuardianWriteMapper writeMapper,
-                                      AuthorizationService authorizationService) {
+                                      AuthorizationHelper authorizationHelper) {
         this.guardianRepository = guardianRepository;
         this.receptionRepository = receptionRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
-        this.authorizationService = authorizationService;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @Override
@@ -55,25 +61,17 @@ public class GuardianApplicationService implements GuardianUseCase {
         Guardian guardian = guardianRepository.findById(id)
                 .orElseThrow(() -> new GuardianNoFoundException("Not fount"));
 
-        // Construir contexto con ownership
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
+        // OwnershipPolicy: Tutor solo ve sus propios datos
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.GUARDIAN,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withResourceOwnerId(guardian.getUserId());
-
-        // Si es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+                .withOwnership(guardian.getUserId()) // ← OwnershipPolicy
+                .build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return readMapper.toReadDto(guardian);
     }
@@ -85,22 +83,14 @@ public class GuardianApplicationService implements GuardianUseCase {
                                          UserIdentityId requesterId,
                                          RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId);
-
-        // Si es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+       // SectorBasedPolicy: Receptionist ve todos
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.GUARDIAN,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder().build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return guardianRepository.findAll(pageable)
                 .map(readMapper::toPageDto);
@@ -118,19 +108,15 @@ public class GuardianApplicationService implements GuardianUseCase {
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
                 .withResourceId(patientId.value());
 
-        // Si es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+         authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.GUARDIAN,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder()
+                .withResourceId(patientId.value())
+                .build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return guardianRepository.findByPatientId(patientId, pageable)
                 .map(readMapper::toPageDto);
@@ -139,29 +125,24 @@ public class GuardianApplicationService implements GuardianUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.GUARDIAN,
             action = ActionCatalog.BasicAction.CREATE)
-    public ReadGuardianDto save(CreateGuardianDto createGuardianDto,
+    public ReadGuardianDto save(CreateGuardianDto dto,
                                 UserIdentityId requesterId,
                                 RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
+         authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.GUARDIAN,
+            ActionCatalog.BasicAction.CREATE,
+            AuthorizationContext.builder().build()
+        );
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
+          Guardian guardian = Guardian.registerGuardian(
+            writeMapper.toPerson(dto),
+            writeMapper.toUserIdentityId(dto),
+            writeMapper.toTypeGuardian(dto)
+        );
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        Guardian guardian = writeMapper.fromCreateDto(createGuardianDto);
         Guardian saved = guardianRepository.save(guardian);
 
         return readMapper.toReadDto(saved);
@@ -170,7 +151,7 @@ public class GuardianApplicationService implements GuardianUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.GUARDIAN,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadGuardianDto updateContactData(UpdateGuardianContactDto updateGuardian,
+    public ReadGuardianDto updateContactData(UpdateGuardianContactDto dto,
                                              GuardianId id,
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
@@ -178,27 +159,23 @@ public class GuardianApplicationService implements GuardianUseCase {
         Guardian guardian = guardianRepository.findById(id)
                 .orElseThrow(() -> new GuardianNoFoundException("Not found"));
 
-        // Construir contexto con ownership
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
+        // OwnershipPolicy
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.GUARDIAN,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withResourceOwnerId(guardian.getUserId());
-
-        // Si es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+                .withOwnership(guardian.getUserId())
+                .build()
         );
 
-        SecurityContext context = contextBuilder.build();
+         guardian.updateContactData(
+            writeMapper.toAddress(dto),
+            writeMapper.toPhoneNumber(dto)
+        );
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        writeMapper.updateContactFromDto(updateGuardian, guardian);
         Guardian updated = guardianRepository.save(guardian);
 
         return readMapper.toReadDto(updated);
@@ -207,7 +184,7 @@ public class GuardianApplicationService implements GuardianUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.GUARDIAN,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadGuardianDto updateSensitiveData(UpdateGuardianSensitiveDto updateGuardian,
+    public ReadGuardianDto updateSensitiveData(UpdateGuardianSensitiveDto dto,
                                                GuardianId id,
                                                UserIdentityId requesterId,
                                                RolId requesterRolId) {
@@ -215,29 +192,29 @@ public class GuardianApplicationService implements GuardianUseCase {
         Guardian guardian = guardianRepository.findById(id)
                 .orElseThrow(() -> new GuardianNoFoundException("Not found"));
 
-        // Para datos sensibles, requiere sector (receptionist)
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
+          authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.GUARDIAN,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceOwnerId(guardian.getUserId())
-                .build();
+                .withOwnership(guardian.getUserId())
+                .build()
+        ); 
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+          guardian.updateSensitiveData(
+            writeMapper.toAge(dto),
+            writeMapper.toBloodType(dto),
+            writeMapper.toDateOfBirth(dto),
+            writeMapper.toDocument(dto),
+            writeMapper.toDocumentEPS(dto),
+            writeMapper.toFullName(dto),
+            writeMapper.toTypeGuardian(dto)
+        );
 
-        writeMapper.updateSensitiveFromDto(updateGuardian, guardian);
-        Guardian updated = guardianRepository.save(guardian);
+
+          Guardian updated = guardianRepository.save(guardian);
 
         return readMapper.toReadDto(updated);
     }
@@ -252,24 +229,15 @@ public class GuardianApplicationService implements GuardianUseCase {
         Guardian guardian = guardianRepository.findById(id)
                 .orElseThrow(() -> new GuardianNoFoundException("Not found"));
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
+          authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.GUARDIAN,
+            ActionCatalog.BasicAction.DELETE,
+            AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+                .build()
+        );
 
         guardianRepository.deleteById(guardian.getGuardianId());
     }

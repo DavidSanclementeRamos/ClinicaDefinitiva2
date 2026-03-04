@@ -2,16 +2,16 @@ package com.example.ClinicaDefinitiva.domain.schedule.service;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftRepository;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceDuration;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepository;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.schedule.output.AppointmentRepository;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.model.Shift;
+import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
 

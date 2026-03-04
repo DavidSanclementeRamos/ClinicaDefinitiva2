@@ -3,25 +3,32 @@ package com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
 public enum ThirdPartiesError implements ErrorCatalog {
+    
+    // si
     ERR_THIRD_PARTY_INVALID_DOCUMENT_LENGTH("RN-THIRDPARTIES-001", "error.thirdParties.invalidDocumentLength",
             "Número de documento debe tener entre 5 y 20 caracteres"),
 
+    // si
     ERR_THIRD_PARTY_MISSING_DOCUMENT_TYPE("RN-THIRDPARTIES-002", "error.thirdParties.missingDocumentType",
             "Tipo de documento es obligatorio"),
 
+    // si
     ERR_THIRD_PARTY_MISSING_DOCUMENT_NUMBER("RN-THIRDPARTIES-003", "error.thirdParties.missingDocumentNumber",
             "Número de documento es obligatorio y único"),
 
+    // si
     ERR_THIRD_PARTY_MISSING_TYPE("RN-THIRDPARTIES-004", "error.thirdParties.missingType",
             "Tipo de tercero es obligatorio"),
 
+    // si
     ERR_THIRD_PARTY_NOT_EDITABLE("RN-THIRDPARTIES-005", "error.thirdParties.notEditable",
             "Solo puede editarse si está activo"),
 
+    // si
     ERR_THIRD_PARTY_INACTIVATION_REQUIRES_REASON("RN-THIRDPARTIES-006", "error.thirdParties.inactivationRequiresReason",
             "Inactivación requiere motivo obligatorio"),
 
-    ERR_THIRD_PARTY_CANNOT_MODIFY_DOCUMENT("RN-THIRDPARTIES-007", "error.thirdParties.cannotModifyDocument",
+    /*ERR_THIRD_PARTY_CANNOT_MODIFY_DOCUMENT("RN-THIRDPARTIES-007", "error.thirdParties.cannotModifyDocument",
             "No puede modificarse el número de documento una vez registrado"),
 
     ERR_THIRD_PARTY_DUPLICATE_DOCUMENT("RN-THIRDPARTIES-008", "error.thirdParties.duplicateDocument",
@@ -29,8 +36,12 @@ public enum ThirdPartiesError implements ErrorCatalog {
 
     ERR_THIRD_PARTY_INVALID_DOCUMENT_FORMAT("RN-THIRDPARTIES-009", "error.thirdParties.invalidDocumentFormat",
             "Número de documento solo acepta caracteres alfanuméricos"),
+    */
+    // si
     ERR_THIRD_PARTY_ALREADY_ACTIVE("RN-THIRDPARTIES-010", "error.thirdParties.alreadyActive",
             "El tercero ya está activo"),
+    
+    // si
     ERR_THIRD_PARTY_ALREADY_INACTIVE("RN-THIRDPARTIES-011", "error.thirdParties.alreadyInactive",
             "El tercero ya está inactivo");
 

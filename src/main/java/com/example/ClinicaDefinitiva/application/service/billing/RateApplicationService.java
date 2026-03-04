@@ -5,8 +5,8 @@ import com.example.ClinicaDefinitiva.application.dto.billing.rate.CreateRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.PageRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.ReadRateDto;
 import com.example.ClinicaDefinitiva.application.exceptions.RateNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.billing.RateReadMapper;
-import com.example.ClinicaDefinitiva.application.mapper.billing.RateWriteMapper;
+import com.example.ClinicaDefinitiva.application.mapper.billing.rate.RateReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.billing.rate.RateWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.billing.RateUseCase;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
@@ -15,9 +15,9 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.service
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.RateError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
@@ -143,7 +143,7 @@ public class RateApplicationService implements RateUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
             action = ActionCatalog.BasicAction.READ)
-    public Page<PageRateDto> findByPayerType(Rate.PayerType payerType,
+    public Page<PageRateDto> findByPayerType(String payerType,
                                              Pageable pageable,
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
@@ -190,7 +190,7 @@ public class RateApplicationService implements RateUseCase {
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
             action = ActionCatalog.BasicAction.READ)
     public ReadRateDto findActiveRateForService(Long serviceId,
-                                                Rate.PayerType payerType,
+                                                String payerType,
                                                 Long contractId,
                                                 UserIdentityId requesterId,
                                                 RolId requesterRolId) {
@@ -264,66 +264,25 @@ public class RateApplicationService implements RateUseCase {
         // RN-RATE-003: Check for overlapping rates
         //validateNoOverlappingRates(dto);
 
-        Rate rate = writeMapper.fromCreateDto(dto);
+         Rate rate = Rate.create(
+                writeMapper.toServiceId(dto),
+                writeMapper.toAmount(dto),
+
+                writeMapper.toPayerType(dto),
+                writeMapper.toContractId(dto)
+         );
+
         Rate saved = rateRepository.save(rate);
 
         return readMapper.toDto(saved);
     }
 
-    @Override
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
-            action = ActionCatalog.BasicAction.UPDATE)
-    public ReadRateDto updateAmount(RateId id,
-                                    BigDecimal newAmount,
-                                    LocalDateTime validFrom,
-                                    UserIdentityId requesterId,
-                                    RolId requesterRolId) {
-
-        Rate currentRate = rateRepository.findById(id)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        RateError.ERR_RATE_NOT_FOUND,
-                        EntityContext.RATE
-                ));
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .withResourceId(id.getValue())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        // End validity of current rate
-        currentRate.endValidityAt(validFrom);
-        rateRepository.save(currentRate);
-
-        // Create new rate with new amount
-        Rate newRate = Rate.create(
-                currentRate.getServiceId(),
-                Price.of(newAmount, currentRate.getAmount().getCurrency()),
-                currentRate.getPayerType(),
-                currentRate.getContractId()
-        );
-
-        Rate savedNewRate = rateRepository.save(newRate);
-        return readMapper.toDto(savedNewRate);
-    }
+   
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadRateDto endValidity(RateId id,
+    public ReadRateDto endValidityAt(RateId id,
                                    LocalDateTime endDate,
                                    UserIdentityId requesterId,
                                    RolId requesterRolId) {
@@ -396,21 +355,21 @@ public class RateApplicationService implements RateUseCase {
         rateRepository.save(rate);
     }
 
-    // RN-RATE-003: Validate no overlapping rates
-    /**private void validateNoOverlappingRates(CreateRateDto dto) {
-        boolean hasOverlap = rateRepository.hasOverlappingRates(
-                ServiceId.of(dto.getServiceId()),
-                dto.getPayerType(),
-                dto.getContractId() != null ? ContractId.of(dto.getContractId()) : null,
-                dto.getValidFrom(),
-                dto.getValidTo()
-        );
+    @Override
+    public void markAsReplaced(RateId id, UserIdentityId requesterId, RolId requesterRolId) {
+        Rate rate = rateRepository.findById(id)
+                .orElseThrow(() -> new BusinessRuleViolationException(
+                        RateError.ERR_RATE_NOT_FOUND,
+                        EntityContext.RATE
+                ));
+         
+            rate.markAsReplaced();
+                    rateRepository.save(rate);
 
-        if (hasOverlap) {
-            throw new BusinessRuleViolationException(
-                    RateError.ERR_RATE_OVERLAPPING_VALIDITY,
-                    EntityContext.RATE
-            );
-        }
-    }*/
+            
+        
+    }
+    
+
+ 
 }

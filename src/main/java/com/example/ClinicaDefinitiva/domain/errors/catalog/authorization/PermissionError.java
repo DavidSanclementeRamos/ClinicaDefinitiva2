@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
 public enum PermissionError implements ErrorCatalog {
 
-    // si
+    // si autorizacion 
     ERR_PERMISSION_UNAUTHORIZED_ADD(
             "RN-PERMISSION-001",
             "error.permission.add.unauthorized",
@@ -15,17 +15,19 @@ public enum PermissionError implements ErrorCatalog {
             "error.permission.already.exists",
             "No puede agregar permiso duplicado a un rol"
     ),
+    
     ERR_PERMISSION_CANNOT_REMOVE_LAST(
             "RN-PERMISSION-003",
             "error.permission.remove.last",
             "No puede remover el último permiso de un rol editable"
     ),
-    // si
+    // si autorizacion
     ERR_PERMISSION_UNAUTHORIZED_REMOVE(
             "RN-PERMISSION-004",
             "error.permission.remove.unauthorized",
             "Solo RECEPTIONIST del sector RECURSOS_HUMANOS puede remover permisos"
     ),
+    
     ERR_PERMISSION_SET_EMPTY(
             "RN-PERMISSION-005",
             "error.permission.set.empty",

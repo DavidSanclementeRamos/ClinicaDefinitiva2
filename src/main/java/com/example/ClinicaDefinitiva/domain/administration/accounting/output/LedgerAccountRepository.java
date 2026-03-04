@@ -7,6 +7,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerA
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Repositorio para LedgerAccount
@@ -16,9 +17,12 @@ public interface LedgerAccountRepository {
     Optional<LedgerAccount> findById(LedgerAccountId id);
     Optional<LedgerAccount> findByCode(String code);
     Page<LedgerAccount> findByCompanyId(CompanyId companyId);
-    Page<LedgerAccount> findByNature(NaturalezaCuenta nature);
+    Page<LedgerAccount> findByNature(String nature, Pageable pageable);
     Page<LedgerAccount> findActiveAccounts();
-    Page<LedgerAccount> findByLevel(int level);
+    Page<LedgerAccount> findByLevel(int level,Pageable pageable);
     Page<LedgerAccount> findChildAccounts(String parentCode);
     boolean existsByCode(String code);
+
+    Page<LedgerAccount> findAll(Pageable pageable);
+    Page<LedgerAccount> findByAccountType(String type, Pageable pageable);
 }

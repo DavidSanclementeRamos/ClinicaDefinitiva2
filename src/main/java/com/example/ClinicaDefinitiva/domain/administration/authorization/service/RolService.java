@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.administration.authorization.service;
 
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
@@ -24,33 +24,14 @@ public class RolService {
         this.rolRepository = rolRepository;
     }
 
-    public Rol createCustom(RolEnum baseType, String description, Set<Permission> permissions) {
+    public Rol createCustom(RolEnum baseType, String description) {
         validateUniqueDescription(description);
-        Rol rol = new Rol(
-                baseType,
-                description,
-                false,
-                true,   // clones son editables
-                true,   // clones son eliminables
-                RolStatus.ACTIVE
-        );
-        rol.setPermissions(new HashSet<>(rol.getPermissions()));
-        return rolRepository.save(rol);
+        return Rol.createDefault(baseType, description);
     }
 
     public Rol cloneRole(Rol sourceRole, String newDescription) {
         validateUniqueDescription(newDescription);
-
-        Rol clonedRole = new Rol(
-                sourceRole.getRolEnum(),
-                    newDescription,
-                false,
-                true,   // clones son editables
-                true,   // clones son eliminables
-                RolStatus.ACTIVE
-        );
-        clonedRole.setPermissions(new HashSet<>(sourceRole.getPermissions()));
-        return rolRepository.save(clonedRole);
+        return Rol.cloneFrom(sourceRole, newDescription);
     }
 
     private void validateUniqueDescription(String description) {

@@ -15,7 +15,7 @@ import java.util.List;
  * Se utiliza cuando una operación incumple una restricción explícita
  * definida por el modelo de negocio.
  */
-public class BusinessRuleViolationException extends ModelException {
+public class BusinessRuleViolationException extends DomainAggregateException {
 
     public BusinessRuleViolationException(ErrorCatalog catalogo, DomainContext contexto) {
         super(catalogo, contexto);

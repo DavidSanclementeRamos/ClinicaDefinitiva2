@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.NaturalezaCuenta;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 //import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.LedgerAccountError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
@@ -191,10 +191,10 @@ public final class LedgerAccount {
      */
     public void validateMovementRequirements(boolean hasThirdParty, boolean hasDocument) {
         if (this.requiresThirdParty && !hasThirdParty) {
-          //  throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_REQUIRES_THIRD_PARTY, EntityContext.LEDGERACCOUNT);
+            throw new DomainAggregateException(LedgerAccountError.ERR_ACCOUNT_REQUIRES_THIRD_PARTY, EntityContext.LEDGERACCOUNT);
         }
         if (this.requiresDocument && !hasDocument) {
-          //  throw new DomainAggregateException(ErrorCatalogXD.ERR_ACCOUNT_REQUIRES_DOCUMENT, EntityContext.LEDGERACCOUNT);
+            throw new DomainAggregateException(LedgerAccountError.ERR_ACCOUNT_REQUIRES_DOCUMENT, EntityContext.LEDGERACCOUNT);
         }
     }
 

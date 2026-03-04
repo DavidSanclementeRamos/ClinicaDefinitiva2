@@ -148,4 +148,3 @@ Este VO será extendido con:
 
 - ADR-02: Implementación estratégica de VO
 - ADR-01: Migración a arquitectura hexagonal
-  

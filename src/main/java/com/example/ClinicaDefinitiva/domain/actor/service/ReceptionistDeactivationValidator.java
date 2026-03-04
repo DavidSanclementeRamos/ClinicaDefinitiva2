@@ -1,10 +1,10 @@
 package com.example.ClinicaDefinitiva.domain.actor.service;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.ReceptionId;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.model.Shift;
+import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.ReceptionistError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.ShiftRepository;
+import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepository;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;

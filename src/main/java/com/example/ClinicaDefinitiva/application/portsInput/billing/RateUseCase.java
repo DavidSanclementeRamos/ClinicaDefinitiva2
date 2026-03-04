@@ -50,7 +50,7 @@ public interface RateUseCase {
 
 
     Page<PageRateDto> findByPayerType(
-            Rate.PayerType payerType,
+            String payerType,
             Pageable pageable,
             UserIdentityId requesterId,
             RolId requesterRolId
@@ -65,7 +65,7 @@ public interface RateUseCase {
 
     ReadRateDto findActiveRateForService(
             Long serviceId,
-            Rate.PayerType payerType,
+            String payerType,
             Long contractId,
             UserIdentityId requesterId,
             RolId requesterRolId
@@ -85,15 +85,8 @@ public interface RateUseCase {
             RolId requesterRolId
     );
 
-    ReadRateDto updateAmount(
-            RateId id,
-            java.math.BigDecimal newAmount,
-            LocalDateTime validFrom,
-            UserIdentityId requesterId,
-            RolId requesterRolId
-    );
-
-    ReadRateDto endValidity(
+   
+    ReadRateDto endValidityAt(
             RateId id,
             LocalDateTime endDate,
             UserIdentityId requesterId,
@@ -105,4 +98,8 @@ public interface RateUseCase {
             UserIdentityId requesterId,
             RolId requesterRolId
     );
+    void markAsReplaced(
+    RateId id,
+            UserIdentityId requesterId,
+            RolId requesterRolId);
 }

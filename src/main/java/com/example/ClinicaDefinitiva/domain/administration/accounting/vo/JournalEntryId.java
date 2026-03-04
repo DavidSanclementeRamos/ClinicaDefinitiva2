@@ -4,29 +4,15 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAcc
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
-public final class JournalEntryId {
+public record  JournalEntryId(Long getValue) {
 
-    private final Long value;
-
-    private JournalEntryId(Long value) {
+    public static JournalEntryId of(Long value) {
         if (value == null) {
             throw new ValueObjectValidationException(
                     VoAccountingError.ERR_JOURNAL_ENTRY_ID_NULL,
                     VOContext.ACCOUNTING
             );
         }
-        if (value <= 0) {
-            throw new ValueObjectValidationException(
-                    VoAccountingError.ERR_JOURNAL_ENTRY_ID_INVALID,
-                    VOContext.ACCOUNTING
-            );
-        }
-        this.value = value;
-    }
-
-    public static JournalEntryId of(Long value) {
         return new JournalEntryId(value);
     }
-
-    public Long getValue() { return value; }
 }

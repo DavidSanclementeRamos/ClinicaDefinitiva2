@@ -3,11 +3,11 @@ package com.example.ClinicaDefinitiva.domain.billing.service;
 
 import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.billing.vo.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import org.hibernate.service.internal.ProvidedService;
 
 /**
  * Domain Service: InvoiceItemFactoryService
@@ -24,17 +24,14 @@ public class InvoiceItemFactoryService {
 
 
     public InvoiceItem createFromRateSnapshot(
-            InvoiceItemId id,
             ProvidedService service,
             Rate rate,
             Quantity quantity,
             LocalDateTime performedAt) {
 
-        Objects.requireNonNull(service, "El servicio no puede ser nulo");
-        Objects.requireNonNull(rate, "La tarifa no puede ser nula");
+      
 
         return InvoiceItem.builder()
-                .id(id)
                 .serviceId(service.getId())
                 .serviceCode(service.getCode().getValue())
                 .serviceDescription(service.getName().getValue())

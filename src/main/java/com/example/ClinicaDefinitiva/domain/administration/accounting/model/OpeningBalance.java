@@ -38,7 +38,10 @@ public class OpeningBalance {
             LedgerAccountId cuentaId,
             ThirdPartiesId thirdPartiesId,
             Price amount
+
             ) {
+    
+            
 
         return new OpeningBalance(
                 null,
@@ -54,12 +57,8 @@ public class OpeningBalance {
     }
 
   private void validateMandatoryFields(Price amount, LocalDate date) {
-    if (amount.isNegativeOrZero()) {
-        throw new BusinessRuleViolationException(OpeningBalanceError.ERR_OPENING_BALANCE_INVALID_AMOUNT, EntityContext.OPENINGBALANCE);
-    }
-    if (amount == null) {
-        throw new DomainAggregateException(OpeningBalanceError.ERR_OPENING_BALANCE_MISSING_AMOUNT, EntityContext.OPENINGBALANCE);
-    }
+    
+    
       if (date == null) {
           throw new DomainAggregateException(OpeningBalanceError.ERR_OPENING_BALANCE_MISSING_DATE, EntityContext.OPENINGBALANCE);
       }

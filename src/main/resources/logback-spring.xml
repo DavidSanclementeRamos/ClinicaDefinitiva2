@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- ========== APPENDER PARA CONSOLA (DESARROLLO) ========== -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Patrón legible para debugging -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ========== APPENDER PARA LOGS GENERALES DE APLICACIÓN ========== -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/application.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory> <!-- Retención moderada -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ========== APPENDER PARA AUDITORÍA DE AUTORIZACIÓN ========== -->
+    <appender name="AUTHORIZATION_AUDIT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/authorization-audit.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/authorization-audit.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>90</maxHistory> <!-- Retención larga para compliance -->
+        </rollingPolicy>
+        <encoder>
+            <!-- Solo el mensaje JSON generado por AuthorizationAuditEvent.toJson() -->
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ========== LOGGER DEDICADO PARA AUDITORÍA ========== -->
+    <logger name="AUTHORIZATION_AUDIT" level="INFO" additivity="false">
+        <appender-ref ref="AUTHORIZATION_AUDIT_FILE"/>
+    </logger>
+
+    <!-- ========== LOGGER PARA ERRORES DE AUTORIZACIÓN ========== -->
+    <logger name="com.example.ClinicaDefinitiva.domain.administration.authorization.infrastructure.DefaultAuditLogger"
+            level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <!-- ========== ROOT LOGGER (GENERAL) ========== -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
+import com.example.ClinicaDefinitiva.domain.billing.output.RateRepository;
 
 /**
  * Domain Service: InvoiceDomainService

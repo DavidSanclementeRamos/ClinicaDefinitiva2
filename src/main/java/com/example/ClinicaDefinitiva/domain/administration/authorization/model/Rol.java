@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.administration.authorization.model;
 
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
@@ -31,15 +31,27 @@ public class Rol {
 
 
 
-    public Rol(RolEnum rolEnum, String description, boolean isDefault,
+    private Rol(RolEnum rolEnum, String description, boolean isDefault,
                boolean isEditable, boolean isDeletable, RolStatus statusRol) {
         this.rolEnum = rolEnum ;
-        this.description = Objects.requireNonNull(description, "Description cannot be null");
+        this.description = description;
         this.isDefault = isDefault;
         this.isEditable = isEditable;
         this.isDeletable = isDeletable;
-        this.statusRol = Objects.requireNonNull(statusRol, "Status cannot be null");
+        this.statusRol = statusRol;
         this.permissions = new HashSet<>();
+    }
+    
+        /** Crea un rol institucional/base del sistema (no editable ni eliminable). */
+    public static Rol createDefault(RolEnum baseType, String description) {
+        return new Rol(baseType, description, true, false, false, RolStatus.ACTIVE);
+    }
+
+    
+
+    /** Clona un rol existente con nueva descripción (editable y eliminable). */
+    public static Rol cloneFrom(Rol sourceRole, String newDescription) {
+        return new Rol(sourceRole.getRolEnum(), newDescription, false, true, true, RolStatus.ACTIVE);
     }
 
 
@@ -51,6 +63,10 @@ public class Rol {
 
     public void removePermission(Permission permission) {
         ensureEditable();
+        if(this.permissions.isEmpty()){
+            throw new BusinessRuleViolationException( RolError.RR_ROL_EMPTY_PERMISSIONS, EntityContext.ROL );
+            
+        }
 
         this.permissions.remove(permission);
     }
@@ -70,6 +86,12 @@ public class Rol {
         if (!isDeletable){
             throw new BusinessRuleViolationException(RolError.ERR_ROL_SYSTEM_NOT_DELETABLE, EntityContext.ROL);
         }
+         if (this.statusRol != RolStatus.DELETED) {
+        throw new BusinessRuleViolationException(
+                RolError.ERR_ROL_DELETE_NOT_MARKED,
+                EntityContext.ROL
+        );
+         }
     }
     private void ensureEditable() {
         if (!isEditable) {

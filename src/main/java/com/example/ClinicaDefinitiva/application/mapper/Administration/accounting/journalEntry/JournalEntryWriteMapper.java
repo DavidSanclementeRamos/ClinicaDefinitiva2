@@ -5,43 +5,54 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.UpdateJournalEntryDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.ReadLedgerAccountDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntry;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntryLine;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
+import java.time.LocalDate;
+import java.util.Currency;
+import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JournalEntryWriteMapper {
-    public JournalEntry fromCreateDto(CreateJournalEntryDto dto){
-        return JournalEntry.registerJournalEntry(
-               CompanyId.of( dto.companyId()),
-                dto.date(),
-                dto.documentNumber(),
-                dto.description()
 
-        );
+    public CompanyId toCompanyId(CreateJournalEntryDto dto) {
+        return CompanyId.of(dto.companyId());
     }
 
-    public void toUpdateDto(UpdateJournalEntryDto dto, JournalEntry journalEntry){
-        journalEntry.updateInformation(
-                dto.description(),
-                dto.documentNumber()
-        );
+    public LocalDate toDate(CreateJournalEntryDto dto) {
+        return dto.date();
     }
 
-    public ReadLedgerAccountDto toAddLineDto(AddJournalEntryLineDto dto){
-        return new ReadLedgerAccountDto(
-                dto.id(),
-                dto.thirdPartyId(),
-                dto.description(),
-                null,
-                dto.document(),
-                dto.isDebit(),
-                true,
-                true,
-                1,
-                "",
-                true,
-                true,
-                true,
-                true
+    public String toDocumentNumber(CreateJournalEntryDto dto) {
+        return dto.documentNumber();
+    }
 
+    public String toDescription(CreateJournalEntryDto dto) {
+        return dto.description();
+    }
+
+
+
+    public String toDescription(UpdateJournalEntryDto dto) {
+        return dto.description();
+    }
+
+    public String toDocumentNumber(UpdateJournalEntryDto dto) {
+        return dto.documentNumber();
+    }
+
+
+    public JournalEntryLine toAddLineDto(AddJournalEntryLineDto dto){
+        return  JournalEntryLine.of(
+               LedgerAccountId.of( dto.id()),
+               ThirdPartiesId.of( dto.thirdPartyId()),
+                dto.description(), 
+               Price.of(dto.amount(), Currency.getInstance("COP")), 
+                dto.isDebit(), 
+                dto.document()
 
 
         );

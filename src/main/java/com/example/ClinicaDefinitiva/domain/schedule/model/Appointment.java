@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.schedule.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
@@ -223,41 +223,7 @@ public class Appointment {
 
         public Appointment build() {
 
-            if (id == null) {
-                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_ID,EntityContext.APPOINTMENT);
-            }
-            if (dentist == null) {
-                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_DENTIST,EntityContext.APPOINTMENT);
-            }
-            if (patient == null) {
-                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_PATIENT,EntityContext.APPOINTMENT);
-            }
-            if (serviceId == null) {
-                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_SERVICE,EntityContext.APPOINTMENT);
-            }
-            if (start == null) {
-                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_START,EntityContext.APPOINTMENT);
-            }
-            if (end == null) {
-
-                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_END,EntityContext.APPOINTMENT);
-            }
-            if (reason == null || reason.isBlank()) {
-                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_REASON,EntityContext.APPOINTMENT);
-            }
-            if (appointmentType == null) {
-                throw new DomainAggregateException(AppointmentError.ERR_APPT_REQUIRED_TYPE,EntityContext.APPOINTMENT);
-            }
-
-
-            if (!start.isBefore(end)) {
-                throw new DomainAggregateException(AppointmentError.ERR_APPT_INVALID_DATE_RANGE,EntityContext.APPOINTMENT);
-            }
-
-            if (start.isBefore(LocalDateTime.now())) {
-                throw new DomainAggregateException(AppointmentError.ERR_APPT_PAST_DATE,EntityContext.APPOINTMENT);
-            }
-
+      
             return new Appointment(this);
         }
     }

@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Company
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePerson;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.CompanyError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
@@ -38,81 +38,53 @@ public final class Company {
     private LocalDate incorporationDate;
     private CompanyStatus status;
 
-    private Company(
-            CompanyId id,
-            Name name,
-            Nit taxIdentificationNumber,
-            TypePerson typePerson,
-            TaxRegime taxRegime,
-            String legalRepresentative,
-            Address address,
-            PhoneNumber phoneNumber,
-            Email email,
-            LocalDate incorporationDate,
-            CompanyStatus status
-            ) {
+    private Company(Builder builder) {
+        validateIncorporationDate(builder.incorporationDate);
+        
 
-        validateIncorporationDate(incorporationDate);
-        if (Objects.isNull(typePerson)) {
-            throw new DomainAggregateException(CompanyError.ERR_COMPANY_MISSING_PERSON_TYPE, EntityContext.COMPANY);
-        }
-
-
-        this.id = id;
-        this.name = name;
-        this.taxIdentificationNumber = taxIdentificationNumber;
-        this.typePerson = typePerson;
-        this.taxRegime = taxRegime;
-        this.legalRepresentative = legalRepresentative != null ? legalRepresentative.trim() : null;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.incorporationDate = incorporationDate;
-        this.status = status != null ? status : CompanyStatus.of(CompanyStatus.Status.ACTIVE);
-
+        this.id = builder.id;
+        this.name = builder.name;
+        this.taxIdentificationNumber = builder.taxIdentificationNumber;
+        this.typePerson = builder.typePerson;
+        this.taxRegime = builder.taxRegime;
+        this.legalRepresentative = builder.legalRepresentative ;
+        this.address = builder.address;
+        this.phoneNumber = builder.phoneNumber;
+        this.email = builder.email;
+        this.incorporationDate = builder.incorporationDate;
+        this.status = builder.status;
     }
-
-    /**
-     * Factory method para registrar una nueva compañía.
-     */
+    
     public static Company registerCompany(
-            Name name,
-            Nit taxIdentificationNumber,
-            TypePerson typePerson,
-            TaxRegime taxRegime,
-            String legalRepresentative,
-            Address address,
-            PhoneNumber phoneNumber,
-            Email email) {
+        Name name,
+        Nit taxIdentificationNumber,
+        TypePerson typePerson,
+        TaxRegime taxRegime,
+        String legalRepresentative,
+        Address address,
+        PhoneNumber phoneNumber,
+        Email email) {
 
-        return new Company(
-                null,
-                name,
-                taxIdentificationNumber,
-                typePerson,
-                taxRegime,
-                legalRepresentative,
-                address,
-                phoneNumber,
-                email,
-                LocalDate.now(),
-                CompanyStatus.of(CompanyStatus.Status.ACTIVE)
-        );
-    }
+    return Company.builder()
+            .withName(name)
+            .withTaxIdentificationNumber(taxIdentificationNumber)
+            .withTypePerson(typePerson)
+            .withTaxRegime(taxRegime)
+            .withLegalRepresentative(legalRepresentative)
+            .withAddress(address)
+            .withPhoneNumber(phoneNumber)
+            .withEmail(email)
+            .withIncorporationDate(LocalDate.now())
+            .withStatus(CompanyStatus.of(CompanyStatus.Status.ACTIVE))
+            .build();
+}
 
-    /**
-     * Actualiza la información de contacto y datos generales de la compañía.
-     * Solo permite edición si el estado es editable.
-     */
-    public void updateContactInformation(
-            Name name,
-            String legalRepresentative,
-            Address address,
-            PhoneNumber phoneNumber,
-            Email email) {
 
+   
+    // Métodos de negocio
+    public void updateContactInformation(Name name, String legalRepresentative,
+                                         Address address, PhoneNumber phoneNumber, Email email) {
         ensureEditable();
-
         this.name = name;
         this.legalRepresentative = legalRepresentative != null ? legalRepresentative.trim() : null;
         this.address = address;
@@ -120,40 +92,24 @@ public final class Company {
         this.email = email;
     }
 
-    /**
-     * Actualiza el estado de la compañía.
-     */
     public void updateStatus(CompanyStatus newStatus) {
         Objects.requireNonNull(newStatus, "El estado no puede ser nulo");
-
         if (Objects.equals(this.status, CompanyStatus.of(CompanyStatus.Status.INACTIVE)) &&
                 newStatus.equals(CompanyStatus.of(CompanyStatus.Status.ACTIVE))) {
-             throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_CANNOT_REACTIVATE_DIRECTLY, EntityContext.COMPANY);
+            throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_CANNOT_REACTIVATE_DIRECTLY, EntityContext.COMPANY);
         }
-
         this.status = newStatus;
     }
 
-    /**
-     * Actualiza información fiscal de la compañía.
-     * Solo permite cambios si el estado es editable.
-     */
-    public void updateTaxInformation(
-            Nit taxIdentificationNumber,
-            TaxRegime taxRegime,
-            TypePerson typePerson,
-            LocalDate incorporationDate) {
-
+    public void updateTaxInformation(Nit taxIdentificationNumber, TaxRegime taxRegime,
+                                     TypePerson typePerson, LocalDate incorporationDate) {
         ensureEditable();
         validateIncorporationDate(incorporationDate);
-
         this.taxIdentificationNumber = taxIdentificationNumber;
         this.taxRegime = taxRegime;
         this.typePerson = typePerson;
         this.incorporationDate = incorporationDate;
     }
-
-
 
     private void ensureEditable() {
         if (!status.isEditable()) {
@@ -162,18 +118,18 @@ public final class Company {
     }
 
     private void validateIncorporationDate(LocalDate date) {
-        if (Objects.isNull(incorporationDate)) {
-            throw new TemporalValidationException(CompanyError.ERR_COMPANY_MISSING_INCORPORATION_DATE, EntityContext.COMPANY);
+        if (Objects.isNull(date)) {
+            throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_MISSING_INCORPORATION_DATE, EntityContext.COMPANY);
         }
-        if (incorporationDate.isAfter(LocalDate.now())) {
-            throw new TemporalValidationException(CompanyError.ERR_COMPANY_FUTURE_INCORPORATION_DATE, EntityContext.COMPANY);
+        if (date.isAfter(LocalDate.now())) {
+            throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_FUTURE_INCORPORATION_DATE, EntityContext.COMPANY);
         }
         if (date.isBefore(LocalDate.of(1800, 1, 1))) {
-            throw new TemporalValidationException(CompanyError.ERR_COMPANY_INVALID_INCORPORATION_DATE, EntityContext.COMPANY);
+            throw new BusinessRuleViolationException(CompanyError.ERR_COMPANY_INVALID_INCORPORATION_DATE, EntityContext.COMPANY);
         }
     }
 
-
+    // Getters
     public CompanyId getId() { return id; }
     public Name getName() { return name; }
     public Nit getTaxIdentificationNumber() { return taxIdentificationNumber; }
@@ -185,5 +141,40 @@ public final class Company {
     public Email getEmail() { return email; }
     public LocalDate getIncorporationDate() { return incorporationDate; }
     public CompanyStatus getStatus() { return status; }
+    
+    
+     public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private CompanyId id;
+        private Name name;
+        private Nit taxIdentificationNumber;
+        private TypePerson typePerson;
+        private TaxRegime taxRegime;
+        private String legalRepresentative;
+        private Address address;
+        private PhoneNumber phoneNumber;
+        private Email email;
+        private LocalDate incorporationDate = LocalDate.now();
+        private CompanyStatus status = CompanyStatus.of(CompanyStatus.Status.ACTIVE);
+
+        public Builder withId(CompanyId id) { this.id = id; return this; }
+        public Builder withName(Name name) { this.name = name; return this; }
+        public Builder withTaxIdentificationNumber(Nit nit) { this.taxIdentificationNumber = nit; return this; }
+        public Builder withTypePerson(TypePerson typePerson) { this.typePerson = typePerson; return this; }
+        public Builder withTaxRegime(TaxRegime taxRegime) { this.taxRegime = taxRegime; return this; }
+        public Builder withLegalRepresentative(String rep) { this.legalRepresentative = rep; return this; }
+        public Builder withAddress(Address address) { this.address = address; return this; }
+        public Builder withPhoneNumber(PhoneNumber phoneNumber) { this.phoneNumber = phoneNumber; return this; }
+        public Builder withEmail(Email email) { this.email = email; return this; }
+        public Builder withIncorporationDate(LocalDate date) { this.incorporationDate = date; return this; }
+        public Builder withStatus(CompanyStatus status) { this.status = status; return this; }
+
+        public Company build() {
+            return new Company(this);
+        }
+    }
 
 }

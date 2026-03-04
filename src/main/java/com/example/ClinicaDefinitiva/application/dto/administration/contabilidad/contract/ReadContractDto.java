@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.ContractStatus;
+import java.math.BigDecimal;
 
 import java.time.LocalDate;
 
@@ -17,7 +18,7 @@ public record ReadContractDto(
         LocalDate startDate,
         LocalDate endDate,
         String coverageType,
-        Double coverageRate,
+        BigDecimal coverageRate,
         ContractStatus status,
         boolean isExpired,
         boolean isNearExpiration,

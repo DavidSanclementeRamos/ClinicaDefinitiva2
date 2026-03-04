@@ -41,5 +41,3 @@ feat(accounting): refactorización de dominio y nuevas reglas de negocio
 - Estándar ampliamente usado en proyectos profesionales y open source.
 
 ---
-
-👉 ¿Quieres que te arme una **chuleta rápida (cheat sheet)** con ejemplos de commits para cada tipo (`feat`, `fix`, `refactor`, etc.) que puedas tener a mano en tu flujo de trabajo?

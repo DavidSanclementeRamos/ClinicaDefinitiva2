@@ -6,15 +6,35 @@ import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 
 import java.util.List;
 
-public class AggregateBusinessRuleViolationException extends ModelException {
+public class AggregateBusinessRuleViolationException extends DomainAggregateException {
+
     private final List<OutcomeDetail> detalles;
 
     public AggregateBusinessRuleViolationException(List<OutcomeDetail> detalles) {
         super(
-                detalles != null && !detalles.isEmpty() ? detalles.get(0).getCode() : null,
-                detalles != null && !detalles.isEmpty() ? detalles.get(0).getContext() : null
+            primerCatalogo(detalles),   // ← validación ocurre aquí, dentro del argumento
+            primerContexto(detalles),
+            Map.of("totalViolaciones", detalles.size())
         );
-        this.detalles = detalles != null ? List.copyOf(detalles) : List.of();
+        this.detalles = List.copyOf(detalles);
+    }
+
+    private static ErrorCatalog primerCatalogo(List<OutcomeDetail> detalles) {
+        if (detalles == null || detalles.isEmpty()) {
+            throw new IllegalArgumentException(
+                "AggregateBusinessRuleViolationException requiere al menos un OutcomeDetail"
+            );
+        }
+        return detalles.get(0).getCode();
+    }
+
+    private static DomainContext primerContexto(List<OutcomeDetail> detalles) {
+        if (detalles == null || detalles.isEmpty()) {
+            throw new IllegalArgumentException(
+                "AggregateBusinessRuleViolationException requiere al menos un OutcomeDetail"
+            );
+        }
+        return detalles.get(0).getContext();
     }
 
     public List<OutcomeDetail> getDetalles() {

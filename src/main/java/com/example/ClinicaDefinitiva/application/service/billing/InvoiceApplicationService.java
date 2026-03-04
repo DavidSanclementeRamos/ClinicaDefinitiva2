@@ -1,8 +1,13 @@
 package com.example.ClinicaDefinitiva.application.service.billing;
 
 
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceStatus;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceNumberGenerator;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.*;
 import com.example.ClinicaDefinitiva.application.exceptions.InvoiceNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.RateNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.PatientNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.billing.invoice.InvoiceReadMapper;
@@ -21,15 +26,20 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.billing.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
+import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
 import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceDomainService;
 import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceItemFactoryService;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.dentalService.output.ProvidedServiceRepository;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceCode;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.portsOutput.InvoiceRepository;
+import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Currency;
 
 
 @Service
@@ -54,18 +65,10 @@ public class InvoiceApplicationService implements InvoiceUseCase {
     private final InvoiceWriteMapper writeMapper;
     private final AuthorizationService authorizationService;
     private final InvoiceNumberGenerator invoiceNumberGenerator;
+    private final RateRepository rateRepository;
+    private final ProvidedServiceRepository providedServiceRepository;
 
-    public InvoiceApplicationService(
-            InvoiceRepository invoiceRepository,
-            PatientRepository patientRepository,
-            DentistRepository dentistRepository,
-            ReceptionRepository receptionRepository,
-            InvoiceDomainService invoiceDomainService,
-            InvoiceItemFactoryService invoiceItemFactoryService,
-            InvoiceReadMapper readMapper,
-            InvoiceWriteMapper writeMapper,
-            AuthorizationService authorizationService,
-            InvoiceNumberGenerator invoiceNumberGenerator) {
+    public InvoiceApplicationService(InvoiceRepository invoiceRepository, PatientRepository patientRepository, DentistRepository dentistRepository, ReceptionRepository receptionRepository, InvoiceDomainService invoiceDomainService, InvoiceItemFactoryService invoiceItemFactoryService, InvoiceReadMapper readMapper, InvoiceWriteMapper writeMapper, AuthorizationService authorizationService, InvoiceNumberGenerator invoiceNumberGenerator, RateRepository rateRepository, ProvidedServiceRepository providedServiceRepository) {
         this.invoiceRepository = invoiceRepository;
         this.patientRepository = patientRepository;
         this.dentistRepository = dentistRepository;
@@ -76,7 +79,12 @@ public class InvoiceApplicationService implements InvoiceUseCase {
         this.writeMapper = writeMapper;
         this.authorizationService = authorizationService;
         this.invoiceNumberGenerator = invoiceNumberGenerator;
+        this.rateRepository = rateRepository;
+        this.providedServiceRepository = providedServiceRepository;
     }
+    
+
+  
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.INVOICE,
@@ -314,7 +322,16 @@ public class InvoiceApplicationService implements InvoiceUseCase {
             );
         }
 
-        Invoice invoice = writeMapper.fromCreateParticularDto(dto);
+        Invoice invoice = Invoice.createParticular(
+            writeMapper.toPatientId(dto),
+            writeMapper.toProviderId(dto),
+            writeMapper.toDentistId(dto),
+            writeMapper.toCurrency(dto),
+            writeMapper.toNotes(dto),
+            writeMapper.toDueDate(dto)
+        );
+        
+        invoiceDomainService.validateRates(invoice, dto.dueDate());
         Invoice saved = invoiceRepository.save(invoice);
 
         return readMapper.toDto(saved);
@@ -345,10 +362,19 @@ public class InvoiceApplicationService implements InvoiceUseCase {
             );
         }
 
-        Invoice invoice = writeMapper.fromCreateInstitutionalDto(dto);
+
+        Invoice invoice = Invoice.createInstitutional(
+                writeMapper.toContractId(dto),
+            writeMapper.toProviderId(dto),
+            writeMapper.toDentistId(dto),
+            writeMapper.toCurrency(dto),
+            writeMapper.toNotes(dto),
+            writeMapper.toDueDate(dto)
+        );
 
         // RN-INVOICE-007: Validate institutional contract
         invoiceDomainService.validateInstitutionalContract(invoice);
+        invoiceDomainService.validateRates(invoice, dto.dueDate());
 
         Invoice saved = invoiceRepository.save(invoice);
 
@@ -363,8 +389,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                                   UserIdentityId requesterId,
                                   RolId requesterRolId) {
 
-        Invoice invoice = invoiceRepository.findById(invoiceId)
-                .orElseThrow(() -> new InvoiceNotFoundException("Not found"));
+        
 
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
@@ -382,14 +407,34 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                     VOContext.AUTHORIZATION
             );
         }
+        
 
-        // RN-INVOICE-004: Only editable in DRAFT status (enforced by domain)
-        InvoiceItem item = writeMapper.toInvoiceItem(dto, invoiceItemFactoryService);
-        invoice.addItem(item);
+    Invoice invoice = invoiceRepository.findById(invoiceId)
+            .orElseThrow(() -> new InvoiceNotFoundException("Not found"));
 
-        Invoice updated = invoiceRepository.save(invoice);
-        return readMapper.toDto(updated);
-    }
+    // Buscar el ProvidedService y Rate desde sus repositorios
+    ProvidedService service = providedServiceRepository.findById(writeMapper.toServiceId(dto))
+            .orElseThrow(() -> new ProvidedServiceNotFoundException("Not found"));
+
+    Rate rate = rateRepository.findById(writeMapper.toRateId(dto))
+            .orElseThrow(() -> new RateNotFoundException("Not fount"));
+
+    // Crear el InvoiceItem usando el domain service
+    InvoiceItem item = invoiceItemFactoryService.createFromRateSnapshot(
+            service,
+            rate,
+            writeMapper.toQuantity(dto),
+            writeMapper.toPerformedAt(dto)
+    );
+
+    invoice.addItem(item);
+
+    Invoice updated = invoiceRepository.save(invoice);
+    return readMapper.toDto(updated);
+
+    }   
+
+      
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.INVOICE,

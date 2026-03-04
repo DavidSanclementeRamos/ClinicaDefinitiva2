@@ -1,7 +1,12 @@
 package com.example.ClinicaDefinitiva.domain.billing.model;
 
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceStatus;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceNumberGenerator;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceNumber;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.ProviderId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.CurrencyCode;
+import com.example.ClinicaDefinitiva.domain.vo.Notes;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceStatus;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
@@ -60,12 +65,12 @@ public final class Invoice {
 
 
     private Invoice(Builder builder) {
-        this.id = Objects.requireNonNull(builder.id, "Invoice ID is required");
-        this.patientId = Objects.requireNonNull(builder.patientId, "Patient ID is required");
-        this.dentistId = Objects.requireNonNull(builder.dentistId, "Dentist ID is required");
-        this.providerId = Objects.requireNonNull(builder.providerId, "ProviderId is required");
+        this.id =builder.id;
+        this.patientId = builder.patientId;
+        this.dentistId = builder.dentistId;
+        this.providerId = builder.providerId;
         this.contractId = builder.contractId;
-        this.currency = Objects.requireNonNull(builder.currency, "Currency is required");
+        this.currency = builder.currency;
         this.notes = builder.notes;
         this.dueDate = builder.dueDate;
         LocalDateTime createdAt = LocalDateTime.now();
@@ -120,7 +125,6 @@ public final class Invoice {
 
 
     public void addItem(InvoiceItem item) {
-        Objects.requireNonNull(item, "Item cannot be null");
         ensureEditable();
         validateCurrencyMatch(item);
 
@@ -155,7 +159,6 @@ public final class Invoice {
     }
 
     public void emit(InvoiceNumberGenerator generator) {
-        Objects.requireNonNull(generator, "InvoiceNumberGenerator is required");
 
         validateBeforeEmit();
 

@@ -11,14 +11,8 @@ import java.util.List;
  * Excepción de dominio cuando un usuario no cumple requisitos
  * para realizar una acción sensible.
  */
-public class UserNotEligibleException extends DomainAggregateException {
-
-
-    private final UserIdentityId userIdentityId;
-    private final String reason;
-    private final List<OutcomeDetail> details;
-
-    public UserNotEligibleException(
+public class UserNotEligibleException extends DomainAggregateException{
+    public UserNotEligibleException  (
             UserIdentityId userIdentityId,
             String reason,
             EntityContext context,
@@ -29,7 +23,7 @@ public class UserNotEligibleException extends DomainAggregateException {
                 context
 
         );
-        this.userIdentityId = userIdentityId;
+        this.userIden   tityId = userIdentityId;
         this.reason = reason;
         this.details = details;
     }

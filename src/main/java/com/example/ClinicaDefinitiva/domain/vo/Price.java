@@ -116,4 +116,8 @@ public final class Price {
     public String toString() {
         return amount + " " + currency.getCurrencyCode();
     }
+
+    public boolean isGreaterThan(Price amount) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.administration.Operations.vo.ShiftId;
+import com.example.ClinicaDefinitiva.domain.administration.operations.vo.ShiftId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.DentistError;
@@ -34,7 +34,7 @@ public class Dentist   {
 
 
 
-    public Dentist(DentistId dentistId, ShiftId shiftId,
+    private Dentist(DentistId dentistId, ShiftId shiftId,
                    Person personData,
                    Specialties specialties,
                    UserIdentityId userIdentityId,
@@ -131,5 +131,15 @@ public class Dentist   {
     }
     
 
+    // Solo para tests/simulación de persistencia
+    public static Dentist withId(
+        DentistId dentistId,
+        Person personData,
+        Specialties specialties,
+        UserIdentityId userId,
+        WorkingHours workingHours,
+        LocalDateTime lastUpdate) {
+    return new Dentist(dentistId, null, personData, specialties, userId, workingHours, lastUpdate, List.of());
+}
 
 }

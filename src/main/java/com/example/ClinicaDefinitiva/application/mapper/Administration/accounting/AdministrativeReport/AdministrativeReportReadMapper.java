@@ -12,42 +12,40 @@ import java.util.stream.Collectors;
 
 @Component
 public class AdministrativeReportReadMapper {
+public ReadAdministrativeReportDto toReadDto(AdministrativeReport report) {
+    return new ReadAdministrativeReportDto(
+            report.getId().value(),                
+            report.getTitle().toString(),
+            toPeriodDto(report.getPeriod()),
+            report.getCreatedAt(),
+            report.getCreatedBy().value(),         
+            report.getStatus().getDescription(),
+            report.getJournalEntryReferences().stream()
+                    .map(JournalEntryId::getValue)
+                    .collect(Collectors.toList()),
+            report.getIndicators().stream()
+                    .map(this::toIndicatorDTO)
+                    .collect(Collectors.toList()),
+            report.getNotes(),
+            report.getAttachments().stream()
+                    .map(this::toDocumentDTO)
+                    .collect(Collectors.toList()),
+            report.getLastUpdate(),
+            report.getApprovedBy().value(),        
+            report.isComplete(),
+            report.isEditable()
+    );
+}
 
-    public ReadAdministrativeReportDto toReadDto(AdministrativeReport report) {
-        return new ReadAdministrativeReportDto(
-                report.getId() != null ? report.getId().value(): null,
-                report.getTitle().toString(),
-                toPeriodDto(report.getPeriod()),
-                report.getCreatedAt(),
-                report.getCreatedBy() != null ? report.getCreatedBy().value() : null,
-                report.getStatus().getDisplayName(),
-                report.getJournalEntryReferences().stream()
-                        .map(JournalEntryId::getValue)
-                        .collect(Collectors.toList()),
-                report.getIndicators().stream()
-                        .map(this::toIndicatorDTO)
-                        .collect(Collectors.toList()),
-                report.getNotes(),
-                report.getAttachments().stream()
-                        .map(this::toDocumentDTO)
-                        .collect(Collectors.toList()),
-                report.getLastUpdate(),
-                report.getApprovedBy() != null ? report.getApprovedBy().value() : null,
-                report.isComplete(),
-                report.isEditable()
-        );
-    }
-
-    public PageAdministrativeReportDto toPageDto(AdministrativeReport report) {
-        return new PageAdministrativeReportDto(
-                report.getId() != null ? report.getId().value(): null,
-                report.getTitle().toString(),
-                toPeriodDto(report.getPeriod()),
-                report.getStatus(),
-                report.getCreatedAt(),
-                report.getTotalItemsCount()
-        );
-    }
+public PageAdministrativeReportDto toPageDto(AdministrativeReport report) {
+    return new PageAdministrativeReportDto(
+            report.getId().value(),                            report.getTitle().toString(),
+            toPeriodDto(report.getPeriod()),
+            report.getStatus(),
+            report.getCreatedAt(),
+            report.getTotalItemsCount()
+    );
+}
 
     private PeriodDto toPeriodDto(Period period) {
         return new PeriodDto(

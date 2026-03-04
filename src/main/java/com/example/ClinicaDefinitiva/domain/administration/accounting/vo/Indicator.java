@@ -24,6 +24,12 @@ public final class Indicator {
                     VOContext.ACCOUNTING
             );
         }
+        if (value.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ValueObjectValidationException(
+                    VoAccountingError.ERR_REPORT_INDICATOR_INVALID,
+                    VOContext.ACCOUNTING
+            );
+        }
         if (unit == null || unit.isBlank()) {
             throw new ValueObjectValidationException(
                     VoAccountingError.ERR_REPORT_INDICATOR_INVALID,
@@ -43,3 +49,4 @@ public final class Indicator {
     public BigDecimal getValue() { return value; }
     public String getUnit() { return unit; }
 }
+

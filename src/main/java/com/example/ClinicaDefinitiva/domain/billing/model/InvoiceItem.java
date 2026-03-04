@@ -35,41 +35,19 @@ public final class InvoiceItem {
     private final LocalDateTime performedAt;
 
     private InvoiceItem(Builder builder) {
-        this.id = Objects.requireNonNull(builder.id, "InvoiceItemId no puede ser nulo");
-        this.serviceId = Objects.requireNonNull(builder.serviceId, "ServiceId no puede ser nulo");
-        this.serviceCode = Objects.requireNonNull(builder.serviceCode, "ServiceCode no puede ser nulo");
-        this.serviceDescription = Objects.requireNonNull(builder.serviceDescription, "ServiceDescription no puede ser nulo");
-        this.unitPrice = Objects.requireNonNull(builder.unitPrice, "UnitPrice no puede ser nulo");
-        this.quantity = Objects.requireNonNull(builder.quantity, "Quantity no puede ser nulo");
-        this.rateId = Objects.requireNonNull(builder.rateId, "RateId no puede ser nulo");
-        this.performedAt = Objects.requireNonNull(builder.performedAt, "PerformedAt no puede ser nulo");
+        this.id = builder.id;
+        this.serviceId = builder.serviceId;
+        this.serviceCode = builder.serviceCode;
+        this.serviceDescription = builder.serviceDescription ;
+        this.unitPrice = builder.unitPrice ;
+        this.quantity = builder.quantity ;
+        this.rateId = builder.rateId;
+        this.performedAt = builder.performedAt;
 
 
     }
 
 
-
-    public static InvoiceItem fromRateSnapshot(
-            InvoiceItemId id,
-            ServiceId serviceId,
-            String serviceCode,
-            String serviceDescription,
-            RateId rate,
-            Quantity quantity,
-            LocalDateTime performedAt) {
-
-        Objects.requireNonNull(rate, "Rate no puede ser nulo");
-
-        return builder()
-                .id(id)
-                .serviceId(serviceId)
-                .serviceCode(serviceCode)
-                .serviceDescription(serviceDescription)
-                .quantity(quantity)
-                .rateId(rate)
-                .performedAt(performedAt)
-                .build();
-    }
     public Price getTotalPrice() {
         return unitPrice.multiply(quantity.getValue());
     }

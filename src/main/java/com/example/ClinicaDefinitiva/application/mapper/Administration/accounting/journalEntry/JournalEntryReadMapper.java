@@ -13,15 +13,16 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JournalEntryReadMapper {
-    public ReadJournalEntryDto toResponse(JournalEntry entry
-                                          ) {
+
+    public ReadJournalEntryDto toReadDto(JournalEntry entry) {
         return new ReadJournalEntryDto(
-                entry.getId() != null ? entry.getId().getValue() : null,
-                entry.getCompanyId() != null ? entry.getCompanyId().getValue() : null,
+                entry.getId().getValue(),
+                entry.getCompanyId().getValue(),
                 entry.getDate(),
                 entry.getDocumentNumber(),
                 entry.getDescription(),
-                entry.getLines().stream().map(this::toAddLine)
+                entry.getLines().stream()
+                        .map(this::toAddLine)
                         .collect(Collectors.toList()),
                 entry.getTotalDebits().asBigDecimal(),
                 entry.getTotalCredits().asBigDecimal(),
@@ -30,9 +31,9 @@ public class JournalEntryReadMapper {
         );
     }
 
-    public PageJournalEntryDto toListResponse(JournalEntry entry) {
+    public PageJournalEntryDto toPageDto(JournalEntry entry) {
         return new PageJournalEntryDto(
-                entry.getId() != null ? entry.getId().getValue() : null,
+                entry.getId().getValue(),
                 entry.getDate(),
                 entry.getDocumentNumber(),
                 entry.getDescription(),
@@ -42,14 +43,10 @@ public class JournalEntryReadMapper {
         );
     }
 
-    private JournalEntryLineDto toAddLine(JournalEntryLine line
-                                         ) {
-
-
+    private JournalEntryLineDto toAddLine(JournalEntryLine line) {
         return new JournalEntryLineDto(
-                line.getLedgerAccountId() != null ? line.getLedgerAccountId().getValue() : null,
-
-                line.getThirdPartiesId() != null ? line.getThirdPartiesId().getValue() : null,
+                line.getLedgerAccountId().getValue(),
+                line.getThirdPartiesId().getValue(),
                 line.getDescription(),
                 line.getAmount().asBigDecimal(),
                 line.getDocumentReference(),
@@ -57,11 +54,10 @@ public class JournalEntryReadMapper {
         );
     }
 
-    public BalanceReportResponse toBalanceResponse(String accountCode, String accountName,
-                                                   java.math.BigDecimal debits,
-                                                   java.math.BigDecimal credits,
-                                                   java.math.BigDecimal balance) {
+    public BalanceReportResponse toBalanceDto(String accountCode, String accountName,
+                                              java.math.BigDecimal debits,
+                                              java.math.BigDecimal credits,
+                                              java.math.BigDecimal balance) {
         return new BalanceReportResponse(accountCode, accountName, debits, credits, balance);
     }
 }
-

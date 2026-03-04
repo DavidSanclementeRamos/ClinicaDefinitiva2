@@ -3,17 +3,16 @@ package com.example.ClinicaDefinitiva.application.mapper.Administration.accounti
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.PageContractDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.ReadContractDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ContractReadMapper {
 
-    public ReadContractDto toReadDto(Contract contract, ThirdParties thirdParties) {
+    public ReadContractDto toReadDto(Contract contract) {
         return new ReadContractDto(
-                contract.getContractId() != null ? contract.getContractId().getValue() : null,
-                contract.getCompanyId() != null ? contract.getCompanyId().getValue() : null,
-                contract.getThirdPartiesId() != null ? contract.getThirdPartiesId().getValue() : null,
+                contract.getContractId().getValue(),
+                contract.getCompanyId().getValue(),
+                contract.getThirdPartiesId().getValue(),
                 contract.getName().getValue(),
                 contract.getDescription(),
                 contract.getOrigin(),
@@ -30,7 +29,7 @@ public class ContractReadMapper {
 
     public PageContractDto toPageDto(Contract contract) {
         return new PageContractDto(
-                contract.getContractId() != null ? contract.getContractId().getValue() : null,
+                contract.getContractId().getValue(),
                 contract.getName().getValue(),
                 contract.getThirdPartiesId().getValue(),
                 contract.getCoverageType(),

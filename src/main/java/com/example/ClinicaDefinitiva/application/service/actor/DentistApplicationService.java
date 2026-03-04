@@ -2,51 +2,61 @@ package com.example.ClinicaDefinitiva.application.service.actor;
 
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
+import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
 import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapper.DentistReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapper.DentistWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.DentistUseCase;
+import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
-import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
-import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.actor.vo.Age;
+import com.example.ClinicaDefinitiva.domain.actor.vo.BloodType;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DateOfBirth;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
+import com.example.ClinicaDefinitiva.domain.actor.vo.Document;
+import com.example.ClinicaDefinitiva.domain.actor.vo.FullName;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
-import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
+/**
+ * DentistApplicationService refactorizado con AuthorizationHelper.
+ * 
+ * POLÍTICAS APLICADAS:
+ * - SectorBasedPolicy: Solo RECEPTIONIST de RRHH puede eliminar dentistas
+ * - OwnershipPolicy: Dentista solo puede modificar sus propios datos (vacaciones, incapacidad)
+ * 
+ * ANTES: 10-15 líneas de código de autorización por método
+ * DESPUÉS: 1 línea con AuthorizationHelper
+ */
 @Service
 @Transactional
 public class DentistApplicationService implements DentistUseCase {
-    private final DentistRepository dentistRepository;
-    private final ReceptionRepository receptionRepository;
+    
+      private final DentistRepository dentistRepository;
     private final DentistReadMapper dentistReadMapper;
     private final DentistWriteMapper dentistWriteMapper;
-    private final AuthorizationService authorizationService;
+    private final AuthorizationHelper authorizationHelper; 
 
-    public DentistApplicationService(DentistRepository dentistRepository,
-                                     ReceptionRepository receptionRepository,
-                                     DentistReadMapper dentistReadMapper,
-                                     DentistWriteMapper dentistWriteMapper,
-                                     AuthorizationService authorizationService) {
+    public DentistApplicationService(
+            DentistRepository dentistRepository,
+            DentistReadMapper dentistReadMapper,
+            DentistWriteMapper dentistWriteMapper,
+            AuthorizationHelper authorizationHelper) {
         this.dentistRepository = dentistRepository;
-        this.receptionRepository = receptionRepository;
         this.dentistReadMapper = dentistReadMapper;
         this.dentistWriteMapper = dentistWriteMapper;
-        this.authorizationService = authorizationService;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @Override
@@ -59,25 +69,16 @@ public class DentistApplicationService implements DentistUseCase {
         Dentist dentist = dentistRepository.findById(id)
                 .orElseThrow(() -> new DentistNotFoundException("Not found"));
 
-        // Construir contexto de seguridad con ownership
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
+         authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withResourceOwnerId(dentist.getUserId());
-
-        // Si el requester es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+                .withOwnership(dentist.getUserId()) // ← OwnershipPolicy
+                .build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return dentistReadMapper.toReadDto(dentist);
     }
@@ -89,22 +90,14 @@ public class DentistApplicationService implements DentistUseCase {
                                         UserIdentityId requesterId,
                                         RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId);
-
-        // Si el requester es receptionist, agregar sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+          // Autorización simple (solo sector, sin ownership)
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder().build() // Sin atributos adicionales
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         // Si es dentist, solo puede ver sus propios datos
         return dentistRepository.findByUserId(requesterId)
@@ -115,14 +108,6 @@ public class DentistApplicationService implements DentistUseCase {
                             .withResourceOwnerId(dentist.getUserId())
                             .build();
 
-                    if (!authorizationService.isAuthorized(requesterRolId, ownershipContext)) {
-                        // Dentist autenticado pero sin permisos completos → devolver solo su registro
-                        return new PageImpl<>(
-                                List.of(dentistReadMapper.toPageDto(dentist)),
-                                pageable,
-                                1
-                        );
-                    }
 
                     // Tiene permisos completos → devolver todos
                     return dentistRepository.findAll(pageable)
@@ -144,18 +129,13 @@ public class DentistApplicationService implements DentistUseCase {
         SecurityContext.Builder contextBuilder = SecurityContext
                 .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId);
 
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder().build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return dentistRepository.findByAvailability(status, pageable)
                 .map(dentistReadMapper::toPageDto);
@@ -169,21 +149,13 @@ public class DentistApplicationService implements DentistUseCase {
                                                 UserIdentityId requesterId,
                                                 RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId);
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
-        );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+         authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder().build()
+        ); 
 
         return dentistRepository.findBySpecialty(specialty, pageable)
                 .map(dentistReadMapper::toPageDto);
@@ -192,29 +164,30 @@ public class DentistApplicationService implements DentistUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
             action = ActionCatalog.BasicAction.CREATE)
-    public ReadDentistDto save(CreateDentistDto createDentistDto,
+    public ReadDentistDto save(CreateDentistDto dto,
                                UserIdentityId requesterId,
                                RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
+        // SectorBasedPolicy: Requiere sector válido
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.CREATE,
+            AuthorizationContext.builder().build()
+        );
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
+        Dentist dentist = Dentist.registerDentist(
+    dentistWriteMapper.toPerson(dto),
+    dentistWriteMapper.toSpecialties(dto.specialties()),
+    dentistWriteMapper.toUserIdentityId(dto),
+    dentistWriteMapper.toWorkingHours(dto.workingHoursDto()),
+    dentistWriteMapper.toLastUpdate(dto)
+);
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
-        Dentist dentist = dentistWriteMapper.fromCreateDto(createDentistDto);
+
+
         Dentist saved = dentistRepository.save(dentist);
 
         return dentistReadMapper.toReadDto(saved);
@@ -223,7 +196,7 @@ public class DentistApplicationService implements DentistUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadDentistDto updateContactData(UpdateDentistContactDto updateDentistDto,
+    public ReadDentistDto updateContactData(UpdateDentistContactDto dto,
                                             Long id,
                                             UserIdentityId requesterId,
                                             RolId requesterRolId) {
@@ -231,25 +204,22 @@ public class DentistApplicationService implements DentistUseCase {
         Dentist dentist = dentistRepository.findById(DentistId.of(id))
                 .orElseThrow(() -> new DentistNotFoundException("Not found"));
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
+         // Sector + Ownership: Dentista puede editar sus propios datos
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
                 .withResourceId(id)
-                .withResourceOwnerId(dentist.getUserId());
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+                .withOwnership(dentist.getUserId()) // ← OwnershipPolicy
+                .build()
         );
 
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        dentistWriteMapper.updateContactFromDto(updateDentistDto, dentist);
+        dentist.updateContactData(
+    Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
+    PhoneNumber.of(dto.phoneNumber())
+);
         Dentist updated = dentistRepository.save(dentist);
 
         return dentistReadMapper.toReadDto(updated);
@@ -258,7 +228,7 @@ public class DentistApplicationService implements DentistUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
             action = ActionCatalog.BasicAction.UPDATE)
-    public ReadDentistDto updateSensitiveData(UpdateDentistSensitiveDto updateDentistDto,
+    public ReadDentistDto updateSensitiveData(UpdateDentistSensitiveDto dto,
                                               Long id,
                                               UserIdentityId requesterId,
                                               RolId requesterRolId) {
@@ -266,28 +236,28 @@ public class DentistApplicationService implements DentistUseCase {
         Dentist dentist = dentistRepository.findById(DentistId.of(id))
                 .orElseThrow(() -> new DentistNotFoundException("Not found"));
 
-        // Para datos sensibles, validar sector de RRHH
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
+       // Datos sensibles: Solo RECEPTIONIST (validado por SectorBasedPolicy)
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
                 .withResourceId(id)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceOwnerId(dentist.getUserId())
-                .build();
+                .withOwnership(dentist.getUserId())
+                .build()
+        );
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        dentistWriteMapper.updateSensitiveFromDto(updateDentistDto, dentist);
+        dentist.updateSensitiveData(
+    Age.of(DateOfBirth.of(dto.dateOfBirth())),
+    BloodType.fromLabel(dto.bloodType()),
+    DateOfBirth.of(dto.dateOfBirth()),
+    Document.of(dto.dni()),
+    dto.documentEPS(),
+    FullName.of(dto.first(), dto.lastName()),
+    dentistWriteMapper.toSpecialties(dto.specialties()),
+    dentistWriteMapper.toWorkingHours(dto.workingHoursDto())
+);
         Dentist updated = dentistRepository.save(dentist);
 
         return dentistReadMapper.toReadDto(updated);
@@ -304,22 +274,20 @@ public class DentistApplicationService implements DentistUseCase {
         Dentist dentist = dentistRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new DentistNotFoundException("Not found"));
 
-        // Un dentista solo puede aplicar vacaciones a sí mismo (ownership)
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
-                .withResourceOwnerId(dentist.getUserId())
-                .build();
+          // OwnershipPolicy: Solo el dentista puede aplicar vacaciones a sí mismo
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
+                .withOwnership(dentist.getUserId()) // ← CRÍTICO: Solo su propio recurso
+                .build()
+        );
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-          dentist.applyVacation(start,end);
-        //availabilityService.applyVacation(dentist, start, end);
+        dentist.applyVacation(start, end);
         dentistRepository.save(dentist);
+
     }
 
     @Override
@@ -334,18 +302,16 @@ public class DentistApplicationService implements DentistUseCase {
         Dentist dentist = dentistRepository.findByUserId(requesterId)
                 .orElseThrow(() -> new DentistNotFoundException("Not found"));
 
-        // Un dentista solo puede aplicar incapacidad a sí mismo (ownership)
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
-                .withResourceOwnerId(dentist.getUserId())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // OwnershipPolicy: Solo el dentista puede aplicar incapacidad a sí mismo
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
+                .withOwnership(dentist.getUserId())
+                .build()
+        );
 
         dentist.applyIncapacity(start,end,note);
         dentistRepository.save(dentist);
@@ -360,22 +326,22 @@ public class DentistApplicationService implements DentistUseCase {
         Dentist dentist = dentistRepository.findByUserId(requesterId)
                 .orElseThrow(() ->  new DentistNotFoundException("Not found"));
 
-        // Un dentista solo puede volver a disponible a sí mismo (ownership)
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
-                .withResourceOwnerId(dentist.getUserId())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // OwnershipPolicy
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.UPDATE,
+            AuthorizationContext.builder()
+                .withOwnership(dentist.getUserId())
+                .build()
+        );
 
         dentist.returnToAvailable();
         dentistRepository.save(dentist);
     }
+
+     
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
@@ -387,25 +353,17 @@ public class DentistApplicationService implements DentistUseCase {
         Dentist dentist = dentistRepository.findById(id)
                 .orElseThrow(() -> new DentistNotFoundException("Not found"));
 
-        // Solo RECEPTIONIST de RECURSOS_HUMANOS puede eliminar dentistas
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
+        // SectorBasedPolicy: Solo RECEPTIONIST de RECURSOS_HUMANOS puede eliminar
+        // (Validado automáticamente por SectorBasedPolicy en el PolicyEngine)
+        authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.DENTIST,
+            ActionCatalog.BasicAction.DELETE,
+            AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+                .build()
+        );
 
         dentistRepository.deleteById(dentist.getDentistId());
     }

@@ -9,67 +9,84 @@ import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePerson;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Name;
+import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
+import java.time.LocalDate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CompanyWriteMapper {
 
-
-    public Company fromCreateDto(CreateCompanyDto dto){
-
-        Outcome<Email> emailOutcome = Email.of(dto.email());
-        if (emailOutcome.isFailure()) {
-            throw new DomainAggregateException(
-                    VoAccesError.valueOf(""),
-                    EntityContext.COMPANY
-            );
-        }
-
-
-        return Company.registerCompany(
-                Name.of(dto.name()),
-                Nit.of( dto.taxIdentificationNumber()),
-                TypePerson.valueOf( dto.typePerson()),
-                TaxRegime.valueOf(dto.taxRegime()),
-                dto.legalRepresentative(),
-                Address.of(dto.street(),dto.city(),dto.state(),dto.country(),dto.postalCode()),
-                PhoneNumber.of(dto.phoneNumber()),
-                emailOutcome.getValue().get()
-
-        );
-
+    public Name toName(CreateCompanyDto dto) {
+        return Name.of(dto.name());
     }
 
-    public void toUpdateContactDto(UpdateCompanyContactDto dto, Company company){
-        Outcome<Email> emailOutcome = Email.of(dto.email());
-        if (emailOutcome.isFailure()) {
-            throw new DomainAggregateException(
-                    VoAccesError.valueOf(""),
-                    EntityContext.COMPANY
-            );
-        }
-        company.updateContactInformation(
-                Name.of(dto.name()),
-                dto.legalRepresentative(),
-                Address.of(dto.street(),dto.city(),dto.country(),dto.country(),dto.postalCode()),
-                PhoneNumber.of( dto.phoneNumber()),
-                emailOutcome.getValue().get()
-
-        );
+    public Nit toNit(CreateCompanyDto dto) {
+        return Nit.of(dto.taxIdentificationNumber());
     }
 
-    public void toUpdateTaxDto(UpdateCompanyTaxDto dto, Company company){
-        company.updateTaxInformation(
-               Nit.of( dto.taxIdentificationNumber()),
-               TaxRegime.valueOf( dto.taxRegime()),
-              TypePerson.valueOf(  dto.typePerson()),
-                dto.incorporationDate()
-        );
+    public TypePerson toTypePerson(CreateCompanyDto dto) {
+        return TypePerson.valueOf(dto.typePerson());
     }
+
+    public TaxRegime toTaxRegime(CreateCompanyDto dto) {
+        return TaxRegime.valueOf(dto.taxRegime());
+    }
+
+    public String toLegalRepresentative(CreateCompanyDto dto) {
+        return dto.legalRepresentative();
+    }
+
+    public Address toAddress(CreateCompanyDto dto) {
+        return Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode());
+    }
+
+    public PhoneNumber toPhoneNumber(CreateCompanyDto dto) {
+        return PhoneNumber.of(dto.phoneNumber());
+    }
+
+    public Email toEmail(CreateCompanyDto dto) {
+        return Email.ofOrThrow(dto.email());
+    }
+
+
+    
+    public Name toName(UpdateCompanyContactDto dto) {
+        return Name.of(dto.name());
+    }
+
+    public Address toAddress(UpdateCompanyContactDto dto) {
+        return Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode());
+    }
+
+    public PhoneNumber toPhoneNumber(UpdateCompanyContactDto dto) {
+        return PhoneNumber.of(dto.phoneNumber());
+    }
+
+    public Email toEmail(UpdateCompanyContactDto dto) {
+        return Email.ofOrThrow(dto.email()); // uso del nuevo método
+    }
+
+    public Nit toNit(UpdateCompanyTaxDto dto) {
+        return Nit.of(dto.taxIdentificationNumber());
+    }
+
+    public TaxRegime toTaxRegime(UpdateCompanyTaxDto dto) {
+        return TaxRegime.valueOf(dto.taxRegime());
+    }
+
+    public TypePerson toTypePerson(UpdateCompanyTaxDto dto) {
+        return TypePerson.valueOf(dto.typePerson());
+    }
+
+    public LocalDate toIncorporationDate(UpdateCompanyTaxDto dto) {
+        return dto.incorporationDate();
+    }
+
+
+    
 }

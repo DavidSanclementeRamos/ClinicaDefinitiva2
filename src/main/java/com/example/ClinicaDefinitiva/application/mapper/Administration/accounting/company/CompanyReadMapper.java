@@ -7,9 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CompanyReadMapper {
+
     public ReadCompanyDto toReadDto(Company company) {
         return new ReadCompanyDto(
-                company.getId() != null ? company.getId().getValue() : null,
+                company.getId().getValue(),
                 company.getName().getValue(),
                 company.getTaxIdentificationNumber().getValue(),
                 company.getTypePerson().name(),
@@ -21,7 +22,7 @@ public class CompanyReadMapper {
                 company.getAddress().Country(),
                 company.getAddress().PostalCode(),
                 company.getPhoneNumber().toString(),
-                company.getEmail( ).value(),
+                company.getEmail().value(),
                 company.getIncorporationDate(),
                 company.getStatus().getStatus().name()
         );
@@ -29,12 +30,11 @@ public class CompanyReadMapper {
 
     public PageCompanyDto toPageDto(Company company) {
         return new PageCompanyDto(
-                company.getId() != null ? company.getId().getValue() : null,
+                company.getId().getValue(),
                 company.getName().getValue(),
                 company.getTaxIdentificationNumber().getValue(),
                 company.getStatus().getStatus().name()
         );
     }
-
-
 }
+
