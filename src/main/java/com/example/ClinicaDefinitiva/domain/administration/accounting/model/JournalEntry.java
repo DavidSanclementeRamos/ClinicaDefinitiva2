@@ -8,7 +8,6 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.Journ
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TemporalValidationException;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 //import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 

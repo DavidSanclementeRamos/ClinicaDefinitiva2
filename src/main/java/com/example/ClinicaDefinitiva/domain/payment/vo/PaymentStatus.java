@@ -1,9 +1,9 @@
 
 package com.example.ClinicaDefinitiva.domain.payment.vo;
 
-package com.example.ClinicaDefinitiva.domain.billing.payment.valueObject;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.PaymentError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.payment.PaymentError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.payment.PaymentVoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 
@@ -83,7 +83,7 @@ public final class PaymentStatus {
     public PaymentStatus transitionTo(Status next) {
         if (!canTransitionTo(next)) {
             throw new BusinessRuleViolationException(
-                PaymentError.ERR_PAYMENT_INVALID_TRANSITION,
+                PaymentVoError.ERR_PAYMENT_INVALID_TRANSITION,
                 EntityContext.PAYMENT
             );
         }

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.administration.authorization.output;
 
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

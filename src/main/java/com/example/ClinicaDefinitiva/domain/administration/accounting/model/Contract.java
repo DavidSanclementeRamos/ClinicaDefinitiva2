@@ -8,7 +8,6 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.Contr
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TemporalValidationException;
 import com.example.ClinicaDefinitiva.domain.vo.AuditoriaInfo;
 import java.math.BigDecimal;
 

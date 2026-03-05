@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.schedule.output;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 

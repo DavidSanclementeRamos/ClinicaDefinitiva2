@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.dentalService.output;
 
 import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.dentalService.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dentalService.enu.ServiceType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

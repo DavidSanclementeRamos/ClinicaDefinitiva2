@@ -8,7 +8,6 @@ import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
 
 import java.time.LocalDateTime;
 
