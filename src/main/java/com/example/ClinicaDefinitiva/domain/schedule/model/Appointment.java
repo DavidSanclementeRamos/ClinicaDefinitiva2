@@ -91,13 +91,8 @@ public class Appointment {
      */
 
 
-    public void complete(AppointmentCompletion completion,DentistId dentist) {
-        if (completion == null) {
-            throw new BusinessRuleViolationException(
-                    AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION,
-                    EntityContext.APPOINTMENT
-            );
-        }
+    public void complete(AppointmentCompletion completion) {
+        
         this.status = AppointmentStatus.from(AppointmentStatus.Status.COMPLETED);
         this.completion = completion;
         this.lastUpdated = LocalDateTime.now();

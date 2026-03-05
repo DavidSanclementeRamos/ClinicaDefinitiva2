@@ -64,10 +64,7 @@ public class Shift {
      */
     public static Shift create( DentistId dentistId, LocalDate date,
                                LocalTime startTime, LocalTime endTime, ShiftType type) {
-        if (dentistId == null) {
-            throw new BusinessRuleViolationException(
-                    ShiftError.ERR_SHIFT_DENTIST_REQUIRED, EntityContext.SHIFT);
-        }
+        
         if (date == null) {
             throw new BusinessRuleViolationException(
                     ShiftError.ERR_SHIFT_DATE_REQUIRED, EntityContext.SHIFT);
@@ -76,10 +73,7 @@ public class Shift {
             throw new BusinessRuleViolationException(
                     ShiftError.ERR_SHIFT_TIME_REQUIRED, EntityContext.SHIFT);
         }
-        if (type == null) {
-            throw new BusinessRuleViolationException(
-                    ShiftError.ERR_SHIFT_TYPE_REQUIRED, EntityContext.SHIFT);
-        }
+       
         if (!startTime.isBefore(endTime)) {
             throw new BusinessRuleViolationException(
                     ShiftError.ERR_SHIFT_INVALID_TIME_RANGE, EntityContext.SHIFT);

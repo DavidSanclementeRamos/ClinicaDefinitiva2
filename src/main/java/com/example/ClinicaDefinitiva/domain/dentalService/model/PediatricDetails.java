@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * Reglas de negocio:
  * - RN-PEDIATRIC-001: El rango de edad debe ser válido para pacientes pediátricos (0-18 años).
  * - RN-PEDIATRIC-002: El rango de edad debe tener una longitud mínima.
- * - RN-PEDIATRIC-006: La descripción de materiales pediátricos debe tener una longitud mínima.
+ * - RN-PEDIATRIC-003: La descripción de materiales pediátricos debe tener una longitud mínima.
  */
 public final class PediatricDetails implements ServiceDetails {
 

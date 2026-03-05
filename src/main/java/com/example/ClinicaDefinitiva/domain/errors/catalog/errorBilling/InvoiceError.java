@@ -22,11 +22,7 @@ public enum InvoiceError implements ErrorCatalog {
             "El total de la factura debe ser mayor a cero",
             "Invoice"
     ),
-   /* ERR_INVOICE_MISSING_REQUIRED_FIELDS(
-            "RN-INVOICE-015",
-            "La factura debe tener paciente y proveedor asociados",
-            "Invoice"
-    ),*/
+   
 
 // si
     ERR_INVOICE_EXPIRED_RATE(

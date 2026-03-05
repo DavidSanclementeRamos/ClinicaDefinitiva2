@@ -4,77 +4,63 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
 public enum PatientError implements ErrorCatalog {
 
-    // RN-PATIENT-001: ELIMINADA (2024-12)
-    // Motivo: Validaciones ocurren en ValueObjects
-    // Original: "Debe tener nombre, documento y fecha de nacimiento válida"
-    // Reemplazo: ValueObjectError.ERR_FULLNAME_BLANK, ERR_DOCUMENT_INVALID_FORMAT, ERR_BIRTHDATE_FUTURE
-
+    
     ERR_PATIENT_ACTIVE_SERVICES(
-            "RN-PATIENT-002",
+            "RN-PATIENT-001",
             "error.patient.deactivate.services",
             "No puede desactivarse si tiene citas activas o tratamientos en curso"
     ),
     ERR_PATIENT_TIME_CONFLICT(
-            "RN-PATIENT-003",
+            "RN-PATIENT-002",
             "error.patient.schedule.conflict",
             "El paciente ya tiene una cita agendada en este horario"
     ),
 
-    // RN-PATIENT-004: ELIMINADA (2024-12)
-    // Motivo: Delegada a UserAccessError.ERR_USER_INACTIVE
-    // Original: "Solo puede editarse si está activo"
-
-    // RN-PATIENT-005: ELIMINADA (Catálogo actualizado)
-    // Motivo: Validación ocurre en ValueObjects
-    // Original: "Debe registrar al menos un medio de contacto válido"
+    
 
     ERR_PATIENT_INVALID_AGE(
-            "RN-PATIENT-006",
+            "RN-PATIENT-003",
             "error.patient.age.invalid",
             "La edad del paciente debe estar en el rango válido (0-120 años)"
     ),
 
-    // RN-PATIENT-007: ELIMINADA (2024-12)
-    // Motivo: Validación ocurre en ValueObject DateOfBirth
-    // Original: "Fecha de nacimiento no puede ser futura"
-    // Reemplazo: ValueObjectError.ERR_BIRTHDATE_FUTURE
-
+ 
     ERR_PATIENT_MINOR_REQUIRES_GUARDIAN(
-            "RN-PATIENT-008",
+            "RN-PATIENT-004",
             "error.patient.guardian.required",
             "Los pacientes menores de edad deben tener un responsable legal vinculado"
     ),
 
     // RN-PATIENT-009: POSPUESTA -> APLICADA v1.0 ✅
     ERR_PATIENT_CANNOT_MODIFY_BIRTHDATE_WITH_HISTORY(
-            "RN-PATIENT-009",
+            "RN-PATIENT-005",
             "error.patient.birthdate.immutable",
             "No se puede modificar la fecha de nacimiento si el paciente tiene historial de citas"
     ),
 
     ERR_PATIENT_DEACTIVATION_REQUIRES_REASON(
-            "RN-PATIENT-010",
+            "RN-PATIENT-006",
             "error.patient.deactivate.reason",
             "La desactivación requiere motivo obligatorio"
     ),
 
     // ========== NUEVOS ==========
     ERR_PATIENT_NO_SHIFT_ASSIGNED(
-            "RN-PATIENT-011",
+            "RN-PATIENT-007",
             "error.patient.shift.missing",
             "El paciente no tiene un turno asignado"
     ),
     ERR_PATIENT_SHIFT_NOT_AVAILABLE(
-            "RN-PATIENT-012",
+            "RN-PATIENT-008",
             "error.patient.shift.unavailable",
             "El horario solicitado no está dentro del turno asignado al paciente"
     ),
     ERR_PATIENT_ACTIVE_TREATMENT(
-            "RN-PATIENT-013",
+            "RN-PATIENT-009",
             "error.patient.activeTreatment",
             "El paciente tiene tratamientos activos y no puede ser desactivado" ),
     ERR_PATIENT_CONTRACT_INVALID(
-            "RN-PATIENT-014",
+            "RN-PATIENT-010",
             "error.patient.contractInvalid",
             "El contrato asignado al paciente no está activo o se encuentra vencido"
     );

@@ -31,25 +31,12 @@ public enum ProstheticError implements ErrorCatalog {
             "error.prosthetic.type.value",
             "El tipo debe ser FIXED (fija) o REMOVABLE (removible)"
     ),
+;
+   
 
-    // Warnings
-    WARN_PROSTHETIC_CROWN_MULTIPLE_UNITS(
-            "RN-PROSTHETIC-005",
-            "warn.prosthetic.crown.units",
-            "Corona individual típicamente tiene 1 unidad"
-    ),
+    
 
-    WARN_PROSTHETIC_FULL_DENTURE_UNITS(
-            "RN-PROSTHETIC-006",
-            "warn.prosthetic.denture.units",
-            "Prótesis total típicamente tiene 14 unidades por arcada"
-    ),
-
-    WARN_PROSTHETIC_BRIDGE_INSUFFICIENT_UNITS(
-            "RN-PROSTHETIC-007",
-            "warn.prosthetic.bridge.units",
-            "Puente fijo típicamente tiene al menos 3 unidades"
-    );
+   
 
     private final String code;
     private final String messageKey;

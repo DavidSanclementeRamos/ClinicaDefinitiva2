@@ -20,13 +20,13 @@ public final class AgeRange {
     private AgeRange(int minAge, int maxAge) {
         if (minAge < 0) {
             throw new ValueObjectValidationException(
-                ServiceVOError.ERR_PEDIATRIC_INVALID_MIN_AGE,
+                ServiceVOError.ERR_SERVICE_INVALID_MIN_AGE,
                 VOContext.DENTAL_SERVICES
             );
         }
         if (maxAge <= minAge) {
             throw new ValueObjectValidationException(
-                ServiceVOError.ERR_PEDIATRIC_INVALID_RANGE,
+                ServiceVOError.ERR_SERVICE_INVALID_RANGE,
                 VOContext.DENTAL_SERVICES
             );
         }

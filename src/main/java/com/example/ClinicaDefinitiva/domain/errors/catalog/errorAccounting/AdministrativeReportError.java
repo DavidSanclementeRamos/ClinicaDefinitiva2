@@ -8,10 +8,13 @@ public enum AdministrativeReportError implements ErrorCatalog {
     ERR_REPORT_NOT_EDITABLE("RN-ADMINREPORT-001", "error.report.notEditable",
             "Solo puede editarse si está en estado DRAFT"),
 
-    // no
-   /** ERR_REPORT_INCOMPLETE("RN-ADMINREPORT-002", "error.report.incomplete",
-            "El reporte debe tener al menos un asiento contable o un indicador"),*/
-
+    // si
+    ERR_REPORT_INDICATOR_NOT_FOUND(
+            "RN-ADMINREPORT-002",
+            "error.report.indicatorNotFound",
+            "El indicador especificado no se encuentra en el reporte"
+    ),
+   
     // si
     ERR_REPORT_CANNOT_SUBMIT("RN-ADMINREPORT-003", "error.report.cannotSubmit",
             "Solo puede enviarse a revisión desde DRAFT"),
@@ -67,12 +70,7 @@ public enum AdministrativeReportError implements ErrorCatalog {
             "error.report.attachmentNotFound",
             "El documento adjunto especificado no se encuentra en el reporte"
     ),
-    // si
-    ERR_REPORT_INDICATOR_NOT_FOUND(
-            "RN-ADMINREPORT-014",
-            "error.report.indicatorNotFound",
-            "El indicador especificado no se encuentra en el reporte"
-    );
+    ;
 
 
     private final String code;

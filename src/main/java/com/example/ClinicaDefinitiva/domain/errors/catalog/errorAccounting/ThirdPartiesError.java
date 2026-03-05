@@ -28,17 +28,9 @@ public enum ThirdPartiesError implements ErrorCatalog {
     ERR_THIRD_PARTY_INACTIVATION_REQUIRES_REASON("RN-THIRDPARTIES-006", "error.thirdParties.inactivationRequiresReason",
             "Inactivación requiere motivo obligatorio"),
 
-    /*ERR_THIRD_PARTY_CANNOT_MODIFY_DOCUMENT("RN-THIRDPARTIES-007", "error.thirdParties.cannotModifyDocument",
-            "No puede modificarse el número de documento una vez registrado"),
-
-    ERR_THIRD_PARTY_DUPLICATE_DOCUMENT("RN-THIRDPARTIES-008", "error.thirdParties.duplicateDocument",
-            "Número de documento debe ser único por compañía"),
-
-    ERR_THIRD_PARTY_INVALID_DOCUMENT_FORMAT("RN-THIRDPARTIES-009", "error.thirdParties.invalidDocumentFormat",
-            "Número de documento solo acepta caracteres alfanuméricos"),
-    */
+    
     // si
-    ERR_THIRD_PARTY_ALREADY_ACTIVE("RN-THIRDPARTIES-010", "error.thirdParties.alreadyActive",
+    ERR_THIRD_PARTY_ALREADY_ACTIVE("RN-THIRDPARTIES-007", "error.thirdParties.alreadyActive",
             "El tercero ya está activo"),
     
     // si

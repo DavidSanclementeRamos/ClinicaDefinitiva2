@@ -5,11 +5,16 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 public enum TreatmentsVoError implements ErrorCatalog {
 
     ERR_TREATMENTS_ID_NULL(
-            "RN-TREATMENTS_ID-001",
+            "RN-TREATMENTS-VO-001",
             "error.serviceId.null",
             "El identificador del tratamiento no puede ser nulo"
     ),
-    ERR_TREATMENTS_PHASE_DATE_INVALID("","","");
+
+    ERR_TREATMENTS_PHASE_DATE_INVALID(
+        "RN-TREATMENT-007",
+        "error.treatments.phaseDateInvalid",
+        "La fecha de la fase del tratamiento es inválida"
+);
 
     private final String code;
     private final String messageKey;

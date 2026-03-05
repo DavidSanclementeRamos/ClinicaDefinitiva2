@@ -20,7 +20,7 @@ import java.util.Objects;
  * - RN-IMPLANTOLOGY-001: El tiempo de cicatrización debe estar entre 2 y 12 meses.
  * - RN-IMPLANTOLOGY-002: Los procedimientos con injerto óseo requieren al menos 4 meses de cicatrización.
  * - RN-IMPLANTOLOGY-003: El tiempo de cicatrización no puede ser negativo.
- * - RN-IMPLANTOLOGY-007: El sitio de colocación debe tener una longitud mínima.
+ * - RN-IMPLANTOLOGY-004: El sitio de colocación debe tener una longitud mínima.
  */
 public final class ImplantologyDetails implements ServiceDetails {
 

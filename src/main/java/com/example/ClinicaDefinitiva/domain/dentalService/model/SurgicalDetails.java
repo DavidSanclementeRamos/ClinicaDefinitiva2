@@ -16,10 +16,10 @@ import java.util.Set;
  *
  * Reglas de negocio:
  * - RN-SURGICAL-001: Las cirugías de baja complejidad no deben requerir anestesia.
- * - RN-SURGICAL-003: Solo se permiten niveles de complejidad válidos.
- * - RN-SURGICAL-004: Las cirugías críticas deben requerir tanto anestesia como quirófano.
- * - RN-SURGICAL-006: El tipo de cirugía debe tener una longitud mínima.
- * - RN-SURGICAL-007: Asignar quirófano a cirugías de baja complejidad es inconsistente.
+ * - RN-SURGICAL-002: Solo se permiten niveles de complejidad válidos.
+ * - RN-SURGICAL-003: Las cirugías críticas deben requerir tanto anestesia como quirófano.
+ * - RN-SURGICAL-004: El tipo de cirugía debe tener una longitud mínima.
+ * - RN-SURGICAL-005: Asignar quirófano a cirugías de baja complejidad es inconsistente.
  */
 public final class SurgicalDetails implements ServiceDetails {
 

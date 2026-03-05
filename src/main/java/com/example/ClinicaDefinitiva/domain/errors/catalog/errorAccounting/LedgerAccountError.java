@@ -23,8 +23,13 @@ public enum LedgerAccountError implements ErrorCatalog {
     ERR_ACCOUNT_INACTIVATION_REQUIRES_REASON("RN-LEDGERACCOUNT-005", "error.ledgerAccount.inactivationRequiresReason",
             "La inactivación de la cuenta requiere un motivo obligatorio"),
 
-    /*ERR_ACCOUNT_CANNOT_MODIFY_CODE("RN-LEDGERACCOUNT-006", "error.ledgerAccount.cannotModifyCode",
-            "El código de la cuenta no puede modificarse una vez registrado"),*/
+     // si
+    ERR_ACCOUNT_ALREADY_ACTIVE("RN-LEDGERACCOUNT-006", "error.ledgerAccount.alreadyActive",
+            "La cuenta ya está activa"),
+
+    
+  
+ 
     // si
     ERR_ACCOUNT_REQUIRES_THIRD_PARTY("RN-LEDGERACCOUNT-007", "error.ledgerAccount.requiresThirdParty",
             "El movimiento debe cumplir requisitos de tercero si la cuenta lo requiere"),
@@ -33,17 +38,11 @@ public enum LedgerAccountError implements ErrorCatalog {
     ERR_ACCOUNT_REQUIRES_DOCUMENT("RN-LEDGERACCOUNT-008", "error.ledgerAccount.requiresDocument",
             "El movimiento debe cumplir requisitos de documento si la cuenta lo requiere"),
 
-    /*ERR_ACCOUNT_DUPLICATE_CODE("RN-LEDGERACCOUNT-009", "error.ledgerAccount.duplicateCode",
-            "El código de la cuenta debe ser único por compañía"),*/
+      // si
+    ERR_ACCOUNT_MISSING_CODE("RN-LEDGERACCOUNT-008", "error.ledgerAccount.missingCode",
+            "El código de la cuenta es obligatorio")
 
-    // si
-    ERR_ACCOUNT_ALREADY_ACTIVE("RN-LEDGERACCOUNT-010", "error.ledgerAccount.alreadyActive",
-            "La cuenta ya está activa"),
-
-    
-    // si
-    ERR_ACCOUNT_MISSING_CODE("RN-LEDGERACCOUNT-011", "error.ledgerAccount.missingCode",
-            "El código de la cuenta es obligatorio");
+   ;
 
     private final String code;
     private final String messageKey;

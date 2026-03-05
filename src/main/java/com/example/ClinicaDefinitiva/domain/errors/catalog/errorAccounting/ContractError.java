@@ -18,16 +18,17 @@ public enum ContractError implements ErrorCatalog {
     // si
     ERR_CONTRACT_EXPIRED_CANNOT_REACTIVATE("RN-CONTRACT-004", "error.contract.expiredCannotReactivate",
             "No puede reactivarse si está vencido"),
-// no
-   /** ERR_CONTRACT_INVALID_EXTENSION("RN-CONTRACT-005", "error.contract.invalidExtension",
-            "La extensión de vigencia solo permite fechas posteriores"),*/
 
+
+     // si
+    ERR_CONTRACT_EXPIRED_NOT_EDITABLE("RN-CONTRACT-005", "error.contract.expiredNotEditable",
+            "No se puede editar un contrato vencido"),
     // si 
     ERR_CONTRACT_MISSING_COVERAGE_TYPE("RN-CONTRACT-006", "error.contract.missingCoverageType",
             "Debe tener tipo de cobertura válido"),
 
-// RN-CONTRACT-007: Evento de sistema (ContractNearExpirationEvent) — no genera error de catálogo.
-
+ ERR_CONTRACT_MISSING_END_DATE("RN-CONTRACT-007", "error.contract.missingEndDate",
+            "La fecha de fin es obligatoria"),
     // si
     ERR_CONTRACT_TERMINATION_REQUIRES_REASON("RN-CONTRACT-008", "error.contract.terminationRequiresReason",
             "La terminación requiere motivo obligatorio"),
@@ -50,16 +51,13 @@ public enum ContractError implements ErrorCatalog {
             "El contrato ya está terminado"),
     // --- Contract (Contrato) ---
     // si
-    ERR_CONTRACT_MISSING_START_DATE("RN-CONTRACT-014", "error.contract.missingStartDate",
+    ERR_CONTRACT_MISSING_START_DATE("RN-CONTRACT-013", "error.contract.missingStartDate",
             "La fecha de inicio es obligatoria"),
 
     // si
-    ERR_CONTRACT_MISSING_END_DATE("RN-CONTRACT-015", "error.contract.missingEndDate",
-            "La fecha de fin es obligatoria"),
+   
     // --- Contract (Contrato) ---
-    // si
-    ERR_CONTRACT_EXPIRED_NOT_EDITABLE("RN-CONTRACT-013", "error.contract.expiredNotEditable",
-            "No se puede editar un contrato vencido");
+   ;
 
     private final String code;
     private final String messageKey;

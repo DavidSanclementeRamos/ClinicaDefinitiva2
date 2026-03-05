@@ -25,30 +25,15 @@ public enum ImplantologyError implements ErrorCatalog {
             "El tiempo de cicatrización no puede ser negativo"
     ),
 
-    // RN-IMPLANTOLOGY-004 (warning)
-    WARN_IMPLANTOLOGY_SHORT_HEALING_TIME(
-            "RN-IMPLANTOLOGY-004",
-            "warn.implantology.healing.short",
-            "Tiempos menores a 3 meses sin injerto son atípicos"
-    ),
+    
 
-    // RN-IMPLANTOLOGY-005 (warning)
-    WARN_IMPLANTOLOGY_LONG_HEALING_TIME(
-            "RN-IMPLANTOLOGY-005",
-            "warn.implantology.healing.long",
-            "Tiempos mayores a 9 meses sin injerto complejo son atípicos"
-    ),
+   
 
-    // RN-IMPLANTOLOGY-006 (warning)
-    WARN_IMPLANTOLOGY_ZYGOMATIC_SHORT_HEALING(
-            "RN-IMPLANTOLOGY-006",
-            "warn.implantology.zygomatic.healing",
-            "Implantes zigomáticos requieren tiempo de cicatrización extendido (6+ meses)"
-    ),
+   
 
-    // RN-IMPLANTOLOGY-007
+    // RN-IMPLANTOLOGY-004
     ERR_IMPLANTOLOGY_INVALID_PLACEMENT_SITE(
-            "RN-IMPLANTOLOGY-007",
+            "RN-IMPLANTOLOGY-004",
             "error.implantology.site.invalid",
             "El sitio de colocación debe tener formato válido si se especifica"
     );

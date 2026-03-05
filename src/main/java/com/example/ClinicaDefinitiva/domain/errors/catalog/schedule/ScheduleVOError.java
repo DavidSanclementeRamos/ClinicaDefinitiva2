@@ -9,54 +9,32 @@ public enum ScheduleVOError implements ErrorCatalog {
             "El valor de AppointmentId no puede ser nulo"
     ),
 
-    ERR_APPOINTMENT_ID_EMPTY(
-            "RN-APPT-002",
-            "error.appointment.idEmpty",
-            "El valor de AppointmentId no puede estar vacío"
-    ),
+    
 
     ERR_APPOINTMENT_STATUS_REQUIRED(
-            "RN-APPT-001",
+            "RN-APPT-002",
             "error.appointment.statusRequired",
             "El estado de Appointment no puede ser nulo"
     ),
 
     ERR_APPOINTMENT_STATUS_INVALID_TRANSITION(
-            "RN-APPT-002",
+            "RN-APPT-003",
             "error.appointment.statusInvalidTransition",
             "No se puede transicionar desde el estado actual a un estado inválido"
     ),
-
-    ERR_AVAIL_ID_REQUIRED(
-            "RN-AVAIL-001",
-            "error.availability.idRequired",
-            "El valor de AvailabilityId no puede ser nulo"
+    
+    ERR_APPT_INCOMPLETE_COMPLETION(
+            "RN-APPT-003",
+            "error.appointment.incompleteCompletion",
+            "Solo puede finalizarse si tiene duración real y notas clínicas"
     ),
 
-    ERR_AVAIL_ID_BLANK(
-            "RN-AVAIL-002",
-            "error.availability.idBlank",
-            "El valor de AvailabilityId no puede estar vacío"
-    ),
 
-    ERR_AVAIL_STATUS_REQUIRED(
-            "RN-AVAIL-001",
-            "error.availability.statusRequired",
-            "El estado de Availability no puede ser nulo"
-    ),
 
-    ERR_SHIFT_ID_REQUIRED(
-            "RN-SHIFT-001",
-            "error.shift.idRequired",
-            "El valor de ShiftId no puede ser nulo"
-    ),
+    
 
-    ERR_SHIFT_ID_BLANK(
-            "RN-SHIFT-002",
-            "error.shift.idBlank",
-            "El valor de ShiftId no puede estar vacío"
-    );
-
+   
+;
     private final String code;
     private final String messageKey;
     private final String defaultMessage;

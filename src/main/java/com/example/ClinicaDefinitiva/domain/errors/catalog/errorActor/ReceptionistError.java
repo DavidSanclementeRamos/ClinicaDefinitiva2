@@ -27,44 +27,43 @@ public enum ReceptionistError implements ErrorCatalog {
             "El recepcionista debe estar asociado a una sede válida"
     ),
 
-    // RN-RECEPTIONIST-005: ELIMINADA (2024-12)
-    // Motivo: Delegada a UserAccessError.ERR_USER_INACTIVE
-    // Original: "Solo puede editarse si está activo"
+   
 
     // RN-RECEPTIONIST-006: POSPUESTA (Módulo de tareas pendiente)
     ERR_RECEPTIONIST_HAS_PENDING_TASKS(
-            "RN-RECEPTIONIST-006",
+            "RN-RECEPTIONIST-005",
             "error.receptionist.deactivate.tasks",
             "No puede desactivarse si tiene tareas pendientes"
     ),
 
     ERR_RECEPTIONIST_ACTIVE_ASSIGNMENTS(
-            "RN-RECEPTIONIST-007",
+            "RN-RECEPTIONIST-006",
             "error.receptionist.location.assignments",
             "No puede modificar sede si tiene citas asignadas en curso"
     ),
 
     ERR_RECEPTIONIST_CREATION_REQUIRES_ACTIVE_USER(// sera eliminado
-            "RN-RECEPTIONIST-008",
+            "RN-RECEPTIONIST-007",
             "error.receptionist.create.user",
             "Solo se pueden registrar recepcionistas con usuarios activos"
     ),
 
-    // RN-RECEPTIONIST-009: Regla aplicada, catálogo actualizado
-    // Original: ERR_RECEPTIONIST_MISSING_CONTACT
-    // Ahora validado en ValueObjects
+
 
     ERR_RECEPTIONIST_DEACTIVATION_REQUIRES_REASON(
-            "RN-RECEPTIONIST-010",
+            "RN-RECEPTIONIST-008",
             "error.receptionist.deactivate.reason",
             "La desactivación requiere motivo obligatorio"
     ),
     ERR_RECEPTIONIST_ASSIGNED_SHIFTS(
-            "RN-RECEPTIONIST-011",
+            "RN-RECEPTIONIST-009",
             "error.receptionist.assignedShifts",
             "El recepcionista tiene turnos asignados y no puede ser desactivado" ),
-    ERR_RECEPTIONIST_AGE_INSUFFICIENT("","","");
-
+ERR_RECEPTIONIST_AGE_INSUFFICIENT(
+        "RN-RECEPTIONIST-010",
+        "error.receptionist.age.insufficient",
+        "La edad del recepcionista es insuficiente para cumplir con los requisitos mínimos"
+);
     private final String code;
     private final String messageKey;
     private final String defaultMessage;

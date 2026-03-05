@@ -10,24 +10,35 @@ public enum OperationsVoError implements ErrorCatalog {
             "El valor de ShiftId no puede ser nulo"
     ),
 
-    ERR_SHIFT_ID_BLANK(
-            "RN-SHIFT-002",
-            "error.shift.idBlank",
-            "El valor de ShiftId no puede estar vacío"
-    ),
+   
     ERR_SHIFT_INVALID_COMPLETION(
-            "RN-SHIFT-003",
+            "RN-SHIFT-002",
             "error.shift.invalid.completion",
             "No se puede completar el turno en el estado actual: {currentStatus}"
     ),
     ERR_SHIFT_INVALID_CANCELLATION(
-            "RN-SHIFT-004",
+            "RN-SHIFT-003",
             "error.shift.invalid.cancellation",
             "No se puede cancelar el turno en el estado actual: {currentStatus}"
     ),
-    ERR_EXCLUDED_BLOCK_NULL_TIME("","",""),
-    ERR_EXCLUDED_BLOCK_INVALID_RANGE("","",""),
-    ERR_SHIFT_STATUS_NULL("","","");
+    
+ERR_EXCLUDED_BLOCK_INVALID_RANGE(
+    "RN-SHIFT-004",
+    "error.excludedBlock.invalidRange",
+    "El rango de tiempo del bloque excluido es inválido"
+),
+
+ERR_SHIFT_STATUS_NULL(
+    "RN-SHIFT-005",
+    "error.shift.statusNull",
+    "El estado del turno no puede ser nulo"
+),
+ERR_EXCLUDED_BLOCK_NULL_TIME(
+    "RN-SHIFT-005",
+    "error.excludedBlock.nullTime",
+    "El bloque excluido debe tener hora de inicio y fin definidas"
+),
+;
     
 
     private final String code;

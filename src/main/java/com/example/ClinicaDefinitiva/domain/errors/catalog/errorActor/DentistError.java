@@ -37,49 +37,40 @@ public enum DentistError implements ErrorCatalog {
             "El odontólogo no está disponible para agendar en este momento"
     ),
 
-    // RN-DENTIST-006: ELIMINADA (2024-12)
-    // Motivo: Delegada a UserAccessError.ERR_USER_INACTIVE
-    // Original: "Solo puede editarse si está activo"
+ 
 
     ERR_DENTIST_INVALID_SPECIALTY(
-            "RN-DENTIST-007",
+            "RN-DENTIST-006",
             "error.dentist.specialty.invalid",
             "La especialidad proporcionada no es reconocida"
     ),
 
-    // RN-DENTIST-008: ELIMINADA (2024-12)
-    // Motivo: Duplicada con RN-DENTIST-006
-    // Original: "No puede crearse con estado INACTIVO"
-
-    // RN-DENTIST-009: ELIMINADA (2024-12)
-    // Motivo: Dividida en catálogos específicos de ValueObject
-    // Original: "Debe tener nombre y documento válidos"
-    // Reemplazo: ValueObjectError.ERR_FULLNAME_BLANK, ERR_DOCUMENT_INVALID_FORMAT
+ 
 
     ERR_DENTIST_EMPTY_AVAILABILITY(
-            "RN-DENTIST-010",
+            "RN-DENTIST-007",
             "error.dentist.availability.empty",
             "La disponibilidad del odontólogo no puede quedar vacía"
     ),
 
     // ========== NUEVOS ==========
     ERR_DENTIST_OUT_OF_WORKING_HOURS(
-            "RN-DENTIST-011",
+            "RN-DENTIST-008",
             "error.dentist.working.hours",
             "El horario solicitado está fuera de las horas laborales declaradas"
     ),
     ERR_DENTIST_INVALID_VACATION_RANGE(
-            "RN-DENTIST-012",
+            "RN-DENTIST-009",
             "error.dentist.vacation.range",
             "El rango de vacaciones solicitado es inválido"
     ),
     ERR_DENTIST_VACATION_CONFLICT(
-            "RN-DENTIST-013",
+            "RN-DENTIST-010",
             "error.dentist.vacation.conflict",
             "Hay citas agendadas que entran en conflicto con el período de vacaciones"
     ),
     ERR_DENTIST_RESCHEDULE_OUT_OF_WORKING_HOURS(
-            "RN-DENTIST-014",
+            "RN-DENTIST-011",
             "error.dentist.reschedule.hours",
             "La reagendación está fuera de las horas laborales del odontólogo"
     );

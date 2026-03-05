@@ -27,13 +27,13 @@ import java.util.Set;
  * - Validar estado operativo antes de operaciones
  *
  * Reglas de negocio:
- * - RN-SERVICE-003: El servicio debe estar activo para ser editado
- * - RN-SERVICE-004: La categoría debe coincidir con el tipo de detalles
- * - RN-SERVICE-006: El tipo de detalles no puede cambiar después de la creación
- * - RN-SERVICE-008: Los cambios de tarifa requieren justificación
- * - RN-SERVICE-009: Los cambios de tarifa deben estar dentro de un rango razonable
- * - RN-SERVICE-011: Validación de política de tarifas
- * - RN-SERVICE-015: La desactivación requiere un motivo detallado
+ * - RN-SERVICE-001: El servicio debe estar activo para ser editado
+ * - RN-SERVICE-002: La categoría debe coincidir con el tipo de detalles
+ * - RN-SERVICE-003: El tipo de detalles no puede cambiar después de la creación
+ * - RN-SERVICE-004: Los cambios de tarifa requieren justificación
+ * - RN-SERVICE-005: Los cambios de tarifa deben estar dentro de un rango razonable
+ * - RN-SERVICE-006: Validación de política de tarifas
+ * - RN-SERVICE-007: La desactivación requiere un motivo detallado
  *
  * @see ServiceDetails para detalles específicos por especialidad
  * @see ProvidedServiceError para catálogo de errores

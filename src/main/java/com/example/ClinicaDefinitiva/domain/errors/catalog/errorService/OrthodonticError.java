@@ -33,18 +33,9 @@ public enum OrthodonticError implements ErrorCatalog {
             "La duración del tratamiento debe ser positiva"
     ),
 
-    // Warnings (opcionales, para logs)
-    WARN_ORTHODONTIC_ATYPICAL_ALIGNER_DURATION(
-            "RN-ORTHODONTIC-005",
-            "warn.orthodontic.aligner.duration",
-            "Alineadores transparentes típicamente duran 12-24 meses"
-    ),
+    
 
-    WARN_ORTHODONTIC_ATYPICAL_LINGUAL_DURATION(
-            "RN-ORTHODONTIC-006",
-            "warn.orthodontic.lingual.duration",
-            "Brackets linguales deben tener duración mínima de 18 meses"
-    );
+   ;
 
     private final String code;
     private final String messageKey;

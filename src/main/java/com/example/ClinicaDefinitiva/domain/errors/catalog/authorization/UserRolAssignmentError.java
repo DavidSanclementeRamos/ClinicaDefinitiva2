@@ -10,6 +10,11 @@ public enum UserRolAssignmentError implements ErrorCatalog {
             "error.assignment.duplicate.active",
             "Un usuario no puede tener dos asignaciones del mismo rol activas"
     ),
+    
+    ERR_ASSIGNMENT_VALID_FROM_REQUIRED(
+            "RN-ASSIGNMENT-002",
+            "error.assignment.valid.from.required",
+            "La fecha de inicio (validFrom) no puede ser nula" ),
     // si
     ERR_ASSIGNMENT_TEMPORARY_CANNOT_BE_PRIMARY(
             "RN-ASSIGNMENT-003",
@@ -22,14 +27,13 @@ public enum UserRolAssignmentError implements ErrorCatalog {
             "error.assignment.date.range",
             "validFrom no puede ser posterior a validTo"
     ),
-    // se cambio por ERR_ASSIGNMENT_CANNOT_REVOKE_LAST_INDIVIDUAL
-    /**
-     * ERR_ASSIGNMENT_CANNOT_REVOKE_LAST(
-     *             "RN-ASSIGNMENT-005",
-     *             "error.assignment.revoke.last",
-     *             "No puede revocar el único rol activo de un usuario"
-     *     ),
-     */
+    
+      ERR_ASSIGNMENT_INVALID_EXTENSION_DATE(
+            "RN-ASSIGNMENT-0O5",
+            "error.assignment.extension.date",
+            "La nueva fecha fin debe ser posterior a la actual"
+    ),
+    
     // si
     ERR_ASSIGNMENT_CANNOT_REVOKE_LAST_INDIVIDUAL(
             "RN-ASSIGNMENT-006",
@@ -61,17 +65,8 @@ public enum UserRolAssignmentError implements ErrorCatalog {
             "error.assignment.extend.permanent",
             "La extensión de vigencia solo aplica a roles temporales"
     ),
-    // si
-    ERR_ASSIGNMENT_INVALID_EXTENSION_DATE(
-            "RN-ASSIGNMENT-011",
-            "error.assignment.extension.date",
-            "La nueva fecha fin debe ser posterior a la actual"
-    ),
-    // si
-    ERR_ASSIGNMENT_VALID_FROM_REQUIRED(
-            "RN-ASSIGNMENT-012",
-            "error.assignment.valid.from.required",
-            "La fecha de inicio (validFrom) no puede ser nula" );
+
+    ;
 
     private final String code;
     private final String messageKey;
