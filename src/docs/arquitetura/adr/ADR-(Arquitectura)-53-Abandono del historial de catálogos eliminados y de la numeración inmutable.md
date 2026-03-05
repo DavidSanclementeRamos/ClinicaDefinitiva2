@@ -38,7 +38,7 @@ La deuda técnica en los catálogos de error es de naturaleza diferente a la que
 
 **Se abandona la numeración inmutable** (ADR-22 queda superado). Dado que la deuda técnica implica eliminar una cantidad significativa de catálogos, mantener huecos en la secuencia numérica en este contexto añade confusión sin aportar trazabilidad real: no hay producción, no hay sistemas externos que referencien los códigos, y los huecos no documentarían evolución sino errores iniciales de diseño. Los nuevos catálogos usan numeración secuencial continua.
 
-**Se conservan las lecciones aprendidas**, que sí tienen valor. Los patrones anti-patrón identificados (catálogos por operación, catálogos genéricos para múltiples VOs, responsabilidades transversales duplicadas en cada agregado) quedan documentados en la sección de contexto de este ADR y en ADR-50. Eso es suficiente.
+**Se conservan las lecciones aprendidas**, que sí tienen valor. Los patrones anti-patrón identificados (catálogos por operación, catálogos genéricos para múltiples VOs, responsabilidades transversales duplicadas en cada agregado) quedan documentados en la sección de contexto de este ADR y en ADR-52. Eso es suficiente.
 
 ---
 

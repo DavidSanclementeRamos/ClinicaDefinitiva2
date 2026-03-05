@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Acti
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.SecurityContext;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.policies.PermissionPolicy;
 
 /**

@@ -1,6 +1,6 @@
 # ADR-22 (Arquitectura): Estrategia de Numeración de Catálogos de Error
 
-**Estado:** ✅ Aceptado  
+**Estado:** Superado — ver ADR-53 (2026-03-04)  
 **Fecha:** Diciembre 24, 2025  
 **Contexto:** Gestión de ciclo de vida de catálogos de error en el dominio  
 **Autor:** David Stiven Sanclemente  
