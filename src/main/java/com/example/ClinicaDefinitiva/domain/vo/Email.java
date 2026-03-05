@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.VoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
@@ -45,7 +45,7 @@ public final class Email implements Serializable {
     public static Outcome<Email> of(String raw) {
         if (raw == null) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_EMAIL_NULL,
+                    VoError.ERR_EMAIL_NULL,
                     Severity.ERROR,
                     Category.TECNICO, VOContext.AUTHORIZATION
             ));
@@ -54,7 +54,7 @@ public final class Email implements Serializable {
         String trimmed = raw.trim();
         if (trimmed.isEmpty()) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_EMAIL_EMPTY,
+                    VoError.ERR_EMAIL_EMPTY,
                     Severity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
@@ -63,7 +63,7 @@ public final class Email implements Serializable {
         int atIndex = trimmed.lastIndexOf('@');
         if (atIndex <= 0 || atIndex == trimmed.length() - 1) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_EMAIL_MISSING_LOCAL_OR_DOMAIN,
+                    VoError.ERR_EMAIL_MISSING_LOCAL_OR_DOMAIN,
                     Severity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
@@ -79,14 +79,14 @@ public final class Email implements Serializable {
        
         if (local.length() > MAX_LOCAL) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_EMAIL_LOCAL_LENGTH_EXCEEDED,
+                    VoError.ERR_EMAIL_LOCAL_LENGTH_EXCEEDED,
                     Severity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
         if (domain.length() > MAX_DOMAIN) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_EMAIL_DOMAIN_LENGTH_EXCEEDED,
+                    VoError.ERR_EMAIL_DOMAIN_LENGTH_EXCEEDED,
                     Severity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
@@ -94,7 +94,7 @@ public final class Email implements Serializable {
         
          if (normalized.length() > MAX_LENGTH) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_EMAIL_LENGTH_EXCEEDED,
+                    VoError.ERR_EMAIL_LENGTH_EXCEEDED,
                     Severity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
@@ -103,7 +103,7 @@ public final class Email implements Serializable {
         // Validación de patrón
         if (!EMAIL_PATTERN.matcher(normalized).matches()) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_EMAIL_INVALID_FORMAT,
+                    VoError.ERR_EMAIL_INVALID_FORMAT,
                     Severity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
@@ -112,14 +112,14 @@ public final class Email implements Serializable {
         // Validaciones adicionales del dominio
         if (domain.startsWith("-") || domain.endsWith("-")) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_EMAIL_DOMAIN_INVALID_DASH,
+                    VoError.ERR_EMAIL_DOMAIN_INVALID_DASH,
                     Severity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
         if (domain.contains("..")) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_EMAIL_DOMAIN_CONSECUTIVE_DOTS,
+                    VoError.ERR_EMAIL_DOMAIN_CONSECUTIVE_DOTS,
                     Severity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
@@ -133,7 +133,7 @@ public final class Email implements Serializable {
         Outcome<Email> outcome = of(email);
         if (outcome.isFailure()) {
             throw new DomainAggregateException(
-                VoAccesError.valueOf("EMAIL_INVALID"),
+                VoError.valueOf("EMAIL_INVALID"),
                 EntityContext.COMPANY
             );
         }

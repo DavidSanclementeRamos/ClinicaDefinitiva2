@@ -1,6 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.vo;
 
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.VoError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
@@ -20,12 +21,12 @@ public final class Price {
 
             if (amount == null) {
                 throw new ValueObjectValidationException(
-                        ServiceVOError.ERR_SERVICE_PRICE_AMOUNT_REQUIRED,
+                        VoError.ERR_SERVICE_PRICE_AMOUNT_REQUIRED,
                         VOContext.DENTAL_SERVICES);
             }
             if (currency == null) {
                 throw new ValueObjectValidationException(
-                        ServiceVOError.ERR_SERVICE_PRICE_CURRENCY_REQUIRED,
+                        VoError.ERR_SERVICE_PRICE_CURRENCY_REQUIRED,
                         VOContext.DENTAL_SERVICES);
             }
 
@@ -34,7 +35,7 @@ public final class Price {
 
             if (this.amount.compareTo(BigDecimal.ZERO) < 0) {
                 throw new ValueObjectValidationException(
-                        ServiceVOError.ERR_SERVICE_PRICE_NEGATIVE,
+                        VoError.ERR_SERVICE_PRICE_NEGATIVE,
                         VOContext.DENTAL_SERVICES);
             }
     }
@@ -89,7 +90,7 @@ public final class Price {
     // Validación de moneda
     private void requireSameCurrency(Price other) {
         if (!this.currency.equals(other.currency)) {
-            throw new ValueObjectValidationException(ServiceVOError.ERR_PRICE_CURRENCY_MISMATCH,VOContext.DENTAL_SERVICES);
+            throw new ValueObjectValidationException(VoError.ERR_PRICE_CURRENCY_MISMATCH,VOContext.DENTAL_SERVICES);
         }
     }
 

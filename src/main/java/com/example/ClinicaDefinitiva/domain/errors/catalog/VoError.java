@@ -87,32 +87,49 @@ public enum VoError implements ErrorCatalog {
     
       // PhoneNumber errors
     ERR_PHONE_NULL(
-            "RN-VO-007",
+            "RN-PHONE-007",
             "error.phone.null",
             "El número telefónico no puede ser nulo"
     ),
     ERR_PHONE_BLANK(
-            "RN-VO-008",
+            "RN-PHONE-008",
             "error.phone.blank",
             "El número telefónico no puede estar vacío"
     ),
     ERR_PHONE_INVALID_FORMAT(
-            "RN-VO-009",
+            "RN-PHONE-009",
             "error.phone.format",
             "El formato del número telefónico es inválido"
     ),
 
     // Address errors
     ERR_ADDRESS_NULL(
-            "RN-VO-010",
+            "RN-ADDRESS-010",
             "error.address.null",
             "Los campos de dirección no pueden ser nulos"
     ),
     ERR_ADDRESS_BLANK(
-            "RN-VO-011",
+            "RN-ADDRESS-011",
             "error.address.blank",
             "Los campos de dirección no pueden estar vacíos"
     ),
+    // ===== Name =====
+ERR_NAME_NULL(
+        "ERR-NAME-012",
+        "error.name.null",
+        "El nombre no puede ser nulo"
+),
+ERR_NAME_BLANK(
+        "ERR-NAME-013",
+        "error.name.blank",
+        "El nombre no puede estar vacío"
+),
+ERR_NAME_TOO_LONG(
+        "ERR-NAME-014",
+        "error.name.tooLong",
+        "El nombre excede la longitud máxima permitida"
+),
+
     
             ;
     

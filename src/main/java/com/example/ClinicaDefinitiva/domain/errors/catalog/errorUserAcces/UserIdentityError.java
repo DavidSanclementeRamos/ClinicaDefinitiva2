@@ -80,8 +80,12 @@ ERR_USER_DEACTIVATION_REASON_REQUIRED(
         "RN-USER-010",
         "error.user.deactivation.reason",
         "Debe especificarse una razón para desactivar al usuario"
+),
+ERR_USER_NOT_ELIGIBLE(
+    "RN-USER-011",
+    "error.user.not.eligible",
+    "El usuario no cumple con los criterios de elegibilidad requeridos"
 );
-
     private final String code;
     private final String messageKey;
     private final String defaultMessage;

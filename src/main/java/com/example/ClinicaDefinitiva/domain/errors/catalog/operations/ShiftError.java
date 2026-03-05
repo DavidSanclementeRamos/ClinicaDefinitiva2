@@ -100,6 +100,11 @@ ERR_SHIFT_INVALID_COMPLETION(
     "RN-SHIFT-012",
     "error.shift.invalidCompletion",
     "El turno no puede marcarse como completado en un estado inválido"
+),
+ERR_SHIFT_CANCELLATION_REQUIRES_REASON(
+    "RN-SHIFT-015",
+    "error.shift.cancellation.reason",
+    "Debe especificarse una razón para cancelar el turno"
 );
     private final String code;
     private final String messageKey;

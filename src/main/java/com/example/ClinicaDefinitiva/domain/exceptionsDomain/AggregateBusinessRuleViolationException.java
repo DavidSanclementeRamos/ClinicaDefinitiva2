@@ -5,19 +5,23 @@ import com.example.ClinicaDefinitiva.domain.errors.context.DomainContext;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 
 import java.util.List;
+import java.util.Map;
 
 public class AggregateBusinessRuleViolationException extends DomainAggregateException {
 
     private final List<OutcomeDetail> detalles;
 
-    public AggregateBusinessRuleViolationException(List<OutcomeDetail> detalles) {
-        super(
-            primerCatalogo(detalles),   // ← validación ocurre aquí, dentro del argumento
-            primerContexto(detalles),
-            Map.of("totalViolaciones", detalles.size())
-        );
-        this.detalles = List.copyOf(detalles);
-    }
+    private final int totalViolaciones;
+
+public AggregateBusinessRuleViolationException(List<OutcomeDetail> detalles) {
+    super(primerCatalogo(detalles), primerContexto(detalles));
+    this.detalles = List.copyOf(detalles);
+    this.totalViolaciones = detalles.size();
+}
+
+public int getTotalViolaciones() {
+    return totalViolaciones;
+}
 
     private static ErrorCatalog primerCatalogo(List<OutcomeDetail> detalles) {
         if (detalles == null || detalles.isEmpty()) {

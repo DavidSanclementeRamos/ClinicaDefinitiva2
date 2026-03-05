@@ -143,22 +143,7 @@ ERR_NIT_INVALID_FORMAT(
         "El NIT no cumple con el formato esperado"
 ),
 
-// ===== Name =====
-ERR_NAME_NULL(
-        "ERR-ACCOUNTING-VO-024",
-        "error.name.null",
-        "El nombre no puede ser nulo"
-),
-ERR_NAME_BLANK(
-        "ERR-ACCOUNTING-VO-025",
-        "error.name.blank",
-        "El nombre no puede estar vacío"
-),
-ERR_NAME_TOO_LONG(
-        "ERR-ACCOUNTING-VO-026",
-        "error.name.tooLong",
-        "El nombre excede la longitud máxima permitida"
-),
+
 
 // ===== Period =====
 ERR_PERIOD_NULL(

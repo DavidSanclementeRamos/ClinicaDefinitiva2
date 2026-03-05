@@ -7,28 +7,33 @@ import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 
 import java.util.List;
 
-/**
+
+ /**
  * Excepción de dominio cuando un usuario no cumple requisitos
  * para realizar una acción sensible.
  */
-public class UserNotEligibleException extends DomainAggregateException{
-    public UserNotEligibleException  (
+public class UserNotEligibleException extends DomainAggregateException {
+
+    private final UserIdentityId userIdentityId;
+    private final String reason;
+    private final List<OutcomeDetail> details;
+
+    public UserNotEligibleException(
             UserIdentityId userIdentityId,
             String reason,
             EntityContext context,
             List<OutcomeDetail> details
     ) {
         super(
-                UserIdentityError.ERR_USER_NOT_ELIGIBLE,
-                context
-
+            UserIdentityError.ERR_USER_NOT_ELIGIBLE,
+            context
         );
-        this.userIden   tityId = userIdentityId;
+        this.userIdentityId = userIdentityId;
         this.reason = reason;
-        this.details = details;
+        this.details = List.copyOf(details);
     }
 
-    public UserIdentityId getUserId() {
+    public UserIdentityId getUserIdentityId() {
         return userIdentityId;
     }
 
