@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.schedule.service.ScheduleQueryServic
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.Severity;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 
 public class PatientDeactivationValidator {
     private final ScheduleRepository scheduleRepository;
@@ -26,7 +26,7 @@ public class PatientDeactivationValidator {
         if (schedule != null && schedule.hasAppointmentsWithin(patientId,daysToBlockDeactivation)) {
             return Outcome.fail(new OutcomeDetail(
                     PatientError.ERR_PATIENT_ACTIVE_SERVICES,
-                    Severity.INFO,
+                    ErrorSeverity.INFO,
                     Category.CLINICO, EntityContext.PATIENT));
         }
 

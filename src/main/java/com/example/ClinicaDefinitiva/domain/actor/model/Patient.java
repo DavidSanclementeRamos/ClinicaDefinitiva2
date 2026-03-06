@@ -111,7 +111,7 @@ public class Patient  {
         if (treatments != null && !treatments.isEmpty()) {
             return Outcome.fail(new OutcomeDetail(
                     PatientError.ERR_PATIENT_ACTIVE_TREATMENT,
-                    Severity.INFO,
+                    ErrorSeverity.INFO,
                     Category.CLINICO,
                     EntityContext.PATIENT
             ));

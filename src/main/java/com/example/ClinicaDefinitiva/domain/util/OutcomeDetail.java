@@ -17,12 +17,12 @@ import java.util.Objects;
  */
 public class OutcomeDetail {
     private final ErrorCatalog code;
-    private final Severity severity;
+    private final ErrorSeverity severity;
     private final Category category;
     private final DomainContext context;
 
 
-    public OutcomeDetail(ErrorCatalog code, Severity severity, Category category, DomainContext context) {
+    public OutcomeDetail(ErrorCatalog code, ErrorSeverity severity, Category category, DomainContext context) {
         this.context = context;
 
         Objects.requireNonNull(code, "Codigo cannot be null");
@@ -40,7 +40,7 @@ public class OutcomeDetail {
     }
 
 
-    public Severity getSeverity() {
+    public ErrorSeverity getSeverity() {
         return severity;
     }
 
@@ -53,15 +53,15 @@ public class OutcomeDetail {
     }
 
     public boolean isError() {
-        return severity == Severity.ERROR;
+        return severity == ErrorSeverity.ERROR;
     }
 
     public boolean isWarning() {
-        return severity == Severity.WARNING;
+        return severity == ErrorSeverity.WARN;
     }
 
     public boolean isInfo() {
-        return severity == Severity.INFO;
+        return severity == ErrorSeverity.INFO;
     }
 
     public boolean isCategory(Category category) {

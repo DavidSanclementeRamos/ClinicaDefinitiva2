@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateExce
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.Severity;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.regex.Pattern;
@@ -46,7 +46,7 @@ public final class Email implements Serializable {
         if (raw == null) {
             return Outcome.fail(new OutcomeDetail(
                     VoError.ERR_EMAIL_NULL,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO, VOContext.AUTHORIZATION
             ));
         }
@@ -55,7 +55,7 @@ public final class Email implements Serializable {
         if (trimmed.isEmpty()) {
             return Outcome.fail(new OutcomeDetail(
                     VoError.ERR_EMAIL_EMPTY,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
@@ -64,7 +64,7 @@ public final class Email implements Serializable {
         if (atIndex <= 0 || atIndex == trimmed.length() - 1) {
             return Outcome.fail(new OutcomeDetail(
                     VoError.ERR_EMAIL_MISSING_LOCAL_OR_DOMAIN,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
@@ -80,14 +80,14 @@ public final class Email implements Serializable {
         if (local.length() > MAX_LOCAL) {
             return Outcome.fail(new OutcomeDetail(
                     VoError.ERR_EMAIL_LOCAL_LENGTH_EXCEEDED,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
         if (domain.length() > MAX_DOMAIN) {
             return Outcome.fail(new OutcomeDetail(
                     VoError.ERR_EMAIL_DOMAIN_LENGTH_EXCEEDED,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
@@ -95,7 +95,7 @@ public final class Email implements Serializable {
          if (normalized.length() > MAX_LENGTH) {
             return Outcome.fail(new OutcomeDetail(
                     VoError.ERR_EMAIL_LENGTH_EXCEEDED,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
@@ -104,7 +104,7 @@ public final class Email implements Serializable {
         if (!EMAIL_PATTERN.matcher(normalized).matches()) {
             return Outcome.fail(new OutcomeDetail(
                     VoError.ERR_EMAIL_INVALID_FORMAT,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
@@ -113,14 +113,14 @@ public final class Email implements Serializable {
         if (domain.startsWith("-") || domain.endsWith("-")) {
             return Outcome.fail(new OutcomeDetail(
                     VoError.ERR_EMAIL_DOMAIN_INVALID_DASH,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }
         if (domain.contains("..")) {
             return Outcome.fail(new OutcomeDetail(
                     VoError.ERR_EMAIL_DOMAIN_CONSECUTIVE_DOTS,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHORIZATION
             ));
         }

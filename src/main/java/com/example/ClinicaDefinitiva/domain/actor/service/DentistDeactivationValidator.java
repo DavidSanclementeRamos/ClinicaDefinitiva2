@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.schedule.service.ScheduleQueryServic
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.Severity;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 
 
 public class DentistDeactivationValidator {
@@ -24,7 +24,7 @@ public class DentistDeactivationValidator {
         if (schedule.hasAppointmentsWithinHours(dentistId,24)) {
             return Outcome.fail(new OutcomeDetail(
                     DentistError.ERR_DENTIST_ACTIVE_APPOINTMENTS,
-                    Severity.INFO,
+                    ErrorSeverity.INFO,
                     Category.CLINICO, EntityContext.DENTIST
             ));
         }

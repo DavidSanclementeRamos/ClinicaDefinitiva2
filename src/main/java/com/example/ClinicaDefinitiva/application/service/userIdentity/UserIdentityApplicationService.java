@@ -25,7 +25,7 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolati
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.Severity;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -394,7 +394,7 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
             userIdentityRepository.save(userIdentity);
             throw new AggregateBusinessRuleViolationException(
                     List.of(new OutcomeDetail(UserIdentityError.ERR_USER_INVALID_CREDENTIALS,
-                            Severity.ERROR, Category.TECNICO, EntityContext.USER_IDENTITY)));
+                            ErrorSeverity.ERROR, Category.TECNICO, EntityContext.USER_IDENTITY)));
         }
 
         // Verificar estado del usuario

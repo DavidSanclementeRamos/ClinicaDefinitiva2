@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.Severity;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -44,7 +44,7 @@ public final class UserIdentityName implements Serializable {
         if (raw == null) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_NULL,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHENTICATION
             ));
         }
@@ -52,7 +52,7 @@ public final class UserIdentityName implements Serializable {
         if (raw.isBlank()) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_EMPTY,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO, VOContext.AUTHENTICATION));
         }
 
@@ -61,7 +61,7 @@ public final class UserIdentityName implements Serializable {
         if (trimmed.length() < MIN_LENGTH) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_TOO_SHORT,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHENTICATION
             ));
         }
@@ -69,7 +69,7 @@ public final class UserIdentityName implements Serializable {
         if (trimmed.length() > MAX_LENGTH) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_NAME_TOO_LONG,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO, VOContext.AUTHENTICATION
             ));
         }

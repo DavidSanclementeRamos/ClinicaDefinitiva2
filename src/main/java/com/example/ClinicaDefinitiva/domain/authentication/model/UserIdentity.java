@@ -12,7 +12,7 @@ import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityStatus
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.Severity;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -71,7 +71,7 @@ public class UserIdentity {
     public Outcome<UserIdentity> recordSuccessfulLogin(Instant now) {
         if (isLocked(now)) return Outcome.fail(new OutcomeDetail(
                 UserIdentityError.ERR_USER_FAILED_ATTEMPTS_NOT_RESET,
-                Severity.WARNING,
+                ErrorSeverity.WARN,
                 Category.TECNICO,
                 EntityContext.USER_IDENTITY));
         this.failedLoginAttempts = 0;
@@ -103,13 +103,13 @@ public class UserIdentity {
     public Outcome<UserIdentity> recordFailedLogin(Instant now, int maxAttempts, Duration lockDuration) {
         if (isLocked(now)) return Outcome.fail(new OutcomeDetail(
                 UserIdentityError.ERR_USER_ACCOUNT_LOCKED,
-                Severity.WARNING, Category.TECNICO,EntityContext.USER_IDENTITY));
+                ErrorSeverity.WARN, Category.TECNICO,EntityContext.USER_IDENTITY));
         this.failedLoginAttempts++;
         if (this.failedLoginAttempts >= maxAttempts) {
             this.lockedUntil = now.plus(lockDuration);
-            return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_ACCOUNT_LOCKED_DUE_TO_FAILED_ATTEMPTS, Severity.ERROR, Category.TECNICO,EntityContext.USER_IDENTITY));
+            return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_ACCOUNT_LOCKED_DUE_TO_FAILED_ATTEMPTS, ErrorSeverity.ERROR, Category.TECNICO,EntityContext.USER_IDENTITY));
         }
-        return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_INVALID_CREDENTIALS, Severity.INFO, Category.TECNICO,EntityContext.USER_IDENTITY));
+        return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_INVALID_CREDENTIALS, ErrorSeverity.INFO, Category.TECNICO,EntityContext.USER_IDENTITY));
     }
 
     public boolean isLocked(Instant now) {
@@ -117,7 +117,7 @@ public class UserIdentity {
     }
 
     public Outcome<UserIdentity> verify() {
-        if (this.verified) return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_NOT_VERIFIED, Severity.INFO, Category.TECNICO,EntityContext.USER_IDENTITY));
+        if (this.verified) return Outcome.fail(new OutcomeDetail(UserIdentityError.ERR_USER_NOT_VERIFIED, ErrorSeverity.INFO, Category.TECNICO,EntityContext.USER_IDENTITY));
         this.verified = true;
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
@@ -132,7 +132,7 @@ public class UserIdentity {
         if (reason == null || reason.isBlank()) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_DEACTIVATION_REASON_REQUIRED,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,
                     EntityContext.USER_IDENTITY));
         }
@@ -163,7 +163,7 @@ public class UserIdentity {
         if (!verified) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_NOT_VERIFIED,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,
                     EntityContext.USER_IDENTITY
             ));
@@ -172,7 +172,7 @@ public class UserIdentity {
         if (isLocked(now)) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_ACCOUNT_LOCKED,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,
                     EntityContext.USER_IDENTITY
             ));
@@ -181,7 +181,7 @@ public class UserIdentity {
         if (status.getValue()!= UserIdentityStatus.Status.ACTIVE) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_INACTIVE,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,
                     EntityContext.USER_IDENTITY
             ));
@@ -202,7 +202,7 @@ public class UserIdentity {
         if (!status.canTransitionTo(UserIdentityStatus.Status.SUSPENDED)) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_ALREADY_SUSPENDED,
-                    Severity.INFO,
+                    ErrorSeverity.INFO,
                     Category.TECNICO,
                     EntityContext.USER_IDENTITY
             ));
@@ -211,7 +211,7 @@ public class UserIdentity {
         if (reason == null || reason.isBlank()) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_SUSPENSION_REQUIRES_REASON,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,
                     EntityContext.USER_IDENTITY
             ));
@@ -234,7 +234,7 @@ public class UserIdentity {
         if (!status.canTransitionTo(UserIdentityStatus.Status.ACTIVE)) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_ALREADY_ACTIVE,
-                    Severity.INFO,
+                    ErrorSeverity.INFO,
                     Category.TECNICO,
                     EntityContext.USER_IDENTITY
             ));
@@ -243,7 +243,7 @@ public class UserIdentity {
         if (!verified) {
             return Outcome.fail(new OutcomeDetail(
                     UserIdentityError.ERR_USER_NOT_VERIFIED,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,
                     EntityContext.USER_IDENTITY
             ));

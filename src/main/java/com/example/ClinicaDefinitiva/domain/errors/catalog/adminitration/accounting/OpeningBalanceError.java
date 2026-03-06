@@ -1,16 +1,15 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 
-public enum TreatmentsVoError implements ErrorCatalog {
+public enum OpeningBalanceError implements ErrorCatalog {
 
-    ERR_TREATMENTS_ID_NULL("RN-TREATMENTS-VO-001","error.serviceId.null","El identificador del tratamiento no puede ser nulo",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
-    ERR_TREATMENTS_PHASE_DATE_INVALID("RN-TREATMENTS-VO-002","error.treatments.phaseDateInvalid","La fecha de la fase del tratamiento es inválida",
+    ERR_OPENING_BALANCE_MISSING_DATE(
+            "RN-OPENINGBALANCE-003","error.openingBalance.missingDate",
+            "La fecha es obligatoria",
             HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
-
 
     private final String code;
     private final String messageKey;
@@ -18,8 +17,8 @@ public enum TreatmentsVoError implements ErrorCatalog {
     private final HttpStatus suggestedHttpStatus;
     private final ErrorSeverity severity;
 
-    TreatmentsVoError(String code, String messageKey, String defaultMessage,
-                      HttpStatus suggestedHttpStatus, ErrorSeverity severity) {
+    OpeningBalanceError(String code, String messageKey, String defaultMessage,
+                        HttpStatus suggestedHttpStatus, ErrorSeverity severity) {
         this.code = code;
         this.messageKey = messageKey;
         this.defaultMessage = defaultMessage;

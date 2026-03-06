@@ -10,7 +10,7 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.UserNotEligibleExce
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.Severity;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -58,7 +58,7 @@ class UserAccessValidatorTest {
         UserIdentity user = mock(UserIdentity.class);
         OutcomeDetail detail = new OutcomeDetail(
                 UserIdentityError.ERR_USER_NOT_VERIFIED,
-                Severity.ERROR,
+                ErrorSeverity.ERROR,
                 Category.TECNICO,
                 context
         );
@@ -77,7 +77,7 @@ class UserAccessValidatorTest {
         UserIdentity user = mock(UserIdentity.class);
         OutcomeDetail detail = new OutcomeDetail(
                 UserIdentityError.ERR_USER_ACCOUNT_LOCKED,
-                Severity.ERROR,
+                ErrorSeverity.ERROR,
                 Category.TECNICO,
                 context
         );

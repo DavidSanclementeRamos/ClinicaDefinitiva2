@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepos
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.Severity;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class ReceptionistDeactivationValidator {
         if (hasActiveShifts) {
             return Outcome.fail(new OutcomeDetail(
                     ReceptionistError.ERR_RECEPTIONIST_ASSIGNED_SHIFTS,
-                    Severity.INFO,
+                    ErrorSeverity.INFO,
                     Category.CLINICO, EntityContext.RECEPTIONIST
             ));
         }

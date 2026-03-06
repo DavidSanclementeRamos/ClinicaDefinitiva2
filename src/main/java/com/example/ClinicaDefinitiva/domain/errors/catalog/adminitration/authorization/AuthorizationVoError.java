@@ -1,15 +1,16 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import org.springframework.http.HttpStatus;
 
-public enum TreatmentsVoError implements ErrorCatalog {
+public enum AuthorizationVoError implements ErrorCatalog {
 
-    ERR_TREATMENTS_ID_NULL("RN-TREATMENTS-VO-001","error.serviceId.null","El identificador del tratamiento no puede ser nulo",
+    ERR_ROL_ID_NULL("RN-AUTHORIZATION-VO-001","error.rol.id.null","El identificador del rol (rolId) no puede ser nulo",
             HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
-    ERR_TREATMENTS_PHASE_DATE_INVALID("RN-TREATMENTS-VO-002","error.treatments.phaseDateInvalid","La fecha de la fase del tratamiento es inválida",
+    ERR_USER_ROL_ASSIGNMENT_ID_NULL("RN-AUTHORIZATION-VO-002","error.userRolAssignment.id.null","El identificador de la asignación (userRolAssignmentId) no puede ser nulo",
             HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
+
 
 
     private final String code;
@@ -18,8 +19,8 @@ public enum TreatmentsVoError implements ErrorCatalog {
     private final HttpStatus suggestedHttpStatus;
     private final ErrorSeverity severity;
 
-    TreatmentsVoError(String code, String messageKey, String defaultMessage,
-                      HttpStatus suggestedHttpStatus, ErrorSeverity severity) {
+    AuthorizationVoError(String code, String messageKey, String defaultMessage,
+                         HttpStatus suggestedHttpStatus, ErrorSeverity severity) {
         this.code = code;
         this.messageKey = messageKey;
         this.defaultMessage = defaultMessage;

@@ -98,7 +98,7 @@ public class Guardian  {
             if (patientList != null && !patientList.isEmpty()) {
                 return Outcome.fail(new OutcomeDetail(
                         GuardianError.ERR_GUARDIAN_ACTIVE_AUTHORIZATIONS,
-                        Severity.INFO,
+                        ErrorSeverity.INFO,
                         Category.CLINICO,EntityContext.GUARDIAN
                 ));
             }

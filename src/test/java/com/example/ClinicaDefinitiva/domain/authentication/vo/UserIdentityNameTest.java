@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.authentication.vo;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.Severity;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +30,7 @@ class UserIdentityNameTest {
         List<OutcomeDetail> detalles = outcome.getDetalles();
         assertEquals(1, detalles.size());
         assertEquals(VoAccesError.ERR_USER_NAME_NULL, detalles.get(0).getCode());
-        assertEquals(Severity.ERROR, detalles.get(0).getSeverity());
+        assertEquals(ErrorSeverity.ERROR, detalles.get(0).getSeverity());
     }
 
     @Test

@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.util.Category;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.Severity;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -38,7 +38,7 @@ public final class HashedPassword implements Serializable {
         if (rawHash == null) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_PASSWORD_HASH_NULL,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO, VOContext.AUTHENTICATION
             ));
         }
@@ -46,7 +46,7 @@ public final class HashedPassword implements Serializable {
         if (rawHash.isBlank()) {
             return Outcome.fail(new OutcomeDetail(
                     VoAccesError.ERR_USER_PASSWORD_HASH_EMPTY,
-                    Severity.ERROR,
+                    ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHENTICATION
             ));
         }

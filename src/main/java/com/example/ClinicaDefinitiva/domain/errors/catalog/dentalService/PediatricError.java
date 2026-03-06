@@ -1,16 +1,21 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.errorService;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
+
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
 
-public enum TreatmentsVoError implements ErrorCatalog {
+public enum PediatricError implements ErrorCatalog {
 
-    ERR_TREATMENTS_ID_NULL("RN-TREATMENTS-VO-001","error.serviceId.null","El identificador del tratamiento no puede ser nulo",
+    ERR_PEDIATRIC_INVALID_AGE_RANGE(
+            "RN-PEDIATRIC-001","error.pediatric.age.invalid",
+            "El rango de edad debe especificar edades pediátricas válidas (0-18 años)",
             HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
-    ERR_TREATMENTS_PHASE_DATE_INVALID("RN-TREATMENTS-VO-002","error.treatments.phaseDateInvalid","La fecha de la fase del tratamiento es inválida",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
 
+    ERR_PEDIATRIC_MATERIALS_TOO_SHORT(
+            "RN-PEDIATRIC-002","error.pediatric.materials.short",
+            "Materiales pediátricos deben describirse adecuadamente (mínimo 5 caracteres)",
+            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
 
     private final String code;
     private final String messageKey;
@@ -18,8 +23,8 @@ public enum TreatmentsVoError implements ErrorCatalog {
     private final HttpStatus suggestedHttpStatus;
     private final ErrorSeverity severity;
 
-    TreatmentsVoError(String code, String messageKey, String defaultMessage,
-                      HttpStatus suggestedHttpStatus, ErrorSeverity severity) {
+    PediatricError(String code, String messageKey, String defaultMessage,
+                   HttpStatus suggestedHttpStatus, ErrorSeverity severity) {
         this.code = code;
         this.messageKey = messageKey;
         this.defaultMessage = defaultMessage;
