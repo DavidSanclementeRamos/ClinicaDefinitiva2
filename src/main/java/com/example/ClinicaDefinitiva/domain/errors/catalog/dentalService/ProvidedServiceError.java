@@ -19,7 +19,7 @@ public enum ProvidedServiceError implements ErrorCatalog {
 
     ERR_SERVICE_HAS_APPOINTMENTS(
             "RN-SERVICE-003","error.service.appointments.exist",
-            "No puede desactivarse porque tiene citas programadas en las próximas 48 horas",
+            "No puede desactivarse porque tiene citas programadas ",
             HttpStatus.CONFLICT, ErrorSeverity.ERROR),
 
     ERR_SERVICE_TYPE_IMMUTABLE(

@@ -87,4 +87,5 @@ public interface AppointmentRepository {
     Page<Appointment> findByStatus(AppointmentStatus status, Pageable pageable);
 
     Page<Appointment> findByPatientAndDentist(PatientId patientId, DentistId dentistId, LocalDate start, LocalDate end, Pageable pageable);
+    boolean existsByServiceId(ServiceId serviceId);
 }
