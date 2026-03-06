@@ -81,6 +81,34 @@ public final class Price {
     public boolean isZero() {
         return this.amount.compareTo(BigDecimal.ZERO) == 0;
     }
+ 
+    /**
+     * True si este precio es estrictamente mayor que otro.
+     *
+     * Precondición: ambos precios deben tener la misma moneda. 
+     *
+     * @param other precio con el que comparar
+     * @return true si this > other
+     */
+    public boolean isGreaterThan(Price other) {
+        requireSameCurrency(other);
+        return this.amount.compareTo(other.amount) > 0;
+    }
+
+    /**
+     * True si este precio es mayor o igual que otro.
+     *
+     * Usado en Invoice.receivePayment() para detectar que totalPaid >= total y
+     * disparar la transición a PAID.
+     *
+     * @param other precio con el que comparar
+     * @return true si this >= other
+     */
+    public boolean isGreaterThanOrEqual(Price other) {
+        requireSameCurrency(other);
+        return this.amount.compareTo(other.amount) >= 0;
+    }
+
 
     public int compareTo(Price other) {
         requireSameCurrency(other);
@@ -118,7 +146,5 @@ public final class Price {
         return amount + " " + currency.getCurrencyCode();
     }
 
-    public boolean isGreaterThan(Price amount) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
 }

@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.administration.operations.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.OperationsVoError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.operations.OperationsVoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 

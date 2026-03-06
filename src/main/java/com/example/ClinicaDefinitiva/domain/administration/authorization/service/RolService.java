@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.Rol
 import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 

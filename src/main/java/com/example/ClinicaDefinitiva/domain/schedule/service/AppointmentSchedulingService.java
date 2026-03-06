@@ -255,7 +255,6 @@ public class AppointmentSchedulingService {
         ServiceDuration duration = ServiceDuration.between(start, end);
 
         return new Appointment.Builder()
-                //.withId(AppointmentId())
                 .withDentistId(dentistId)
                 .withPatientId(patientId)
                 .withServiceId(serviceId)
@@ -263,7 +262,6 @@ public class AppointmentSchedulingService {
                 .withEnd(end)
                 .withAppointmentType(type)
                 .withReason(reason)
-               // .withServiceDuration(duration)
                 .build();
     }
 }

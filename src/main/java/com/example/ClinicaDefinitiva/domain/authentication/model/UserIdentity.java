@@ -3,7 +3,6 @@ package com.example.ClinicaDefinitiva.domain.authentication.model;
 import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.authentication.service.UserDeactivationPolicy;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
@@ -180,7 +179,7 @@ public class UserIdentity {
 
         if (status.getValue()!= UserIdentityStatus.Status.ACTIVE) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_USER_INACTIVE,
+                    UserIdentityError.ERR_USER_INACTIVE,
                     ErrorSeverity.ERROR,
                     Category.TECNICO,
                     EntityContext.USER_IDENTITY

@@ -1,10 +1,10 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.authentication;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
 
-public enum AuthorizationVoError implements ErrorCatalog {
+public enum AuthenticationVoError implements ErrorCatalog {
 
     ERR_USER_ID_INVALID("RN-USER-VO-001","error.user.id.invalid","El Id de usuario no es válido",
             HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
@@ -35,7 +35,7 @@ public enum AuthorizationVoError implements ErrorCatalog {
     private final HttpStatus suggestedHttpStatus;
     private final ErrorSeverity severity;
 
-    AuthorizationVoError(String code, String messageKey, String defaultMessage,
+    AuthenticationVoError(String code, String messageKey, String defaultMessage,
                          HttpStatus suggestedHttpStatus, ErrorSeverity severity) {
         this.code = code;
         this.messageKey = messageKey;

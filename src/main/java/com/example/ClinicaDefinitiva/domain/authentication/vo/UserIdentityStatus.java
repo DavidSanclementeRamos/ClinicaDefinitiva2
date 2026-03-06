@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.authentication.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.authentication.AuthenticationVoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
 
@@ -22,7 +22,7 @@ public final class UserIdentityStatus {
     private UserIdentityStatus(Status value) {
         if (value == null) {
             throw new ValueObjectValidationException(
-                    VoAccesError.ERR_USER_STATUS_NULL,
+                    AuthenticationVoError.ERR_USER_STATUS_NULL,
                     VOContext.AUTHORIZATION
             );
         }
@@ -42,7 +42,7 @@ public final class UserIdentityStatus {
     public UserIdentityStatus transitionTo(Status next) {
         if (!canTransitionTo(next)) {
             throw new ValueObjectValidationException(
-                    VoAccesError.ERR_USER_INVALID_TRANSITION,
+                    AuthenticationVoError.ERR_USER_INVALID_TRANSITION,
                     VOContext.AUTHENTICATION
             );
         }

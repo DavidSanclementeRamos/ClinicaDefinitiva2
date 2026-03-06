@@ -88,4 +88,13 @@ public interface AppointmentRepository {
 
     Page<Appointment> findByPatientAndDentist(PatientId patientId, DentistId dentistId, LocalDate start, LocalDate end, Pageable pageable);
     boolean existsByServiceId(ServiceId serviceId);
+/**
+     * Total de citas SCHEDULED o CONFIRMED para el dentista (sin límite de fecha).
+     * Usado en métricas / dashboard.
+     */
+    long countScheduledByDentist(DentistId dentistId);
+    
+    public boolean existsScheduledByDentistBetween(DentistId dentistId, LocalDateTime start, LocalDateTime end);
+
+    public boolean existsScheduledByPatientBetween(PatientId patientId, LocalDateTime now, LocalDateTime limit);
 }

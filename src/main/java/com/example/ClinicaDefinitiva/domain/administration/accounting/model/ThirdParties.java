@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeTh
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.ThirdPartiesError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting.ThirdPartiesError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;

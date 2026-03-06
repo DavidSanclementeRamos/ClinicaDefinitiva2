@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.authentication.vo;
 
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.authentication.AuthenticationVoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.util.Category;
@@ -43,7 +43,7 @@ public final class UserIdentityName implements Serializable {
     public static Outcome<UserIdentityName> create(String raw) {
         if (raw == null) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_USER_NAME_NULL,
+                    AuthenticationVoError.ERR_USER_NAME_NULL,
                     ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHENTICATION
             ));
@@ -51,7 +51,7 @@ public final class UserIdentityName implements Serializable {
 
         if (raw.isBlank()) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_USER_NAME_EMPTY,
+                    AuthenticationVoError.ERR_USER_NAME_EMPTY,
                     ErrorSeverity.ERROR,
                     Category.TECNICO, VOContext.AUTHENTICATION));
         }
@@ -60,7 +60,7 @@ public final class UserIdentityName implements Serializable {
 
         if (trimmed.length() < MIN_LENGTH) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_USER_NAME_TOO_SHORT,
+                   AuthenticationVoError.ERR_USER_NAME_TOO_SHORT,
                     ErrorSeverity.ERROR,
                     Category.TECNICO,VOContext.AUTHENTICATION
             ));
@@ -68,7 +68,7 @@ public final class UserIdentityName implements Serializable {
 
         if (trimmed.length() > MAX_LENGTH) {
             return Outcome.fail(new OutcomeDetail(
-                    VoAccesError.ERR_USER_NAME_TOO_LONG,
+                    AuthenticationVoError.ERR_USER_NAME_TOO_LONG,
                     ErrorSeverity.ERROR,
                     Category.TECNICO, VOContext.AUTHENTICATION
             ));

@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
 import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepository;
 import com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftType;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.ShiftError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.operations.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 

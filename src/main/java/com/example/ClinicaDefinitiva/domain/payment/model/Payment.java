@@ -9,6 +9,9 @@ import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolati
 import com.example.ClinicaDefinitiva.domain.payment.vo.PaymentId;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Agregado: Payment (Pago)
@@ -23,6 +26,11 @@ import java.time.LocalDateTime;
  * - RN-PAYMENT-005: Pagos con gateway requieren transactionRef
  * - RN-PAYMENT-006: El reembolso no puede exceder el monto original
  * - RN-PAYMENT-007: Pagos institucionales requieren identificador del pagador
+ * 
+ * Eventos de dominio publicados:
+ * - PaymentConfirmedEvent → escuchado por PaymentConfirmedEventHandler para marcar Invoice como pagada
+ * - PaymentFailedEvent    → para notificaciones / reintentos
+ * - PaymentRefundedEvent  → para trazabilidad contable
  */
 public final class Payment {
     
@@ -40,6 +48,14 @@ public final class Payment {
     private final LocalDateTime paymentDate;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    
+    
+    /**
+     * Eventos pendientes de publicación.
+     * El Application Service los extrae con pullDomainEvents() tras persistir el agregado.
+     */
+    private final List<Object> pendingEvents = new ArrayList<>();
+
     
     private Payment(Builder builder) {
         this.id = builder.id;
@@ -179,6 +195,26 @@ public final class Payment {
         
         this.updatedAt = LocalDateTime.now();
     }
+    
+    
+    
+    /**
+     * Extrae y limpia los eventos pendientes.
+     * El Application Service llama a este método tras persistir el agregado,
+     * y publica cada evento al EventPublisher de la infraestructura.
+     *
+     * Ejemplo en el Application Service:
+     * <pre>
+     *   paymentRepository.save(payment);
+     *   payment.pullDomainEvents().forEach(eventPublisher::publish);
+     * </pre>
+     */
+    public List<Object> pullDomainEvents() {
+        List<Object> events = Collections.unmodifiableList(new ArrayList<>(pendingEvents));
+        pendingEvents.clear();
+        return events;
+    }
+    
     
     /**
      * Calcula el monto pendiente de reembolso.

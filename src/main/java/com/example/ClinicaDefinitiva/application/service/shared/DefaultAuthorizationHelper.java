@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.service
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.AuthorizationError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import org.slf4j.Logger;

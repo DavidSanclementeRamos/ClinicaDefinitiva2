@@ -61,7 +61,16 @@ public enum UserIdentityError implements ErrorCatalog {
     ERR_USER_NOT_ELIGIBLE(
             "RN-USER-011","error.user.not.eligible",
             "El usuario no cumple con los criterios de elegibilidad requeridos",
-            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR);
+            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR),
+    
+    ERR_USER_INACTIVE(
+    "RN-USER-012",
+    "error.user.inactive",
+    "El usuario se encuentra inactivo y no puede realizar la operación solicitada",
+    HttpStatus.FORBIDDEN,
+    ErrorSeverity.ERROR
+);
+    
 
     private final String code;
     private final String messageKey;
