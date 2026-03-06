@@ -2,12 +2,10 @@ package com.example.ClinicaDefinitiva.application.mapper.billing.rate;
 
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.CreateRateDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.PayerType;
-import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
+import com.example.ClinicaDefinitiva.domain.billing.enu.PayerType;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 
 import java.util.Currency;
 import org.springframework.stereotype.Component;

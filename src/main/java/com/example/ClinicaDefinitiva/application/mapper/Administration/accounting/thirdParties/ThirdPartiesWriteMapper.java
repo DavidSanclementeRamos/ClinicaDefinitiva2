@@ -6,13 +6,9 @@ import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeThirdParties;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.util.Outcome;
+
 import org.springframework.stereotype.Component;
 
 @Component

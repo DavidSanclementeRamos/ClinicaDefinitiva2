@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.application.portsInput.dentalService;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.*;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

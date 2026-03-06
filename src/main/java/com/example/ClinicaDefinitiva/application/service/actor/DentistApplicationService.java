@@ -66,9 +66,7 @@ public class DentistApplicationService implements DentistUseCase {
                                    UserIdentityId requesterId,
                                    RolId requesterRolId) {
 
-        Dentist dentist = dentistRepository.findById(id)
-                .orElseThrow(() -> new DentistNotFoundException("Not found"));
-
+        
          authorizationHelper.authorize(
             requesterId,
             requesterRolId,
@@ -76,10 +74,13 @@ public class DentistApplicationService implements DentistUseCase {
             ActionCatalog.BasicAction.READ,
             AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withOwnership(dentist.getUserId()) // ← OwnershipPolicy
                 .build()
         );
+         
+          Dentist dentist = dentistRepository.findById(id)
+                .orElseThrow(() -> new DentistNotFoundException("Not found"));
 
+        
         return dentistReadMapper.toReadDto(dentist);
     }
 
@@ -87,35 +88,21 @@ public class DentistApplicationService implements DentistUseCase {
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
             action = ActionCatalog.BasicAction.READ)
     public Page<PageDentistDto> findAll(Pageable pageable,
-                                        UserIdentityId requesterId,
-                                        RolId requesterRolId) {
+            UserIdentityId requesterId,
+            RolId requesterRolId) {
 
-          // Autorización simple (solo sector, sin ownership)
+        // Autorización simple (solo sector, sin ownership)
         authorizationHelper.authorize(
-            requesterId,
-            requesterRolId,
-            ResourceCatalog.BasicResource.DENTIST,
-            ActionCatalog.BasicAction.READ,
-            AuthorizationContext.builder().build() // Sin atributos adicionales
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.DENTIST,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
         );
 
-        // Si es dentist, solo puede ver sus propios datos
-        return dentistRepository.findByUserId(requesterId)
-                .map(dentist -> {
-                    // Validar ownership
-                    SecurityContext ownershipContext = SecurityContext
-                            .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId)
-                            .withResourceOwnerId(dentist.getUserId())
-                            .build();
+        return dentistRepository.findAll(pageable)
+                .map(dentistReadMapper::toPageDto);
 
-
-                    // Tiene permisos completos → devolver todos
-                    return dentistRepository.findAll(pageable)
-                            .map(dentistReadMapper::toPageDto);
-                })
-                // Si no se encuentra dentista para ese requesterId → devolver todos
-                .orElse(dentistRepository.findAll(pageable)
-                        .map(dentistReadMapper::toPageDto));
     }
 
     @Override
@@ -126,9 +113,7 @@ public class DentistApplicationService implements DentistUseCase {
                                                    UserIdentityId requesterId,
                                                    RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST)), requesterId);
-
+        
         authorizationHelper.authorize(
             requesterId,
             requesterRolId,
@@ -215,6 +200,7 @@ public class DentistApplicationService implements DentistUseCase {
                 .withOwnership(dentist.getUserId()) // ← OwnershipPolicy
                 .build()
         );
+        
 
         dentist.updateContactData(
     Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
@@ -233,9 +219,7 @@ public class DentistApplicationService implements DentistUseCase {
                                               UserIdentityId requesterId,
                                               RolId requesterRolId) {
 
-        Dentist dentist = dentistRepository.findById(DentistId.of(id))
-                .orElseThrow(() -> new DentistNotFoundException("Not found"));
-
+        
        // Datos sensibles: Solo RECEPTIONIST (validado por SectorBasedPolicy)
         authorizationHelper.authorize(
             requesterId,
@@ -244,9 +228,12 @@ public class DentistApplicationService implements DentistUseCase {
             ActionCatalog.BasicAction.UPDATE,
             AuthorizationContext.builder()
                 .withResourceId(id)
-                .withOwnership(dentist.getUserId())
                 .build()
         );
+        
+        Dentist dentist = dentistRepository.findById(DentistId.of(id))
+                .orElseThrow(() -> new DentistNotFoundException("Not found"));
+
 
         dentist.updateSensitiveData(
     Age.of(DateOfBirth.of(dto.dateOfBirth())),
@@ -350,8 +337,7 @@ public class DentistApplicationService implements DentistUseCase {
                            UserIdentityId requesterId,
                            RolId requesterRolId) {
 
-        Dentist dentist = dentistRepository.findById(id)
-                .orElseThrow(() -> new DentistNotFoundException("Not found"));
+        
 
         // SectorBasedPolicy: Solo RECEPTIONIST de RECURSOS_HUMANOS puede eliminar
         // (Validado automáticamente por SectorBasedPolicy en el PolicyEngine)
@@ -364,6 +350,9 @@ public class DentistApplicationService implements DentistUseCase {
                 .withResourceId(id.value())
                 .build()
         );
+        
+        Dentist dentist = dentistRepository.findById(id)
+                .orElseThrow(() -> new DentistNotFoundException("Not found"));
 
         dentistRepository.deleteById(dentist.getDentistId());
     }

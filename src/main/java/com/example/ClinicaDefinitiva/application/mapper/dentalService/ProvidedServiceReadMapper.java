@@ -2,8 +2,8 @@ package com.example.ClinicaDefinitiva.application.mapper.dentalService;
 
 import com.example.ClinicaDefinitiva.application.dto.dentalService.PageServiceDto;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.ReadServiceDto;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetails;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;

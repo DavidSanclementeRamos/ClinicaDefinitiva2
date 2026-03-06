@@ -58,10 +58,7 @@ public class GuardianApplicationService implements GuardianUseCase {
                                     UserIdentityId requesterId,
                                     RolId requesterRolId) {
 
-        Guardian guardian = guardianRepository.findById(id)
-                .orElseThrow(() -> new GuardianNoFoundException("Not fount"));
-
-        // OwnershipPolicy: Tutor solo ve sus propios datos
+       
         authorizationHelper.authorize(
             requesterId,
             requesterRolId,
@@ -69,9 +66,11 @@ public class GuardianApplicationService implements GuardianUseCase {
             ActionCatalog.BasicAction.READ,
             AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withOwnership(guardian.getUserId()) // ← OwnershipPolicy
                 .build()
         );
+         Guardian guardian = guardianRepository.findById(id)
+                .orElseThrow(() -> new GuardianNoFoundException("Not fount"));
+
 
         return readMapper.toReadDto(guardian);
     }
@@ -104,9 +103,8 @@ public class GuardianApplicationService implements GuardianUseCase {
                                                  UserIdentityId requesterId,
                                                  RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.GUARDIAN)), requesterId)
-                .withResourceId(patientId.value());
+       
+        
 
          authorizationHelper.authorize(
             requesterId,
@@ -189,9 +187,7 @@ public class GuardianApplicationService implements GuardianUseCase {
                                                UserIdentityId requesterId,
                                                RolId requesterRolId) {
 
-        Guardian guardian = guardianRepository.findById(id)
-                .orElseThrow(() -> new GuardianNoFoundException("Not found"));
-
+        
           authorizationHelper.authorize(
             requesterId,
             requesterRolId,
@@ -199,9 +195,12 @@ public class GuardianApplicationService implements GuardianUseCase {
             ActionCatalog.BasicAction.UPDATE,
             AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withOwnership(guardian.getUserId())
                 .build()
-        ); 
+        );
+          
+          Guardian guardian = guardianRepository.findById(id)
+                .orElseThrow(() -> new GuardianNoFoundException("Not found"));
+
 
           guardian.updateSensitiveData(
             writeMapper.toAge(dto),
@@ -226,8 +225,7 @@ public class GuardianApplicationService implements GuardianUseCase {
                            UserIdentityId requesterId,
                            RolId requesterRolId) {
 
-        Guardian guardian = guardianRepository.findById(id)
-                .orElseThrow(() -> new GuardianNoFoundException("Not found"));
+       
 
           authorizationHelper.authorize(
             requesterId,
@@ -238,6 +236,9 @@ public class GuardianApplicationService implements GuardianUseCase {
                 .withResourceId(id.value())
                 .build()
         );
+          
+           Guardian guardian = guardianRepository.findById(id)
+                .orElseThrow(() -> new GuardianNoFoundException("Not found"));
 
         guardianRepository.deleteById(guardian.getGuardianId());
     }

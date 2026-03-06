@@ -88,9 +88,7 @@ public class PatientApplicationService implements PatientUseCase {
                                         UserIdentityId requesterId,
                                         RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)), requesterId);
-
+       
         // Solo sector (receptionist ve todos)
         authorizationHelper.authorize(
             requesterId,
@@ -218,8 +216,7 @@ public class PatientApplicationService implements PatientUseCase {
                                               UserIdentityId requesterId,
                                               RolId requesterRolId) {
 
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new PatientNotFoundException("Not found"));
+        
 
         // Datos sensibles: Solo receptionist (SectorBasedPolicy)
         authorizationHelper.authorize(
@@ -229,9 +226,10 @@ public class PatientApplicationService implements PatientUseCase {
             ActionCatalog.BasicAction.UPDATE,
             AuthorizationContext.builder()
                 .withResourceId(id.value())
-                .withOwnership(patient.getUser())
                 .build()
         );
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException("Not found"));
 
         patient.updateSensitiveData(
             writeMapper.toAge(dto),

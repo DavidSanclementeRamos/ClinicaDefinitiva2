@@ -5,10 +5,8 @@ import com.example.ClinicaDefinitiva.application.dto.sheduled.CreateAppointmentD
 import com.example.ClinicaDefinitiva.application.dto.sheduled.UpdateAppointmentDto;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceDuration;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
-import com.example.ClinicaDefinitiva.domain.schedule.service.AppointmentSchedulingService;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentCompletion;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
 import java.time.LocalDateTime;

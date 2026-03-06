@@ -4,13 +4,17 @@ import com.example.ClinicaDefinitiva.application.dto.dentalService.CreateService
 import com.example.ClinicaDefinitiva.application.dto.dentalService.UpdateServiceDetailsDto;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.UpdateServiceInfoDto;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.UpdateServiceRateDto;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetails;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetailsFactory;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.*;
+import com.example.ClinicaDefinitiva.domain.dentalService.enu.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceDetails;
+import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceDetailsFactory;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceCatalog;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceCode;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDescription;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceName;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceStatus;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
-
 import java.util.Currency;
 import org.springframework.stereotype.Component;
 

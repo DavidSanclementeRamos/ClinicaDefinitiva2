@@ -1,14 +1,10 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.authorization.rol;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.CreateRolDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.PermissionDto;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ActionCatalog;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;
 
-import java.util.HashSet;
 
 public class RolWriteMapper {
     

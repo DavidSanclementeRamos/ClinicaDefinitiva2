@@ -11,10 +11,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePe
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
-import com.example.ClinicaDefinitiva.domain.util.Outcome;
+
 import java.time.LocalDate;
 import org.springframework.stereotype.Component;
 

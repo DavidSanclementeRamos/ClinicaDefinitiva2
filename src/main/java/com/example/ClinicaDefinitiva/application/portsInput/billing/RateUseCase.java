@@ -6,8 +6,7 @@ import com.example.ClinicaDefinitiva.application.dto.billing.rate.PageRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.ReadRateDto;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

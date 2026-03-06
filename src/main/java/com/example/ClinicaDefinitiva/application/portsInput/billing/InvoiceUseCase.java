@@ -3,8 +3,8 @@ package com.example.ClinicaDefinitiva.application.portsInput.billing;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.*;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceId;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceStatus;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

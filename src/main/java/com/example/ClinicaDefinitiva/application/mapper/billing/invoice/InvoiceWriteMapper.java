@@ -8,13 +8,13 @@ import com.example.ClinicaDefinitiva.application.dto.billing.invoice.CreateParti
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.model.Invoice;
-import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
-import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceItemFactoryService;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.*;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.CurrencyCode;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceItemId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.ProviderId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.Quantity;
+import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 

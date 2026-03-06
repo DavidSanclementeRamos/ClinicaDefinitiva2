@@ -38,9 +38,7 @@ public class ScheduleQueryService {
      * Límite máximo de citas que se cargan en memoria en una sola consulta.
      *
      * 500 es un techo razonable para validaciones de negocio (desactivación,
-     * conflictos de agenda). Si se alcanza, hay un problema de modelado más
-     * profundo (ej. el dentista lleva años sin depurar citas) que debe resolverse
-     * en el repositorio con consultas COUNT, no cargando más elementos en memoria.
+     * conflictos de agenda).
      */
     private static final int MAX_APPOINTMENTS_PER_QUERY = 500;
 
@@ -50,9 +48,7 @@ public class ScheduleQueryService {
         this.appointmentRepository = appointmentRepository;
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
     // Consultas de EXISTENCIA — estrategia A: COUNT en repositorio
-    // ──────────────────────────────────────────────────────────────────────────
 
     /**
      * Verifica si el dentista tiene citas activas en las próximas N horas.
@@ -83,9 +79,7 @@ public class ScheduleQueryService {
         return appointmentRepository.existsScheduledByDentistBetween(dentistId, now, limit);
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
     // Consultas de LISTA — estrategia B: límite explícito y documentado
-    // ──────────────────────────────────────────────────────────────────────────
 
     /**
      * Retorna citas programadas del dentista en las próximas N horas.
@@ -158,9 +152,7 @@ public class ScheduleQueryService {
         return results;
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
     // Métricas
-    // ──────────────────────────────────────────────────────────────────────────
 
     /**
      * Tiempo total ocupado por citas activas en una fecha específica.
@@ -190,10 +182,7 @@ public class ScheduleQueryService {
         return appointmentRepository.existsScheduledByDentistBetween(dentistId, start, end);
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // Utilitario interno
-    // ──────────────────────────────────────────────────────────────────────────
-
+   
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(ScheduleQueryService.class);
 

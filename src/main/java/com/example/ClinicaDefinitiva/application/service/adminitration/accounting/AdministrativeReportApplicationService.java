@@ -11,7 +11,6 @@ import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHel
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.JournalEntryRepository;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ReportRepository;
-//import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Expense;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.AdministrativeReportId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.JournalEntryId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ActionCatalog;
