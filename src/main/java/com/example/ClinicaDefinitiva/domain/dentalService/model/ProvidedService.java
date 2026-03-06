@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.dentalService.model;
 
 import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.dentalService.enu.ServiceType;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ProvidedServiceError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceRatePolicy;

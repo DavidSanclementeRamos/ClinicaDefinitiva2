@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.dentalService.service;
 
 import com.example.ClinicaDefinitiva.domain.vo.Price;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ProvidedServiceError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 

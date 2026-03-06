@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorService;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
