@@ -6,17 +6,21 @@ import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepos
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDuration;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.schedule.output.AppointmentRepository;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.dentalService.output.ProvidedServiceRepository;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.operations.ShiftError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Domain Service: Orquesta operaciones entre agregados
@@ -28,15 +32,16 @@ public class AppointmentSchedulingService {
     private final AppointmentRepository appointmentRepository;
     private final ShiftRepository shiftRepository;
     private final ScheduleQueryService scheduleQueryService;
+    private final ProvidedServiceRepository serviceRepository;
 
-    public AppointmentSchedulingService(
-            AppointmentRepository appointmentRepository,
-            ShiftRepository shiftRepository,
-            ScheduleQueryService scheduleQueryService) {
+    public AppointmentSchedulingService(AppointmentRepository appointmentRepository, ShiftRepository shiftRepository, ScheduleQueryService scheduleQueryService, ProvidedServiceRepository serviceRepository) {
         this.appointmentRepository = appointmentRepository;
         this.shiftRepository = shiftRepository;
         this.scheduleQueryService = scheduleQueryService;
+        this.serviceRepository = serviceRepository;
     }
+
+   
 
     /**
      * Agenda una nueva cita
@@ -61,7 +66,8 @@ public class AppointmentSchedulingService {
         Shift shift = ensureShiftCoverage(dentistId, start, end);
 
 
-        ensureNoConflicts(dentistId, patientId, start, end);
+        ensureNoConflicts(dentistId, patientId, start, end, serviceId
+);
 
         // 4. Crear cita
         Appointment appointment = buildAppointment(
@@ -86,6 +92,7 @@ public class AppointmentSchedulingService {
             PatientId patientId,
             LocalDateTime newStart,
             LocalDateTime newEnd
+            
              ) {
 
         if (!original.getStatus().isEditable()) {
@@ -158,13 +165,14 @@ public class AppointmentSchedulingService {
     }
 
     /**
-     * RN-APPT-004, RN-APPT-009: Coordina conflictos entre Appointments CON LOCK
+     * RN-APPT-004, RN-APPT-009: Coordina conflictos entre Appointments CON LOCK y servicios activos
      */
     private void ensureNoConflicts(
             DentistId dentistId,
             PatientId patientId,
             LocalDateTime start,
-            LocalDateTime end) {
+            LocalDateTime end,
+            ServiceId serviceId) {
 
         List<Appointment> dentistConflicts = appointmentRepository
                 .findConflictingForDentist(dentistId, start, end, true);
@@ -181,6 +189,19 @@ public class AppointmentSchedulingService {
             throw new BusinessRuleViolationException(
                     AppointmentError.ERR_APPT_PATIENT_TIME_CONFLICT, EntityContext.APPOINTMENT);
         }
+            ProvidedService service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new BusinessRuleViolationException(
+                        ProvidedServiceError.ERR_SERVICE_NOT_FOUND,
+                        EntityContext.DENTAL_SERVICE
+                ));
+
+        if (!service.isActive()) {
+            throw new BusinessRuleViolationException(
+                    ProvidedServiceError.ERR_SERVICE_INACTIVE,
+                    EntityContext.DENTAL_SERVICE
+            );
+        }
+
     }
 
     /**
@@ -191,7 +212,8 @@ public class AppointmentSchedulingService {
             DentistId dentistId,
             PatientId patientId,
             LocalDateTime start,
-            LocalDateTime end) {
+            LocalDateTime end
+            ) {
 
         List<Appointment> dentistConflicts = appointmentRepository
                 .findConflictingForDentist(dentistId, start, end, true);
@@ -212,7 +234,11 @@ public class AppointmentSchedulingService {
             throw new BusinessRuleViolationException(
                     AppointmentError.ERR_APPT_PATIENT_TIME_CONFLICT, EntityContext.APPOINTMENT);
         }
+        
+          
     }
+    
+    
 
     /**
      * Construye Appointment usando Builder CORREGIDO

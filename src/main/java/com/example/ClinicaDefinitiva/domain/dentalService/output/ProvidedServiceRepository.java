@@ -28,7 +28,6 @@ public interface ProvidedServiceRepository {
     Page<ProvidedService> findByStatus(String status, Pageable pageable);
 
     Page<ProvidedService> findByType(String serviceType, Pageable pageable);
-    // Puedes añadir más métodos específicos según futuros requisitos
 
 
 }

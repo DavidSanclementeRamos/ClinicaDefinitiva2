@@ -55,7 +55,14 @@ public enum ProvidedServiceError implements ErrorCatalog {
     ERR_SERVICE_DEACTIVATION_REASON_REQUIRED(
             "RN-SERVICE-010","error.service.deactivation.reason",
             "Debe registrar motivo de desactivación con mínimo 10 caracteres",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
+            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
+    ERR_SERVICE_NOT_FOUND(
+    "RN-SERVICE-011",
+    "error.service.not.found",
+    "El servicio solicitado no existe o no está disponible",
+    HttpStatus.NOT_FOUND,
+    ErrorSeverity.ERROR
+);
 
     private final String code;
     private final String messageKey;
