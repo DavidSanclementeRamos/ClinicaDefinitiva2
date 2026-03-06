@@ -28,4 +28,6 @@ public interface InvoiceRepository {
     Page<Invoice> findByPatient(PatientId patientId, Pageable pageable);
 
     Page<Invoice> findByStatus(InvoiceStatus.Status status, Pageable pageable);
+
+    public boolean existsByServicId(InvoiceId invoiceId);
 }

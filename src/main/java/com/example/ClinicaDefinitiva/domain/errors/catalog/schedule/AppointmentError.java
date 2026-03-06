@@ -22,7 +22,7 @@ public enum AppointmentError implements ErrorCatalog {
 
     ERR_APPT_NOT_EDITABLE(
             "RN-APPT-003","error.appointment.notEditable",
-            "Solo puede editarse si está en estado SCHEDULED o CONFIRMED",
+            "Solo puede editarse si está en estado SCHEDULED",
             HttpStatus.CONFLICT, ErrorSeverity.ERROR),
 
     ERR_APPT_LATE_CANCELLATION(

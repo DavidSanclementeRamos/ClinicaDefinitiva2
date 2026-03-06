@@ -15,6 +15,10 @@ import java.time.LocalDateTime;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import com.example.ClinicaDefinitiva.domain.billing.output.RateRepository;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.dentalService.output.ProvidedServiceRepository;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ProvidedServiceError;
 
 /**
  * Domain Service: InvoiceDomainService
@@ -28,12 +32,16 @@ public final class InvoiceDomainService {
 
     private final ContractRepository contractRepository;
     private final RateRepository rateRepository;
+        private final ProvidedServiceRepository serviceRepository;
 
-    public InvoiceDomainService(ContractRepository contractRepository,
-                                RateRepository rateRepository) {
+    public InvoiceDomainService(ContractRepository contractRepository, RateRepository rateRepository, ProvidedServiceRepository serviceRepository) {
         this.contractRepository = contractRepository;
         this.rateRepository = rateRepository;
+        this.serviceRepository = serviceRepository;
     }
+
+
+    
 
     /**
      * Valida que el contrato institucional exista y esté activo/vigente.
@@ -67,6 +75,24 @@ public final class InvoiceDomainService {
                     ));
 
             rate.ensureValidAt(emitDate);
+        }
+
+    }
+    
+    // Valida que un servicio este activo al momento de factura.
+    public void validanteService(ServiceId serviceId){
+                
+            ProvidedService service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new BusinessRuleViolationException(
+                        ProvidedServiceError.ERR_SERVICE_NOT_FOUND,
+                        EntityContext.DENTAL_SERVICE
+                ));
+
+        if (!service.isActive()) {
+            throw new BusinessRuleViolationException(
+                    ProvidedServiceError.ERR_SERVICE_INACTIVE,
+                    EntityContext.DENTAL_SERVICE
+            );
         }
     }
 }

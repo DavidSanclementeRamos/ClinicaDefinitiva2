@@ -87,12 +87,21 @@ public class Appointment {
     }
 
     /**
-     * RN-APPT-005: Solo puede finalizarse si tiene duración real y notas clínicas
+     * RN-APPT-005: Solo puede finalizarse si tiene duración real,
+     * estado valido para ser completada y notas clínicas
      */
 
 
     public void complete(AppointmentCompletion completion) {
         
+
+        if (! status.isScheduled()) {
+            throw new BusinessRuleViolationException(
+                AppointmentError.ERR_APPT_NOT_EDITABLE,
+                EntityContext.APPOINTMENT
+            );
+        }
+    
         this.status = AppointmentStatus.from(AppointmentStatus.Status.COMPLETED);
         this.completion = completion;
         this.lastUpdated = LocalDateTime.now();
@@ -102,6 +111,13 @@ public class Appointment {
 
 
     public void markAsNoShow(String reason) {
+        
+        if (! status.isScheduled()) {
+            throw new BusinessRuleViolationException(
+                AppointmentError.ERR_APPT_NOT_EDITABLE,
+                EntityContext.APPOINTMENT
+            );
+        }
         if (reason == null || reason.isBlank()) {
             throw new BusinessRuleViolationException(
                     AppointmentError.ERR_APPT_MISSING_REASON, EntityContext.APPOINTMENT);
@@ -110,10 +126,7 @@ public class Appointment {
         this.lastUpdated = LocalDateTime.now();
     }
 
-    /**public void markAsRescheduled() {
-        this.status = this.status.transitionTo(AppointmentStatus.Status.RESCHEDULED);
-        this.lastUpdated = LocalDateTime.now();
-    }*/
+
 
 
 
