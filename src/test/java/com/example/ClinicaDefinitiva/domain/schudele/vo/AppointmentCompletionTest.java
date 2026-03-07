@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.schudele.vo;
 
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDuration;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentCompletion;
 
 

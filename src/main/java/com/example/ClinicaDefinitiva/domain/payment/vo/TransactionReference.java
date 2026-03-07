@@ -10,8 +10,8 @@ import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.payment.PaymentVoError;
 import java.util.Objects;
 
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 /**
  * Value Object: TransactionReference

@@ -2,7 +2,7 @@
 package com.example.ClinicaDefinitiva.domain.schudele.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.ScheduleVOError;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

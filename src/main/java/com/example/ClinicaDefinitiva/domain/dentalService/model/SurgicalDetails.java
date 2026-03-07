@@ -3,7 +3,7 @@ import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceDetails
 import com.example.ClinicaDefinitiva.domain.dentalService.enu.ServiceType;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.SurgicalError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 import java.util.Objects;
 import java.util.Set;

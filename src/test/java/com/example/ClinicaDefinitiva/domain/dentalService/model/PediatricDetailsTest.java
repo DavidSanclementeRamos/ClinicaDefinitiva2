@@ -4,7 +4,7 @@ package com.example.ClinicaDefinitiva.domain.dentalService.model;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.AgeRange;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.PediatricError;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 
 import static org.assertj.core.api.Assertions.*;

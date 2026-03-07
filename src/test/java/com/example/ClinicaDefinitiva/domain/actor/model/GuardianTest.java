@@ -13,7 +13,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.Person;
 import com.example.ClinicaDefinitiva.domain.actor.vo.TypeGuardian;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;

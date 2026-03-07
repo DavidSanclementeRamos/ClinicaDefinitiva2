@@ -13,7 +13,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.Specialties;
 import com.example.ClinicaDefinitiva.domain.actor.vo.Specialty;
 import com.example.ClinicaDefinitiva.domain.actor.vo.WorkingHours;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import org.junit.jupiter.api.Test;

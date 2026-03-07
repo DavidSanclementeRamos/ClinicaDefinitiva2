@@ -9,7 +9,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.policie
 import com.example.ClinicaDefinitiva.domain.administration.authorization.policies.contextual.SectorBasedPolicy;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.policies.contextual.SpecialtyBasedPolicy;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.RolError;
 

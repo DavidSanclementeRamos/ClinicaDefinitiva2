@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.payment.PaymentError;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.payment.vo.PaymentId;
 
 import java.time.LocalDateTime;

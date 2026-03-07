@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.authentication.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authentication.AuthenticationVoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 public final class UserIdentityStatus {
 

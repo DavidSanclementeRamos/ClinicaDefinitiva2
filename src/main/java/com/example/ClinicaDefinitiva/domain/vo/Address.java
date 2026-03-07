@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.vo;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.VoError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import java.util.Objects;
 
 public final class Address {

@@ -8,8 +8,8 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolI
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.PageResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.autorization.rol.*;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.authorization.rol.RolReadMapper;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.authorization.rol.RolWriteMapper;
+import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.administration.authorization.rol.RolReadMapper;
+import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.administration.authorization.rol.RolWriteMapper;
 import com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

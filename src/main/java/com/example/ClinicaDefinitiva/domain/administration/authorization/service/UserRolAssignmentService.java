@@ -10,7 +10,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolI
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.UserRolAssignmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
 import java.time.LocalDate;
 import java.util.List;

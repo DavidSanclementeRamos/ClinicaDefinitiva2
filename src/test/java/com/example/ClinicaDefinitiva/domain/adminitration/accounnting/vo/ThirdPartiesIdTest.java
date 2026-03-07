@@ -4,7 +4,7 @@ package com.example.ClinicaDefinitiva.domain.adminitration.accounnting.vo;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

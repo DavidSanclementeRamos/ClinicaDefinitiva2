@@ -14,11 +14,8 @@ public record CreateDentistRequest(
      String specialties,
      String availabilityStatus,
 
-    // WorkingHours de horas laborales
-     LocalTime start,
-     LocalTime end,
-     DayOfWeek dayOfWeek,
-     int declaredHoursPerWeek,
+     WorkingHoursRequest WorkingHours,
+    
 
     // Person
      String dni,

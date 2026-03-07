@@ -14,7 +14,7 @@ import com.example.ClinicaDefinitiva.domain.billing.valueObject.ProviderId;
 import com.example.ClinicaDefinitiva.domain.billing.vo.Quantity;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

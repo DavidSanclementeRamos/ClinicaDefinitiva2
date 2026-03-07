@@ -2,7 +2,7 @@
 package com.example.ClinicaDefinitiva.domain.adminitration.authorization.vo;
 
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

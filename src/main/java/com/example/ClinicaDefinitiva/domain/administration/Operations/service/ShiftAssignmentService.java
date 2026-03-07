@@ -10,7 +10,7 @@ import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepos
 import com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftType;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.operations.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

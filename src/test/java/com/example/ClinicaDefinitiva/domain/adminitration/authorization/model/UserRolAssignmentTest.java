@@ -4,8 +4,8 @@ package com.example.ClinicaDefinitiva.domain.adminitration.authorization.model;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;

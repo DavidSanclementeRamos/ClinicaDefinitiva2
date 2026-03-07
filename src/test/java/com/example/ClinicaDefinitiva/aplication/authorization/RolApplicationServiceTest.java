@@ -17,7 +17,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.service
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.junit.jupiter.api.*;

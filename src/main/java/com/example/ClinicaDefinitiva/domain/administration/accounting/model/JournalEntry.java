@@ -6,8 +6,8 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerA
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting.JournalEntryError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 //import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 

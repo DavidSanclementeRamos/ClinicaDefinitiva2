@@ -11,5 +11,7 @@ public record WorkingHoursDto(
         LocalTime end,
         DayOfWeek dayOfWeek,
         int declaredHoursPerWeek) {
+
+   
     
 }

@@ -6,7 +6,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Perm
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
 import java.util.HashSet;
 import java.util.Objects;

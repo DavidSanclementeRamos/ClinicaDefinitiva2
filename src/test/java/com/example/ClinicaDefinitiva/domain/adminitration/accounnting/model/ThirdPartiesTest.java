@@ -5,8 +5,8 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypeTh
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;

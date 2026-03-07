@@ -10,7 +10,7 @@ import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepos
 import com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftType;
 import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
 import com.example.ClinicaDefinitiva.domain.administration.operations.service.ShiftAssignmentService;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

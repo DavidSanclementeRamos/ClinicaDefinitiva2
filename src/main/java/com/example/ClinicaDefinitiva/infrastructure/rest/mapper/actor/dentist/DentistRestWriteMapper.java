@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.dentistReadMapper;
+package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.dentist;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist.*;
@@ -14,10 +14,10 @@ public class DentistRestWriteMapper {
                 request.specialties(),
                 request.availabilityStatus(),
 
-                request.start(),
+           new WorkingHoursDto(    request.start(),
                 request.end(),
                 request.dayOfWeek(),
-                request.declaredHoursPerWeek(),
+                request.declaredHoursPerWeek()),
 
                 request.dni(),
                 request.first(),
@@ -58,10 +58,10 @@ public class DentistRestWriteMapper {
 
         return new UpdateDentistSensitiveDto(
                 request.specialties(),
-                request.start(),
+                new WorkingHoursDto(    request.start(),
                 request.end(),
                 request.dayOfWeek(),
-                request.declaredHoursPerWeek(),
+                request.declaredHoursPerWeek()),
                 request.dni(),
                 request.first(),
                 request.lastName(),

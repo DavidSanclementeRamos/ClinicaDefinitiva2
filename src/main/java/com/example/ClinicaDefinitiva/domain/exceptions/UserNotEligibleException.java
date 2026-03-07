@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
+package com.example.ClinicaDefinitiva.domain.exceptions;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;

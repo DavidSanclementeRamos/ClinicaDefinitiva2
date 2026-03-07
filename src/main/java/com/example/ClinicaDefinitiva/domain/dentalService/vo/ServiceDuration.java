@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.dentalService.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ServiceVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.output.Con
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.PatientError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
 import java.util.Optional;
 

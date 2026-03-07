@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.authorization.rol;
+package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.administration.authorization.rol;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.CreateRolDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.PermissionDto;

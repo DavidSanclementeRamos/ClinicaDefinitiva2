@@ -5,8 +5,8 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.Natura
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
 import org.junit.jupiter.api.Test;
 import java.util.Currency;
 import static org.junit.jupiter.api.Assertions.*;

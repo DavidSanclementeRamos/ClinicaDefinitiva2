@@ -2,7 +2,7 @@
 package com.example.ClinicaDefinitiva.domain.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor;
 
 import org.junit.jupiter.api.Test;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import static org.junit.jupiter.api.Assertions.*;
 

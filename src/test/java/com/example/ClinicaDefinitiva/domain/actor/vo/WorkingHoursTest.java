@@ -2,7 +2,7 @@
 package com.example.ClinicaDefinitiva.domain.actor;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.WorkingHours;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;

@@ -15,10 +15,9 @@ public class DentistReadMapper {
                 dentist.getDentistId().value(),
                 dentist.getSpecialties().toString(),
                 dentist.getAvailabilityStatus().toString(),
-                dentist.getWorkingHours().getStart(),
-                dentist.getWorkingHours().getEnd(),
-                dentist.getWorkingHours().getDayOfWeek(),
-                dentist.getWorkingHours().getDeclaredHoursPerWeek(),
+                 new WorkingHoursDto(dentist.getWorkingHours().getStart(),
+                 dentist.getWorkingHours().getEnd(), dentist.getWorkingHours().getDayOfWeek(), dentist.getWorkingHours().getDeclaredHoursPerWeek()),
+
                 dentist.getPersonData().getDni().toString(),
                 dentist.getPersonData().getFullname().FirstName(),
                 dentist.getPersonData().getFullname().LastName(),
@@ -50,6 +49,7 @@ public class DentistReadMapper {
 
                 );
     }
+
 
 }
 

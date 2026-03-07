@@ -4,7 +4,7 @@ package com.example.ClinicaDefinitiva.domain.vo;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.VoError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ServiceVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;

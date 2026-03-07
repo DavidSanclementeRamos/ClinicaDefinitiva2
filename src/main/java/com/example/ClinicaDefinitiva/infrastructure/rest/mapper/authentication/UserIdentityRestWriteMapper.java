@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.userIdentity;
+package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.authentication;
 
 import com.example.ClinicaDefinitiva.application.dto.authentication.CreateUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.dto.authentication.UpdateUserIdentityDto;

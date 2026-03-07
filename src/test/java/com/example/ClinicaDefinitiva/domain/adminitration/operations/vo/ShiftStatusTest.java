@@ -4,7 +4,7 @@ package com.example.ClinicaDefinitiva.domain.adminitration.operations;
 import com.example.ClinicaDefinitiva.domain.administration.operations.vo.ShiftStatus;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.operations.OperationsVoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

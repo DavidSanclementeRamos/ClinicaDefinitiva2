@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.billing.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.BillingVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 public  record InvoiceItemId(Long getValue) {
 

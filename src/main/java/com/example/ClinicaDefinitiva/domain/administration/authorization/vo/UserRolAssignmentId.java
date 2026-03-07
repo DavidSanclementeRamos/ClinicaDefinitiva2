@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.administration.authorization.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.AuthorizationVoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 /**
  * VO UserRolAssignmentId - Identificador único del agregado UserRolAssignment

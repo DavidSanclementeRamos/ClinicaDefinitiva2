@@ -6,7 +6,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.num.Rol
 import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.Set;

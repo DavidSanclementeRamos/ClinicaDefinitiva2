@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapper;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
-import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.vo.Address;

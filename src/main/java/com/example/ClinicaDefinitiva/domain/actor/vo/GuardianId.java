@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.actor.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 
 public record  GuardianId(Long value) {

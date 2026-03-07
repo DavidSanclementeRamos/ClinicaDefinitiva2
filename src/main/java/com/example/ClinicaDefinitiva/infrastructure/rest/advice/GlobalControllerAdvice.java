@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.advice;
 
 
 
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ClinicaDefinitivaException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ClinicaDefinitivaException;
 
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.ErrorResponse;
 import com.example.ClinicaDefinitiva.util.ErrorCodeResolver;

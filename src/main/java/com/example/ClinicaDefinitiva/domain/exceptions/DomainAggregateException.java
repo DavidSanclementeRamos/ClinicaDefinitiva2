@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.exceptionsDomain;
+package com.example.ClinicaDefinitiva.domain.exceptions;
 
 //import com.example.ClinicaDefinitiva.domain.errors.ErrorCatalogXD;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;

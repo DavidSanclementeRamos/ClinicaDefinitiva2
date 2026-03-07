@@ -1,9 +1,10 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.dentistReadMapper;
+package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.actor.dentist;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.PageDentistDto;
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.ReadDentistDto;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist.PageDentistResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist.ReadDentistResponse;
+import com.example.ClinicaDefinitiva.infrastructure.rest.dto.actorDto.dentist.WorkingHoursRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,9 +19,8 @@ public class DentistRestReadMapper {
                 dto.dentistId(),
                 dto.specialties(),
                 dto.availabilityStatus(),
-                dto.start(),
-                dto.end(),
-                dto.dayOfWeek(),
+               new WorkingHoursRequest(  dto.workingHoursDto.start(), dto.workingHoursDto().end(),
+               dto.workingHoursDto().dayOfWeek(), dto.workingHoursDto().declaredHoursPerWeek()),
                 dto.dni(),
                 dto.first(),
                 dto.lastName(),
@@ -53,6 +53,8 @@ public class DentistRestReadMapper {
                 dto.availabilityStatus()
         );
     }
+    
+    
 
 
 

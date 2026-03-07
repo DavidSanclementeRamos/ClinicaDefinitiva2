@@ -9,7 +9,7 @@ import com.example.ClinicaDefinitiva.domain.billing.enu.RateStatus;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.RateError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

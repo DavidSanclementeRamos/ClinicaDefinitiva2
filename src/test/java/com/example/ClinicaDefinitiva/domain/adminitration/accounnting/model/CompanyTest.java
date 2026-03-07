@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Comp
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.DomainAggregateException;
+import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.TemporalValidationException;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.Email;

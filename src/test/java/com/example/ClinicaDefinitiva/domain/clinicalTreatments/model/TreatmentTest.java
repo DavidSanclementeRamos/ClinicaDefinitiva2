@@ -11,7 +11,7 @@ import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentPhase;
 import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments.TreatmentError;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.vo.Notes;
 import org.junit.jupiter.api.DisplayName;

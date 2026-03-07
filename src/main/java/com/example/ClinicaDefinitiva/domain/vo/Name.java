@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.VoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 public final class Name {
 

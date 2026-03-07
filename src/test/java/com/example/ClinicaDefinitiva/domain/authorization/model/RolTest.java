@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.num.Rol
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

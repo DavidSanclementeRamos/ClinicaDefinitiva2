@@ -6,7 +6,7 @@ package com.example.ClinicaDefinitiva.domain.actor;
  * @author David
  */
 import com.example.ClinicaDefinitiva.domain.actor.vo.Document;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

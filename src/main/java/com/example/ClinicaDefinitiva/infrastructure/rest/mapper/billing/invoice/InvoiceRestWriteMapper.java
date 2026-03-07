@@ -50,16 +50,16 @@ public class InvoiceRestWriteMapper {
      * Convierte AddInvoiceItemRequest (REST) a AddInvoiceItemDto (application)
      */
     public AddInvoiceItemDto toServiceAddItem(AddInvoiceItemRequest request) {
-        if (request == null) {
-            return null;
-        }
-
-        return new AddInvoiceItemDto(
-                request.item(),
-                request.serviceId(),
-                request.rateId(),
-                request.quantity(),
-                request.performedAt()
-        );
-    }
+       
+       return new AddInvoiceItemDto(
+        request.item(),
+        request.serviceId(),
+        request.serviceCode(),
+        request.serviceDescription(),
+        request.rateId(),
+        request.unitPrice(),
+        request.currency(),
+        request.quantity(),
+        request.performedAt()
+);    }
 }

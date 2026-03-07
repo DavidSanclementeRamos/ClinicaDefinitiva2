@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetails;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ProvidedServiceError;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import java.util.Currency;
 

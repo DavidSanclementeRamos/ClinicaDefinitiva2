@@ -6,7 +6,7 @@ import com.example.ClinicaDefinitiva.application.portsInput.billing.InvoiceUseCa
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceStatus;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.billing.invoice.*;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.invoice.InvoiceRestReadMapper;
+import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.rate.InvoiceRestReadMapper;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.invoice.InvoiceRestWriteMapper;
 import com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails;
 import jakarta.validation.Valid;

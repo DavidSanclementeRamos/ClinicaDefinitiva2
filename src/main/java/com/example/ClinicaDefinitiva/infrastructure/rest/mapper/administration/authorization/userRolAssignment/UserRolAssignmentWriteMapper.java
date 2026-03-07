@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.authorization.userRolAssignment;
+package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.administration.authorization.userRolAssignment;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.UserRolAssignment.CreateAssignmentPermanentDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.UserRolAssignment.CreateAssignmentTemporaryDto;

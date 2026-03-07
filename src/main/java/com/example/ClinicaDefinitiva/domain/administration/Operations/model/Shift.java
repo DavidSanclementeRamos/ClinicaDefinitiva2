@@ -7,7 +7,7 @@ import com.example.ClinicaDefinitiva.domain.administration.operations.vo.ShiftId
 import com.example.ClinicaDefinitiva.domain.administration.operations.vo.ShiftStatus;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.operations.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

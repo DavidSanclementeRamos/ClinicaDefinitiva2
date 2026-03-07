@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments.TreatmentsVoError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ServiceVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 public record TreatmentId(Long getValue) {
 

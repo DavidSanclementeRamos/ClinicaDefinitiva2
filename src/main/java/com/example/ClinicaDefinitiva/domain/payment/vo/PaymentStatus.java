@@ -5,7 +5,7 @@ package com.example.ClinicaDefinitiva.domain.payment.vo;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.payment.PaymentError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.payment.PaymentVoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
 import java.util.EnumSet;
 import java.util.Set;

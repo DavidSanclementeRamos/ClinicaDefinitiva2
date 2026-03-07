@@ -4,8 +4,8 @@ package com.example.ClinicaDefinitiva.domain.payment.vo;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.payment.PaymentVoError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 import java.util.Objects;
 

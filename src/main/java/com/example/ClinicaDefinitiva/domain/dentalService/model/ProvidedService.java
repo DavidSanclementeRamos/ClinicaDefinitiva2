@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceDetails
 import com.example.ClinicaDefinitiva.domain.dentalService.enu.ServiceType;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceRatePolicy;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceCatalog;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;

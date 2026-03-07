@@ -12,8 +12,8 @@ import com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse.Create
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse.PageUserIdentityResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse.ReadUserIdentityResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.userResponse.UpdateUserIdentityRequest;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.userIdentity.UserIdentityRestReadMapper;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.userIdentity.UserIdentityRestWriteMapper;
+import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.authentication.UserIdentityRestReadMapper;
+import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.authentication.UserIdentityRestWriteMapper;
 import com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

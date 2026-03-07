@@ -2,7 +2,7 @@
 package com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo;
 
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.PhaseStatus;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.ValueObjectValidationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.vo.Notes;
 import java.time.LocalDate;

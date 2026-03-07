@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Jour
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntryLine;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.invoice;
+package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.rate;
 
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.PageInvoiceDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.ReadInvoiceDto;
