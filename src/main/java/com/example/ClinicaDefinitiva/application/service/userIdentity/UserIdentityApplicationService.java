@@ -4,22 +4,20 @@ import com.example.ClinicaDefinitiva.application.dto.authentication.CreateUserId
 import com.example.ClinicaDefinitiva.application.dto.authentication.PageUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.dto.authentication.ReadUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.dto.authentication.UpdateUserIdentityDto;
+import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
 import com.example.ClinicaDefinitiva.application.mapper.authentication.UserIdentityReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.authentication.UserIdentityWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.authentication.UserIdentityUseCase;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
+import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.service.UserAccessValidator;
 import com.example.ClinicaDefinitiva.domain.authentication.service.UserDeactivationPolicy;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
-
+import com.example.ClinicaDefinitiva.domain.errors.catalog.authentication.AuthenticationVoError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.AggregateBusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.util.Category;
@@ -36,8 +34,14 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
+/** POLÍTICAS:
+ * - SectorBasedPolicy: Solo RECEPTIONIST puede gestionar usuarios
+ * - (Futuro) OwnershipPolicy: Usuario puede ver/editar su propio perfil
+ */
 @Service
+@Transactional
 public class UserIdentityApplicationService implements UserIdentityUseCase {
 
     private final UserIdentityRepository userIdentityRepository;
@@ -45,25 +49,25 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
     private final UserIdentityReadMapper readMapper;
     private final UserIdentityWriteMapper writeMapper;
     private final PasswordEncoder passwordEncoder;
-    private final AuthorizationService authorizationService;
+    private final AuthorizationHelper authorizationHelper;
     private final UserAccessValidator userAccessValidator;
 
-
-    public UserIdentityApplicationService(UserIdentityRepository userIdentityRepository,
-                                          UserDeactivationPolicy userDeactivationPolicy,
-                                          UserIdentityReadMapper readMapper,
-                                          UserIdentityWriteMapper writeMapper,
-                                          PasswordEncoder passwordEncoder,
-                                          AuthorizationService authorizationService, UserAccessValidator userAccessValidator) {
+    public UserIdentityApplicationService(
+            UserIdentityRepository userIdentityRepository,
+            UserDeactivationPolicy userDeactivationPolicy,
+            UserIdentityReadMapper readMapper,
+            UserIdentityWriteMapper writeMapper,
+            PasswordEncoder passwordEncoder,
+            AuthorizationHelper authorizationHelper,
+            UserAccessValidator userAccessValidator) {
         this.userIdentityRepository = userIdentityRepository;
         this.userDeactivationPolicy = userDeactivationPolicy;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
         this.passwordEncoder = passwordEncoder;
-        this.authorizationService = authorizationService;
+        this.authorizationHelper = authorizationHelper;
         this.userAccessValidator = userAccessValidator;
     }
-
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.USER_IDENTITY,
@@ -71,18 +75,16 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
     public Optional<ReadUserIdentityDto> findById(UserIdentityId targetUserId,
                                                   UserIdentityId requesterId,
                                                   RolId requesterRolId) {
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY)), requesterId)
-                .withResourceId(targetUserId.value())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO: Usar AuthorizationHelper
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(targetUserId.value())
+                        .build()
+        );
 
         return userIdentityRepository.findById(targetUserId)
                 .map(readMapper::toReadDto);
@@ -94,17 +96,14 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
     public Page<PageUserIdentityDto> findAll(Pageable pageable,
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY)), requesterId)
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return userIdentityRepository.findAll(pageable)
                 .map(readMapper::toPageDto);
@@ -116,17 +115,14 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
     public Optional<PageUserIdentityDto> findByEmail(String email,
                                                      UserIdentityId requesterId,
                                                      RolId requesterRolId) {
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY)), requesterId)
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return userIdentityRepository.findByEmail(email)
                 .map(readMapper::toPageDto);
@@ -139,17 +135,14 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                                               String status,
                                                               UserIdentityId requesterId,
                                                               RolId requesterRolId) {
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY)), requesterId)
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return userIdentityRepository.findByEmailAndStatus(email, status)
                 .map(readMapper::toPageDto);
@@ -162,23 +155,20 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                                            String status,
                                                            UserIdentityId requesterId,
                                                            RolId requesterRolId) {
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY)), requesterId)
-                .withResourceId(targetUserId.value())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(targetUserId.value())
+                        .build()
+        );
 
         return userIdentityRepository.findByIdAndStatus(targetUserId, status)
                 .map(readMapper::toPageDto);
     }
-
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.USER_IDENTITY,
@@ -186,27 +176,23 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
     public ReadUserIdentityDto register(CreateUserIdentityDto dto,
                                         UserIdentityId requesterId,
                                         RolId requesterRolId) {
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY)), requesterId)
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.CREATE,
+                AuthorizationContext.builder().build()
+        );
 
         // Verificar que el email no exista
         userIdentityRepository.findByEmail(dto.email())
                 .ifPresent(existing -> {
                     throw new BusinessRuleViolationException(
-                            VoAccesError.ERR_USER_DUPLICATE_EMAIL,
+                            AuthenticationVoError.ERR_USER_DUPLICATE_EMAIL,
                             EntityContext.USER_IDENTITY
                     );
                 });
-
 
         UserIdentity user = UserIdentity.register(
             writeMapper.toEmail(dto).getValue().get(),
@@ -230,20 +216,18 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                       Long id,
                                       UserIdentityId requesterId,
                                       RolId requesterRolId) {
-
         UserIdentityId targetUserId = UserIdentityId.from(id);
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY)), requesterId)
-                .withResourceId(targetUserId.value())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .withResourceId(targetUserId.value())
+                        .build()
+        );
 
         UserIdentity userIdentity = userIdentityRepository.findById(targetUserId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -255,20 +239,21 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
         if (dto.email() != null) {
             userIdentityRepository.findByEmail(dto.email())
                     .ifPresent(existing -> {
-                        throw new BusinessRuleViolationException(
-                                VoAccesError.ERR_USER_DUPLICATE_EMAIL,
-                                EntityContext.USER_IDENTITY
-                        );
+                        if (!existing.getId().equals(targetUserId)) {
+                            throw new BusinessRuleViolationException(
+                                    AuthenticationVoError.ERR_USER_DUPLICATE_EMAIL,
+                                    EntityContext.USER_IDENTITY
+                            );
+                        }
                     });
         }
 
-         userIdentity.update(
+        userIdentity.update(
             writeMapper.toUserName(dto).getValue().get(),
             writeMapper.toEmail(dto).getValue().get(),
             writeMapper.toPassword(dto).getValue().get(),
             Instant.now()
         );
-
 
         // Si se está actualizando la contraseña, encriptarla
         if (dto.password() != null && !dto.password().isEmpty()) {
@@ -287,21 +272,16 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                           String reason,
                                           UserIdentityId requesterId,
                                           RolId requesterRolId) {
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(
-                        ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY),
-                        ActionCatalog.of(ActionCatalog.BasicAction.DEACTIVATE)
-                ), requesterId)
-                .withResourceId(targetUserId.value())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.DEACTIVATE,
+                AuthorizationContext.builder()
+                        .withResourceId(targetUserId.value())
+                        .build()
+        );
 
         UserIdentity userIdentity = userIdentityRepository.findById(targetUserId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -326,21 +306,16 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                        String reason,
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(
-                        ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY),
-                        ActionCatalog.of(ActionCatalog.BasicAction.SUSPEND)
-                ), requesterId)
-                .withResourceId(targetUserId.value())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.SUSPEND,
+                AuthorizationContext.builder()
+                        .withResourceId(targetUserId.value())
+                        .build()
+        );
 
         UserIdentity userIdentity = userIdentityRepository.findById(targetUserId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -348,7 +323,7 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                         EntityContext.USER_IDENTITY
                 ));
 
-        userIdentity.suspend(reason,Instant.now());
+        userIdentity.suspend(reason, Instant.now());
         UserIdentity suspended = userIdentityRepository.save(userIdentity);
         return readMapper.toReadDto(suspended);
     }
@@ -360,20 +335,14 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                             String rawPassword,
                                             UserIdentityId requesterId,
                                             RolId requesterRolId) {
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(
-                        ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY),
-                        ActionCatalog.of(ActionCatalog.BasicAction.AUTHENTICATE)
-                ), requesterId)
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.AUTHENTICATE,
+                AuthorizationContext.builder().build()
+        );
 
         UserIdentity userIdentity = userIdentityRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -381,38 +350,30 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                         EntityContext.USER_IDENTITY
                 ));
 
-       /** // Verificar contraseña
-        if (!passwordEncoder.matches(rawPassword, userIdentity.getHashedPassword())) {
-            throw new BusinessRuleViolationException(
-                    UserIdentityError.ERR_USER_INVALID_CREDENTIALS,
-                    EntityContext.USER_IDENTITY
-            );
-        }*/
         // Validar password
         if (!passwordEncoder.matches(rawPassword, userIdentity.getHashedPassword().toString())) {
             userIdentity.recordFailedLogin(Instant.now(), 3, Duration.ofMinutes(5));
             userIdentityRepository.save(userIdentity);
             throw new AggregateBusinessRuleViolationException(
-                    List.of(new OutcomeDetail(UserIdentityError.ERR_USER_INVALID_CREDENTIALS,
-                            ErrorSeverity.ERROR, Category.TECNICO, EntityContext.USER_IDENTITY)));
+                    List.of(new OutcomeDetail(
+                            UserIdentityError.ERR_USER_INVALID_CREDENTIALS,
+                            ErrorSeverity.ERROR,
+                            Category.TECNICO,
+                            EntityContext.USER_IDENTITY
+                    ))
+            );
         }
 
         // Verificar estado del usuario
-        userAccessValidator.validateUserCanPerformSensitiveAction(userIdentity.getId(),Instant.now(),EntityContext.USER_IDENTITY);
-
-
-        /*// Validar reglas de negocio
-        Outcome<UserIdentity> eligibility = userIdentity.canPerformSensitiveAction(Instant.now());
-        if (eligibility.isFailure()) {
-            throw new AggregateBusinessRuleViolationException(eligibility.getDetalles());
-        }*/
+        userAccessValidator.validateUserCanPerformSensitiveAction(
+                userIdentity.getId(),
+                Instant.now(),
+                EntityContext.USER_IDENTITY
+        );
 
         // Login exitoso
         userIdentity.recordSuccessfulLogin(Instant.now());
         userIdentityRepository.save(userIdentity);
-
-
-
 
         return readMapper.toReadDto(userIdentity);
     }
@@ -424,21 +385,16 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                           String reason,
                                           UserIdentityId requesterId,
                                           RolId requesterRolId) {
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(
-                        ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY),
-                        ActionCatalog.of(ActionCatalog.BasicAction.REACTIVATE)
-                ), requesterId)
-                .withResourceId(targetUserId.value())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.USER_IDENTITY,
+                ActionCatalog.BasicAction.REACTIVATE,
+                AuthorizationContext.builder()
+                        .withResourceId(targetUserId.value())
+                        .build()
+        );
 
         UserIdentity userIdentity = userIdentityRepository.findById(targetUserId)
                 .orElseThrow(() -> new BusinessRuleViolationException(
@@ -446,8 +402,9 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                         EntityContext.USER_IDENTITY
                 ));
 
-        userIdentity.reactivate( Instant.now());
+        userIdentity.reactivate(Instant.now());
         UserIdentity reactivated = userIdentityRepository.save(userIdentity);
         return readMapper.toReadDto(reactivated);
     }
 }
+    

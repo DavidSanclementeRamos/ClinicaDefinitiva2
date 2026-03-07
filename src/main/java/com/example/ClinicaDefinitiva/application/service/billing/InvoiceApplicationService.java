@@ -5,6 +5,7 @@ import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceStatus;
 import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceNumberGenerator;
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.*;
+import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
 import com.example.ClinicaDefinitiva.application.exceptions.InvoiceNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.RateNotFoundException;
@@ -13,33 +14,25 @@ import com.example.ClinicaDefinitiva.application.exceptions.actorException.Patie
 import com.example.ClinicaDefinitiva.application.mapper.billing.invoice.InvoiceReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.billing.invoice.InvoiceWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.billing.InvoiceUseCase;
+import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
-import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.billing.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
+import com.example.ClinicaDefinitiva.domain.billing.output.InvoiceRepository;
+import com.example.ClinicaDefinitiva.domain.billing.output.RateRepository;
 import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceDomainService;
 import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceItemFactoryService;
 import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dentalService.output.ProvidedServiceRepository;
-import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceCode;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.portsOutput.InvoiceRepository;
-import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
-import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,9 +41,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Currency;
 
 
+/**
+ * InvoiceApplicationService refactorizado.
+ *
+ * POLÍTICAS:
+ * - SectorBasedPolicy: Receptionist por sector
+ * - OwnershipPolicy: Paciente ve sus propias facturas
+ * - AssignmentPolicy: Dentista ve facturas donde está asignado
+ */
 @Service
 @Transactional
 public class InvoiceApplicationService implements InvoiceUseCase {
@@ -63,12 +63,12 @@ public class InvoiceApplicationService implements InvoiceUseCase {
     private final InvoiceItemFactoryService invoiceItemFactoryService;
     private final InvoiceReadMapper readMapper;
     private final InvoiceWriteMapper writeMapper;
-    private final AuthorizationService authorizationService;
+    private final AuthorizationHelper authorizationHelper;
     private final InvoiceNumberGenerator invoiceNumberGenerator;
     private final RateRepository rateRepository;
     private final ProvidedServiceRepository providedServiceRepository;
 
-    public InvoiceApplicationService(InvoiceRepository invoiceRepository, PatientRepository patientRepository, DentistRepository dentistRepository, ReceptionRepository receptionRepository, InvoiceDomainService invoiceDomainService, InvoiceItemFactoryService invoiceItemFactoryService, InvoiceReadMapper readMapper, InvoiceWriteMapper writeMapper, AuthorizationService authorizationService, InvoiceNumberGenerator invoiceNumberGenerator, RateRepository rateRepository, ProvidedServiceRepository providedServiceRepository) {
+    public InvoiceApplicationService(InvoiceRepository invoiceRepository, PatientRepository patientRepository, DentistRepository dentistRepository, ReceptionRepository receptionRepository, InvoiceDomainService invoiceDomainService, InvoiceItemFactoryService invoiceItemFactoryService, InvoiceReadMapper readMapper, InvoiceWriteMapper writeMapper, AuthorizationHelper authorizationHelper, InvoiceNumberGenerator invoiceNumberGenerator, RateRepository rateRepository, ProvidedServiceRepository providedServiceRepository) {
         this.invoiceRepository = invoiceRepository;
         this.patientRepository = patientRepository;
         this.dentistRepository = dentistRepository;
@@ -77,11 +77,13 @@ public class InvoiceApplicationService implements InvoiceUseCase {
         this.invoiceItemFactoryService = invoiceItemFactoryService;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
-        this.authorizationService = authorizationService;
+        this.authorizationHelper = authorizationHelper;
         this.invoiceNumberGenerator = invoiceNumberGenerator;
         this.rateRepository = rateRepository;
         this.providedServiceRepository = providedServiceRepository;
     }
+
+
     
 
   
@@ -93,43 +95,33 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                                    UserIdentityId requesterId,
                                    RolId requesterRolId) {
 
+
+
         Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new InvoiceNotFoundException("Not found"));
 
-        // Build security context with ownership
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withResourceId(id.getValue());
+        // Obtener patient y dentist para ownership/assignment
+        Patient patient = invoice.getPatientId() != null ?
+                patientRepository.findById(invoice.getPatientId())
+                        .orElseThrow(() -> new PatientNotFoundException("Not found")) : null;
 
-        // Patient ownership
-        if (invoice.getPatientId() != null) {
-            Patient patient = patientRepository.findById(invoice.getPatientId())
-                    .orElseThrow(() -> new PatientNotFoundException("Not found"));
-            contextBuilder.withResourceOwnerId(patient.getUser());
-        }
+        Dentist dentist = invoice.getDentistId() != null ?
+                dentistRepository.findById(invoice.getDentistId())
+                        .orElseThrow(() -> new DentistNotFoundException("Not found")) : null;
 
-        // Dentist assignment
-        if (invoice.getDentistId() != null) {
-            Dentist dentist = dentistRepository.findById(invoice.getDentistId())
-                    .orElseThrow(() -> new DentistNotFoundException("Not found"));
-            contextBuilder.withAttribute("assignedDentistUserId",
-                    dentist.getUserId());
-        }
-
-        // Receptionist sector
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+        // Ownership + Assignment
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.INVOICE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .withOwnership(patient != null ? patient.getUser() : null) // ← Paciente ve sus facturas
+                        .withAssignedDentist(dentist != null ? dentist.getUserId() : null) // ← Dentista ve sus facturas
+                        .build()
         );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
+          
         return readMapper.toDto(invoice);
     }
 
@@ -140,21 +132,14 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                                         UserIdentityId requesterId,
                                         RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId);
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.COMPANY,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .build()
         );
 
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return invoiceRepository.findAll(pageable)
                 .map(readMapper::toPageDto);
@@ -163,64 +148,54 @@ public class InvoiceApplicationService implements InvoiceUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.INVOICE,
             action = ActionCatalog.BasicAction.READ)
-    public Page<PageInvoiceDto> findByPatient(Long patientId,
+    public Page<PageInvoiceDto> findByPatient(PatientId patientId,
                                               Pageable pageable,
                                               UserIdentityId requesterId,
                                               RolId requesterRolId) {
 
-        Patient patient = patientRepository.findById(PatientId.of(patientId))
+        Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new PatientNotFoundException("Not found"));
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withResourceOwnerId(patient.getUser());
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+        // OwnershipPolicy: Paciente solo ve sus propias facturas
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.INVOICE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withOwnership(patient.getUser())
+                        .build()
         );
 
-        SecurityContext context = contextBuilder.build();
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
-        return invoiceRepository.findByPatient(patient.getPatientId(), pageable)
+        return invoiceRepository.findByPatient(patientId, pageable)
                 .map(readMapper::toPageDto);
     }
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.INVOICE,
             action = ActionCatalog.BasicAction.READ)
-    public Page<PageInvoiceDto> findByDentist(Long dentistId,
+    public Page<PageInvoiceDto> findByDentist(DentistId dentistId,
                                               Pageable pageable,
                                               UserIdentityId requesterId,
                                               RolId requesterRolId) {
 
-        Dentist dentist = dentistRepository.findById(DentistId.of(dentistId))
+        Dentist dentist = dentistRepository.findById(dentistId)
                 .orElseThrow(() -> new DentistNotFoundException("Not found"));
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withAttribute("assignedDentistUserId", dentist.getUserId());
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+        // AssignmentPolicy: Dentista solo ve facturas donde está asignado
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.INVOICE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withAssignedDentist(dentist.getUserId())
+                        .build()
         );
 
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        return invoiceRepository.findByDentist(dentist.getDentistId(), pageable)
+        return invoiceRepository.findByDentist(dentistId, pageable)
                 .map(readMapper::toPageDto);
     }
 
@@ -232,22 +207,13 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId);
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
-        );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
+         authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.COMPANY,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .build()
+               );
         return invoiceRepository.findByStatus(status, pageable)
                 .map(readMapper::toPageDto);
     }
@@ -258,6 +224,14 @@ public class InvoiceApplicationService implements InvoiceUseCase {
     public ReadInvoiceDto findByNumber(String invoiceNumber,
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
+        
+         authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.COMPANY,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .build()
+               );
 
         Invoice invoice = invoiceRepository.findByNumber(invoiceNumber)
                 .orElseThrow(() -> new InvoiceNotFoundException("Not found"));
@@ -274,21 +248,13 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                                                 UserIdentityId requesterId,
                                                 RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId);
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
-        );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+         authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.COMPANY,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .build()
+               );
 
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = endDate.atTime(23, 59, 59);
@@ -304,24 +270,14 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                                            UserIdentityId requesterId,
                                            RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
+        // Solo receptionist puede crear (sector-based)
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.INVOICE,
+                ActionCatalog.BasicAction.CREATE,
+                AuthorizationContext.builder().build()
+        );
         Invoice invoice = Invoice.createParticular(
             writeMapper.toPatientId(dto),
             writeMapper.toProviderId(dto),
@@ -344,23 +300,13 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                                               UserIdentityId requesterId,
                                               RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.INVOICE,
+                ActionCatalog.BasicAction.CREATE,
+                AuthorizationContext.builder()
+                        .build()
+               );
 
 
         Invoice invoice = Invoice.createInstitutional(
@@ -375,6 +321,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
         // RN-INVOICE-007: Validate institutional contract
         invoiceDomainService.validateInstitutionalContract(invoice);
         invoiceDomainService.validateRates(invoice, dto.dueDate());
+        
 
         Invoice saved = invoiceRepository.save(invoice);
 
@@ -391,22 +338,15 @@ public class InvoiceApplicationService implements InvoiceUseCase {
 
         
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withResourceId(invoiceId.getValue());
+         authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.INVOICE,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                       .withResourceId(invoiceId.getValue())
 
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
-        );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+                        .build()
+               );
         
 
     Invoice invoice = invoiceRepository.findById(invoiceId)
@@ -426,6 +366,8 @@ public class InvoiceApplicationService implements InvoiceUseCase {
             writeMapper.toQuantity(dto),
             writeMapper.toPerformedAt(dto)
     );
+            invoiceDomainService.validanteService(service.getId());
+
 
     invoice.addItem(item);
 
@@ -443,25 +385,19 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                                UserIdentityId requesterId,
                                RolId requesterRolId) {
 
+       authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.INVOICE,
+                ActionCatalog.BasicAction.CREATE,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+               );
+       
+       
         Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new InvoiceNotFoundException("Not fount"));
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withResourceId(id.getValue());
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
-        );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         // RN-INVOICE-003: Validate rates
         invoiceDomainService.validateRates(invoice, LocalDateTime.now());
@@ -481,25 +417,19 @@ public class InvoiceApplicationService implements InvoiceUseCase {
                                  UserIdentityId requesterId,
                                  RolId requesterRolId) {
 
-        Invoice invoice = invoiceRepository.findById(id)
+               authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.INVOICE,
+                ActionCatalog.BasicAction.CANCEL,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+               );
+       
+
+                Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new InvoiceNotFoundException("Not found"));
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withResourceId(id.getValue());
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
-        );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         // RN-INVOICE-005, RN-INVOICE-009: Validated in domain
         invoice.cancel(reason);
@@ -508,45 +438,7 @@ public class InvoiceApplicationService implements InvoiceUseCase {
         return readMapper.toDto(cancelled);
     }
 
-    @Override
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.INVOICE,
-            action = ActionCatalog.BasicAction.UPDATE)
-    public ReadInvoiceDto markAsPaid(InvoiceId id,
-                                     LocalDate paymentDate,
-                                     UserIdentityId requesterId,
-                                     RolId requesterRolId) {
+    
 
-        Invoice invoice = invoiceRepository.findById(id)
-                .orElseThrow(() -> new InvoiceNotFoundException("Not fount"));
-
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE)), requesterId)
-                .withResourceId(id.getValue());
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
-        );
-
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        // Transition to PAID status
-        if (!invoice.getStatus().isPending()) {
-            throw new BusinessRuleViolationException(
-                    InvoiceError.ERR_INVOICE_MUST_BE_PENDING_TO_PAY,
-                    EntityContext.INVOICE
-            );
-        }
-
-        invoice.getStatus().transitionTo(InvoiceStatus.Status.PAID);
-
-        Invoice paid = invoiceRepository.save(invoice);
-        return readMapper.toDto(paid);
-    }
+    
 }

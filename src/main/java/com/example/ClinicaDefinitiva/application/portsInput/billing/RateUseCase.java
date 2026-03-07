@@ -4,9 +4,11 @@ package com.example.ClinicaDefinitiva.application.portsInput.billing;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.CreateRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.PageRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.ReadRateDto;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -41,7 +43,7 @@ public interface RateUseCase {
     );
 
     Page<PageRateDto> findByService(
-            Long serviceId,
+            ServiceId serviceId,
             Pageable pageable,
             UserIdentityId requesterId,
             RolId requesterRolId
@@ -56,16 +58,16 @@ public interface RateUseCase {
     );
 
     Page<PageRateDto> findByContract(
-            Long contractId,
+            ContractId contractId,
             Pageable pageable,
             UserIdentityId requesterId,
             RolId requesterRolId
     );
 
     ReadRateDto findActiveRateForService(
-            Long serviceId,
+            ServiceId serviceId,
             String payerType,
-            Long contractId,
+            ContractId contractId,
             UserIdentityId requesterId,
             RolId requesterRolId
     );

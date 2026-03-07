@@ -30,7 +30,7 @@ import org.springframework.data.domain.Page;
 public interface ShiftUseCase {
 
     ReadShiftDto findById(
-            Long shiftId ,
+            ShiftId shiftId ,
             UserIdentityId requesterId,
             RolId requesterRolId
     );

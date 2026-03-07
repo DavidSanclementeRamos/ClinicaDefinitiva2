@@ -4,10 +4,12 @@ package com.example.ClinicaDefinitiva.application.service.billing;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.CreateRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.PageRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.ReadRateDto;
+import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
 import com.example.ClinicaDefinitiva.application.exceptions.RateNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.billing.rate.RateReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.billing.rate.RateWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.billing.RateUseCase;
+import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
@@ -15,8 +17,8 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.service
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
+import com.example.ClinicaDefinitiva.domain.billing.output.RateRepository;
 import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
-import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.RateError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
@@ -30,7 +32,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -39,23 +40,18 @@ import java.time.LocalDateTime;
 public class RateApplicationService implements RateUseCase {
 
     private final RateRepository rateRepository;
-    private final ReceptionRepository receptionRepository;
     private final RateReadMapper readMapper;
     private final RateWriteMapper writeMapper;
-    private final AuthorizationService authorizationService;
+    private final AuthorizationHelper authorizationHelper;
 
-    public RateApplicationService(
-            RateRepository rateRepository,
-            ReceptionRepository receptionRepository,
-            RateReadMapper readMapper,
-            RateWriteMapper writeMapper,
-            AuthorizationService authorizationService) {
+    public RateApplicationService(RateRepository rateRepository, RateReadMapper readMapper, RateWriteMapper writeMapper, AuthorizationHelper authorizationHelper) {
         this.rateRepository = rateRepository;
-        this.receptionRepository = receptionRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
-        this.authorizationService = authorizationService;
+        this.authorizationHelper = authorizationHelper;
     }
+
+   
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
@@ -64,28 +60,21 @@ public class RateApplicationService implements RateUseCase {
                                 UserIdentityId requesterId,
                                 RolId requesterRolId) {
 
-        Rate rate = rateRepository.findById(id)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        RateError.ERR_RATE_NOT_FOUND,
-                        EntityContext.RATE
-                ));
+             
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .withResourceId(id.getValue());
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
         );
 
-        SecurityContext context = contextBuilder.build();
+        Rate rate = rateRepository.findById(id)
+                .orElseThrow(() -> new RateNotFoundException("No found"));
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+           
 
         return readMapper.toDto(rate);
     }
@@ -97,21 +86,14 @@ public class RateApplicationService implements RateUseCase {
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
 
-        SecurityContext.Builder contextBuilder = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId);
-
-        receptionRepository.findByUserId(requesterId).ifPresent(receptionist ->
-                contextBuilder.withSector(receptionist.getSector().getDescription())
+         authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .build()
         );
 
-        SecurityContext context = contextBuilder.build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return rateRepository.findAll(pageable)
                 .map(readMapper::toPageDto);
@@ -120,23 +102,21 @@ public class RateApplicationService implements RateUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
             action = ActionCatalog.BasicAction.READ)
-    public Page<PageRateDto> findByService(Long serviceId,
+    public Page<PageRateDto> findByService(ServiceId serviceId,
                                            Pageable pageable,
                                            UserIdentityId requesterId,
                                            RolId requesterRolId) {
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .build();
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .build()
+        );
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
-        return rateRepository.findByService(ServiceId.of(serviceId), pageable)
+        return rateRepository.findByService(serviceId, pageable)
                 .map(readMapper::toPageDto);
     }
 
@@ -148,16 +128,14 @@ public class RateApplicationService implements RateUseCase {
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .build();
+       authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .build()
+        );
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return rateRepository.findByPayerType(String.valueOf(payerType), pageable)
                 .map(readMapper::toPageDto);
@@ -166,50 +144,44 @@ public class RateApplicationService implements RateUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
             action = ActionCatalog.BasicAction.READ)
-    public Page<PageRateDto> findByContract(Long contractId,
+    public Page<PageRateDto> findByContract(ContractId contractId,
                                             Pageable pageable,
                                             UserIdentityId requesterId,
                                             RolId requesterRolId) {
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .build();
+       authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .build()
+        );
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
-        return rateRepository.findByContract(ContractId.of(contractId), pageable)
+        return rateRepository.findByContract(contractId, pageable)
                 .map(readMapper::toPageDto);
     }
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.RATE,
             action = ActionCatalog.BasicAction.READ)
-    public ReadRateDto findActiveRateForService(Long serviceId,
+    public ReadRateDto findActiveRateForService(ServiceId serviceId,
                                                 String payerType,
-                                                Long contractId,
+                                                ContractId contractId,
                                                 UserIdentityId requesterId,
                                                 RolId requesterRolId) {
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .build();
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .build()
+        );
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
-        Rate rate = rateRepository.findActiveRateForService(
-                ServiceId.of(serviceId),
-                contractId != null ? ContractId.of(contractId) : null
-        ).orElseThrow(() -> new RateNotFoundException("Not fount"));
+        Rate rate = rateRepository.findActiveRateForService(serviceId,contractId )
+                .orElseThrow(() -> new RateNotFoundException("Not fount"));
 
         return readMapper.toDto(rate);
     }
@@ -220,17 +192,14 @@ public class RateApplicationService implements RateUseCase {
     public Page<PageRateDto> findCurrentlyValid(Pageable pageable,
                                                 UserIdentityId requesterId,
                                                 RolId requesterRolId) {
+ authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .build()
+        );
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         return rateRepository.findCurrentlyValid(LocalDateTime.now(), pageable)
                 .map(readMapper::toPageDto);
@@ -243,23 +212,14 @@ public class RateApplicationService implements RateUseCase {
                               UserIdentityId requesterId,
                               RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .build()
+        );
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         // RN-RATE-003: Check for overlapping rates
         //validateNoOverlappingRates(dto);
@@ -287,30 +247,19 @@ public class RateApplicationService implements RateUseCase {
                                    UserIdentityId requesterId,
                                    RolId requesterRolId) {
 
-        Rate rate = rateRepository.findById(id)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        RateError.ERR_RATE_NOT_FOUND,
-                        EntityContext.RATE
-                ));
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
+         Rate rate = rateRepository.findById(id)
+                .orElseThrow(() -> new RateNotFoundException("No found"));
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .withResourceId(id.getValue())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         // RN-RATE-002: End date must be after start date
         rate.endValidityAt(endDate);
@@ -326,43 +275,40 @@ public class RateApplicationService implements RateUseCase {
                            UserIdentityId requesterId,
                            RolId requesterRolId) {
 
-        Rate rate = rateRepository.findById(id)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        RateError.ERR_RATE_NOT_FOUND,
-                        EntityContext.RATE
-                ));
+               
+ authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
+         Rate rate = rateRepository.findById(id)
+                .orElseThrow(() -> new RateNotFoundException("No found"));
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.RATE)), requesterId)
-                .withResourceId(id.getValue())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
 
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
+        
         rate.deactivate();
         rateRepository.save(rate);
     }
 
     @Override
     public void markAsReplaced(RateId id, UserIdentityId requesterId, RolId requesterRolId) {
-        Rate rate = rateRepository.findById(id)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        RateError.ERR_RATE_NOT_FOUND,
-                        EntityContext.RATE
-                ));
-         
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.RATE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
+
+         Rate rate = rateRepository.findById(id)
+                .orElseThrow(() -> new RateNotFoundException("No found"));
+
+
             rate.markAsReplaced();
                     rateRepository.save(rate);
 

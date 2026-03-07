@@ -2,26 +2,26 @@ package com.example.ClinicaDefinitiva.application.service.dentalService;
 
 
 import com.example.ClinicaDefinitiva.application.dto.dentalService.*;
+import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
 
 import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.dentalService.ProvidedServiceReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.dentalService.ProvidedServiceWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.dentalService.ProvidedServiceUseCase;
-import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
-import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
-import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
+import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.model.ProvidedService;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
-import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.output.ProvidedServiceRepository;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceRatePolicy;
+import com.example.ClinicaDefinitiva.domain.dentalService.enu.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
+import com.example.ClinicaDefinitiva.domain.dentalService.output.ProvidedServiceRepository;
+import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceDeactivationValidator;
+import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceDetails;
+import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceDetailsFactory;
+import com.example.ClinicaDefinitiva.domain.dentalService.service.ServiceRatePolicy;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -45,30 +45,33 @@ import org.springframework.transaction.annotation.Transactional;
  * - RN-SERVICE-012: No debe haber facturas pendientes antes de la desactivación.
  * - RN-SERVICE-013: El código del servicio debe ser único.
  * - RN-SERVICE-015: La desactivación requiere un motivo detallado (mínimo 10 caracteres).
+ *
  */
 @Service
 @Transactional
 public class ProvidedServiceApplicationService implements ProvidedServiceUseCase {
 
     private final ProvidedServiceRepository serviceRepository;
-    private final DentistRepository dentistRepository;
-    private final ReceptionRepository receptionRepository;
     private final ProvidedServiceReadMapper readMapper;
     private final ProvidedServiceWriteMapper writeMapper;
-    private final AuthorizationService authorizationService;
     private final ServiceRatePolicy serviceRatePolicy;
+    private final AuthorizationHelper authorizationHelper;
+    private final ServiceDeactivationValidator serviceDeactivationValidator;
 
-    public ProvidedServiceApplicationService(ProvidedServiceRepository serviceRepository, DentistRepository dentistRepository, ReceptionRepository receptionRepository, ProvidedServiceReadMapper readMapper, ProvidedServiceWriteMapper writeMapper, AuthorizationService authorizationService, ServiceRatePolicy serviceRatePolicy) {
+    public ProvidedServiceApplicationService(
+            ProvidedServiceRepository serviceRepository,
+            ProvidedServiceReadMapper readMapper,
+            ProvidedServiceWriteMapper writeMapper,
+            ServiceRatePolicy serviceRatePolicy,
+            AuthorizationHelper authorizationHelper,
+            ServiceDeactivationValidator serviceDeactivationValidator) {
         this.serviceRepository = serviceRepository;
-        this.dentistRepository = dentistRepository;
-        this.receptionRepository = receptionRepository;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
-        this.authorizationService = authorizationService;
         this.serviceRatePolicy = serviceRatePolicy;
+        this.authorizationHelper = authorizationHelper;
+        this.serviceDeactivationValidator = serviceDeactivationValidator;
     }
-
-    
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PROVIDED_SERVICE,
@@ -76,10 +79,17 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
     public ReadServiceDto findById(ServiceId id,
                                    UserIdentityId requesterId,
                                    RolId requesterRolId) {
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE, 
+                ActionCatalog.BasicAction.READ,                                 AuthorizationContext.builder()
+                        .withResourceId(id.getId())
+                        .build()
+        );
 
         ProvidedService service = serviceRepository.findById(id)
                 .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
-
 
         return readMapper.toReadDto(service);
     }
@@ -90,6 +100,13 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
     public Page<PageServiceDto> findAll(Pageable pageable,
                                         UserIdentityId requesterId,
                                         RolId requesterRolId) {
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return serviceRepository.findAll(pageable)
                 .map(readMapper::toPageDto);
@@ -102,8 +119,13 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                              Pageable pageable,
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
-
-
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return serviceRepository.findByStatus(status, pageable)
                 .map(readMapper::toPageDto);
@@ -116,8 +138,13 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                                Pageable pageable,
                                                UserIdentityId requesterId,
                                                RolId requesterRolId) {
-
-
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return serviceRepository.findByCategory(category, pageable)
                 .map(readMapper::toPageDto);
@@ -130,8 +157,13 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                            Pageable pageable,
                                            UserIdentityId requesterId,
                                            RolId requesterRolId) {
-
-
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return serviceRepository.findByType(serviceType, pageable)
                 .map(readMapper::toPageDto);
@@ -143,42 +175,29 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
     public ReadServiceDto create(CreateServiceDto dto,
                                  UserIdentityId requesterId,
                                  RolId requesterRolId) {
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
+                ActionCatalog.BasicAction.CREATE,              
+                AuthorizationContext.builder().build()
+        );
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
+        ServiceDetails details = null;
+        if (dto.serviceType() != null && dto.detailsMap() != null) {
+            // Usar factory para crear el tipo correcto de ServiceDetails
+            details = ServiceDetailsFactory.fromMap(ServiceType.valueOf(dto.serviceType() ), (Map<String, Object>) dto.detailsMap());
         }
 
-        // RN-SERVICE-013: Service code must be unique
-       /** if (serviceRepository.existsByCode(dto.code())) {
-            throw new BusinessRuleViolationException(
-                    ProvidedServiceError.ERR_SERVICE_CODE_ALREADY_EXISTS,
-                    EntityContext.PROVIDED_SERVICE
-            );
-        }*/
-
-
-       ProvidedService service = ProvidedService.create(
+        // Crear servicio con todos los campos
+        ProvidedService service = ProvidedService.create(
                 writeMapper.toServiceName(dto),
                 writeMapper.toServiceCategory(dto),
-           writeMapper.toServiceCode(dto),
+                writeMapper.toServiceCode(dto),
                 writeMapper.toBaseRate(dto),
                 writeMapper.toDuration(dto),
                 writeMapper.toDescription(dto),
-                writeMapper.toDetails(dto),
+                details,                                        
                 writeMapper.toRequiresAuthorization(dto)
         );
 
@@ -193,30 +212,21 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                             ServiceId id,
                                             UserIdentityId requesterId,
                                             RolId requesterRolId) {
+        // ⭐ CORREGIDO: Recurso correcto
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE, 
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getId())
+                        .build()
+        );
 
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new ProvidedServiceNotFoundException("No fount"));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE)), requesterId)
-                .withResourceId(id.getId())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-         service.updateInformation(
+        service.updateInformation(
             writeMapper.toServiceName(dto),
             writeMapper.toServiceCategory(dto),
             writeMapper.toDuration(dto),
@@ -225,7 +235,6 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
         );
 
         ProvidedService updated = serviceRepository.save(service);
-
         return readMapper.toReadDto(updated);
     }
 
@@ -236,44 +245,26 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                      ServiceId id,
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getId())
+                        .build()
+        );
 
-       
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE)), requesterId)
-                .withResourceId(id.getId())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new ProvidedServiceNotFoundException("Not found"));
-                
+        ProvidedService service = serviceRepository.findById(id)
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
         Price newRate = writeMapper.toRate(dto);
-
+        
         // Validar con la política antes de aplicar el cambio
         serviceRatePolicy.validateRateChange(service.getBaseRate(), newRate);
 
-
-
-        service.updateRate(
-                writeMapper.toRate(dto),
-                dto.justification()
-        );
-                
-
+        service.updateRate(newRate, dto.justification());
 
         ProvidedService updated = serviceRepository.save(service);
         return readMapper.toReadDto(updated);
@@ -286,32 +277,32 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                         ServiceId id,
                                         UserIdentityId requesterId,
                                         RolId requesterRolId) {
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getId())
+                        .build()
+        );
 
         ProvidedService service = serviceRepository.findById(id)
                 .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE)), requesterId)
-                .withResourceId(id.getId())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
+        // ⭐ IMPLEMENTADO: Actualizar detalles usando factory si viene en el DTO
+        ServiceDetails newDetails = null;
+        if (dto.serviceType() != null && dto.detailsMap() != null) {
+            newDetails = ServiceDetailsFactory.fromMap(ServiceType.valueOf(dto.serviceType())   , (Map<String, Object>) dto.detailsMap());
+        } else if (dto.detailsMap() != null && service.getDetails().isPresent()) {
+            // Si no viene serviceType pero sí detailsMap, usar el tipo actual del servicio
+            newDetails = ServiceDetailsFactory.fromMap(service.getDetails().get().serviceType(), (Map<String, Object>) dto.detailsMap());
         }
 
-
-
-        service.updateDetails(writeMapper.toDetails(dto));
+        if (newDetails != null) {
+            service.updateDetails(newDetails);
+        }
 
         ProvidedService updated = serviceRepository.save(service);
         return readMapper.toReadDto(updated);
@@ -325,31 +316,21 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                            UserIdentityId requesterId,
                            RolId requesterRolId) {
 
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
+                ActionCatalog.BasicAction.DEACTIVATE,          
+                AuthorizationContext.builder()
+                        .withResourceId(id.getId())
+                        .build()
+        );
+
         ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found "));
+                .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(
-                        ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE),
-                        ActionCatalog.of(ActionCatalog.BasicAction.DEACTIVATE)
-                ), requesterId)
-                .withResourceId(id.getId())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
+        // Validar que no haya citas pendientes
+        serviceDeactivationValidator.validateNoAppointments(id);
 
         service.deactivate(reason);
         serviceRepository.save(service);
@@ -362,31 +343,17 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
 
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
+                ActionCatalog.BasicAction.REACTIVATE,                          AuthorizationContext.builder()
+                        .withResourceId(id.getId())
+                        .build()
+        );
+
         ProvidedService service = serviceRepository.findById(id)
                 .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(
-                        ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE),
-                        ActionCatalog.of(ActionCatalog.BasicAction.REACTIVATE)
-                ), requesterId)
-                .withResourceId(id.getId())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
 
         service.reactivate();
         ProvidedService reactivated = serviceRepository.save(service);
@@ -401,27 +368,18 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                            UserIdentityId requesterId,
                            RolId requesterRolId) {
 
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
+                ActionCatalog.BasicAction.DELETE,              
+                AuthorizationContext.builder()
+                        .withResourceId(id.getId())
+                        .build()
+        );
+
         ProvidedService service = serviceRepository.findById(id)
                 .orElseThrow(() -> new ProvidedServiceNotFoundException("Not found"));
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE)), requesterId)
-                .withResourceId(id.getId())
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
 
         serviceRepository.deleteById(service.getId());
     }

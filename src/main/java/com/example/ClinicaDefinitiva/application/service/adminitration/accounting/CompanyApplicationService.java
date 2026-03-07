@@ -47,9 +47,7 @@ public class CompanyApplicationService implements CompanyUseCase {
                                    UserIdentityId requesterId,
                                    RolId requesterRolId) {
 
-        Company company = repository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.COMPANY,
@@ -58,6 +56,9 @@ public class CompanyApplicationService implements CompanyUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+         Company company = repository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
+
 
         return readMapper.toReadDto(company);
     }
@@ -156,9 +157,7 @@ public class CompanyApplicationService implements CompanyUseCase {
                                                    UserIdentityId requesterId,
                                                    RolId requesterRolId) {
 
-        Company company = repository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.COMPANY,
@@ -167,6 +166,10 @@ public class CompanyApplicationService implements CompanyUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+         Company company = repository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
+
 
          company.updateContactInformation(
                              writeMapper.toName(dto),
@@ -188,8 +191,7 @@ public class CompanyApplicationService implements CompanyUseCase {
                                                UserIdentityId requesterId,
                                                RolId requesterRolId) {
 
-        Company company = repository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
+        
 
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
@@ -199,6 +201,10 @@ public class CompanyApplicationService implements CompanyUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+         Company company = repository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
+
 
                     company.updateTaxInformation(
     writeMapper.toNit(dto),
@@ -221,8 +227,7 @@ public class CompanyApplicationService implements CompanyUseCase {
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
 
-        Company company = repository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
+        
 
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
@@ -232,6 +237,10 @@ public class CompanyApplicationService implements CompanyUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+         Company company = repository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
+
 
         company.updateStatus(newStatus);
         Company updated = repository.save(company);

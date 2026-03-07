@@ -61,8 +61,7 @@ public class ContractApplicationService implements ContractUseCase {
                                     UserIdentityId requesterId,
                                     RolId requesterRolId) {
 
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(() -> new ContractNotFoundException("Not found"));
+      
 
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
@@ -72,6 +71,9 @@ public class ContractApplicationService implements ContractUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+          Contract contract = contractRepository.findById(id)
+                .orElseThrow(() -> new ContractNotFoundException("Not found"));
 
         return readMapper.toReadDto(contract);
     }
@@ -102,9 +104,7 @@ public class ContractApplicationService implements ContractUseCase {
                                                UserIdentityId requesterId,
                                                RolId requesterRolId) {
 
-        companyRepository.findById(companyId)
-                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
-
+        
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.CONTRACT,
@@ -113,6 +113,8 @@ public class ContractApplicationService implements ContractUseCase {
                         .withResourceId(companyId.getValue())
                         .build()
         );
+        
+        
 
         return contractRepository.findByCompanyId(companyId, pageable)
                 .map(readMapper::toPageDto);
@@ -126,8 +128,7 @@ public class ContractApplicationService implements ContractUseCase {
                                                   UserIdentityId requesterId,
                                                   RolId requesterRolId) {
 
-        thirdPartiesRepository.findById(thirdPartyId)
-                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
+       
 
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
@@ -137,6 +138,8 @@ public class ContractApplicationService implements ContractUseCase {
                         .withResourceId(thirdPartyId.getValue())
                         .build()
         );
+         thirdPartiesRepository.findById(thirdPartyId)
+                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
 
         return contractRepository.findByThirdPartiesId(thirdPartyId, pageable)
                 .map(readMapper::toPageDto);
@@ -219,9 +222,6 @@ public class ContractApplicationService implements ContractUseCase {
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
 
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(() -> new ContractNotFoundException("Not found"));
-
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.CONTRACT,
@@ -230,6 +230,11 @@ public class ContractApplicationService implements ContractUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+        
+        Contract contract = contractRepository.findById(id)
+                .orElseThrow(() -> new ContractNotFoundException("Not found"));
+
         
                    contract.updateInformation(
     writeMapper.toName(dto),
@@ -251,8 +256,7 @@ public class ContractApplicationService implements ContractUseCase {
                                           UserIdentityId requesterId,
                                           RolId requesterRolId) {
 
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(() -> new ContractNotFoundException("Not found"));
+       
 
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
@@ -262,6 +266,10 @@ public class ContractApplicationService implements ContractUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+        Contract contract = contractRepository.findById(id)
+                .orElseThrow(() -> new ContractNotFoundException("Not found"));
+
 
         contract.extendContract(newEndDate);
         Contract updated = contractRepository.save(contract);
@@ -277,8 +285,7 @@ public class ContractApplicationService implements ContractUseCase {
                         UserIdentityId requesterId,
                         RolId requesterRolId) {
 
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(() -> new ContractNotFoundException("Not found"));
+       
 
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
@@ -288,6 +295,11 @@ public class ContractApplicationService implements ContractUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+        
+        Contract contract = contractRepository.findById(id)
+                .orElseThrow(() -> new ContractNotFoundException("Not found"));
+
 
         contract.suspend(reason);
         contractRepository.save(contract);
@@ -300,9 +312,7 @@ public class ContractApplicationService implements ContractUseCase {
                            UserIdentityId requesterId,
                            RolId requesterRolId) {
 
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(() -> new ContractNotFoundException("Not found"));
-
+        
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.CONTRACT,
@@ -311,6 +321,10 @@ public class ContractApplicationService implements ContractUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+
+        
+        Contract contract = contractRepository.findById(id)
+                .orElseThrow(() -> new ContractNotFoundException("Not found"));
 
         contract.reactivate();
         contractRepository.save(contract);
@@ -324,8 +338,7 @@ public class ContractApplicationService implements ContractUseCase {
                           UserIdentityId requesterId,
                           RolId requesterRolId) {
 
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(() -> new ContractNotFoundException("Not found"));
+       
 
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
@@ -335,6 +348,8 @@ public class ContractApplicationService implements ContractUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+         Contract contract = contractRepository.findById(id)
+                .orElseThrow(() -> new ContractNotFoundException("Not found"));
 
         contract.terminate(reason);
         contractRepository.save(contract);

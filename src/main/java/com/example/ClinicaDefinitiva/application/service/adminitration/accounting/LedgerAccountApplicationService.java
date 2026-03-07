@@ -50,9 +50,7 @@ public class LedgerAccountApplicationService implements LedgerAccountUseCase {
                                          UserIdentityId requesterId,
                                          RolId requesterRolId) {
 
-        LedgerAccount account = ledgerAccountRepository.findById(id)
-                .orElseThrow(() -> new LedgerAccountNotFoundException("Not found"));
-
+        
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.LEDGER_ACCOUNT,
@@ -61,6 +59,10 @@ public class LedgerAccountApplicationService implements LedgerAccountUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+        LedgerAccount account = ledgerAccountRepository.findById(id)
+                .orElseThrow(() -> new LedgerAccountNotFoundException("Not found"));
+
 
         return readMapper.toReadDto(account);
     }
@@ -194,9 +196,7 @@ public class LedgerAccountApplicationService implements LedgerAccountUseCase {
                                                          UserIdentityId requesterId,
                                                          RolId requesterRolId) {
 
-        LedgerAccount account = ledgerAccountRepository.findById(id)
-                .orElseThrow(() -> new LedgerAccountNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.LEDGER_ACCOUNT,
@@ -205,6 +205,9 @@ public class LedgerAccountApplicationService implements LedgerAccountUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+         LedgerAccount account = ledgerAccountRepository.findById(id)
+                .orElseThrow(() -> new LedgerAccountNotFoundException("Not found"));
+
         
          account.updateAccountInformation(
                            writeMapper.toName(dto),
@@ -224,9 +227,7 @@ public class LedgerAccountApplicationService implements LedgerAccountUseCase {
                          UserIdentityId requesterId,
                          RolId requesterRolId) {
 
-        LedgerAccount account = ledgerAccountRepository.findById(id)
-                .orElseThrow(() -> new LedgerAccountNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.LEDGER_ACCOUNT,
@@ -235,6 +236,9 @@ public class LedgerAccountApplicationService implements LedgerAccountUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+
+         LedgerAccount account = ledgerAccountRepository.findById(id)
+                .orElseThrow(() -> new LedgerAccountNotFoundException("Not found"));
 
         account.activate();
         ledgerAccountRepository.save(account);
@@ -248,9 +252,7 @@ public class LedgerAccountApplicationService implements LedgerAccountUseCase {
                            UserIdentityId requesterId,
                            RolId requesterRolId) {
 
-        LedgerAccount account = ledgerAccountRepository.findById(id)
-                .orElseThrow(() -> new LedgerAccountNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.LEDGER_ACCOUNT,
@@ -259,6 +261,10 @@ public class LedgerAccountApplicationService implements LedgerAccountUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+         LedgerAccount account = ledgerAccountRepository.findById(id)
+                .orElseThrow(() -> new LedgerAccountNotFoundException("Not found"));
+
 
         account.inactivate(reason);
         ledgerAccountRepository.save(account);

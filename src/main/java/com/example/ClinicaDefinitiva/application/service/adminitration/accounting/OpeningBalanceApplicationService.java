@@ -60,10 +60,7 @@ public class OpeningBalanceApplicationService implements OpeningBalanceUseCase {
                                           UserIdentityId requesterId,
                                           RolId requesterRolId) {
 
-        OpeningBalance balance = openingBalanceRepository.findById(id)
-                .orElseThrow(() -> new OpeningBalanceNotFoundException("Not found"));
-
-        authorizationHelper.authorize(
+              authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.OPENING_BALANCE,
                 ActionCatalog.BasicAction.READ,
@@ -71,6 +68,10 @@ public class OpeningBalanceApplicationService implements OpeningBalanceUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+
+                OpeningBalance balance = openingBalanceRepository.findById(id)
+                .orElseThrow(() -> new OpeningBalanceNotFoundException("Not found"));
+
 
         return readMapper.toReadDto(balance);
     }
@@ -101,9 +102,7 @@ public class OpeningBalanceApplicationService implements OpeningBalanceUseCase {
                                                      UserIdentityId requesterId,
                                                      RolId requesterRolId) {
 
-        ledgerAccountRepository.findById(accountId)
-                .orElseThrow(() -> new LedgerAccountNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.OPENING_BALANCE,
@@ -125,9 +124,7 @@ public class OpeningBalanceApplicationService implements OpeningBalanceUseCase {
                                                      UserIdentityId requesterId,
                                                      RolId requesterRolId) {
 
-        companyRepository.findById(companyId)
-                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.OPENING_BALANCE,
@@ -174,10 +171,7 @@ public class OpeningBalanceApplicationService implements OpeningBalanceUseCase {
                        UserIdentityId requesterId,
                        RolId requesterRolId) {
 
-        OpeningBalance balance = openingBalanceRepository.findById(id)
-                .orElseThrow(() -> new OpeningBalanceNotFoundException("Not found"));
-
-        authorizationHelper.authorize(
+               authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.OPENING_BALANCE,
                 ActionCatalog.BasicAction.DELETE,
@@ -185,6 +179,11 @@ public class OpeningBalanceApplicationService implements OpeningBalanceUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+               
+                 OpeningBalance balance = openingBalanceRepository.findById(id)
+                .orElseThrow(() -> new OpeningBalanceNotFoundException("Not found"));
+
+
 
         openingBalanceRepository.deleteById(balance.getOpeningBalanceId());
     }

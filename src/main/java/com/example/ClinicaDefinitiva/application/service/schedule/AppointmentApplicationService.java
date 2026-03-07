@@ -1,25 +1,20 @@
 package com.example.ClinicaDefinitiva.application.service.schedule;
 
+import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.AppointmentCompletionDTO;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.CreateAppointmentDto;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.ReadAppointmentDto;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.UpdateAppointmentDto;
 import com.example.ClinicaDefinitiva.application.exceptions.AppointmentNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.actorException.ReceptionistNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.schedule.AppointmentReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.schedule.AppointmentWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.schedule.AppointmentUseCase;
-import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
-import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
+import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
-import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.output.AppointmentRepository;
 import com.example.ClinicaDefinitiva.domain.schedule.service.AppointmentSchedulingService;
@@ -34,6 +29,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+
+/**
+* POLÍTICAS:
+ * - SectorBasedPolicy: Solo RECEPTIONIST del sector correcto puede gestionar citas
+ * - (Futuro) AssignmentPolicy: Dentista solo ve sus citas asignadas
+ */
 @Service
 @Transactional
 public class AppointmentApplicationService implements AppointmentUseCase {
@@ -42,21 +43,19 @@ public class AppointmentApplicationService implements AppointmentUseCase {
     private final AppointmentSchedulingService schedulingService;
     private final AppointmentReadMapper readMapper;
     private final AppointmentWriteMapper writeMapper;
-    private final AuthorizationService authorizationService;
-    private final ReceptionRepository receptionRepository;
+    private final AuthorizationHelper authorizationHelper;
 
-    public AppointmentApplicationService(AppointmentRepository appointmentRepository,
-                                         AppointmentSchedulingService schedulingService,
-                                         AppointmentReadMapper readMapper,
-                                         AppointmentWriteMapper writeMapper,
-                                         AuthorizationService authorizationService,
-                                         ReceptionRepository receptionRepository) {
+    public AppointmentApplicationService(
+            AppointmentRepository appointmentRepository,
+            AppointmentSchedulingService schedulingService,
+            AppointmentReadMapper readMapper,
+            AppointmentWriteMapper writeMapper,
+            AuthorizationHelper authorizationHelper) {
         this.appointmentRepository = appointmentRepository;
         this.schedulingService = schedulingService;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
-        this.authorizationService = authorizationService;
-        this.receptionRepository = receptionRepository;
+        this.authorizationHelper = authorizationHelper;
     }
 
     @Override
@@ -65,25 +64,19 @@ public class AppointmentApplicationService implements AppointmentUseCase {
     public ReadAppointmentDto findById(AppointmentId appointmentId,
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(appointmentId.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO: Usar AuthorizationHelper
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(appointmentId.getValue())
+                        .build()
+        );
 
         Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new AppointmentNotFoundException(""));
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found"));
 
         return readMapper.toReadDto(appointment);
     }
@@ -94,21 +87,14 @@ public class AppointmentApplicationService implements AppointmentUseCase {
     public Page<ReadAppointmentDto> findAll(Pageable pageable,
                                             UserIdentityId requesterId,
                                             RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return appointmentRepository.findAll(pageable)
                 .map(readMapper::toReadDto);
@@ -121,22 +107,16 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                     Pageable pageable,
                                                     UserIdentityId requesterId,
                                                     RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(patientId.value())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(patientId.value())
+                        .build()
+        );
 
         return appointmentRepository.findByPatientId(patientId, pageable)
                 .map(readMapper::toReadDto);
@@ -150,21 +130,14 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                     Pageable pageable,
                                                     UserIdentityId requesterId,
                                                     RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return appointmentRepository.findByDateRange(start, end, pageable)
                 .map(readMapper::toReadDto);
@@ -177,22 +150,16 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                     Pageable pageable,
                                                     UserIdentityId requesterId,
                                                     RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(dentistId.value())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(dentistId.value())
+                        .build()
+        );
 
         return appointmentRepository.findByDentistId(dentistId, pageable)
                 .map(readMapper::toReadDto);
@@ -205,22 +172,16 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                     Pageable pageable,
                                                     UserIdentityId requesterId,
                                                     RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(serviceId.getId())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(serviceId.getId())
+                        .build()
+        );
 
         return appointmentRepository.findByServiceId(serviceId, pageable)
                 .map(readMapper::toReadDto);
@@ -233,21 +194,14 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                  Pageable pageable,
                                                  UserIdentityId requesterId,
                                                  RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return appointmentRepository.findByStatus(status, pageable)
                 .map(readMapper::toReadDto);
@@ -263,21 +217,14 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                             Pageable pageable,
                                                             UserIdentityId requesterId,
                                                             RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        // ⭐ CORREGIDO
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
 
         return appointmentRepository.findByPatientAndDentist(patientId, dentistId, start, end, pageable)
                 .map(readMapper::toReadDto);
@@ -289,21 +236,13 @@ public class AppointmentApplicationService implements AppointmentUseCase {
     public ReadAppointmentDto save(CreateAppointmentDto dto,
                                    UserIdentityId requesterId,
                                    RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.CREATE,
+                AuthorizationContext.builder().build()
+        );
 
         Appointment appointment = schedulingService.scheduleAppointment(
             writeMapper.toDentistId(dto),
@@ -316,7 +255,6 @@ public class AppointmentApplicationService implements AppointmentUseCase {
         );
 
         Appointment saved = appointmentRepository.save(appointment);
-
         return readMapper.toReadDto(saved);
     }
 
@@ -326,25 +264,18 @@ public class AppointmentApplicationService implements AppointmentUseCase {
     public ReadAppointmentDto update(UpdateAppointmentDto dto,
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(dto.appointmentId())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .withResourceId(dto.appointmentId())
+                        .build()
+        );
 
         Appointment appointment = appointmentRepository.findById(AppointmentId.of(dto.appointmentId()))
-                .orElseThrow(() -> new AppointmentNotFoundException(""));
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found"));
 
         schedulingService.rescheduleAppointment(
             appointment,
@@ -355,7 +286,6 @@ public class AppointmentApplicationService implements AppointmentUseCase {
         );
 
         Appointment updated = appointmentRepository.save(appointment);
-
         return readMapper.toReadDto(updated);
     }
 
@@ -366,28 +296,18 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                      String reason,
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(
-                        ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT),
-                        ActionCatalog.of(ActionCatalog.BasicAction.CANCEL)
-                ), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(id.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.CANCEL,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
 
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new AppointmentNotFoundException(""));
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found"));
 
         appointment.cancel(reason);
         Appointment cancelled = appointmentRepository.save(appointment);
@@ -402,28 +322,18 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                        AppointmentCompletionDTO completionDTO,
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(
-                        ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT),
-                        ActionCatalog.of(ActionCatalog.BasicAction.COMPLETE)
-                ), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(id.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.COMPLETE,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
 
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new AppointmentNotFoundException(""));
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found"));
 
         writeMapper.toCompletion(completionDTO);
         Appointment completed = appointmentRepository.save(appointment);
@@ -438,28 +348,18 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                            String reason,
                                            UserIdentityId requesterId,
                                            RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(
-                        ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT),
-                        ActionCatalog.of(ActionCatalog.BasicAction.MARK_AS_NO_SHOW)
-                ), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(id.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.MARK_AS_NO_SHOW,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
 
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new AppointmentNotFoundException(""));
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found"));
 
         appointment.markAsNoShow(reason);
         Appointment updated = appointmentRepository.save(appointment);
@@ -473,26 +373,18 @@ public class AppointmentApplicationService implements AppointmentUseCase {
     public ReadAppointmentDto daleById(AppointmentId id,
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
-
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new ReceptionistNotFoundException(""));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(id.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+        authorizationHelper.authorize(
+                requesterId,
+                requesterRolId,
+                ResourceCatalog.BasicResource.APPOINTMENT,
+                ActionCatalog.BasicAction.DELETE,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
 
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new AppointmentNotFoundException(""));
-
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found"));
 
         ReadAppointmentDto dto = readMapper.toReadDto(appointment);
         appointmentRepository.delete(appointment.getId());
@@ -500,6 +392,88 @@ public class AppointmentApplicationService implements AppointmentUseCase {
         return dto;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

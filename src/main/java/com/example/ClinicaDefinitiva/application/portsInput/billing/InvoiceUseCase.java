@@ -1,6 +1,8 @@
 package com.example.ClinicaDefinitiva.application.portsInput.billing;
 
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.*;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
@@ -39,7 +41,7 @@ public interface InvoiceUseCase {
     );
 
     Page<PageInvoiceDto> findByPatient(
-            Long patientId,
+            PatientId patientId,
             Pageable pageable,
             UserIdentityId requesterId,
             RolId requesterRolId
@@ -47,7 +49,7 @@ public interface InvoiceUseCase {
 
 
     Page<PageInvoiceDto> findByDentist(
-            Long dentistId,
+            DentistId dentistId,
             Pageable pageable,
             UserIdentityId requesterId,
             RolId requesterRolId
@@ -111,10 +113,5 @@ public interface InvoiceUseCase {
     );
 
 
-    ReadInvoiceDto markAsPaid(
-            InvoiceId id,
-            LocalDate paymentDate,
-            UserIdentityId requesterId,
-            RolId requesterRolId
-    );
+    
 }

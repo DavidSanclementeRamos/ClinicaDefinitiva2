@@ -5,10 +5,8 @@ import com.example.ClinicaDefinitiva.domain.errors.context.DomainContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 
-public class UserIdentityNoFoundException extends BusinessRuleViolationException {
-
-
-    public UserIdentityNoFoundException(ErrorCatalog catalogo, DomainContext contexto, UserIdentityId userIdentityId) {
-        super(catalogo, contexto);
+public class UserIdentityNoFoundException extends RuntimeException {
+    public UserIdentityNoFoundException(String message) {
+        super(message);
     }
 }

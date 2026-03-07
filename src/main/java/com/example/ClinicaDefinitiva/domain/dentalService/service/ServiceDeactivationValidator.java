@@ -20,9 +20,9 @@ public class ServiceDeactivationValidator {
 
     
 
-    public void validateNoAppointments(ServiceId serviceId, InvoiceId invoiceId) {
+    public void validateNoAppointments(ServiceId serviceId) {
 
-        if (invoiceRepository.existsByServicId(invoiceId)) {
+        if (invoiceRepository.existsByServiceId(serviceId)) {
             throw new BusinessRuleViolationException(
                     ProvidedServiceError.ERR_SERVICE_HAS_PENDING_INVOICES,
                     EntityContext.DENTAL_SERVICE

@@ -13,6 +13,7 @@ import com.example.ClinicaDefinitiva.application.mapper.Administration.operation
 import com.example.ClinicaDefinitiva.application.mapper.Administration.operations.ShiftWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.ShiftUseCase;
 import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
+import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ActionCatalog;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;
@@ -40,11 +41,7 @@ public class ShiftApplicationService implements ShiftUseCase {
     private final AuthorizationHelper authorization;
     private final ShiftAssignmentService shiftAssignmentService;
 
-    public ShiftApplicationService(ShiftReadMapper readMapper,
-                                   ShiftWriteMapper writeMapper,
-                                   ShiftRepository repository,
-                                   AuthorizationHelper authorization,
-                                   ShiftAssignmentService shiftAssignmentService) {
+    public ShiftApplicationService(ShiftReadMapper readMapper, ShiftWriteMapper writeMapper, ShiftRepository repository, AuthorizationHelper authorization, ShiftAssignmentService shiftAssignmentService) {
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
         this.repository = repository;
@@ -52,25 +49,30 @@ public class ShiftApplicationService implements ShiftUseCase {
         this.shiftAssignmentService = shiftAssignmentService;
     }
 
+   
+
+
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.SHIFT,
             action = ActionCatalog.BasicAction.READ)
-    public ReadShiftDto findById(Long shiftId,
+    public ReadShiftDto findById(ShiftId shiftId,
                                  UserIdentityId requesterId,
                                  RolId requesterRolId) {
 
-        Shift shift = repository.findById(ShiftId.from(shiftId))
-                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
-
-        authorization.authorize(
+                authorization.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.SHIFT,
                 ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
-                        .withResourceId(shiftId)
+                        .withResourceId(shiftId.value())
                         .build()
         );
+                
+                Shift shift = repository.findById(ShiftId.from(shiftId.value()))
+                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
+
+
 
         return readMapper.toReadDto(shift);
     }
@@ -147,9 +149,7 @@ public class ShiftApplicationService implements ShiftUseCase {
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
 
-        Shift shift = repository.findById(id)
-                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
-
+       
         authorization.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.SHIFT,
@@ -159,14 +159,14 @@ public class ShiftApplicationService implements ShiftUseCase {
                         .build()
         );
 
+         Shift shift = repository.findById(id)
+                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
+
         shift.excludeBlock(
     writeMapper.toStart(dto),
     writeMapper.toEnd(dto),
     writeMapper.toReason(dto)
 );
-
-
-
 
         Shift updated = repository.save(shift);
 
@@ -182,9 +182,7 @@ public class ShiftApplicationService implements ShiftUseCase {
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
 
-        Shift shift = repository.findById(shiftId)
-                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
-
+       
         authorization.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.SHIFT,
@@ -193,6 +191,9 @@ public class ShiftApplicationService implements ShiftUseCase {
                         .withResourceId(shiftId.value())
                         .build()
         );
+         Shift shift = repository.findById(shiftId)
+                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
+
         boolean canAccommodate = shift.canAccommodateAppointment(
     writeMapper.toAppointmentStart(dto),
     writeMapper.toAppointmentEnd(dto)
@@ -210,9 +211,7 @@ public class ShiftApplicationService implements ShiftUseCase {
                                    UserIdentityId requesterId,
                                    RolId requesterRolId) {
 
-        Shift shift = repository.findById(shiftId)
-                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
-
+       
         authorization.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.SHIFT,
@@ -221,6 +220,9 @@ public class ShiftApplicationService implements ShiftUseCase {
                         .withResourceId(shiftId.value())
                        .build()
         );
+         Shift shift = repository.findById(shiftId)
+                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
+
 
 
 shift.reschedule(
@@ -243,10 +245,7 @@ Shift updated = repository.save(shift);
                                UserIdentityId requesterId,
                                RolId requesterRolId) {
 
-        Shift shift = repository.findById(shiftId)
-                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
-
-        authorization.authorize(
+               authorization.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.SHIFT,
                 ActionCatalog.BasicAction.UPDATE,
@@ -254,6 +253,10 @@ Shift updated = repository.save(shift);
                         .withResourceId(shiftId.value())
                         .build()
         );
+                Shift shift = repository.findById(shiftId)
+                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
+
+
 
         shift.cancel(reason);
         Shift updated = repository.save(shift);
@@ -268,9 +271,7 @@ Shift updated = repository.save(shift);
                                  UserIdentityId requesterId,
                                  RolId requesterRolId) {
 
-        Shift shift = repository.findById(shiftId)
-                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
-
+       
         authorization.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.SHIFT,
@@ -279,6 +280,10 @@ Shift updated = repository.save(shift);
                         .withResourceId(shiftId.value())
                         .build()
         );
+         Shift shift = repository.findById(shiftId)
+                .orElseThrow(() -> new ShiftNotFoundException("Not found"));
+
+
 
         shift.complete();
         Shift updated = repository.save(shift);

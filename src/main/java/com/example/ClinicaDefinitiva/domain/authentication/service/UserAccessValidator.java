@@ -7,6 +7,7 @@ import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptionsDomain.UserNotEligibleException;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 import java.time.Instant;
@@ -54,9 +55,10 @@ public class UserAccessValidator {
             EntityContext requesterContext
     ) {
         UserIdentity user = userRepository.findById(userIdentityId)
-                .orElseThrow(() -> new UserIdentityNoFoundException(
+                .orElseThrow(() -> new BusinessRuleViolationException(
                         UserIdentityError.ERR_USER_NOT_FOUND,
-                        requesterContext, userIdentityId
+                        EntityContext.USER_IDENTITY
+                       
                 ));
 
         Outcome<UserIdentity> eligibility = user.canPerformSensitiveAction(now);

@@ -52,9 +52,7 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                                       UserIdentityId requesterId,
                                       RolId requesterRolId) {
 
-        ThirdParties thirdParty = repository.findById(id)
-                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.THIRD_PARTY,
@@ -63,6 +61,9 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+         ThirdParties thirdParty = repository.findById(id)
+                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
+
 
         return readMapper.toReadDto(thirdParty);
     }
@@ -131,9 +132,7 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                                                  UserIdentityId requesterId,
                                                  RolId requesterRolId) {
 
-        companyRepository.findById(companyId)
-                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.THIRD_PARTY,
@@ -185,9 +184,7 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                                                       UserIdentityId requesterId,
                                                       RolId requesterRolId) {
 
-        ThirdParties thirdParty = repository.findById(id)
-                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.THIRD_PARTY,
@@ -196,6 +193,10 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+         ThirdParties thirdParty = repository.findById(id)
+                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
+
 
         thirdParty.updateContactInformation(
     writeMapper.toName(dto),
@@ -215,9 +216,7 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                          UserIdentityId requesterId,
                          RolId requesterRolId) {
 
-        ThirdParties thirdParty = repository.findById(id)
-                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
-
+      
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.THIRD_PARTY,
@@ -226,6 +225,9 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+
+         ThirdParties thirdParty = repository.findById(id)
+                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
 
         thirdParty.activate();
         repository.save(thirdParty);
@@ -239,9 +241,7 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                            UserIdentityId requesterId,
                            RolId requesterRolId) {
 
-        ThirdParties thirdParty = repository.findById(id)
-                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.THIRD_PARTY,
@@ -250,6 +250,10 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+         ThirdParties thirdParty = repository.findById(id)
+                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
+
 
         thirdParty.inactivate(reason);
         repository.save(thirdParty);

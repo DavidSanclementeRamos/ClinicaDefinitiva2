@@ -3,23 +3,25 @@ package com.example.ClinicaDefinitiva.application.service.adminitration.authoriz
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.UserRolAssignment.CreateAssignmentPermanentDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.UserRolAssignment.CreateAssignmentTemporaryDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.UserRolAssignment.ReadAssignmentDto;
+import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
+import com.example.ClinicaDefinitiva.application.exceptions.Admistration.permission.RolNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.Admistration.permission.UserRolAssignmentNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.UserIdentityNoFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.authorization.userRolAssignment.AssignmentReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.authorization.userRolAssignment.AssignmentWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.authorization.UserRolAssignmentUseCase;
-import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
+import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.UserRolAssignmentRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.UserRolAssignmentService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.AuthorizationError;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.authorization.RolError;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
-import com.example.ClinicaDefinitiva.domain.exceptionsDomain.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -34,21 +36,28 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
     private final UserRolAssignmentRepository repository;
     private final AuthorizationService authorizationService;
     private final ReceptionRepository receptionRepository;
+    private final AuthorizationHelper authorizationHelper;
+    private final RolRepository rolRepository;
+    private final UserIdentityRepository userIdentityRepository;
 
-    public UserRolAssignmentApplicationService(UserRolAssignmentService userRolService,
-                                               AssignmentWriteMapper writeMapper,
-                                               AssignmentReadMapper readMapper,
-                                               UserRolAssignmentRepository repository,
-                                               AuthorizationService authorizationService,
-                                               ReceptionRepository receptionRepository) {
+    public UserRolAssignmentApplicationService(UserRolAssignmentService userRolService, AssignmentWriteMapper writeMapper, AssignmentReadMapper readMapper, UserRolAssignmentRepository repository, AuthorizationService authorizationService, ReceptionRepository receptionRepository, AuthorizationHelper authorizationHelper, RolRepository rolRepository, UserIdentityRepository userIdentityRepository) {
         this.userRolService = userRolService;
         this.writeMapper = writeMapper;
         this.readMapper = readMapper;
         this.repository = repository;
         this.authorizationService = authorizationService;
         this.receptionRepository = receptionRepository;
+        this.authorizationHelper = authorizationHelper;
+        this.rolRepository = rolRepository;
+        this.userIdentityRepository = userIdentityRepository;
     }
 
+
+
+   
+
+
+    
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
@@ -57,20 +66,15 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                                            UserIdentityId requesterId,
                                            RolId requesterRolId) {
 
-        Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(RolError.ERR_ROL_UNAUTHORIZED_CREATION, EntityContext.ASSIGNMENT);
-        }
+       
+        
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.CREATE,
+                AuthorizationContext.builder()
+                        .build()
+        );
 
         UserRolAssignment assignment = UserRolAssignment.assignPermanent(
             writeMapper.toUserIdentityId(dto),
@@ -94,20 +98,14 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                                            RolId requesterRolId) {
 
 
-        Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT), ActionCatalog.of(ActionCatalog.BasicAction.CREATE_TEMPORARY)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(RolError.ERR_ROL_UNAUTHORIZED_CREATION, EntityContext.ASSIGNMENT);
-        }
+       
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.CREATE_TEMPORARY,
+                AuthorizationContext.builder()
+                        .build()
+        );
 
          UserRolAssignment assignment = UserRolAssignment.assignTemporary(
             writeMapper.toUserIdentityId(dto),
@@ -135,27 +133,18 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                               UserIdentityId requesterId,
                               RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ROLE),ActionCatalog.of(ActionCatalog.BasicAction.IS_ACTIVE_AT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(targetId.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+       
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.IS_ACTIVE_AT,
+                AuthorizationContext.builder()
+                        .withResourceId(targetId.getValue())
+                        .build()
+        );
 
         UserRolAssignment assignment = repository.findById(targetId)
-                .orElseThrow(() -> new UserRolAssignmentNotFoundException(""));
+                .orElseThrow(() -> new UserRolAssignmentNotFoundException("Not fount"));
 
         return assignment.isActiveAt(date);
     }
@@ -167,27 +156,18 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ROLE),ActionCatalog.of(ActionCatalog.BasicAction.IS_CURRENTLY_ACTIVE)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(targetId.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
+       
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.IS_CURRENTLY_ACTIVE,
+                AuthorizationContext.builder()
+                        .withResourceId(targetId.getValue())
+                        .build()
+        );
 
         UserRolAssignment assignment = repository.findById(targetId)
-                .orElseThrow(() -> new UserRolAssignmentNotFoundException(""));
+                .orElseThrow(() -> new UserRolAssignmentNotFoundException("Not fount"));
 
         return assignment.isCurrentlyActive();
     }
@@ -200,27 +180,17 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                        UserIdentityId requesterId,
                        RolId requesterRolId) {
 
-       Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT), ActionCatalog.of(ActionCatalog.BasicAction.EXTEND_ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(targetId.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_ASSIGNMENT_UNAUTHORIZED_EXTENSION,
-                    VOContext.AUTHORIZATION
-            );
-        }
+       authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.EXTEND_ASSIGNMENT,
+                AuthorizationContext.builder()
+                        .withResourceId(targetId.getValue())
+                        .build()
+        );
 
         UserRolAssignment assignment = repository.findById(targetId)
-                .orElseThrow(() -> new UserRolAssignmentNotFoundException(""));
+                .orElseThrow(() -> new UserRolAssignmentNotFoundException("Not fount"));
 
         assignment.extend(newValidTo);
         repository.save(assignment);
@@ -235,25 +205,18 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                              RolId requesterRolId) {
 
 
-        Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT), ActionCatalog.of(ActionCatalog.BasicAction.REVOKE_ALL)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(targetUserIdentityId.value())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(AuthorizationError.ERR_ASSIGNMENT_UNAUTHORIZED_REVOKE, VOContext.AUTHORIZATION);
-        }
+       authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.REVOKE_ALL,
+                AuthorizationContext.builder()
+                        .withResourceId(targetUserIdentityId.value())
+                        .build()
+        );
 
         List<UserRolAssignment> assignments = repository.findByUserId(targetUserIdentityId);
         if (assignments.isEmpty()) {
-            throw new UserRolAssignmentNotFoundException("");
+            throw new UserRolAssignmentNotFoundException("Not fount");
         }
         userRolService.revokeAllRoles(targetUserIdentityId);
     }
@@ -265,31 +228,25 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                           RolId targetRolId,
                           UserIdentityId requesterId,
                           RolId requesterRolId) {
-
-
-        Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
-
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT), ActionCatalog.of(ActionCatalog.BasicAction.REVOKE)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(targetRolId.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(AuthorizationError.ERR_ASSIGNMENT_UNAUTHORIZED_REVOKE, VOContext.AUTHORIZATION);
-        }
-
-        List<UserRolAssignment> assignments = repository.findByUserIdAndRolId(targetUserIdentityId, targetRolId);
-        if (assignments.isEmpty()) {
-            throw new UserRolAssignmentNotFoundException("" + targetUserIdentityId + targetRolId);
-        }
-
-        userRolService.revokeRole(targetUserIdentityId,targetRolId);
+        
+         authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.REVOKE,
+                AuthorizationContext.builder()
+                        .withResourceId(targetUserIdentityId.value())
+                        .build()
+        );
+         
+          UserIdentity userIdentity = userIdentityRepository.findById(targetUserIdentityId)
+                .orElseThrow(() -> new UserIdentityNoFoundException("Not found"));
+          
+           Rol rol = rolRepository.findById(targetRolId)
+                .orElseThrow(() -> new RolNotFoundException("Rol not found: " ));
+                        
+   
+     
+        userRolService.revokeRole(userIdentity.getId(),rol.getId());
 
     }
 
@@ -303,27 +260,21 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                                                 RolId requesterRolId) {
 
 
-        Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
+        
+         authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.VIEW_ASSIGNMENT,
+                AuthorizationContext.builder()
+                        .withResourceId(targetId.getValue())
+                        .build()
+        );
+         
+          UserRolAssignment assignment = repository.findById(targetId)
+                .orElseThrow(() -> new UserRolAssignmentNotFoundException("Not found"));
 
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(targetId.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        return repository.findById(targetId)
+        return repository.findById(assignment.getId())
                 .map(readMapper::toReadDto);
     }
 
@@ -334,27 +285,20 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                                                 UserIdentityId requesterId,
                                                 RolId requesterRolId) {
 
-        Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.VIEW_ASSIGNMENT,
+                AuthorizationContext.builder()
+                        .build()
+        );
+        
+         UserIdentity userIdentity = userIdentityRepository.findById(targeUserIdentityId)
+                .orElseThrow(() -> new UserIdentityNoFoundException("Not found"));
+          
+         
 
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(targeUserIdentityId.value())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        return repository.findByUserId(targeUserIdentityId)
+        return repository.findByUserId(userIdentity.getId())
                 .stream().map(readMapper::toReadDto).toList();
     }
 
@@ -366,61 +310,49 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
                                                             RolId requesterRolId) {
 
 
-        Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.VIEW_ASSIGNMENT,
+                AuthorizationContext.builder()
+                        .build()
+        );
+        
+         UserIdentity userIdentity = userIdentityRepository.findById(targeUserIdentityId)
+                .orElseThrow(() -> new UserIdentityNoFoundException("Not found"));
+          
+          Rol rol = rolRepository.findById(targeRolId)
+                .orElseThrow(() -> new RolNotFoundException("Rol not found: " ));
+                       
 
-
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(targeRolId.getValue())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        return repository.findByUserIdAndRolId(UserIdentityId.from(targeRolId.getValue()), RolId.of(targeRolId.getValue()))
+        return repository.findByUserIdAndRolId(userIdentity.getId(), rol.getId())
                 .stream().map(readMapper::toReadDto).findFirst();
     }
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
             action = ActionCatalog.BasicAction.VIEW_ASSIGNMENT)
-    public Optional<ReadAssignmentDto> findByUserIdAndIsPrimary(UserIdentityId targetUuserIdentityId,
+    public Optional<ReadAssignmentDto> findByUserIdAndIsPrimary(UserIdentityId targetUserIdentityId,
                                                                 boolean isPrimary,
                                                                 UserIdentityId requesterId,
                                                                 RolId requesterRolId) {
 
 
-        Receptionist  receptionist = receptionRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new BusinessRuleViolationException(
-                        AuthorizationError.ERR_AUTH_SECTOR_REQUIRED,
-                        VOContext.AUTHORIZATION
-                ));
+    
+         authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.ASSIGNMENT,
+                ActionCatalog.BasicAction.VIEW_ASSIGNMENT,
+                AuthorizationContext.builder()
+                        .build()
+        );
+        
+         UserIdentity userIdentity = userIdentityRepository.findById(targetUserIdentityId)
+                .orElseThrow(() -> new UserIdentityNoFoundException("Not found"));
+          
 
-         Optional<UserRolAssignment> assignment = repository.findByUserIdAndIsPrimary(targetUuserIdentityId,isPrimary);
 
-        SecurityContext context = SecurityContext
-                .builder(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.ASSIGNMENT)), requesterId)
-                .withSector(receptionist.getSector().getDescription())
-                .withResourceId(assignment.stream().count())
-                .build();
-
-        if (!authorizationService.isAuthorized(requesterRolId, context)) {
-            throw new BusinessRuleViolationException(
-                    AuthorizationError.ERR_AUTH_PERMISSION_DENIED,
-                    VOContext.AUTHORIZATION
-            );
-        }
-
-        return repository.findByUserIdAndIsPrimary(targetUuserIdentityId, isPrimary)
+        return repository.findByUserIdAndIsPrimary(userIdentity.getId(), isPrimary)
                 .map(readMapper::toReadDto);
     }
 

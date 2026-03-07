@@ -10,4 +10,9 @@ import java.util.Map;
 public record UpdateServiceDetailsDto(
         String serviceType,
         Map<String, Object> details
-) {}
+) {
+
+    public Object detailsMap() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+}

@@ -67,8 +67,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                                         UserIdentityId requesterId,
                                         RolId requesterRolId) {
 
-        JournalEntry entry = journalEntryRepository.findById(id)
-                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
+       
 
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
@@ -78,6 +77,9 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+         JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
 
         return readMapper.toReadDto(entry);
     }
@@ -108,9 +110,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                                                    UserIdentityId requesterId,
                                                    RolId requesterRolId) {
 
-        companyRepository.findById(companyId)
-                .orElseThrow(() -> new CompanyNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.JOURNAL_ENTRY,
@@ -152,9 +152,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                                                    UserIdentityId requesterId,
                                                    RolId requesterRolId) {
 
-        ledgerAccountRepository.findById(accountId)
-                .orElseThrow(() -> new LedgerAccountNotFoundException("Not found"));
-
+        
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.JOURNAL_ENTRY,
@@ -176,10 +174,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                                                       UserIdentityId requesterId,
                                                       RolId requesterRolId) {
 
-        thirdPartiesRepository.findById(thirdPartyId)
-                .orElseThrow(() -> new ThirdPartyNotFoundException("Not found"));
-
-        authorizationHelper.authorize(
+               authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.JOURNAL_ENTRY,
                 ActionCatalog.BasicAction.READ,
@@ -227,9 +222,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
 
-        JournalEntry entry = journalEntryRepository.findById(id)
-                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
-
+      
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.JOURNAL_ENTRY,
@@ -238,6 +231,10 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+          JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
+
 
         entry.addLine(writeMapper.toAddLineDto(dto));
         JournalEntry updated = journalEntryRepository.save(entry);
@@ -255,9 +252,6 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                                                  UserIdentityId requesterId,
                                                  RolId requesterRolId) {
 
-        JournalEntry entry = journalEntryRepository.findById(id)
-                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
-
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.JOURNAL_ENTRY,
@@ -266,6 +260,10 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+          JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
+
 
         entry.updateInformation(
     writeMapper.toDescription(dto),
@@ -283,9 +281,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                                     UserIdentityId requesterId,
                                     RolId requesterRolId) {
 
-        JournalEntry entry = journalEntryRepository.findById(id)
-                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
-
+      
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.JOURNAL_ENTRY,
@@ -294,6 +290,10 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+          JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
+
 
         entry.post();
         JournalEntry posted = journalEntryRepository.save(entry);
@@ -309,9 +309,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
 
-        JournalEntry entry = journalEntryRepository.findById(id)
-                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.JOURNAL_ENTRY,
@@ -320,6 +318,10 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                         .withResourceId(id.getValue())
                         .build()
         );
+        
+          JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
+
 
         entry.registerRverse(reason);
         JournalEntry reversed = journalEntryRepository.save(entry);

@@ -5,6 +5,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.billing.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceStatus;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Range;
@@ -29,5 +30,7 @@ public interface InvoiceRepository {
 
     Page<Invoice> findByStatus(InvoiceStatus.Status status, Pageable pageable);
 
-    public boolean existsByServicId(InvoiceId invoiceId);
+
+
+    public boolean existsByServiceId(ServiceId serviceId);
 }

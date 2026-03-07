@@ -23,5 +23,10 @@ public record CreateServiceDto(
 
         // Detalles específicos según el tipo de servicio
         Map<String, Object> details
-) {}
+) {
+
+    public Object detailsMap() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+}
 

@@ -44,9 +44,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
                                         UserIdentityId requesterId,
                                         RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findById(id)
-                .orElseThrow(() -> new ReceptionNotFoundException("Not found"));
-
+       
         authorizationHelper.authorize(
             requesterId,
             requesterRolId,
@@ -54,9 +52,12 @@ public class ReceptionApplicationService implements ReceptionUseCase {
             ActionCatalog.BasicAction.READ,
             AuthorizationContext.builder()
                 .withResourceId(id.getValue())
-                .withOwnership(receptionist.getUserIdentityId()) // ← OwnershipPolicy
                 .build()
         );
+        
+         Receptionist receptionist = receptionRepository.findById(id)
+                .orElseThrow(() -> new ReceptionNotFoundException("Not found"));
+
 
         return readMapper.toReadDto(receptionist);
     }
@@ -115,7 +116,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         authorizationHelper.authorize(
             requesterId,
             requesterRolId,
-            ResourceCatalog.BasicResource.DENTIST,
+            ResourceCatalog.BasicResource.RECEPTIONIST,
             ActionCatalog.BasicAction.CREATE,
             AuthorizationContext.builder().build()
         );
@@ -145,7 +146,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         authorizationHelper.authorize(
             requesterId,
             requesterRolId,
-            ResourceCatalog.BasicResource.DENTIST,
+            ResourceCatalog.BasicResource.RECEPTIONIST,
             ActionCatalog.BasicAction.UPDATE,
             AuthorizationContext.builder()
                 .withResourceId(id.getValue())
@@ -171,20 +172,21 @@ public class ReceptionApplicationService implements ReceptionUseCase {
                                                UserIdentityId requesterId,
                                                RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findById(id)
-                .orElseThrow(() -> new  ReceptionNotFoundException("Not found"));
-
+        
         // Datos sensibles: Solo RECEPTIONIST (validado por SectorBasedPolicy)
         authorizationHelper.authorize(
             requesterId,
             requesterRolId,
-            ResourceCatalog.BasicResource.DENTIST,
+            ResourceCatalog.BasicResource.RECEPTIONIST,
             ActionCatalog.BasicAction.UPDATE,
             AuthorizationContext.builder()
                 .withResourceId(id.getValue())
-                .withOwnership(receptionist.getUserIdentityId())
                 .build()
         );
+        
+        Receptionist receptionist = receptionRepository.findById(id)
+                .orElseThrow(() -> new  ReceptionNotFoundException("Not found"));
+
 
         receptionist.updateSensitiveData(
             writeMapper.toAge(dto),
@@ -207,20 +209,22 @@ public class ReceptionApplicationService implements ReceptionUseCase {
                            UserIdentityId requesterId,
                            RolId requesterRolId) {
 
-        Receptionist receptionist = receptionRepository.findById(id)
-                .orElseThrow(() -> new ReceptionNotFoundException("Not found"));
-
+       
         // SectorBasedPolicy: Solo RECEPTIONIST de RECURSOS_HUMANOS puede eliminar
         // (Validado automáticamente por SectorBasedPolicy en el PolicyEngine)
         authorizationHelper.authorize(
             requesterId,
             requesterRolId,
-            ResourceCatalog.BasicResource.DENTIST,
+            ResourceCatalog.BasicResource.RECEPTIONIST,
             ActionCatalog.BasicAction.DELETE,
             AuthorizationContext.builder()
                 .withResourceId(id.getValue())
                 .build()
         );
+        
+         Receptionist receptionist = receptionRepository.findById(id)
+                .orElseThrow(() -> new ReceptionNotFoundException("Not found"));
+
 
         receptionRepository.deleteById(receptionist.getId());
     }
