@@ -7,16 +7,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class RateRestWriteMapper {
     public CreateRateDto toServiceCreate(CreateRateRequest request) {
-        if (request == null) return null;
 
         return new CreateRateDto(
-                request.serviceId(),
-                request.payerType(),
                 request.contractId(),
-                request.amount(),
                 request.currency(),
-                request.validFrom(),
-                request.validTo()
+                request.
+                
+               
         );
     }
 }

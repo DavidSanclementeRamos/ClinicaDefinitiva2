@@ -8,7 +8,7 @@ import com.example.ClinicaDefinitiva.application.dto.administration.operations.P
 import com.example.ClinicaDefinitiva.application.dto.administration.operations.ReadShiftDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.operations.RescheduleShiftDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.ShiftNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.ShiftNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.operations.ShiftReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.operations.ShiftWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.ShiftUseCase;

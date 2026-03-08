@@ -2,8 +2,8 @@ package com.example.ClinicaDefinitiva.application.service.adminitration.accounti
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.*;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ThirdPartyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.CompanyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.ThirdPartyNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.thirdParties.ThirdPartiesReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.thirdParties.ThirdPartiesWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.ThirdPartiesUseCase;

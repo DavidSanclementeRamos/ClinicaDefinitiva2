@@ -19,7 +19,7 @@ public class DentistRestReadMapper {
                 dto.dentistId(),
                 dto.specialties(),
                 dto.availabilityStatus(),
-               new WorkingHoursRequest(  dto.workingHoursDto.start(), dto.workingHoursDto().end(),
+               new WorkingHoursRequest(  dto.workingHoursDto().start(), dto.workingHoursDto().end(),
                dto.workingHoursDto().dayOfWeek(), dto.workingHoursDto().declaredHoursPerWeek()),
                 dto.dni(),
                 dto.first(),
@@ -41,7 +41,6 @@ public class DentistRestReadMapper {
 
     // De DTO de aplicación → DTO REST simplificado (listados/paginación)
     public PageDentistResponse toPageRest(PageDentistDto dto) {
-        if (dto == null) return null;
 
         return new PageDentistResponse(
                 dto.dentistId(),

@@ -14,10 +14,10 @@ public class DentistRestWriteMapper {
                 request.specialties(),
                 request.availabilityStatus(),
 
-           new WorkingHoursDto(    request.start(),
-                request.end(),
-                request.dayOfWeek(),
-                request.declaredHoursPerWeek()),
+           new WorkingHoursDto(    request.WorkingHours().start(),
+                request.WorkingHours().end(),
+                request.WorkingHours().dayOfWeek(),
+                request.WorkingHours().declaredHoursPerWeek()),
 
                 request.dni(),
                 request.first(),

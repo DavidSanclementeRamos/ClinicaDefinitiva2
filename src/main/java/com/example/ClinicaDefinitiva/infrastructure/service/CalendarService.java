@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository;
+package com.example.ClinicaDefinitiva.infrastructure.service;
 
 import java.time.LocalDateTime;
 

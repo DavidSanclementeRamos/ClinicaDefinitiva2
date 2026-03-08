@@ -5,8 +5,8 @@ import com.example.ClinicaDefinitiva.application.dto.administration.authorizatio
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.PermissionDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.ReadRolDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.ReceptionNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.permission.RolNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.ReceptionNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.permission.RolNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.authorization.rol.RolReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.authorization.rol.RolWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.authorization.RolUseCase;

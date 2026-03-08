@@ -4,9 +4,9 @@ import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.PageOpeningBalanceDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.ReadOpeningBalanceDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.LedgerAccountNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.OpeningBalanceNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.CompanyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.LedgerAccountNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.OpeningBalanceNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.openingBalance.OpeningBalanceReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.openingBalance.OpeningBalanceWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.OpeningBalanceUseCase;

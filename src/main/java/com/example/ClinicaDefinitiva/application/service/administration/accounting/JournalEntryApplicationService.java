@@ -2,10 +2,10 @@ package com.example.ClinicaDefinitiva.application.service.adminitration.accounti
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.*;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.JournalEntryNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.LedgerAccountNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ThirdPartyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.CompanyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.JournalEntryNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.LedgerAccountNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.ThirdPartyNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry.JournalEntryReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry.JournalEntryWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.JournalEntryUseCase;

@@ -2,9 +2,9 @@ package com.example.ClinicaDefinitiva.application.service.adminitration.accounti
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.*;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ContractNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.ThirdPartyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.CompanyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.ContractNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.ThirdPartyNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract.ContractReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract.ContractWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.ContractUseCase;
@@ -21,7 +21,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Reso
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.application.service.adminitration.accounti
 
 import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.*;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.contavilidad.CompanyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.CompanyNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.company.CompanyReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.company.CompanyWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.CompanyUseCase;
@@ -16,7 +16,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Reso
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
