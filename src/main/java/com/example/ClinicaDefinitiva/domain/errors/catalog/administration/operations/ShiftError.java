@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.operations;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.administration.operations;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;

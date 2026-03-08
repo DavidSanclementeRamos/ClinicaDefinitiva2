@@ -1,5 +1,5 @@
 
-package com.example.ClinicaDefinitiva.application.exceptions.Admistration;
+package com.example.ClinicaDefinitiva.application.exceptions.administration.operations;
 
 
 public class ShiftNotFoundException extends RuntimeException {

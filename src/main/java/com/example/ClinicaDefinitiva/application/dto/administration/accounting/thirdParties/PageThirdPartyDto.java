@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties;
+package com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties;
 
 public record PageThirdPartyDto(
         Long id,

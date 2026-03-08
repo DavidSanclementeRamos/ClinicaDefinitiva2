@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.domain.authentication.service;
 
-import com.example.ClinicaDefinitiva.application.exceptions.UserIdentityNoFoundException;
 import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;

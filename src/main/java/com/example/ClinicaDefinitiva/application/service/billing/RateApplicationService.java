@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.application.dto.billing.rate.CreateRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.PageRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.ReadRateDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.RateNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.billing.RateNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.billing.rate.RateReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.billing.rate.RateWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.billing.RateUseCase;

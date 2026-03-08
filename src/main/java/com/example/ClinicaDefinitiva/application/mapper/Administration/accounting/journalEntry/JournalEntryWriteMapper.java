@@ -1,10 +1,8 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.AddJournalEntryLineDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.CreateJournalEntryDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.UpdateJournalEntryDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.ReadLedgerAccountDto;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntry;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.AddJournalEntryLineDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.CreateJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.UpdateJournalEntryDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntryLine;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
@@ -12,7 +10,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPa
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import java.time.LocalDate;
 import java.util.Currency;
-import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 @Component

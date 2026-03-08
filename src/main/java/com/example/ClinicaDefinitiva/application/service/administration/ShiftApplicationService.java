@@ -1,5 +1,5 @@
 
-package com.example.ClinicaDefinitiva.application.service.adminitration;
+package com.example.ClinicaDefinitiva.application.service.administration;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.operations.AssignShiftDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.operations.CanAccommodateAppointmentDto;
@@ -8,12 +8,11 @@ import com.example.ClinicaDefinitiva.application.dto.administration.operations.P
 import com.example.ClinicaDefinitiva.application.dto.administration.operations.ReadShiftDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.operations.RescheduleShiftDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.ShiftNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.operations.ShiftNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.operations.ShiftReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.operations.ShiftWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.ShiftUseCase;
 import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
-import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ActionCatalog;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;

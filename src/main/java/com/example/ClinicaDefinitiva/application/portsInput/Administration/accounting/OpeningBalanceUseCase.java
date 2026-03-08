@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.CreateOpeningBalanceDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.PageOpeningBalanceDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.ReadOpeningBalanceDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.openingBalance.CreateOpeningBalanceDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.openingBalance.PageOpeningBalanceDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.openingBalance.ReadOpeningBalanceDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.OpeningBalanceId;

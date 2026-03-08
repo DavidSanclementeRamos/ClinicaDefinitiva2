@@ -1,6 +1,12 @@
 package com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.CreateAdministrativeReportDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.DocumentDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.IndicatorDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.PageAdministrativeReportDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.PeriodDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.ReadAdministrativeReportDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.UpdateAdministrativeReportDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.AdministrativeReportId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.JournalEntryId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;

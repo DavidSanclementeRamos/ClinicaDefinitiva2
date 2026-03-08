@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry;
+package com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry;
 
 import java.math.BigDecimal;
 

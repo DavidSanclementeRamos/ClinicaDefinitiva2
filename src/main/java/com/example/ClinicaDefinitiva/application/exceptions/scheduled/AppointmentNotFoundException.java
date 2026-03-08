@@ -1,6 +1,5 @@
-package com.example.ClinicaDefinitiva.application.exceptions;
+package com.example.ClinicaDefinitiva.application.exceptions.scheduled;
 
-import jakarta.persistence.EntityNotFoundException;
 
 public class AppointmentNotFoundException extends RuntimeException {
     public AppointmentNotFoundException(String message) {

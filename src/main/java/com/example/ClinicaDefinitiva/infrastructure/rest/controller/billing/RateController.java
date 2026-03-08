@@ -5,8 +5,10 @@ import com.example.ClinicaDefinitiva.application.dto.billing.rate.CreateRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.PageRateDto;
 import com.example.ClinicaDefinitiva.application.dto.billing.rate.ReadRateDto;
 import com.example.ClinicaDefinitiva.application.portsInput.billing.RateUseCase;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
 import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.billing.*;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.RateRestReadMapper;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.RateRestWriteMapper;
@@ -66,7 +68,7 @@ public class RateController {
             @PageableDefault(size = 20) Pageable pageable,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        Page<PageRateDto> rates = useCase.findByService(serviceId, pageable, userDetails.getId(), userDetails.getActiveRolId());
+        Page<PageRateDto> rates = useCase.findByService(ServiceId.of( serviceId), pageable, userDetails.getId(), userDetails.getActiveRolId());
         return ResponseEntity.ok(rates.map(readMapper::toPageRest));
     }
 
@@ -86,7 +88,7 @@ public class RateController {
             @PageableDefault(size = 20) Pageable pageable,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        Page<PageRateDto> rates = useCase.findByContract(contractId, pageable, userDetails.getId(), userDetails.getActiveRolId());
+        Page<PageRateDto> rates = useCase.findByContract(Contract.of( contractId), pageable, userDetails.getId(), userDetails.getActiveRolId());
         return ResponseEntity.ok(rates.map(readMapper::toPageRest));
     }
 

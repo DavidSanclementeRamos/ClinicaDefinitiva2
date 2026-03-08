@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.thirdParties;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.PageThirdPartyDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.ReadThirdPartyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.PageThirdPartyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.ReadThirdPartyDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.ThirdParties;
 import org.springframework.stereotype.Component;
 

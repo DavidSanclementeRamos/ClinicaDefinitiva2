@@ -1,8 +1,7 @@
 package com.example.ClinicaDefinitiva.application.portsInput.schedule;
 
-import com.example.ClinicaDefinitiva.application.dto.sheduled.AppointmentCompletionDTO;
-import com.example.ClinicaDefinitiva.application.dto.sheduled.ReadAppointmentDto;
-import com.example.ClinicaDefinitiva.application.dto.sheduled.UpdateAppointmentDto;
+import com.example.ClinicaDefinitiva.application.dto.scheduled.ReadAppointmentDto;
+import com.example.ClinicaDefinitiva.application.dto.scheduled.UpdateAppointmentDto;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.CreateAppointmentDto;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
@@ -31,7 +30,6 @@ public interface AppointmentUseCase {
     ReadAppointmentDto update(UpdateAppointmentDto dto,UserIdentityId requesterId, RolId requesterRolId);
 
     ReadAppointmentDto cancel(AppointmentId id, String reason, UserIdentityId requesterId, RolId requesterRolId);
-    ReadAppointmentDto complete(AppointmentId id, AppointmentCompletionDTO completionDTO  , UserIdentityId requesterId, RolId requesterRolId);
     ReadAppointmentDto markAsNoShow(  AppointmentId id, String reason,UserIdentityId requesterId, RolId requesterRolId);
 
     ReadAppointmentDto daleById(AppointmentId id,UserIdentityId requesterId, RolId requesterRolId );

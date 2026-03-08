@@ -2,9 +2,9 @@ package com.example.ClinicaDefinitiva.application.service.actor;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.Receptionist.*;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.ReceptionNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionistReadMapper;
-import com.example.ClinicaDefinitiva.application.mapper.actorMapper.receptionMapper.ReceptionistWriteMapper;
+import com.example.ClinicaDefinitiva.application.exceptions.actor.ReceptionistNotFoundException;
+import com.example.ClinicaDefinitiva.application.mapper.actor.reception.ReceptionistReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.actor.reception.ReceptionistWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.ReceptionUseCase;
 import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
@@ -56,7 +56,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         );
         
          Receptionist receptionist = receptionRepository.findById(id)
-                .orElseThrow(() -> new ReceptionNotFoundException("Not found"));
+                .orElseThrow(() -> new ReceptionistNotFoundException("Not found"));
 
 
         return readMapper.toReadDto(receptionist);
@@ -140,7 +140,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
                                              RolId requesterRolId) {
 
         Receptionist receptionist = receptionRepository.findById(id)
-                .orElseThrow(() -> new  ReceptionNotFoundException("Not found"));
+                .orElseThrow(() -> new  ReceptionistNotFoundException("Not found"));
 
          // Sector + Ownership
         authorizationHelper.authorize(
@@ -185,7 +185,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         );
         
         Receptionist receptionist = receptionRepository.findById(id)
-                .orElseThrow(() -> new  ReceptionNotFoundException("Not found"));
+                .orElseThrow(() -> new  ReceptionistNotFoundException("Not found"));
 
 
         receptionist.updateSensitiveData(
@@ -223,7 +223,7 @@ public class ReceptionApplicationService implements ReceptionUseCase {
         );
         
          Receptionist receptionist = receptionRepository.findById(id)
-                .orElseThrow(() -> new ReceptionNotFoundException("Not found"));
+                .orElseThrow(() -> new ReceptionistNotFoundException("Not found"));
 
 
         receptionRepository.deleteById(receptionist.getId());

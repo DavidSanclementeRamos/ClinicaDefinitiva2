@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract;
+package com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

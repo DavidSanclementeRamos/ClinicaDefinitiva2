@@ -3,8 +3,10 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.controller.billing;
 
 import com.example.ClinicaDefinitiva.application.dto.billing.invoice.*;
 import com.example.ClinicaDefinitiva.application.portsInput.billing.InvoiceUseCase;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceId;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceStatus;
+import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceStatus;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.billing.invoice.*;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.rate.InvoiceRestReadMapper;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.billing.invoice.InvoiceRestWriteMapper;
@@ -78,7 +80,7 @@ public class InvoiceController {
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         Page<PageInvoiceDto> invoices = useCase.findByPatient(
-                patientId,
+              PatientId.of(  patientId),
                 pageable,
                 userDetails.getId(),
                 userDetails.getActiveRolId()
@@ -93,7 +95,7 @@ public class InvoiceController {
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         Page<PageInvoiceDto> invoices = useCase.findByDentist(
-                dentistId,
+              DentistId.of(  dentistId),
                 pageable,
                 userDetails.getId(),
                 userDetails.getActiveRolId()

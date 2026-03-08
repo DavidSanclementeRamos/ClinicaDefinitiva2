@@ -3,9 +3,9 @@ package com.example.ClinicaDefinitiva.application.service.actor;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.dentist.*;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapper.DentistReadMapper;
-import com.example.ClinicaDefinitiva.application.mapper.actorMapper.dentistMapper.DentistWriteMapper;
+import com.example.ClinicaDefinitiva.application.exceptions.actor.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.application.mapper.actor.dentist.DentistReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.actor.dentist.DentistWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.DentistUseCase;
 import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;

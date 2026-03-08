@@ -1,16 +1,14 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.AdministrativeReport;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.CreateAdministrativeReportDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.DocumentDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.IndicatorDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.UpdateAdministrativeReportDto;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.CreateAdministrativeReportDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.DocumentDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.IndicatorDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.UpdateAdministrativeReportDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Document;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Indicator;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Period;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import java.math.BigDecimal;
 import org.springframework.stereotype.Component;
 
 @Component

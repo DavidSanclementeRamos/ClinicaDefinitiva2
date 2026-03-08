@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance;
+package com.example.ClinicaDefinitiva.application.dto.administration.accounting.openingBalance;
 
 import java.math.BigDecimal;
 

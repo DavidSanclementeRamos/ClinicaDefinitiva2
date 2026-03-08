@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.company;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.PageCompanyDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.ReadCompanyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.company.PageCompanyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.company.ReadCompanyDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
 import org.springframework.stereotype.Component;
 

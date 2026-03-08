@@ -1,6 +1,10 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.AdministrativeReport;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.DocumentDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.IndicatorDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.PageAdministrativeReportDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.PeriodDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.ReadAdministrativeReportDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.AdministrativeReport;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Document;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Indicator;

@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.exceptions;
+package com.example.ClinicaDefinitiva.application.exceptions.clinicalTreatments;
 
 public class TreatmentNotFoundException extends RuntimeException {
     public TreatmentNotFoundException(String message) {

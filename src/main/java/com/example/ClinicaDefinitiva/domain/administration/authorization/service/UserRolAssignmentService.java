@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.administration.authorization.service;
 
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.permission.RolNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.authorization.RolNotFoundException;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;

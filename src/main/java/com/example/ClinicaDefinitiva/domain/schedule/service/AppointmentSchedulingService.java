@@ -13,14 +13,13 @@ import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
 import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dentalService.output.ProvidedServiceRepository;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.operations.ShiftError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.operations.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Domain Service: Orquesta operaciones entre agregados

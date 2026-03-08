@@ -1,12 +1,14 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.BalanceReportResponse;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.JournalEntryLineDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.PageJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.ReadJournalEntryDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntry;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntryLine;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 /**
  * Mapper: JournalEntry (Domain → DTO)

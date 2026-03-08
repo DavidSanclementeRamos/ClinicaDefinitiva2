@@ -1,14 +1,13 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.company;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.CreateCompanyDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.UpdateCompanyContactDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.UpdateCompanyTaxDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.company.CreateCompanyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.company.UpdateCompanyContactDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.company.UpdateCompanyTaxDto;
 import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TaxRegime;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.TypePerson;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Company;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
 

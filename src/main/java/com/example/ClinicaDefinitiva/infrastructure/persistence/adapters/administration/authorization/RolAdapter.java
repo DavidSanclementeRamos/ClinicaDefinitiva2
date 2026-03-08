@@ -1,7 +1,7 @@
-package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.authorization;
+package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.administration.authorization;
 
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.authorization.RolJpaRepository;

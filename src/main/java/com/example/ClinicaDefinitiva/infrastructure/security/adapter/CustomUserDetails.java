@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.infrastructure.security.adapter;
 
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.policies.RoleBasedPolicy;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;

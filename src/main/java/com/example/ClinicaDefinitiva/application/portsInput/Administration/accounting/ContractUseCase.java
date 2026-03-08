@@ -1,6 +1,9 @@
 package com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.CreateContractDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.PageContractDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.ReadContractDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.UpdateContractDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
@@ -9,7 +12,6 @@ import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
 
 public interface ContractUseCase {
     ReadContractDto findById(ContractId id, UserIdentityId requesterId, RolId requesterRolId);

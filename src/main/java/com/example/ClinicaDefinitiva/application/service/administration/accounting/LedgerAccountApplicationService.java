@@ -1,8 +1,11 @@
-package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
+package com.example.ClinicaDefinitiva.application.service.administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount.CreateLedgerAccountDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount.PageLedgerAccountDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount.ReadLedgerAccountDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount.UpdateLedgerAccountDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.LedgerAccountNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.accounting.LedgerAccountNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.LedgerAccount.LedgerAccountReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.LedgerAccount.LedgerAccountWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.LedgerAccountUseCase;

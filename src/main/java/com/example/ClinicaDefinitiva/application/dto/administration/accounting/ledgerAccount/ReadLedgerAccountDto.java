@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount;
+package com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount;
 
 public record ReadLedgerAccountDto(
         Long id,

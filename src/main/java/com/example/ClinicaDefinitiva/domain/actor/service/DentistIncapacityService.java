@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.actor.service;
 
-import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.actor.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;

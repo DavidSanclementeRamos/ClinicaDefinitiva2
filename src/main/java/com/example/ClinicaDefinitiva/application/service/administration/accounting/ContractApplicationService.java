@@ -1,10 +1,12 @@
-package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
+package com.example.ClinicaDefinitiva.application.service.administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.CreateContractDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.PageContractDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.ReadContractDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.UpdateContractDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.CompanyNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.ContractNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.ThirdPartyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.accounting.ContractNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.accounting.ThirdPartyNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract.ContractReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract.ContractWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.ContractUseCase;

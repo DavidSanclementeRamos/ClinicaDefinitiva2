@@ -1,6 +1,9 @@
 package com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount.CreateLedgerAccountDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount.PageLedgerAccountDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount.ReadLedgerAccountDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount.UpdateLedgerAccountDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;

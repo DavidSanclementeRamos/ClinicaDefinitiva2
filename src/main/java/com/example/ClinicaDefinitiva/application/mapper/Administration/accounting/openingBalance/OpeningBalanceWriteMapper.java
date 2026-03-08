@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.openingBalance;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.CreateOpeningBalanceDto;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.OpeningBalance;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.openingBalance.CreateOpeningBalanceDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;

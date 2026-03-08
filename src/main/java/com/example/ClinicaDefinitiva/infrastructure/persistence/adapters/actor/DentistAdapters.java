@@ -1,13 +1,13 @@
 package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.actor;
 
-import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.actor.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.DentistJpaRepository;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.dentistEntityMapper.DentistReadEntityMapper;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.dentistEntityMapper.DentistWriteEntityMapper;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actor.dentist.DentistReadEntityMapper;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actor.dentist.DentistWriteEntityMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;

@@ -1,5 +1,6 @@
-package com.example.ClinicaDefinitiva.infrastructure.persistence.entity.providedService;
+package com.example.ClinicaDefinitiva.infrastructure.persistence.entity.dentalService;
 
+import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.dentalService.ProvidedServiceEntity;
 import jakarta.persistence.*;
 @Entity
 @Table(name = "provided_service_implantology",

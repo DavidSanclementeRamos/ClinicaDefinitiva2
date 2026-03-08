@@ -1,9 +1,8 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.LedgerAccount;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.CreateLedgerAccountDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.ledgerAccount.UpdateLedgerAccountDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount.CreateLedgerAccountDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.ledgerAccount.UpdateLedgerAccountDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.NaturalezaCuenta;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import org.springframework.stereotype.Component;

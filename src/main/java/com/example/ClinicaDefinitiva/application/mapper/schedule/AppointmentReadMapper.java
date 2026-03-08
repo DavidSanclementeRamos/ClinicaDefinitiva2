@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.application.mapper.schedule;
 
-import com.example.ClinicaDefinitiva.application.dto.sheduled.ReadAppointmentDto;
+import com.example.ClinicaDefinitiva.application.dto.scheduled.ReadAppointmentDto;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import org.springframework.stereotype.Component;
 

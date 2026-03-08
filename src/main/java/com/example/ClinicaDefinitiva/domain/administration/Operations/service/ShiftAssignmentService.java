@@ -1,14 +1,14 @@
 package com.example.ClinicaDefinitiva.domain.administration.operations.service;
 
 
-import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.dentalService.ProvidedServiceNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
 import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepository;
 import com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftType;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.operations.ShiftError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.operations.ShiftError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 

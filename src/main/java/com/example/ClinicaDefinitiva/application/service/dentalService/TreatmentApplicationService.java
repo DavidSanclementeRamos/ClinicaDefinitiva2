@@ -4,10 +4,11 @@ package com.example.ClinicaDefinitiva.application.service.dentalService;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.CreateTreatmentDto;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.TreatmentDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.TreatmentNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.actorException.PatientNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.treatment.TreatmentReadMapper;
-import com.example.ClinicaDefinitiva.application.mapper.treatment.TreatmentWriteMapper;
+import com.example.ClinicaDefinitiva.application.exceptions.actor.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.actor.PatientNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.clinicalTreatments.TreatmentNotFoundException;
+import com.example.ClinicaDefinitiva.application.mapper.clinicalTreatments.TreatmentReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.clinicalTreatments.TreatmentWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.dentalService.TreatmentUseCase;
 import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
@@ -27,8 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Optional;
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 /**
  * Servicio de aplicación para Treatment (Tratamientos clínicos).
@@ -74,7 +73,7 @@ public class TreatmentApplicationService implements TreatmentUseCase {
 
 
         Dentist destist = dentistRepository.findById(treatment.getDentistId())
-                .orElseThrow(() -> new PatientNotFoundException(""));
+                .orElseThrow(() -> new DentistNotFoundException(""));
 
         // Obtener paciente para ownership/guardianship
         Patient patient = patientRepository.findById(treatment.getPatientId())

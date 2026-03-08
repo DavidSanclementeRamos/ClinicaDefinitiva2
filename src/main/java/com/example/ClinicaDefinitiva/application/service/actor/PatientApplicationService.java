@@ -3,9 +3,9 @@ package com.example.ClinicaDefinitiva.application.service.actor;
 
 import com.example.ClinicaDefinitiva.application.dto.actor.Patient.*;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.actorException.PatientNotFoundException;
-import com.example.ClinicaDefinitiva.application.mapper.actorMapper.patientMapper.PatientReadMapper;
-import com.example.ClinicaDefinitiva.application.mapper.actorMapper.patientMapper.PatientWriteMapper;
+import com.example.ClinicaDefinitiva.application.exceptions.actor.PatientNotFoundException;
+import com.example.ClinicaDefinitiva.application.mapper.actor.patient.PatientReadMapper;
+import com.example.ClinicaDefinitiva.application.mapper.actor.patient.PatientWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.actor.PatientUseCase;
 import com.example.ClinicaDefinitiva.application.service.shared.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;

@@ -1,11 +1,10 @@
 package com.example.ClinicaDefinitiva.infrastructure.rest.controller.schedule;
 
+import com.example.ClinicaDefinitiva.application.dto.scheduled.ReadAppointmentDto;
+import com.example.ClinicaDefinitiva.application.dto.scheduled.UpdateAppointmentDto;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.AppointmentCompletionDTO;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.CreateAppointmentDto;
-import com.example.ClinicaDefinitiva.application.dto.sheduled.ReadAppointmentDto;
-import com.example.ClinicaDefinitiva.application.dto.sheduled.UpdateAppointmentDto;
 import com.example.ClinicaDefinitiva.application.portsInput.schedule.AppointmentUseCase;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentStatus;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.schedule.AppointmentCompletionRequest;
@@ -24,6 +23,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

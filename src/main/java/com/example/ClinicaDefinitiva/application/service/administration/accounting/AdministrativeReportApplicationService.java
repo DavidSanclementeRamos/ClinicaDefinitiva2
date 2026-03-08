@@ -1,9 +1,15 @@
-package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
+package com.example.ClinicaDefinitiva.application.service.administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.CreateAdministrativeReportDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.DocumentDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.IndicatorDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.PageAdministrativeReportDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.PeriodDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.ReadAdministrativeReportDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport.UpdateAdministrativeReportDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.AdministrativeReportNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.JournalEntryNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.accounting.AdministrativeReportNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.accounting.JournalEntryNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.AdministrativeReport.AdministrativeReportReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.AdministrativeReport.AdministrativeReportWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.AdministrativeReportUseCase;

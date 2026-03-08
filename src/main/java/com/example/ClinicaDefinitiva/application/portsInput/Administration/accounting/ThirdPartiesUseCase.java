@@ -1,6 +1,9 @@
 package com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.CreateThirdPartyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.PageThirdPartyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.ReadThirdPartyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.UpdateThirdPartyDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;

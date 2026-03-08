@@ -9,7 +9,7 @@ import com.example.ClinicaDefinitiva.application.dto.dentalService.ReadServiceDt
 import com.example.ClinicaDefinitiva.application.portsInput.dentalService.ProvidedServiceUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.dentalService.service.*;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.dentalService.ProvidedServiceRestReadMapper;
 import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.dentalService.ProvidedServiceRestWriteMapper;

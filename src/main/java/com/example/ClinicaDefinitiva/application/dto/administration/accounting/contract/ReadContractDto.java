@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract;
+package com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.ContractStatus;
 import java.math.BigDecimal;

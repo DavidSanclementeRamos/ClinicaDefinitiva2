@@ -1,6 +1,10 @@
 package com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.AddJournalEntryLineDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.CreateJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.PageJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.ReadJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.UpdateJournalEntryDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.JournalEntryId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;

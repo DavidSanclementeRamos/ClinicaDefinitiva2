@@ -1,8 +1,12 @@
-package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
+package com.example.ClinicaDefinitiva.application.service.administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.company.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.company.CreateCompanyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.company.PageCompanyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.company.ReadCompanyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.company.UpdateCompanyContactDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.company.UpdateCompanyTaxDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.CompanyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.accounting.CompanyNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.company.CompanyReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.company.CompanyWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.CompanyUseCase;

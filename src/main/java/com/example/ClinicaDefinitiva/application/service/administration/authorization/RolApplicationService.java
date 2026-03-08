@@ -1,12 +1,11 @@
-package com.example.ClinicaDefinitiva.application.service.adminitration.authorization;
+package com.example.ClinicaDefinitiva.application.service.administration.authorization;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.CreateRolDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.PageRolDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.PermissionDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.rol.ReadRolDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.ReceptionNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.permission.RolNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.authorization.RolNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.authorization.rol.RolReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.authorization.rol.RolWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.authorization.RolUseCase;
@@ -16,7 +15,6 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.output.
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.RolService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;

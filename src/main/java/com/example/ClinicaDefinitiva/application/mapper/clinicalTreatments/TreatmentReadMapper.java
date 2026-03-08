@@ -1,9 +1,8 @@
-package com.example.ClinicaDefinitiva.application.mapper.treatment;
+package com.example.ClinicaDefinitiva.application.mapper.clinicalTreatments;
 
 
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.TreatmentDto;
 import com.example.ClinicaDefinitiva.application.dto.dentalService.treatment.TreatmentPhaseDto;
-import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.PhaseStatus;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.model.Treatment;
 
 

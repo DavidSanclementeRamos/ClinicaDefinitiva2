@@ -7,8 +7,8 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Contrac
 import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.PatientJpaRepository;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.PatientEntityMapper.PatientReadEntityMapper;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.PatientEntityMapper.PatientWriteEntityMapper;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actor.Patient.PatientReadEntityMapper;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actor.Patient.PatientWriteEntityMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

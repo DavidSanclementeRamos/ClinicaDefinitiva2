@@ -1,11 +1,12 @@
-package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
+package com.example.ClinicaDefinitiva.application.service.administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.AddJournalEntryLineDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.CreateJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.PageJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.ReadJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry.UpdateJournalEntryDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.CompanyNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.JournalEntryNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.LedgerAccountNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.ThirdPartyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.accounting.JournalEntryNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry.JournalEntryReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.journalEntry.JournalEntryWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.JournalEntryUseCase;

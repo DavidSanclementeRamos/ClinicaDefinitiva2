@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.administrativeReport;
+package com.example.ClinicaDefinitiva.application.dto.administration.accounting.administrativeReport;
 
 import java.time.LocalDate;
 

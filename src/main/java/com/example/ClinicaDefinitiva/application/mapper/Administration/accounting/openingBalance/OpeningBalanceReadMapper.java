@@ -1,8 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.openingBalance;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.PageOpeningBalanceDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.openingBalance.ReadOpeningBalanceDto;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.LedgerAccount;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.openingBalance.PageOpeningBalanceDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.openingBalance.ReadOpeningBalanceDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.OpeningBalance;
 import org.springframework.stereotype.Component;
 

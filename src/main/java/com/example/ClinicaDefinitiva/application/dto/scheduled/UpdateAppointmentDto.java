@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.sheduled;
+package com.example.ClinicaDefinitiva.application.dto.scheduled;
 
 
 import java.time.LocalDateTime;

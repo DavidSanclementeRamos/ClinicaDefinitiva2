@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.thirdParties;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.CreateThirdPartyDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.UpdateThirdPartyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.CreateThirdPartyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.UpdateThirdPartyDto;
 import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;

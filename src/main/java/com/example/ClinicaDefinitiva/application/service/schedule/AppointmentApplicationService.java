@@ -1,11 +1,10 @@
 package com.example.ClinicaDefinitiva.application.service.schedule;
 
+import com.example.ClinicaDefinitiva.application.dto.scheduled.ReadAppointmentDto;
+import com.example.ClinicaDefinitiva.application.dto.scheduled.UpdateAppointmentDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.dto.sheduled.AppointmentCompletionDTO;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.CreateAppointmentDto;
-import com.example.ClinicaDefinitiva.application.dto.sheduled.ReadAppointmentDto;
-import com.example.ClinicaDefinitiva.application.dto.sheduled.UpdateAppointmentDto;
-import com.example.ClinicaDefinitiva.application.exceptions.AppointmentNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.scheduled.AppointmentNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.schedule.AppointmentReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.schedule.AppointmentWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.schedule.AppointmentUseCase;
@@ -315,31 +314,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
         return readMapper.toReadDto(cancelled);
     }
 
-    @Override
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.APPOINTMENT,
-            action = ActionCatalog.BasicAction.COMPLETE)
-    public ReadAppointmentDto complete(AppointmentId id,
-                                       AppointmentCompletionDTO completionDTO,
-                                       UserIdentityId requesterId,
-                                       RolId requesterRolId) {
-        authorizationHelper.authorize(
-                requesterId,
-                requesterRolId,
-                ResourceCatalog.BasicResource.APPOINTMENT,
-                ActionCatalog.BasicAction.COMPLETE,
-                AuthorizationContext.builder()
-                        .withResourceId(id.getValue())
-                        .build()
-        );
-
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found"));
-
-        writeMapper.toCompletion(completionDTO);
-        Appointment completed = appointmentRepository.save(appointment);
-
-        return readMapper.toReadDto(completed);
-    }
+   
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.APPOINTMENT,

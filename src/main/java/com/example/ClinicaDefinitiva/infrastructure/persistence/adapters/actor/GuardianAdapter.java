@@ -6,8 +6,8 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.actor.output.GuardianRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.GuardianJpaRepository;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.guardianEntityMapper.GuardianReadEntityMapper;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.guardianEntityMapper.GuardianWriteEntityMapper;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actor.guardian.GuardianReadEntityMapper;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actor.guardian.GuardianWriteEntityMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

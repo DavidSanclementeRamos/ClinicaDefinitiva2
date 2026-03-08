@@ -1,7 +1,6 @@
-package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.journalEntry;
+package com.example.ClinicaDefinitiva.application.dto.administration.accounting.journalEntry;
 
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * DTO para crear un asiento accounting

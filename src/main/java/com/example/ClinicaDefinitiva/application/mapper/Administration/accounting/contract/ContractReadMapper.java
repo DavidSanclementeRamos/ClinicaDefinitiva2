@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.PageContractDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.ReadContractDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.PageContractDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.ReadContractDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import org.springframework.stereotype.Component;
 

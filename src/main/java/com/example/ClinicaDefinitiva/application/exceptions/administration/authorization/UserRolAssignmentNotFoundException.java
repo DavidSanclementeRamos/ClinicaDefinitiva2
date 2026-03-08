@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.exceptions.Admistration.permission;
+package com.example.ClinicaDefinitiva.application.exceptions.administration.authorization;
 
 public class UserRolAssignmentNotFoundException extends RuntimeException {
     public UserRolAssignmentNotFoundException(String message) {

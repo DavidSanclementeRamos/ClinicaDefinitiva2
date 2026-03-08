@@ -20,7 +20,6 @@ import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import org.junit.jupiter.api.Test;
 import java.time.*;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 

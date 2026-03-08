@@ -1,9 +1,11 @@
-package com.example.ClinicaDefinitiva.application.service.adminitration.accounting;
+package com.example.ClinicaDefinitiva.application.service.administration.accounting;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.thirdParties.*;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.CreateThirdPartyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.PageThirdPartyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.ReadThirdPartyDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.thirdParties.UpdateThirdPartyDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.CompanyNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.contavilidad.ThirdPartyNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.accounting.ThirdPartyNotFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.thirdParties.ThirdPartiesReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.thirdParties.ThirdPartiesWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.accounting.ThirdPartiesUseCase;

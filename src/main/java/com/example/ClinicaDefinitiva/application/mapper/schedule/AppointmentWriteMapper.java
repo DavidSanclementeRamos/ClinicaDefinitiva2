@@ -1,13 +1,10 @@
 package com.example.ClinicaDefinitiva.application.mapper.schedule;
 
-import com.example.ClinicaDefinitiva.application.dto.sheduled.AppointmentCompletionDTO;
+import com.example.ClinicaDefinitiva.application.dto.scheduled.UpdateAppointmentDto;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.CreateAppointmentDto;
-import com.example.ClinicaDefinitiva.application.dto.sheduled.UpdateAppointmentDto;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDuration;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentCompletion;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
@@ -62,11 +59,5 @@ public class AppointmentWriteMapper {
         return dto.newEnd();
     }
 
-    // Mapper para AppointmentCompletion
-    public AppointmentCompletion toCompletion(AppointmentCompletionDTO dto) {
-        return new AppointmentCompletion(
-            ServiceDuration.of(dto.actualDurationMinutes()),
-            dto.clinicalNotes()
-        );
-    }
+  
 }

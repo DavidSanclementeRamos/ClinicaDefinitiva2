@@ -1,12 +1,12 @@
-package com.example.ClinicaDefinitiva.application.service.adminitration.authorization;
+package com.example.ClinicaDefinitiva.application.service.administration.authorization;
 
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.UserRolAssignment.CreateAssignmentPermanentDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.UserRolAssignment.CreateAssignmentTemporaryDto;
 import com.example.ClinicaDefinitiva.application.dto.administration.authorization.UserRolAssignment.ReadAssignmentDto;
 import com.example.ClinicaDefinitiva.application.dto.shared.AuthorizationContext;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.permission.RolNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.permission.UserRolAssignmentNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.UserIdentityNoFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.authorization.RolNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.authorization.UserRolAssignmentNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.authentication.UserIdentityNoFoundException;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.authorization.userRolAssignment.AssignmentReadMapper;
 import com.example.ClinicaDefinitiva.application.mapper.Administration.authorization.userRolAssignment.AssignmentWriteMapper;
 import com.example.ClinicaDefinitiva.application.portsInput.Administration.authorization.UserRolAssignmentUseCase;

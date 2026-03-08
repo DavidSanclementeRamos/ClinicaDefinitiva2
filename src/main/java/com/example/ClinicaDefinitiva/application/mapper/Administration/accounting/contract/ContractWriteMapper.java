@@ -1,8 +1,7 @@
 package com.example.ClinicaDefinitiva.application.mapper.Administration.accounting.contract;
 
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.CreateContractDto;
-import com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract.UpdateContractDto;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.CreateContractDto;
+import com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract.UpdateContractDto;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;

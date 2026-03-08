@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.dto.administration.contabilidad.contract;
+package com.example.ClinicaDefinitiva.application.dto.administration.accounting.contract;
 
 /**
  * DTO para actualizar información del contrato

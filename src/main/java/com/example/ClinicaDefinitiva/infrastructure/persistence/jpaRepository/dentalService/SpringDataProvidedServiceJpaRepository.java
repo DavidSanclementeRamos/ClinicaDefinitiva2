@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository;
+package com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.dentalService;
 
 import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
 

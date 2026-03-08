@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.domain.authentication.service;
 
-import com.example.ClinicaDefinitiva.application.exceptions.Admistration.ReceptionNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
