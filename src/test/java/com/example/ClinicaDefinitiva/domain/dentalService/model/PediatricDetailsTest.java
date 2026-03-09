@@ -1,9 +1,9 @@
 
 package com.example.ClinicaDefinitiva.domain.dentalService.model;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
+import com.example.ClinicaDefinitiva.domain.dentalService.enu.ServiceType;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.AgeRange;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.PediatricError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.PediatricError;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 

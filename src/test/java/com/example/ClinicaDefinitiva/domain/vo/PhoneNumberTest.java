@@ -1,6 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.vo;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.VoError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +45,7 @@ class PhoneNumberTest {
             assertThatThrownBy(() -> PhoneNumber.of(null))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(VoActorError.ERR_PHONE_NULL));
+                            .isEqualTo(VoError.ERR_PHONE_NULL));
         }
 
         @Test
@@ -53,7 +54,7 @@ class PhoneNumberTest {
             assertThatThrownBy(() -> PhoneNumber.of("   "))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(VoActorError.ERR_PHONE_BLANK));
+                            .isEqualTo(VoError.ERR_PHONE_BLANK));
         }
 
         @Test
@@ -62,7 +63,7 @@ class PhoneNumberTest {
             assertThatThrownBy(() -> PhoneNumber.of("abc123"))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(VoActorError.ERR_PHONE_INVALID_FORMAT));
+                            .isEqualTo(VoError.ERR_PHONE_INVALID_FORMAT));
         }
     }
 

@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.model.R
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.authorization.RolJpaRepository;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.authorization.RolEntityMapper;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.administration.authorization.RolEntityMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,6 +22,41 @@ public class RolAdapter implements RolRepository {
     }
 
     @Override
+    public Optional<Rol> findById(RolId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<Rol> findByRolEnum(RolEnum rolEnum) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Page<Rol> findAll(Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Page<Rol> findByEditable(boolean editable, Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Rol save(Rol rol) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void delete(RolId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean existsByDescription(String description) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   /** @Override
     public Optional<Rol> findById(RolId id) {
         return rolJpaRepository.findById(id.getValue())
                 .map(rolEntityMapper::toDomain);
@@ -60,5 +95,5 @@ public class RolAdapter implements RolRepository {
     @Override
     public boolean existsByDescription(String description) {
         return false;
-    }
+    }*/
 }

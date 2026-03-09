@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.userIdentity;
+package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.authentication;
 
 import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
@@ -27,6 +27,36 @@ public class UserIdentityAdapter implements UserIdentityRepository {
     }
 
     @Override
+    public Optional<UserIdentity> findById(UserIdentityId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Page<UserIdentity> findAll(Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<UserIdentity> findByEmail(String email) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<UserIdentity> findByEmailAndStatus(String email, String status) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<UserIdentity> findByIdAndStatus(UserIdentityId id, String status) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public UserIdentity save(UserIdentity user) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+ /**   @Override
     public Optional<UserIdentity> findById(UserIdentityId id) {
         return userJpaRepository.findById(id.value())
                 .map(readMapper::toDomain);

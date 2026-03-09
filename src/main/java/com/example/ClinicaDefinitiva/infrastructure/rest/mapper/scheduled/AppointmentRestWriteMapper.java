@@ -1,16 +1,14 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.shedule;
+package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.scheduled;
 
 
+import com.example.ClinicaDefinitiva.application.dto.scheduled.UpdateAppointmentDto;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.AppointmentCompletionDTO;
 import com.example.ClinicaDefinitiva.application.dto.sheduled.CreateAppointmentDto;
-import com.example.ClinicaDefinitiva.application.dto.sheduled.UpdateAppointmentDto;
-import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 
 
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.schedule.AppointmentCompletionRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.schedule.CreateAppointmentRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.schedule.UpdateAppointmentRequest;
-import org.springframework.stereotype.Component;
 
 public class AppointmentRestWriteMapper {
 

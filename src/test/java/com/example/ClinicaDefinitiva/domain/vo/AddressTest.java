@@ -1,7 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.VoError;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -38,7 +38,7 @@ class AddressTest {
             assertThatThrownBy(() -> Address.of(null, "Cali", "Valle", "Colombia", "760001"))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(VoActorError.ERR_ADDRESS_NULL));
+                            .isEqualTo(VoError.ERR_ADDRESS_NULL));
         }
 
         @Test
@@ -47,7 +47,7 @@ class AddressTest {
             assertThatThrownBy(() -> Address.of(" ", "Cali", "Valle", "Colombia", "760001"))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(VoActorError.ERR_ADDRESS_BLANK));
+                            .isEqualTo(VoError.ERR_ADDRESS_BLANK));
         }
     }
 

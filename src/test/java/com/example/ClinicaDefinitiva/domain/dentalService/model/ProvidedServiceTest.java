@@ -1,12 +1,17 @@
 
 package com.example.ClinicaDefinitiva.domain.dentalService.model;
 
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceCatalog;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceCode;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDescription;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDuration;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceName;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ProvidedServiceError;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.service.ServiceDetails;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import java.util.Currency;
@@ -20,7 +25,6 @@ class ProvidedServiceTest {
         ServiceCatalog catalog = ServiceCatalog.Defaults.SURG_WISDOM_EXTRACTION.get(); 
         SurgicalDetails details = new SurgicalDetails("Extraction", "MEDIUM", true, false);
         return ProvidedService.create(
-                 ServiceId.of(4L),
                  ServiceName.custom("Cirugía dental"),
                  catalog,
                  ServiceCode.of("C001"),

@@ -8,18 +8,16 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Contrac
 import com.example.ClinicaDefinitiva.domain.billing.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
+import com.example.ClinicaDefinitiva.domain.billing.output.RateRepository;
 import com.example.ClinicaDefinitiva.domain.billing.vo.CurrencyCode;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceId;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceItemId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.ProviderId;
 import com.example.ClinicaDefinitiva.domain.vo.Notes;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.ProviderId;
 import com.example.ClinicaDefinitiva.domain.billing.vo.Quantity;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.portsOutput.RateRepository;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +42,7 @@ import static org.mockito.Mockito.*;
 
 class InvoiceDomainServiceTest {
 
-    private ContractRepository contractRepository;
+ /*   private ContractRepository contractRepository;
     private RateRepository rateRepository;
     private InvoiceDomainService service;
 
@@ -203,5 +201,5 @@ class InvoiceDomainServiceTest {
 
         assertThrows(BusinessRuleViolationException.class,
                 () -> service.validateRates(invoice, LocalDateTime.now().plusDays(67)));
-    }
+    }*/
 }

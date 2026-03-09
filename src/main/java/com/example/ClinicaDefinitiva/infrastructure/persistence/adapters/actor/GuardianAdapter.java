@@ -25,8 +25,48 @@ public class GuardianAdapter implements GuardianRepository {
         this.writeEntityMapper = writeEntityMapper;
     }
 
+    @Override
+    public Optional<Guardian> findById(GuardianId guardianId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
     @Override
+    public Page<Guardian> findAll(Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Guardian save(Guardian guardian) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Guardian update(GuardianId guardianId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Guardian deleteById(GuardianId guardianId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Page<Guardian> findByPatientId(PatientId patientId, Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean existsById(GuardianId guardianId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<Guardian> findByUserId(UserIdentityId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+
+  /**  @Override
     public Optional<Guardian> findById(GuardianId guardianId) {
         if (guardianId == null) return Optional.empty();
         try {
@@ -94,7 +134,7 @@ public class GuardianAdapter implements GuardianRepository {
                     return false;
                 })
                 .findFirst();
-    }*/
+    }
 
     @Override
     public boolean existsById(GuardianId guardianId) {
@@ -109,6 +149,6 @@ public class GuardianAdapter implements GuardianRepository {
     @Override
     public Optional<Guardian> findByUserId(UserIdentityId id) {
         return null;
-    }
+    }*/
 
 }

@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.persistence.entity;
+package com.example.ClinicaDefinitiva.infrastructure.persistence.entity.billing;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

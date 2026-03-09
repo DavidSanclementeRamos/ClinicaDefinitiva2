@@ -89,7 +89,7 @@ class ReceptionistTest {
         FullName newName = FullName.of("Maria", "Lopez");
         Sector newSector = Sector.of(Sector.Type.DENTAL_ASSISTANCE);
 
-        receptionist.updateSensitiveData(newAge, newBloodType, newDob, newDni, "EPS456", newName, newSector);
+        receptionist.updateSensitiveData(newBloodType, newDob, newDni, "EPS456", newName, newSector);
 
         assertEquals(newName, receptionist.getPerson().getFullname());
         assertEquals(newBloodType, receptionist.getPerson().getBloodType());

@@ -30,13 +30,11 @@ public class AppointmentSchedulingService {
 
     private final AppointmentRepository appointmentRepository;
     private final ShiftRepository shiftRepository;
-    private final ScheduleQueryService scheduleQueryService;
     private final ProvidedServiceRepository serviceRepository;
 
-    public AppointmentSchedulingService(AppointmentRepository appointmentRepository, ShiftRepository shiftRepository, ScheduleQueryService scheduleQueryService, ProvidedServiceRepository serviceRepository) {
+    public AppointmentSchedulingService(AppointmentRepository appointmentRepository, ShiftRepository shiftRepository , ProvidedServiceRepository serviceRepository) {
         this.appointmentRepository = appointmentRepository;
         this.shiftRepository = shiftRepository;
-        this.scheduleQueryService = scheduleQueryService;
         this.serviceRepository = serviceRepository;
     }
 

@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.operations.ShiftRepository;
 import com.example.ClinicaDefinitiva.domain.administration.operations.model.Shift;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
@@ -19,10 +19,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -44,7 +42,7 @@ class AppointmentSchedulingServiceTest {
         appointmentRepository = mock(AppointmentRepository.class);
         shiftRepository = mock(ShiftRepository.class);
         scheduleQueryService = mock(ScheduleQueryService.class);
-        service = new AppointmentSchedulingService(appointmentRepository, shiftRepository, scheduleQueryService);
+        //service = new AppointmentSchedulingService(appointmentRepository, shiftRepository, scheduleQueryService);
     }
 
     @Nested

@@ -1,8 +1,8 @@
 
 package com.example.ClinicaDefinitiva.domain.dentalService.model;
 
-import com.example.ClinicaDefinitiva.domain.dental.care.service.num.ServiceType;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.SurgicalError;
+import com.example.ClinicaDefinitiva.domain.dentalService.enu.ServiceType;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.SurgicalError;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

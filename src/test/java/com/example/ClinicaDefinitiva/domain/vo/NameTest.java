@@ -1,8 +1,8 @@
 
 package com.example.ClinicaDefinitiva.domain.vo;
 
+import com.example.ClinicaDefinitiva.domain.errors.catalog.VoError;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorAccounting.VoAccountingError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ class NameTest {
         ValueObjectValidationException ex = assertThrows(ValueObjectValidationException.class,
             () -> Name.of(null));
 
-        assertEquals(VoAccountingError.ERR_NAME_NULL, ex.getCatalogo());
+        assertEquals(VoError.ERR_NAME_NULL, ex.getCatalogo());
         assertEquals(VOContext.ACCOUNTING, ex.getContexto());
     }
 
@@ -31,7 +31,7 @@ class NameTest {
         ValueObjectValidationException ex = assertThrows(ValueObjectValidationException.class,
             () -> Name.of("   "));
 
-        assertEquals(VoAccountingError.ERR_NAME_BLANK, ex.getCatalogo());
+        assertEquals(VoError.ERR_NAME_BLANK, ex.getCatalogo());
         assertEquals(VOContext.ACCOUNTING, ex.getContexto());
     }
 
@@ -41,7 +41,7 @@ class NameTest {
         ValueObjectValidationException ex = assertThrows(ValueObjectValidationException.class,
             () -> Name.of(longName));
 
-        assertEquals(VoAccountingError.ERR_NAME_TOO_LONG, ex.getCatalogo());
+        assertEquals(VoError.ERR_NAME_TOO_LONG, ex.getCatalogo());
         assertEquals(VOContext.ACCOUNTING, ex.getContexto());
     }
 }

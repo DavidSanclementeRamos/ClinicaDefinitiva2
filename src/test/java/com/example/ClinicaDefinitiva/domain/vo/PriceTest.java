@@ -1,7 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.VoError;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -59,7 +59,7 @@ class PriceTest {
             assertThatThrownBy(() -> Price.of(null, usd))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(ServiceVOError.ERR_SERVICE_PRICE_AMOUNT_REQUIRED));
+                            .isEqualTo(VoError.ERR_SERVICE_PRICE_AMOUNT_REQUIRED));
         }
 
         @Test
@@ -68,7 +68,7 @@ class PriceTest {
             assertThatThrownBy(() -> Price.of(BigDecimal.TEN, null))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(ServiceVOError.ERR_SERVICE_PRICE_CURRENCY_REQUIRED));
+                            .isEqualTo(VoError.ERR_SERVICE_PRICE_CURRENCY_REQUIRED));
         }
 
         @Test
@@ -77,7 +77,7 @@ class PriceTest {
             assertThatThrownBy(() -> Price.of(new BigDecimal("-5"), usd))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(ServiceVOError.ERR_SERVICE_PRICE_NEGATIVE));
+                            .isEqualTo(VoError.ERR_SERVICE_PRICE_NEGATIVE));
         }
     }
 
@@ -136,7 +136,7 @@ class PriceTest {
             assertThatThrownBy(() -> p1.add(p2))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(ServiceVOError.ERR_PRICE_CURRENCY_MISMATCH));
+                            .isEqualTo(VoError.ERR_PRICE_CURRENCY_MISMATCH));
         }
     }
 

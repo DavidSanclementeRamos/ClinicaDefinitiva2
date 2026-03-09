@@ -1,7 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.actor.service;
 
-import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.actor.DentistNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -2,8 +2,9 @@
 package com.example.ClinicaDefinitiva.domain.billing.model;
 
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.billing.enu.PayerType;
+import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import org.junit.jupiter.api.Test;
@@ -12,118 +13,259 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.Currency;
 
+
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
+import com.example.ClinicaDefinitiva.domain.billing.enu.PayerType;
+import com.example.ClinicaDefinitiva.domain.billing.enu.RateStatus;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.RateError;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import com.example.ClinicaDefinitiva.domain.vo.Price;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.Currency;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+
+@DisplayName("Tests del Agregado Rate")
 class RateTest {
 
-    private Rate buildValidRate() {
-        return Rate.builder()
-                .id(RateId.of(1L))
-                .serviceId(ServiceId.of(10L))
-                .amount(Price.of(500, Currency.getInstance("COP")))
-                .payerType(Rate.PayerType.PRIVATE)
-                .contractId(ContractId.of(100L))
-                .validFrom(LocalDateTime.now().minusDays(1))
-                .validTo(LocalDateTime.now().plusDays(10))
-                .active(true)
+    private ServiceId serviceId;
+    private Price amount;
+    private PayerType payerType;
+    private ContractId contractId;
+    private Currency cop;
+
+    @BeforeEach
+    void setUp() {
+        serviceId = ServiceId.of(1L);
+        cop = Currency.getInstance("COP");
+        amount = Price.of(150000, cop);
+        payerType = PayerType.EPS;
+        contractId = ContractId.of(100L);
+    }
+
+    @Nested
+    @DisplayName("Tests de creación de Rate")
+    class RateCreationTests {
+
+        @Test
+        @DisplayName("Debe crear una tarifa exitosamente")
+        void shouldCreateRateSuccessfully() {
+            // Act
+            Rate rate = Rate.create(serviceId, amount, payerType, contractId);
+
+            // Assert
+            assertNotNull(rate);
+            assertNull(rate.getId());
+            assertEquals(serviceId, rate.getServiceId());
+            assertEquals(amount, rate.getAmount());
+            assertEquals(payerType, rate.getPayerType());
+            assertEquals(contractId, rate.getContractId());
+            assertNotNull(rate.getValidFrom());
+            assertNull(rate.getValidTo());
+            assertEquals(RateStatus.ACTIVE, rate.getStatus());
+            assertTrue(rate.isActive());
+            assertTrue(rate.isCurrentlyValid());
+            assertTrue(rate.isIndefinite());
+            assertTrue(rate.isForEPS());
+        }
+
+        @Test
+        @DisplayName("Debe crear una tarifa sin contrato para particulares")
+        void shouldCreateRateWithoutContractForParticular() {
+            // Arrange
+            PayerType particular = PayerType.EPS;
+
+            // Act
+            Rate rate = Rate.create(serviceId, amount, particular, null);
+
+            // Assert
+            assertNotNull(rate);
+            assertEquals(particular, rate.getPayerType());
+            assertNull(rate.getContractId());
+            assertFalse(rate.isForEPS());
+        }
+
+        @Test
+        @DisplayName("Debe lanzar excepción cuando la fecha de vigencia final es anterior a la inicial")
+        void shouldThrowExceptionWhenValidToBeforeValidFrom() {
+            // Act & Assert
+            BusinessRuleViolationException exception = assertThrows(
+                BusinessRuleViolationException.class,
+                () -> Rate.builder()
+                    .serviceId(serviceId)
+                    .amount(amount)
+                    .payerType(payerType)
+                    .contractId(contractId)
+                    .validFrom(LocalDateTime.now())
+                    .validTo(LocalDateTime.now().minusDays(1))
+                    .build()
+            );
+            
+            assertEquals(RateError.ERR_RATE_INVALID_VALIDITY_RANGE, exception.getCatalogo());
+        }
+    }
+
+    @Nested
+    @DisplayName("Tests de validación de vigencia")
+    class ValidityTests {
+
+        private Rate rate;
+
+        @BeforeEach
+        void setUp() {
+            rate = Rate.create(serviceId, amount, payerType, contractId);
+        }
+
+        @Test
+        @DisplayName("Debe retornar true si la tarifa es válida en una fecha específica")
+        void shouldReturnTrueIfValidAtSpecificDate() {
+            // Arrange
+            LocalDateTime validFrom = LocalDateTime.now().minusDays(10);
+            LocalDateTime validTo = LocalDateTime.now().plusDays(10);
+            
+            Rate datedRate = Rate.builder()
+                .serviceId(serviceId)
+                .amount(amount)
+                .payerType(payerType)
+                .contractId(contractId)
+                .validFrom(validFrom)
+                .validTo(validTo)
                 .build();
+
+            // Act & Assert
+            assertTrue(datedRate.isValidAt(validFrom));
+            assertTrue(datedRate.isValidAt(validFrom.plusDays(5)));
+            assertTrue(datedRate.isValidAt(validTo));
+        }
+
+        @Test
+        @DisplayName("Debe retornar false si la tarifa no es válida en una fecha específica")
+        void shouldReturnFalseIfNotValidAtSpecificDate() {
+            // Arrange
+            LocalDateTime validFrom = LocalDateTime.now().minusDays(10);
+            LocalDateTime validTo = LocalDateTime.now().minusDays(5);
+            
+            Rate expiredRate = Rate.builder()
+                .serviceId(serviceId)
+                .amount(amount)
+                .payerType(payerType)
+                .contractId(contractId)
+                .validFrom(validFrom)
+                .validTo(validTo)
+                .build();
+
+            // Act & Assert
+            assertFalse(expiredRate.isValidAt(LocalDateTime.now()));
+            assertFalse(expiredRate.isValidAt(validFrom.minusDays(1)));
+            assertFalse(expiredRate.isValidAt(validTo.plusDays(1)));
+        }
+
+        @Test
+        @DisplayName("Debe retornar true para tarifa indefinida en cualquier fecha futura")
+        void shouldReturnTrueForIndefiniteRateAnyFutureDate() {
+            // Act & Assert
+            assertTrue(rate.isValidAt(LocalDateTime.now().plusYears(1)));
+            assertTrue(rate.isValidAt(LocalDateTime.now().plusMonths(6)));
+        }
+
+        @Test
+        @DisplayName("Debe lanzar excepción al verificar validez con ensureValidAt")
+        void shouldThrowExceptionWhenEnsuringValidityFails() {
+            // Arrange
+            LocalDateTime validFrom = LocalDateTime.now().minusDays(10);
+            LocalDateTime validTo = LocalDateTime.now().minusDays(5);
+            
+            Rate expiredRate = Rate.builder()
+                .serviceId(serviceId)
+                .amount(amount)
+                .payerType(payerType)
+                .contractId(contractId)
+                .validFrom(validFrom)
+                .validTo(validTo)
+                .build();
+
+            // Act & Assert
+            BusinessRuleViolationException exception = assertThrows(
+                BusinessRuleViolationException.class,
+                () -> expiredRate.ensureValidAt(LocalDateTime.now())
+            );
+            
+            assertEquals(RateError.ERR_RATE_NOT_VALID_AT_DATE, exception.getCatalogo());
+        }
     }
 
-    @Test
-    void shouldCreateRateSuccessfullyWithBuilder() {
-        Rate rate = buildValidRate();
+    @Nested
+    @DisplayName("Tests de gestión de estado")
+    class RateStatusTests {
 
-        assertNotNull(rate.getId());
-        assertEquals(Rate.PayerType.PRIVATE, rate.getPayerType());
-        assertTrue(rate.isActive());
-        assertTrue(rate.isCurrentlyValid());
-    }
+        private Rate rate;
 
-    @Test
-    void shouldCreateRateSuccessfullyWithFactoryMethod() {
-        Rate rate = Rate.create(
-                ServiceId.of(20L),
-                Price.of(300, Currency.getInstance("COP")),
-                Rate.PayerType.EPS,
-                ContractId.of(200L)
-        );
+        @BeforeEach
+        void setUp() {
+            rate = Rate.create(serviceId, amount, payerType, contractId);
+        }
 
-        assertEquals(Rate.PayerType.EPS, rate.getPayerType());
-        assertTrue(rate.isActive());
-        assertTrue(rate.isIndefinite()); // porque no se pasó validTo
-    }
+        @Test
+        @DisplayName("Debe finalizar la vigencia correctamente")
+        void shouldEndValiditySuccessfully() {
+            // Arrange
+            LocalDateTime endDate = LocalDateTime.now().plusDays(30);
 
-    @Test
-    void shouldThrowExceptionWhenValidityRangeIsInvalid() {
-        assertThrows(BusinessRuleViolationException.class, () ->
-                Rate.builder()
-                        .id(RateId.of(2L))
-                        .serviceId(ServiceId.of(30L))
-                        .amount(Price.of(400, Currency.getInstance("COP")))
-                        .payerType(Rate.PayerType.PRIVATE)
-                        .validFrom(LocalDateTime.now())
-                        .validTo(LocalDateTime.now().minusDays(1)) // inválido
-                        .build()
-        );
-    }
+            // Act
+            rate.endValidityAt(endDate);
 
-    @Test
-    void shouldBeValidAtDateWithinRange() {
-        Rate rate = buildValidRate();
-        LocalDateTime testDate = LocalDateTime.now().plusDays(5);
+            // Assert
+            assertEquals(endDate, rate.getValidTo());
+            assertEquals(RateStatus.EXPIRED, rate.getStatus());
+            assertFalse(rate.isActive());
+            assertTrue(rate.isExpired());
+        }
 
-        assertTrue(rate.isValidAt(testDate));
-    }
+        @Test
+        @DisplayName("Debe lanzar excepción al finalizar vigencia con fecha anterior al inicio")
+        void shouldThrowExceptionWhenEndingValidityWithDateBeforeStart() {
+            // Arrange
+            LocalDateTime invalidDate = rate.getValidFrom().minusDays(1);
 
-    @Test
-    void shouldNotBeValidBeforeValidFrom() {
-        Rate rate = buildValidRate();
-        LocalDateTime testDate = rate.getValidFrom().minusDays(1);
+            // Act & Assert
+            BusinessRuleViolationException exception = assertThrows(
+                BusinessRuleViolationException.class,
+                () -> rate.endValidityAt(invalidDate)
+            );
+            
+            assertEquals(RateError.ERR_RATE_INVALID_VALIDITY_RANGE, exception.getCatalogo());
+        }
 
-        assertFalse(rate.isValidAt(testDate));
-    }
+        @Test
+        @DisplayName("Debe marcar como reemplazada correctamente")
+        void shouldMarkAsReplaced() {
+            // Act
+            rate.markAsReplaced();
 
-    @Test
-    void shouldNotBeValidAfterValidTo() {
-        Rate rate = buildValidRate();
-        LocalDateTime testDate = rate.getValidTo().plusDays(1);
+            // Assert
+            assertEquals(RateStatus.REPLACED, rate.getStatus());
+            assertTrue(rate.isReplaced());
+            assertFalse(rate.isActive());
+        }
 
-        assertFalse(rate.isValidAt(testDate));
-    }
+        @Test
+        @DisplayName("Debe desactivar la tarifa correctamente")
+        void shouldDeactivateRate() {
+            // Act
+            rate.deactivate();
 
-    @Test
-    void shouldThrowExceptionWhenEnsureValidAtInvalidDate() {
-        Rate rate = buildValidRate();
-        LocalDateTime testDate = rate.getValidFrom().minusDays(2);
-
-        assertThrows(BusinessRuleViolationException.class, () -> rate.ensureValidAt(testDate));
-    }
-
-    @Test
-    void shouldDeactivateRateSuccessfully() {
-        Rate rate = buildValidRate();
-        rate.deactivate();
-
-        assertFalse(rate.isActive());
-        assertFalse(rate.isCurrentlyValid());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenEndValidityBeforeValidFrom() {
-        Rate rate = buildValidRate();
-        LocalDateTime invalidEndDate = rate.getValidFrom().minusDays(1);
-
-        assertThrows(BusinessRuleViolationException.class, () -> rate.endValidityAt(invalidEndDate));
-    }
-
-    @Test
-    void shouldIdentifyRateAsForEPS() {
-        Rate rate = Rate.create(
-                ServiceId.of(40L),
-                Price.of(600, Currency.getInstance("COP")),
-                Rate.PayerType.EPS,
-                ContractId.of(300L)
-        );
-
-        assertTrue(rate.isForEPS());
+            // Assert
+            assertEquals(RateStatus.INACTIVE, rate.getStatus());
+            assertTrue(rate.isInactive());
+            assertFalse(rate.isActive());
+        }
     }
 }
-

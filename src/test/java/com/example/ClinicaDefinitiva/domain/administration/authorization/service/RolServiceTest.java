@@ -1,9 +1,9 @@
 
 package com.example.ClinicaDefinitiva.domain.administration.authorization.service;
 
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.RolService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
@@ -54,7 +54,7 @@ class RolServiceTest {
         when(repo.existsByDescription("Cloned")).thenReturn(false);
         when(repo.save(any(Rol.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        Rol source = new Rol(RolEnum.DENTIST, "Source", false, true, true, RolStatus.ACTIVE);
+        Rol source =  Rol.createDefault(RolEnum.DENTIST, "Source");
         source.addPermission(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)));
 
         RolService service = new RolService(repo);
@@ -74,7 +74,7 @@ class RolServiceTest {
         RolRepository repo = mock(RolRepository.class);
         when(repo.existsByDescription("Duplicate")).thenReturn(true);
 
-        Rol source = new Rol(RolEnum.DENTIST, "Source", false, true, true, RolStatus.ACTIVE);
+        Rol source =  Rol.createDefault(RolEnum.DENTIST, "Source");
 
         RolService service = new RolService(repo);
 

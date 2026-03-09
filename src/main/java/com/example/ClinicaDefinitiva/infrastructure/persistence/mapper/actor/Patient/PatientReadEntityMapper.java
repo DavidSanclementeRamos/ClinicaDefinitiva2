@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class PatientReadEntityMapper {
 
-    public Patient toDomain(PatientEntity entity) {
+   /** public Patient toDomain(PatientEntity entity) {
         Objects.requireNonNull(entity, "PatientEntity must not be null");
 
         // Person: asumimos que siempre existe y está completo
@@ -46,5 +46,5 @@ public class PatientReadEntityMapper {
                 null,
                 null
         );
-    }
+    }*/
 }

@@ -4,12 +4,11 @@ package com.example.ClinicaDefinitiva.domain.clinicalTreatments.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
+import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.PhaseStatus;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.TreatmentStatus;
-import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentPhase;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments.TreatmentError;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Name;

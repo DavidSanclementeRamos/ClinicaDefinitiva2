@@ -32,9 +32,9 @@ public final class Person {
         return new Person(address, age, bloodType, dateOfBirth, dni, documentoEPS, fullname, phoneNumber);
     }
 
-    public  Person withSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth,
+    public  Person withSensitiveData(BloodType bloodType, DateOfBirth dateOfBirth,
                                     Document dni, String documentoEPS, FullName fullname) {
-        return new Person(this.address, age, bloodType, dateOfBirth, dni, documentoEPS, fullname, this.phoneNumber);
+        return new Person(this.address, this.age, bloodType, dateOfBirth, dni, documentoEPS, fullname, this.phoneNumber);
     }
 
     public  Person withContactData(Address address, PhoneNumber phoneNumber) {
@@ -77,4 +77,5 @@ public final class Person {
     public String getDocumentoEPS() {
         return documentoEPS;
     }
+    
 }

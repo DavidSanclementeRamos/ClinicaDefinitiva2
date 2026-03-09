@@ -1,7 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.actor.service;
 
-import com.example.ClinicaDefinitiva.application.exceptions.actorException.DentistNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.actor.DentistNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
@@ -9,7 +9,6 @@ import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.output.AppointmentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.util.List;

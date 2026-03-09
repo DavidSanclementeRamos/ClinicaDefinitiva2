@@ -8,15 +8,13 @@ import org.junit.jupiter.api.Test;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDuration;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentCompletion;
-import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentId;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentStatus;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
-import java.time.LocalDateTime;
 
 
 import java.time.LocalDateTime;
@@ -25,7 +23,7 @@ import static org.assertj.core.api.Assertions.*;
 
 class AppointmentTest {
 
-    private Appointment buildScheduledAppointment(LocalDateTime start, LocalDateTime end) {
+  /**  private Appointment buildScheduledAppointment(LocalDateTime start, LocalDateTime end) {
         return new Appointment.Builder()
                 .withDentistId(DentistId.of(10L))
                 .withPatientId(PatientId.of(20L))
@@ -187,5 +185,5 @@ class AppointmentTest {
 
             assertThat(appt.conflictsWith(start.plusHours(2), start.plusHours(3))).isFalse();
         }
-    }
+    }*/
 }

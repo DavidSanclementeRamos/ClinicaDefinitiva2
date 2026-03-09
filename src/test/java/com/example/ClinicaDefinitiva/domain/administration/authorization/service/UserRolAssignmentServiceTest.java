@@ -1,10 +1,10 @@
 
 package com.example.ClinicaDefinitiva.domain.administration.authorization.service;
 
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.UserRolAssignmentRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.UserRolAssignmentService;
@@ -28,7 +28,7 @@ class UserRolAssignmentServiceTest {
 
         UserIdentityId userId = UserIdentityId.from(1L);
         RolId rolId = RolId.of(10L);
-        Rol rol = new Rol(RolEnum.ADMINISTRATOR, "Admin", false, true, true, RolStatus.ACTIVE);
+        Rol rol =  Rol.createDefault(RolEnum.ADMINISTRATOR, "Admin");
 
         UserRolAssignment assignment = UserRolAssignment.assignPermanent(userId, rolId, true);
         when(assignmentRepo.findByUserId(userId)).thenReturn(List.of(assignment));
@@ -48,7 +48,7 @@ class UserRolAssignmentServiceTest {
 
         UserIdentityId userId = UserIdentityId.from(2L);
         RolId rolId = RolId.of(20L);
-        Rol rol = new Rol(RolEnum.RECEPTIONIST, "Receptionist", false, true, true, RolStatus.ACTIVE);
+        Rol rol =  Rol.createDefault(RolEnum.RECEPTIONIST, "Receptionist");
 
         UserRolAssignment assignment = UserRolAssignment.assignPermanent(userId, rolId, true);
         when(assignmentRepo.findByUserIdAndIsPrimary(userId, true)).thenReturn(Optional.of(assignment));
@@ -67,7 +67,7 @@ class UserRolAssignmentServiceTest {
 
         UserIdentityId userId = UserIdentityId.from(3L);
         RolId rolId = RolId.of(30L);
-        Rol rol = new Rol(RolEnum.DENTIST, "Dentist", false, true, true, RolStatus.ACTIVE);
+        Rol rol =  Rol.createDefault(RolEnum.DENTIST, "Dentist");
 
         when(rolRepo.findById(rolId)).thenReturn(Optional.of(rol));
         when(assignmentRepo.findByUserId(userId)).thenReturn(List.of());
@@ -87,7 +87,7 @@ class UserRolAssignmentServiceTest {
 
         UserIdentityId userId = UserIdentityId.from(4L);
         RolId rolId = RolId.of(40L);
-        Rol rol = new Rol(RolEnum.PATIENT, "Inactive Role", false, true, true, RolStatus.INACTIVE);
+        Rol rol =  Rol.createDefault(RolEnum.PATIENT, "Inactive Role");
 
         when(rolRepo.findById(rolId)).thenReturn(Optional.of(rol));
 
@@ -104,7 +104,7 @@ class UserRolAssignmentServiceTest {
 
         UserIdentityId userId = UserIdentityId.from(5L);
         RolId rolId = RolId.of(50L);
-        Rol rol = new Rol(RolEnum.ADMINISTRATOR, "Admin", false, true, true, RolStatus.ACTIVE);
+        Rol rol =  Rol.createDefault(RolEnum.ADMINISTRATOR, "Admin");
 
         UserRolAssignment assignment = UserRolAssignment.assignPermanent(userId, rolId, false);
 

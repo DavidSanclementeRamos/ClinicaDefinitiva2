@@ -62,7 +62,7 @@ public class Patient  {
         this.lastUpdate = LocalDateTime.now();
     }
 
-    public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
+    public void updateSensitiveData( BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
                                     String documentoEPS, FullName fullname) {
 
 
@@ -80,7 +80,6 @@ public class Patient  {
 
 
         this.person = person.withSensitiveData(
-                age,
                 bloodType,
                 dateOfBirth,
                 dni,

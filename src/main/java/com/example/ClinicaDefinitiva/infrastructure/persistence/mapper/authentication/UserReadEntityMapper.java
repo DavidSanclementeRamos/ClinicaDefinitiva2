@@ -10,7 +10,7 @@ import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.authentic
 
 public class UserReadEntityMapper {
 
-    // Mapea de UserEntity a UserIdentity
+ /**   // Mapea de UserEntity a UserIdentity
     public UserIdentity toDomain(UserIdentityEntity entity) {
         if (entity == null) {
             return null;
@@ -31,5 +31,5 @@ public class UserReadEntityMapper {
                 entity.getCreatedAt()
 
         );
-    }
+    }*/
 }

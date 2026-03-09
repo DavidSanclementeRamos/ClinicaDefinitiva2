@@ -71,14 +71,12 @@ public class Dentist   {
 
     }
 
-    public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
+    public void updateSensitiveData( BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
                                     String documentoEPS, FullName fullname, Specialties specialties, WorkingHours workingHours) {
 
-        if (!age.isBetween(25, 130)) {
-            throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
-        }
+        
 
-        this.personData = personData.withSensitiveData(age, bloodType,
+        this.personData = personData.withSensitiveData( bloodType,
                 dateOfBirth,dni, documentoEPS, fullname);
         this.specialties = specialties;
         this.workingHours = workingHours;

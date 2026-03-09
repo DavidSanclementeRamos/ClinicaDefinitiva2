@@ -1,7 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.dentalService.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorService.ServiceVOError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ServiceVOError;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -36,7 +36,7 @@ class AgeRangeTest {
             assertThatThrownBy(() -> AgeRange.of(-1, 10))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(ServiceVOError.ERR_PEDIATRIC_INVALID_MIN_AGE));
+                            .isEqualTo(ServiceVOError.ERR_SERVICE_INVALID_MIN_AGE));
         }
 
         @Test
@@ -45,12 +45,12 @@ class AgeRangeTest {
             assertThatThrownBy(() -> AgeRange.of(5, 5))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(ServiceVOError.ERR_PEDIATRIC_INVALID_RANGE));
+                            .isEqualTo(ServiceVOError.ERR_SERVICE_INVALID_MIN_AGE));
 
             assertThatThrownBy(() -> AgeRange.of(10, 8))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(ServiceVOError.ERR_PEDIATRIC_INVALID_RANGE));
+                            .isEqualTo(ServiceVOError.ERR_SERVICE_INVALID_MIN_AGE));
         }
     }
 

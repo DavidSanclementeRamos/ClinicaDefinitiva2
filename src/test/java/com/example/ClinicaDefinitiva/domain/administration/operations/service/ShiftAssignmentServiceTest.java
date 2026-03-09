@@ -1,7 +1,7 @@
 
 package com.example.ClinicaDefinitiva.domain.administration.operations.service;
 
-import com.example.ClinicaDefinitiva.application.exceptions.ProvidedServiceNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.dentalService.ProvidedServiceNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;

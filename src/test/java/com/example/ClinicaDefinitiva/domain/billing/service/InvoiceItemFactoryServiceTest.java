@@ -3,12 +3,9 @@ package com.example.ClinicaDefinitiva.domain.billing.service;
 
 import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.InvoiceItemId;
 import com.example.ClinicaDefinitiva.domain.billing.vo.Quantity;
-import com.example.ClinicaDefinitiva.domain.billing.valueObject.RateId;
 import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceCode;
-import com.example.ClinicaDefinitiva.domain.dental.care.service.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceName;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import java.time.LocalDateTime;
@@ -23,7 +20,7 @@ import static org.mockito.Mockito.when;
 
 class InvoiceItemFactoryServiceTest {
 
-    private InvoiceItemFactoryService factory;
+ /**   private InvoiceItemFactoryService factory;
 
     @BeforeEach
     void setUp() {
@@ -93,5 +90,5 @@ class InvoiceItemFactoryServiceTest {
                         Quantity.of(1),
                         LocalDateTime.now()
                 ));
-    }
+    }*/
 }

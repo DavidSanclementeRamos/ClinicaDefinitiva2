@@ -1,6 +1,6 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.shedule;
+package com.example.ClinicaDefinitiva.infrastructure.rest.mapper.scheduled;
 
-import com.example.ClinicaDefinitiva.application.dto.sheduled.ReadAppointmentDto;
+import com.example.ClinicaDefinitiva.application.dto.scheduled.ReadAppointmentDto;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.schedule.ReadAppointmentResponse;
 
 public class AppointmentRestReadMapper {

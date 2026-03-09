@@ -236,7 +236,6 @@ public class DentistApplicationService implements DentistUseCase {
 
 
         dentist.updateSensitiveData(
-    Age.of(DateOfBirth.of(dto.dateOfBirth())),
     BloodType.fromLabel(dto.bloodType()),
     DateOfBirth.of(dto.dateOfBirth()),
     Document.of(dto.dni()),

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RateRestWriteMapper {
-    public CreateRateDto toServiceCreate(CreateRateRequest request) {
+  /**  public CreateRateDto toServiceCreate(CreateRateRequest request) {
 
         return new CreateRateDto(
                 request.contractId(),
@@ -15,5 +15,5 @@ public class RateRestWriteMapper {
                 
                
         );
-    }
+    }*/
 }

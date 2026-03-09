@@ -189,7 +189,6 @@ public class ReceptionApplicationService implements ReceptionUseCase {
 
 
         receptionist.updateSensitiveData(
-            writeMapper.toAge(dto),
             writeMapper.toBloodType(dto),
             writeMapper.toDateOfBirth(dto),
             writeMapper.toDocument(dto),

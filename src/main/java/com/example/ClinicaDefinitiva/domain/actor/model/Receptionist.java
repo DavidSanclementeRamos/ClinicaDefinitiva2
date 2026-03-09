@@ -46,11 +46,10 @@ public class Receptionist   {
         this.lastUpdate = LocalDateTime.now();
     }
 
-    public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
+    public void updateSensitiveData(BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
                                     String documentoEPS, FullName fullname, Sector sector) {
 
         this.person = person.withSensitiveData(
-                age,
                 bloodType,
                 dateOfBirth,
                 dni,

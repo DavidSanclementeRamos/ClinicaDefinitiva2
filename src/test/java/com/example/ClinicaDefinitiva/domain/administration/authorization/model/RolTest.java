@@ -2,65 +2,219 @@
 package com.example.ClinicaDefinitiva.domain.administration.authorization.model;
 
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolEnum;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.num.RolStatus;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.Set;
 
+
+@DisplayName("Tests del Agregado Rol")
 class RolTest {
 
-    @Test
-    void shouldAddAndRemovePermissionWhenEditable() {
-        Rol rol = new Rol(RolEnum.ADMINISTRATOR, "Administrador", false, true, true, RolStatus.ACTIVE);
-        Permission p = Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY));
+    @Nested
+    @DisplayName("Tests de creación de Rol")
+    class RolCreationTests {
 
-        rol.addPermission(p);
-        assertTrue(rol.hasPermission(p));
+        @Test
+        @DisplayName("Debe crear un rol por defecto exitosamente")
+        void shouldCreateDefaultRoleSuccessfully() {
+            // Act
+            Rol rol = Rol.createDefault(RolEnum.ADMINISTRATOR, "Administrador del sistema");
 
-        rol.removePermission(p);
-        assertFalse(rol.hasPermission(p));
+            // Assert
+            assertNotNull(rol);
+            assertEquals(RolEnum.ADMINISTRATOR, rol.getRolEnum());
+            assertEquals("Administrador del sistema", rol.getDescription());
+            assertTrue(rol.isDefault());
+            assertFalse(rol.isEditable());
+            assertFalse(rol.isDeletable());
+            assertEquals(RolStatus.ACTIVE, rol.getStatusRol());
+            assertTrue(rol.getPermissions().isEmpty());
+        }
+
+        @Test
+        @DisplayName("Debe clonar un rol existente exitosamente")
+        void shouldCloneExistingRoleSuccessfully() {
+            // Arrange
+            Rol sourceRole = Rol.createDefault(RolEnum.DENTIST, "Odontólogo base");
+
+            // Act
+            Rol clonedRole = Rol.cloneFrom(sourceRole, "Odontólogo especialista");
+
+            // Assert
+            assertNotNull(clonedRole);
+            assertEquals(sourceRole.getRolEnum(), clonedRole.getRolEnum());
+            assertEquals("Odontólogo especialista", clonedRole.getDescription());
+            assertFalse(clonedRole.isDefault());
+            assertTrue(clonedRole.isEditable());
+            assertTrue(clonedRole.isDeletable());
+            assertEquals(RolStatus.ACTIVE, clonedRole.getStatusRol());
+        }
     }
 
-    @Test
-    void shouldThrowWhenAddingPermissionIfNotEditable() {
-        Rol rol = new Rol(RolEnum.ADMINISTRATOR, "Administrador", false, false, true, RolStatus.ACTIVE);
-        Permission p = Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.USER_IDENTITY));
+    @Nested
+    @DisplayName("Tests de gestión de permisos")
+    class PermissionManagementTests {
 
-        assertThrows(BusinessRuleViolationException.class, () -> rol.addPermission(p));
+        private Rol rol;
+        private Permission permission1;
+        private Permission permission2;
+
+        @BeforeEach
+        void setUp() {
+            rol = Rol.cloneFrom(
+                Rol.createDefault(RolEnum.DENTIST, "Odontólogo base"),
+                "Odontólogo con permisos personalizados"
+            );
+            permission1 = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT));
+            permission2 = Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT));
+        }
+
+        @Test
+        @DisplayName("Debe agregar un permiso correctamente")
+        void shouldAddPermissionSuccessfully() {
+            // Act
+            rol.addPermission(permission1);
+
+            // Assert
+            assertTrue(rol.getPermissions().contains(permission1));
+            assertEquals(1, rol.getPermissions().size());
+        }
+
+        @Test
+        @DisplayName("Debe remover un permiso correctamente")
+        void shouldRemovePermissionSuccessfully() {
+            // Arrange
+            rol.addPermission(permission1);
+            rol.addPermission(permission2);
+
+            // Act
+            rol.removePermission(permission1);
+
+            // Assert
+            assertFalse(rol.getPermissions().contains(permission1));
+            assertTrue(rol.getPermissions().contains(permission2));
+            assertEquals(1, rol.getPermissions().size());
+        }
+
+        @Test
+        @DisplayName("Debe verificar si tiene un permiso específico")
+        void shouldCheckIfHasPermission() {
+            // Arrange
+            rol.addPermission(permission1);
+
+            // Act & Assert
+            assertTrue(rol.hasPermission(permission1));
+            assertFalse(rol.hasPermission(permission2));
+        }
+
+        @Test
+        @DisplayName("Debe lanzar excepción al agregar permiso a rol no editable")
+        void shouldThrowExceptionWhenAddingPermissionToNonEditableRole() {
+            // Arrange
+            Rol defaultRol = Rol.createDefault(RolEnum.ADMINISTRATOR, "Admin");
+
+            // Act & Assert
+            BusinessRuleViolationException exception = assertThrows(
+                BusinessRuleViolationException.class,
+                () -> defaultRol.addPermission(permission1)
+            );
+            
+            assertEquals(RolError.ERR_ROL_SYSTEM_NOT_EDITABLE, exception.getCatalogo());
+        }
+
+        @Test
+        @DisplayName("Debe establecer conjunto de permisos completo")
+        void shouldSetPermissionsSet() {
+            // Arrange
+            Set<Permission> permissions = Set.of(permission1, permission2);
+
+            // Act
+            rol.setPermissions(permissions);
+
+            // Assert
+            assertEquals(2, rol.getPermissions().size());
+            assertTrue(rol.getPermissions().contains(permission1));
+            assertTrue(rol.getPermissions().contains(permission2));
+        }
     }
 
-    @Test
-    void shouldThrowWhenDeletingIfNotDeletable() {
-        Rol rol = new Rol(RolEnum.ADMINISTRATOR, "Administrador", false, true, false, RolStatus.ACTIVE);
-        assertThrows(BusinessRuleViolationException.class, rol::delete);
-    }
+    @Nested
+    @DisplayName("Tests de gestión de estado")
+    class RolStatusTests {
 
-    @Test
-    void shouldChangeStatusWithValidReason() {
-        Rol rol = new Rol(RolEnum.ADMINISTRATOR, "Administrador", false, true, true, RolStatus.INACTIVE);
+        private Rol rol;
 
-        rol.activate("Cambio de estado por requerimiento válido");
-        assertEquals(RolStatus.ACTIVE, rol.getStatusRol());
+        @BeforeEach
+        void setUp() {
+            rol = Rol.cloneFrom(
+                Rol.createDefault(RolEnum.DENTIST, "Odontólogo base"),
+                "Rol editable"
+            );
+        }
 
-        rol.suspend("Suspensión temporal por auditoría");
-        assertEquals(RolStatus.SUSPENDED, rol.getStatusRol());
-    }
+        @Test
+        @DisplayName("Debe activar el rol correctamente")
+        void shouldActivateRole() {
+            // Arrange
+            rol.deactivate("Razón de desactivación");
 
-    @Test
-    void shouldThrowWhenReasonIsTooShort() {
-        Rol rol = new Rol(RolEnum.ADMINISTRATOR, "Administrador", false, true, true, RolStatus.ACTIVE);
-        assertThrows(BusinessRuleViolationException.class, () -> rol.deactivate("corto"));
-    }
+            // Act
+            rol.activate("Razón de activación");
 
-    @Test
-    void shouldMarkDeletedWhenDeletableAndReasonValid() {
-        Rol rol = new Rol(RolEnum.ADMINISTRATOR, "Administrador", false, true, true, RolStatus.ACTIVE);
-        rol.markDeleted("Eliminación solicitada por migración de datos");
-        assertEquals(RolStatus.DELETED, rol.getStatusRol());
+            // Assert
+            assertEquals(RolStatus.ACTIVE, rol.getStatusRol());
+        }
+
+        @Test
+        @DisplayName("Debe desactivar el rol correctamente")
+        void shouldDeactivateRole() {
+            // Act
+            rol.deactivate("Razón de desactivación válida con más de 10 caracteres");
+
+            // Assert
+            assertEquals(RolStatus.INACTIVE, rol.getStatusRol());
+        }
+
+        @Test
+        @DisplayName("Debe suspender el rol correctamente")
+        void shouldSuspendRole() {
+            // Act
+            rol.suspend("Razón de suspensión válida con más de 10 caracteres");
+
+            // Assert
+            assertEquals(RolStatus.SUSPENDED, rol.getStatusRol());
+        }
+
+        @Test
+        @DisplayName("Debe marcar como eliminado correctamente")
+        void shouldMarkAsDeleted() {
+            // Act
+            rol.markDeleted("Razón de eliminación válida con más de 10 caracteres");
+
+            // Assert
+            assertEquals(RolStatus.DELETED, rol.getStatusRol());
+        }
+
+        @Test
+        @DisplayName("Debe lanzar excepción al cambiar estado sin razón válida")
+        void shouldThrowExceptionWhenChangingStateWithoutValidReason() {
+            // Act & Assert
+            BusinessRuleViolationException exception = assertThrows(
+                BusinessRuleViolationException.class,
+                () -> rol.deactivate("Corta")
+            );
+            
+            assertEquals(RolError.ERR_ROL_DELETE_REASON_REQUIRED, exception.getCatalogo());
+        }
     }
 }
-

@@ -232,7 +232,6 @@ public class PatientApplicationService implements PatientUseCase {
                 .orElseThrow(() -> new PatientNotFoundException("Not found"));
 
         patient.updateSensitiveData(
-            writeMapper.toAge(dto),
             writeMapper.toBloodType(dto),
             writeMapper.toDateOfBirth(dto),
             writeMapper.toDocument(dto),

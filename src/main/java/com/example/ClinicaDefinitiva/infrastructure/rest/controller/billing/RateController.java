@@ -44,7 +44,7 @@ public class RateController {
         this.writeMapper = writeMapper;
     }
 
-    @GetMapping("/{id}")
+  /**  @GetMapping("/{id}")
     public ResponseEntity<ReadRateResponse> findById(
             @PathVariable Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -154,5 +154,5 @@ public class RateController {
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         useCase.deactivate(RateId.of(id), userDetails.getId(), userDetails.getActiveRolId());
-    }
+    }*/
 }

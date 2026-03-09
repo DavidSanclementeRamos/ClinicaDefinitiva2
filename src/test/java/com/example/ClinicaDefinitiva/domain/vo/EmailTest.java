@@ -1,11 +1,8 @@
 
 package com.example.ClinicaDefinitiva.domain.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.VoAccesError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.VoError;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -43,7 +40,7 @@ class EmailTest {
 
             assertThat(outcome.isFailure()).isTrue();
             assertThat(outcome.getDetalles().get(0).getCode())
-                    .isEqualTo(VoAccesError.ERR_EMAIL_NULL);
+                    .isEqualTo(VoError.ERR_EMAIL_NULL);
         }
 
         @Test
@@ -53,7 +50,7 @@ class EmailTest {
 
             assertThat(outcome.isFailure()).isTrue();
             assertThat(outcome.getDetalles().get(0).getCode())
-                    .isEqualTo(VoAccesError.ERR_EMAIL_EMPTY);
+                    .isEqualTo(VoError.ERR_EMAIL_EMPTY);
         }
     }
 
@@ -68,7 +65,7 @@ class EmailTest {
 
             assertThat(outcome.isFailure()).isTrue();
             assertThat(outcome.getDetalles().get(0).getCode())
-                    .isEqualTo(VoAccesError.ERR_EMAIL_MISSING_LOCAL_OR_DOMAIN);
+                    .isEqualTo(VoError.ERR_EMAIL_MISSING_LOCAL_OR_DOMAIN);
         }
 
         @Test
@@ -78,7 +75,7 @@ class EmailTest {
 
             assertThat(outcome.isFailure()).isTrue();
             assertThat(outcome.getDetalles().get(0).getCode())
-                    .isEqualTo(VoAccesError.ERR_EMAIL_INVALID_FORMAT);
+                    .isEqualTo(VoError.ERR_EMAIL_INVALID_FORMAT);
         }
     }
 
@@ -97,7 +94,7 @@ class EmailTest {
 
             assertThat(outcome.isFailure()).isTrue();
             assertThat(outcome.getDetalles().get(0).getCode())
-                    .isEqualTo(VoAccesError.ERR_EMAIL_LENGTH_EXCEEDED);
+                    .isEqualTo(VoError.ERR_EMAIL_LENGTH_EXCEEDED);
         }
 
         @Test
@@ -110,7 +107,7 @@ class EmailTest {
 
             assertThat(outcome.isFailure()).isTrue();
             assertThat(outcome.getDetalles().get(0).getCode())
-                    .isEqualTo(VoAccesError.ERR_EMAIL_LOCAL_LENGTH_EXCEEDED);
+                    .isEqualTo(VoError.ERR_EMAIL_LOCAL_LENGTH_EXCEEDED);
         }
 
         @Test
@@ -123,7 +120,7 @@ class EmailTest {
 
             assertThat(outcome.isFailure()).isTrue();
             assertThat(outcome.getDetalles().get(0).getCode())
-                    .isEqualTo(VoAccesError.ERR_EMAIL_DOMAIN_LENGTH_EXCEEDED);
+                    .isEqualTo(VoError.ERR_EMAIL_DOMAIN_LENGTH_EXCEEDED);
         }
     }
 
@@ -138,7 +135,7 @@ class EmailTest {
 
             assertThat(outcome.isFailure()).isTrue();
             assertThat(outcome.getDetalles().get(0).getCode())
-                    .isEqualTo(VoAccesError.ERR_EMAIL_DOMAIN_INVALID_DASH);
+                    .isEqualTo(VoError.ERR_EMAIL_DOMAIN_INVALID_DASH);
         }
 
         @Test
@@ -148,7 +145,7 @@ class EmailTest {
 
             assertThat(outcome.isFailure()).isTrue();
             assertThat(outcome.getDetalles().get(0).getCode())
-                    .isEqualTo(VoAccesError.ERR_EMAIL_DOMAIN_CONSECUTIVE_DOTS);
+                    .isEqualTo(VoError.ERR_EMAIL_DOMAIN_CONSECUTIVE_DOTS);
         }
     }
 }

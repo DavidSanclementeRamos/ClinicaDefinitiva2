@@ -11,8 +11,6 @@ import com.example.ClinicaDefinitiva.infrastructure.rest.dto.schedule.Appointmen
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.schedule.CreateAppointmentRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.schedule.ReadAppointmentResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.dto.schedule.UpdateAppointmentRequest;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.shedule.AppointmentRestReadMapper;
-import com.example.ClinicaDefinitiva.infrastructure.rest.mapper.shedule.AppointmentRestWriteMapper;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -40,7 +38,7 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/v1/appointments")
 public class AppointmentController {
 
-    private final AppointmentUseCase useCase;
+   /* private final AppointmentUseCase useCase;
     private final AppointmentRestReadMapper readMapper;
     private final AppointmentRestWriteMapper writeMapper;
 
@@ -50,12 +48,12 @@ public class AppointmentController {
         this.useCase = useCase;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
-    }
+    }*/
 
     /**
      * Buscar cita por ID
      */
-    @GetMapping("/{id}")
+  /**  @GetMapping("/{id}")
     public ResponseEntity<ReadAppointmentResponse> findById(
             @PathVariable Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -67,9 +65,7 @@ public class AppointmentController {
         return ResponseEntity.ok(readMapper.toRest(dto));
     }
 
-    /**
-     * Listar todas las citas con paginación
-     */
+   
     @GetMapping
     public ResponseEntity<Page<ReadAppointmentResponse>> findAll(
             @PageableDefault(size = 20, sort = "appointmentDate") Pageable pageable,
@@ -84,9 +80,7 @@ public class AppointmentController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Buscar citas por ID de paciente
-     */
+
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<Page<ReadAppointmentResponse>> findByPatientId(
             @PathVariable Long patientId,
@@ -107,9 +101,7 @@ public class AppointmentController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Buscar citas por rango de fechas
-     */
+
     @GetMapping("/date-range")
     public ResponseEntity<Page<ReadAppointmentResponse>> findByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime start,
@@ -132,9 +124,7 @@ public class AppointmentController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Buscar citas por ID de dentista
-     */
+   
     @GetMapping("/dentist/{dentistId}")
     public ResponseEntity<Page<ReadAppointmentResponse>> findByDentistId(
             @PathVariable Long dentistId,
@@ -155,9 +145,7 @@ public class AppointmentController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Buscar citas por ID de servicio
-     */
+    
     @GetMapping("/service/{serviceId}")
     public ResponseEntity<Page<ReadAppointmentResponse>> findByServiceId(
             @PathVariable Long serviceId,
@@ -178,9 +166,7 @@ public class AppointmentController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Buscar citas por estado
-     */
+    
     @GetMapping("/status/{status}")
     public ResponseEntity<Page<ReadAppointmentResponse>> findByStatus(
             @PathVariable AppointmentStatus status,
@@ -201,9 +187,7 @@ public class AppointmentController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Buscar citas por paciente y dentista en un rango de fechas
-     */
+    
     @GetMapping("/patient/{patientId}/dentist/{dentistId}")
     public ResponseEntity<Page<ReadAppointmentResponse>> findByPatientAndDentist(
             @PathVariable Long patientId,
@@ -230,9 +214,7 @@ public class AppointmentController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Crear una nueva cita
-     */
+
     @PostMapping
     public ResponseEntity<ReadAppointmentResponse> create(
             @Valid @RequestBody CreateAppointmentRequest request,
@@ -249,9 +231,7 @@ public class AppointmentController {
                 .body(readMapper.toRest(created));
     }
 
-    /**
-     * Actualizar una cita existente
-     */
+    
     @PutMapping("/{id}")
     public ResponseEntity<ReadAppointmentResponse> update(
             @PathVariable Long id,
@@ -267,9 +247,7 @@ public class AppointmentController {
         return ResponseEntity.ok(readMapper.toRest(updated));
     }
 
-    /**
-     * Cancelar una cita
-     */
+    
     @PatchMapping("/{id}/cancel")
     public ResponseEntity<ReadAppointmentResponse> cancel(
             @PathVariable Long id,
@@ -289,9 +267,7 @@ public class AppointmentController {
         return ResponseEntity.ok(readMapper.toRest(cancelled));
     }
 
-    /**
-     * Completar una cita
-     */
+    
     @PatchMapping("/{id}/complete")
     public ResponseEntity<ReadAppointmentResponse> complete(
             @PathVariable Long id,
@@ -312,9 +288,7 @@ public class AppointmentController {
         return ResponseEntity.ok(readMapper.toRest(completed));
     }
 
-    /**
-     * Marcar una cita como no presentada
-     */
+    
     @PatchMapping("/{id}/no-show")
     public ResponseEntity<ReadAppointmentResponse> markAsNoShow(
             @PathVariable Long id,
@@ -334,9 +308,7 @@ public class AppointmentController {
         return ResponseEntity.ok(readMapper.toRest(noShow));
     }
 
-    /**
-     * Eliminar una cita
-     */
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<ReadAppointmentResponse> delete(
             @PathVariable Long id,
@@ -352,7 +324,7 @@ public class AppointmentController {
         );
 
         return ResponseEntity.ok(readMapper.toRest(deleted));
-    }
+    }*/
 }
 
 

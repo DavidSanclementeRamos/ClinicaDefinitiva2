@@ -28,6 +28,51 @@ public class PatientAdapter implements PatientRepository {
 
     @Override
     public Optional<Patient> findById(PatientId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Page<Patient> findAll(Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Page<Patient> findByContractId(ContractId contractId, Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Page<Patient> findByGuardianId(GuardianId guardianId, Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Patient save(Patient patient) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Patient update(PatientId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean existsById(PatientId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void deleteById(PatientId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<Patient> findByUserId(UserIdentityId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   /** @Override
+    public Optional<Patient> findById(PatientId id) {
         if (id == null) return Optional.empty();
         try {
             Long value = Long.valueOf(id.value());
@@ -74,7 +119,7 @@ public class PatientAdapter implements PatientRepository {
                 .map(writeMapper::toDomain)
                 .collect(Collectors.toList());
         return found.stream().findFirst();
-    }*/
+    }
 
     @Override
     public Patient save(Patient patient) {
@@ -120,5 +165,5 @@ public class PatientAdapter implements PatientRepository {
     @Override
     public Optional<Patient> findByUserId(UserIdentityId id) {
         return null;
-    }
+    }*/
 }

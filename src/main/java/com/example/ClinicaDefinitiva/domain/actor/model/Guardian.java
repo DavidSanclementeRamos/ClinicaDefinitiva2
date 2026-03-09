@@ -57,7 +57,7 @@ public class Guardian  {
          this.lastUpdate = LocalDateTime.now();
     }
 
-    public void updateSensitiveData(Age age, BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
+    public void updateSensitiveData( BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
                                     String documentoEPS, FullName fullname, TypeGuardian typeGuardian) {
 
 
@@ -76,13 +76,9 @@ public class Guardian  {
             );
         }*/
 
-       if (!this.person.getDateOfBirth().equals(dateOfBirth)) {
 
-            if (!age.isBetween(22, 60)) {
-                throw new BusinessRuleViolationException(GuardianError.ERR_RESPONSIBLE_INVALID_AGE, EntityContext.GUARDIAN);
-            }
+            
             this.person = person.withSensitiveData(
-                    age,
                     bloodType,
                     dateOfBirth,
                     dni,
@@ -91,7 +87,7 @@ public class Guardian  {
             );
 
             this.typeGuardian = typeGuardian;
-        }}
+        }
 
 
         public Outcome<Void> validateDeactivation() {

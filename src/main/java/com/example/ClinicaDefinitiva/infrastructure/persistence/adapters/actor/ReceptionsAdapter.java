@@ -5,8 +5,6 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.ReceptionId;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.actor.ReceptionistJpaRepository;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.receptionEntityMapper.ReceptionReadEntityMapper;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.receptionEntityMapper.ReceptionWriteEntityMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,7 +12,7 @@ import java.util.Optional;
 
 public class ReceptionsAdapter implements ReceptionRepository {
 
-    private final ReceptionistJpaRepository receptionistJpaRepository;
+   /** private final ReceptionistJpaRepository receptionistJpaRepository;
     private final ReceptionReadEntityMapper readEntityMapper;
     private final ReceptionWriteEntityMapper writeEntityMapper;
 
@@ -23,9 +21,49 @@ public class ReceptionsAdapter implements ReceptionRepository {
         this.readEntityMapper = readEntityMapper;
         this.writeEntityMapper = writeEntityMapper;
     }
-
+*/
+    @Override
+    public Optional<Receptionist> findById(ReceptionId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
     @Override
+    public Page<Receptionist> findAll(Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Receptionist save(Receptionist receptionist) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Receptionist update(Receptionist receptionist) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean existsById(ReceptionId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void deleteById(ReceptionId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Page<Receptionist> findBySector(String sector, Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<Receptionist> findByUserId(UserIdentityId id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+
+   /** @Override
     public Optional<Receptionist> findById(ReceptionId id) {
         if (id == null) return Optional.empty();
         Long value;
@@ -91,5 +129,5 @@ public class ReceptionsAdapter implements ReceptionRepository {
     @Override
     public Optional<Receptionist> findByUserId(UserIdentityId id) {
         return Optional.empty();
-    }
+    }*/
 }

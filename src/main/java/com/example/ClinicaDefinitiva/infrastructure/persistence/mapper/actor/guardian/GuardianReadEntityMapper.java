@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class GuardianReadEntityMapper {
     // De Entity a Dominio
-    public Guardian toDomain(GuardianEntity entity) {
+  /**  public Guardian toDomain(GuardianEntity entity) {
         Objects.requireNonNull(entity, "GuardianEntity must not be null");
 
       /*  Address address = new Address(
@@ -44,7 +44,7 @@ public class GuardianReadEntityMapper {
 
         List<PatientId> patientIds = entity.getPatientList().stream()
                 .map(p -> PatientId.of(p.getPatientId()))
-                .collect(Collectors.toList());*/
+                .collect(Collectors.toList());
 
         return new Guardian(
                 GuardianId.fromLong(entity.getGuardianId()),
@@ -52,8 +52,7 @@ public class GuardianReadEntityMapper {
                 null,
                 null,
                 entity.getTypeGuardian(),
-                //new UserIdentityId(entity.getUser())
                 null
         );
-    }
+    }*/
    }

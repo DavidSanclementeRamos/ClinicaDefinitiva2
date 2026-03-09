@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.domain.schudele.vo;
 
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceDuration;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.ScheduleVOError;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentCompletion;
 
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
 
 class AppointmentCompletionTest {
 
@@ -42,7 +42,7 @@ class AppointmentCompletionTest {
             assertThatThrownBy(() -> new AppointmentCompletion(null, "Notas válidas"))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION));
+                            .isEqualTo(ScheduleVOError.ERR_APPT_INCOMPLETE_COMPLETION));
         }
 
         @Test
@@ -53,12 +53,12 @@ class AppointmentCompletionTest {
             assertThatThrownBy(() -> new AppointmentCompletion(duration, null))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION));
+                            .isEqualTo(ScheduleVOError.ERR_APPT_INCOMPLETE_COMPLETION));
 
             assertThatThrownBy(() -> new AppointmentCompletion(duration, "   "))
                     .isInstanceOf(ValueObjectValidationException.class)
                     .satisfies(ex -> assertThat(((ValueObjectValidationException) ex).getCatalogo())
-                            .isEqualTo(AppointmentError.ERR_APPT_INCOMPLETE_COMPLETION));
+                            .isEqualTo(ScheduleVOError.ERR_APPT_INCOMPLETE_COMPLETION));
         }
     }
 }

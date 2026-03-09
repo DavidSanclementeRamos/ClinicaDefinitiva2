@@ -7,6 +7,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Comp
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyStatus;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Nit;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.Email;
@@ -51,7 +52,7 @@ void shouldRegisterCompanyWithDefaults() {
 
     @Test
     void shouldThrowExceptionWhenIncorporationDateIsFuture() {
-        assertThrows(TemporalValidationException.class, () ->
+        assertThrows(BusinessRuleViolationException.class, () ->
             Company.builder()
                 .withName(Name.of("Clinica OdontoSalud"))
                 .withTaxIdentificationNumber(Nit.of("123456789"))
@@ -64,7 +65,7 @@ void shouldRegisterCompanyWithDefaults() {
 
     @Test
     void shouldThrowExceptionWhenIncorporationDateIsTooOld() {
-        assertThrows(TemporalValidationException.class, () ->
+        assertThrows(BusinessRuleViolationException.class, () ->
             Company.builder()
                 .withName(Name.of("Clinica OdontoSalud"))
                 .withTaxIdentificationNumber(Nit.of("123456789"))

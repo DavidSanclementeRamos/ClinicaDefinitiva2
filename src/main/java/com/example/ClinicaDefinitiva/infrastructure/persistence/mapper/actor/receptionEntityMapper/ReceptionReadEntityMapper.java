@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.receptionEntityMapper;
+package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actor.receptionEntityMapper;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class ReceptionReadEntityMapper {
 
-    public Receptionist toDomain(ReceptionistEntity entity) {
+  /**  public Receptionist toDomain(ReceptionistEntity entity) {
         Objects.requireNonNull(entity, "ReceptionistEntity must not be null");
 
         // Person: asumimos que siempre existe y está completo
@@ -44,7 +44,7 @@ public class ReceptionReadEntityMapper {
 
         // Sector y ReceptionId: asumimos que siempre existen
         ReceptionId receptionId = ReceptionId.fromLong(entity.getReceptionistId());
-        Sector sector = new Sector(entity.getSector());*/
+        Sector sector = new Sector(entity.getSector());
 
         return new Receptionist(
                 null,
@@ -54,5 +54,5 @@ public class ReceptionReadEntityMapper {
                 null
 
         );
-    }
+    }*/
 }

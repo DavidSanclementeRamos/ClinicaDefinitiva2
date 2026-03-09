@@ -229,19 +229,5 @@ public class InvoiceController {
         return ResponseEntity.ok(readMapper.toRest(cancelled));
     }
 
-    @PatchMapping("/{id}/mark-paid")
-    public ResponseEntity<ReadInvoiceResponse> markAsPaid(
-            @PathVariable Long id,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate paymentDate,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        ReadInvoiceDto paid = useCase.markAsPaid(
-                InvoiceId.of(id),
-                paymentDate,
-                userDetails.getId(),
-                userDetails.getActiveRolId()
-        );
-
-        return ResponseEntity.ok(readMapper.toRest(paid));
-    }
+   
 }
