@@ -76,6 +76,10 @@ public final class UserIdentityName implements Serializable {
 
         return Outcome.ok(new UserIdentityName(trimmed));
     }
+    
+    public static UserIdentityName of(String value){
+        return new UserIdentityName(value);
+    }
 
     public String getValue() {
         return value;

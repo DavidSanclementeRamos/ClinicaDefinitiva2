@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.application.service.userIdentity;
+package com.example.ClinicaDefinitiva.application.service.authentication;
 
 import com.example.ClinicaDefinitiva.application.dto.authentication.CreateUserIdentityDto;
 import com.example.ClinicaDefinitiva.application.dto.authentication.PageUserIdentityDto;
@@ -75,7 +75,6 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
     public Optional<ReadUserIdentityDto> findById(UserIdentityId targetUserId,
                                                   UserIdentityId requesterId,
                                                   RolId requesterRolId) {
-        // ⭐ CORREGIDO: Usar AuthorizationHelper
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -96,7 +95,6 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
     public Page<PageUserIdentityDto> findAll(Pageable pageable,
                                              UserIdentityId requesterId,
                                              RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -115,7 +113,6 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
     public Optional<PageUserIdentityDto> findByEmail(String email,
                                                      UserIdentityId requesterId,
                                                      RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -135,7 +132,6 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                                               String status,
                                                               UserIdentityId requesterId,
                                                               RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -155,7 +151,6 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                                            String status,
                                                            UserIdentityId requesterId,
                                                            RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -176,7 +171,6 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
     public ReadUserIdentityDto register(CreateUserIdentityDto dto,
                                         UserIdentityId requesterId,
                                         RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,

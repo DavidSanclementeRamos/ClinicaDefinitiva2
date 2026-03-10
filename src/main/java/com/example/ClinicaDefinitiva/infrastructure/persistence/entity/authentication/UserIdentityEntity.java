@@ -58,8 +58,20 @@ public class UserIdentityEntity {
         this.failedLoginAttempts = 0;
     }
 
-    // Getters y setters
     public Long getId() { return id; }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
+    }
+    
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 

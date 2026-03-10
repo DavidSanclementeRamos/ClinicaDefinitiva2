@@ -32,6 +32,8 @@ public final class UserIdentityStatus {
     public static UserIdentityStatus of(Status status) {
         return new UserIdentityStatus(status);
     }
+    
+
 
     // Queries semánticas
     public boolean isActive() { return value == Status.ACTIVE; }

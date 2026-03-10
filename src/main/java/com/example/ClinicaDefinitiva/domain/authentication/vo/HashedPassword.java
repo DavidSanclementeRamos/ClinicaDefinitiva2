@@ -53,6 +53,11 @@ public final class HashedPassword implements Serializable {
 
         return Outcome.ok(new HashedPassword(rawHash));
     }
+    
+        public static HashedPassword  of(String rawHash) {
+        return new HashedPassword(rawHash);
+        }
+
 
     public String getHash() {
         return hash;

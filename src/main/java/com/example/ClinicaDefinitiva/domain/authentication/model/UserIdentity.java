@@ -254,6 +254,23 @@ public class UserIdentity {
 
         return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
     }
+    
+    //  Para reconstrucción desde BD
+    public static UserIdentity reconstruct(UserIdentityId id, Email email, 
+                                      HashedPassword hashedPassword, UserIdentityName name,
+                                      Instant createdAt, Instant lastLoginAt,
+                                      int failedLoginAttempts, Instant lockedUntil, 
+                                      boolean verified, UserIdentityStatus status, 
+                                      long version) {
+    UserIdentity user = new UserIdentity(id, email, hashedPassword, name, createdAt);
+    user.lastLoginAt = lastLoginAt;
+    user.failedLoginAttempts = failedLoginAttempts;
+    user.lockedUntil = lockedUntil;
+    user.verified = verified;
+    user.status = status;
+    user.version = version;
+    return user;
+}
 
     public UserIdentityId getId() { return id; }
     public Email getEmail() { return email; }

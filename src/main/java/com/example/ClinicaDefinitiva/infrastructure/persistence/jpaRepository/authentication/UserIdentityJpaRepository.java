@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.userIdentity;
+package com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.authentication;
 
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.authentication.UserIdentityEntity;
 import org.springframework.data.domain.Page;

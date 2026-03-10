@@ -3,10 +3,9 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.adapters.authen
 import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.authentication.UserIdentityEntity;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.userIdentity.UserIdentityJpaRepository;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.userIdentity.UserReadEntityMapper;
-import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.userIdentity.UserWriteEntityMapper;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.jpaRepository.authentication.UserIdentityJpaRepository;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.authentication.UserReadEntityMapper;
+import com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.authentication.UserWriteEntityMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -26,37 +25,9 @@ public class UserIdentityAdapter implements UserIdentityRepository {
         this.writeMapper = writeMapper;
     }
 
-    @Override
-    public Optional<UserIdentity> findById(UserIdentityId id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+   
 
     @Override
-    public Page<UserIdentity> findAll(Pageable pageable) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Optional<UserIdentity> findByEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Optional<UserIdentity> findByEmailAndStatus(String email, String status) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Optional<UserIdentity> findByIdAndStatus(UserIdentityId id, String status) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public UserIdentity save(UserIdentity user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
- /**   @Override
     public Optional<UserIdentity> findById(UserIdentityId id) {
         return userJpaRepository.findById(id.value())
                 .map(readMapper::toDomain);
@@ -68,27 +39,8 @@ public class UserIdentityAdapter implements UserIdentityRepository {
                 .map(readMapper::toDomain);
     }
 
-    @Override
-    public Optional<UserIdentity> findByEmail(String email) {
-        return Optional.empty();
-    }
 
-    @Override
-    public Optional<UserIdentity> findByEmailAndStatus(String email, String status) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<UserIdentity> findByIdAndStatus(UserIdentityId id, String status) {
-        return Optional.empty();
-    }
-
-    @Override
-    public UserIdentity save(UserIdentity user) {
-        return null;
-    }
-
-    /** @Override
+     @Override
     public Page<UserIdentity> findByEmail(String email, Pageable pageable) {
         return userJpaRepository.findByEmail(email, pageable)
                 .map(readMapper::toDomain);
@@ -111,5 +63,20 @@ public class UserIdentityAdapter implements UserIdentityRepository {
         UserIdentityEntity entity = writeMapper.toEntity(user);
         UserIdentityEntity saved = userJpaRepository.save(entity);
         return readMapper.toDomain(saved);
-    }*/
+    }
+
+    @Override
+    public Optional<UserIdentity> findByEmail(String email) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<UserIdentity> findByEmailAndStatus(String email, String status) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<UserIdentity> findByIdAndStatus(UserIdentityId id, String status) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
