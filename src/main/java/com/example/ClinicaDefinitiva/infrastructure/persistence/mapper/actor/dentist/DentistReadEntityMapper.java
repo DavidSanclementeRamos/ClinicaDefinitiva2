@@ -10,8 +10,10 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
 // Mal escrito nombre de be ser de write ya que es de escritura
+@Component
 public class DentistReadEntityMapper {
 
 // De Entity a Dominio

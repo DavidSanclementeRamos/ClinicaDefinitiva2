@@ -117,7 +117,7 @@ public class JournalEntryApplicationService implements JournalEntryUseCase {
                 ResourceCatalog.BasicResource.JOURNAL_ENTRY,
                 ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
-                        .withResourceId(companyId.getValue())
+                        .withResourceId(companyId.value())
                         .build()
         );
 

@@ -10,7 +10,7 @@ public class CompanyReadMapper {
 
     public ReadCompanyDto toReadDto(Company company) {
         return new ReadCompanyDto(
-                company.getId().getValue(),
+                company.getId().value(),
                 company.getName().getValue(),
                 company.getTaxIdentificationNumber().getValue(),
                 company.getTypePerson().name(),
@@ -30,7 +30,7 @@ public class CompanyReadMapper {
 
     public PageCompanyDto toPageDto(Company company) {
         return new PageCompanyDto(
-                company.getId().getValue(),
+                company.getId().value(),
                 company.getName().getValue(),
                 company.getTaxIdentificationNumber().getValue(),
                 company.getStatus().getStatus().name()

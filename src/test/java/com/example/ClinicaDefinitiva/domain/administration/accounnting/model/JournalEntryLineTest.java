@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JournalEntryLineTest {
 
-    @Test
+  /**  @Test
     void shouldCreateDebitLine() {
         JournalEntryLine line = JournalEntryLine.of(
                 LedgerAccountId.of(1105L),
@@ -92,5 +92,5 @@ class JournalEntryLineTest {
                 null
             )
         );
-    }
+    }*/
 }

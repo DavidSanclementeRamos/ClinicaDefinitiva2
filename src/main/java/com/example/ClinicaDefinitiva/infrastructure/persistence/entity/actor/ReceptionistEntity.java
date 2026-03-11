@@ -4,6 +4,7 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "recepcionistas")
@@ -33,13 +34,13 @@ public class ReceptionistEntity {
     @Column(name = "direccion")
     private String address;
     @Column(name = "fecha_nacimiento")
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     @Column(name = "tipo_sangre")
     private String bloodType;
     @Column(name = "documento_eps")
     private String documentEPS;
     @Column(name = "usuario")
-    private String user;
+    private Long user;
     @Column(name = "ultima_actualizacion")
     private LocalDateTime lastUpdate;
 
@@ -58,7 +59,7 @@ public class ReceptionistEntity {
     public ReceptionistEntity() {
     }
 
-    public ReceptionistEntity(Long receptionistId, String sector, String dni, String first, String lastName, String age, String phoneNumber, String address, String dateOfBirth, String bloodType, String documentEPS, String user, LocalDateTime lastUpdate, String street, String city, String state, String country, String postalCode) {
+    public ReceptionistEntity(Long receptionistId, String sector, String dni, String first, String lastName, String age, String phoneNumber, String address, LocalDate dateOfBirth, String bloodType, String documentEPS, Long user, LocalDateTime lastUpdate, String street, String city, String state, String country, String postalCode) {
         this.receptionistId = receptionistId;
         this.sector = sector;
         this.dni = dni;
@@ -78,6 +79,8 @@ public class ReceptionistEntity {
         this.country = country;
         this.postalCode = postalCode;
     }
+
+  
 
     public Long getReceptionistId() {
         return receptionistId;
@@ -143,13 +146,7 @@ public class ReceptionistEntity {
         this.address = address;
     }
 
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+   
 
     public String getBloodType() {
         return bloodType;
@@ -167,13 +164,23 @@ public class ReceptionistEntity {
         this.documentEPS = documentEPS;
     }
 
-    public String getUser() {
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Long getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(Long user) {
         this.user = user;
     }
+
+
 
     public LocalDateTime getLastUpdate() {
         return lastUpdate;

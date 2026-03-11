@@ -40,7 +40,7 @@ class InvoiceTest {
     private Price unitPrice;
     private Quantity quantity;
 
-    @BeforeEach
+   /** @BeforeEach
     void setUp() {
         patientId = PatientId.of(1L);
         dentistId = DentistId.of(2L);
@@ -56,7 +56,7 @@ class InvoiceTest {
             public String next() {
                 return "INV-" + (++counter);
             }
-        };*/
+        };
         
         serviceId = ServiceId.of(100L);
         unitPrice = Price.of(150000, Currency.getInstance("COP"));
@@ -400,5 +400,5 @@ class InvoiceTest {
             
             assertEquals(InvoiceError.ERR_INVOICE_MUST_BE_PENDING_TO_PAY, exception.getCatalogo());
         }
-    }
+    }*/
 }

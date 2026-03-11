@@ -44,12 +44,13 @@ public class Patient  {
                                           GuardianId guardianId
                                           ) {
 
-        if (!data.getAge().isEligibleForRegistration()) {
-            throw new DomainAggregateException(PatientError.ERR_PATIENT_INVALID_AGE, EntityContext.PATIENT);
-        }
+        
 
         if (!data.getAge().isAdult() && guardianId == null) {
             throw new BusinessRuleViolationException(PatientError.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
+        }
+        if (!data.getAge().isEligibleForRegistration()) {
+            throw new DomainAggregateException(PatientError.ERR_PATIENT_INVALID_AGE, EntityContext.PATIENT);
         }
 
         return new Patient(null,  LocalDate.now().atStartOfDay(), guardianId, data, null, userIdentityId, null);

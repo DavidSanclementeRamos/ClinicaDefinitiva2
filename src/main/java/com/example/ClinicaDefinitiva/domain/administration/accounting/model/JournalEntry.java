@@ -29,7 +29,7 @@ public final class JournalEntry {
     private final LocalDate date;
     private String documentNumber;
     private String description;
-    private final List<JournalEntryLine> lines;
+    private  List<JournalEntryLine> lines = new ArrayList<>();
     private boolean balanced;
     private boolean posted;
 

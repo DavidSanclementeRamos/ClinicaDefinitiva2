@@ -80,6 +80,17 @@ public class Receptionist   {
     public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
+    
+    // Para persistencia
+    public static Receptionist reconstruct(
+            ReceptionId id,
+            Person person,
+            Sector sector,
+            UserIdentityId userIdentityId,
+            LocalDateTime lastUpdate) {
+
+        return new Receptionist(lastUpdate, userIdentityId, sector, person, id);
+}
 
 
 }

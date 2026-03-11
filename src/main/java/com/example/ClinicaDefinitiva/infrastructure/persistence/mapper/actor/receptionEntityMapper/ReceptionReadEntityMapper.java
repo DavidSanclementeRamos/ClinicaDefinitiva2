@@ -4,55 +4,58 @@ import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.ReceptionistEntity;
+import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import java.time.LocalDateTime;
 
+@Component
 public class ReceptionReadEntityMapper {
 
-  /**  public Receptionist toDomain(ReceptionistEntity entity) {
-        Objects.requireNonNull(entity, "ReceptionistEntity must not be null");
+    public Receptionist toDomain(ReceptionistEntity entity) {
+        if (entity == null) return null;
 
-        // Person: asumimos que siempre existe y está completo
-       /** Address address = new Address(
-                entity.getStreet(),
-                entity.getCity(),
-                entity.getState(),
-                entity.getCountry(),
-                entity.getPostalCode()
+        Address address =  Address.of(
+            entity.getStreet(),
+            entity.getCity(),
+            entity.getState(),
+            entity.getCountry(),
+            entity.getPostalCode()
         );
 
-        DateOfBirth dob = new DateOfBirth(LocalDate.parse(entity.getDateOfBirth()));
-        Age age = new Age(dob);
+        DateOfBirth dateOfBirth = DateOfBirth.of(entity.getDateOfBirth());
+        
+        Age age = Age.of(dateOfBirth);
 
-        // Corregimos orden: primero nombre, luego apellido
-        FullName fullname = new FullName(entity.getFirst(), entity.getLastName());
-        PhoneNumber phone = new PhoneNumber(entity.getPhoneNumber());
+        PhoneNumber phoneNumber =  PhoneNumber.of(entity.getPhoneNumber());
+
         BloodType bloodType = BloodType.fromLabel(entity.getBloodType());
-        Document document = new Document(entity.getDni());
 
-        Person person = new Person(
-                address,
-                age,
-                bloodType,
-                dob,
-                document,
-                entity.getDocumentEPS(),
-                fullname,
-                phone
+        Document document =  Document.of(entity.getDni());
+
+        FullName fullName =  FullName.of(entity.getFirst(), entity.getLastName());
+
+        Person person =  Person.of(address, age, bloodType, dateOfBirth, document, entity.getDocumentEPS(), fullName, phoneNumber);
+
+
+        // Construir Sector
+        Sector sector =  Sector.fromString(entity.getSector());
+
+        // Construir ReceptionId
+        ReceptionId receptionId = ReceptionId.of(entity.getReceptionistId());
+
+        // Construir UserIdentityId
+        UserIdentityId userIdentityId = UserIdentityId.from(entity.getUser());
+
+        // Reconstruir Receptionist usando el nuevo método reconstruct
+        return Receptionist.reconstruct(
+            receptionId,
+            person,
+            sector,
+            userIdentityId,
+            entity.getLastUpdate()
         );
-
-        // Sector y ReceptionId: asumimos que siempre existen
-        ReceptionId receptionId = ReceptionId.fromLong(entity.getReceptionistId());
-        Sector sector = new Sector(entity.getSector());
-
-        return new Receptionist(
-                null,
-                null,
-                null,
-                null,
-                null
-
-        );
-    }*/
+    }
 }

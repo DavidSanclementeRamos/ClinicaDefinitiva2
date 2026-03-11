@@ -11,7 +11,7 @@ public class ContractReadMapper {
     public ReadContractDto toReadDto(Contract contract) {
         return new ReadContractDto(
                 contract.getContractId().getValue(),
-                contract.getCompanyId().getValue(),
+                contract.getCompanyId().value(),
                 contract.getThirdPartiesId().getValue(),
                 contract.getName().getValue(),
                 contract.getDescription(),

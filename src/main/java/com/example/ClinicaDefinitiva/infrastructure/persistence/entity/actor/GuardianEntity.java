@@ -16,7 +16,7 @@ public class GuardianEntity {
     private Long guardianId;
 
     // Propio
-    @Enumerated(EnumType.STRING)
+    @Embedded
     @Column(name = "tipo_tutor")
     private TypeGuardian typeGuardian;
 

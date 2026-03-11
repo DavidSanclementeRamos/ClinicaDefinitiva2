@@ -13,17 +13,17 @@ class CompanyIdTest {
     @Test
     void shouldCreateValidCompanyId() {
         CompanyId id = CompanyId.of(10L);
-        assertEquals(10L, id.getValue());
+        assertEquals(10L, id.value());
         assertEquals("10", id.toString());
     }
 
     @Test
     void shouldAllowZeroOrNegativeValues() {
         CompanyId idZero = CompanyId.of(0L);
-        assertEquals(0L, idZero.getValue());
+        assertEquals(0L, idZero.value());
 
         CompanyId idNegative = CompanyId.of(-5L);
-        assertEquals(-5L, idNegative.getValue());
+        assertEquals(-5L, idNegative.value());
     }
 
     @Test

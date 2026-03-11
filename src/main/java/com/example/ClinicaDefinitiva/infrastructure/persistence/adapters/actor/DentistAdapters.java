@@ -46,15 +46,11 @@ public class DentistAdapters implements DentistRepository {
                 .save(writeEntityMapper.toEntity(dentist)));
     }
 
-    @Override
-    public Page<Dentist> findByAvailability(String status, Pageable pageable) {
-        return dentistJpaRepository.findByAvailability(status,pageable)
-                .map(readEntityMapper::toDomain);
-    }
+    
 
     @Override
     public Page<Dentist> findBySpecialty(String specialty, Pageable pageable) {
-        return dentistJpaRepository.findBySpecialty(specialty,pageable)
+        return dentistJpaRepository.findBySpecialties(specialty,pageable)
                 .map(readEntityMapper::toDomain);
     }
 
@@ -74,5 +70,10 @@ public class DentistAdapters implements DentistRepository {
     @Override
     public Optional<Dentist> findByUserId(UserIdentityId id) {
         return Optional.empty();
+    }
+
+    @Override
+    public Page<Dentist> findByAvailability(String status, Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

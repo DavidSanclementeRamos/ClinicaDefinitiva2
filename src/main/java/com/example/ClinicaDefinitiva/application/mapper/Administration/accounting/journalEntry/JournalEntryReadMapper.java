@@ -19,7 +19,7 @@ public class JournalEntryReadMapper {
     public ReadJournalEntryDto toReadDto(JournalEntry entry) {
         return new ReadJournalEntryDto(
                 entry.getId().getValue(),
-                entry.getCompanyId().getValue(),
+                entry.getCompanyId().value(),
                 entry.getDate(),
                 entry.getDocumentNumber(),
                 entry.getDescription(),

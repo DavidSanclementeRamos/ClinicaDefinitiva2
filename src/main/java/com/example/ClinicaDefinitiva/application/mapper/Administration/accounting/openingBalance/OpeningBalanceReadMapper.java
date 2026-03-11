@@ -11,7 +11,7 @@ public class OpeningBalanceReadMapper {
     public ReadOpeningBalanceDto toReadDto(OpeningBalance balance) {
         return new ReadOpeningBalanceDto(
                 balance.getOpeningBalanceId().getValue(),
-                balance.getCompanyId().getValue(),
+                balance.getCompanyId().value(),
                 balance.getCuentaId().getValue(),
                 balance.getThirdPartiesId().getValue(),
                 balance.getValor().asBigDecimal(),

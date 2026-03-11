@@ -14,7 +14,7 @@ public class ThirdPartiesReadMapper {
     public ReadThirdPartyDto toReadDto(ThirdParties thirdParties) {
         return new ReadThirdPartyDto(
                 thirdParties.getPartiesId().getValue(),
-                thirdParties.getCompanyId().getValue(),
+                thirdParties.getCompanyId().value(),
                 thirdParties.getName().getValue(),
                 thirdParties.getTypeDocument(),
                 thirdParties.getDocumentNumber(),

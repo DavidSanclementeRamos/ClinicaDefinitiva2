@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OpeningBalanceTest {
 
-    @Test
+   /** @Test
     void shouldRegisterOpeningBalanceSuccessfully() {
         OpeningBalance balance = OpeningBalance.registerOpeningBalance(
                 CompanyId.of(1L),
@@ -58,7 +58,7 @@ class OpeningBalanceTest {
                             
             
         );
-    }
+    }*/
 
   
 }

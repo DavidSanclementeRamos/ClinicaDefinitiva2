@@ -1,46 +1,64 @@
-package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actorMapper.receptionEntityMapper;
+package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actor.receptionEntityMapper;
 
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.ReceptionistEntity;
+import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
+@Component
 public class ReceptionWriteEntityMapper {
 
-
-
     public ReceptionistEntity toEntity(Receptionist domain) {
-        Objects.requireNonNull(domain, "Receptionist domain object must not be null");
 
         ReceptionistEntity entity = new ReceptionistEntity();
 
-        // Identificadores y sector: asumimos que siempre existen
-        entity.setReceptionistId(domain.getId().getValue());
-        entity.setSector(domain.getSector().toString());
+            entity.setReceptionistId(domain.getId().getValue());
+        
 
-        // Person: asumimos que siempre existe y está completo
+            entity.setSector(domain.getSector().getDescription());
+       
+
+        // Person
         Person person = domain.getPerson();
+            // Documentos
+                entity.setDni(person.getDni().value());
+           
+            
+                entity.setFirst(person.getFullname().FirstName());
+                entity.setLastName(person.getFullname().LastName());
+            
+            
+            // Teléfono
+                entity.setPhoneNumber(person.getPhoneNumber().Value());
+            
+            
+            // Fecha de nacimiento
+                entity.setDateOfBirth(person.getDateOfBirth().Value());
+            
+            
+            // Tipo de sangre
+                entity.setBloodType(person.getBloodType().getValue());
+            
+            
+            entity.setDocumentEPS(person.getDocumentoEPS());
+            
+                entity.setAge(String.valueOf(person.getAge().Value()));
+            
+            
+                entity.setStreet(person.getAddress().Street());
+                entity.setCity(person.getAddress().City());
+                entity.setState(person.getAddress().State());
+                entity.setCountry(person.getAddress().Country());
+                entity.setPostalCode(person.getAddress().PostalCode());
+                entity.setAddress(person.getAddress().toString()); // Campo address completo
+            
+        
 
-        entity.setDni(person.getDni().toString());
-        entity.setFirst(person.getFullname().FirstName());
-        entity.setLastName(person.getFullname().LastName()); // corregimos duplicación: antes se repetía setFirst
+        // UserIdentityId
+            entity.setUser(domain.getUserIdentityId().value());
+        
 
-        entity.setPhoneNumber(person.getPhoneNumber().toString());
-
-        entity.setStreet(person.getAddress().Street());
-        entity.setCity(person.getAddress().City());
-        entity.setState(person.getAddress().State());
-        entity.setCountry(person.getAddress().Country());
-        entity.setPostalCode(person.getAddress().PostalCode());
-
-        entity.setDateOfBirth(person.getDateOfBirth().asDate().toString());
-        entity.setBloodType(person.getBloodType().getValue());
-        entity.setDocumentEPS(person.getDocumentoEPS());
-
-        // User: asumimos que siempre existe
-        entity.setUser(domain.getUserIdentityId().toString());
-
+        // LastUpdate
         entity.setLastUpdate(domain.getLastUpdate());
 
         return entity;

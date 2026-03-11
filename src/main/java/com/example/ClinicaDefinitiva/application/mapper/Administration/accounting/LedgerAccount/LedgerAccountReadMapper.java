@@ -14,7 +14,7 @@ public class LedgerAccountReadMapper {
     public ReadLedgerAccountDto toReadDto(LedgerAccount account) {
         return new ReadLedgerAccountDto(
                 account.getId().getValue(),
-                account.getCompanyId().getValue(),
+                account.getCompanyId().value(),
                 account.getCode(),
                 account.getName().getValue(),
                 account.getNature().name(),

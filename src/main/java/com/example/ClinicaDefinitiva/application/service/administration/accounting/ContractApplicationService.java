@@ -112,7 +112,7 @@ public class ContractApplicationService implements ContractUseCase {
                 ResourceCatalog.BasicResource.CONTRACT,
                 ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
-                        .withResourceId(companyId.getValue())
+                        .withResourceId(companyId.value())
                         .build()
         );
         

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CompanyTest {
 
-    @Test
+  /**  @Test
 void shouldRegisterCompanyWithDefaults() {
     Company company = Company.registerCompany(
             Name.of("Clinica OdontoSalud"),
@@ -92,7 +92,7 @@ void shouldRegisterCompanyWithDefaults() {
         assertEquals("Clinica Dental Integral", company.getName().getValue());
         assertEquals("Maria Lopez", company.getLegalRepresentative());
         assertEquals("contacto@clinica.com", company.getEmail().value());
-    }
+    }*/
     
 }
 

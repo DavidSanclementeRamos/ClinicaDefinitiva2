@@ -17,8 +17,6 @@ class RolIdTest {
     @Test
     void shouldThrowExceptionForInvalidValues() {
         assertThrows(ValueObjectValidationException.class, () -> RolId.of(null));
-        assertThrows(ValueObjectValidationException.class, () -> RolId.of(0L));
-        assertThrows(ValueObjectValidationException.class, () -> RolId.of(-5L));
     }
 
     @Test

@@ -128,7 +128,7 @@ public class OpeningBalanceApplicationService implements OpeningBalanceUseCase {
                 ResourceCatalog.BasicResource.OPENING_BALANCE,
                 ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
-                        .withResourceId(companyId.getValue())
+                        .withResourceId(companyId.value())
                         .build()
         );
 

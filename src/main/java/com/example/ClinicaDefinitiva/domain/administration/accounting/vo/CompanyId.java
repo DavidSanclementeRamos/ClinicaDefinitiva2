@@ -5,7 +5,7 @@ import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 
-public record  CompanyId(Long getValue) {
+public record  CompanyId(Long value) {
 
     public static CompanyId of(Long value) {
         if (value == null) {

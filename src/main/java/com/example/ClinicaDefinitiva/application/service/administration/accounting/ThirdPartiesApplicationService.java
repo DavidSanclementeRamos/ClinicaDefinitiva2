@@ -140,7 +140,7 @@ public class ThirdPartiesApplicationService implements ThirdPartiesUseCase {
                 ResourceCatalog.BasicResource.THIRD_PARTY,
                 ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
-                        .withResourceId(companyId.getValue())
+                        .withResourceId(companyId.value())
                         .build()
         );
 

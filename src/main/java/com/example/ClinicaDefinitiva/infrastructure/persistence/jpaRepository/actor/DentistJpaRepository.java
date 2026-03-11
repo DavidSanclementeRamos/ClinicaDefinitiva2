@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface DentistJpaRepository extends JpaRepository<DentistEntity,Long> {
-    Page<DentistEntity> findByAvailability(String status, Pageable pageable);
-    Page<DentistEntity> findBySpecialty(String specialty, Pageable pageable);
+   // Page<DentistEntity> findByAvailability(String status, Pageable pageable);
+    Page<DentistEntity> findBySpecialties(String specialty, Pageable pageable);
 }

@@ -57,7 +57,7 @@ public class CompanyApplicationService implements CompanyUseCase {
                 ResourceCatalog.BasicResource.COMPANY,
                 ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
-                        .withResourceId(id.getValue())
+                        .withResourceId(id.value())
                         .build()
         );
          Company company = repository.findById(id)
@@ -167,7 +167,7 @@ public class CompanyApplicationService implements CompanyUseCase {
                 ResourceCatalog.BasicResource.COMPANY,
                 ActionCatalog.BasicAction.UPDATE,
                 AuthorizationContext.builder()
-                        .withResourceId(id.getValue())
+                        .withResourceId(id.value())
                         .build()
         );
         
@@ -202,7 +202,7 @@ public class CompanyApplicationService implements CompanyUseCase {
                 ResourceCatalog.BasicResource.COMPANY,
                 ActionCatalog.BasicAction.UPDATE,
                 AuthorizationContext.builder()
-                        .withResourceId(id.getValue())
+                        .withResourceId(id.value())
                         .build()
         );
         
@@ -238,7 +238,7 @@ public class CompanyApplicationService implements CompanyUseCase {
                 ResourceCatalog.BasicResource.COMPANY,
                 ActionCatalog.BasicAction.UPDATE,
                 AuthorizationContext.builder()
-                        .withResourceId(id.getValue())
+                        .withResourceId(id.value())
                         .build()
         );
         
