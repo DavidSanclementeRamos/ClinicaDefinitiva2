@@ -133,6 +133,26 @@ public class Patient  {
     public List<TreatmentId> getTreatments() {
         return treatments;
     }
+    
+public static Patient reconstruct(
+        PatientId patientId,
+        UserIdentityId userIdentityId,
+        GuardianId guardianId,
+        LocalDateTime lastUpdate,
+        ContractId contractId,
+        List<TreatmentId> treatments,
+        Person person) {
+    
+    return new Patient(
+        contractId,
+        lastUpdate,
+        guardianId,
+        person,
+        treatments,
+        userIdentityId,
+        patientId
+    );
+}
 
 
 

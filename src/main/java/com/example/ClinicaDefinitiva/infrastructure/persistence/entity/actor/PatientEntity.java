@@ -18,7 +18,7 @@ public class PatientEntity {
 
     // simplificamos y guardamos id de contrato como String
     @Column(name = "id_contrato")
-    private String contractId;
+    private Long contractId;
 
     // Person
     @Column(name = "dni")
@@ -49,7 +49,7 @@ public class PatientEntity {
     private String documentEPS;
 
     @Column(name = "usuario")
-    private String user;
+    private Long user;
 
     @Column(name = "ultima_actualizacion")
     private LocalDateTime lastUpdate;
@@ -73,6 +73,28 @@ public class PatientEntity {
     public PatientEntity() {
     }
 
+    public PatientEntity(Long patientId, GuardianEntity guardian, Long contractId, String dni, String first, String lastName, String age, String phoneNumber, String address, String dateOfBirth, String bloodType, String documentEPS, Long user, LocalDateTime lastUpdate, String street, String city, String state, String country, String postalCode) {
+        this.patientId = patientId;
+        this.guardian = guardian;
+        this.contractId = contractId;
+        this.dni = dni;
+        this.first = first;
+        this.lastName = lastName;
+        this.age = age;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.dateOfBirth = dateOfBirth;
+        this.bloodType = bloodType;
+        this.documentEPS = documentEPS;
+        this.user = user;
+        this.lastUpdate = lastUpdate;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.postalCode = postalCode;
+    }
+
     // Getters y setters
     public Long getPatientId() {
         return patientId;
@@ -90,13 +112,7 @@ public class PatientEntity {
         this.guardian = guardian;
     }
 
-    public String getContractId() {
-        return contractId;
-    }
-
-    public void setContractId(String contractId) {
-        this.contractId = contractId;
-    }
+   
 
     public String getDni() {
         return dni;
@@ -170,13 +186,23 @@ public class PatientEntity {
         this.documentEPS = documentEPS;
     }
 
-    public String getUser() {
+    public Long getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(Long contractId) {
+        this.contractId = contractId;
+    }
+
+    public Long getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(Long user) {
         this.user = user;
     }
+
+  
 
     public LocalDateTime getLastUpdate() {
         return lastUpdate;

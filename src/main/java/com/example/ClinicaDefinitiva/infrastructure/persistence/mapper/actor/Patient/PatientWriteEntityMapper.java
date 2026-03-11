@@ -3,27 +3,24 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.mapper.actor.Pa
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.entity.actor.PatientEntity;
+import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
+@Component
 public class PatientWriteEntityMapper {
 
-
-
-
     public PatientEntity toEntity(Patient domain) {
-        Objects.requireNonNull(domain, "Patient domain object must not be null");
-
         PatientEntity entity = new PatientEntity();
 
-        // Identificadores: asumimos que siempre existen
-        entity.setPatientId(domain.getPatientId().value());
-        entity.setGuardian(null); // referencia nula, adapter la seteará si es necesario
-        entity.setContractId(String.valueOf(domain.getContractId().getValue()));
+        if (domain.getPatientId() != null) {
+            entity.setPatientId(domain.getPatientId().value());
+        }
 
-        // Person: asumimos que siempre existe y está completo
+        if (domain.getContractId() != null) {
+            entity.setContractId(domain.getContractId().getValue().toString());
+        }
+
         Person person = domain.getPerson();
-
+        
         entity.setDni(person.getDni().toString());
         entity.setFirst(person.getFullname().FirstName());
         entity.setLastName(person.getFullname().LastName());
@@ -38,6 +35,17 @@ public class PatientWriteEntityMapper {
         entity.setDateOfBirth(person.getDateOfBirth().asDate().toString());
         entity.setBloodType(person.getBloodType().getValue());
         entity.setDocumentEPS(person.getDocumentoEPS());
+        
+        entity.setAge(String.valueOf(person.getAge().Value()));
+
+        entity.setAddress(person.getAddress().toString());
+
+        if (domain.getUser() != null) {
+            entity.setUser(domain.getUser().value().toString());
+        }
+
+        entity.setLastUpdate(domain.getLastUpdate());
+
 
         return entity;
     }
