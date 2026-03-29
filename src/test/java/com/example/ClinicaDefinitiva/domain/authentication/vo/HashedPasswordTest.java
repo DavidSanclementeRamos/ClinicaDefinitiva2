@@ -1,42 +1,51 @@
 package com.example.ClinicaDefinitiva.domain.authentication.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.AuthorizationVoError;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
-import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
+import static org.assertj.core.api.Assertions.*;
 
 class HashedPasswordTest {
 
-    @Test
-    void shouldCreateValidHashedPassword() {
-        Outcome<HashedPassword> outcome = HashedPassword.fromHash("$2a$10$abcdefghijklmnopqrstuv");
-        assertTrue(outcome.isSuccess());
-        assertEquals("$2a$10$abcdefghijklmnopqrstuv", outcome.getValue().get().getHash());
-        assertTrue(outcome.getDetalles().isEmpty());
+    // ========== Pruebas para fromHash() ==========
+
+    @ParameterizedTest
+    @ValueSource(strings = {"$2a$10$encodedHash123", "hashed_password_123"})
+    @DisplayName("fromHash() - hash válido retorna Outcome exitoso")
+    void fromHash_shouldReturnSuccessForValidHash(String validHash) {
+        Outcome<HashedPassword> outcome = HashedPassword.fromHash(validHash);
+        assertThat(outcome.isSuccess()).isTrue();
+        assertThat(outcome.getValue().get().getHash()).isEqualTo(validHash.trim());
     }
 
-    @Test
-    void shouldFailWhenHashIsNull() {
-        Outcome<HashedPassword> outcome = HashedPassword.fromHash(null);
-        assertTrue(outcome.isFailure());
-
-        List<OutcomeDetail> detalles = outcome.getDetalles();
-        assertEquals(1, detalles.size());
-       // assertEquals(AuthorizationVoError.ERR_USER_PASSWORD_HASH_NULL, detalles.get(0).getCode());
-        assertEquals(ErrorSeverity.ERROR, detalles.get(0).getSeverity());
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("fromHash() - hash null o vacío retorna Outcome fallido")
+    void fromHash_shouldReturnFailureForNullOrEmpty(String invalidHash) {
+        Outcome<HashedPassword> outcome = HashedPassword.fromHash(invalidHash);
+        assertThat(outcome.isFailure()).isTrue();
     }
 
-    @Test
-    void shouldFailWhenHashIsEmpty() {
-        Outcome<HashedPassword> outcome = HashedPassword.fromHash("   ");
-        assertTrue(outcome.isFailure());
+    // ========== Pruebas para of() ==========
 
-        List<OutcomeDetail> detalles = outcome.getDetalles();
-        assertEquals(1, detalles.size());
-        //assertEquals(VoAccesError.ERR_USER_PASSWORD_HASH_EMPTY, detalles.get(0).getCode());
+    @ParameterizedTest
+    @ValueSource(strings = {"$2a$10$encodedHash123", "hashed_password_123"})
+    @DisplayName("of() - hash válido retorna instancia")
+    void of_shouldReturnInstanceForValidHash(String validHash) {
+        HashedPassword hash = HashedPassword.of(validHash);
+        assertThat(hash.getHash()).isEqualTo(validHash.trim());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("of() - hash null o vacío lanza excepción")
+    void of_shouldThrowForNullOrEmpty(String invalidHash) {
+        assertThatThrownBy(() -> HashedPassword.of(invalidHash))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 }

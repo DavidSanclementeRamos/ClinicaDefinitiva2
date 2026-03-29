@@ -13,8 +13,7 @@ public interface GuardianRepository {
     Optional<Guardian> findById(GuardianId guardianId);
     Page<Guardian> findAll(Pageable pageable);
     Guardian save(Guardian guardian);
-    Guardian update(GuardianId guardianId);
-    Guardian deleteById(GuardianId guardianId);
+    void deleteById(GuardianId guardianId);
     Page<Guardian> findByPatientId(PatientId patientId, Pageable pageable);
     boolean existsById(GuardianId guardianId);
 

@@ -35,7 +35,11 @@ public enum TreatmentError implements ErrorCatalog {
     ERR_TREATMENT_PHASES_REQUIRED(
             "RN-TREATMENT-006","error.treatment.phasesRequired",
             "El tratamiento debe tener al menos una fase definida",
-            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR);
+            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR),
+    ERR_TREATMENT_NOT_FOUND(
+    "RN-TREATMENT-007", "error.treatment.not.found",
+    "El tratamiento solicitado no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

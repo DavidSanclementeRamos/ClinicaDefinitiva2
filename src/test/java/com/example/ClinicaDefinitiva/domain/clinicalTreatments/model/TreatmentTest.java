@@ -1,6 +1,4 @@
-
 package com.example.ClinicaDefinitiva.domain.clinicalTreatments.model;
-
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
@@ -9,12 +7,10 @@ import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.PhaseStatus;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.enu.TreatmentStatus;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentPhase;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments.TreatmentError;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.vo.Notes;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -22,160 +18,120 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@DisplayName("Treatment aggregate tests")
 class TreatmentTest {
 
-    private PatientId patientId = PatientId.of(1L);
-    private DentistId dentistId = DentistId.of(2L);
-    private ServiceId serviceId = ServiceId.of(3L);
-    private RateId rateId = RateId.of(4L);
+    private static final PatientId PATIENT_ID = PatientId.of(1L);
+    private static final DentistId DENTIST_ID = DentistId.of(2L);
+    private static final ServiceId SERVICE_ID = ServiceId.of(3L);
+    private static final RateId RATE_ID = RateId.of(4L);
+    private static final LocalDate START = LocalDate.now().minusDays(1);
+    private static final LocalDate END = LocalDate.now().plusMonths(1);
+    private static final List<TreatmentPhase> PHASES = List.of(
+            TreatmentPhase.of(Name.of("Fase 1"), LocalDate.now().plusDays(1), PhaseStatus.PENDING, Notes.of("Nota válida"))
+    );
 
-    private TreatmentPhase samplePhase() {
-        return  TreatmentPhase.of(Name.of( "Diagnóstico"),LocalDate.now(),PhaseStatus.IN_PROGRESS,Notes.of("nota"));
+    @Test
+    @DisplayName("TRE-UNIT-001: Crear tratamiento con fecha inicio pasada (válido)")
+    void create_shouldBeActive() {
+        Treatment treatment = Treatment.createNew(
+                PATIENT_ID, DENTIST_ID, SERVICE_ID, START, END, PHASES, "Notas", RATE_ID
+        );
+
+        assertThat(treatment.getStatus()).isEqualTo(TreatmentStatus.ACTIVE);
+        assertThat(treatment.getStartDate()).isEqualTo(START);
+        assertThat(treatment.getPhases()).hasSize(1);
     }
 
-    @Nested
-    @DisplayName("Creation rules")
-    class CreationTests {
+    @Test
+    @DisplayName("TRE-UNIT-001: Fecha inicio futura lanza excepción")
+    void create_futureStartDate_shouldThrow() {
+        LocalDate futureStart = LocalDate.now().plusDays(1);
 
-        @Test
-        @DisplayName("createNew - success")
-        void createNew_success() {
-            Treatment treatment = Treatment.createNew(
-                    patientId,
-                    dentistId,
-                    serviceId,
-                    LocalDate.now().minusDays(1),
-                    LocalDate.now().plusDays(30),
-                    List.of(samplePhase()),
-                    "Notas iniciales",
-                    rateId
-            );
-
-            assertThat(treatment).isNotNull();
-            assertThat(treatment.isActive()).isTrue();
-            assertThat(treatment.getPhases()).hasSize(1);
-            assertThat(treatment.getExpectedEndDate()).isAfter(treatment.getStartDate());
-        }
-
-        @Test
-        @DisplayName("createNew - start date in future -> exception")
-        void createNew_futureStartDate_throws() {
-            assertThatThrownBy(() -> Treatment.createNew(
-                    patientId,
-                    dentistId,
-                    serviceId,
-                    LocalDate.now().plusDays(5),
-                    LocalDate.now().plusDays(10),
-                    List.of(samplePhase()),
-                    "Notas",
-                    rateId
-            ))
-            .isInstanceOf(BusinessRuleViolationException.class)
-            .satisfies(ex -> assertThat(((BusinessRuleViolationException) ex).getCatalogo())
-                    .isEqualTo(TreatmentError.ERR_TREATMENT_FUTURE_START_DATE));
-        }
-
-        @Test
-        @DisplayName("createNew - expected end before start -> exception")
-        void createNew_invalidEndDate_throws() {
-            LocalDate start = LocalDate.now().minusDays(1);
-            LocalDate end = start.minusDays(4);
-
-            assertThatThrownBy(() -> Treatment.createNew(
-                    patientId,
-                    dentistId,
-                    serviceId,
-                    start,
-                    end,
-                    List.of(samplePhase()),
-                    "Notas",
-                    rateId
-            ))
-            .isInstanceOf(BusinessRuleViolationException.class)
-            .satisfies(ex -> assertThat(((BusinessRuleViolationException) ex).getCatalogo())
-                    .isEqualTo(TreatmentError.ERR_TREATMENT_INVALID_END_DATE));
-        }
-
-        @Test
-        @DisplayName("createNew - no phases -> exception")
-        void createNew_noPhases_throws() {
-            assertThatThrownBy(() -> Treatment.createNew(
-                    patientId,
-                    dentistId,
-                    serviceId,
-                    LocalDate.now().minusDays(1),
-                    LocalDate.now().plusDays(10),
-                    List.of(),
-                    "Notas",
-                    rateId
-            ))
-            .isInstanceOf(BusinessRuleViolationException.class)
-            .satisfies(ex -> assertThat(((BusinessRuleViolationException) ex).getCatalogo())
-                    .isEqualTo(TreatmentError.ERR_TREATMENT_PHASES_REQUIRED));
-        }
+        assertThatThrownBy(() -> Treatment.createNew(
+                PATIENT_ID, DENTIST_ID, SERVICE_ID, futureStart, END, PHASES, "Notas", RATE_ID
+        )).isInstanceOf(BusinessRuleViolationException.class)
+          .hasMessageContaining("La fecha de inicio del tratamiento no puede ser futura");
     }
 
-    @Nested
-    @DisplayName("Business operations")
-    class BusinessOperationsTests {
+    @Test
+    @DisplayName("TRE-UNIT-002: Fecha fin esperada antes del inicio lanza excepción")
+    void create_expectedEndBeforeStart_shouldThrow() {
+        LocalDate invalidEnd = START.minusDays(1);
 
-        private Treatment activeTreatment() {
-            return Treatment.createNew(
-                    patientId,
-                    dentistId,
-                    serviceId,
-                    LocalDate.now().minusDays(1),
-                    LocalDate.now().plusDays(10),
-                    List.of(samplePhase()),
-                    "Notas",
-                    rateId
-            );
-        }
+        assertThatThrownBy(() -> Treatment.createNew(
+                PATIENT_ID, DENTIST_ID, SERVICE_ID, START, invalidEnd, PHASES, "Notas", RATE_ID
+        )).isInstanceOf(BusinessRuleViolationException.class)
+          .hasMessageContaining("La fecha de fin esperada debe ser posterior a la fecha de inicio");
+    }
 
-        @Test
-        @DisplayName("complete - success")
-        void complete_success() {
-            Treatment treatment = activeTreatment();
-            LocalDate completionDate = LocalDate.now();
+    @Test
+    @DisplayName("TRE-UNIT-005: Tratamiento sin fases lanza excepción")
+    void create_withoutPhases_shouldThrow() {
+        assertThatThrownBy(() -> Treatment.createNew(
+                PATIENT_ID, DENTIST_ID, SERVICE_ID, START, END, List.of(), "Notas", RATE_ID
+        )).isInstanceOf(BusinessRuleViolationException.class)
+          .hasMessageContaining("El tratamiento debe tener al menos una fase definida");
+    }
 
-            treatment.complete(completionDate);
+    @Test
+    @DisplayName("TRE-UNIT-003: Completar tratamiento activo")
+    void complete_whenActive_shouldChangeStatus() {
+        Treatment treatment = createActiveTreatment();
+        LocalDate completionDate = LocalDate.now();
 
-            assertThat(treatment.getStatus()).isEqualTo(TreatmentStatus.COMPLETED);
-            assertThat(treatment.getActualEndDate()).isEqualTo(completionDate);
-        }
+        treatment.complete(completionDate);
 
-        @Test
-        @DisplayName("complete - invalid date before start -> exception")
-        void complete_invalidDate_throws() {
-            Treatment treatment = activeTreatment();
-            LocalDate invalidDate = treatment.getStartDate().minusDays(1);
+        assertThat(treatment.getStatus()).isEqualTo(TreatmentStatus.COMPLETED);
+        assertThat(treatment.getActualEndDate()).isEqualTo(completionDate);
+    }
 
-            assertThatThrownBy(() -> treatment.complete(invalidDate))
-                    .isInstanceOf(BusinessRuleViolationException.class)
-                    .satisfies(ex -> assertThat(((BusinessRuleViolationException) ex).getCatalogo())
-                            .isEqualTo(TreatmentError.ERR_TREATMENT_INVALID_COMPLETION_DATE));
-        }
+    @Test
+    @DisplayName("TRE-UNIT-003: Completar tratamiento no activo lanza excepción")
+    void complete_whenNotActive_shouldThrow() {
+        Treatment treatment = createActiveTreatment();
+        treatment.complete(LocalDate.now()); // ahora COMPLETED
 
-        @Test
-        @DisplayName("cancel - success")
-        void cancel_success() {
-            Treatment treatment = activeTreatment();
-            treatment.cancel("Paciente no asistió a citas programadas");
+        assertThatThrownBy(() -> treatment.complete(LocalDate.now()))
+                .isInstanceOf(BusinessRuleViolationException.class)
+                .hasMessageContaining("El tratamiento debe estar activo para esta operación");
+    }
 
-            assertThat(treatment.getStatus()).isEqualTo(TreatmentStatus.CANCELLED);
-        }
+    @Test
+    @DisplayName("TRE-UNIT-003: Fecha de finalización antes del inicio lanza excepción")
+    void complete_completionDateBeforeStart_shouldThrow() {
+        Treatment treatment = createActiveTreatment();
 
-        @Test
-        @DisplayName("cancel - reason too short -> exception")
-        void cancel_invalidReason_throws() {
-            Treatment treatment = activeTreatment();
+        assertThatThrownBy(() -> treatment.complete(START.minusDays(1)))
+                .isInstanceOf(BusinessRuleViolationException.class)
+                .hasMessageContaining("La fecha de finalización no puede ser anterior a la fecha de inicio");
+    }
 
-            assertThatThrownBy(() -> treatment.cancel("Muy corto"))
-    .isInstanceOf(BusinessRuleViolationException.class)
-    .satisfies(ex -> assertThat(((BusinessRuleViolationException) ex).getCatalogo())
-        .isEqualTo(TreatmentError.ERR_TREATMENT_CANCELLATION_REASON_REQUIRED));
-        }
+    @Test
+    @DisplayName("TRE-UNIT-004: Cancelar tratamiento activo con razón válida")
+    void cancel_withValidReason_shouldChangeStatus() {
+        Treatment treatment = createActiveTreatment();
+
+        treatment.cancel("Razón válida con más de diez caracteres");
+
+        assertThat(treatment.getStatus()).isEqualTo(TreatmentStatus.CANCELLED);
+    }
+
+    @Test
+    @DisplayName("TRE-UNIT-004: Cancelar sin razón o con razón corta lanza excepción")
+    void cancel_withInvalidReason_shouldThrow() {
+        Treatment treatment = createActiveTreatment();
+
+        assertThatThrownBy(() -> treatment.cancel(null))
+                .isInstanceOf(BusinessRuleViolationException.class)
+                .hasMessageContaining("La cancelación requiere un motivo detallado (mínimo 10 caracteres)");
+
+        assertThatThrownBy(() -> treatment.cancel("corta"))
+                .isInstanceOf(BusinessRuleViolationException.class);
+    }
+
+    private Treatment createActiveTreatment() {
+        return Treatment.createNew(
+                PATIENT_ID, DENTIST_ID, SERVICE_ID, START, END, PHASES, "Notas", RATE_ID
+        );
     }
 }
-

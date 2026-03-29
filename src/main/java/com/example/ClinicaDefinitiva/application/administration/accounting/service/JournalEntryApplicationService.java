@@ -1,0 +1,337 @@
+package com.example.ClinicaDefinitiva.application.administration.accounting.service;
+
+import com.example.ClinicaDefinitiva.application.administration.accounting.dto.journalEntry.AddJournalEntryLineDto;
+import com.example.ClinicaDefinitiva.application.administration.accounting.dto.journalEntry.CreateJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.administration.accounting.dto.journalEntry.PageJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.administration.accounting.dto.journalEntry.ReadJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.administration.accounting.dto.journalEntry.UpdateJournalEntryDto;
+import com.example.ClinicaDefinitiva.application.administration.accounting.input.JournalEntryUseCase;
+import com.example.ClinicaDefinitiva.application.administration.accounting.mapper.journalEntry.JournalEntryReadMapper;
+import com.example.ClinicaDefinitiva.application.administration.accounting.mapper.journalEntry.JournalEntryWriteMapper;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.accounting.JournalEntryNotFoundException;
+import com.example.ClinicaDefinitiva.application.shared.dto.AuthorizationContext;
+import com.example.ClinicaDefinitiva.application.shared.service.AuthorizationHelper;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.model.JournalEntry;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.CompanyId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.JournalEntryId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.output.CompanyRepository;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.output.JournalEntryRepository;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.output.LedgerAccountRepository;
+import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ThirdPartiesRepository;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ActionCatalog;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;
+import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDate;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional
+public class JournalEntryApplicationService implements JournalEntryUseCase {
+
+    private final JournalEntryRepository journalEntryRepository;
+    private final ThirdPartiesRepository thirdPartiesRepository;
+    private final LedgerAccountRepository ledgerAccountRepository;
+    private final CompanyRepository companyRepository;
+    private final JournalEntryReadMapper readMapper;
+    private final JournalEntryWriteMapper writeMapper;
+    private final AuthorizationHelper authorizationHelper;
+
+    public JournalEntryApplicationService(JournalEntryRepository journalEntryRepository,
+                                          ThirdPartiesRepository thirdPartiesRepository,
+                                          LedgerAccountRepository ledgerAccountRepository,
+                                          CompanyRepository companyRepository,
+                                          JournalEntryReadMapper readMapper,
+                                          JournalEntryWriteMapper writeMapper,
+                                          AuthorizationHelper authorizationHelper) {
+        this.journalEntryRepository = journalEntryRepository;
+        this.thirdPartiesRepository = thirdPartiesRepository;
+        this.ledgerAccountRepository = ledgerAccountRepository;
+        this.companyRepository = companyRepository;
+        this.readMapper = readMapper;
+        this.writeMapper = writeMapper;
+        this.authorizationHelper = authorizationHelper;
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.READ)
+    public ReadJournalEntryDto findById(JournalEntryId id,
+                                        UserIdentityId requesterId,
+                                        RolId requesterRolId) {
+
+       
+
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
+        
+         JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
+
+        return readMapper.toReadDto(entry);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.READ)
+    public Page<PageJournalEntryDto> findAll(Pageable pageable,
+                                             UserIdentityId requesterId,
+                                             RolId requesterRolId) {
+
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
+
+        return journalEntryRepository.findAll(pageable)
+                .map(readMapper::toPageDto);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.READ)
+    public Page<PageJournalEntryDto> findByCompany(CompanyId companyId,
+                                                   Pageable pageable,
+                                                   UserIdentityId requesterId,
+                                                   RolId requesterRolId) {
+
+       
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(companyId.value())
+                        .build()
+        );
+
+        return journalEntryRepository.findByCompanyId(companyId, pageable)
+                .map(readMapper::toPageDto);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.READ)
+    public Page<PageJournalEntryDto> findByDateRange(LocalDate start,
+                                                     LocalDate end,
+                                                     Pageable pageable,
+                                                     UserIdentityId requesterId,
+                                                     RolId requesterRolId) {
+
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder().build()
+        );
+
+        return journalEntryRepository.findByDateRange(start, end, pageable)
+                .map(readMapper::toPageDto);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.READ)
+    public Page<PageJournalEntryDto> findByAccount(LedgerAccountId accountId,
+                                                   Pageable pageable,
+                                                   UserIdentityId requesterId,
+                                                   RolId requesterRolId) {
+
+        
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(accountId.getValue())
+                        .build()
+        );
+
+        return journalEntryRepository.findByAccount(accountId, pageable)
+                .map(readMapper::toPageDto);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.READ)
+    public Page<PageJournalEntryDto> findByThirdParty(ThirdPartiesId thirdPartyId,
+                                                      Pageable pageable,
+                                                      UserIdentityId requesterId,
+                                                      RolId requesterRolId) {
+
+               authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.READ,
+                AuthorizationContext.builder()
+                        .withResourceId(thirdPartyId.getValue())
+                        .build()
+        );
+
+        return journalEntryRepository.findByThirdParty(thirdPartyId, pageable)
+                .map(readMapper::toPageDto);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.CREATE)
+    public ReadJournalEntryDto createJournalEntry(CreateJournalEntryDto dto,
+                                                  UserIdentityId requesterId,
+                                                  RolId requesterRolId) {
+
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.CREATE,
+                AuthorizationContext.builder().build()
+        );
+
+         JournalEntry entry = JournalEntry.registerJournalEntry(
+            writeMapper.toCompanyId(dto),
+            writeMapper.toDate(dto),
+            writeMapper.toDocumentNumber(dto),
+            writeMapper.toDescription(dto),
+            List.of()
+        );
+
+        JournalEntry saved = journalEntryRepository.save(entry);
+
+        return readMapper.toReadDto(saved);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.UPDATE)
+    public ReadJournalEntryDto addLine(JournalEntryId id,
+                                       AddJournalEntryLineDto dto,
+                                       UserIdentityId requesterId,
+                                       RolId requesterRolId) {
+
+      
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
+        
+          JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
+
+
+        entry.addLine(writeMapper.toAddLineDto(dto));
+        JournalEntry updated = journalEntryRepository.save(entry);
+
+        return readMapper.toReadDto(updated);
+    }
+
+ 
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.UPDATE)
+    public ReadJournalEntryDto updateInformation(JournalEntryId id,
+                                                 UpdateJournalEntryDto dto,
+                                                 UserIdentityId requesterId,
+                                                 RolId requesterRolId) {
+
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
+        
+          JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
+
+
+        entry.updateInformation(
+    writeMapper.toDescription(dto),
+    writeMapper.toDocumentNumber(dto)
+);
+        JournalEntry updated = journalEntryRepository.save(entry);
+
+        return readMapper.toReadDto(updated);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.UPDATE)
+    public ReadJournalEntryDto post(JournalEntryId id,
+                                    UserIdentityId requesterId,
+                                    RolId requesterRolId) {
+
+      
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
+        
+          JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
+
+
+        entry.post();
+        JournalEntry posted = journalEntryRepository.save(entry);
+
+        return readMapper.toReadDto(posted);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+            action = ActionCatalog.BasicAction.UPDATE)
+    public ReadJournalEntryDto registerRverse(JournalEntryId id,
+                                       String reason,
+                                       UserIdentityId requesterId,
+                                       RolId requesterRolId) {
+
+       
+        authorizationHelper.authorize(
+                requesterId, requesterRolId,
+                ResourceCatalog.BasicResource.JOURNAL_ENTRY,
+                ActionCatalog.BasicAction.UPDATE,
+                AuthorizationContext.builder()
+                        .withResourceId(id.getValue())
+                        .build()
+        );
+        
+          JournalEntry entry = journalEntryRepository.findById(id)
+                .orElseThrow(() -> new JournalEntryNotFoundException("Not found"));
+
+
+        entry.registerRverse(reason);
+        JournalEntry reversed = journalEntryRepository.save(entry);
+
+        return readMapper.toReadDto(reversed);
+    }
+
+    @Override
+    public ReadJournalEntryDto removeLine(JournalEntryId id, int lineIndex, UserIdentityId requesterId, RolId requesterRolId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+}

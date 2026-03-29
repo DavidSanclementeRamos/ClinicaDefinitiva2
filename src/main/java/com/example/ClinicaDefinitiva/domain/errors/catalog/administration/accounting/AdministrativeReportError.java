@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.administration.accounting;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -69,7 +69,10 @@ public enum AdministrativeReportError implements ErrorCatalog {
     ERR_REPORT_ATTACHMENT_NOT_FOUND(
             "RN-ADMINREPORT-013","error.report.attachmentNotFound",
             "El documento adjunto especificado no se encuentra en el reporte",
-            HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
+            HttpStatus.NOT_FOUND, ErrorSeverity.ERROR),
+    ERR_REPORT_NOT_FOUND("RN-REPORT-014", "error.report.not.found",
+    "El reporte solicitado no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

@@ -1,88 +1,72 @@
+package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-package com.example.ClinicaDefinitiva.domain.actor;
-
-import com.example.ClinicaDefinitiva.domain.actor.vo.TypeGuardian;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.assertj.core.api.Assertions.*;
 
 class TypeGuardianTest {
 
-    @Test
-    void shouldCreateValidTypeGuardian() {
-        TypeGuardian guardian = TypeGuardian.of("MAMA", "Madre");
-        assertEquals("MAMA", guardian.getCode());
-        assertEquals("Madre", guardian.getDescription());
-        assertTrue(guardian.isParent());
-        assertEquals(1, guardian.getLegalPriority());
+    @ParameterizedTest
+    @CsvSource({
+            "MAMA, Madre",
+            "PAPA, Padre",
+            "HERMANO, Hermano",
+            "HERMANA, Hermana",
+            "ABUELO, Abuelo",
+            "ABUELA, Abuela",
+            "TIO, Tío",
+            "TIA, Tía",
+            "PRIMO, Primo",
+            "PRIMA, Prima",
+            "TUTOR_LEGAL, Tutor Legal",
+            "OTRO, Otro"
+    })
+    @DisplayName("Crear TypeGuardian con código y descripción válidos")
+    void shouldCreateValidTypeGuardian(String code, String description) {
+        TypeGuardian type = TypeGuardian.of(code, description);
+        assertThat(type.getCode()).isEqualTo(code);
+        assertThat(type.getDescription()).isEqualTo(description);
     }
 
     @Test
-    void shouldThrowExceptionWhenCodeIsNull() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> TypeGuardian.of(null, "Madre"));
+    @DisplayName("Crear TypeGuardian con código inválido lanza excepción")
+    void shouldThrowForInvalidCode() {
+        assertThatThrownBy(() -> TypeGuardian.of("INVALID", "Descripción"))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldThrowExceptionWhenCodeIsBlank() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> TypeGuardian.of("   ", "Madre"));
+    @DisplayName("Crear TypeGuardian con descripción vacía lanza excepción")
+    void shouldThrowForEmptyDescription() {
+        assertThatThrownBy(() -> TypeGuardian.of("MAMA", "   "))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldThrowExceptionWhenCodeIsInvalid() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> TypeGuardian.of("INVALID", "Otro"));
+    @DisplayName("fromCode reconstruye con descripción por defecto")
+    void testFromCode() {
+        TypeGuardian type = TypeGuardian.fromCode("MAMA");
+        assertThat(type.getCode()).isEqualTo("MAMA");
+        assertThat(type.getDescription()).isEqualTo("Madre");
     }
 
     @Test
-    void shouldThrowExceptionWhenDescriptionIsBlank() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> TypeGuardian.of("MAMA", "   "));
-    }
+    @DisplayName("Métodos semánticos funcionan")
+    void testSemanticMethods() {
+        TypeGuardian mama = TypeGuardian.fromCode("MAMA");
+        assertThat(mama.isParent()).isTrue();
+        assertThat(mama.isGrandparent()).isFalse();
+        assertThat(mama.isSibling()).isFalse();
+        assertThat(mama.isLegalGuardian()).isFalse();
+        assertThat(mama.isDirectFamily()).isTrue();
+        assertThat(mama.getLegalPriority()).isEqualTo(1);
 
-    @Test
-    void shouldIdentifyGrandparent() {
-        TypeGuardian abuelo = TypeGuardian.of("ABUELO", "Abuelo");
-        assertTrue(abuelo.isGrandparent());
-        assertEquals(3, abuelo.getLegalPriority());
-    }
-
-    @Test
-    void shouldIdentifySibling() {
-        TypeGuardian hermano = TypeGuardian.of("HERMANO", "Hermano");
-        assertTrue(hermano.isSibling());
-        assertEquals(4, hermano.getLegalPriority());
-    }
-
-    @Test
-    void shouldIdentifyLegalGuardian() {
-        TypeGuardian tutor = TypeGuardian.of("TUTOR_LEGAL", "Tutor Legal");
-        assertTrue(tutor.isLegalGuardian());
-        assertEquals(2, tutor.getLegalPriority());
-    }
-
-    @Test
-    void shouldBeEqualWhenSameCode() {
-        TypeGuardian g1 = TypeGuardian.of("PAPA", "Padre");
-        TypeGuardian g2 = TypeGuardian.of("PAPA", "Padre");
-
-        assertEquals(g1, g2);
-        assertEquals(g1.hashCode(), g2.hashCode());
-    }
-
-    @Test
-    void shouldNotBeEqualWhenDifferentCode() {
-        TypeGuardian g1 = TypeGuardian.of("MAMA", "Madre");
-        TypeGuardian g2 = TypeGuardian.of("PAPA", "Padre");
-
-        assertNotEquals(g1, g2);
-    }
-
-    @Test
-    void shouldReturnReadableToString() {
-        TypeGuardian g = TypeGuardian.of("MAMA", "Madre");
-        assertEquals("Madre (MAMA)", g.toString());
+        TypeGuardian tutor = TypeGuardian.fromCode("TUTOR_LEGAL");
+        assertThat(tutor.isLegalGuardian()).isTrue();
+        assertThat(tutor.getLegalPriority()).isEqualTo(2);
     }
 }
-

@@ -2,7 +2,7 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.GuardianError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.GuardianError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.util.*;
@@ -21,9 +21,9 @@ public class Guardian  {
     private final List<PatientId> patientList;
     private LocalDateTime lastUpdate;
 
-    private Guardian(GuardianId guardianId, LocalDateTime lastUpdate, List<PatientId> patientList, Person person, TypeGuardian typeGuardian, UserIdentityId userIdentityId) {
+    private Guardian(GuardianId guardianId, List<PatientId> patientList, Person person, TypeGuardian typeGuardian, UserIdentityId userIdentityId) {
         this.guardianId = guardianId;
-        this.lastUpdate = lastUpdate;
+        this.lastUpdate = lastUpdate = LocalDateTime.now();
         this.patientList = patientList;
         this.person = person;
         this.typeGuardian = typeGuardian;
@@ -43,7 +43,6 @@ public class Guardian  {
 
         return new Guardian(
                 null,
-                LocalDateTime.now(),
                 null,
                 data,
                 typeGuardian,
@@ -87,6 +86,7 @@ public class Guardian  {
             );
 
             this.typeGuardian = typeGuardian;
+            this.lastUpdate = LocalDateTime.now();
         }
 
 
@@ -125,4 +125,15 @@ public class Guardian  {
     public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
+    
+public static Guardian reconstruct(
+        GuardianId guardianId,
+        Person person,
+        TypeGuardian typeGuardian,
+        UserIdentityId userIdentityId,
+        List<PatientId> patientList,
+        LocalDateTime lastUpdate) {
+    
+    return new Guardian(guardianId, patientList, person, typeGuardian, userIdentityId);
+}
 }

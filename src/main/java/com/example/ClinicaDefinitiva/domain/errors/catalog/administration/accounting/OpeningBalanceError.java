@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.administration.accounting;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -7,9 +7,13 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 public enum OpeningBalanceError implements ErrorCatalog {
 
     ERR_OPENING_BALANCE_MISSING_DATE(
-            "RN-OPENINGBALANCE-003","error.openingBalance.missingDate",
+            "RN-OPENINGBALANCE-001","error.openingBalance.missingDate",
             "La fecha es obligatoria",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
+            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
+    ERR_OPENING_BALANCE_NOT_FOUND(
+    "RN-OPENINGBALANCE-002", "error.openingBalance.not.found",
+    "El balance inicial solicitado no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

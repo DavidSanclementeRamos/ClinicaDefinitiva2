@@ -1,51 +1,50 @@
-
 package com.example.ClinicaDefinitiva.domain.actor.service;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ScheduleRepository;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.DentistError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.DentistError;
 import com.example.ClinicaDefinitiva.domain.schedule.service.ScheduleQueryService;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class DentistDeactivationValidatorTest {
 
-    private ScheduleRepository scheduleRepository;
+    @Mock
+    private ScheduleQueryService scheduleQueryService;
+
+    @InjectMocks
     private DentistDeactivationValidator validator;
-    private DentistId dentistId;
-    private ScheduleQueryService schedule;
 
-    @BeforeEach
-    void setUp() {
-        scheduleRepository = mock(ScheduleRepository.class);
-        validator = new DentistDeactivationValidator(scheduleRepository);
-        dentistId = DentistId.of(1L);
-        schedule = mock(ScheduleQueryService.class);
+    @Test
+    @DisplayName("Validar dentista sin citas próximas (éxito)")
+    void validateSuccess() {
+        DentistId dentistId = DentistId.of(1L);
+        when(scheduleQueryService.hasAppointmentsWithinHours(dentistId, 24)).thenReturn(false);
+
+        Outcome<Void> outcome = validator.validate(dentistId);
+
+        assertThat(outcome.isSuccess()).isTrue();
+        verify(scheduleQueryService).hasAppointmentsWithinHours(dentistId, 24);
     }
 
     @Test
-    void shouldFailWhenDentistHasAppointmentsWithin24Hours() {
-        when(scheduleRepository.findByDentistId(dentistId)).thenReturn(schedule);
-        when(schedule.hasAppointmentsWithinHours(dentistId, 24)).thenReturn(true);
+    @DisplayName("Validar dentista con citas próximas (fallo)")
+    void validateFail() {
+        DentistId dentistId = DentistId.of(1L);
+        when(scheduleQueryService.hasAppointmentsWithinHours(dentistId, 24)).thenReturn(true);
 
-        Outcome<Void> result = validator.validate(dentistId);
+        Outcome<Void> outcome = validator.validate(dentistId);
 
-        assertTrue(result.isFailure());
-        assertEquals(DentistError.ERR_DENTIST_ACTIVE_APPOINTMENTS,
-                     result.getDetalles().get(0).getCode());
-    }
-
-    @Test
-    void shouldPassWhenDentistHasNoAppointmentsWithin24Hours() {
-        when(scheduleRepository.findByDentistId(dentistId)).thenReturn(schedule);
-        when(schedule.hasAppointmentsWithinHours(dentistId, 24)).thenReturn(false);
-
-        Outcome<Void> result = validator.validate(dentistId);
-
-        assertTrue(result.isSuccess());
+        assertThat(outcome.isFailure()).isTrue();
+        assertThat(outcome.getDetalles().get(0).getCode()).isEqualTo(DentistError.ERR_DENTIST_ACTIVE_APPOINTMENTS);
+        verify(scheduleQueryService).hasAppointmentsWithinHours(dentistId, 24);
     }
 }

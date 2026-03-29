@@ -4,12 +4,11 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.Rol
 import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.RolError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -28,6 +27,7 @@ public class Rol {
 
     // Permisos asignados dinámicamente
     private Set<Permission> permissions;
+    private String lastStateChangeReason;
 
 
 
@@ -102,16 +102,19 @@ public class Rol {
     public void activate(String reason) {
         validateStateChange(reason);
         this.statusRol = RolStatus.ACTIVE;
+        this.lastStateChangeReason = reason;
     }
 
     public void deactivate(String reason) {
         validateStateChange(reason);
         this.statusRol = RolStatus.INACTIVE;
+        this.lastStateChangeReason = reason;
     }
 
     public void suspend(String reason) {
         validateStateChange(reason);
         this.statusRol = RolStatus.SUSPENDED;
+        this.lastStateChangeReason = reason;
     }
 
     public void markDeleted(String reason) {
@@ -123,6 +126,8 @@ public class Rol {
         }
         validateStateChange(reason);
         this.statusRol = RolStatus.DELETED;
+        this.lastStateChangeReason = reason;
+        
     }
 
 
@@ -145,7 +150,32 @@ public class Rol {
     public RolStatus getStatusRol() { return statusRol; }
     public Set<Permission> getPermissions() { return new HashSet<>(permissions); }
 
+    public String getLastStateChangeReason() {
+        return lastStateChangeReason;
+    }
+    
+
 
     public void setId(RolId targetRoleId) {
     }
+    
+    // Agregar en Rol.java
+public static Rol reconstruct(
+        RolId id,
+        RolEnum rolEnum,
+        String description,
+        boolean isDefault,
+        boolean isEditable,
+        boolean isDeletable,
+        RolStatus statusRol,
+        Set<Permission> permissions,
+        String lastStateChangeReason){
+ 
+    
+    Rol rol = new Rol(rolEnum, description, isDefault, isEditable, isDeletable, statusRol);
+    rol.id = id;
+    rol.permissions = new HashSet<>(permissions);
+    rol.lastStateChangeReason = lastStateChangeReason;
+    return rol;
+}
 }

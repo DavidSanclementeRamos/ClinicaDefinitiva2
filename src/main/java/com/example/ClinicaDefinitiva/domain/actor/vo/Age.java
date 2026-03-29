@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import java.time.LocalDate;
@@ -41,10 +41,6 @@ public final class Age {
         if (value < 18) return "Teenager";
         if (value < 65) return "Adult";
         return "Senior";
-    }
-
-    public int asInt() {
-        return value;
     }
 
     // methods access

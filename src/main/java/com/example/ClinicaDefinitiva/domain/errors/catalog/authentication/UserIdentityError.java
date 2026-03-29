@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.authentication;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 

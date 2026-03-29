@@ -8,6 +8,7 @@ import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import org.springframework.stereotype.Service;
 
 /**
  * Domain Service: InvoiceItemFactoryService
@@ -20,6 +21,7 @@ import java.util.Objects;
  * - Este servicio evita que InvoiceItem dependa directamente de ProvidedService.
  * - InvoiceItem solo valida nulos y calcula totales; las reglas de contenido se delegan.
  */
+@Service
 public class InvoiceItemFactoryService {
 
 

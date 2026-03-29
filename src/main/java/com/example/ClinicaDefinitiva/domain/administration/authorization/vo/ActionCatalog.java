@@ -27,6 +27,7 @@ public final class ActionCatalog {
         REVOKE_ALL,
         REVOKE,
         REVOKE_ASSIGNMENT,
+        
         UPDATE_PRIMARY,
         EXTEND_ASSIGNMENT,
         IS_ACTIVE_AT,

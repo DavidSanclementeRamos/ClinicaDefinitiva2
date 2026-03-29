@@ -1,10 +1,12 @@
 package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class TypeGuardian {
 
@@ -15,10 +17,19 @@ public final class TypeGuardian {
             "PRIMO", "PRIMA", "TUTOR_LEGAL", "OTRO"
     );
 
+    // Mapa para cachear instancias y permitir reconstrucción por código
+    private static final Map<String, TypeGuardian> INSTANCES = new ConcurrentHashMap<>();
+
     private final String code;
     private final String description;
 
     private TypeGuardian(String code, String description) {
+        this.code = code;
+        this.description = description;
+    }
+
+    // Fábrica pública con validación completa
+    public static TypeGuardian of(String code, String description) {
         // Validar código
         if (code == null) {
             throw new ValueObjectValidationException(
@@ -33,7 +44,7 @@ public final class TypeGuardian {
 
         if (!VALID_CODES.contains(normalizedCode)) {
             throw new ValueObjectValidationException(
-                    VoActorError.ERR_TYPE_GUARDIAN_CODE_INVALID,VOContext.ACTORS);
+                    VoActorError.ERR_TYPE_GUARDIAN_CODE_INVALID, VOContext.ACTORS);
         }
 
         // Validar descripción
@@ -42,28 +53,66 @@ public final class TypeGuardian {
                     VoActorError.ERR_TYPE_GUARDIAN_DESCRIPTION_BLANK, VOContext.ACTORS);
         }
 
-        this.code = normalizedCode;
-        this.description = description.trim();
+        // Crear y cachear la instancia
+        return INSTANCES.computeIfAbsent(normalizedCode, 
+            k -> new TypeGuardian(normalizedCode, description.trim()));
     }
 
-    // Fábrica pública con validación
-    public static TypeGuardian of(String code, String description) {
-        return new TypeGuardian(code, description);
+    /**
+     * Reconstruye un TypeGuardian solo con el código.
+     * Útil para reconstrucción desde persistencia donde solo se almacena el código.
+     */
+    public static TypeGuardian fromCode(String code) {
+        if (code == null) {
+            throw new ValueObjectValidationException(
+                    VoActorError.ERR_TYPE_GUARDIAN_CODE_NULL, VOContext.ACTORS);
+        }
+
+        String normalizedCode = code.trim().toUpperCase();
+        if (normalizedCode.isEmpty()) {
+            throw new ValueObjectValidationException(
+                    VoActorError.ERR_TYPE_GUARDIAN_CODE_BLANK, VOContext.ACTORS);
+        }
+
+        if (!VALID_CODES.contains(normalizedCode)) {
+            throw new ValueObjectValidationException(
+                    VoActorError.ERR_TYPE_GUARDIAN_CODE_INVALID, VOContext.ACTORS);
+        }
+
+        // Buscar en el mapa de instancias o crear una nueva con descripción por defecto
+        return INSTANCES.computeIfAbsent(normalizedCode, k -> {
+            String defaultDescription = switch (normalizedCode) {
+                case "MAMA" -> "Madre";
+                case "PAPA" -> "Padre";
+                case "HERMANO" -> "Hermano";
+                case "HERMANA" -> "Hermana";
+                case "ABUELO" -> "Abuelo";
+                case "ABUELA" -> "Abuela";
+                case "TIO" -> "Tío";
+                case "TIA" -> "Tía";
+                case "PRIMO" -> "Primo";
+                case "PRIMA" -> "Prima";
+                case "TUTOR_LEGAL" -> "Tutor Legal";
+                case "OTRO" -> "Otro";
+                default -> throw new IllegalArgumentException("Unknown code: " + normalizedCode);
+            };
+            return new TypeGuardian(normalizedCode, defaultDescription);
+        });
     }
 
     // Instancias estáticas predefinidas (familia nuclear)
-    public static final TypeGuardian MAMA = new TypeGuardian("MAMA", "Madre");
-    public static final TypeGuardian PAPA = new TypeGuardian("PAPA", "Padre");
-    public static final TypeGuardian HERMANO = new TypeGuardian("HERMANO", "Hermano");
-    public static final TypeGuardian HERMANA = new TypeGuardian("HERMANA", "Hermana");
-    public static final TypeGuardian ABUELO = new TypeGuardian("ABUELO", "Abuelo");
-    public static final TypeGuardian ABUELA = new TypeGuardian("ABUELA", "Abuela");
-    public static final TypeGuardian TIO = new TypeGuardian("TIO", "Tío");
-    public static final TypeGuardian TIA = new TypeGuardian("TIA", "Tía");
-    public static final TypeGuardian PRIMO = new TypeGuardian("PRIMO", "Primo");
-    public static final TypeGuardian PRIMA = new TypeGuardian("PRIMA", "Prima");
-    public static final TypeGuardian TUTOR_LEGAL = new TypeGuardian("TUTOR_LEGAL", "Tutor Legal");
-    public static final TypeGuardian OTRO = new TypeGuardian("OTRO", "Otro");
+    public static final TypeGuardian MAMA = TypeGuardian.fromCode("MAMA");
+    public static final TypeGuardian PAPA = TypeGuardian.fromCode("PAPA");
+    public static final TypeGuardian HERMANO = TypeGuardian.fromCode("HERMANO");
+    public static final TypeGuardian HERMANA = TypeGuardian.fromCode("HERMANA");
+    public static final TypeGuardian ABUELO = TypeGuardian.fromCode("ABUELO");
+    public static final TypeGuardian ABUELA = TypeGuardian.fromCode("ABUELA");
+    public static final TypeGuardian TIO = TypeGuardian.fromCode("TIO");
+    public static final TypeGuardian TIA = TypeGuardian.fromCode("TIA");
+    public static final TypeGuardian PRIMO = TypeGuardian.fromCode("PRIMO");
+    public static final TypeGuardian PRIMA = TypeGuardian.fromCode("PRIMA");
+    public static final TypeGuardian TUTOR_LEGAL = TypeGuardian.fromCode("TUTOR_LEGAL");
+    public static final TypeGuardian OTRO = TypeGuardian.fromCode("OTRO");
 
     // Métodos semánticos
     public boolean isParent() {

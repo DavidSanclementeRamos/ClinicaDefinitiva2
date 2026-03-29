@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.administration.accounting;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -44,7 +44,11 @@ public enum ThirdPartiesError implements ErrorCatalog {
     ERR_THIRD_PARTY_ALREADY_INACTIVE(
             "RN-THIRDPARTIES-011","error.thirdParties.alreadyInactive",
             "El tercero ya está inactivo",
-            HttpStatus.CONFLICT, ErrorSeverity.WARN);
+            HttpStatus.CONFLICT, ErrorSeverity.WARN),
+    ERR_THIRD_PARTY_NOT_FOUND(
+    "RN-THIRDPARTIES-012", "error.thirdParty.not.found",
+    "El tercero solicitado no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

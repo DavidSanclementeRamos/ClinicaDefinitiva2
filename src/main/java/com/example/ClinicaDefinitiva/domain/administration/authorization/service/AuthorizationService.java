@@ -11,75 +11,123 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.policie
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.RolError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization.RolError;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
- * Servicio de autorización - punto de entrada único para validaciones
+ * Servicio de autorización con dos niveles bien diferenciados:
+ *
+ * Nivel 1 — RBAC (isAllowedByRole):
+ *   Usado por @RequiresPermission (AOP).
+ *   Solo evalúa RoleBasedPolicy.
+ *   Pregunta: "¿El tipo de rol tiene este permiso base?"
+ *   Sin BD, sin contexto, sin ABAC.
+ *
+ * Nivel 2 — ABAC (isAuthorizedByContext):
+ *   Usado por DefaultAuthorizationHelper dentro del ApplicationService.
+ *   Evalúa OwnershipPolicy, SectorBasedPolicy, SpecialtyBasedPolicy.
+ *   Pregunta: "¿En este contexto específico está permitido?"
+ *   Requiere contexto: sector, ownerId, guardianId, specialties.
+ *
+ * El método isAuthorized() combina ambos para compatibilidad con código existente
+ * que aún no usa la separación.
  */
+@Service
 public class AuthorizationService {
+
     private final RolRepository rolRepository;
-    private final List<PermissionPolicy> policies;
+    private final RoleBasedPolicy roleBasedPolicy;
+    private final List<PermissionPolicy> abacPolicies;
 
     public AuthorizationService(RolRepository rolRepository) {
         this.rolRepository = rolRepository;
-        this.policies = new ArrayList<>();
+        this.roleBasedPolicy = new RoleBasedPolicy();
 
-        // Orden de evaluación (por prioridad descendente):
-        // 1. Ownership (300) - más restrictivo
-        // 2. Sector/Specialty (200) - restricciones específicas
-        // 3. RBAC Base (100) - permisos generales
+        // Solo políticas ABAC (contextuales) — NO incluye RoleBasedPolicy
+        this.abacPolicies = new ArrayList<>();
+        this.abacPolicies.add(new OwnershipPolicy());
+        this.abacPolicies.add(new SectorBasedPolicy());
+        this.abacPolicies.add(new SpecialtyBasedPolicy());
+        this.abacPolicies.sort(Comparator.comparingInt(PermissionPolicy::getPriority).reversed());
+    }
 
-        policies.add(new RoleBasedPolicy());
-        policies.add(new OwnershipPolicy());
-        policies.add(new SectorBasedPolicy());
-        policies.add(new SpecialtyBasedPolicy());
+    // ─────────────────────────────────────────────────────────────────────────
+    // NIVEL 1: RBAC — usado exclusivamente por AuthorizationAspect (@RequiresPermission)
+    // ─────────────────────────────────────────────────────────────────────────
 
-        // Ordenar por prioridad
-        policies.sort(Comparator.comparingInt(PermissionPolicy::getPriority).reversed());
+    /**
+     * Verifica si el rol tiene el permiso base según RoleBasedPolicy.
+     * No requiere instancia de Rol desde BD: opera sobre el enum del rol cargado en sesión.
+     *
+     * @param rol Agregado Rol ya cargado (viene de CustomUserDetails)
+     * @param context SecurityContext con el permiso solicitado
+     * @return true si el rol tiene el permiso base
+     */
+    public boolean isAllowedByRole(Rol rol, SecurityContext context) {
+        return roleBasedPolicy.isAllowed(rol, context);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // NIVEL 2: ABAC — usado exclusivamente por DefaultAuthorizationHelper
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Verifica autorización contextual (ABAC) para políticas de sector, ownership y especialidad.
+     * NO evalúa RoleBasedPolicy — ese chequeo ya fue hecho por @RequiresPermission.
+     *
+     * @param rolId ID del rol del requester
+     * @param context SecurityContext con atributos ABAC (sector, ownerId, guardianId, etc.)
+     * @return true si todas las políticas ABAC aplicables permiten la operación
+     */
+    public boolean isAuthorizedByContext(RolId rolId, SecurityContext context) {
+        Rol rol = rolRepository.findById(rolId)
+                .orElseThrow(() -> new DomainAggregateException(RolError.ERR_ROL_NOT_FOUND, EntityContext.ROL));
+
+        for (PermissionPolicy policy : abacPolicies) {
+            if (!policy.appliesTo(context)) continue;
+            if (!policy.isAllowed(rol, context)) return false;
+        }
+        return true;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // COMBINADO — mantiene compatibilidad con código que usa isAuthorized()
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Evalúa RBAC + ABAC en un solo paso.
+     * Úsalo solo cuando NO tengas la anotación @RequiresPermission en el método.
+     *
+     * @param rolId ID del rol del requester
+     * @param context SecurityContext completo
+     * @return true si RBAC y todas las políticas ABAC aplicables permiten la operación
+     */
+    public boolean isAuthorized(RolId rolId, SecurityContext context) {
+        Rol rol = rolRepository.findById(rolId)
+                .orElseThrow(() -> new DomainAggregateException(RolError.ERR_ROL_NOT_FOUND, EntityContext.ROL));
+
+        // RBAC base
+        if (!roleBasedPolicy.isAllowed(rol, context)) return false;
+
+        // ABAC contextual
+        for (PermissionPolicy policy : abacPolicies) {
+            if (!policy.appliesTo(context)) continue;
+            if (!policy.isAllowed(rol, context)) return false;
+        }
+        return true;
     }
 
     /**
-     * Verifica autorización con todas las políticas aplicables
-     * TODAS las políticas que apliquen deben permitir la operación
+     * Método de conveniencia para permisos simples sin contexto ABAC.
      */
-   /** public boolean isAuthorized(Rol rol, SecurityContext context) {
-        for (PermissionPolicy policy : policies) {
-            // Solo evaluar políticas que apliquen al contexto
-            if (!policy.appliesTo(context)) {
-                continue;
-            }
-
-            // Si alguna política aplicable deniega, denegar
-            if (!policy.isAllowed(rol, context)) {
-                return false;
-            }
-        }
-        return true;
-
-        }*/
-        // AuthorizationService
-        public boolean isAuthorized(RolId rolId, SecurityContext context) {
-            Rol rol = rolRepository.findById(rolId)
-                    .orElseThrow(() -> new DomainAggregateException(RolError.ERR_ROL_NOT_FOUND, EntityContext.ROL));
-            for (PermissionPolicy policy : policies) {
-                if (!policy.appliesTo(context)) continue;
-                if (!policy.isAllowed(rol, context)) return false;
-            }
-            return true;
-        }
-
-
-
-    /**
-     * Método de conveniencia para permisos simples sin contexto ABAC
-     */
-    public boolean hasPermission(RolId rol, UserIdentityId userIdentityId, ResourceCatalog resource, ActionCatalog action) {
+    public boolean hasPermission(RolId rolId, UserIdentityId userIdentityId,
+                                  ResourceCatalog resource, ActionCatalog action) {
         Permission permission = Permission.of(resource, action);
         SecurityContext context = SecurityContext.builder(permission, userIdentityId).build();
-        return isAuthorized(rol, context);
+        return isAuthorized(rolId, context);
     }
 }

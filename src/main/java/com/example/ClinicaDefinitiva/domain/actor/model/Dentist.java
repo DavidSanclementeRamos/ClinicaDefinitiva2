@@ -4,13 +4,12 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.operations.vo.ShiftId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.DentistError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.DentistError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,7 +29,6 @@ public class Dentist   {
     private  LocalDateTime incapacityStart;
     private  LocalDateTime incapacityEnd;
     private  String incapacityNote;
-    private  Instant lastUpdated;
 
 
 
@@ -39,7 +37,6 @@ public class Dentist   {
                    Specialties specialties,
                    UserIdentityId userIdentityId,
                    WorkingHours workingHours,
-                   LocalDateTime lastUpdate,
                    List<TreatmentId> treatmentId){
         this.dentistId = dentistId;
         this.shiftId = shiftId;
@@ -48,7 +45,7 @@ public class Dentist   {
         this.userIdentityId = userIdentityId;
         this.workingHours = workingHours;
         this.availabilityStatus =  DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.AVAILABLE);
-        this.lastUpdate = lastUpdate;
+        this.lastUpdate  = LocalDateTime.now();
         this.treatmentId = treatmentId;
     }
 
@@ -56,8 +53,7 @@ public class Dentist   {
                                           Person data,
                                           Specialties specialties,
                                           UserIdentityId userIdentityId,
-                                          WorkingHours workingHours,
-                                          LocalDateTime lastUpdate
+                                          WorkingHours workingHours
                                            ) {
 
 
@@ -65,9 +61,7 @@ public class Dentist   {
             throw new BusinessRuleViolationException(DentistError.ERR_DENTIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
         }
 
-        return new Dentist(null, null, data, specialties, userIdentityId, workingHours,
-
-                lastUpdate, List.of());
+        return new Dentist(null, null, data, specialties, userIdentityId, workingHours,List.of());
 
     }
 
@@ -94,7 +88,7 @@ public class Dentist   {
         this.availabilityStatus = DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.VACATION);
         this.vacationStart = start;
         this.vacationEnd = end;
-        this.lastUpdated = Instant.now();
+        this.lastUpdate = LocalDateTime.now();
     }
 
     public void applyIncapacity(LocalDateTime start, LocalDateTime end, String note) {
@@ -102,7 +96,7 @@ public class Dentist   {
         this.incapacityStart = start;
         this.incapacityEnd = end;
         this.incapacityNote = note;
-        this.lastUpdated = Instant.now();
+        this.lastUpdate = LocalDateTime.now();
     }
 
     public void returnToAvailable() {
@@ -112,7 +106,6 @@ public class Dentist   {
         this.incapacityStart = null;
         this.incapacityEnd = null;
         this.incapacityNote = null;
-        this.lastUpdated = Instant.now();
     }
 
     public List<TreatmentId> getTreatmentId() {return treatmentId;}
@@ -124,12 +117,38 @@ public class Dentist   {
     public UserIdentityId getUserId() { return userIdentityId; }
     public LocalDateTime getLastUpdate() { return lastUpdate; }
 
+    public ShiftId getShiftId() {
+        return shiftId;
+    }
+
+    public UserIdentityId getUserIdentityId() {
+        return userIdentityId;
+    }
+
+    public LocalDateTime getVacationStart() {
+        return vacationStart;
+    }
+
+    public LocalDateTime getVacationEnd() {
+        return vacationEnd;
+    }
+
+    public LocalDateTime getIncapacityStart() {
+        return incapacityStart;
+    }
+
+    public LocalDateTime getIncapacityEnd() {
+        return incapacityEnd;
+    }
+
+
+    
+
     public String getIncapacityNote() {
         return incapacityNote;
     }
     
 
-    // Solo para tests/simulación de persistencia
     public static Dentist withId(
         DentistId dentistId,
         Person personData,
@@ -137,7 +156,37 @@ public class Dentist   {
         UserIdentityId userId,
         WorkingHours workingHours,
         LocalDateTime lastUpdate) {
-    return new Dentist(dentistId, null, personData, specialties, userId, workingHours, lastUpdate, List.of());
+    return new Dentist(dentistId, null, personData, specialties, userId, workingHours, List.of());
+}
+   
+    // persistencia BD
+public static Dentist reconstruct(
+        DentistId dentistId,
+        ShiftId shiftId,
+        Person personData,
+        Specialties specialties,
+        UserIdentityId userIdentityId,
+        WorkingHours workingHours,
+        LocalDateTime lastUpdate,
+        List<TreatmentId> treatmentId,
+        DentistAvailabilityStatus availabilityStatus,
+        LocalDateTime vacationStart,
+        LocalDateTime vacationEnd,
+        LocalDateTime incapacityStart,
+        LocalDateTime incapacityEnd,
+        String incapacityNote) {
+    
+    Dentist dentist = new Dentist(dentistId, shiftId, personData, specialties, 
+                                   userIdentityId, workingHours, treatmentId);
+    
+    dentist.availabilityStatus = availabilityStatus;
+    dentist.vacationStart = vacationStart;
+    dentist.vacationEnd = vacationEnd;
+    dentist.incapacityStart = incapacityStart;
+    dentist.incapacityEnd = incapacityEnd;
+    dentist.incapacityNote = incapacityNote;
+    
+    return dentist;
 }
 
 }

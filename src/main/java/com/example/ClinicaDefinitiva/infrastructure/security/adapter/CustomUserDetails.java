@@ -30,7 +30,7 @@ public class CustomUserDetails implements UserDetails {
     public CustomUserDetails(UserIdentity user, List<UserRolAssignment> assignments, List<Rol> rol, RolId activeRolId) {
         this.id = user.getId();
         this.username = user.getEmail().value();
-        this.password = user.getHashedPassword().toString();
+        this.password = user.getHashedPassword().getHash();
         this.rols = rol;
         this.activeRolId = activeRolId;
 

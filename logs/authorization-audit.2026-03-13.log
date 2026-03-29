@@ -1,0 +1,4 @@
+Authorization decision: {"timestamp":"2026-03-13T23:03:04.262757600Z","userId":1,"rolId":1,"resource":"ROLE","action":"VIEW_ROLE","decision":"ALLOW","durationMs":11,"context":{"resourceId":1}}
+Authorization decision: {"timestamp":"2026-03-13T23:03:19.430512300Z","userId":1,"rolId":1,"resource":"ROLE","action":"VIEW_ROLE","decision":"ALLOW","durationMs":8,"context":{"resourceId":2}}
+Authorization decision: {"timestamp":"2026-03-13T23:03:42.873949800Z","userId":1,"rolId":1,"resource":"ROLE","action":"VIEW_ROLE","decision":"ALLOW","durationMs":5}
+Authorization decision: {"timestamp":"2026-03-13T23:06:03.701679500Z","userId":1,"rolId":1,"resource":"USER_IDENTITY","action":"READ","decision":"ALLOW","durationMs":24}

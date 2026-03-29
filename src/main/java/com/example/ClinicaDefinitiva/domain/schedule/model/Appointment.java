@@ -235,4 +235,33 @@ public class Appointment {
             return new Appointment(this);
         }
     }
+    
+    // Añadir en Appointment.java
+public static Appointment reconstruct(
+        AppointmentId id,
+        DentistId dentistId,
+        PatientId patientId,
+        ServiceId serviceId,
+        LocalDateTime start,
+        LocalDateTime end,
+        AppointmentStatus status,
+        String reason,
+        AppointmentType appointmentType,
+        LocalDateTime creationDate,
+        LocalDateTime lastUpdated,
+        AppointmentCompletion completion) {
+
+    return new Appointment.Builder()
+            .withId(id)
+            .withDentistId(dentistId)
+            .withPatientId(patientId)
+            .withServiceId(serviceId)
+            .withStart(start)
+            .withEnd(end)
+            .withStatus(status)
+            .withReason(reason)
+            .withAppointmentType(appointmentType)
+            .withCompletion(completion)
+            .build();
+}
 }

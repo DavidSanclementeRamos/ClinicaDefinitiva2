@@ -35,6 +35,10 @@ public final class ExcludedBlock {
         this.end = end;
         this.reason = reason;
     }
+    
+    public static ExcludedBlock of(LocalTime start, LocalTime end, String reason){
+        return new ExcludedBlock(start, end,reason);
+    }
 
     public boolean overlapsWith(ExcludedBlock other) {
         return this.start.isBefore(other.end) && this.end.isAfter(other.start);

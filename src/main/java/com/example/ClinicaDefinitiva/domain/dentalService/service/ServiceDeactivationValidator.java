@@ -7,7 +7,10 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.Provide
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.schedule.output.AppointmentRepository;
+import org.springframework.stereotype.Service;
 
+
+@Service
 public class ServiceDeactivationValidator {
 
     private final AppointmentRepository repository;

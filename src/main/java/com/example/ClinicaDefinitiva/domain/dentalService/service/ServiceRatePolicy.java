@@ -6,7 +6,9 @@ import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
 import java.math.BigDecimal;
+import org.springframework.stereotype.Service;
 
+@Service
 public final class ServiceRatePolicy {
 
     private static final BigDecimal MIN_RATE_PERCENTAGE = new BigDecimal("0.80"); // 80%

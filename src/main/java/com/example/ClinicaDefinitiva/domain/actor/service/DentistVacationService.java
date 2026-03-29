@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.application.exceptions.actor.DentistNotFoun
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.DentistError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.DentistError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.schedule.model.Appointment;
@@ -14,7 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DentistVacationService {
 
     private final AppointmentRepository appointmentRepository;

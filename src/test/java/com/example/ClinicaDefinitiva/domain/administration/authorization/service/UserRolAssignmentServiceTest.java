@@ -1,119 +1,167 @@
-
 package com.example.ClinicaDefinitiva.domain.administration.authorization.service;
 
-import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.UserRolAssignmentRepository;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.service.UserRolAssignmentService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
 class UserRolAssignmentServiceTest {
 
-   /** @Test
-    void shouldReturnActiveRoles() {
-        UserRolAssignmentRepository assignmentRepo = mock(UserRolAssignmentRepository.class);
-        RolRepository rolRepo = mock(RolRepository.class);
+    @Mock
+    private UserRolAssignmentRepository assignmentRepository;
+    @Mock
+    private RolRepository rolRepository;
 
-        UserIdentityId userId = UserIdentityId.from(1L);
-        RolId rolId = RolId.of(10L);
-        Rol rol =  Rol.createDefault(RolEnum.ADMINISTRATOR, "Admin");
+    @InjectMocks
+    private UserRolAssignmentService service;
 
-        UserRolAssignment assignment = UserRolAssignment.assignPermanent(userId, rolId, true);
-        when(assignmentRepo.findByUserId(userId)).thenReturn(List.of(assignment));
-        when(rolRepo.findById(rolId)).thenReturn(Optional.of(rol));
+    private static final UserIdentityId USER_ID = UserIdentityId.from(1L);
+    private static final RolId ROL_ID = RolId.of(1L);
 
-        UserRolAssignmentService service = new UserRolAssignmentService(assignmentRepo, rolRepo);
+    @Test
+    @DisplayName("Asignar rol activo exitosamente")
+    void assignRole_success() {
+        // Stubs necesarios para el flujo exitoso
+        Rol rol = mock(Rol.class);
+        when(rol.getStatusRol()).thenReturn(RolStatus.ACTIVE);
+        when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol));
+        when(assignmentRepository.findByUserId(USER_ID)).thenReturn(List.of());
+        when(assignmentRepository.save(any(UserRolAssignment.class))).thenAnswer(i -> i.getArgument(0));
 
-        List<Rol> activeRoles = service.getActiveRoles(userId);
-        assertEquals(1, activeRoles.size());
-        assertEquals("Admin", activeRoles.get(0).getDescription());
+        UserRolAssignment result = service.assignRole(USER_ID, ROL_ID, true);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getUserId()).isEqualTo(USER_ID);
+        assertThat(result.getRolId()).isEqualTo(ROL_ID);
+        assertThat(result.isPrimary()).isTrue();
+        verify(assignmentRepository).save(any(UserRolAssignment.class));
     }
 
     @Test
-    void shouldReturnPrimaryRole() {
-        UserRolAssignmentRepository assignmentRepo = mock(UserRolAssignmentRepository.class);
-        RolRepository rolRepo = mock(RolRepository.class);
+    @DisplayName("Asignar rol inactivo lanza excepción")
+    void assignRole_inactive_throws() {
+        // Solo stubs necesarios para la excepción
+        Rol rol = mock(Rol.class);
+        when(rol.getStatusRol()).thenReturn(RolStatus.INACTIVE);
+        when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol));
 
-        UserIdentityId userId = UserIdentityId.from(2L);
-        RolId rolId = RolId.of(20L);
-        Rol rol =  Rol.createDefault(RolEnum.RECEPTIONIST, "Receptionist");
-
-        UserRolAssignment assignment = UserRolAssignment.assignPermanent(userId, rolId, true);
-        when(assignmentRepo.findByUserIdAndIsPrimary(userId, true)).thenReturn(Optional.of(assignment));
-        when(rolRepo.findById(rolId)).thenReturn(Optional.of(rol));
-
-        UserRolAssignmentService service = new UserRolAssignmentService(assignmentRepo, rolRepo);
-
-        Rol primaryRole = service.getPrimaryRole(userId);
-        assertEquals("Receptionist", primaryRole.getDescription());
+        assertThatThrownBy(() -> service.assignRole(USER_ID, ROL_ID, true))
+                .isInstanceOf(BusinessRuleViolationException.class);
+        
+        verify(assignmentRepository, never()).findByUserId(any());
     }
 
     @Test
-    void shouldAssignPermanentRoleSuccessfully() {
-        UserRolAssignmentRepository assignmentRepo = mock(UserRolAssignmentRepository.class);
-        RolRepository rolRepo = mock(RolRepository.class);
-
-        UserIdentityId userId = UserIdentityId.from(3L);
-        RolId rolId = RolId.of(30L);
-        Rol rol =  Rol.createDefault(RolEnum.DENTIST, "Dentist");
-
-        when(rolRepo.findById(rolId)).thenReturn(Optional.of(rol));
-        when(assignmentRepo.findByUserId(userId)).thenReturn(List.of());
-        when(assignmentRepo.save(any(UserRolAssignment.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        UserRolAssignmentService service = new UserRolAssignmentService(assignmentRepo, rolRepo);
-
-        UserRolAssignment assignment = service.assignRole(userId, rolId, true);
-        assertTrue(assignment.isPrimary());
-        assertEquals(rolId, assignment.getRolId());
+    @DisplayName("Asignar rol ya activo lanza excepción")
+    void assignRole_alreadyActive_throws() {
+        // Stubs necesarios para detectar rol ya activo
+        Rol rol = mock(Rol.class);
+        when(rol.getStatusRol()).thenReturn(RolStatus.ACTIVE);
+        when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol));
+        
+        // Configurar asignación existente
+        UserRolAssignment existingAssignment = mock(UserRolAssignment.class);
+        when(existingAssignment.isCurrentlyActive()).thenReturn(true);
+        when(existingAssignment.getRolId()).thenReturn(ROL_ID);
+        
+        // Para getActiveRoles - necesitamos que rolRepository.findById devuelva el rol existente
+        // pero NO necesitamos configurar existingRol.getId() porque la comparación
+        // se hace con rolId (ROL_ID) directamente, no con rol.getId()
+        when(assignmentRepository.findByUserId(USER_ID)).thenReturn(List.of(existingAssignment));
+        
+        // getActiveRoles llama a rolRepository.findById para cada asignación
+        Rol existingRol = mock(Rol.class);
+        // NO configurar existingRol.getId() - no es necesario porque en assignRole,
+        // la comparación se hace con rolId directamente: r.getId().equals(rolId)
+        // Pero si no se configura, getActiveRoles lo obtiene y luego se compara en assignRole
+        // Para evitar NPE, sí necesitamos configurarlo
+        when(existingRol.getId()).thenReturn(ROL_ID);
+        when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(existingRol));
+        
+        assertThatThrownBy(() -> service.assignRole(USER_ID, ROL_ID, true))
+                .isInstanceOf(BusinessRuleViolationException.class);
+        
+        verify(assignmentRepository, never()).save(any());
     }
 
     @Test
-    void shouldThrowExceptionWhenAssigningInactiveRole() {
-        UserRolAssignmentRepository assignmentRepo = mock(UserRolAssignmentRepository.class);
-        RolRepository rolRepo = mock(RolRepository.class);
+    @DisplayName("Revocar último rol activo lanza excepción")
+    void revokeLastRole_throws() {
+        // Configurar rol para la validación
+        Rol rol = mock(Rol.class);
+        when(rol.getId()).thenReturn(ROL_ID);
+        when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol));
+        
+        // Configurar asignación única
+        UserRolAssignment assignment = mock(UserRolAssignment.class);
+        when(assignment.isCurrentlyActive()).thenReturn(true);
+        when(assignment.getRolId()).thenReturn(ROL_ID);
+        
+        // Para getActiveRoles
+        when(assignmentRepository.findByUserId(USER_ID)).thenReturn(List.of(assignment));
+        // getActiveRoles llama a rolRepository.findById para cada asignación
+        // Ya configurado arriba: when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol))
+        
+        // Para findByUserIdAndRolId
+        when(assignmentRepository.findByUserIdAndRolId(USER_ID, ROL_ID)).thenReturn(List.of(assignment));
+        
+        // NO configurar assignmentRepository.save - no se llega a usar
 
-        UserIdentityId userId = UserIdentityId.from(4L);
-        RolId rolId = RolId.of(40L);
-        Rol rol =  Rol.createDefault(RolEnum.PATIENT, "Inactive Role");
-
-        when(rolRepo.findById(rolId)).thenReturn(Optional.of(rol));
-
-        UserRolAssignmentService service = new UserRolAssignmentService(assignmentRepo, rolRepo);
-
-        assertThrows(BusinessRuleViolationException.class, () ->
-                service.assignRole(userId, rolId, false));
+        assertThatThrownBy(() -> service.revokeRole(USER_ID, ROL_ID))
+                .isInstanceOf(BusinessRuleViolationException.class);
+        
+        verify(assignment, never()).revoke();
     }
 
     @Test
-    void shouldRevokeRoleSuccessfully() {
-        UserRolAssignmentRepository assignmentRepo = mock(UserRolAssignmentRepository.class);
-        RolRepository rolRepo = mock(RolRepository.class);
-
-        UserIdentityId userId = UserIdentityId.from(5L);
-        RolId rolId = RolId.of(50L);
-        Rol rol =  Rol.createDefault(RolEnum.ADMINISTRATOR, "Admin");
-
-        UserRolAssignment assignment = UserRolAssignment.assignPermanent(userId, rolId, false);
-
-        when(assignmentRepo.findByUserId(userId)).thenReturn(List.of(assignment, assignment));
-        when(assignmentRepo.findByUserIdAndRolId(userId, rolId)).thenReturn(List.of(assignment));
-
-        UserRolAssignmentService service = new UserRolAssignmentService(assignmentRepo, rolRepo);
-
-        assertDoesNotThrow(() -> service.revokeRole(userId, rolId));
-    }*/
+    @DisplayName("Revocar rol cuando hay múltiples roles activos")
+    void revokeRole_success() {
+        RolId otherRolId = RolId.of(2L);
+        
+        // Configurar roles
+        Rol rol1 = mock(Rol.class);
+        when(rol1.getId()).thenReturn(ROL_ID);
+        Rol rol2 = mock(Rol.class);
+        when(rol2.getId()).thenReturn(otherRolId);
+        
+        // Configurar asignaciones
+        UserRolAssignment assignment1 = mock(UserRolAssignment.class);
+        when(assignment1.isCurrentlyActive()).thenReturn(true);
+        when(assignment1.getRolId()).thenReturn(ROL_ID);
+        
+        UserRolAssignment assignment2 = mock(UserRolAssignment.class);
+        when(assignment2.isCurrentlyActive()).thenReturn(true);
+        when(assignment2.getRolId()).thenReturn(otherRolId);
+        
+        when(assignmentRepository.findByUserId(USER_ID)).thenReturn(List.of(assignment1, assignment2));
+        when(assignmentRepository.findByUserIdAndRolId(USER_ID, ROL_ID)).thenReturn(List.of(assignment1));
+        
+        // Para getActiveRoles
+        when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol1));
+        when(rolRepository.findById(otherRolId)).thenReturn(Optional.of(rol2));
+        
+        assertThatCode(() -> service.revokeRole(USER_ID, ROL_ID))
+                .doesNotThrowAnyException();
+        
+        verify(assignment1).revoke();
+        verify(assignmentRepository).save(assignment1);
+        verify(assignment2, never()).revoke();
+    }
 }
-

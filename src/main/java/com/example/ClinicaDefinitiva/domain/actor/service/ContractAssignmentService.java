@@ -6,12 +6,13 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.PatientError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.PatientError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
 import java.util.Optional;
-
+import org.springframework.stereotype.Service;
+@Service
 public class ContractAssignmentService {
 
     private final ContractRepository contractRepository;

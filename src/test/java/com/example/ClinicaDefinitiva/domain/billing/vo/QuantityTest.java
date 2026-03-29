@@ -1,74 +1,117 @@
-
 package com.example.ClinicaDefinitiva.domain.billing.vo;
 
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.assertj.core.api.Assertions.*;
 
 class QuantityTest {
 
     @Test
-    void shouldCreateValidQuantity() {
-        Quantity q = Quantity.of(10);
-        assertEquals(10, q.getValue());
-        assertTrue(q.isMultiple());
-        assertFalse(q.isSingle());
+    @DisplayName("VO-BIL-008: Cantidad positiva válida")
+    void of_withValidPositive_shouldCreate() {
+        Quantity quantity = Quantity.of(5);
+        assertThat(quantity.getValue()).isEqualTo(5);
+        assertThat(quantity.asInteger()).isEqualTo(5);
+        assertThat(quantity.toString()).isEqualTo("5");
     }
 
     @Test
-    void shouldCreateSingleQuantityWithFactoryMethod() {
-        Quantity q = Quantity.one();
-        assertEquals(1, q.getValue());
-        assertTrue(q.isSingle());
-        assertFalse(q.isMultiple());
+    @DisplayName("VO-BIL-009: Cantidad cero lanza excepción")
+    void of_withZero_shouldThrow() {
+        assertThatThrownBy(() -> Quantity.of(0))
+                .isInstanceOf(ValueObjectValidationException.class)
+                .hasMessageContaining("La cantidad debe ser mayor o igual a 1");
     }
 
     @Test
-    void shouldThrowExceptionWhenQuantityIsLessThanMinimum() {
-        assertThrows(ValueObjectValidationException.class, () -> Quantity.of(0));
+    @DisplayName("VO-BIL-009: Cantidad negativa lanza excepción")
+    void of_withNegative_shouldThrow() {
+        assertThatThrownBy(() -> Quantity.of(-5))
+                .isInstanceOf(ValueObjectValidationException.class)
+                .hasMessageContaining("La cantidad debe ser mayor o igual a 1");
     }
 
     @Test
-    void shouldThrowExceptionWhenQuantityExceedsMaximum() {
-        assertThrows(ValueObjectValidationException.class, () -> Quantity.of(2000));
+    @DisplayName("VO-BIL-010: Cantidad excede máximo (1000) lanza excepción")
+    void of_withExceedsMax_shouldThrow() {
+        assertThatThrownBy(() -> Quantity.of(1500))
+                .isInstanceOf(ValueObjectValidationException.class)
+                .hasMessageContaining("La cantidad no puede exceder 1000 ítems por línea de factura");
     }
 
     @Test
-    void shouldAddQuantitiesCorrectly() {
+    @DisplayName("Cantidad 1 es single")
+    void one_isSingle() {
+        Quantity quantity = Quantity.one();
+        assertThat(quantity.getValue()).isEqualTo(1);
+        assertThat(quantity.isSingle()).isTrue();
+        assertThat(quantity.isMultiple()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Cantidad mayor a 1 es multiple")
+    void multiple_isMultiple() {
+        Quantity quantity = Quantity.of(3);
+        assertThat(quantity.isMultiple()).isTrue();
+        assertThat(quantity.isSingle()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Suma de dos cantidades")
+    void add_shouldSum() {
         Quantity q1 = Quantity.of(5);
         Quantity q2 = Quantity.of(3);
         Quantity result = q1.add(q2);
-        assertEquals(8, result.getValue());
+        assertThat(result.getValue()).isEqualTo(8);
     }
 
     @Test
-    void shouldMultiplyQuantityCorrectly() {
+    @DisplayName("Multiplicación por factor positivo")
+    void multiply_withPositiveFactor_shouldMultiply() {
         Quantity q = Quantity.of(4);
         Quantity result = q.multiply(3);
-        assertEquals(12, result.getValue());
+        assertThat(result.getValue()).isEqualTo(12);
     }
 
     @Test
-    void shouldThrowExceptionWhenMultiplyByZeroOrNegative() {
-        Quantity q = Quantity.of(5);
-        assertThrows(IllegalArgumentException.class, () -> q.multiply(0));
-        assertThrows(IllegalArgumentException.class, () -> q.multiply(-2));
+    @DisplayName("Multiplicación por factor cero lanza excepción")
+    void multiply_withZeroFactor_shouldThrow() {
+        Quantity q = Quantity.of(4);
+        assertThatThrownBy(() -> q.multiply(0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("El factor debe ser positivo");
     }
 
     @Test
-    void shouldRespectEquality() {
-        Quantity q1 = Quantity.of(10);
-        Quantity q2 = Quantity.of(10);
-        Quantity q3 = Quantity.of(20);
-
-        assertEquals(q1, q2);
-        assertNotEquals(q1, q3);
+    @DisplayName("Multiplicación por factor negativo lanza excepción")
+    void multiply_withNegativeFactor_shouldThrow() {
+        Quantity q = Quantity.of(4);
+        assertThatThrownBy(() -> q.multiply(-2))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("El factor debe ser positivo");
     }
 
     @Test
-    void toStringShouldReturnValue() {
-        Quantity q = Quantity.of(15);
-        assertEquals("15", q.toString());
+    @DisplayName("Igualdad basada en valor")
+    void equals_shouldCompareByValue() {
+        Quantity q1 = Quantity.of(5);
+        Quantity q2 = Quantity.of(5);
+        Quantity q3 = Quantity.of(7);
+        assertThat(q1).isEqualTo(q2);
+        assertThat(q1).isNotEqualTo(q3);
+        assertThat(q1).isNotEqualTo(null);
+        assertThat(q1).isNotEqualTo("5");
+    }
+
+    @Test
+    @DisplayName("HashCode consistente con equals")
+    void hashCode_shouldBeConsistent() {
+        Quantity q1 = Quantity.of(5);
+        Quantity q2 = Quantity.of(5);
+        assertThat(q1.hashCode()).isEqualTo(q2.hashCode());
     }
 }
-

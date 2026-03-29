@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * Evento: PaymentRefundedEvent
  */
-class PaymentRefundedEvent {
+public class PaymentRefundedEvent {
     
     private final String eventId;
     private final Instant occurredOn;

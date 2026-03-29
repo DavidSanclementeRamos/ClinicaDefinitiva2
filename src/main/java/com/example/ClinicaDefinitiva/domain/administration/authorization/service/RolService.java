@@ -2,20 +2,18 @@ package com.example.ClinicaDefinitiva.domain.administration.authorization.servic
 
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.RolError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.stereotype.Service;
 
 /**
  * Servicio de dominio para reglas de negocio relacionadas con Roles.
  * Encapsula validaciones que requieren colaboración con repositorios.
  */
+@Service
 public class RolService {
 
     private final RolRepository rolRepository;

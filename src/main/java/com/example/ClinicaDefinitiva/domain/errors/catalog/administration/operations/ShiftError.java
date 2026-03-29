@@ -75,7 +75,11 @@ public enum ShiftError implements ErrorCatalog {
     ERR_SHIFT_CANCELLATION_REQUIRES_REASON(
             "RN-SHIFT-015","error.shift.cancellation.reason",
             "Debe especificarse una razón para cancelar el turno",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
+            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
+    ERR_SHIFT_NOT_FOUND(
+    "RN-SHIFT-016", "error.shift.not.found",
+    "El turno solicitado no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

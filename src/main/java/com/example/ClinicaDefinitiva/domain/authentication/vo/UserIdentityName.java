@@ -1,31 +1,17 @@
 package com.example.ClinicaDefinitiva.domain.authentication.vo;
 
-
+import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authentication.AuthenticationVoError;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.util.Category;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * Value Object que representa el nombre de un usuario.
- *
- * Responsabilidades:
- * - Garantizar que el nombre cumpla reglas de validación
- * - Normalizar el nombre (trim, caso)
- * - Ser inmutable
- *
- * Reglas de negocio:
- * - Mínimo 3 caracteres
- * - Máximo 15 caracteres
- * - No puede ser null o vacío
- * - Se trimea automáticamente
- */
 public final class UserIdentityName implements Serializable {
 
     @Serial
@@ -36,53 +22,64 @@ public final class UserIdentityName implements Serializable {
 
     private final String value;
 
-    public UserIdentityName(String value) {
+    // Constructor PRIVADO con VALIDACIÓN
+    private UserIdentityName(String value) {
+        // Validaciones aquí, en el constructor
+        if (value == null) {
+            throw new ValueObjectValidationException(
+                    AuthenticationVoError.ERR_USER_NAME_NULL,
+                    VOContext.AUTHENTICATION
+            );
+        }
+
+        if (value.isBlank()) {
+            throw new ValueObjectValidationException(
+                    AuthenticationVoError.ERR_USER_NAME_EMPTY,
+                    VOContext.AUTHENTICATION
+            );
+        }
+
+        if (value.length() < MIN_LENGTH) {
+            throw new ValueObjectValidationException(
+                    AuthenticationVoError.ERR_USER_NAME_TOO_SHORT,
+                    VOContext.AUTHENTICATION
+            );
+        }
+
+        if (value.length() > MAX_LENGTH) {
+            throw new ValueObjectValidationException(
+                    AuthenticationVoError.ERR_USER_NAME_TOO_LONG,
+                    VOContext.AUTHENTICATION
+            );
+        }
+
         this.value = value;
     }
 
+    // create(): usa Outcome (para casos donde no quieres excepción)
     public static Outcome<UserIdentityName> create(String raw) {
-        if (raw == null) {
+        try {
+            String trimmed = raw != null ? raw.trim() : null;
+            return Outcome.ok(new UserIdentityName(trimmed));
+        } catch (ValueObjectValidationException e) {
+            // Extraer el código de error de la excepción
+            ErrorCatalog errorCode = e.getCatalogo();
             return Outcome.fail(new OutcomeDetail(
-                    AuthenticationVoError.ERR_USER_NAME_NULL,
+                    errorCode,
                     ErrorSeverity.ERROR,
-                    Category.TECNICO,VOContext.AUTHENTICATION
+                    Category.TECNICO,
+                    VOContext.AUTHENTICATION
             ));
         }
-
-        if (raw.isBlank()) {
-            return Outcome.fail(new OutcomeDetail(
-                    AuthenticationVoError.ERR_USER_NAME_EMPTY,
-                    ErrorSeverity.ERROR,
-                    Category.TECNICO, VOContext.AUTHENTICATION));
-        }
-
-        String trimmed = raw.trim();
-
-        if (trimmed.length() < MIN_LENGTH) {
-            return Outcome.fail(new OutcomeDetail(
-                   AuthenticationVoError.ERR_USER_NAME_TOO_SHORT,
-                    ErrorSeverity.ERROR,
-                    Category.TECNICO,VOContext.AUTHENTICATION
-            ));
-        }
-
-        if (trimmed.length() > MAX_LENGTH) {
-            return Outcome.fail(new OutcomeDetail(
-                    AuthenticationVoError.ERR_USER_NAME_TOO_LONG,
-                    ErrorSeverity.ERROR,
-                    Category.TECNICO, VOContext.AUTHENTICATION
-            ));
-        }
-
-        return Outcome.ok(new UserIdentityName(trimmed));
     }
-    
-    public static UserIdentityName of(String value){
-        return new UserIdentityName(value);
+
+    // of(): lanza excepción directamente (para mappers, servicios de aplicación)
+    public static UserIdentityName of(String value) {
+        String trimmed = value != null ? value.trim() : null;
+        return new UserIdentityName(trimmed);
     }
 
     public String getValue() {
         return value;
     }
-
 }

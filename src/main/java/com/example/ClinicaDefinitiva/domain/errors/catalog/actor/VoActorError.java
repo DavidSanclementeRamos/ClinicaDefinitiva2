@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.actor;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;

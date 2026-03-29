@@ -5,7 +5,6 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.output.Con
 import com.example.ClinicaDefinitiva.domain.billing.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
@@ -18,7 +17,9 @@ import com.example.ClinicaDefinitiva.domain.billing.output.RateRepository;
 import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
 import com.example.ClinicaDefinitiva.domain.dentalService.output.ProvidedServiceRepository;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.billing.InvoiceError;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ProvidedServiceError;
+import org.springframework.stereotype.Service;
 
 /**
  * Domain Service: InvoiceDomainService
@@ -28,6 +29,7 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.Provide
  * - RN-INVOICE-007: Facturas institucionales requieren contrato
  * - RN-INVOICE-016: El contrato es la entidad pagadora institucional
  */
+@Service
 public final class InvoiceDomainService {
 
     private final ContractRepository contractRepository;

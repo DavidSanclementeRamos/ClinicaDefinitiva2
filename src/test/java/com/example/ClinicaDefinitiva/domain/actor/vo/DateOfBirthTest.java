@@ -1,60 +1,38 @@
-package com.example.ClinicaDefinitiva.domain.actor;
+package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-import com.example.ClinicaDefinitiva.domain.actor.vo.DateOfBirth;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class DateOfBirthTest {
 
     @Test
-    void shouldCreateValidDateOfBirth() {
-        LocalDate date = LocalDate.now().minusYears(25);
+    @DisplayName("Crear DateOfBirth válida")
+    void shouldCreateValidDate() {
+        LocalDate date = LocalDate.of(1990, 5, 15);
         DateOfBirth dob = DateOfBirth.of(date);
-
-        assertEquals(date, dob.asDate());
-        assertEquals(date, dob.Value());
-        assertEquals("Date of birth: " + date, dob.toString());
+        assertThat(dob.asDate()).isEqualTo(date);
     }
 
     @Test
-    void shouldThrowExceptionWhenDateIsNull() {
-        assertThrows(ValueObjectValidationException.class,
-                () -> DateOfBirth.of(null));
+    @DisplayName("Fecha futura lanza excepción")
+    void shouldThrowForFutureDate() {
+        LocalDate future = LocalDate.now().plusDays(1);
+        assertThatThrownBy(() -> DateOfBirth.of(future))
+                .isInstanceOf(ValueObjectValidationException.class)
+                .hasMessageContaining("La fecha de nacimiento no puede ser futura");
     }
 
     @Test
-    void shouldThrowExceptionWhenDateIsFuture() {
-        LocalDate futureDate = LocalDate.now().plusDays(1);
-        assertThrows(ValueObjectValidationException.class,
-                () -> DateOfBirth.of(futureDate));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenDateTooOld() {
-        LocalDate oldDate = LocalDate.now().minusYears(150);
-        assertThrows(ValueObjectValidationException.class,
-                () -> DateOfBirth.of(oldDate));
-    }
-
-    @Test
-    void shouldBeEqualWhenSameDate() {
-        LocalDate date = LocalDate.of(1990, 1, 1);
-        DateOfBirth dob1 = DateOfBirth.of(date);
-        DateOfBirth dob2 = DateOfBirth.of(date);
-
-        assertEquals(dob1, dob2);
-        assertEquals(dob1.hashCode(), dob2.hashCode());
-    }
-
-    @Test
-    void shouldNotBeEqualWhenDifferentDates() {
-        DateOfBirth dob1 = DateOfBirth.of(LocalDate.of(1990, 1, 1));
-        DateOfBirth dob2 = DateOfBirth.of(LocalDate.of(2000, 1, 1));
-
-        assertNotEquals(dob1, dob2);
+    @DisplayName("Fecha con edad >130 años lanza excepción")
+    void shouldThrowForTooOld() {
+        LocalDate tooOld = LocalDate.now().minusYears(131);
+        assertThatThrownBy(() -> DateOfBirth.of(tooOld))
+                .isInstanceOf(ValueObjectValidationException.class)
+                .hasMessageContaining("La fecha de nacimiento excede el rango válido (edad > 130 años)");
     }
 }

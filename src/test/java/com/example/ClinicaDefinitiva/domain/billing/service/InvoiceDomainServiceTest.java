@@ -1,7 +1,5 @@
-
 package com.example.ClinicaDefinitiva.domain.billing.service;
 
-import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.model.Contract;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ContractRepository;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
@@ -9,197 +7,91 @@ import com.example.ClinicaDefinitiva.domain.billing.model.Invoice;
 import com.example.ClinicaDefinitiva.domain.billing.model.InvoiceItem;
 import com.example.ClinicaDefinitiva.domain.billing.model.Rate;
 import com.example.ClinicaDefinitiva.domain.billing.output.RateRepository;
-import com.example.ClinicaDefinitiva.domain.billing.vo.CurrencyCode;
-import com.example.ClinicaDefinitiva.domain.billing.vo.ProviderId;
-import com.example.ClinicaDefinitiva.domain.vo.Notes;
-import com.example.ClinicaDefinitiva.domain.billing.vo.Quantity;
-import com.example.ClinicaDefinitiva.domain.billing.vo.RateId;
-import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
-import com.example.ClinicaDefinitiva.domain.vo.Price;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.ClinicaDefinitiva.domain.dentalService.output.ProvidedServiceRepository;
+import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.Currency;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.Currency;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 class InvoiceDomainServiceTest {
 
- /*   private ContractRepository contractRepository;
+    @Mock
+    private ContractRepository contractRepository;
+    @Mock
     private RateRepository rateRepository;
-    private InvoiceDomainService service;
+    @Mock
+    private ProvidedServiceRepository serviceRepository;
 
-    @BeforeEach
-    void setUp() {
-        contractRepository = mock(ContractRepository.class);
-        rateRepository = mock(RateRepository.class);
-        service = new InvoiceDomainService(contractRepository, rateRepository);
-    }
+    @InjectMocks
+    private InvoiceDomainService domainService;
 
     @Test
-    void shouldValidateInstitutionalContractSuccessfully() {
+    @DisplayName("RN-INVOICE-007: Contrato institucional válido pasa")
+    void validateInstitutionalContract_validContract_shouldNotThrow() {
+        Invoice invoice = mock(Invoice.class);
+        when(invoice.getContractId()).thenReturn(ContractId.of(1L));
         Contract contract = mock(Contract.class);
         when(contract.isActiveAndValid()).thenReturn(true);
         when(contractRepository.findById(any())).thenReturn(Optional.of(contract));
 
-        Invoice invoice = Invoice.createInstitutional(
-                ContractId.of(10L),
-                ProviderId.of(2L),
-                DentistId.of(5L),
-                CurrencyCode.of("COP"),
-                Notes.of("Notes"),
-                LocalDateTime.now().plusDays(7)
-                
-                
-        );
-
-        assertDoesNotThrow(() -> service.validateInstitutionalContract(invoice));
+        assertThatCode(() -> domainService.validateInstitutionalContract(invoice))
+                .doesNotThrowAnyException();
     }
 
     @Test
-    void shouldThrowExceptionWhenInstitutionalContractMissing() {
+    @DisplayName("RN-INVOICE-007: Contrato inexistente lanza excepción")
+    void validateInstitutionalContract_missingContract_shouldThrow() {
+        Invoice invoice = mock(Invoice.class);
+        when(invoice.getContractId()).thenReturn(ContractId.of(1L));
         when(contractRepository.findById(any())).thenReturn(Optional.empty());
 
-        Invoice invoice = Invoice.createInstitutional(
-                ContractId.of(10L),
-                ProviderId.of(2L),
-                DentistId.of(5L),
-                CurrencyCode.of("COP"),
-                Notes.of("Notes"),
-                LocalDateTime.now().plusDays(7)
-        );
-
-        assertThrows(BusinessRuleViolationException.class,
-                () -> service.validateInstitutionalContract(invoice));
+        assertThatThrownBy(() -> domainService.validateInstitutionalContract(invoice))
+                .isInstanceOf(BusinessRuleViolationException.class)
+                .hasMessageContaining("Factura a EPS requiere contrato vigente. Asociar ContractId antes de emitir");
     }
 
     @Test
-    void shouldThrowExceptionWhenInstitutionalContractNotValid() {
-        Contract contract = mock(Contract.class);
-        when(contract.isActiveAndValid()).thenReturn(false);
-        when(contractRepository.findById(any())).thenReturn(Optional.of(contract));
+    @DisplayName("RN-INVOICE-003: Tarifas vigentes en la fecha de emisión")
+    void validateRates_allRatesValid_shouldNotThrow() {
+        Invoice invoice = mock(Invoice.class);
+        InvoiceItem item = mock(InvoiceItem.class);
+        when(item.getServiceId()).thenReturn(ServiceId.of(1L));
+        when(invoice.getItems()).thenReturn(List.of(item));
+        when(invoice.getContractId()).thenReturn(null);
 
-        Invoice invoice = Invoice.createInstitutional(
-                ContractId.of(30L),
-                ProviderId.of(5L),
-                DentistId.of(5L),
-                CurrencyCode.of("COP"),
-                Notes.of("Notes"),
-                LocalDateTime.now().plusDays(7)
-        );
-
-        assertThrows(BusinessRuleViolationException.class,
-                () -> service.validateInstitutionalContract(invoice));
-    }
-
-    @Test
-    void shouldValidateRatesSuccessfully() {
         Rate rate = mock(Rate.class);
         doNothing().when(rate).ensureValidAt(any());
+
         when(rateRepository.findActiveRateForService(any(), any())).thenReturn(Optional.of(rate));
 
-        InvoiceItem item = InvoiceItem.fromRateSnapshot(
-                ServiceId.of(100L),
-                "SRV001",
-                "Consulta",
-                RateId.of(5L),
-                Price.of(200, Currency.getInstance("COP")),
-                Quantity.of(1),
-                
-                LocalDateTime.now().plusDays(7)
-        );
-
-        Invoice invoice = Invoice.createInstitutional(
-                ContractId.of(10L),
-                ProviderId.of(2L),
-                DentistId.of(5L),
-                CurrencyCode.of("COP"),
-                Notes.of("Notes"),
-                LocalDateTime.now().plusDays(7)
-        );
-
-        assertDoesNotThrow(() -> service.validateRates(invoice, LocalDateTime.now()));
+        assertThatCode(() -> domainService.validateRates(invoice, LocalDateTime.now()))
+                .doesNotThrowAnyException();
     }
 
     @Test
-    void shouldThrowExceptionWhenRateMissing() {
+    @DisplayName("RN-INVOICE-003: Tarifa no encontrada lanza excepción")
+    void validateRates_rateNotFound_shouldThrow() {
+        Invoice invoice = mock(Invoice.class);
+        InvoiceItem item = mock(InvoiceItem.class);
+        when(item.getServiceId()).thenReturn(ServiceId.of(1L));
+        when(invoice.getItems()).thenReturn(List.of(item));
+
         when(rateRepository.findActiveRateForService(any(), any())).thenReturn(Optional.empty());
 
-        InvoiceItem item = InvoiceItem.fromRateSnapshot(
-                ServiceId.of(200L),
-                "SRV002",
-                "Tratamiento",
-                RateId.of(6L),
-
-                Price.of(300, Currency.getInstance("COP")),
-                Quantity.of(1),
-                LocalDateTime.now().plusDays(7)
-        );
-
-        Invoice invoice = Invoice.createInstitutional(
-               ContractId.of(10L),
-                ProviderId.of(2L),
-                DentistId.of(5L),
-                CurrencyCode.of("COP"),
-                Notes.of("Notes"),
-                LocalDateTime.now().plusDays(7)
-        );
-        invoice.addItem(item); 
-
-        assertThrows(BusinessRuleViolationException.class,
-                () -> service.validateRates(invoice, LocalDateTime.now().plusDays(20)));
+        assertThatThrownBy(() -> domainService.validateRates(invoice, LocalDateTime.now()))
+                .isInstanceOf(BusinessRuleViolationException.class)
+                .hasMessageContaining("No se puede emitir factura con tarifas vencidas. Validar vigencia de Rate al momento de facturar");
     }
-
-    @Test
-    void shouldThrowExceptionWhenRateNotValidAtDate() {
-        Rate rate = mock(Rate.class);
-        doThrow(new BusinessRuleViolationException(
-                InvoiceError.ERR_INVOICE_EXPIRED_RATE,
-                EntityContext.INVOICE
-        )).when(rate).ensureValidAt(any());
-
-        when(rateRepository.findActiveRateForService(any(), any())).thenReturn(Optional.of(rate));
-
-        InvoiceItem item = InvoiceItem.fromRateSnapshot(
-                ServiceId.of(300L),
-                "SRV003",
-                "Radiografía",
-                RateId.of(7L),
-                Price.of(400, Currency.getInstance("COP")),
-                Quantity.of(1),
-                
-                
-                LocalDateTime.now().plusDays(7)
-        );
-
-        Invoice invoice = Invoice.createInstitutional(
-                ContractId.of(10L),
-                ProviderId.of(2L),
-                DentistId.of(5L),
-                CurrencyCode.of("COP"),
-                Notes.of("Notes"),
-                LocalDateTime.now().plusDays(7)
-        );
-        invoice.addItem(item); 
-
-        assertThrows(BusinessRuleViolationException.class,
-                () -> service.validateRates(invoice, LocalDateTime.now().plusDays(67)));
-    }*/
 }

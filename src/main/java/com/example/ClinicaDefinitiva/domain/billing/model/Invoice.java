@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.billing.model;
 
 
-import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceNumberGenerator;
+import com.example.ClinicaDefinitiva.domain.billing.service.InvoiceNumberGenerator;
 import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceNumber;
 import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.billing.vo.ProviderId;
@@ -12,7 +12,7 @@ import com.example.ClinicaDefinitiva.domain.vo.Price;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.InvoiceError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.billing.InvoiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.payment.event.InvoiceFullyPaidEvent;
@@ -190,6 +190,22 @@ public final class Invoice {
         pendingEvents.clear();
         return events;
     }
+    
+     /**
+     * Marca la factura como pagada.
+     */
+    public void markAsPaid() {
+        String previousState = this.status.toString();
+        this.status = this.status.transitionTo(InvoiceStatus.Status.PAID);
+        this.updatedAt = LocalDateTime.now();
+    }
+    
+    /**
+     * Verifica si la factura puede recibir pagos.
+     */
+    public boolean canReceivePayment() {
+        return status.isPending() || status.isDraft();
+    }
 
     // Queries / estado calculado
 
@@ -310,4 +326,53 @@ public final class Invoice {
 
         public Invoice build() { return new Invoice(this); }
     }
+    
+    // Añadir en Invoice.java
+public static Invoice reconstruct(
+        InvoiceId id,
+        PatientId patientId,
+        DentistId dentistId,
+        ProviderId providerId,
+        ContractId contractId,
+        InvoiceNumber number,
+        InvoiceStatus status,
+        CurrencyCode currency,
+        Price subtotal,
+        Price tax,
+        Price total,
+        Price totalPaid,
+        LocalDateTime dueDate,
+        LocalDateTime updatedAt,
+        Notes notes,
+        List<InvoiceItem> items) {
+
+    Invoice.Builder builder;
+    if (patientId != null) {
+        builder = Invoice.builder().patientId(patientId);
+    } else {
+        builder = Invoice.builder().contractId(contractId);
+    }
+
+    Invoice invoice = builder
+            .id(id)
+            .dentistId(dentistId)
+            .providerId(providerId)
+            .currency(currency)
+            .notes(notes)
+            .dueDate(dueDate)
+            .build();
+
+    // Establecer campos adicionales
+    invoice.number = number;
+    invoice.status = status;
+    invoice.subtotal = subtotal;
+    invoice.tax = tax;
+    invoice.total = total;
+    invoice.totalPaid = totalPaid;
+    invoice.updatedAt = updatedAt;
+    invoice.items.clear();
+    invoice.items.addAll(items);
+
+    return invoice;
+}
 }

@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.infrastructure.security.config;
 
-import com.example.ClinicaDefinitiva.application.portsInput.authentication.SecurityPolicy;
+import com.example.ClinicaDefinitiva.application.authentication.input.SecurityPolicy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

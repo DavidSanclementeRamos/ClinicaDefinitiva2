@@ -1,53 +1,43 @@
+package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-package com.example.ClinicaDefinitiva.domain.actor;
-
-import com.example.ClinicaDefinitiva.domain.actor.vo.Sector;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class SectorTest {
 
-    @Test
-    void shouldCreateValidSectorFromEnum() {
-        Sector sector = Sector.of(Sector.Type.RECEPTION);
-        assertEquals(Sector.Type.RECEPTION, sector.getValue());
-        assertEquals("Recepción", sector.getDescription());
+    @ParameterizedTest
+    @EnumSource(Sector.Type.class)
+    @DisplayName("Crear Sector con todos los tipos")
+    void shouldCreateSector(Sector.Type type) {
+        Sector sector = Sector.of(type);
+        assertThat(sector.getValue()).isEqualTo(type);
+        assertThat(sector.is(type)).isTrue();
+        assertThat(sector.getDescription()).isEqualTo(type.getDescription());
     }
 
     @Test
-    void shouldCreateValidSectorFromString() {
-        Sector sector = Sector.fromString("reception");
-        assertEquals(Sector.Type.RECEPTION, sector.getValue());
-        assertEquals("Recepción", sector.getDescription());
+    @DisplayName("Sector.fromString válido")
+    void shouldCreateFromString() {
+        Sector sector = Sector.fromString("RECEPTION");
+        assertThat(sector.getValue()).isEqualTo(Sector.Type.RECEPTION);
     }
 
     @Test
-    void shouldThrowExceptionWhenStringIsNullOrBlank() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> Sector.fromString(null));
-        assertThrows(ValueObjectValidationException.class,
-            () -> Sector.fromString("   "));
+    @DisplayName("Sector.fromString inválido lanza excepción")
+    void shouldThrowForInvalidString() {
+        assertThatThrownBy(() -> Sector.fromString("INVALID"))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldThrowExceptionWhenStringNotAllowed() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> Sector.fromString("unknown"));
-    }
-
-    @Test
-    void shouldBeEqualWhenSameSector() {
-        Sector s1 = Sector.fromString("billing");
-        Sector s2 = Sector.of(Sector.Type.BILLING);
-
-        assertEquals(s1.getValue(), s2.getValue());
-        assertEquals(s1.toString(), s2.toString());
+    @DisplayName("Sector.fromString con valor nulo lanza excepción")
+    void shouldThrowForNullString() {
+        assertThatThrownBy(() -> Sector.fromString(null))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 }
-

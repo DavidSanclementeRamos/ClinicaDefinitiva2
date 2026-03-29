@@ -1,16 +1,17 @@
 package com.example.ClinicaDefinitiva.domain.authentication.service;
 
 import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.UserNotEligibleException;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.authentication.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 import java.time.Instant;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -25,6 +26,7 @@ import java.util.List;
  * - Evitar acoplamiento directo entre bounded contexts
  *
  */
+@Service
 public class UserAccessValidator {
 
     private final UserIdentityRepository userRepository;

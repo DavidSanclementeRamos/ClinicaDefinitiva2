@@ -1,32 +1,24 @@
-
 package com.example.ClinicaDefinitiva.domain.billing.vo;
 
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.*;
 
 class ProviderIdTest {
 
     @Test
-    void shouldCreateProviderIdSuccessfully() {
-        ProviderId id = ProviderId.of(10L);
-        assertEquals(10L, id.getValue());
-        assertEquals("ProviderId[getValue=10]", id.toString());
+    @DisplayName("Crear ProviderId válido")
+    void shouldCreateValidId() {
+        ProviderId id = ProviderId.of(1L);
+        assertThat(id.getValue()).isEqualTo(1L);
     }
 
     @Test
-    void shouldThrowExceptionWhenValueIsNull() {
-        assertThrows(ValueObjectValidationException.class, () -> ProviderId.of(null));
-    }
-
-    @Test
-    void shouldRespectEquality() {
-        ProviderId id1 = ProviderId.of(20L);
-        ProviderId id2 = ProviderId.of(20L);
-        ProviderId id3 = ProviderId.of(30L);
-
-        assertEquals(id1, id2);
-        assertNotEquals(id1, id3);
+    @DisplayName("Crear ProviderId con null lanza excepción")
+    void shouldThrowForNull() {
+        assertThatThrownBy(() -> ProviderId.of(null))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 }
-

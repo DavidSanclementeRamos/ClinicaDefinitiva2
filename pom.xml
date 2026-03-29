@@ -20,6 +20,7 @@
 
 	<properties>
 		<java.version>17</java.version>
+                <testcontainers.version>1.20.4</testcontainers.version>
 	</properties>
 
 	<dependencyManagement>
@@ -75,6 +76,54 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+                
+                
+<dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers</artifactId>
+        <version>${testcontainers.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>mysql</artifactId>
+        <version>${testcontainers.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${testcontainers.version}</version>
+        <scope>test</scope>
+    </dependency>
+
+    
+    <!-- Spring Boot Testcontainers (para @ServiceConnection) -->
+    <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-testcontainers</artifactId>
+    <scope>test</scope>
+</dependency>
+
+    <!-- Driver de MySQL (para pruebas) -->
+    <dependency>
+        <groupId>com.mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+
+
+                
+                
+                <!-- Stripe SDK -->
+<dependency>
+    <groupId>com.stripe</groupId>
+    <artifactId>stripe-java</artifactId>
+    <version>24.3.0</version>
+</dependency>
+
+
 
 		<!-- AssertJ -->
 		<dependency>

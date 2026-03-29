@@ -3,8 +3,7 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.PatientError;
+import com.example.ClinicaDefinitiva.domain.clinicalTreatments.vo.TreatmentId;import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.PatientError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
@@ -12,7 +11,6 @@ import com.example.ClinicaDefinitiva.domain.util.*;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -28,14 +26,15 @@ public class Patient  {
     private Person person;
 
 
-    private Patient(ContractId contractId, LocalDateTime lastUpdate, GuardianId guardianId, Person person, List<TreatmentId> treatments, UserIdentityId userIdentityId, PatientId patientId) {
+    private Patient(ContractId contractId, GuardianId guardianId, Person person, List<TreatmentId> treatments, UserIdentityId userIdentityId, PatientId patientId) {
         this.contractId = contractId;
-        this.lastUpdate = lastUpdate;
+        this.lastUpdate = lastUpdate = LocalDateTime.now();
         this.guardianId = guardianId;
         this.person = person;
         this.treatments = treatments;
         this.userIdentityId = userIdentityId;
         this.patientId = patientId;
+        validateGuardian();
     }
 
     public static Patient registerPatient(
@@ -46,14 +45,15 @@ public class Patient  {
 
         
 
-        if (!data.getAge().isAdult() && guardianId == null) {
-            throw new BusinessRuleViolationException(PatientError.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
-        }
         if (!data.getAge().isEligibleForRegistration()) {
             throw new DomainAggregateException(PatientError.ERR_PATIENT_INVALID_AGE, EntityContext.PATIENT);
         }
+        if (!data.getAge().isAdult() && guardianId == null) {
+            throw new BusinessRuleViolationException(PatientError.ERR_PATIENT_MINOR_REQUIRES_GUARDIAN, EntityContext.PATIENT);
+        }
+        
 
-        return new Patient(null,  LocalDate.now().atStartOfDay(), guardianId, data, null, userIdentityId, null);
+        return new Patient(null,  guardianId, data, null, userIdentityId, null);
     }
 
     public void updatePatientContact(Address address, PhoneNumber phoneNumber) {
@@ -122,7 +122,6 @@ public class Patient  {
     public boolean requiereResponsable() { return !person.getAge().isAdult(); }
     public boolean hasGuardian() { return guardianId != null; }
 
-    // Getters
     public PatientId getPatientId() { return patientId; }
     public Person getPerson() { return person; }
     public GuardianId getGuardianId() { return guardianId; }
@@ -145,7 +144,6 @@ public static Patient reconstruct(
     
     return new Patient(
         contractId,
-        lastUpdate,
         guardianId,
         person,
         treatments,
@@ -153,12 +151,11 @@ public static Patient reconstruct(
         patientId
     );
 }
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+

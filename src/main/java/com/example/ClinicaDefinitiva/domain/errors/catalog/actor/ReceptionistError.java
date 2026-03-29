@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.actor;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -54,7 +54,11 @@ public enum ReceptionistError implements ErrorCatalog {
     ERR_RECEPTIONIST_AGE_INSUFFICIENT(
             "RN-RECEPTIONIST-010","error.receptionist.age.insufficient",
             "La edad del recepcionista es insuficiente para cumplir con los requisitos mínimos",
-            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR);
+            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR),
+    ERR_RECEPTIONIST_NOT_FOUND(
+    "RN-RECEPTIONIST-011", "error.receptionist.not.found",
+    "El recepcionista solicitado no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

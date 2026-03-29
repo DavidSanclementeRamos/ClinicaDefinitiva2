@@ -1,7 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.vo;
 
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
@@ -16,6 +16,8 @@ public final class Sector {
         CALL_CENTER("Call Center"),
         INVENTORY("Inventario"),
         DENTAL_TECHNICIAN_SUPPORT("Soporte técnico odontológico"),
+        HUMAN_RESOURCES("Recursos Humanos"),
+
         DENTAL_ASSISTANCE("Asistencia odontológica");
 
         private final String description;

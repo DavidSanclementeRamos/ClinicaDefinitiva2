@@ -1,65 +1,48 @@
-
 package com.example.ClinicaDefinitiva.domain.administration.authorization.vo;
 
-import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ActionCatalog;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.*;
 
 class PermissionTest {
 
     @Test
-    void shouldCreatePermissionWithCreateAction() {
-        ResourceCatalog resource = ResourceCatalog.custom("USER");
-        Permission permission = Permission.create(resource);
-
-        assertEquals("CREATE_USER", permission.getCode());
-        assertEquals(ActionCatalog.BasicAction.CREATE.name(), permission.getAction().getCode());
+    @DisplayName("Crear permiso CREATE")
+    void createPermission() {
+        Permission perm = Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        assertThat(perm.getAction().getCode()).isEqualTo("CREATE");
+        assertThat(perm.getResource().getCode()).isEqualTo("PATIENT");
     }
 
     @Test
-    void shouldCreatePermissionWithReadAction() {
-        ResourceCatalog resource = ResourceCatalog.custom("USER");
-        Permission permission = Permission.read(resource);
-
-        assertEquals("READ_USER", permission.getCode());
+    @DisplayName("Crear permiso READ")
+    void readPermission() {
+        Permission perm = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        assertThat(perm.getAction().getCode()).isEqualTo("READ");
     }
 
     @Test
-    void shouldCreatePermissionWithCustomAction() {
-        ResourceCatalog resource = ResourceCatalog.custom("REPORT");
-        ActionCatalog action = ActionCatalog.custom("EXPORT");
-        Permission permission = Permission.of(resource, action);
-
-        assertEquals("EXPORT_REPORT", permission.getCode());
+    @DisplayName("Crear permiso UPDATE")
+    void updatePermission() {
+        Permission perm = Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        assertThat(perm.getAction().getCode()).isEqualTo("UPDATE");
     }
 
     @Test
-    void shouldBeEqualWhenResourceAndActionMatch() {
-        ResourceCatalog resource = ResourceCatalog.custom("USER");
-        Permission p1 = Permission.update(resource);
-        Permission p2 = Permission.of(resource, ActionCatalog.of(ActionCatalog.BasicAction.UPDATE));
-
-        assertEquals(p1, p2);
-        assertEquals(p1.hashCode(), p2.hashCode());
+    @DisplayName("Crear permiso DELETE")
+    void deletePermission() {
+        Permission perm = Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        assertThat(perm.getAction().getCode()).isEqualTo("DELETE");
     }
 
     @Test
-    void shouldNotBeEqualWhenResourceDiffers() {
-        Permission p1 = Permission.delete(ResourceCatalog.custom("USER"));
-        Permission p2 = Permission.delete(ResourceCatalog.custom("REPORT"));
-
-        assertNotEquals(p1, p2);
-    }
-
-    @Test
-    void shouldNotBeEqualWhenActionDiffers() {
-        ResourceCatalog resource = ResourceCatalog.custom("USER");
-        Permission p1 = Permission.create(resource);
-        Permission p2 = Permission.read(resource);
-
-        assertNotEquals(p1, p2);
+    @DisplayName("Crear permiso personalizado")
+    void customPermission() {
+        Permission perm = Permission.of(
+                ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT),
+                ActionCatalog.of(ActionCatalog.BasicAction.CANCEL)
+        );
+        assertThat(perm.getCode()).isEqualTo("CANCEL_APPOINTMENT");
     }
 }
-

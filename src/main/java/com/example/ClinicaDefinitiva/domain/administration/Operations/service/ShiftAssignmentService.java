@@ -15,7 +15,9 @@ import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationExce
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ShiftAssignmentService {
     private final DentistRepository dentistRepository;
     private final ShiftRepository shiftRepository;

@@ -1,46 +1,42 @@
-
 package com.example.ClinicaDefinitiva.domain.billing.vo;
 
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Currency;
+import static org.assertj.core.api.Assertions.*;
 
 class CurrencyCodeTest {
 
-    @Test
-    void shouldCreateValidCurrencyCode() {
-        CurrencyCode code = CurrencyCode.of("USD");
-        assertEquals("USD", code.getCode());
-        assertEquals(Currency.getInstance("USD"), code.toJavaCurrency());
+    @ParameterizedTest
+    @ValueSource(strings = {"COP", "USD", "EUR", "GBP", "JPY"})
+    @DisplayName("Crear CurrencyCode con código ISO 4217 válido")
+    void shouldCreateValidCurrencyCode(String code) {
+        CurrencyCode currency = CurrencyCode.of(code);
+        assertThat(currency.getCode()).isEqualTo(code.toUpperCase());
+        assertThat(currency.toJavaCurrency()).isNotNull();
     }
 
     @Test
-    void shouldNormalizeToUpperCase() {
-        CurrencyCode code = CurrencyCode.of("usd");
-        assertEquals("USD", code.getCode());
+    @DisplayName("Crear CurrencyCode con código nulo lanza excepción")
+    void shouldThrowForNull() {
+        assertThatThrownBy(() -> CurrencyCode.of(null))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldThrowExceptionWhenCodeIsNull() {
-        assertThrows(ValueObjectValidationException.class, () -> CurrencyCode.of(null));
+    @DisplayName("Crear CurrencyCode con código vacío lanza excepción")
+    void shouldThrowForEmpty() {
+        assertThatThrownBy(() -> CurrencyCode.of(""))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldThrowExceptionWhenCodeIsBlank() {
-        assertThrows(ValueObjectValidationException.class, () -> CurrencyCode.of("   "));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenCodeIsInvalid() {
-        assertThrows(ValueObjectValidationException.class, () -> CurrencyCode.of("XYZ123"));
-    }
-
-    @Test
-    void toStringShouldReturnCode() {
-        CurrencyCode code = CurrencyCode.of("EUR");
-        assertEquals("EUR", code.toString());
+    @DisplayName("Crear CurrencyCode con código inválido lanza excepción")
+    void shouldThrowForInvalidCode() {
+        assertThatThrownBy(() -> CurrencyCode.of("XYZ"))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 }
-

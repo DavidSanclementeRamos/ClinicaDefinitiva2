@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.actor;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -44,7 +44,11 @@ public enum GuardianError implements ErrorCatalog {
     ERR_GUARDIAN_PATIENT_LIMIT_EXCEEDED(
             "RN-GUARDIAN-008","error.guardian.patients.limit",
             "El responsable ha alcanzado el límite de pacientes a cargo",
-            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR);
+            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR),
+    ERR_GUARDIAN_NOT_FOUND(
+    "RN-GUARDIAN-009", "error.guardian.not.found",
+    "El responsable legal solicitado no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

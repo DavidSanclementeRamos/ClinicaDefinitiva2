@@ -1,62 +1,77 @@
 package com.example.ClinicaDefinitiva.domain.authentication.vo;
 
+import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
-import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
+import static org.assertj.core.api.Assertions.*;
 
 class UserIdentityNameTest {
 
+    // ========== Pruebas para create() ==========
+    
     @Test
-    void shouldCreateValidName() {
-        Outcome<UserIdentityName> outcome = UserIdentityName.create("  David  ");
-        assertTrue(outcome.isSuccess());
-        assertEquals("David", outcome.getValue().get().getValue());
-        assertTrue(outcome.getDetalles().isEmpty());
+    @DisplayName("create() - nombre válido retorna Outcome exitoso")
+    void create_shouldReturnSuccessForValidName() {
+        Outcome<UserIdentityName> outcome = UserIdentityName.create("juan");
+        assertThat(outcome.isSuccess()).isTrue();
+        assertThat(outcome.getValue().get().getValue()).isEqualTo("juan");
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("create() - nombre null o vacío retorna Outcome fallido")
+    void create_shouldReturnFailureForNullOrEmpty(String invalidInput) {
+        Outcome<UserIdentityName> outcome = UserIdentityName.create(invalidInput);
+        assertThat(outcome.isFailure()).isTrue();
     }
 
     @Test
-    void shouldFailWhenNameIsNull() {
-        Outcome<UserIdentityName> outcome = UserIdentityName.create(null);
-        assertTrue(outcome.isFailure());
-
-        List<OutcomeDetail> detalles = outcome.getDetalles();
-        assertEquals(1, detalles.size());
-      //  assertEquals(VoAccesError.ERR_USER_NAME_NULL, detalles.get(0).getCode());
-        assertEquals(ErrorSeverity.ERROR, detalles.get(0).getSeverity());
+    @DisplayName("create() - nombre muy corto retorna Outcome fallido")
+    void create_shouldReturnFailureForTooShort() {
+        Outcome<UserIdentityName> outcome = UserIdentityName.create("ab");
+        assertThat(outcome.isFailure()).isTrue();
     }
 
     @Test
-    void shouldFailWhenNameIsEmpty() {
-        Outcome<UserIdentityName> outcome = UserIdentityName.create("   ");
-        assertTrue(outcome.isFailure());
+    @DisplayName("create() - nombre muy largo retorna Outcome fallido")
+    void create_shouldReturnFailureForTooLong() {
+        Outcome<UserIdentityName> outcome = UserIdentityName.create("a".repeat(16));
+        assertThat(outcome.isFailure()).isTrue();
+    }
 
-        List<OutcomeDetail> detalles = outcome.getDetalles();
-        assertEquals(1, detalles.size());
-      // assertEquals(VoAccesError.ERR_USER_NAME_EMPTY, detalles.get(0).getCode());
+    // ========== Pruebas para of() ==========
+    
+    @Test
+    @DisplayName("of() - nombre válido retorna instancia")
+    void of_shouldReturnInstanceForValidName() {
+        UserIdentityName name = UserIdentityName.of("juan");
+        assertThat(name.getValue()).isEqualTo("juan");
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("of() - nombre null o vacío lanza excepción")
+    void of_shouldThrowForNullOrEmpty(String invalidInput) {
+        assertThatThrownBy(() -> UserIdentityName.of(invalidInput))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldFailWhenNameTooShort() {
-        Outcome<UserIdentityName> outcome = UserIdentityName.create("Al");
-        assertTrue(outcome.isFailure());
-
-        List<OutcomeDetail> detalles = outcome.getDetalles();
-       // assertEquals(VoAccesError.ERR_USER_NAME_TOO_SHORT, detalles.get(0).getCode());
+    @DisplayName("of() - nombre muy corto lanza excepción")
+    void of_shouldThrowForTooShort() {
+        assertThatThrownBy(() -> UserIdentityName.of("ab"))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldFailWhenNameTooLong() {
-        Outcome<UserIdentityName> outcome = UserIdentityName.create("abcdefghijklmnop");
-        assertTrue(outcome.isFailure());
-
-        List<OutcomeDetail> detalles = outcome.getDetalles();
-       // assertEquals(VoAccesError.ERR_USER_NAME_TOO_LONG, detalles.get(0).getCode());
+    @DisplayName("of() - nombre muy largo lanza excepción")
+    void of_shouldThrowForTooLong() {
+        assertThatThrownBy(() -> UserIdentityName.of("a".repeat(16)))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 }

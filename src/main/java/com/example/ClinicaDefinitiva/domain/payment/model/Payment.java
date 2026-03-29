@@ -46,8 +46,9 @@ public final class Payment {
     private Price refundedAmount; // Monto reembolsado (para reembolsos parciales)
     
     private final LocalDateTime paymentDate;
-    private final LocalDateTime createdAt;
+    private  LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String refundReason;
     
     
     /**
@@ -76,14 +77,12 @@ public final class Payment {
      * Crea un pago en estado PENDING (para procesar con gateway).
      */
     public static Payment createPending(
-            PaymentId id,
             InvoiceId invoiceId,
             Price amount,
             PaymentMethod paymentMethod,
             Payer payer) {
         
         return new Builder()
-                .id(id)
                 .invoiceId(invoiceId)
                 .amount(amount)
                 .paymentMethod(paymentMethod)
@@ -167,7 +166,7 @@ public final class Payment {
      * 
      * @param refundAmount Monto a reembolsar
      */
-    public void refund(Price refundAmount) {
+    public void refund(Price refundAmount, String reason) {
         ensureConfirmed();
         
         if (refundAmount.isNegativeOrZero()) {
@@ -282,8 +281,15 @@ public final class Payment {
     public boolean isCancelled() { return status.isCancelled(); }
     public boolean isRefunded() { return status.isRefunded(); }
     public boolean isSuccessful() { return status.isSuccessful(); }
+
+    public String getRefundReason() {
+        return refundReason;
+    }
+
+    public void setRefundReason(String refundReason) {
+        this.refundReason = refundReason;
+    }
     
-    // Getters
     
     public PaymentId getId() { return id; }
     public InvoiceId getInvoiceId() { return invoiceId; }
@@ -346,4 +352,46 @@ public final class Payment {
             return new Payment(this); 
         }
     }
+    
+    // En Payment.java agregar:
+public static Payment reconstruct(
+        PaymentId id,
+        InvoiceId invoiceId,
+        Price amount,
+        PaymentMethod paymentMethod,
+        Payer payer,
+        PaymentStatus status,
+        TransactionReference transactionReference,
+        String errorMessage,
+        Price refundedAmount,
+        LocalDateTime paymentDate,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt,
+        String refundReason
+) {
+
+    // Usar el builder para construir el objeto
+    Payment payment = Payment.builder()
+        .id(id)
+        .invoiceId(invoiceId)
+        .amount(amount)
+        .paymentMethod(paymentMethod)
+        .payer(payer)
+        .paymentDate(paymentDate)
+        .build();
+
+    // Luego asignar los campos privados (necesitarás setters o usar reflexión)
+    // Por simplicidad, puedes añadir métodos package-private para asignar estos campos.
+    // Aquí asumo que tienes un método interno para ello.
+    payment.status = status;
+    payment.transactionReference = transactionReference;
+    payment.errorMessage = errorMessage;
+    payment.refundedAmount = refundedAmount;
+    payment.createdAt = createdAt;
+    payment.updatedAt = updatedAt;
+    payment.refundReason = refundReason;
+    
+    
+    return payment;
+}
 }

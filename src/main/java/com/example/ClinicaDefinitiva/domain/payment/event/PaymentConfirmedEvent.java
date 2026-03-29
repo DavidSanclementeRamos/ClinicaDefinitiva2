@@ -2,9 +2,9 @@
 package com.example.ClinicaDefinitiva.domain.payment.event;
 
 
-import com.example.ClinicaDefinitiva.domain.administration.accounting.enu.PaymentMethod;
 import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.payment.vo.PaymentId;
+import com.example.ClinicaDefinitiva.domain.payment.vo.PaymentMethod;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 
 import java.time.Instant;

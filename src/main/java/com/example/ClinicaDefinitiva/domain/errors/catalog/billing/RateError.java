@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.billing;
 
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
@@ -36,7 +36,11 @@ public enum RateError implements ErrorCatalog {
     ERR_RATE_NOT_VALID_AT_DATE(
             "RN-RATE-006","error.rate.notValidAtDate",
             "La tarifa no es válida en la fecha solicitada",
-            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR);
+            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR),
+    ERR_RATE_NOT_FOUND(
+    "RN-RATE-007", "error.rate.not.found",
+    "La tarifa solicitada no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

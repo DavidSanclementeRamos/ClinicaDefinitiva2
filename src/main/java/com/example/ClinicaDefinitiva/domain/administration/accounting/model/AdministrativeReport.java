@@ -3,12 +3,11 @@ package com.example.ClinicaDefinitiva.domain.administration.accounting.model;
 import com.example.ClinicaDefinitiva.domain.vo.Name;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting.AdministrativeReportError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.accounting.AdministrativeReportError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;

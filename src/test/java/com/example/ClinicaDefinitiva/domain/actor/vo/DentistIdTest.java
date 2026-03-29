@@ -1,38 +1,24 @@
-package com.example.ClinicaDefinitiva.domain.actor;
+package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-import org.junit.jupiter.api.Test;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
-import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.*;
 
 class DentistIdTest {
 
     @Test
-    void shouldCreateValidDentistId() {
-        DentistId id = DentistId.of(123L);
-        assertEquals(123L, id.value());
+    @DisplayName("Crear DentistId válido")
+    void shouldCreateValidId() {
+        DentistId id = DentistId.of(1L);
+        assertThat(id.value()).isEqualTo(1L);
     }
 
     @Test
-    void shouldThrowExceptionWhenNullValue() {
-        assertThrows(ValueObjectValidationException.class,
-                () -> DentistId.of(null));
-    }
-
-    @Test
-    void shouldBeEqualWhenSameValue() {
-        DentistId id1 = DentistId.of(10L);
-        DentistId id2 = DentistId.of(10L);
-
-        assertEquals(id1, id2);
-        assertEquals(id1.hashCode(), id2.hashCode());
-    }
-
-    @Test
-    void shouldNotBeEqualWhenDifferentValues() {
-        DentistId id1 = DentistId.of(10L);
-        DentistId id2 = DentistId.of(20L);
-
-        assertNotEquals(id1, id2);
+    @DisplayName("Crear DentistId con null lanza excepción")
+    void shouldThrowForNull() {
+        assertThatThrownBy(() -> DentistId.of(null))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 }

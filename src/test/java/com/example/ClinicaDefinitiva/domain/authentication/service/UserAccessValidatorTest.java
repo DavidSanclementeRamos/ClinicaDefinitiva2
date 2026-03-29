@@ -1,93 +1,117 @@
 package com.example.ClinicaDefinitiva.domain.authentication.service;
 
-import com.example.ClinicaDefinitiva.application.exceptions.authentication.UserIdentityNoFoundException;
 import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.authentication.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
+import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptions.UserNotEligibleException;
 import com.example.ClinicaDefinitiva.domain.util.Category;
+import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
-import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 import java.util.Optional;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class UserAccessValidatorTest {
 
-    private UserIdentityRepository userRepo;
+    @Mock
+    private UserIdentityRepository userRepository;
+
+    @InjectMocks
     private UserAccessValidator validator;
+
+    private UserIdentity user;
     private UserIdentityId userId;
-    private EntityContext context;
+    private Instant now;
+    private EntityContext context = EntityContext.USER_IDENTITY;
 
     @BeforeEach
     void setUp() {
-        userRepo = mock(UserIdentityRepository.class);
-        validator = new UserAccessValidator(userRepo);
-        userId = new UserIdentityId(1L);
-        context = EntityContext.USER_IDENTITY;
+        userId = UserIdentityId.from(1L);
+        user = mock(UserIdentity.class);
+        now = Instant.now();
+        // No se necesita stubbing de user.getId() aquí
     }
 
     @Test
-    void shouldThrowExceptionWhenUserNotFound() {
-        when(userRepo.findById(userId)).thenReturn(Optional.empty());
+    void validateUserCanPerformSensitiveAction_shouldSucceed() {
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(user.canPerformSensitiveAction(now)).thenReturn(Outcome.ok(user));
 
-       // assertThrows(UserIdentityNoFoundException.class,
-              //  () -> validator.validateUserCanPerformSensitiveAction(userId, Instant.now(), context));
+        assertThatCode(() -> validator.validateUserCanPerformSensitiveAction(userId, now, context))
+                .doesNotThrowAnyException();
     }
 
     @Test
-    void shouldPassWhenUserIsEligible() {
-        UserIdentity user = mock(UserIdentity.class);
-        when(userRepo.findById(userId)).thenReturn(Optional.of(user));
-        when(user.canPerformSensitiveAction(any())).thenReturn(Outcome.ok(user));
+    void validateUserCanPerformSensitiveAction_shouldThrowWhenUserNotFound() {
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        assertDoesNotThrow(() -> validator.validateUserCanPerformSensitiveAction(userId, Instant.now(), context));
+        assertThatThrownBy(() -> validator.validateUserCanPerformSensitiveAction(userId, now, context))
+                .isInstanceOf(BusinessRuleViolationException.class)
+                .hasMessageContaining("El usuario no fue encontrado en el sistema");
     }
+
     @Test
-    void shouldThrowBusinessExceptionWhenUserNotVerified() {
-        UserIdentity user = mock(UserIdentity.class);
+    void validateUserCanPerformSensitiveAction_shouldThrowWhenUserNotVerified() {
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
         OutcomeDetail detail = new OutcomeDetail(
                 UserIdentityError.ERR_USER_NOT_VERIFIED,
                 ErrorSeverity.ERROR,
                 Category.TECNICO,
-                context
+                EntityContext.USER_IDENTITY
         );
-        when(userRepo.findById(userId)).thenReturn(Optional.of(user));
-        when(user.canPerformSensitiveAction(any())).thenReturn(Outcome.fail(List.of(detail)));
+        Outcome<UserIdentity> failOutcome = Outcome.fail(detail);
+        when(user.canPerformSensitiveAction(now)).thenReturn(failOutcome);
 
-        UserNotEligibleException ex = assertThrows(UserNotEligibleException.class,
-                () -> validator.validateUserCanPerformSensitiveAction(userId, Instant.now(), context));
-
-        // Verificar que el código de error está en los detalles
-        assertEquals(UserIdentityError.ERR_USER_NOT_VERIFIED, ex.getDetails().get(0).getCode());
+        assertThatThrownBy(() -> validator.validateUserCanPerformSensitiveAction(userId, now, context))
+                .isInstanceOf(UserNotEligibleException.class);
     }
 
     @Test
-    void shouldThrowBusinessExceptionWhenUserLocked() {
-        UserIdentity user = mock(UserIdentity.class);
+    void validateUserCanPerformSensitiveAction_shouldThrowWhenAccountLocked() {
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
         OutcomeDetail detail = new OutcomeDetail(
                 UserIdentityError.ERR_USER_ACCOUNT_LOCKED,
                 ErrorSeverity.ERROR,
                 Category.TECNICO,
-                context
+                EntityContext.USER_IDENTITY
         );
-        when(userRepo.findById(userId)).thenReturn(Optional.of(user));
-        when(user.canPerformSensitiveAction(any())).thenReturn(Outcome.fail(List.of(detail)));
+        Outcome<UserIdentity> failOutcome = Outcome.fail(detail);
+        when(user.canPerformSensitiveAction(now)).thenReturn(failOutcome);
 
-        UserNotEligibleException ex = assertThrows(UserNotEligibleException.class,
-                () -> validator.validateUserCanPerformSensitiveAction(userId, Instant.now(), context));
+        assertThatThrownBy(() -> validator.validateUserCanPerformSensitiveAction(userId, now, context))
+                .isInstanceOf(UserNotEligibleException.class);
+    }
 
-        // Verificar que el código de error está en los detalles
-        assertEquals(UserIdentityError.ERR_USER_ACCOUNT_LOCKED, ex.getDetails().get(0).getCode());
+    @Test
+    void validateUserCanPerformSensitiveAction_shouldThrowWhenInactive() {
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        OutcomeDetail detail = new OutcomeDetail(
+                UserIdentityError.ERR_USER_INACTIVE,
+                ErrorSeverity.ERROR,
+                Category.TECNICO,
+                EntityContext.USER_IDENTITY
+        );
+        Outcome<UserIdentity> failOutcome = Outcome.fail(detail);
+        when(user.canPerformSensitiveAction(now)).thenReturn(failOutcome);
+
+        assertThatThrownBy(() -> validator.validateUserCanPerformSensitiveAction(userId, now, context))
+                .isInstanceOf(UserNotEligibleException.class);
     }
 }

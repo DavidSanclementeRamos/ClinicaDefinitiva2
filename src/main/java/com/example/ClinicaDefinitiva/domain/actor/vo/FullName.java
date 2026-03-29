@@ -1,6 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.VoActorError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
@@ -40,26 +40,21 @@ public final class FullName {
         return (firstName.charAt(0) + "" + lastName.charAt(0)).toUpperCase();
     }
 
-    public String firstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public String lastName() {
+    public String getLastName() {
         return lastName;
     }
+
+    
 
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
     }
 
-    // methods access
-    public String LastName() {
-        return lastName;
-    }
-
-    public String FirstName() {
-        return firstName;
-    }
+   
 
     // methods utility
     @Override

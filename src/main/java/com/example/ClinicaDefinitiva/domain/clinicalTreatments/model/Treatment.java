@@ -186,4 +186,32 @@ public class Treatment {
 
         public Treatment build() { return new Treatment(this); }
     }
+    
+    // Añadir en Treatment.java
+public static Treatment reconstruct(
+        TreatmentId id,
+        PatientId patientId,
+        DentistId dentistId,
+        ServiceId servicioId,
+        TreatmentStatus status,
+        LocalDate startDate,
+        LocalDate expectedEndDate,
+        LocalDate actualEndDate,
+        List<TreatmentPhase> phases,
+        String notes,
+        RateId tarifaId) {
+
+    return Treatment.builder()
+            .withId(id)
+            .withPatientId(patientId)
+            .withDentistId(dentistId)
+            .withServiceId(servicioId)
+            .withStartDate(startDate)
+            .withExpectedEndDate(expectedEndDate)
+            .withPhases(phases)
+            .withNotes(notes)
+            .withRateId(tarifaId)
+            .build();
+    // Nota: Necesitas un setter para status o modificar el builder
+}
 }

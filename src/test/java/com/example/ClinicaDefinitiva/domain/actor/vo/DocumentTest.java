@@ -1,61 +1,44 @@
+package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-package com.example.ClinicaDefinitiva.domain.actor;
-
-/**
- *
- * @author David
- */
-import com.example.ClinicaDefinitiva.domain.actor.vo.Document;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class DocumentTest {
 
-    @Test
-    void shouldCreateValidDocument() {
-        Document doc = Document.of("123456789");
-        assertEquals("123456789", doc.value());
-        assertEquals("123456789", doc.toString());
+    @ParameterizedTest
+    @ValueSource(strings = {"12345678", "1234567890", "123456"})
+    @DisplayName("Crear documento con formato válido (6-10 dígitos)")
+    void shouldCreateValidDocument(String raw) {
+        Document doc = Document.of(raw);
+        assertThat(doc.value()).isEqualTo(raw);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"12345", "12345678901", "12-345", "abc123"})
+    @DisplayName("Documento con formato inválido lanza excepción")
+    void shouldThrowForInvalidDocument(String raw) {
+        assertThatThrownBy(() -> Document.of(raw))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldThrowExceptionWhenNull() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> Document.of(null));
+    @DisplayName("Documento nulo lanza excepción")
+    void shouldThrowForNull() {
+        assertThatThrownBy(() -> Document.of(null))
+                .isInstanceOf(ValueObjectValidationException.class)
+                .hasMessageContaining("El documento no puede ser nulo");
     }
 
     @Test
-    void shouldThrowExceptionWhenBlank() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> Document.of("   "));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenInvalidFormat() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> Document.of("ABC123"));
-        assertThrows(ValueObjectValidationException.class,
-            () -> Document.of("12345")); // menos de 6 dígitos
-        assertThrows(ValueObjectValidationException.class,
-            () -> Document.of("12345678901")); // más de 10 dígitos
-    }
-
-    @Test
-    void shouldBeEqualWhenSameValue() {
-        Document doc1 = Document.of("123456789");
-        Document doc2 = Document.of("123456789");
-
-        assertEquals(doc1, doc2);
-        assertEquals(doc1.hashCode(), doc2.hashCode());
-    }
-
-    @Test
-    void shouldNotBeEqualWhenDifferentValues() {
-        Document doc1 = Document.of("123456789");
-        Document doc2 = Document.of("987654321");
-
-        assertNotEquals(doc1, doc2);
+    @DisplayName("Documento en blanco lanza excepción")
+    void shouldThrowForBlank() {
+        assertThatThrownBy(() -> Document.of("   "))
+                .isInstanceOf(ValueObjectValidationException.class)
+                .hasMessageContaining("El documento no puede estar vacío");
     }
 }

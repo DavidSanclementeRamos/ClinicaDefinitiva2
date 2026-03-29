@@ -4,7 +4,7 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Company
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.JournalEntryId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.LedgerAccountId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ThirdPartiesId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting.JournalEntryError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.accounting.JournalEntryError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;

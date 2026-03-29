@@ -1,120 +1,172 @@
-
 package com.example.ClinicaDefinitiva.domain.actor.model;
 
-import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
-import com.example.ClinicaDefinitiva.domain.actor.vo.Age;
-import com.example.ClinicaDefinitiva.domain.actor.vo.BloodType;
-import com.example.ClinicaDefinitiva.domain.actor.vo.DateOfBirth;
-import com.example.ClinicaDefinitiva.domain.actor.vo.DentistAvailabilityStatus;
-import com.example.ClinicaDefinitiva.domain.actor.vo.Document;
-import com.example.ClinicaDefinitiva.domain.actor.vo.FullName;
-import com.example.ClinicaDefinitiva.domain.actor.vo.Person;
-import com.example.ClinicaDefinitiva.domain.actor.vo.Specialties;
-import com.example.ClinicaDefinitiva.domain.actor.vo.Specialty;
-import com.example.ClinicaDefinitiva.domain.actor.vo.WorkingHours;
+import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
+import java.time.DayOfWeek;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.time.*;
-import java.util.List;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Set;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.*;
 
 class DentistTest {
 
-    private Person createValidPerson() {
-           
-        DateOfBirth dob = DateOfBirth.of(LocalDate.of(1990, 1, 1));
+    private Person validPerson;
+    private Specialties specialties;
+    private UserIdentityId userId;
+    private WorkingHours workingHours;
+
+    @BeforeEach
+    void setUp() {
+        // Crear una persona con edad 30 años
+        DateOfBirth dob = DateOfBirth.of(LocalDate.now().minusYears(30));
         Age age = Age.of(dob);
-        BloodType bloodType = BloodType.fromLabel("O+");
-        Document dni = Document.of("123456789");
-        FullName fullname = FullName.of("John", "Doe");
-        Address address = Address.of("cr 28p ", "Cali","XD","Colombi","236456");
+        Address address = Address.of("Calle 123", "Bogotá", "Cundinamarca", "Colombia", "110111");
         PhoneNumber phone = PhoneNumber.of("3001234567");
-        return Person.of(address, age, bloodType, dob, dni, "EPS123", fullname, phone);
-    }
+        BloodType blood = BloodType.fromLabel("O+");
+        Document dni = Document.of("12345678");
+        FullName name = FullName.of("Juan", "Pérez");
 
-    private Specialties createSpecialties() {
-        return Specialties.of(Set.of(Specialty.of("Orthodontics")));
-    }
+        validPerson = Person.of(address, age, blood, dob, dni, "EPS123", name, phone);
 
-    private WorkingHours createWorkingHours() {
-        return WorkingHours.of(LocalTime.of(8,0), LocalTime.of(16,0), DayOfWeek.MONDAY, 40);
-    }
-
-    @Test
-    void shouldRegisterValidDentist() {
-        Person person = createValidPerson();
-        Specialties specialties = createSpecialties();
-        UserIdentityId userId = UserIdentityId.from(1L);
-        WorkingHours wh = createWorkingHours();
-
-        Dentist dentist = Dentist.registerDentist(person, specialties, userId, wh, LocalDateTime.now());
-
-        assertNotNull(dentist.getPersonData());
-        assertEquals(DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.AVAILABLE),
-                     dentist.getAvailabilityStatus());
+        specialties = Specialties.of(Set.of(Specialty.of("General Dentistry")));
+        userId = UserIdentityId.from(1L);
+        workingHours = WorkingHours.of(LocalTime.of(8, 0), LocalTime.of(17, 0), DayOfWeek.MONDAY, 40);
     }
 
     @Test
-void shouldThrowExceptionWhenAgeIsTooLow() {
-    DateOfBirth dob = DateOfBirth.of(LocalDate.of(2010, 1, 1)); // edad ~16 en 2026
+    @DisplayName("Registrar dentista con edad válida")
+    void shouldRegisterDentist() {
+        Dentist dentist = Dentist.registerDentist(validPerson, specialties, userId, workingHours);
+        assertThat(dentist).isNotNull();
+        assertThat(dentist.getPersonData()).isEqualTo(validPerson);
+        assertThat(dentist.getSpecialties()).isEqualTo(specialties);
+        assertThat(dentist.getUserId()).isEqualTo(userId);
+        assertThat(dentist.getWorkingHours()).isEqualTo(workingHours);
+        assertThat(dentist.getAvailabilityStatus()).isEqualTo(DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.AVAILABLE));
+        assertThat(dentist.getLastUpdate()).isNotNull();
+    }
+
+   @Test
+@DisplayName("Registrar dentista con edad inválida lanza excepción")
+void shouldThrowWhenAgeInvalid() {
+    // Datos fijos
+    Address address = Address.of("Calle 123", "Bogotá", "Cundinamarca", "Colombia", "110111");
+    PhoneNumber phone = PhoneNumber.of("3001234567");
+    BloodType blood = BloodType.fromLabel("O+");
+    Document dni = Document.of("12345678");
+    FullName name = FullName.of("Juan", "Pérez");
+    String eps = "EPS123";
+
+    // Fecha de nacimiento que da edad 20 años (válida para Age)
+    DateOfBirth dob = DateOfBirth.of(LocalDate.now().minusYears(20));
     Age age = Age.of(dob);
-    BloodType bloodType = BloodType.fromLabel("O+");
-    Document dni = Document.of("987654321");
-    FullName fullname = FullName.of("Jane", "Doe");
-    Address address = Address.of("Av Siempre Viva 742", "Cali", "Valle", "Colombia", "760001");
-    PhoneNumber phone = PhoneNumber.of("3009876543");
-    Person person = Person.of(address, age, bloodType, dob, dni, "EPS456", fullname, phone);
+    Person underAge = Person.of(address, age, blood, dob, dni, eps, name, phone);
 
-    Specialties specialties = createSpecialties();
+    // Crear especialidades, userId, workingHours (si no existen ya)
+    Specialties specialties = Specialties.of(Set.of(Specialty.of("General Dentistry")));
     UserIdentityId userId = UserIdentityId.from(1L);
-    WorkingHours wh = createWorkingHours();
+    WorkingHours workingHours = WorkingHours.of(
+        LocalTime.of(8, 0), LocalTime.of(17, 0), DayOfWeek.MONDAY, 40
+    );
 
-    assertThrows(BusinessRuleViolationException.class,
-        () -> Dentist.registerDentist(person, specialties, userId, wh, LocalDateTime.now()));
+    assertThatThrownBy(() -> Dentist.registerDentist(underAge, specialties, userId, workingHours))
+        .isInstanceOf(BusinessRuleViolationException.class)
+        .hasMessageContaining("El odontólogo debe tener al menos 25 años");
+     
 }
 
     @Test
-    void shouldApplyVacation() {
-        Dentist dentist = Dentist.registerDentist(createValidPerson(), createSpecialties(),
-                UserIdentityId.from(1L), createWorkingHours(), LocalDateTime.now());
+@DisplayName("Actualizar datos de contacto")
+void shouldUpdateContactData() {
+    Dentist dentist = Dentist.registerDentist(validPerson, specialties, userId, workingHours);
+    Address newAddress = Address.of("Calle Nueva 456", "Medellín", "Antioquia", "Colombia", "050001");
+    PhoneNumber newPhone = PhoneNumber.of("3011234567");
 
-        LocalDateTime start = LocalDateTime.of(2026, 2, 1, 8, 0);
-        LocalDateTime end = LocalDateTime.of(2026, 2, 10, 18, 0);
+LocalDateTime originalLastUpdate = dentist.getLastUpdate();
+    dentist.updateContactData(newAddress, newPhone);
+
+    assertThat(dentist.getPersonData().getAddress()).isEqualTo(newAddress);
+    assertThat(dentist.getPersonData().getPhoneNumber()).isEqualTo(newPhone);
+    // Permitir que la fecha sea igual si ocurre en el mismo milisegundo
+    assertThat(dentist.getLastUpdate()).isAfterOrEqualTo(originalLastUpdate);
+}
+
+    @Test
+    @DisplayName("Actualizar datos sensibles")
+    void shouldUpdateSensitiveData() {
+        Dentist dentist = Dentist.registerDentist(validPerson, specialties, userId, workingHours);
+
+        BloodType newBlood = BloodType.fromLabel("A+");
+        DateOfBirth newDob = DateOfBirth.of(LocalDate.now().minusYears(35));
+        Document newDni = Document.of("87654321");
+        FullName newName = FullName.of("Pedro", "Gómez");
+        Specialties newSpecialties = Specialties.of(Set.of(Specialty.of("Orthodontics")));
+        WorkingHours newHours = WorkingHours.of(LocalTime.of(9, 0), LocalTime.of(18, 0), DayOfWeek.TUESDAY, 35);
+
+        dentist.updateSensitiveData(newBlood, newDob, newDni, "EPS456", newName, newSpecialties, newHours);
+
+        assertThat(dentist.getPersonData().getBloodType()).isEqualTo(newBlood);
+        assertThat(dentist.getPersonData().getDateOfBirth()).isEqualTo(newDob);
+        assertThat(dentist.getPersonData().getDni()).isEqualTo(newDni);
+        assertThat(dentist.getPersonData().getDocumentoEPS()).isEqualTo("EPS456");
+        assertThat(dentist.getPersonData().getFullname()).isEqualTo(newName);
+        assertThat(dentist.getSpecialties()).isEqualTo(newSpecialties);
+        assertThat(dentist.getWorkingHours()).isEqualTo(newHours);
+    }
+
+    @Test
+    @DisplayName("Aplicar vacaciones")
+    void shouldApplyVacation() {
+        Dentist dentist = Dentist.registerDentist(validPerson, specialties, userId, workingHours);
+        LocalDateTime start = LocalDateTime.now().plusDays(1);
+        LocalDateTime end = start.plusDays(10);
 
         dentist.applyVacation(start, end);
 
-        assertEquals(DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.VACATION),
-                     dentist.getAvailabilityStatus());
+        assertThat(dentist.getAvailabilityStatus()).isEqualTo(DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.VACATION));
+        assertThat(dentist.getVacationStart()).isEqualTo(start);
+        assertThat(dentist.getVacationEnd()).isEqualTo(end);
+        assertThat(dentist.getLastUpdate()).isNotNull();
     }
 
     @Test
+    @DisplayName("Aplicar incapacidad")
     void shouldApplyIncapacity() {
-        Dentist dentist = Dentist.registerDentist(createValidPerson(), createSpecialties(),
-                UserIdentityId.from(1L), createWorkingHours(), LocalDateTime.now());
+        Dentist dentist = Dentist.registerDentist(validPerson, specialties, userId, workingHours);
+        LocalDateTime start = LocalDateTime.now().plusHours(1);
+        LocalDateTime end = start.plusDays(3);
+        String note = "Fiebre";
 
-        LocalDateTime start = LocalDateTime.of(2026, 2, 15, 8, 0);
-        LocalDateTime end = LocalDateTime.of(2026, 2, 20, 18, 0);
+        dentist.applyIncapacity(start, end, note);
 
-        dentist.applyIncapacity(start, end, "Flu");
-
-        assertEquals(DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.SICK_LEAVE),
-                     dentist.getAvailabilityStatus());
+        assertThat(dentist.getAvailabilityStatus()).isEqualTo(DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.SICK_LEAVE));
+        assertThat(dentist.getIncapacityStart()).isEqualTo(start);
+        assertThat(dentist.getIncapacityEnd()).isEqualTo(end);
+        assertThat(dentist.getIncapacityNote()).isEqualTo(note);
     }
 
     @Test
+    @DisplayName("Volver a disponible")
     void shouldReturnToAvailable() {
-        Dentist dentist = Dentist.registerDentist(createValidPerson(), createSpecialties(),
-                UserIdentityId.from(1L), createWorkingHours(), LocalDateTime.now());
-
+        Dentist dentist = Dentist.registerDentist(validPerson, specialties, userId, workingHours);
         dentist.applyVacation(LocalDateTime.now(), LocalDateTime.now().plusDays(5));
+
         dentist.returnToAvailable();
 
-        assertEquals(DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.AVAILABLE),
-                     dentist.getAvailabilityStatus());
-        assertNull(dentist.getIncapacityNote());
+        assertThat(dentist.getAvailabilityStatus()).isEqualTo(DentistAvailabilityStatus.of(DentistAvailabilityStatus.Status.AVAILABLE));
+        assertThat(dentist.getVacationStart()).isNull();
+        assertThat(dentist.getVacationEnd()).isNull();
+        assertThat(dentist.getIncapacityStart()).isNull();
+        assertThat(dentist.getIncapacityEnd()).isNull();
+        assertThat(dentist.getIncapacityNote()).isNull();
     }
 }

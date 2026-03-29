@@ -24,7 +24,9 @@ public enum EntityContext implements DomainContext {
     ASSIGNMENT(CodeEntity.ASS20),
     TREATMENT(CodeEntity.TRA21),
     RATE(CodeEntity.RAT22),
-    PAYMENT(CodeEntity.PAY23);
+    PAYMENT(CodeEntity.PAY23), 
+    SYSTEM(CodeEntity.SYSTEM), 
+    GENERIC(CodeEntity.GENERIC);
 
 
 

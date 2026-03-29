@@ -307,4 +307,25 @@ public class Shift {
 
 
 
+/**
+ * Método de fábrica para reconstruir desde persistencia
+ */
+public static Shift reconstruct(
+        ShiftId id,
+        DentistId dentistId,
+        LocalDate date,
+        LocalTime startTime,
+        LocalTime endTime,
+        ShiftType type,
+        ShiftStatus status,
+        String cancellationReason,
+        List<ExcludedBlock> excludedBlocks,
+        Long version) {
+    
+    Shift shift = new Shift(id, dentistId, date, startTime, endTime, type);
+    
+   
+    return shift;
+}
+
 }

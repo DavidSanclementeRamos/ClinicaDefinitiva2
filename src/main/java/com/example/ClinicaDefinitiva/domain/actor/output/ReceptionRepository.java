@@ -12,7 +12,6 @@ public interface ReceptionRepository {
     Optional<Receptionist> findById(ReceptionId id);
     Page<Receptionist> findAll(Pageable pageable);
     Receptionist save(Receptionist receptionist);
-    Receptionist update(Receptionist receptionist);
     boolean existsById(ReceptionId id);
     void deleteById(ReceptionId id);
     Page<Receptionist> findBySector(String sector, Pageable pageable);

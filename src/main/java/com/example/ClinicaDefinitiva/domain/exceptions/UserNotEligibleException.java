@@ -1,8 +1,8 @@
 package com.example.ClinicaDefinitiva.domain.exceptions;
 
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorUserAcces.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.authentication.UserIdentityError;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 
 import java.util.List;

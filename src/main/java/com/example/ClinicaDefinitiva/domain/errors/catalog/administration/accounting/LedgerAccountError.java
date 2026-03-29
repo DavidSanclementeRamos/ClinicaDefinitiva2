@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.administration.accounting;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -51,7 +51,11 @@ public enum LedgerAccountError implements ErrorCatalog {
     ERR_ACCOUNT_MISSING_CODE(
             "RN-LEDGERACCOUNT-009","error.ledgerAccount.missingCode",
             "El código de la cuenta es obligatorio",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
+            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
+    ERR_ACCOUNT_NOT_FOUND(
+    "RN-LEDGERACCOUNT-010", "error.ledgerAccount.not.found",
+    "La cuenta contable solicitada no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

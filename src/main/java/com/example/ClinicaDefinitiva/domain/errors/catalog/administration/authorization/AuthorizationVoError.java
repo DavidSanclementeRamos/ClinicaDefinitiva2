@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;

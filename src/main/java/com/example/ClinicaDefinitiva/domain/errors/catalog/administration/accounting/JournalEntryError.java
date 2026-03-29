@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.administration.accounting;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -75,7 +75,11 @@ public enum JournalEntryError implements ErrorCatalog {
     ERR_JOURNALENTRY_MISSING_DATE(
             "RN-JOURNALENTRY-014","error.journalEntry.missingDate",
             "La fecha es obligatoria",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
+            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
+    ERR_JOURNALENTRY_NOT_FOUND(
+    "RN-JOURNALENTRY-015", "error.journalEntry.not.found",
+    "El asiento contable solicitado no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

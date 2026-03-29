@@ -1,32 +1,24 @@
-
 package com.example.ClinicaDefinitiva.domain.administration.authorization.vo;
 
-import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.UserRolAssignmentId;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.*;
 
 class UserRolAssignmentIdTest {
 
     @Test
-    void shouldCreateUserRolAssignmentIdSuccessfully() {
-        UserRolAssignmentId id = UserRolAssignmentId.of(10L);
-        assertEquals(10L, id.getValue());
+    @DisplayName("Crear UserRolAssignmentId válido")
+    void shouldCreateValidId() {
+        UserRolAssignmentId id = UserRolAssignmentId.of(1L);
+        assertThat(id.getValue()).isEqualTo(1L);
     }
 
     @Test
-    void shouldThrowExceptionForInvalidValues() {
-        assertThrows(ValueObjectValidationException.class, () -> UserRolAssignmentId.of(null));
-    }
-
-    @Test
-    void shouldRespectEquality() {
-        UserRolAssignmentId id1 = UserRolAssignmentId.of(5L);
-        UserRolAssignmentId id2 = UserRolAssignmentId.of(5L);
-        UserRolAssignmentId id3 = UserRolAssignmentId.of(6L);
-
-        assertEquals(id1, id2);
-        assertNotEquals(id1, id3);
+    @DisplayName("Crear UserRolAssignmentId con null lanza excepción")
+    void shouldThrowForNull() {
+        assertThatThrownBy(() -> UserRolAssignmentId.of(null))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 }
-

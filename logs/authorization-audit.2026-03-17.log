@@ -1,0 +1,7 @@
+Authorization decision: {"timestamp":"2026-03-18T01:18:39.447870200Z","userId":1,"rolId":1,"resource":"USER_IDENTITY","action":"CREATE","decision":"ALLOW","durationMs":51}
+Authorization decision: {"timestamp":"2026-03-18T01:21:01.471072800Z","userId":1,"rolId":1,"resource":"USER_IDENTITY","action":"READ","decision":"ALLOW","durationMs":53,"context":{"resourceId":1}}
+Authorization decision: {"timestamp":"2026-03-18T01:24:02.713442800Z","userId":1,"rolId":1,"resource":"USER_IDENTITY","action":"READ","decision":"ALLOW","durationMs":12}
+Authorization decision: {"timestamp":"2026-03-18T01:29:02.669003600Z","userId":1,"rolId":1,"resource":"USER_IDENTITY","action":"UPDATE","decision":"ALLOW","durationMs":5,"context":{"resourceId":1}}
+Authorization decision: {"timestamp":"2026-03-18T01:31:20.836800800Z","userId":1,"rolId":1,"resource":"USER_IDENTITY","action":"UPDATE","decision":"ALLOW","durationMs":7,"context":{"resourceId":2}}
+Authorization decision: {"timestamp":"2026-03-18T01:34:16.257928400Z","userId":1,"rolId":1,"resource":"USER_IDENTITY","action":"UPDATE","decision":"ALLOW","durationMs":11,"context":{"resourceId":2}}
+Authorization decision: {"timestamp":"2026-03-18T01:37:56.642855500Z","userId":1,"rolId":1,"resource":"USER_IDENTITY","action":"DEACTIVATE","decision":"ALLOW","durationMs":8,"context":{"resourceId":2}}

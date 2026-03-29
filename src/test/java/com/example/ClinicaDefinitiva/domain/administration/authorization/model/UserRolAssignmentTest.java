@@ -1,111 +1,136 @@
-
 package com.example.ClinicaDefinitiva.domain.administration.authorization.model;
 
-import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.*;
 
 class UserRolAssignmentTest {
 
-    @Test
-    void shouldCreatePermanentAssignment() {
-        UserRolAssignment assignment = UserRolAssignment.assignPermanent(
-                UserIdentityId.from(1L),
-                RolId.of(10L),
-                true
-        );
+    private static final UserIdentityId USER_ID = UserIdentityId.from(1L);
+    private static final RolId ROL_ID = RolId.of(1L);
 
-        assertTrue(assignment.isPrimary());
-        assertNull(assignment.getValidTo());
-        assertTrue(assignment.isCurrentlyActive());
+    @Test
+    @DisplayName("AUTH-UNIT-006: Asignación permanente")
+    void assignPermanent() {
+        UserRolAssignment assignment = UserRolAssignment.assignPermanent(USER_ID, ROL_ID, true);
+
+        assertThat(assignment.getUserId()).isEqualTo(USER_ID);
+        assertThat(assignment.getRolId()).isEqualTo(ROL_ID);
+        assertThat(assignment.isPrimary()).isTrue();
+        assertThat(assignment.getValidTo()).isNull();
+        assertThat(assignment.isCurrentlyActive()).isTrue();
     }
 
     @Test
-    void shouldCreateTemporaryAssignment() {
-        LocalDate start = LocalDate.now();
-        LocalDate end = start.plusDays(10);
+    @DisplayName("Asignación temporal válida")
+    void assignTemporary() {
+        LocalDate validFrom = LocalDate.now();
+        LocalDate validTo = validFrom.plusMonths(3);
+        UserRolAssignment assignment = UserRolAssignment.assignTemporary(USER_ID, ROL_ID, validFrom, validTo, false);
 
-        UserRolAssignment assignment = UserRolAssignment.assignTemporary(
-                UserIdentityId.from(2L),
-                RolId.of(20L),
-                start,
-                end,
-                false
-        );
-
-        assertFalse(assignment.isPrimary());
-        assertTrue(assignment.isActiveAt(start.plusDays(5)));
-        assertFalse(assignment.isActiveAt(end.plusDays(1)));
+        assertThat(assignment.isPrimary()).isFalse();
+        assertThat(assignment.getValidFrom()).isEqualTo(validFrom);
+        assertThat(assignment.getValidTo()).isEqualTo(validTo);
+        assertThat(assignment.isCurrentlyActive()).isTrue();
     }
 
     @Test
-    void shouldThrowWhenTemporaryAssignmentIsPrimary() {
-        LocalDate start = LocalDate.now();
-        LocalDate end = start.plusDays(5);
+    @DisplayName("Asignación temporal no puede ser primaria")
+    void temporaryCannotBePrimary() {
+        LocalDate validFrom = LocalDate.now();
+        LocalDate validTo = validFrom.plusMonths(3);
 
-        assertThrows(BusinessRuleViolationException.class, () ->
-                UserRolAssignment.assignTemporary(
-                        UserIdentityId.from(3L),
-                        RolId.of(30L),
-                        start,
-                        end,
-                        true
-                )
-        );
+        assertThatThrownBy(() -> UserRolAssignment.assignTemporary(USER_ID, ROL_ID, validFrom, validTo, true))
+                .isInstanceOf(BusinessRuleViolationException.class);
     }
 
     @Test
-    void shouldExtendTemporaryAssignment() {
-        LocalDate start = LocalDate.now();
-        LocalDate end = start.plusDays(5);
-
-        UserRolAssignment assignment = UserRolAssignment.assignTemporary(
-                UserIdentityId.from(4L),
-                RolId.of(40L),
-                start,
-                end,
-                false
-        );
-
-        LocalDate newEnd = end.plusDays(5);
-        assignment.extend(newEnd);
-
-        assertEquals(newEnd, assignment.getValidTo());
+    @DisplayName("Validar fechas: validFrom no puede ser null")
+    void validFromRequired() {
+        assertThatThrownBy(() -> UserRolAssignment.assignTemporary(USER_ID, ROL_ID, null, LocalDate.now(), false))
+                .isInstanceOf(DomainAggregateException.class);
     }
 
     @Test
-    void shouldThrowWhenExtendingPermanentAssignment() {
-        UserRolAssignment assignment = UserRolAssignment.assignPermanent(
-                UserIdentityId.from(5L),
-                RolId.of(50L),
-                false
-        );
+    @DisplayName("Validar fechas: validTo no puede ser anterior a validFrom")
+    void validToCannotBeBeforeValidFrom() {
+        LocalDate validFrom = LocalDate.now();
+        LocalDate validTo = validFrom.minusDays(1);
 
-        assertThrows(DomainAggregateException.class, () ->
-                assignment.extend(LocalDate.now().plusDays(10))
-        );
+        assertThatThrownBy(() -> UserRolAssignment.assignTemporary(USER_ID, ROL_ID, validFrom, validTo, false))
+                .isInstanceOf(DomainAggregateException.class);
     }
 
     @Test
-    void shouldRevokeAssignment() {
-        LocalDate start = LocalDate.now().minusDays(10);
-        LocalDate end = LocalDate.now().plusDays(10);
+    @DisplayName("isActiveAt: fecha dentro del rango")
+    void isActiveAt_withinRange() {
+        LocalDate validFrom = LocalDate.now().minusDays(5);
+        LocalDate validTo = validFrom.plusMonths(2);
+        UserRolAssignment assignment = UserRolAssignment.assignTemporary(USER_ID, ROL_ID, validFrom, validTo, false);
 
-        UserRolAssignment assignment = UserRolAssignment.assignTemporary(
-                UserIdentityId.from(6L),
-                RolId.of(60L),
-                start,
-                end,
-                false
-        );
+        assertThat(assignment.isActiveAt(validFrom.plusDays(10))).isTrue();
+        assertThat(assignment.isActiveAt(validFrom)).isTrue();
+        assertThat(assignment.isActiveAt(validTo)).isTrue();
+    }
 
+    @Test
+    @DisplayName("isActiveAt: fecha fuera del rango")
+    void isActiveAt_outsideRange() {
+        LocalDate validFrom = LocalDate.now().minusDays(5);
+        LocalDate validTo = validFrom.plusMonths(2);
+        UserRolAssignment assignment = UserRolAssignment.assignTemporary(USER_ID, ROL_ID, validFrom, validTo, false);
+
+        assertThat(assignment.isActiveAt(validFrom.minusDays(1))).isFalse();
+        assertThat(assignment.isActiveAt(validTo.plusDays(1))).isFalse();
+    }
+
+    @Test
+    @DisplayName("Extender asignación temporal")
+    void extend() {
+        LocalDate validFrom = LocalDate.now();
+        LocalDate validTo = validFrom.plusMonths(3);
+        UserRolAssignment assignment = UserRolAssignment.assignTemporary(USER_ID, ROL_ID, validFrom, validTo, false);
+
+        LocalDate newValidTo = validTo.plusMonths(2);
+        assignment.extend(newValidTo);
+
+        assertThat(assignment.getValidTo()).isEqualTo(newValidTo);
+    }
+
+    @Test
+    @DisplayName("Extender asignación permanente lanza excepción")
+    void extendPermanent_throws() {
+        UserRolAssignment assignment = UserRolAssignment.assignPermanent(USER_ID, ROL_ID, true);
+
+        assertThatThrownBy(() -> assignment.extend(LocalDate.now().plusMonths(1)))
+                .isInstanceOf(DomainAggregateException.class);
+    }
+
+    @Test
+    @DisplayName("Extender con fecha anterior lanza excepción")
+    void extendWithEarlierDate_throws() {
+        LocalDate validFrom = LocalDate.now();
+        LocalDate validTo = validFrom.plusMonths(3);
+        UserRolAssignment assignment = UserRolAssignment.assignTemporary(USER_ID, ROL_ID, validFrom, validTo, false);
+
+        assertThatThrownBy(() -> assignment.extend(validTo.minusDays(1)))
+                .isInstanceOf(DomainAggregateException.class);
+    }
+
+    @Test
+    @DisplayName("Revocar asignación")
+    void revoke() {
+        UserRolAssignment assignment = UserRolAssignment.assignPermanent(USER_ID, ROL_ID, true);
         assignment.revoke();
-        assertTrue(assignment.getValidTo().isBefore(LocalDate.now()));
+
+        assertThat(assignment.getValidTo()).isEqualTo(LocalDate.now().minusDays(1));
+        assertThat(assignment.isCurrentlyActive()).isFalse();
     }
 }

@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.actor.model;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.ReceptionistError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.ReceptionistError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
@@ -19,8 +19,8 @@ public class Receptionist   {
     private final UserIdentityId userIdentityId;
     private LocalDateTime lastUpdate;
 
-    private Receptionist(LocalDateTime lastUpdate, UserIdentityId userIdentityId, Sector sector, Person person, ReceptionId id) {
-        this.lastUpdate = lastUpdate;
+    private Receptionist(UserIdentityId userIdentityId, Sector sector, Person person, ReceptionId id) {
+        this.lastUpdate = lastUpdate = LocalDateTime.now();
         this.userIdentityId = userIdentityId;
         this.sector = sector;
         this.person = person;
@@ -33,9 +33,9 @@ public class Receptionist   {
             Sector sector
              ) {
         if (!data.getAge().isBetween(20, 130)) {
-            throw new BusinessRuleViolationException(ReceptionistError.ERR_RECEPTIONIST_AGE_INSUFFICIENT, EntityContext.DENTIST);
+            throw new BusinessRuleViolationException(ReceptionistError.ERR_RECEPTIONIST_AGE_INSUFFICIENT, EntityContext.RECEPTIONIST);
         }
-        return new Receptionist(LocalDateTime.now(), userIdentityId, sector, data, null);
+        return new Receptionist( userIdentityId, sector, data, null);
     }
 
 
@@ -89,7 +89,7 @@ public class Receptionist   {
             UserIdentityId userIdentityId,
             LocalDateTime lastUpdate) {
 
-        return new Receptionist(lastUpdate, userIdentityId, sector, person, id);
+        return new Receptionist( userIdentityId, sector, person, id);
 }
 
 

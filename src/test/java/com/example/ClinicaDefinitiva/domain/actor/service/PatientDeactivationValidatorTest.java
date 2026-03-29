@@ -1,60 +1,55 @@
-
 package com.example.ClinicaDefinitiva.domain.actor.service;
 
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
-import com.example.ClinicaDefinitiva.domain.administration.accounting.output.ScheduleRepository;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor.PatientError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.PatientError;
 import com.example.ClinicaDefinitiva.domain.schedule.service.ScheduleQueryService;
 import com.example.ClinicaDefinitiva.domain.util.Outcome;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class PatientDeactivationValidatorTest {
 
-    private ScheduleRepository scheduleRepository;
+    @Mock
+    private ScheduleQueryService scheduleQueryService;
+
     private PatientDeactivationValidator validator;
-    private PatientId patientId;
-    private ScheduleQueryService schedule;
 
     @BeforeEach
     void setUp() {
-        scheduleRepository = mock(ScheduleRepository.class);
-        validator = new PatientDeactivationValidator(scheduleRepository, 7); // bloquea 7 días
-        patientId = PatientId.of(1L);
-        schedule = mock(ScheduleQueryService.class);
+        validator = new PatientDeactivationValidator(scheduleQueryService, 7);
     }
 
     @Test
-    void shouldFailWhenPatientHasAppointmentsWithinBlockDays() {
-        when(scheduleRepository.findByPatientId(patientId)).thenReturn(schedule);
-        when(schedule.hasAppointmentsWithin(patientId, 7)).thenReturn(true);
+    @DisplayName("Validar paciente sin citas próximas (éxito)")
+    void validateSuccess() {
+        PatientId patientId = PatientId.of(1L);
+        when(scheduleQueryService.hasAppointmentsWithin(patientId, 7)).thenReturn(false);
 
-        Outcome<Void> result = validator.validate(patientId);
+        Outcome<Void> outcome = validator.validate(patientId);
 
-        assertTrue(result.isFailure());
-        assertEquals(PatientError.ERR_PATIENT_ACTIVE_SERVICES,
-                     result.getDetalles().get(0).getCode());
+        assertThat(outcome.isSuccess()).isTrue();
+        verify(scheduleQueryService).hasAppointmentsWithin(patientId, 7);
     }
 
     @Test
-    void shouldPassWhenPatientHasNoAppointmentsWithinBlockDays() {
-        when(scheduleRepository.findByPatientId(patientId)).thenReturn(schedule);
-        when(schedule.hasAppointmentsWithin(patientId, 7)).thenReturn(false);
+    @DisplayName("Validar paciente con citas próximas (fallo)")
+    void validateFail() {
+        PatientId patientId = PatientId.of(1L);
+        when(scheduleQueryService.hasAppointmentsWithin(patientId, 7)).thenReturn(true);
 
-        Outcome<Void> result = validator.validate(patientId);
+        Outcome<Void> outcome = validator.validate(patientId);
 
-        assertTrue(result.isSuccess());
-    }
-
-    @Test
-    void shouldPassWhenScheduleIsNull() {
-        when(scheduleRepository.findByPatientId(patientId)).thenReturn(null);
-
-        Outcome<Void> result = validator.validate(patientId);
-
-        assertTrue(result.isSuccess());
+        assertThat(outcome.isFailure()).isTrue();
+        assertThat(outcome.getDetalles().get(0).getCode()).isEqualTo(PatientError.ERR_PATIENT_ACTIVE_SERVICES);
+        verify(scheduleQueryService).hasAppointmentsWithin(patientId, 7);
     }
 }
+

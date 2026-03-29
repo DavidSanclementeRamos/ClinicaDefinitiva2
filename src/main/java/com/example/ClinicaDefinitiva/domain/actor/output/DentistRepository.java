@@ -12,7 +12,6 @@ public interface DentistRepository {
     Optional<Dentist> findById(DentistId id);
     Page<Dentist> findAll (Pageable pageable);
     Dentist save(Dentist dentist);
-    Page<Dentist> findByAvailability(String status, Pageable pageable);
     Page<Dentist> findBySpecialty(String specialty, Pageable pageable);
     void deleteById(DentistId id);
     boolean existsById(Long id);

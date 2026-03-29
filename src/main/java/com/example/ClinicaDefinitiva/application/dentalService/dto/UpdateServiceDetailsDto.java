@@ -1,0 +1,18 @@
+package com.example.ClinicaDefinitiva.application.dentalService.dto;
+
+import java.util.Map;
+
+/**
+ * DTO para actualizar los detalles específicos de un servicio.
+ * La estructura del mapa depende del tipo de servicio.
+ * Regla de negocio: RN-SERVICE-006 - El tipo de servicio no puede cambiar.
+ */
+public record UpdateServiceDetailsDto(
+        String serviceType,
+        Map<String, Object> details
+) {
+
+    public Object detailsMap() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+}

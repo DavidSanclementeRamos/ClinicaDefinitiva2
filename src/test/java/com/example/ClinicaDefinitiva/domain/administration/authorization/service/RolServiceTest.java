@@ -1,85 +1,61 @@
-
 package com.example.ClinicaDefinitiva.domain.administration.authorization.service;
 
-import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolStatus;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.service.RolService;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.Permission;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.ResourceCatalog;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
+@ExtendWith(MockitoExtension.class)
 class RolServiceTest {
 
-  /**  @Test
-    void shouldCreateCustomRoleSuccessfully() {
-        RolRepository repo = mock(RolRepository.class);
-        when(repo.existsByDescription("Custom Role")).thenReturn(false);
-        when(repo.save(any(Rol.class))).thenAnswer(inv -> inv.getArgument(0));
+    @Mock
+    private RolRepository rolRepository;
 
-        RolService service = new RolService(repo);
+    @InjectMocks
+    private RolService rolService;
 
-        Set<Permission> permissions = new HashSet<>();
-        permissions.add(Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT)));
+    @Test
+    @DisplayName("Crear rol personalizado con descripción única")
+    void createCustom_success() {
+        when(rolRepository.existsByDescription("Rol especial")).thenReturn(false);
 
-        Rol rol = service.createCustom(RolEnum.RECEPTIONIST, "Custom Role");
+        Rol rol = rolService.createCustom(RolEnum.DENTIST, "Rol especial");
 
-        assertEquals("Custom Role", rol.getDescription());
-        assertTrue(rol.isEditable());
-        assertTrue(rol.isDeletable());
-        assertEquals(RolStatus.ACTIVE, rol.getStatusRol());
+        assertThat(rol.getRolEnum()).isEqualTo(RolEnum.DENTIST);
+        assertThat(rol.getDescription()).isEqualTo("Rol especial");
+        assertThat(rol.isEditable()).isTrue();
+        verify(rolRepository).existsByDescription("Rol especial");
     }
 
     @Test
-    void shouldThrowExceptionWhenDescriptionIsDuplicateOnCreate() {
-        RolRepository repo = mock(RolRepository.class);
-        when(repo.existsByDescription("Duplicate")).thenReturn(true);
+    @DisplayName("Crear rol personalizado con descripción duplicada lanza excepción")
+    void createCustom_duplicateDescription_throws() {
+        when(rolRepository.existsByDescription("Rol existente")).thenReturn(true);
 
-        RolService service = new RolService(repo);
-
-        assertThrows(BusinessRuleViolationException.class, () ->
-                service.createCustom(RolEnum.DENTIST, "Duplicate"));
+        assertThatThrownBy(() -> rolService.createCustom(RolEnum.DENTIST, "Rol existente"))
+                .isInstanceOf(BusinessRuleViolationException.class);
     }
 
     @Test
-    void shouldCloneRoleSuccessfully() {
-        RolRepository repo = mock(RolRepository.class);
-        when(repo.existsByDescription("Cloned")).thenReturn(false);
-        when(repo.save(any(Rol.class))).thenAnswer(inv -> inv.getArgument(0));
+    @DisplayName("Clonar rol exitosamente")
+    void cloneRole_success() {
+        Rol sourceRol = Rol.createDefault(RolEnum.PATIENT, "Rol original");
+        when(rolRepository.existsByDescription("Rol clonado")).thenReturn(false);
 
-        Rol source =  Rol.createDefault(RolEnum.DENTIST, "Source");
-        source.addPermission(Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.APPOINTMENT)));
+        Rol cloned = rolService.cloneRole(sourceRol, "Rol clonado");
 
-        RolService service = new RolService(repo);
-
-        Rol cloned = service.cloneRole(source, "Cloned");
-
-        assertEquals("Cloned", cloned.getDescription());
-        assertEquals(source.getRolEnum(), cloned.getRolEnum());
-        assertTrue(cloned.isEditable());
-        assertTrue(cloned.isDeletable());
-        assertEquals(RolStatus.ACTIVE, cloned.getStatusRol());
-        assertEquals(source.getPermissions().size(), cloned.getPermissions().size());
+        assertThat(cloned.getRolEnum()).isEqualTo(RolEnum.PATIENT);
+        assertThat(cloned.getDescription()).isEqualTo("Rol clonado");
+        assertThat(cloned.isDefault()).isFalse();
+        assertThat(cloned.isEditable()).isTrue();
     }
-
-    @Test
-    void shouldThrowExceptionWhenDescriptionIsDuplicateOnClone() {
-        RolRepository repo = mock(RolRepository.class);
-        when(repo.existsByDescription("Duplicate")).thenReturn(true);
-
-        Rol source =  Rol.createDefault(RolEnum.DENTIST, "Source");
-
-        RolService service = new RolService(repo);
-
-        assertThrows(BusinessRuleViolationException.class, () ->
-                service.cloneRole(source, "Duplicate"));
-    }*/
 }
-

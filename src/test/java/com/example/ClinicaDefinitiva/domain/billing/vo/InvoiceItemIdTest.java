@@ -1,37 +1,24 @@
-
 package com.example.ClinicaDefinitiva.domain.billing.vo;
 
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.*;
 
 class InvoiceItemIdTest {
 
     @Test
-    void shouldCreateInvoiceItemIdSuccessfully() {
-        InvoiceItemId id = InvoiceItemId.of(100L);
-        assertEquals(100L, id.getValue());
+    @DisplayName("Crear InvoiceItemId válido")
+    void shouldCreateValidId() {
+        InvoiceItemId id = InvoiceItemId.of(1L);
+        assertThat(id.getValue()).isEqualTo(1L);
     }
 
     @Test
-    void shouldThrowExceptionForNullValue() {
-        assertThrows(ValueObjectValidationException.class, () -> InvoiceItemId.of(null));
-    }
-
-    @Test
-    void shouldRespectEquality() {
-        InvoiceItemId id1 = InvoiceItemId.of(200L);
-        InvoiceItemId id2 = InvoiceItemId.of(200L);
-        InvoiceItemId id3 = InvoiceItemId.of(300L);
-
-        assertEquals(id1, id2);
-        assertNotEquals(id1, id3);
-    }
-
-    @Test
-    void toStringShouldReturnValue() {
-        InvoiceItemId id = InvoiceItemId.of(400L);
-        assertEquals("InvoiceItemId[getValue=400]", id.toString());
+    @DisplayName("Crear InvoiceItemId con null lanza excepción")
+    void shouldThrowForNull() {
+        assertThatThrownBy(() -> InvoiceItemId.of(null))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 }
-

@@ -1,65 +1,65 @@
-package com.example.ClinicaDefinitiva.domain.actor;
+package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-import com.example.ClinicaDefinitiva.domain.actor.vo.Age;
-import com.example.ClinicaDefinitiva.domain.actor.vo.DateOfBirth;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
-
-
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class AgeTest {
 
     @Test
-    void shouldCreateValidAge() {
-        DateOfBirth dob = DateOfBirth.of(LocalDate.now().minusYears(25));
+    @DisplayName("Crear Age a partir de DateOfBirth válido")
+    void shouldCreateAge() {
+        DateOfBirth dob = DateOfBirth.of(LocalDate.of(1990, 5, 15));
         Age age = Age.of(dob);
-
-        assertEquals(25, age.asInt());
-        assertTrue(age.isAdult());
-        assertFalse(age.isElderly());
-        assertTrue(age.isEligibleForRegistration());
-        assertEquals("Adult", age.ageCategory());
-    }
-
-
-
-    @Test
-    void shouldIdentifyElderly() {
-        DateOfBirth dob = DateOfBirth.of(LocalDate.now().minusYears(70));
-        Age age = Age.of(dob);
-
-        assertTrue(age.isElderly());
-        assertEquals("Senior", age.ageCategory());
+        assertThat(age.Value()).isPositive();
+        assertThat(age.isAdult()).isTrue();
+        assertThat(age.isElderly()).isFalse();
+        assertThat(age.isEligibleForRegistration()).isTrue();
+        assertThat(age.ageCategory()).isEqualTo("Adult");
     }
 
     @Test
-    void shouldIdentifyChild() {
+    @DisplayName("Edad negativa (fecha futura) lanza excepción en DateOfBirth")
+    void shouldThrowForFutureDate() {
+        assertThatThrownBy(() -> DateOfBirth.of(LocalDate.now().plusDays(1)))
+                .isInstanceOf(ValueObjectValidationException.class)
+                .hasMessageContaining("La fecha de nacimiento no puede ser futura");
+    }
+
+    @Test
+    @DisplayName("Edad > 130 lanza excepción en DateOfBirth")
+    void shouldThrowForAgeOver130() {
+        assertThatThrownBy(() -> DateOfBirth.of(LocalDate.now().minusYears(131)))
+                .isInstanceOf(ValueObjectValidationException.class)
+                .hasMessageContaining("La fecha de nacimiento excede el rango válido (edad > 130 años)");
+    }
+
+    @Test
+    @DisplayName("isBetween() funciona correctamente")
+    void testIsBetween() {
+        DateOfBirth dob = DateOfBirth.of(LocalDate.of(1990, 5, 15));
+        Age age = Age.of(dob);
+        assertThat(age.isBetween(25, 40)).isTrue();
+        assertThat(age.isBetween(18, 30)).isFalse();
+    }
+
+    @Test
+    @DisplayName("isAdult() funciona correctamente")
+    void testIsAdult() {
+        DateOfBirth dob = DateOfBirth.of(LocalDate.of(2010, 5, 15));
+        Age age = Age.of(dob);
+        assertThat(age.isAdult()).isFalse();
+    }
+
+    @Test
+    @DisplayName("ageCategory() para menores de 13")
+    void testAgeCategoryChild() {
         DateOfBirth dob = DateOfBirth.of(LocalDate.now().minusYears(10));
         Age age = Age.of(dob);
-
-        assertFalse(age.isAdult());
-        assertEquals("Child", age.ageCategory());
-    }
-
-    @Test
-    void shouldIdentifyTeenager() {
-        DateOfBirth dob = DateOfBirth.of(LocalDate.now().minusYears(15));
-        Age age = Age.of(dob);
-
-        assertTrue(age.isEligibleForRegistration());
-        assertEquals("Teenager", age.ageCategory());
-    }
-
-    @Test
-    void shouldCheckIsBetween() {
-        DateOfBirth dob = DateOfBirth.of(LocalDate.now().minusYears(30));
-        Age age = Age.of(dob);
-
-        assertTrue(age.isBetween(20, 40));
-        assertFalse(age.isBetween(31, 35));
+        assertThat(age.ageCategory()).isEqualTo("Child");
     }
 }

@@ -39,7 +39,8 @@ public enum BillingVOError implements ErrorCatalog {
     ERR_INVOICE_PROVIDER_REQUIRED("RN-BILLING-016","error.invoice.provider.required","La factura debe tener un proveedor válido como emisor oficial",
             HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
     ERR_INVOICE_STATUS_NULL("RN-BILLING-017","error.invoice.status.null","El estado de la factura no puede ser nulo",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
+            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
+    ERR_INVOICE_NUMBER_EXCEEDS_MAX("","","",HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
 
     private final String code;
     private final String messageKey;

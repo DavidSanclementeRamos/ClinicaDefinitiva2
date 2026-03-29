@@ -20,12 +20,14 @@ import com.example.ClinicaDefinitiva.domain.schedule.vo.AppointmentType;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  * Domain Service: Orquesta operaciones entre agregados
  *
  * SIMPLIFICADO: Ya no valida Availability (eliminada)
  */
+@Service
 public class AppointmentSchedulingService {
 
     private final AppointmentRepository appointmentRepository;

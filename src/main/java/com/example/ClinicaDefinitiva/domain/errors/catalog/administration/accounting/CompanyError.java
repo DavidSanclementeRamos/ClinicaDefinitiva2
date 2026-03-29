@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.accounting;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.administration.accounting;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,11 @@ public enum CompanyError implements ErrorCatalog {
     ERR_COMPANY_MISSING_INCORPORATION_DATE(
             "RN-COMPANY-005","error.company.missingIncorporationDate",
             "La fecha de constitución es obligatoria",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
+            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
+    ERR_COMPANY_NOT_FOUND(
+    "RN-COMPANY-006", "error.company.not.found",
+    "La compañía solicitada no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

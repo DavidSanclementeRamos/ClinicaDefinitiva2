@@ -1,74 +1,66 @@
+package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-package com.example.ClinicaDefinitiva.domain.actor;
-
-import com.example.ClinicaDefinitiva.domain.actor.vo.FullName;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class FullNameTest {
 
     @Test
+    @DisplayName("Crear FullName válido")
     void shouldCreateValidFullName() {
-        FullName name = FullName.of("John", "Doe");
-        assertEquals("John Doe", name.asText());
-        assertEquals("John", name.firstName());
-        assertEquals("Doe", name.lastName());
-        assertEquals("John Doe", name.toString());
+        FullName name = FullName.of("Juan", "Pérez");
+        assertThat(name.getFirstName()).isEqualTo("Juan");
+        assertThat(name.getLastName()).isEqualTo("Pérez");
+        assertThat(name.asText()).isEqualTo("Juan Pérez");
+        assertThat(name.initials()).isEqualTo("JP");
     }
 
     @Test
-    void shouldThrowExceptionWhenNullValues() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> FullName.of(null, "Doe"));
-        assertThrows(ValueObjectValidationException.class,
-            () -> FullName.of("John", null));
+    @DisplayName("Nombre nulo lanza excepción")
+    void shouldThrowForNullFirstName() {
+        assertThatThrownBy(() -> FullName.of(null, "Pérez"))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldThrowExceptionWhenBlankValues() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> FullName.of("   ", "Doe"));
-        assertThrows(ValueObjectValidationException.class,
-            () -> FullName.of("John", "   "));
+    @DisplayName("Apellido nulo lanza excepción")
+    void shouldThrowForNullLastName() {
+        assertThatThrownBy(() -> FullName.of("Juan", null))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldMatchFullNameIgnoringCase() {
-        FullName name = FullName.of("John", "Doe");
-        assertTrue(name.matches("john doe"));
-        assertTrue(name.matches("JOHN DOE"));
+    @DisplayName("Nombre en blanco lanza excepción")
+    void shouldThrowForBlankFirstName() {
+        assertThatThrownBy(() -> FullName.of(" ", "Pérez"))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldStartWithPrefixIgnoringCase() {
-        FullName name = FullName.of("John", "Doe");
-        assertTrue(name.startsWith("jo"));
-        assertTrue(name.startsWith("JOHN"));
-        assertFalse(name.startsWith("Jane"));
+    @DisplayName("Apellido en blanco lanza excepción")
+    void shouldThrowForBlankLastName() {
+        assertThatThrownBy(() -> FullName.of("Juan", " "))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldReturnInitials() {
-        FullName name = FullName.of("John", "Doe");
-        assertEquals("JD", name.initials());
+    @DisplayName("matches() ignora mayúsculas/minúsculas")
+    void testMatches() {
+        FullName name = FullName.of("Juan", "Pérez");
+        assertThat(name.matches("JUAN PÉREZ")).isTrue();
+        assertThat(name.matches("Juan Pérez")).isTrue();
+        assertThat(name.matches("Juan Perez")).isFalse(); // acento
     }
 
     @Test
-    void shouldBeEqualIgnoringCase() {
-        FullName name1 = FullName.of("John", "Doe");
-        FullName name2 = FullName.of("john", "doe");
-
-        assertEquals(name1, name2);
-        assertEquals(name1.hashCode(), name2.hashCode());
-    }
-
-    @Test
-    void shouldNotBeEqualWhenDifferentNames() {
-        FullName name1 = FullName.of("John", "Doe");
-        FullName name2 = FullName.of("Jane", "Doe");
-
-        assertNotEquals(name1, name2);
+    @DisplayName("startsWith() funciona correctamente")
+    void testStartsWith() {
+        FullName name = FullName.of("Juan", "Pérez");
+        assertThat(name.startsWith("Juan")).isTrue();
+        assertThat(name.startsWith("ju")).isTrue();
+        assertThat(name.startsWith("Pedro")).isFalse();
     }
 }

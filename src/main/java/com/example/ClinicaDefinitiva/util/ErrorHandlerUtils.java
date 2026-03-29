@@ -1,9 +1,6 @@
 package com.example.ClinicaDefinitiva.util;
 
 
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.infrastructure.rest.dto.ErrorResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 

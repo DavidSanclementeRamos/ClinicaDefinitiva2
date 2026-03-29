@@ -1,4 +1,3 @@
-Aquí tienes el ADR redactado siguiendo **exactamente la plantilla que me compartiste**, aplicado al caso de **centralizar parámetros de seguridad en una `SecurityPolicy` inyectada**:
 
 ---
 

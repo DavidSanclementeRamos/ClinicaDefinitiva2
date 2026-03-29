@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.infrastructure.security;
 
-import com.example.ClinicaDefinitiva.application.dto.authentication.ReadUserIdentityDto;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,17 +13,18 @@ import java.util.List;
 
 @Component
 public class JwtProvider {
-    private final String secretKey = "claveSecretaMuySegura";
+private final String secretKey = "claveSecretaMuySeguraParaClinicaDefinitiva2024JWT";
 
-    public String generateToken(ReadUserIdentityDto user) {
-        return Jwts.builder()
-                .setSubject(user.email())
-                .claim("roles", List.of("ROLE_USER"))
-                .setIssuedAt(new Date())
-                .setExpiration(Date.from(Instant.now().plus(Duration.ofHours(2))))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-    }
+    // Reemplaza el método generateToken existente
+public String generateToken(String email) {
+    return Jwts.builder()
+            .setSubject(email)
+            .claim("roles", List.of("ROLE_USER"))
+            .setIssuedAt(new Date())
+            .setExpiration(Date.from(Instant.now().plus(Duration.ofHours(2))))
+            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .compact();
+}
 
     public String resolveToken(HttpServletRequest request) {
         String bearer = request.getHeader("Authorization");

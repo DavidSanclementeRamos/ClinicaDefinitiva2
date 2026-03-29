@@ -24,6 +24,10 @@ public interface PaymentRepository {
     
     List<Payment> findAll();
     
+    List<Payment> findConfirmedByInvoiceId(InvoiceId invoiceId);
+    
+    List<Payment> findByStatus(String statusEnum);
+    
     void delete(PaymentId id);
 }
 

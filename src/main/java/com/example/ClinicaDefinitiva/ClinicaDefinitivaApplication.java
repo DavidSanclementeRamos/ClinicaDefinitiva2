@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
 @SpringBootApplication
 public class ClinicaDefinitivaApplication {
@@ -21,6 +23,14 @@ public class ClinicaDefinitivaApplication {
 		logger.info("Logger funciona correctamente");
 		System.out.print(" holo desde Spring");
 	}
+        
+     /**   @Component
+public class HashGenerator implements CommandLineRunner {
+    @Override
+    public void run(String... args) {
+        System.out.println("HASH: " + new BCryptPasswordEncoder().encode("admin123"));
+    }
+}*/
 
 
 // http://localhost/phpmyadmin/index.php?route=/sql&pos=0&db=prueva&tab

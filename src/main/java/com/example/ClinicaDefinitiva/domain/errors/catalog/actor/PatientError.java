@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.actor;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -54,7 +54,11 @@ public enum PatientError implements ErrorCatalog {
     ERR_PATIENT_CONTRACT_INVALID(
             "RN-PATIENT-010","error.patient.contractInvalid",
             "El contrato asignado al paciente no está activo o se encuentra vencido",
-            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR);
+            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR),
+    ERR_PATIENT_NOT_FOUND(
+    "RN-PATIENT-011", "error.patient.not.found",
+    "El paciente solicitado no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -55,7 +55,11 @@ public enum UserRolAssignmentError implements ErrorCatalog {
     ERR_ASSIGNMENT_CANNOT_EXTEND_PERMANENT(
             "RN-ASSIGNMENT-010","error.assignment.extend.permanent",
             "La extensión de vigencia solo aplica a roles temporales",
-            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR);
+            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR),
+    ERR_ASSIGNMENT_NOT_FOUND(
+    "RN-ASSIGNMENT-011", "error.assignment.not.found",
+    "La asignación de rol solicitada no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

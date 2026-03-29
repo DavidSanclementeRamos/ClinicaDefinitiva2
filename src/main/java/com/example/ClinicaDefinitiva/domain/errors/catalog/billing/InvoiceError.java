@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.billing;
 
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import org.springframework.http.HttpStatus;
@@ -91,7 +91,11 @@ public enum InvoiceError implements ErrorCatalog {
     ERR_INVOICE_INACTIVE_SERVICE(
             "RN-INVOICE-017","error.invoice.inactiveService",
             "No se puede facturar servicio inactivo. Activar servicio o usar otro",
-            HttpStatus.CONFLICT, ErrorSeverity.ERROR);
+            HttpStatus.CONFLICT, ErrorSeverity.ERROR),
+    ERR_INVOICE_NOT_FOUND(
+    "RN-INVOICE-018", "error.invoice.not.found",
+    "La factura solicitada no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

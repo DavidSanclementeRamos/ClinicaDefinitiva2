@@ -1,4 +1,3 @@
-Perfecto 🙌, aquí tienes el **ADR-003** redactado siguiendo la plantilla que me compartiste, para documentar la decisión de ubicar la interfaz `SecurityPolicy` en la capa de aplicación y su implementación en infraestructura:
 
 ---
 

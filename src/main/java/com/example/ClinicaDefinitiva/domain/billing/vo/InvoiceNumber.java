@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.domain.billing.vo;
 
-
 import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.BillingVOError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
@@ -14,7 +13,7 @@ import java.util.regex.Pattern;
  * Reglas de negocio:
  * - El número de factura debe seguir el formato PREFIJO-NÚMERO
  *   Ejemplo válido: "FAC-0001", "INV-0123"
- * - El prefijo debe ser de 2 a 5 letras mayúsculas
+ * - El prefijo debe ser de 3 a 5 letras mayúsculas
  * - El número debe tener entre 4 y 8 dígitos, con ceros a la izquierda
  *
  * Notas:
@@ -23,7 +22,8 @@ import java.util.regex.Pattern;
  */
 public final class InvoiceNumber {
 
-    private static final Pattern VALID_PATTERN = Pattern.compile("^[A-Z]{2,5}-\\d{4,8}$");
+    private static final Pattern VALID_PATTERN = Pattern.compile("^[A-Z]{3,5}-\\d{4,8}$");
+    private static final long MAX_SEQUENCE = 99_999_999L;
 
     private final String value;
 
@@ -46,30 +46,33 @@ public final class InvoiceNumber {
     /**
      * Crea un InvoiceNumber a partir de un prefijo y un número secuencial.
      *
-     * @param prefix prefijo (ej. "FAC", "INV")
-     * @param sequence número secuencial
+     * @param prefix  prefijo (ej. "FAC", "INV")
+     * @param sequence número secuencial (debe ser > 0 y ≤ MAX_SEQUENCE)
      * @return instancia de InvoiceNumber
+     * @throws ValueObjectValidationException si el prefijo es nulo/vacío o la secuencia es inválida
      */
     public static InvoiceNumber from(String prefix, long sequence) {
-        if (prefix == null || prefix.isBlank()) {
-            throw new ValueObjectValidationException(
-                    BillingVOError.ERR_INVOICE_NUMBER_PREFIX_REQUIRED,
-                    VOContext.BILLING
-
-            );
-        }
-
-        if (sequence < 0) {
-            throw new ValueObjectValidationException(
-                    BillingVOError.ERR_INVOICE_NUMBER_NEGATIVE,
-                    VOContext.BILLING
-
-            );
-        }
-
-        String formattedNumber = String.format("%s-%04d", prefix.toUpperCase(), sequence);
-        return new InvoiceNumber(formattedNumber);
+    if (prefix == null || prefix.isBlank()) {
+        throw new ValueObjectValidationException(
+                BillingVOError.ERR_INVOICE_NUMBER_PREFIX_REQUIRED,
+                VOContext.BILLING
+        );
     }
+    if (sequence < 0) {   // antes era <= 0, ahora permite 0
+        throw new ValueObjectValidationException(
+                BillingVOError.ERR_INVOICE_NUMBER_NEGATIVE,
+                VOContext.BILLING
+        );
+    }
+    if (sequence > MAX_SEQUENCE) {
+        throw new ValueObjectValidationException(
+                BillingVOError.ERR_INVOICE_NUMBER_EXCEEDS_MAX,
+                VOContext.BILLING
+        );
+    }
+    String formattedNumber = String.format("%s-%04d", prefix.toUpperCase(), sequence);
+    return new InvoiceNumber(formattedNumber);
+}
 
     /**
      * Valida que el número cumpla con el formato PREFIJO-NÚMERO.
@@ -79,7 +82,6 @@ public final class InvoiceNumber {
             throw new ValueObjectValidationException(
                     BillingVOError.ERR_INVOICE_NUMBER_REQUIRED,
                     VOContext.BILLING
-
             );
         }
 
@@ -137,4 +139,3 @@ public final class InvoiceNumber {
         return value;
     }
 }
-

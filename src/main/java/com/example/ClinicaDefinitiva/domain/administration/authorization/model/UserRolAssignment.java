@@ -3,7 +3,7 @@ package com.example.ClinicaDefinitiva.domain.administration.authorization.model;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.UserRolAssignmentId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.adminitration.authorization.UserRolAssignmentError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization.UserRolAssignmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import com.example.ClinicaDefinitiva.domain.exceptions.DomainAggregateException;
@@ -113,4 +113,20 @@ public class UserRolAssignment {
     public LocalDate getValidTo() { return validTo; }
     public boolean isPrimary() { return isPrimary; }
     public void setId(UserRolAssignmentId id) { this.id = id; }
+    
+    // Agregar en UserRolAssignment.java
+public static UserRolAssignment reconstruct(
+        UserRolAssignmentId id,
+        UserIdentityId userIdentityId,
+        RolId rolId,
+        LocalDate validFrom,
+        LocalDate validTo,
+        boolean isPrimary) {
+    
+    UserRolAssignment assignment = new UserRolAssignment(
+        id, userIdentityId, rolId, validFrom, validTo, isPrimary);
+    return assignment;
 }
+}
+
+

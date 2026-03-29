@@ -7,12 +7,11 @@ import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.Contrac
 import com.example.ClinicaDefinitiva.domain.billing.enu.PayerType;
 import com.example.ClinicaDefinitiva.domain.billing.enu.RateStatus;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.errorBilling.RateError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.billing.RateError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * Agregado: Rate (Tarifa de Servicios Odontológicos)

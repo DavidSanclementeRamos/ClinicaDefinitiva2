@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.domain.errors.catalog.errorActor;
+package com.example.ClinicaDefinitiva.domain.errors.catalog.actor;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
@@ -59,7 +59,11 @@ public enum DentistError implements ErrorCatalog {
     ERR_DENTIST_RESCHEDULE_OUT_OF_WORKING_HOURS(
             "RN-DENTIST-011","error.dentist.reschedule.hours",
             "La reagendación está fuera de las horas laborales del odontólogo",
-            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR);
+            HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR),
+    ERR_DENTIST_NOT_FOUND(
+    "RN-DENTIST-012", "error.dentist.not.found",
+    "El odontólogo solicitado no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

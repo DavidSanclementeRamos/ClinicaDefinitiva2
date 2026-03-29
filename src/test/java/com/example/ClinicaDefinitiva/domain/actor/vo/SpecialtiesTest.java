@@ -1,66 +1,47 @@
+package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-package com.example.ClinicaDefinitiva.domain.actor;
-
-import com.example.ClinicaDefinitiva.domain.actor.vo.Specialties;
-import com.example.ClinicaDefinitiva.domain.actor.vo.Specialty;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import java.util.Set;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.*;
 
 class SpecialtiesTest {
 
     @Test
-    void shouldCreateValidSpecialties() {
-        Specialties specialties = Specialties.of(Set.of(
-            Specialty.of("Orthodontics"),
-            Specialty.of("Endodontics")
-        ));
-
-        assertTrue(specialties.contains(Specialty.of("Orthodontics")));
-        assertTrue(specialties.isMultidisciplinary());
-        assertEquals(2, specialties.asSet().size());
+    @DisplayName("Crear Specialties con conjunto válido")
+    void shouldCreateSpecialties() {
+        Set<Specialty> specialtiesSet = Set.of(
+                Specialty.of("Orthodontics"),
+                Specialty.of("Endodontics")
+        );
+        Specialties specialties = Specialties.of(specialtiesSet);
+        assertThat(specialties.asSet()).containsExactlyInAnyOrderElementsOf(specialtiesSet);
+        assertThat(specialties.contains(Specialty.of("Orthodontics"))).isTrue();
+        assertThat(specialties.isMultidisciplinary()).isTrue();
     }
 
     @Test
-    void shouldThrowExceptionWhenEmptySet() {
-        assertThrows(ValueObjectValidationException.class,
-            () -> Specialties.of(Set.of()));
+    @DisplayName("Crear Specialties con conjunto vacío lanza excepción")
+    void shouldThrowForEmptySet() {
+        assertThatThrownBy(() -> Specialties.of(Set.of()))
+                .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
-    void shouldAllowSurgicalProcedures() {
-        Specialties specialties = Specialties.of(Set.of(
-            Specialty.of("Oral Surgery"),
-            Specialty.of("General Dentistry")
-        ));
+    @DisplayName("allowsSurgicalProcedures() retorna true si incluye Oral Surgery")
+    void testAllowsSurgicalProcedures() {
+        Set<Specialty> withSurgery = Set.of(
+                Specialty.of("Oral Surgery"),
+                Specialty.of("Orthodontics")
+        );
+        Specialties specialties = Specialties.of(withSurgery);
+        assertThat(specialties.allowsSurgicalProcedures()).isTrue();
 
-        assertTrue(specialties.allowsSurgicalProcedures());
-    }
-
-    @Test
-    void shouldNotAllowSurgicalProcedures() {
-        Specialties specialties = Specialties.of(Set.of(
-            Specialty.of("Orthodontics")
-        ));
-
-        assertFalse(specialties.allowsSurgicalProcedures());
-    }
-
-    @Test
-    void shouldBeEqualWhenSameSpecialties() {
-        Specialties s1 = Specialties.of(Set.of(Specialty.of("Orthodontics")));
-        Specialties s2 = Specialties.of(Set.of(Specialty.of("Orthodontics")));
-
-        assertEquals(s1, s2);
-        assertEquals(s1.hashCode(), s2.hashCode());
-    }
-
-    @Test
-    void shouldNotBeEqualWhenDifferentSpecialties() {
-        Specialties s1 = Specialties.of(Set.of(Specialty.of("Orthodontics")));
-        Specialties s2 = Specialties.of(Set.of(Specialty.of("Endodontics")));
-
-        assertNotEquals(s1, s2);
+        Set<Specialty> withoutSurgery = Set.of(Specialty.of("Orthodontics"));
+        Specialties noSurgery = Specialties.of(withoutSurgery);
+        assertThat(noSurgery.allowsSurgicalProcedures()).isFalse();
     }
 }

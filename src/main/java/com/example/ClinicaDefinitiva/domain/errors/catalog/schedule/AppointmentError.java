@@ -48,7 +48,11 @@ public enum AppointmentError implements ErrorCatalog {
     ERR_APPT_CANNOT_SPAN_MULTIPLE_DAYS(
             "RN-APPT-008","error.appointment.cannotSpanMultipleDays",
             "La cita no puede cruzar días",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
+            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
+    ERR_APPOINTMENT_NOT_FOUND(
+    "RN-APPT-009", "error.appointment.not.found",
+    "La cita solicitada no existe",
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
 
     private final String code;
     private final String messageKey;

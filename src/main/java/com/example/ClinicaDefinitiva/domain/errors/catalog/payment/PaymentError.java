@@ -47,10 +47,55 @@ public enum PaymentError implements ErrorCatalog {
             "El pago no está en estado pendiente",
             HttpStatus.CONFLICT, ErrorSeverity.ERROR),
 
-    ERR_PAYMENT_NOT_CONFIRMED(
-            "RN-PAYMENT-009","error.payment.notConfirmed",
-            "El pago no está confirmado",
-            HttpStatus.CONFLICT, ErrorSeverity.ERROR);
+ERR_PAYMENT_NOT_CONFIRMED(
+        "RN-PAYMENT-009",
+        "error.payment.notConfirmed",
+        "El pago no está confirmado",
+        HttpStatus.CONFLICT,
+        ErrorSeverity.ERROR),
+
+ERR_PAYMENT_INVOICE_CANCELLED(
+        "RN-PAYMENT-010",
+        "error.payment.invoiceCancelled",
+        "La factura asociada al pago está cancelada",
+        HttpStatus.CONFLICT,
+        ErrorSeverity.ERROR),
+
+ERR_PAYMENT_INVOICE_ALREADY_PAID(
+        "RN-PAYMENT-011",
+        "error.payment.invoiceAlreadyPaid",
+        "La factura ya fue pagada previamente",
+        HttpStatus.CONFLICT,
+        ErrorSeverity.ERROR),
+
+ERR_PAYMENT_INVOICE_NOT_FOUND(
+        "RN-PAYMENT-012",
+        "error.payment.invoiceNotFound",
+        "No se encontró la factura asociada al pago",
+        HttpStatus.CONFLICT,
+        ErrorSeverity.ERROR),
+
+ERR_PAYMENT_EXCEEDS_INVOICE(
+        "RN-PAYMENT-013",
+        "error.payment.exceedsInvoice",
+        "El monto del pago excede el valor de la factura",
+        HttpStatus.CONFLICT,
+        ErrorSeverity.ERROR),
+
+ERR_PAYMENT_REFUND_FAILED(
+        "RN-PAYMENT-014",
+        "error.payment.refundFailed",
+        "El reembolso del pago ha fallado",
+        HttpStatus.CONFLICT,
+        ErrorSeverity.ERROR),
+
+ERR_PAYMENT_NOT_FOUND(
+        "RN-PAYMENT-015",
+        "error.payment.notFound",
+        "No se encontró el pago solicitado",
+        HttpStatus.CONFLICT,
+        ErrorSeverity.ERROR),
+;
 
     private final String code;
     private final String messageKey;
