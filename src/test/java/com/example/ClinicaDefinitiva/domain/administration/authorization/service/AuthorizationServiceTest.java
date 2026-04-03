@@ -45,7 +45,7 @@ class AuthorizationServiceTest {
     @Test
     @DisplayName("isAllowedByRole: Administrador tiene permiso")
     void isAllowedByRole_admin_allowed() {
-        Permission permission = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         SecurityContext context = SecurityContext.builder(permission, UserIdentityId.from(1L)).build();
 
         assertThat(authorizationService.isAllowedByRole(adminRol, context)).isTrue();
@@ -56,7 +56,7 @@ class AuthorizationServiceTest {
     void isAllowedByRole_patient_notAllowed() {
         Permission permission = Permission.of(
                 ResourceCatalog.of(ResourceCatalog.BasicResource.ROLE),
-                ActionCatalog.of(ActionCatalog.BasicAction.CREATE_CUSTOM_ROLE)
+                ActionCatalog.of(ActionCatalog.BasicAction.CREATE_CUSTOM)
         );
         SecurityContext context = SecurityContext.builder(permission, UserIdentityId.from(1L)).build();
 
@@ -68,7 +68,7 @@ class AuthorizationServiceTest {
     void isAuthorizedByContext_checksPolicies() {
         when(rolRepository.findById(patientRolId)).thenReturn(Optional.of(patientRol));
 
-        Permission permission = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         SecurityContext context = SecurityContext.builder(permission, UserIdentityId.from(1L))
                 .withResourceOwnerId(UserIdentityId.from(1L))
                 .build();
@@ -82,7 +82,7 @@ class AuthorizationServiceTest {
     void isAuthorizedByContext_denies() {
         when(rolRepository.findById(patientRolId)).thenReturn(Optional.of(patientRol));
 
-        Permission permission = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         SecurityContext context = SecurityContext.builder(permission, UserIdentityId.from(1L))
                 .withResourceOwnerId(UserIdentityId.from(2L)) // Dueño diferente
                 .build();
@@ -99,7 +99,7 @@ class AuthorizationServiceTest {
                 adminRolId,
                 UserIdentityId.from(1L),
                 ResourceCatalog.of(ResourceCatalog.BasicResource.ROLE),
-                ActionCatalog.of(ActionCatalog.BasicAction.CREATE_CUSTOM_ROLE)
+                ActionCatalog.of(ActionCatalog.BasicAction.CREATE_CUSTOM)
         );
 
         assertThat(result).isTrue();

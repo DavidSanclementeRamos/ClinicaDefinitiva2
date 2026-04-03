@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.administration.authorization.vo;
 
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ class SecurityContextTest {
     @DisplayName("Construir SecurityContext con atributos")
     void buildSecurityContext() {
         UserIdentityId userId = UserIdentityId.from(1L);
-        Permission permission = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
 
         SecurityContext context = SecurityContext.builder(permission, userId)
                 .withResourceId(100L)

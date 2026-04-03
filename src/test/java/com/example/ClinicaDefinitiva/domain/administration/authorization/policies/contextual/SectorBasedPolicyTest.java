@@ -26,7 +26,7 @@ class SectorBasedPolicyTest {
     @Test
     @DisplayName("Sector: Recepcionista de RRHH puede eliminar dentista")
     void sectorRRHH_allowed() {
-        Permission permission = Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST),ActionCatalog.of(ActionCatalog.BasicAction.DELETE));
         SecurityContext context = SecurityContext.builder(permission, requesterId)
                 .withSector("RECURSOS_HUMANOS")
                 .build();
@@ -37,7 +37,7 @@ class SectorBasedPolicyTest {
     @Test
     @DisplayName("Sector: Recepcionista de otro sector no puede eliminar dentista")
     void sectorOther_denied() {
-        Permission permission = Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST),ActionCatalog.of(ActionCatalog.BasicAction.DELETE));
         SecurityContext context = SecurityContext.builder(permission, requesterId)
                 .withSector("FRONT_OFFICE")
                 .build();
@@ -48,7 +48,7 @@ class SectorBasedPolicyTest {
     @Test
     @DisplayName("Sector: Política no aplica para otros recursos")
     void doesNotApplyToOtherResources() {
-        Permission permission = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         SecurityContext context = SecurityContext.builder(permission, requesterId).build();
 
         assertThat(policy.appliesTo(context)).isFalse();

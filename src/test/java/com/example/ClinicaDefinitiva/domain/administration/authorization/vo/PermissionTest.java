@@ -10,7 +10,7 @@ class PermissionTest {
     @Test
     @DisplayName("Crear permiso CREATE")
     void createPermission() {
-        Permission perm = Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.CREATE));
         assertThat(perm.getAction().getCode()).isEqualTo("CREATE");
         assertThat(perm.getResource().getCode()).isEqualTo("PATIENT");
     }
@@ -18,21 +18,21 @@ class PermissionTest {
     @Test
     @DisplayName("Crear permiso READ")
     void readPermission() {
-        Permission perm = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         assertThat(perm.getAction().getCode()).isEqualTo("READ");
     }
 
     @Test
     @DisplayName("Crear permiso UPDATE")
     void updatePermission() {
-        Permission perm = Permission.update(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.UPDATE));
         assertThat(perm.getAction().getCode()).isEqualTo("UPDATE");
     }
 
     @Test
     @DisplayName("Crear permiso DELETE")
     void deletePermission() {
-        Permission perm = Permission.delete(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.DELETE));
         assertThat(perm.getAction().getCode()).isEqualTo("DELETE");
     }
 

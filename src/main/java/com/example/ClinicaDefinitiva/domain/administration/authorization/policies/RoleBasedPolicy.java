@@ -21,14 +21,14 @@ import java.util.Set;
  * Esta es la ÚNICA clase que debes modificar para cambios RBAC.
  *
  * MATRIZ DE PERMISOS:
- * ┌─────────────────────┬─────────────┬──────────┬─────────┬──────────┬──────────────┐
+ * ┌─────────────────────┬─────────────┬──────────┬─────────┬──────────┬──────────────┐--------------
  * │ Recurso             │ ADMINISTRATOR│RECEPTIONIST│ DENTIST │ PATIENT  │  GUARDIAN    │
- * ├─────────────────────┼─────────────┼──────────┼─────────┼──────────┼──────────────┤
+ * ├─────────────────────┼─────────────┼──────────┼─────────┼──────────┼──────────────┤_______________
  * │ ROLE                │ CRUD + admin │   -      │   -     │    -     │      -       │
  * │ ASSIGNMENT          │ CRUD completo│   -      │   -     │    -     │      -       │
  * │ USER_IDENTITY       │ CRUD + admin │   -      │   -     │    -     │      -       │
  * │ PATIENT             │ R           │ CRU      │  R(*)   │  RU(*)   │   RU(*)      │
- * │ DENTIST             │ RD          │ CRUD(*) │   -     │    -     │      -       │
+ * │ DENTIST             │ R          │ CRUD(*) │   -     │    -     │      -       │
  * │ GUARDIAN            │ R           │ CRU      │   -     │    -     │   RU(*)      │
  * │ RECEPTIONIST        │ R           │ R(self)  │   -     │    -     │      -       │
  * │ APPOINTMENT         │ R           │ CRUD+ops │ R+COMPL │   R      │    CR        │
@@ -42,7 +42,7 @@ import java.util.Set;
  * │ JOURNAL_ENTRY       │ CRUD        │  -       │   -     │    -     │      -       │
  * │ COMPANY             │ CRUD        │  -       │   -     │    -     │      -       │
  * │ ADMINISTRATIVE_REPORT│ CRUD       │ R        │  R      │    -     │      -       │
- * └─────────────────────┴─────────────┴──────────┴─────────┴──────────┴──────────────┘
+ * └─────────────────────┴─────────────┴──────────┴─────────┴──────────┴──────────────┘____________
  *
  * (*) Restricciones ABAC adicionales evaluadas por DefaultAuthorizationHelper:
  *   - DENTIST READ PATIENT: solo pacientes asignados (SpecialtyBasedPolicy)
@@ -71,94 +71,95 @@ public class RoleBasedPolicy implements PermissionPolicy {
 
         // ── Seguridad / gestión de acceso ──────────────────────────────────
         // Roles
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.VIEW_ROLE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.CREATE_CUSTOM_ROLE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.CLONE_ROLE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.ADD_PERMISSION)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.REMOVE_PERMISSION)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.CREATE_CUSTOM)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.CLONE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.ADD)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.REMOVE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.SET_PERMISSIONS)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.CHECK_PERMISSION)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.DELETE_ROLE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.ACTIVATE_ROLE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.DEACTIVATE_ROLE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.SUSPEND_ROLE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.MARK_DELETED_ROLE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.CHECK)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.DELETE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.ACTIVATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.DEACTIVATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.SUSPEND)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ROLE), a(ActionCatalog.BasicAction.MARK_DELETED)));
 
         // Asignaciones
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.ASSIGNMENT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.ASSIGNMENT)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.ASSIGNMENT)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.ASSIGNMENT)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.CREATE_TEMPORARY)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.REVOKE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.REVOKE_ALL)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.EXTEND_ASSIGNMENT)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.VIEW_ASSIGNMENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.EXTEND)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.READ)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.IS_ACTIVE_AT)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.IS_CURRENTLY_ACTIVE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.UPDATE_PRIMARY)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.DELETE)));
 
         // Identidades de usuario
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.USER_IDENTITY)));
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.USER_IDENTITY)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.USER_IDENTITY)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.USER_IDENTITY), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.USER_IDENTITY), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.USER_IDENTITY), a(ActionCatalog.BasicAction.UPDATE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.USER_IDENTITY), a(ActionCatalog.BasicAction.DEACTIVATE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.USER_IDENTITY), a(ActionCatalog.BasicAction.SUSPEND)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.USER_IDENTITY), a(ActionCatalog.BasicAction.REACTIVATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.USER_IDENTITY), a(ActionCatalog.BasicAction.ACTIVATE)));
 
         // ── Actores (solo lectura; los crea el flujo de registro) ──────────
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PATIENT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.DENTIST)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.DENTIST)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.GUARDIAN)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.RECEPTIONIST)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.GUARDIAN), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RECEPTIONIST), a(ActionCatalog.BasicAction.READ)));
 
         // ── Facturación y contabilidad (gestión completa) ──────────────────
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.INVOICE)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.INVOICE)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.INVOICE)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.INVOICE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.DELETE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.APPROVE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.REVERSE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.POST)));
 
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.PAYMENT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PAYMENT)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.PAYMENT)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.PAYMENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.DELETE)));
 
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.RATE)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.RATE)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.RATE)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.RATE)));
+        // RATE
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RATE), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RATE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RATE), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RATE), a(ActionCatalog.BasicAction.DELETE)));
 
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.CONTRACT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.CONTRACT)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.CONTRACT)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.CONTRACT)));
+        // CONTRACT
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.CONTRACT), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.CONTRACT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.CONTRACT), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.CONTRACT), a(ActionCatalog.BasicAction.DELETE)));
 
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.JOURNAL_ENTRY)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.JOURNAL_ENTRY)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.JOURNAL_ENTRY)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.JOURNAL_ENTRY)));
+        // JOURNAL_ENTRY
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.JOURNAL_ENTRY), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.JOURNAL_ENTRY), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.JOURNAL_ENTRY), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.JOURNAL_ENTRY), a(ActionCatalog.BasicAction.DELETE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.JOURNAL_ENTRY), a(ActionCatalog.BasicAction.REVERSE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.JOURNAL_ENTRY), a(ActionCatalog.BasicAction.POST)));
 
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.COMPANY)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.COMPANY)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.COMPANY)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.COMPANY)));
+        // COMPANY
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.COMPANY), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.COMPANY), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.COMPANY), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.COMPANY), a(ActionCatalog.BasicAction.DELETE)));
 
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT)));
+        // ADMINISTRATIVE_REPORT
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.DELETE)));
 
         // ── Agenda (solo lectura; la opera RECEPTIONIST) ───────────────────
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.APPOINTMENT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.SHIFT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.AVAILABILITY)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.AVAILABILITY), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.READ)));
 
         ROLE_PERMISSIONS.put(RolEnum.ADMINISTRATOR, permissions);
     }
@@ -170,43 +171,43 @@ public class RoleBasedPolicy implements PermissionPolicy {
         Set<Permission> permissions = new HashSet<>();
 
         // Gestión de actores
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.PATIENT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PATIENT)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.PATIENT)));
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.DENTIST)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.DENTIST)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.DENTIST)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.UPDATE)));
         // DELETE DENTIST: tiene restricción ABAC → solo sector RRHH (SectorBasedPolicy)
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.DENTIST)));
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.GUARDIAN)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.GUARDIAN)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.GUARDIAN)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.DELETE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.GUARDIAN), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.GUARDIAN), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.GUARDIAN), a(ActionCatalog.BasicAction.UPDATE)));
 
         // Gestión de agenda
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.APPOINTMENT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.APPOINTMENT)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.APPOINTMENT)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.APPOINTMENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.DELETE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.CANCEL)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.RESCHEDULE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.SCHEDULE)));
 
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.SHIFT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.SHIFT)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.SHIFT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.UPDATE)));
 
         // Servicios (lectura y actualización administrativa)
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.UPDATE)));
 
         // Facturación básica
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.INVOICE)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.INVOICE)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.INVOICE)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PAYMENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.READ)));
 
         // Reportes administrativos (solo lectura)
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.READ)));
 
         ROLE_PERMISSIONS.put(RolEnum.RECEPTIONIST, permissions);
     }
@@ -218,32 +219,32 @@ public class RoleBasedPolicy implements PermissionPolicy {
         Set<Permission> permissions = new HashSet<>();
 
         // Lectura de pacientes asignados (ABAC: SpecialtyBasedPolicy filtrará por asignación)
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PATIENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.READ)));
 
         // Servicios clínicos propios (ABAC: SpecialtyBasedPolicy valida especialidad)
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.UPDATE)));
 
         // Gestión de citas y disponibilidad propia
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.APPOINTMENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.READ)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.COMPLETE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.MARK_AS_NO_SHOW)));
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.AVAILABILITY)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.AVAILABILITY)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.AVAILABILITY)));
-        permissions.add(Permission.delete(r(ResourceCatalog.BasicResource.AVAILABILITY)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.AVAILABILITY), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.AVAILABILITY), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.AVAILABILITY), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.AVAILABILITY), a(ActionCatalog.BasicAction.DELETE)));
 
         // Turnos propios
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.SHIFT)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.SHIFT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.UPDATE)));
 
         // Consulta de facturación
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.INVOICE)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.RATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RATE), a(ActionCatalog.BasicAction.READ)));
 
         // Reportes
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.READ)));
 
         ROLE_PERMISSIONS.put(RolEnum.DENTIST, permissions);
     }
@@ -255,16 +256,16 @@ public class RoleBasedPolicy implements PermissionPolicy {
         Set<Permission> permissions = new HashSet<>();
 
         // Auto-gestión (ABAC: OwnershipPolicy valida que sea su propio registro)
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PATIENT)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.PATIENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.UPDATE)));
 
         // Citas propias
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.APPOINTMENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.READ)));
 
         // Consulta de servicios y facturación propios
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.INVOICE)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PAYMENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.READ)));
 
         ROLE_PERMISSIONS.put(RolEnum.PATIENT, permissions);
     }
@@ -276,22 +277,22 @@ public class RoleBasedPolicy implements PermissionPolicy {
         Set<Permission> permissions = new HashSet<>();
 
         // Datos propios (ABAC: OwnershipPolicy)
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.GUARDIAN)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.GUARDIAN)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.GUARDIAN), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.GUARDIAN), a(ActionCatalog.BasicAction.UPDATE)));
 
         // Pacientes bajo tutela (ABAC: OwnershipPolicy via guardianship)
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PATIENT)));
-        permissions.add(Permission.update(r(ResourceCatalog.BasicResource.PATIENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.UPDATE)));
 
         // Citas de tutelados
-        permissions.add(Permission.create(r(ResourceCatalog.BasicResource.APPOINTMENT)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.APPOINTMENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.READ)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.CANCEL)));
 
         // Consulta de servicios y facturación
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.INVOICE)));
-        permissions.add(Permission.read(r(ResourceCatalog.BasicResource.PAYMENT)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.READ)));
 
         ROLE_PERMISSIONS.put(RolEnum.GUARDIAN, permissions);
     }

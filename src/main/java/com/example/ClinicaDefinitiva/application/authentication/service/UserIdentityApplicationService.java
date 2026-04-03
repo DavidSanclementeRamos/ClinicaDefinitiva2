@@ -387,7 +387,7 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.USER_IDENTITY,
-            action = ActionCatalog.BasicAction.REACTIVATE)
+            action = ActionCatalog.BasicAction.ACTIVATE)
     public ReadUserIdentityDto reactivate(UserIdentityId targetUserId,
                                           String reason,
                                           UserIdentityId requesterId,
@@ -397,7 +397,7 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                 requesterId,
                 requesterRolId,
                 ResourceCatalog.BasicResource.USER_IDENTITY,
-                ActionCatalog.BasicAction.REACTIVATE,
+                ActionCatalog.BasicAction.ACTIVATE,
                 AuthorizationContext.builder()
                         .withResourceId(targetUserId.value())
                         .build()

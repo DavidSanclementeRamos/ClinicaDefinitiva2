@@ -30,7 +30,7 @@ class OwnershipPolicyTest {
     @Test
     @DisplayName("Ownership: Paciente puede ver sus propios datos")
     void patientOwnership_allowed() {
-        Permission permission = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         SecurityContext context = SecurityContext.builder(permission, requesterId)
                 .withResourceOwnerId(resourceOwnerId)
                 .build();
@@ -41,7 +41,7 @@ class OwnershipPolicyTest {
     @Test
     @DisplayName("Ownership: Paciente no puede ver datos de otro paciente")
     void patientOwnership_denied() {
-        Permission permission = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         SecurityContext context = SecurityContext.builder(permission, requesterId)
                 .withResourceOwnerId(UserIdentityId.from(2L))
                 .build();
@@ -52,7 +52,7 @@ class OwnershipPolicyTest {
     @Test
     @DisplayName("Guardianship: Tutor puede ver datos de paciente bajo tutela")
     void guardianship_allowed() {
-        Permission permission = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         SecurityContext context = SecurityContext.builder(permission, requesterId)
                 .withPatientGuardianId(requesterId.value())
                 .build();
@@ -63,7 +63,7 @@ class OwnershipPolicyTest {
     @Test
     @DisplayName("Guardianship: Tutor no puede ver datos de paciente sin tutela")
     void guardianship_denied() {
-        Permission permission = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         SecurityContext context = SecurityContext.builder(permission, requesterId)
                 .withPatientGuardianId(2L)
                 .build();

@@ -75,5 +75,5 @@ public void removePermission(Permission permission) {
 - [ADR-002 (Autorización): Modelado de Permiso como VO estático](ADR-002-Modelado%20de%20Permiso%20como%20VO%20estático.md)
 - [ADR-07 (Arquitectura): Redefinición del módulo Administration](ADR-07-Redefinición%20del%20módulo%20Administration.md)
 - [ADR-38 (Arquitectura): Modelo híbrido RBAC/ABAC](ADR-38-Modelo%20híbrido%20RBAC-ABAC.md)
-```
+
 

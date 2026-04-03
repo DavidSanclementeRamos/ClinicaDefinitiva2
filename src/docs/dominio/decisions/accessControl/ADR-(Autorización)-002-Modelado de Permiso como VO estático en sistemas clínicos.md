@@ -63,6 +63,41 @@ Modelar `Permission` como **Value Object estático** en el dominio.
 
 ---
 
+## Roles Configurables vs Permisos Estáticos
+
+### Permisos (Estáticos):
+- Catálogo cerrado definido en código
+- ResourceCatalog.BasicResource + ActionCatalog.BasicAction
+- NO se pueden crear permisos custom en runtime
+- Auditable y certificable
+
+### Roles (Configurables):
+- Roles BASE: Predefinidos, no editables (DENTIST, PATIENT, etc.)
+- Roles CLONADOS: Derivados de roles base, editables
+- Solo pueden tener permisos del catálogo estático
+- Permite adaptación a necesidades organizativas
+
+### Ejemplo:
+
+Rol base DENTIST tiene permisos:
+- CREATE_TREATMENT
+- READ_TREATMENT
+- UPDATE_TREATMENT
+- DELETE_TREATMENT
+
+Rol clonado "Dentista Junior" (subconjunto):
+- READ_TREATMENT
+- UPDATE_TREATMENT
+
+Rol clonado "Dentista Senior" (superset):
+- [todos de DENTIST]
+- CREATE_DENTIST (mentor)
+
+ Todos los permisos vienen del catálogo estático
+ No se pueden crear permisos custom como "APPROVE_EXPERIMENTAL_PROCEDURE"
+
+---
+
 ## Relación con otros ADRs
 
 - **Complementa ADR-38**: define que el modelo híbrido RBAC/ABAC se basa en permisos estáticos.

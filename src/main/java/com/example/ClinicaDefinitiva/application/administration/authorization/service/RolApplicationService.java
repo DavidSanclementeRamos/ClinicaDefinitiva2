@@ -47,13 +47,13 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional(readOnly = true)
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.VIEW_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.READ)
     @Override
     public Optional<ReadRolDto> findById(RolId targetRoleId, UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.VIEW_ROLE,
+                ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder().withResourceId(targetRoleId.getValue()).build()
         );
         Rol rol = repository.findById(targetRoleId)
@@ -62,53 +62,53 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional(readOnly = true)
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.VIEW_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.READ)
     @Override
     public Optional<ReadRolDto> findByRolEnum(String rolEnum, UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.VIEW_ROLE,
+                ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder().build()
         );
         return repository.findByRolEnum(RolEnum.valueOf(rolEnum)).map(readMapper::toReadDto);
     }
 
     @Transactional(readOnly = true)
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.VIEW_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.READ)
     @Override
     public Page<PageRolDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.VIEW_ROLE,
+                ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder().build()
         );
         return repository.findAll(pageable).map(readMapper::toPageDto);
     }
 
     @Transactional(readOnly = true)
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.VIEW_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.READ)
     @Override
     public Page<PageRolDto> findByEditable(boolean editable, Pageable pageable,
                                             UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.VIEW_ROLE,
+                ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder().build()
         );
         return repository.findByEditable(editable, pageable).map(readMapper::toPageDto);
     }
 
     @Transactional
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.CREATE_CUSTOM_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.CREATE_CUSTOM)
     @Override
     public ReadRolDto createCustom(CreateRolDto dto, UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.CREATE_CUSTOM_ROLE,
+                ActionCatalog.BasicAction.CREATE_CUSTOM,
                 AuthorizationContext.builder().build()
         );
         Rol created = rolService.createCustom(RolEnum.valueOf(dto.rolEnum()), dto.description());
@@ -117,14 +117,14 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.CLONE_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.CLONE)
     @Override
     public ReadRolDto cloneRole(RolId sourceRolId, String newDescription,
                                 UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.CLONE_ROLE,
+                ActionCatalog.BasicAction.CLONE,
                 AuthorizationContext.builder().withResourceId(sourceRolId.getValue()).build()
         );
         Rol sourceRol = repository.findById(sourceRolId)
@@ -134,14 +134,14 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.ADD_PERMISSION)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.ADD)
     @Override
     public void addPermission(RolId targetRoleId, PermissionDto permissionDto,
                               UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.ADD_PERMISSION,
+                ActionCatalog.BasicAction.ADD,
                 AuthorizationContext.builder().withResourceId(targetRoleId.getValue()).build()
         );
         Rol rol = repository.findById(targetRoleId)
@@ -151,14 +151,14 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.REMOVE_PERMISSION)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.REMOVE)
     @Override
     public void removePermission(RolId targetRoleId, PermissionDto permissionDto,
                                  UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.REMOVE_PERMISSION,
+                ActionCatalog.BasicAction.REMOVE,
                 AuthorizationContext.builder().withResourceId(targetRoleId.getValue()).build()
         );
         Rol rol = repository.findById(targetRoleId)
@@ -189,14 +189,14 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional(readOnly = true)
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.CHECK_PERMISSION)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.CHECK)
     @Override
     public boolean hasPermission(RolId targetRoleId, PermissionDto permissionDto,
                                  UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.CHECK_PERMISSION,
+                ActionCatalog.BasicAction.CHECK,
                 AuthorizationContext.builder().withResourceId(targetRoleId.getValue()).build()
         );
         // CORREGIDO: era repository.findById(requesterRolId) — buscaba el rol del que pide, no el objetivo
@@ -206,14 +206,14 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.ACTIVATE_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.ACTIVATE)
     @Override
     public void activate(RolId targetRoleId, String reason,
                          UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.ACTIVATE_ROLE,
+                ActionCatalog.BasicAction.ACTIVATE,
                 AuthorizationContext.builder().withResourceId(targetRoleId.getValue()).build()
         );
         Rol rol = repository.findById(targetRoleId)
@@ -223,14 +223,14 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.DEACTIVATE_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.DEACTIVATE )
     @Override
     public void deactivate(RolId targetRoleId, String reason,
                            UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.DEACTIVATE_ROLE,
+                ActionCatalog.BasicAction.DEACTIVATE ,
                 AuthorizationContext.builder().withResourceId(targetRoleId.getValue()).build()
         );
         Rol rol = repository.findById(targetRoleId)
@@ -240,14 +240,14 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.SUSPEND_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.SUSPEND )
     @Override
     public void suspend(RolId targetRoleId, String reason,
                         UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.SUSPEND_ROLE,
+                ActionCatalog.BasicAction.SUSPEND ,
                 AuthorizationContext.builder().withResourceId(targetRoleId.getValue()).build()
         );
         Rol rol = repository.findById(targetRoleId)
@@ -257,14 +257,14 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.MARK_DELETED_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.MARK_DELETED )
     @Override
     public void markDeleted(RolId targetRoleId, String reason,
                             UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.MARK_DELETED_ROLE,
+                ActionCatalog.BasicAction.MARK_DELETED ,
                 AuthorizationContext.builder().withResourceId(targetRoleId.getValue()).build()
         );
         Rol rol = repository.findById(targetRoleId)
@@ -274,13 +274,13 @@ public class RolApplicationService implements RolUseCase {
     }
 
     @Transactional
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.DELETE_ROLE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.DELETE)
     @Override
     public void deleteById(RolId targetRoleId, UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
-                ActionCatalog.BasicAction.DELETE_ROLE,
+                ActionCatalog.BasicAction.DELETE,
                 AuthorizationContext.builder().withResourceId(targetRoleId.getValue()).build()
         );
         // CORREGIDO: era repository.findById(requesterRolId) — buscaba el rol del que pide, no el objetivo

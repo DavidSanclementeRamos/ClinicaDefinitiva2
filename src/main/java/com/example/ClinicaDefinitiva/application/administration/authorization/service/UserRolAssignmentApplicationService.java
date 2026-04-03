@@ -177,7 +177,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
-            action = ActionCatalog.BasicAction.EXTEND_ASSIGNMENT)
+            action = ActionCatalog.BasicAction.READ)
     public void extend(UserRolAssignmentId targetId,
                        LocalDate newValidTo,
                        UserIdentityId requesterId,
@@ -186,7 +186,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
        authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ASSIGNMENT,
-                ActionCatalog.BasicAction.EXTEND_ASSIGNMENT,
+                ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
                         .withResourceId(targetId.getValue())
                         .build()
@@ -257,7 +257,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
-            action = ActionCatalog.BasicAction.VIEW_ASSIGNMENT)
+            action = ActionCatalog.BasicAction.READ)
     public Optional<ReadAssignmentDto> findById(UserRolAssignmentId targetId ,
                                                 UserIdentityId requesterId,
                                                 RolId requesterRolId) {
@@ -267,7 +267,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
          authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ASSIGNMENT,
-                ActionCatalog.BasicAction.VIEW_ASSIGNMENT,
+                ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
                         .withResourceId(targetId.getValue())
                         .build()
@@ -283,7 +283,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
-            action = ActionCatalog.BasicAction.VIEW_ASSIGNMENT)
+            action = ActionCatalog.BasicAction.READ)
     public List<ReadAssignmentDto> findByUserId(UserIdentityId targeUserIdentityId,
                                                 UserIdentityId requesterId,
                                                 RolId requesterRolId) {
@@ -291,7 +291,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ASSIGNMENT,
-                ActionCatalog.BasicAction.VIEW_ASSIGNMENT,
+                ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
                         .build()
         );
@@ -307,7 +307,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
-            action = ActionCatalog.BasicAction.VIEW_ASSIGNMENT)
+            action = ActionCatalog.BasicAction.READ)
     public Optional<ReadAssignmentDto> findByUserIdAndRolId(UserIdentityId targeUserIdentityId, RolId  targeRolId,
                                                             UserIdentityId requesterId,
                                                             RolId requesterRolId) {
@@ -316,7 +316,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ASSIGNMENT,
-                ActionCatalog.BasicAction.VIEW_ASSIGNMENT,
+                ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
                         .build()
         );
@@ -334,7 +334,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT,
-            action = ActionCatalog.BasicAction.VIEW_ASSIGNMENT)
+            action = ActionCatalog.BasicAction.READ)
     public Optional<ReadAssignmentDto> findByUserIdAndIsPrimary(UserIdentityId targetUserIdentityId,
                                                                 boolean isPrimary,
                                                                 UserIdentityId requesterId,
@@ -345,7 +345,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
          authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ASSIGNMENT,
-                ActionCatalog.BasicAction.VIEW_ASSIGNMENT,
+                ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
                         .build()
         );
@@ -422,7 +422,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ASSIGNMENT,
-                ActionCatalog.BasicAction.REVOKE_ASSIGNMENT,
+                ActionCatalog.BasicAction.REVOKE,
                 AuthorizationContext.builder()
                         .withResourceId(targetId.getValue())
                         .build()

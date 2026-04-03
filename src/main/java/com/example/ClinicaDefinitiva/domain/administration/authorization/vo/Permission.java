@@ -10,22 +10,7 @@ public final class Permission {
         this.action = action;
     }
 
-    // Factory methods CRUD
-    public static Permission create(ResourceCatalog resource) {
-        return new Permission(resource, ActionCatalog.of(ActionCatalog.BasicAction.CREATE));
-    }
-
-    public static Permission read(ResourceCatalog resource) {
-        return new Permission(resource, ActionCatalog.of(ActionCatalog.BasicAction.READ));
-    }
-
-    public static Permission update(ResourceCatalog resource) {
-        return new Permission(resource, ActionCatalog.of(ActionCatalog.BasicAction.UPDATE));
-    }
-
-    public static Permission delete(ResourceCatalog resource) {
-        return new Permission(resource, ActionCatalog.of(ActionCatalog.BasicAction.DELETE));
-    }
+ 
 
     // Factory genérico
     public static Permission of(ResourceCatalog resource, ActionCatalog action) {

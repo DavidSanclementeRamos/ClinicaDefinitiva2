@@ -25,7 +25,7 @@ class RoleBasedPolicyTest {
         Rol adminRol = Rol.createCustom(RolEnum.ADMINISTRATOR, "Admin");
         Permission perm = Permission.of(
                 ResourceCatalog.of(ResourceCatalog.BasicResource.ROLE),
-                ActionCatalog.of(ActionCatalog.BasicAction.CREATE_CUSTOM_ROLE)
+                ActionCatalog.of(ActionCatalog.BasicAction.CREATE_CUSTOM)
         );
         SecurityContext context = SecurityContext.builder(perm, UserIdentityId.from(1L)).build();
 
@@ -38,7 +38,7 @@ class RoleBasedPolicyTest {
         Rol patientRol = Rol.createCustom(RolEnum.PATIENT, "Paciente");
         Permission perm = Permission.of(
                 ResourceCatalog.of(ResourceCatalog.BasicResource.ROLE),
-                ActionCatalog.of(ActionCatalog.BasicAction.CREATE_CUSTOM_ROLE)
+                ActionCatalog.of(ActionCatalog.BasicAction.CREATE_CUSTOM)
         );
         SecurityContext context = SecurityContext.builder(perm, UserIdentityId.from(1L)).build();
 
@@ -49,7 +49,7 @@ class RoleBasedPolicyTest {
     @DisplayName("Receptionist puede gestionar pacientes")
     void receptionistCanManagePatients() {
         Rol receptionistRol = Rol.createCustom(RolEnum.RECEPTIONIST, "Recepcionista");
-        Permission perm = Permission.create(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.CREATE));
         SecurityContext context = SecurityContext.builder(perm, UserIdentityId.from(1L)).build();
 
         assertThat(policy.isAllowed(receptionistRol, context)).isTrue();
@@ -59,7 +59,7 @@ class RoleBasedPolicyTest {
     @DisplayName("Dentist puede leer sus servicios")
     void dentistCanReadServices() {
         Rol dentistRol = Rol.createCustom(RolEnum.DENTIST, "Dentista");
-        Permission perm = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PROVIDED_SERVICE),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         SecurityContext context = SecurityContext.builder(perm, UserIdentityId.from(1L)).build();
 
         assertThat(policy.isAllowed(dentistRol, context)).isTrue();
@@ -69,7 +69,7 @@ class RoleBasedPolicyTest {
     @DisplayName("Patient puede leer sus facturas")
     void patientCanReadInvoices() {
         Rol patientRol = Rol.createCustom(RolEnum.PATIENT, "Paciente");
-        Permission perm = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.INVOICE),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         SecurityContext context = SecurityContext.builder(perm, UserIdentityId.from(1L)).build();
 
         assertThat(policy.isAllowed(patientRol, context)).isTrue();

@@ -46,7 +46,7 @@ class RolTest {
     @Test
     @DisplayName("Agregar permiso a rol editable")
     void addPermission() {
-        Permission perm = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         customRol.addPermission(perm);
         assertThat(customRol.hasPermission(perm)).isTrue();
     }
@@ -54,7 +54,7 @@ class RolTest {
     @Test
     @DisplayName("Agregar permiso a rol no editable lanza excepción")
     void addPermissionToNonEditable_throws() {
-        Permission perm = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         assertThatThrownBy(() -> defaultRol.addPermission(perm))
                 .isInstanceOf(BusinessRuleViolationException.class);
     }
@@ -62,7 +62,7 @@ class RolTest {
     @Test
     @DisplayName("Remover permiso existente")
     void removePermission() {
-        Permission perm = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         customRol.addPermission(perm);
         customRol.removePermission(perm);
         assertThat(customRol.hasPermission(perm)).isFalse();
@@ -71,7 +71,7 @@ class RolTest {
     @Test
     @DisplayName("Remover permiso de rol sin permisos lanza excepción")
     void removePermissionFromEmpty_throws() {
-        Permission perm = Permission.read(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT));
+        Permission perm = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.PATIENT),ActionCatalog.of(ActionCatalog.BasicAction.READ));
         assertThatThrownBy(() -> customRol.removePermission(perm))
                 .isInstanceOf(BusinessRuleViolationException.class);
     }

@@ -343,7 +343,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PROVIDED_SERVICE,
-            action = ActionCatalog.BasicAction.REACTIVATE)
+            action = ActionCatalog.BasicAction.ACTIVATE)
     public ReadServiceDto reactivate(ServiceId id,
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
@@ -352,7 +352,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                 requesterId,
                 requesterRolId,
                 ResourceCatalog.BasicResource.PROVIDED_SERVICE,
-                ActionCatalog.BasicAction.REACTIVATE,                          AuthorizationContext.builder()
+                ActionCatalog.BasicAction.ACTIVATE,                          AuthorizationContext.builder()
                         .withResourceId(id.getId())
                         .build()
         );
