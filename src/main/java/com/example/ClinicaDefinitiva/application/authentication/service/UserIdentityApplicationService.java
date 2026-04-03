@@ -128,45 +128,9 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                 .map(readMapper::toPageDto);
     }
 
-    @Override
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.USER_IDENTITY,
-            action = ActionCatalog.BasicAction.READ)
-    public Optional<PageUserIdentityDto> findByEmailAndStatus(String email,
-                                                              String status,
-                                                              UserIdentityId requesterId,
-                                                              RolId requesterRolId) {
-        authorizationHelper.authorize(
-                requesterId,
-                requesterRolId,
-                ResourceCatalog.BasicResource.USER_IDENTITY,
-                ActionCatalog.BasicAction.READ,
-                AuthorizationContext.builder().build()
-        );
 
-        return userIdentityRepository.findByEmailAndStatus(email, status)
-                .map(readMapper::toPageDto);
-    }
 
-    @Override
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.USER_IDENTITY,
-            action = ActionCatalog.BasicAction.READ)
-    public Optional<PageUserIdentityDto> findByIdAndStatus(UserIdentityId targetUserId,
-                                                           String status,
-                                                           UserIdentityId requesterId,
-                                                           RolId requesterRolId) {
-        authorizationHelper.authorize(
-                requesterId,
-                requesterRolId,
-                ResourceCatalog.BasicResource.USER_IDENTITY,
-                ActionCatalog.BasicAction.READ,
-                AuthorizationContext.builder()
-                        .withResourceId(targetUserId.value())
-                        .build()
-        );
-
-        return userIdentityRepository.findByIdAndStatus(targetUserId, status)
-                .map(readMapper::toPageDto);
-    }
+   
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.USER_IDENTITY,
@@ -412,6 +376,23 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
         userIdentity.reactivate(Instant.now());
         UserIdentity reactivated = userIdentityRepository.save(userIdentity);
         return readMapper.toReadDto(reactivated);
+    }
+
+    @Override
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.USER_IDENTITY,
+        action = ActionCatalog.BasicAction.READ)
+    public Page<PageUserIdentityDto> findAllByStatus(String status, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId) {
+   
+            authorizationHelper.authorize(
+            requesterId, requesterRolId,
+            ResourceCatalog.BasicResource.USER_IDENTITY,
+            ActionCatalog.BasicAction.READ,
+            AuthorizationContext.builder().build()
+    );
+
+    return userIdentityRepository.findByStatus(status, pageable)
+            .map(readMapper::toPageDto);
+
     }
 }
     

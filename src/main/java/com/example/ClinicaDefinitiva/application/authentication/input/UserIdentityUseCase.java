@@ -17,9 +17,9 @@ public interface UserIdentityUseCase {
     ReadUserIdentityDto findById(UserIdentityId targetUserId, UserIdentityId requesterId, RolId requesterRolId);
     Page<PageUserIdentityDto> findAll(Pageable pageable,UserIdentityId requesterId, RolId requesterRolId);
     Optional<PageUserIdentityDto> findByEmail(String email,UserIdentityId requesterId, RolId requesterRolId );
-    Optional<PageUserIdentityDto> findByEmailAndStatus(String email, String status,UserIdentityId requesterId, RolId requesterRolId  );
-    Optional<PageUserIdentityDto> findByIdAndStatus( UserIdentityId targetUserId, String status, UserIdentityId requesterId, RolId requesterRolId );
-
+    Page<PageUserIdentityDto> findAllByStatus(String status, Pageable pageable,
+                                           UserIdentityId requesterId,
+                                           RolId requesterRolId);
 
     ReadUserIdentityDto register(CreateUserIdentityDto dto,UserIdentityId requesterId, RolId requesterRolId);
     ReadUserIdentityDto update(UpdateUserIdentityDto dto, Long id,UserIdentityId requesterId, RolId requesterRolId);

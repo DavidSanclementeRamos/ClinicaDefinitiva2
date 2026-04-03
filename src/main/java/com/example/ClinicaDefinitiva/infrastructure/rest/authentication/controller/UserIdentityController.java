@@ -56,22 +56,7 @@ public ResponseEntity<ReadUserIdentityResponse> findById(
     return ResponseEntity.ok(readMapper.toRestRead(dto));
 }
 
-    /**
-     * Listar todos los usuarios con paginación
-     */
-    @GetMapping
-    public ResponseEntity<Page<PageUserIdentityResponse>> findAll(
-            @PageableDefault(size = 20) Pageable pageable,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        UserIdentityId requesterId = userDetails.getId();
-        RolId requesterRolId = userDetails.getActiveRolId();
-
-        Page<PageUserIdentityDto> users = useCase.findAll(pageable, requesterId, requesterRolId);
-        Page<PageUserIdentityResponse> response = users.map(readMapper::toRestPage);
-
-        return ResponseEntity.ok(response);
-    }
 
     /**
      * Buscar usuario por email
@@ -90,41 +75,30 @@ public ResponseEntity<ReadUserIdentityResponse> findById(
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Buscar usuario por email y estado
-     */
-    @GetMapping("/email/{email}/status/{status}")
-    public ResponseEntity<PageUserIdentityResponse> findByEmailAndStatus(
-            @PathVariable String email,
-            @PathVariable String status,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
+   
 
-        UserIdentityId requesterId = userDetails.getId();
-        RolId requesterRolId = userDetails.getActiveRolId();
 
-        return useCase.findByEmailAndStatus(email, status, requesterId, requesterRolId)
-                .map(readMapper::toRestPage)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+
+@GetMapping
+public ResponseEntity<Page<PageUserIdentityResponse>> findAll(
+        @PageableDefault(size = 20) Pageable pageable,
+        @RequestParam(required = false) String status,
+        @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+    UserIdentityId requesterId = userDetails.getId();
+    RolId requesterRolId = userDetails.getActiveRolId();
+
+    Page<PageUserIdentityDto> users;
+    if (status != null && !status.isBlank()) {
+        users = useCase.findAllByStatus(status, pageable, requesterId, requesterRolId);
+    } else {
+        users = useCase.findAll(pageable, requesterId, requesterRolId);
     }
 
-    /**
-     * Buscar usuario por ID y estado
-     */
-    @GetMapping("/{id}/status/{status}")
-    public ResponseEntity<PageUserIdentityResponse> findByIdAndStatus(
-            @PathVariable Long id,
-            @PathVariable String status,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        UserIdentityId requesterId = userDetails.getId();
-        RolId requesterRolId = userDetails.getActiveRolId();
-
-        return useCase.findByIdAndStatus(UserIdentityId.from(id), status, requesterId, requesterRolId)
-                .map(readMapper::toRestPage)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+    Page<PageUserIdentityResponse> response = users.map(readMapper::toRestPage);
+    return ResponseEntity.ok(response);
+}
+ 
 
     /**
      * Registrar un nuevo usuario

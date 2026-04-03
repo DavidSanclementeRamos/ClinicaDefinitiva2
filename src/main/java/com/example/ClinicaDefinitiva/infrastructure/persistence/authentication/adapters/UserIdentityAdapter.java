@@ -53,19 +53,7 @@ public class UserIdentityAdapter implements UserIdentityRepository {
                 .map(readMapper::toDomain);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<UserIdentity> findByEmailAndStatus(String email, String status) {
-        return userJpaRepository.findByEmailAndStatus(email, status)
-                .map(readMapper::toDomain);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<UserIdentity> findByIdAndStatus(UserIdentityId id, String status) {
-        return userJpaRepository.findByIdAndStatus(id.value(), status)
-                .map(readMapper::toDomain);
-    }
+   
 
     @Override
     @Transactional
@@ -77,5 +65,12 @@ public class UserIdentityAdapter implements UserIdentityRepository {
      
       
         return savedUser;
+    }
+
+    @Override
+    public Page<UserIdentity> findByStatus(String status, Pageable pageable) {
+    
+        return userJpaRepository.findByStatus( status,pageable)
+                .map(readMapper::toDomain);
     }
 }

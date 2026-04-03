@@ -11,9 +11,9 @@ public interface UserIdentityRepository {
     Optional<UserIdentity> findById(UserIdentityId id);
     Page<UserIdentity> findAll(Pageable pageable);
     Optional<UserIdentity> findByEmail(String email);
-    Optional<UserIdentity> findByEmailAndStatus(String email, String status);
-    Optional<UserIdentity> findByIdAndStatus(UserIdentityId id, String status);
     UserIdentity save(UserIdentity user);
+
+    Page<UserIdentity>   findByStatus(String status, Pageable pageable);
 
 
 }
