@@ -1,63 +1,79 @@
+
 ## ADR-15 (Arquitectura): Revocación de permisos en el sistema de autorización
 
-- Estado: Aprobado
-- Fecha: 2025-11-20
+- Estado: Aprobado (Revisado 2026-04-2)
+- Fecha original: 2025-11-20
+- Última revisión: 2026-04-2
 - Autor: David
 
 ## Contexto
-El sistema de autorización se basa en un modelo híbrido:
-- Roles predefinidos que cubren el 80% de los permisos comunes.
-- Atributos dinámicos que refinan el acceso en un 20% de casos específicos.
+El sistema de autorización se basa en un modelo híbrido RBAC/ABAC con permisos estáticos (ADR-002).
 
-Durante el diseño surgió la duda de si implementar la capacidad de revocar permisos (quitar un permiso que normalmente vendría dado por el rol).
+Durante el diseño original se evaluó si implementar revocación de permisos. La decisión inicial fue no hacerlo por simplicidad.
 
-## Opciones consideradas
-1. No implementar revocación
-    - Mantener simplicidad: roles + atributos cubren la mayoría de casos.
-    - Evitar complejidad adicional en la lógica de autorización.
-    - Los permisos adicionales se pueden otorgar caso por caso, pero no se quitan.
+Sin embargo, tras la refactorización del módulo de autorización, el sistema evolucionó y ahora soporta revocación en roles clonados.
 
-2. Implementar revocación explícita
-    - Permitir excepciones: sanciones, conflictos de interés, restricciones legales.
-    - Añadir una lista de “permisos denegados” evaluada después de roles y atributos.
-    - Aumenta flexibilidad, pero también complejidad y riesgo de inconsistencias.
+## Decisión REVISADA (2026-03-29)
 
-## Decisión
-Se decide no implementar revocación en la primera versión del sistema.  
-La justificación es que los casos de negocio que requieren revocación son poco frecuentes y el costo de complejidad supera el beneficio inmediato.
+### Permitir revocación en roles CLONADOS únicamente:
 
-Sin embargo, el diseño se deja abierto a extensión futura:
-- La lógica de autorización puede incorporar fácilmente una lista de permisos denegados si surge la necesidad.
-- Esto permite evolucionar el sistema sin romper el modelo actual.
+1. **Roles base (isEditable=false):**
+   - NO se puede revocar permisos
+   - Permisos fijos definidos en código (RoleBasedPolicy)
+   - Ejemplo: DENTIST siempre tiene CREATE_TREATMENT
 
-## Consecuencias
-Positivas
-- Simplicidad en la implementación inicial.
-- Claridad en la documentación y exhibición del modelo híbrido.
-- Menor riesgo de inconsistencias.
+2. **Roles clonados (isEditable=true):**
+   - SÍ se puede revocar permisos
+   - Solo permisos del catálogo estático (ADR-002)
+   - Ejemplo: "Dentista Junior" = DENTIST sin CREATE_TREATMENT
 
-## Negativas
-- No se cubren casos raros donde un rol debe perder un permiso.
-- Si surge esa necesidad, habrá que extender el sistema con una capa de revocación.
-
-## Plan de implementación
-1. Implementar autorización inicial basada en roles + atributos.
-2. Documentar explícitamente que la revocación no está soportada en la primera versión.
-3. Diseñar interfaz extensible para incluir lista de permisos denegados en el futuro.
-4. Añadir pruebas unitarias para roles y atributos, dejando espacio para pruebas de revocación futura.
-
-## Ejemplo
+### Reglas de Revocación:
 ```java
-// Evaluación actual: roles + atributos
-boolean hasPermission = role.hasPermission("FACTURAR") || attributes.contains("FACTURAR");
+//  PERMITIDO: Revocar en rol clonado
+Rol dentistJunior = Rol.cloneFrom(dentistBase, "Dentista Junior");
+dentistJunior.removePermission(Permission.create(TREATMENT)); // OK
 
-// Extensión futura: lista de accessControl denegados
-boolean hasPermission = (role.hasPermission("FACTURAR") || attributes.contains("FACTURAR"))
-&& !deniedPermissions.contains("FACTURAR");
+//  PROHIBIDO: Revocar en rol base
+Rol dentist = Rol.createDefault(RolEnum.DENTIST, "Dentista");
+dentist.removePermission(Permission.create(TREATMENT)); // ERROR (isEditable=false)
 ```
 
+### NO permitir:
+- Crear permisos nuevos en runtime (catálogo cerrado)
+- Modificar roles base del sistema
+- Revocar permisos sin validación de negocio
+
+## Consecuencias
+
+**Positivas:**
+- Flexibilidad para roles personalizados (clonados)
+- Seguridad mantenida (catálogo cerrado de permisos)
+- Trazabilidad: roles clonados son auditables
+- Los roles base permanecen inmutables y certificables
+
+**Negativas:**
+- Complejidad adicional (mínima, ya implementada)
+- La decisión original fue superada por la evolución
+
+## Implementación Actual
+
+El código en `Rol.java` es CORRECTO:
+```java
+public void removePermission(Permission permission) {
+    ensureEditable();  // ← Valida isEditable=true
+    if(this.permissions.isEmpty()){
+        throw new BusinessRuleViolationException(...);
+    }
+    this.permissions.remove(permission);
+}
+```
+ - Solo roles clonados (isEditable=true) pueden revocar
+ -  No se pueden crear permisos custom (catálogo cerrado)
+ -  Roles base permanecen inmutables
+
 ## Relación con otros ADR
-- [ADR-07 (Arquitectura): Redefinición del módulo Administration (roles administrativos).](ADR-07-Redefinición%20del%20módulo%20Administration.md)
-- [ADR-13 (Arquitectura): Separar DTOs por operación y DTOs de Update por tipo de datos (seguridad de datos).](ADR-13-DTO-por-operaciones-y-updateDto-por-tipos-de-datos.md)  
-  
+- [ADR-002 (Autorización): Modelado de Permiso como VO estático](ADR-002-Modelado%20de%20Permiso%20como%20VO%20estático.md)
+- [ADR-07 (Arquitectura): Redefinición del módulo Administration](ADR-07-Redefinición%20del%20módulo%20Administration.md)
+- [ADR-38 (Arquitectura): Modelo híbrido RBAC/ABAC](ADR-38-Modelo%20híbrido%20RBAC-ABAC.md)
+```
 
