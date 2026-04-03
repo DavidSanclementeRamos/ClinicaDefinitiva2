@@ -97,21 +97,30 @@ public class UserIdentity {
     }
 
     public Outcome<UserIdentity> deactivate(UserDeactivationPolicy policy, Instant now, String reason) {
-        Outcome<UserIdentity> eligibility = canPerformSensitiveAction(now);
-        if (!eligibility.isSuccess()) return eligibility;
-
-        if (reason == null || reason.isBlank()) {
-            return Outcome.fail(new OutcomeDetail(
-                    UserIdentityError.ERR_USER_DEACTIVATION_REASON_REQUIRED,
-                    ErrorSeverity.ERROR, Category.TECNICO, EntityContext.USER_IDENTITY));
-        }
-
-        Outcome<Void> validation = policy.validate(this);
-        if (validation.isFailure()) return Outcome.fail(validation.getDetalles());
-
-        this.status = status.transitionTo(UserIdentityStatus.Status.INACTIVE);
-        return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
+    // Validar solo lock y estado activo (NO verificado)
+    if (isLocked(now)) {
+        return Outcome.fail(new OutcomeDetail(
+                UserIdentityError.ERR_USER_ACCOUNT_LOCKED,
+                ErrorSeverity.ERROR, Category.TECNICO, EntityContext.USER_IDENTITY));
     }
+    if (status.getValue() != UserIdentityStatus.Status.ACTIVE) {
+        return Outcome.fail(new OutcomeDetail(
+                UserIdentityError.ERR_USER_INACTIVE,
+                ErrorSeverity.ERROR, Category.TECNICO, EntityContext.USER_IDENTITY));
+    }
+
+    if (reason == null || reason.isBlank()) {
+        return Outcome.fail(new OutcomeDetail(
+                UserIdentityError.ERR_USER_DEACTIVATION_REASON_REQUIRED,
+                ErrorSeverity.ERROR, Category.TECNICO, EntityContext.USER_IDENTITY));
+    }
+
+    Outcome<Void> validation = policy.validate(this);
+    if (validation.isFailure()) return Outcome.fail(validation.getDetalles());
+
+    this.status = status.transitionTo(UserIdentityStatus.Status.INACTIVE);
+    return Outcome.ok(this);
+}
 
     public Outcome<UserIdentity> canPerformSensitiveAction(Instant now) {
         if (!verified) {
@@ -148,23 +157,18 @@ public class UserIdentity {
     }
 
     public Outcome<UserIdentity> reactivate(Instant now) {
-        if (!verified) {
-            return Outcome.fail(new OutcomeDetail(
-                    UserIdentityError.ERR_USER_NOT_VERIFIED,
-                    ErrorSeverity.ERROR, Category.TECNICO, EntityContext.USER_IDENTITY));
-        }
-        
-        if (!status.canTransitionTo(UserIdentityStatus.Status.ACTIVE)) {
-            return Outcome.fail(new OutcomeDetail(
-                    UserIdentityError.ERR_USER_ALREADY_ACTIVE,
-                    ErrorSeverity.INFO, Category.TECNICO, EntityContext.USER_IDENTITY));
-        }
-        
-        this.status = status.transitionTo(UserIdentityStatus.Status.ACTIVE);
-        this.failedLoginAttempts = 0;
-        this.lockedUntil = null;
-        return Outcome.ok(new UserIdentity(id, email, hashedPassword, name, createdAt));
+    // Ya no se valida verified
+    if (!status.canTransitionTo(UserIdentityStatus.Status.ACTIVE)) {
+        return Outcome.fail(new OutcomeDetail(
+                UserIdentityError.ERR_USER_ALREADY_ACTIVE,
+                ErrorSeverity.INFO, Category.TECNICO, EntityContext.USER_IDENTITY));
     }
+    
+    this.status = status.transitionTo(UserIdentityStatus.Status.ACTIVE);
+    this.failedLoginAttempts = 0;
+    this.lockedUntil = null;
+    return Outcome.ok(this);
+}
 
     public static UserIdentity reconstruct(UserIdentityId id, Email email,
                                            HashedPassword hashedPassword, UserIdentityName name,
