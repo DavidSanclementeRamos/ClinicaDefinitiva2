@@ -24,7 +24,7 @@ public class RolService {
 
     public Rol createCustom(RolEnum baseType, String description) {
         validateUniqueDescription(description);
-        return Rol.createDefault(baseType, description);
+        return Rol.createCustom(baseType, description);
     }
 
     public Rol cloneRole(Rol sourceRole, String newDescription) {

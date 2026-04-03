@@ -21,8 +21,8 @@ class OwnershipPolicyTest {
     @BeforeEach
     void setUp() {
         policy = new OwnershipPolicy();
-        patientRol = Rol.createDefault(RolEnum.PATIENT, "Paciente");
-        guardianRol = Rol.createDefault(RolEnum.GUARDIAN, "Tutor");
+        patientRol = Rol.createCustom(RolEnum.PATIENT, "Paciente");
+        guardianRol = Rol.createCustom(RolEnum.GUARDIAN, "Tutor");
         requesterId = UserIdentityId.from(1L);
         resourceOwnerId = UserIdentityId.from(1L);
     }

@@ -19,7 +19,7 @@ class SectorBasedPolicyTest {
     @BeforeEach
     void setUp() {
         policy = new SectorBasedPolicy();
-        receptionistRol = Rol.createDefault(RolEnum.RECEPTIONIST, "Recepcionista");
+        receptionistRol = Rol.createCustom(RolEnum.RECEPTIONIST, "Recepcionista");
         requesterId = UserIdentityId.from(1L);
     }
 

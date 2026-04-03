@@ -19,7 +19,7 @@ class RolTest {
 
     @BeforeEach
     void setUp() {
-        defaultRol = Rol.createDefault(RolEnum.PATIENT, "Rol de paciente");
+        defaultRol = Rol.createCustom(RolEnum.PATIENT, "Rol de paciente");
         customRol = Rol.cloneFrom(defaultRol, "Rol clonado");
     }
 

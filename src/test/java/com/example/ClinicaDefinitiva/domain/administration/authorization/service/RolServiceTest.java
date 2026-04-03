@@ -48,7 +48,7 @@ class RolServiceTest {
     @Test
     @DisplayName("Clonar rol exitosamente")
     void cloneRole_success() {
-        Rol sourceRol = Rol.createDefault(RolEnum.PATIENT, "Rol original");
+        Rol sourceRol = Rol.createCustom(RolEnum.PATIENT, "Rol original");
         when(rolRepository.existsByDescription("Rol clonado")).thenReturn(false);
 
         Rol cloned = rolService.cloneRole(sourceRol, "Rol clonado");

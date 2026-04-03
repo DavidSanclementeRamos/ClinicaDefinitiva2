@@ -42,10 +42,10 @@ public class Rol {
         this.permissions = new HashSet<>();
     }
     
-        /** Crea un rol institucional/base del sistema (no editable ni eliminable). */
-    public static Rol createDefault(RolEnum baseType, String description) {
-        return new Rol(baseType, description, true, false, false, RolStatus.ACTIVE);
-    }
+    /** Crea un rol personalizado (editable y eliminable, no es default). */
+public static Rol createCustom(RolEnum baseType, String description) {
+    return new Rol(baseType, description, false, true, true, RolStatus.ACTIVE);
+}
 
     
 

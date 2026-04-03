@@ -34,8 +34,8 @@ class AuthorizationServiceTest {
 
     @BeforeEach
     void setUp() {
-        adminRol = Rol.createDefault(RolEnum.ADMINISTRATOR, "Admin");
-        patientRol = Rol.createDefault(RolEnum.PATIENT, "Paciente");
+        adminRol = Rol.createCustom(RolEnum.ADMINISTRATOR, "Admin");
+        patientRol = Rol.createCustom(RolEnum.PATIENT, "Paciente");
         adminRolId = RolId.of(1L);
         patientRolId = RolId.of(2L);
         adminRol.setId(adminRolId);
