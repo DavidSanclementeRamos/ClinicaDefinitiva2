@@ -19,8 +19,8 @@ import java.util.Set;
 public interface RolUseCase {
 
 
-    Optional<ReadRolDto> findById(RolId targetRoleId  , UserIdentityId requesterId, RolId requesterRolId);
-    Optional<ReadRolDto> findByRolEnum(String rolEnum, UserIdentityId requesterId, RolId requesterRolId);
+    ReadRolDto findById(RolId targetRoleId  , UserIdentityId requesterId, RolId requesterRolId);
+    ReadRolDto findByRolEnum(String rolEnum, UserIdentityId requesterId, RolId requesterRolId);
     Page<PageRolDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
     Page<PageRolDto> findByEditable(boolean editable, Pageable pageable,
                                     UserIdentityId requesterId, RolId requesterRolId);

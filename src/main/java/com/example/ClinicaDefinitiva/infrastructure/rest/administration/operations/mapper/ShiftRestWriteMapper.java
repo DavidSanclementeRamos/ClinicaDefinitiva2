@@ -1,4 +1,4 @@
-package com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations;
+package com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.mapper;
 
 import com.example.ClinicaDefinitiva.application.administration.operations.dto.AssignShiftDto;
 import com.example.ClinicaDefinitiva.application.administration.operations.dto.CanAccommodateAppointmentDto;

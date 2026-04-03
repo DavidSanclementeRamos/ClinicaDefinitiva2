@@ -11,15 +11,14 @@ import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization.UserRolAssignmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
 
-/**
- * Servicio de dominio para gestión de roles de usuario
- */
 @Service
 public class UserRolAssignmentService {
 
@@ -32,16 +31,13 @@ public class UserRolAssignmentService {
         this.rolRepository = rolRepository;
     }
 
-    /**
-     * Obtiene todos los roles activos de un usuario
-     */
     public List<Rol> getActiveRoles(UserIdentityId userIdentityId) {
-        List<UserRolAssignment> activeAssignments = assignmentRepository
-                .findByUserId(userIdentityId)
+        Page<UserRolAssignment> activeAssignments = (Page<UserRolAssignment>) assignmentRepository
+                .findByUserId(userIdentityId, Pageable.unpaged())
                 .stream()
                 .filter(UserRolAssignment::isCurrentlyActive)
-                .toList();
-
+                .collect(Collectors.toList()); 
+        
         return activeAssignments.stream()
                 .map(assignment -> rolRepository.findById(assignment.getRolId()))
                 .filter(java.util.Optional::isPresent)
@@ -49,9 +45,6 @@ public class UserRolAssignmentService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Obtiene el rol principal del usuario (para UI)
-     */
     public Rol getPrimaryRole(UserIdentityId userIdentityId) {
         return assignmentRepository
                 .findByUserIdAndIsPrimary(userIdentityId, true)
@@ -61,7 +54,6 @@ public class UserRolAssignmentService {
     }
 
     public UserRolAssignment assignRole(UserIdentityId userIdentityId, RolId rolId, boolean isPrimary) {
-        // Validar que el rol esté activo
         Rol rol = rolRepository.findById(rolId)
                 .orElseThrow(() -> new RolNotFoundException("" + rolId));
 
@@ -72,7 +64,6 @@ public class UserRolAssignmentService {
             );
         }
 
-        // Validar que el rol no esté ya activo para el usuario
         List<Rol> activeRoles = getActiveRoles(userIdentityId);
         boolean alreadyActive = activeRoles.stream()
                 .anyMatch(r -> r.getId().equals(rolId));
@@ -84,7 +75,6 @@ public class UserRolAssignmentService {
             );
         }
 
-        // Si es primario, quitar primary de otros roles
         if (isPrimary) {
             removePrimaryFromOtherRoles(userIdentityId);
         }
@@ -95,7 +85,6 @@ public class UserRolAssignmentService {
 
     public UserRolAssignment assignTemporaryRole(UserIdentityId userIdentityId, RolId rolId,
                                                  LocalDate validFrom, LocalDate validTo, boolean isPrimary) {
-        // Validar que el rol esté activo
         Rol rol = rolRepository.findById(rolId)
                 .orElseThrow(() -> new RolNotFoundException(""));
 
@@ -106,7 +95,6 @@ public class UserRolAssignmentService {
             );
         }
 
-        // Validar que el rol no esté ya activo para el usuario
         List<Rol> activeRoles = getActiveRoles(userIdentityId);
         boolean alreadyActive = activeRoles.stream()
                 .anyMatch(r -> r.getId().equals(rolId));
@@ -122,17 +110,9 @@ public class UserRolAssignmentService {
         return assignmentRepository.save(assignment);
     }
 
-
-
-    /**
-     * Revoca un rol específico
-     */
-
     public void revokeRole(UserIdentityId userIdentityId, RolId rolId) {
-        // Obtener todos los roles activos del usuario
         List<Rol> activeRoles = getActiveRoles(userIdentityId);
 
-        // Validar si el rol a revocar es el único activo
         boolean isLastActive = activeRoles.size() == 1 &&
                 activeRoles.get(0).getId().equals(rolId);
 
@@ -143,46 +123,27 @@ public class UserRolAssignmentService {
             );
         }
 
-        // Revocar todas las asignaciones del rol
-        List<UserRolAssignment> assignments = assignmentRepository
-                .findByUserIdAndRolId(userIdentityId, rolId);
-
-        assignments.forEach(assignment -> {
+        Page<UserRolAssignment> assignmentsPage = assignmentRepository
+                .findByUserIdAndRolId(userIdentityId, rolId, Pageable.unpaged());
+        assignmentsPage.forEach(assignment -> {
             assignment.revoke();
             assignmentRepository.save(assignment);
         });
     }
 
-
-    /**
-     * Revoca todos los roles de un usuario
-     */
     public void revokeAllRoles(UserIdentityId userIdentityId) {
-        List<UserRolAssignment> assignments = assignmentRepository.findByUserId(userIdentityId);
-        assignments.forEach(assignment -> {
+        Page<UserRolAssignment> assignmentsPage = assignmentRepository
+                .findByUserId(userIdentityId, Pageable.unpaged());
+        assignmentsPage.forEach(assignment -> {
             assignment.revoke();
             assignmentRepository.save(assignment);
         });
     }
 
-
-    /**
-     * ⚠️ removePrimaryFromOtherRoles hace update uno por uno → puede ser costoso.
-     *
-     * Mejor usar un método batch en el repositorio (updatePrimaryByUserId(userId, false)).
-     */
     private void removePrimaryFromOtherRoles(UserIdentityId userIdentityId) {
-        List<UserRolAssignment> primaryAssignments = assignmentRepository
-                .findByUserIdAndIsPrimary(userIdentityId, true)
-                .stream()
-                .toList();
-
-        // Esto debería usar un método en el repositorio o actualizar en batch
-        // Por simplicidad, se muestra el concepto
-        primaryAssignments.forEach(assignment -> {
-            // Marcar como no primario (requiere método en UserRolAssignment)
-            assignmentRepository.updatePrimary(assignment.getId(), false);
-        });
+        assignmentRepository.findByUserIdAndIsPrimary(userIdentityId, true)
+                .ifPresent(currentPrimary -> 
+                    assignmentRepository.updatePrimary(currentPrimary.getId(), false)
+                );
     }
 }
-

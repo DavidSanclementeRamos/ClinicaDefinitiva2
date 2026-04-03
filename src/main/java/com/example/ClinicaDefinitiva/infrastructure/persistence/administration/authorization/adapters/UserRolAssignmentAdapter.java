@@ -11,12 +11,12 @@ import com.example.ClinicaDefinitiva.infrastructure.persistence.administration.a
 import com.example.ClinicaDefinitiva.infrastructure.persistence.administration.authorization.mapper.userRolAssignment.UserRoleAssignmentReadEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.administration.authorization.mapper.userRolAssignment.UserRoleAssignmentWriteEntityMapper;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.authentication.jpaRepository.UserIdentityJpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class UserRolAssignmentAdapter implements UserRolAssignmentRepository {
@@ -45,7 +45,6 @@ public class UserRolAssignmentAdapter implements UserRolAssignmentRepository {
     public UserRolAssignment save(UserRolAssignment assignment) {
         UserRoleAssignmentEntity entity = writeMapper.toEntity(assignment);
         
-        // Establecer relaciones
         if (assignment.getUserId() != null) {
             userJpaRepository.findById(assignment.getUserId().value())
                     .ifPresent(entity::setUserIdentity);
@@ -88,19 +87,15 @@ public class UserRolAssignmentAdapter implements UserRolAssignmentRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserRolAssignment> findByUserId(UserIdentityId userIdentityId) {
-        return jpaRepository.findByUserIdentityId(userIdentityId.value())
-                .stream()
-                .map(readMapper::toDomain)
-                .collect(Collectors.toList());
+    public Page<UserRolAssignment> findByUserId(UserIdentityId userIdentityId, Pageable pageable) {
+        return jpaRepository.findByUserIdentityId(userIdentityId.value(), pageable)
+                .map(readMapper::toDomain);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserRolAssignment> findByUserIdAndRolId(UserIdentityId userIdentityId, RolId rolId) {
-        return jpaRepository.findByUserIdentityIdAndRolId(userIdentityId.value(), rolId.getValue())
-                .stream()
-                .map(readMapper::toDomain)
-                .collect(Collectors.toList());
+    public Page<UserRolAssignment> findByUserIdAndRolId(UserIdentityId userIdentityId, RolId rolId, Pageable pageable) {
+        return jpaRepository.findByUserIdentityIdAndRolId(userIdentityId.value(), rolId.getValue(), pageable)
+                .map(readMapper::toDomain);
     }
 }

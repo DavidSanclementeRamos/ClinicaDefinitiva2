@@ -10,15 +10,15 @@ import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserRolAssignmentUseCase {
 
-    Optional<ReadAssignmentDto> findById(UserRolAssignmentId targetId  , UserIdentityId requesterId, RolId requesterRolId );
-    List<ReadAssignmentDto> findByUserId(UserIdentityId targeUserIdentityId, UserIdentityId requesterId, RolId requesterRolId);
-    Optional<ReadAssignmentDto> findByUserIdAndRolId(UserIdentityId targeUserIdentityId, RolId  targeRolId, UserIdentityId requesterId, RolId requesterRolId);
-    Optional<ReadAssignmentDto> findByUserIdAndIsPrimary(UserIdentityId targetUuserIdentityId, boolean isPrimary, UserIdentityId requesterId, RolId requesterRolId);
-    //Page<PageAssignmentDto> findByActiveRoles(UserId targetUserId, Pageable pageable  , UserId requesterId, RolId requesterRolId);
-
+    ReadAssignmentDto findById(UserRolAssignmentId targetId  , UserIdentityId requesterId, RolId requesterRolId );
+    Page<ReadAssignmentDto> findByUserId(UserIdentityId targeUserIdentityId, UserIdentityId requesterId, RolId requesterRolId,Pageable pageable);
+    Page<ReadAssignmentDto> findByUserIdAndRolId(UserIdentityId targeUserIdentityId, RolId  targeRolId, UserIdentityId requesterId, RolId requesterRolId,Pageable pageable);
+    ReadAssignmentDto findByUserIdAndIsPrimary(UserIdentityId targetUuserIdentityId, boolean isPrimary, UserIdentityId requesterId, RolId requesterRolId);
     ReadAssignmentDto savePermanent(CreateAssignmentPermanentDto assignment, UserIdentityId requesterId, RolId requesterRolId);
     ReadAssignmentDto saveTemporary(CreateAssignmentTemporaryDto assignment, UserIdentityId requesterId, RolId requesterRolId);
     boolean isActiveAt(UserRolAssignmentId targetId , LocalDate dateUserId, UserIdentityId requesterId, RolId requesterRolId);

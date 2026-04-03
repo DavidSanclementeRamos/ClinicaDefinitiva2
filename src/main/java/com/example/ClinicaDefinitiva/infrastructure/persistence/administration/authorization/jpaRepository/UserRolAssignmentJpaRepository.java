@@ -9,17 +9,19 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 public interface UserRolAssignmentJpaRepository extends JpaRepository<UserRoleAssignmentEntity, Long> {
     
-    List<UserRoleAssignmentEntity> findByUserIdentityId(Long userId);
+    Page<UserRoleAssignmentEntity> findByUserIdentityId(Long userId,Pageable pageable);
     
     Optional<UserRoleAssignmentEntity> findByUserIdentityIdAndIsPrimary(Long userId, boolean isPrimary);
     
     @Query("SELECT u FROM UserRoleAssignmentEntity u WHERE u.userIdentity.id = :userId AND u.role.id = :rolId")
-    List<UserRoleAssignmentEntity> findByUserIdentityIdAndRolId(@Param("userId") Long userId, 
-                                                                @Param("rolId") Long rolId);
+    Page<UserRoleAssignmentEntity> findByUserIdentityIdAndRolId(@Param("userId") Long userId, 
+                                                                @Param("rolId") Long rolId, Pageable pageable);
     
     @Modifying
     @Query("UPDATE UserRoleAssignmentEntity u SET u.isPrimary = :isPrimary WHERE u.id = :id")

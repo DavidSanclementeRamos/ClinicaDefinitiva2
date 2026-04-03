@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -46,7 +48,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new DisabledException("Usuario inactivo o suspendido");
         }
 
-        List<UserRolAssignment> assignments = assignmentRepository.findByUserId(user.getId());
+        Page<UserRolAssignment> assignments = assignmentRepository.findByUserId(user.getId(), Pageable.unpaged());
 
 
         if (assignments.isEmpty()) {
@@ -59,7 +61,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (activeRoles.isEmpty()) {
             throw new UsernameNotFoundException("User has no active roles: " + email);
         }
-        return new CustomUserDetails(user, assignments,activeRoles, activeRoles.get(0).getId());
+        return new CustomUserDetails(user, (List<UserRolAssignment>) assignments,activeRoles, activeRoles.get(0).getId());
     }
 }
 

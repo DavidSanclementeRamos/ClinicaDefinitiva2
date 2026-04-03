@@ -10,8 +10,8 @@ import com.example.ClinicaDefinitiva.application.administration.operations.input
 import com.example.ClinicaDefinitiva.domain.administration.operations.vo.ShiftId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.ShiftRestReadMapper;
-import com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.ShiftRestWriteMapper;
+import com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.mapper.ShiftRestReadMapper;
+import com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.mapper.ShiftRestWriteMapper;
 import com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.dto.AssignShiftRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.dto.ExcludedBlockRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.dto.PageShiftResponse;

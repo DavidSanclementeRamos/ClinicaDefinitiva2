@@ -49,7 +49,7 @@ public class RolApplicationService implements RolUseCase {
     @Transactional(readOnly = true)
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.READ)
     @Override
-    public Optional<ReadRolDto> findById(RolId targetRoleId, UserIdentityId requesterId, RolId requesterRolId) {
+    public ReadRolDto findById(RolId targetRoleId, UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
@@ -58,20 +58,21 @@ public class RolApplicationService implements RolUseCase {
         );
         Rol rol = repository.findById(targetRoleId)
                 .orElseThrow(() -> new RolNotFoundException("Rol not found"));
-        return Optional.of(readMapper.toReadDto(rol));
+        return readMapper.toReadDto(rol);
     }
 
     @Transactional(readOnly = true)
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ROLE, action = ActionCatalog.BasicAction.READ)
     @Override
-    public Optional<ReadRolDto> findByRolEnum(String rolEnum, UserIdentityId requesterId, RolId requesterRolId) {
+    public ReadRolDto findByRolEnum(String rolEnum, UserIdentityId requesterId, RolId requesterRolId) {
         authorizationHelper.authorize(
                 requesterId, requesterRolId,
                 ResourceCatalog.BasicResource.ROLE,
                 ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder().build()
         );
-        return repository.findByRolEnum(RolEnum.valueOf(rolEnum)).map(readMapper::toReadDto);
+           Rol rol = repository.findByRolEnum(RolEnum.valueOf(rolEnum)).orElseThrow(() -> new RolNotFoundException("Rol not found"));
+              return  readMapper.toReadDto(rol);
     }
 
     @Transactional(readOnly = true)

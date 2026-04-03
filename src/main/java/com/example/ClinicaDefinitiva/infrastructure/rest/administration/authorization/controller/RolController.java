@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.infrastructure.rest.administration.authori
 import com.example.ClinicaDefinitiva.application.administration.authorization.dto.rol.CreateRolDto;
 import com.example.ClinicaDefinitiva.application.administration.authorization.dto.rol.PageRolDto;
 import com.example.ClinicaDefinitiva.application.administration.authorization.dto.rol.PermissionDto;
+import com.example.ClinicaDefinitiva.application.administration.authorization.dto.rol.ReadRolDto;
 import com.example.ClinicaDefinitiva.application.administration.authorization.input.RolUseCase;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
@@ -57,10 +58,9 @@ public class RolController {
         UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        return rolUseCase.findById(RolId.of(id), userIdentityId, rolId)
-                .map(rolReadMapper::toResponse) // ← Mapper de aplicación → REST
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        ReadRolDto dto = rolUseCase.findById(RolId.of(id), userIdentityId, rolId);
+                        return ResponseEntity.ok(rolReadMapper.toResponse(dto));
+      
     }
 
     @GetMapping("/by-enum/{rolEnum}")
@@ -71,10 +71,8 @@ public class RolController {
         UserIdentityId userIdentityId = userDetails.getId();
         RolId rolId = userDetails.getActiveRolId();
 
-        return rolUseCase.findByRolEnum(rolEnum, userIdentityId, rolId)
-                .map(rolReadMapper::toResponse)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        ReadRolDto dto = rolUseCase.findByRolEnum(rolEnum, userIdentityId, rolId);
+               return ResponseEntity.ok(rolReadMapper.toResponse(dto));
     }
 
     @GetMapping

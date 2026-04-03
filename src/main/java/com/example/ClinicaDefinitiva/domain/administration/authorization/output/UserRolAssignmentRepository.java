@@ -5,19 +5,18 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolI
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.UserRolAssignmentId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 
-import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserRolAssignmentRepository {
     UserRolAssignment save(UserRolAssignment assignment);
     Optional<UserRolAssignment> findById(UserRolAssignmentId id);
-    //Optional<UserRolAssignment> findByUserId(UserId userId);
-    //Page<UserRolAssignment> findByUserIdAndRolId(UserId userId, RolId rolId, Pageable pageable);
     Optional<UserRolAssignment> findByUserIdAndIsPrimary(UserIdentityId userIdentityId, boolean isPrimary);
     void delete(UserRolAssignmentId id);
 
-    List<UserRolAssignment> findByUserId(UserIdentityId userIdentityId);
-    List<UserRolAssignment> findByUserIdAndRolId(UserIdentityId userIdentityId, RolId rolId);
+    Page<UserRolAssignment> findByUserId(UserIdentityId userIdentityId,Pageable pageable);
+    Page<UserRolAssignment> findByUserIdAndRolId(UserIdentityId userIdentityId, RolId rolId,Pageable pageable);
     
     /**
      * Actualiza solo el flag isPrimary de una asignación

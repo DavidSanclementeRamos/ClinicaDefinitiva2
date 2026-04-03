@@ -14,11 +14,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,11 +42,14 @@ class UserRolAssignmentServiceTest {
     @Test
     @DisplayName("Asignar rol activo exitosamente")
     void assignRole_success() {
-        // Stubs necesarios para el flujo exitoso
         Rol rol = mock(Rol.class);
         when(rol.getStatusRol()).thenReturn(RolStatus.ACTIVE);
         when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol));
-        when(assignmentRepository.findByUserId(USER_ID)).thenReturn(List.of());
+        
+        // ✅ Page vacía
+        Page<UserRolAssignment> emptyPage = new PageImpl<>(List.of());
+        when(assignmentRepository.findByUserId(eq(USER_ID), any(Pageable.class))).thenReturn(emptyPage);
+        
         when(assignmentRepository.save(any(UserRolAssignment.class))).thenAnswer(i -> i.getArgument(0));
 
         UserRolAssignment result = service.assignRole(USER_ID, ROL_ID, true);
@@ -57,7 +64,6 @@ class UserRolAssignmentServiceTest {
     @Test
     @DisplayName("Asignar rol inactivo lanza excepción")
     void assignRole_inactive_throws() {
-        // Solo stubs necesarios para la excepción
         Rol rol = mock(Rol.class);
         when(rol.getStatusRol()).thenReturn(RolStatus.INACTIVE);
         when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol));
@@ -65,33 +71,26 @@ class UserRolAssignmentServiceTest {
         assertThatThrownBy(() -> service.assignRole(USER_ID, ROL_ID, true))
                 .isInstanceOf(BusinessRuleViolationException.class);
         
-        verify(assignmentRepository, never()).findByUserId(any());
+        verify(assignmentRepository, never()).findByUserId(any(), any());
     }
 
     @Test
     @DisplayName("Asignar rol ya activo lanza excepción")
     void assignRole_alreadyActive_throws() {
-        // Stubs necesarios para detectar rol ya activo
         Rol rol = mock(Rol.class);
         when(rol.getStatusRol()).thenReturn(RolStatus.ACTIVE);
         when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol));
         
-        // Configurar asignación existente
+        // Simular asignación existente
         UserRolAssignment existingAssignment = mock(UserRolAssignment.class);
         when(existingAssignment.isCurrentlyActive()).thenReturn(true);
         when(existingAssignment.getRolId()).thenReturn(ROL_ID);
         
-        // Para getActiveRoles - necesitamos que rolRepository.findById devuelva el rol existente
-        // pero NO necesitamos configurar existingRol.getId() porque la comparación
-        // se hace con rolId (ROL_ID) directamente, no con rol.getId()
-        when(assignmentRepository.findByUserId(USER_ID)).thenReturn(List.of(existingAssignment));
+        Page<UserRolAssignment> pageWithAssignment = new PageImpl<>(List.of(existingAssignment));
+        when(assignmentRepository.findByUserId(eq(USER_ID), any(Pageable.class))).thenReturn(pageWithAssignment);
         
-        // getActiveRoles llama a rolRepository.findById para cada asignación
+        // getActiveRoles necesita obtener el rol existente
         Rol existingRol = mock(Rol.class);
-        // NO configurar existingRol.getId() - no es necesario porque en assignRole,
-        // la comparación se hace con rolId directamente: r.getId().equals(rolId)
-        // Pero si no se configura, getActiveRoles lo obtiene y luego se compara en assignRole
-        // Para evitar NPE, sí necesitamos configurarlo
         when(existingRol.getId()).thenReturn(ROL_ID);
         when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(existingRol));
         
@@ -104,7 +103,7 @@ class UserRolAssignmentServiceTest {
     @Test
     @DisplayName("Revocar último rol activo lanza excepción")
     void revokeLastRole_throws() {
-        // Configurar rol para la validación
+        // Configurar rol
         Rol rol = mock(Rol.class);
         when(rol.getId()).thenReturn(ROL_ID);
         when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol));
@@ -114,16 +113,13 @@ class UserRolAssignmentServiceTest {
         when(assignment.isCurrentlyActive()).thenReturn(true);
         when(assignment.getRolId()).thenReturn(ROL_ID);
         
-        // Para getActiveRoles
-        when(assignmentRepository.findByUserId(USER_ID)).thenReturn(List.of(assignment));
-        // getActiveRoles llama a rolRepository.findById para cada asignación
-        // Ya configurado arriba: when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol))
+        Page<UserRolAssignment> singlePage = new PageImpl<>(List.of(assignment));
+        when(assignmentRepository.findByUserId(eq(USER_ID), any(Pageable.class))).thenReturn(singlePage);
         
-        // Para findByUserIdAndRolId
-        when(assignmentRepository.findByUserIdAndRolId(USER_ID, ROL_ID)).thenReturn(List.of(assignment));
+        Page<UserRolAssignment> assignmentsForRevoke = new PageImpl<>(List.of(assignment));
+        when(assignmentRepository.findByUserIdAndRolId(eq(USER_ID), eq(ROL_ID), any(Pageable.class)))
+                .thenReturn(assignmentsForRevoke);
         
-        // NO configurar assignmentRepository.save - no se llega a usar
-
         assertThatThrownBy(() -> service.revokeRole(USER_ID, ROL_ID))
                 .isInstanceOf(BusinessRuleViolationException.class);
         
@@ -150,10 +146,13 @@ class UserRolAssignmentServiceTest {
         when(assignment2.isCurrentlyActive()).thenReturn(true);
         when(assignment2.getRolId()).thenReturn(otherRolId);
         
-        when(assignmentRepository.findByUserId(USER_ID)).thenReturn(List.of(assignment1, assignment2));
-        when(assignmentRepository.findByUserIdAndRolId(USER_ID, ROL_ID)).thenReturn(List.of(assignment1));
+        Page<UserRolAssignment> pageWithTwo = new PageImpl<>(List.of(assignment1, assignment2));
+        when(assignmentRepository.findByUserId(eq(USER_ID), any(Pageable.class))).thenReturn(pageWithTwo);
         
-        // Para getActiveRoles
+        Page<UserRolAssignment> revokePage = new PageImpl<>(List.of(assignment1));
+        when(assignmentRepository.findByUserIdAndRolId(eq(USER_ID), eq(ROL_ID), any(Pageable.class)))
+                .thenReturn(revokePage);
+        
         when(rolRepository.findById(ROL_ID)).thenReturn(Optional.of(rol1));
         when(rolRepository.findById(otherRolId)).thenReturn(Optional.of(rol2));
         

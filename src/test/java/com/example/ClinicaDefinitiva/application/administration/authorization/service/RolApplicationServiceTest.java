@@ -44,7 +44,7 @@ class RolApplicationServiceTest {
     @Test
     @DisplayName("Crear rol personalizado exitosamente")
     void createCustom_success() {
-        CreateRolDto dto = new CreateRolDto("DENTIST", "Rol personalizado",false,false,false);
+        CreateRolDto dto = new CreateRolDto("DENTIST", "Rol personalizado", false, false, false);
         Rol created = mock(Rol.class);
         Rol saved = mock(Rol.class);
         ReadRolDto resultDto = mock(ReadRolDto.class);
@@ -69,20 +69,19 @@ class RolApplicationServiceTest {
         when(repository.findById(id)).thenReturn(Optional.of(rol));
         when(readMapper.toReadDto(rol)).thenReturn(dto);
 
-        Optional<ReadRolDto> result = service.findById(id, mock(UserIdentityId.class), mock(RolId.class));
+        ReadRolDto result = service.findById(id, mock(UserIdentityId.class), mock(RolId.class));
 
-        assertThat(result).contains(dto);
+        assertThat(result).isSameAs(dto);
     }
 
     @Test
-    @DisplayName("Buscar rol por ID inexistente retorna Optional vacío")
-    void findById_notFound() {
+    @DisplayName("Buscar rol por ID inexistente lanza excepción")
+    void findById_notFound_throws() {
         RolId id = RolId.of(999L);
         when(repository.findById(id)).thenReturn(Optional.empty());
 
-        Optional<ReadRolDto> result = service.findById(id, mock(UserIdentityId.class), mock(RolId.class));
-
-        assertThat(result).isEmpty();
+        assertThatThrownBy(() -> service.findById(id, mock(UserIdentityId.class), mock(RolId.class)))
+                .isInstanceOf(RolNotFoundException.class);
     }
 
     @Test

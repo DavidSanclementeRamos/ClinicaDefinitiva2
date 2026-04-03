@@ -18,7 +18,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -65,7 +69,7 @@ class UserRolAssignmentApplicationServiceTest {
     }
 
     @Test
-    @DisplayName("Buscar asignación por ID")
+    @DisplayName("Buscar asignación por ID existente")
     void findById_success() {
         UserRolAssignmentId id = UserRolAssignmentId.of(1L);
         UserRolAssignment assignment = mock(UserRolAssignment.class);
@@ -74,9 +78,9 @@ class UserRolAssignmentApplicationServiceTest {
         when(repository.findById(id)).thenReturn(Optional.of(assignment));
         when(readMapper.toReadDto(assignment)).thenReturn(dto);
 
-        Optional<ReadAssignmentDto> result = service.findById(id, mock(UserIdentityId.class), mock(RolId.class));
+        ReadAssignmentDto result = service.findById(id, mock(UserIdentityId.class), mock(RolId.class));
 
-        assertThat(result).contains(dto);
+        assertThat(result).isSameAs(dto);
     }
 
     @Test
@@ -100,5 +104,20 @@ class UserRolAssignmentApplicationServiceTest {
 
         verify(assignment).extend(any());
         verify(repository).save(assignment);
+    }
+
+    @Test
+    @DisplayName("Buscar asignaciones por usuario devuelve página")
+    void findByUserId_returnsPage() {
+        UserIdentityId userId = UserIdentityId.from(1L);
+        Pageable pageable = Pageable.ofSize(10);
+        Page<UserRolAssignment> assignmentPage = new PageImpl<>(List.of(mock(UserRolAssignment.class)));
+        when(repository.findByUserId(eq(userId), eq(pageable))).thenReturn(assignmentPage);
+        when(readMapper.toReadDto(any())).thenReturn(mock(ReadAssignmentDto.class));
+
+        Page<ReadAssignmentDto> result = service.findByUserId(userId, mock(UserIdentityId.class), mock(RolId.class),pageable);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getTotalElements()).isEqualTo(1);
     }
 }

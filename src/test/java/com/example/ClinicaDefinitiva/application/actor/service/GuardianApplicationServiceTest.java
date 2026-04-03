@@ -1,6 +1,11 @@
 package com.example.ClinicaDefinitiva.application.actor.service;
 
 import com.example.ClinicaDefinitiva.application.actor.dto.Patient.*;
+import com.example.ClinicaDefinitiva.application.actor.dto.patient.CreatePatientDto;
+import com.example.ClinicaDefinitiva.application.actor.dto.patient.PagePatientDto;
+import com.example.ClinicaDefinitiva.application.actor.dto.patient.ReadPatientDto;
+import com.example.ClinicaDefinitiva.application.actor.dto.patient.UpdatePatientContactDto;
+import com.example.ClinicaDefinitiva.application.actor.dto.patient.UpdatePatientSensitiveDto;
 import com.example.ClinicaDefinitiva.application.actor.mapper.patient.PatientReadMapper;
 import com.example.ClinicaDefinitiva.application.actor.mapper.patient.PatientWriteMapper;
 import com.example.ClinicaDefinitiva.application.shared.dto.AuthorizationContext;

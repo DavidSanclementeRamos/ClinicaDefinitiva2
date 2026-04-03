@@ -13,25 +13,25 @@ public class UserRolAssignmentReadRestMapper {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
-    public  ReadAssignmentResponse toRest(ReadAssignmentDto serviceDto) {
+    public  ReadAssignmentResponse toRest(ReadAssignmentDto dto) {
         return new ReadAssignmentResponse(
-                serviceDto.id(),
-                serviceDto.userId(),
-                serviceDto.rolId(),
-                serviceDto.isPrimary(),
-                serviceDto.validFrom() != null ? LocalDate.parse(serviceDto.validFrom().format(FORMATTER)) : null,
-                serviceDto.validTo() != null ? LocalDate.parse(serviceDto.validTo().format(FORMATTER)) : null
+                dto.id(),
+                dto.userId(),
+                dto.rolId(),
+                dto.isPrimary(),
+                dto.validFrom() != null ? LocalDate.parse(dto.validFrom().format(FORMATTER)) : null,
+                dto.validTo() != null ? LocalDate.parse(dto.validTo().format(FORMATTER)) : null
         );
     }
 
-    public  PageAssignmentResponse toRestPage(PageAssignmentDto serviceDto) {
+    public  PageAssignmentResponse toRestPage(PageAssignmentDto dto) {
         return new PageAssignmentResponse(
-                serviceDto.id(),
-                serviceDto.userId(),
-                serviceDto.rolId(),
-                serviceDto.isPrimary(),
-                serviceDto.validFrom() != null ? LocalDate.parse(serviceDto.validFrom().format(FORMATTER)) : null,
-                serviceDto.validTo() != null ? LocalDate.parse(serviceDto.validTo().format(FORMATTER)) : null
+                dto.id(),
+                dto.userId(),
+                dto.rolId(),
+                dto.isPrimary(),
+                dto.validFrom() != null ? LocalDate.parse(dto.validFrom().format(FORMATTER)) : null,
+                dto.validTo() != null ? LocalDate.parse(dto.validTo().format(FORMATTER)) : null
         );
     }
 }

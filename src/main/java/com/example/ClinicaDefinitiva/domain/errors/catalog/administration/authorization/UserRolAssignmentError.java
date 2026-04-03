@@ -59,7 +59,14 @@ public enum UserRolAssignmentError implements ErrorCatalog {
     ERR_ASSIGNMENT_NOT_FOUND(
     "RN-ASSIGNMENT-011", "error.assignment.not.found",
     "La asignación de rol solicitada no existe",
-    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR),
+    ERR_ASSIGNMENT_NO_OTHER_ACTIVE_ROLE(
+    "RN-ASSIGNMENT-012",
+    "error.assignment.no.other.active.role",
+    "No hay otro rol activo para asignar como principal",
+    HttpStatus.BAD_REQUEST,
+    ErrorSeverity.ERROR
+);
 
     private final String code;
     private final String messageKey;
