@@ -97,16 +97,17 @@ class RolApplicationServiceTest {
         verify(repository).save(rol);
     }
 
-    @Test
-    @DisplayName("Eliminar rol")
-    void deleteById_success() {
-        RolId id = RolId.of(1L);
-        Rol rol = mock(Rol.class);
-        when(repository.findById(id)).thenReturn(Optional.of(rol));
+  @Test
+@DisplayName("Eliminar rol")
+void deleteById_success() {
+    RolId id = RolId.of(1L);
+    Rol rol = mock(Rol.class);
+    when(rol.getId()).thenReturn(id);  // ← IMPORTANTE: falta esto
+    when(repository.findById(id)).thenReturn(Optional.of(rol));
 
-        service.deleteById(id, mock(UserIdentityId.class), mock(RolId.class));
+    service.deleteById(id, mock(UserIdentityId.class), mock(RolId.class));
 
-        verify(rol).delete();
-        verify(repository).delete(id);
-    }
+    verify(rol).delete();
+    verify(repository).delete(id);
+}
 }

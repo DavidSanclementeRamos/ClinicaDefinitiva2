@@ -1,6 +1,5 @@
 package com.example.ClinicaDefinitiva.application.actor.service;
 
-import com.example.ClinicaDefinitiva.application.actor.dto.Patient.*;
 import com.example.ClinicaDefinitiva.application.actor.dto.patient.CreatePatientDto;
 import com.example.ClinicaDefinitiva.application.actor.dto.patient.PagePatientDto;
 import com.example.ClinicaDefinitiva.application.actor.dto.patient.ReadPatientDto;
@@ -41,7 +40,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PatientApplicationServiceTest {
+class GuardianApplicationServiceTest {
 
     @Mock
     private PatientRepository patientRepository;

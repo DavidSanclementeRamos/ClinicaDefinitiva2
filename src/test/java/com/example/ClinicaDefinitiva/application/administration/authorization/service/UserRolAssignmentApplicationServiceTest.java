@@ -12,6 +12,7 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.service
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.UserRolAssignmentId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,27 +47,31 @@ class UserRolAssignmentApplicationServiceTest {
     private UserRolAssignmentApplicationService service;
 
     @Test
-    @DisplayName("Asignar rol permanente exitosamente")
-    void savePermanent_success() {
-        CreateAssignmentPermanentDto dto = new CreateAssignmentPermanentDto(1L, 1L, true);
-        UserRolAssignment assignment = mock(UserRolAssignment.class);
-        UserRolAssignment saved = mock(UserRolAssignment.class);
-        ReadAssignmentDto resultDto = mock(ReadAssignmentDto.class);
+@DisplayName("Asignar rol permanente exitosamente")
+void savePermanent_success() {
+    CreateAssignmentPermanentDto dto = new CreateAssignmentPermanentDto(1L, 1L, true);
 
-        when(writeMapper.toUserIdentityId(dto)).thenReturn(UserIdentityId.from(1L));
-        when(writeMapper.toRolId(dto)).thenReturn(RolId.of(1L));
-        when(writeMapper.toIsPrimary(dto)).thenReturn(true);
-        when(assignment.getUserId()).thenReturn(UserIdentityId.from(1L));
-        when(assignment.getRolId()).thenReturn(RolId.of(1L));
-        when(assignment.isPrimary()).thenReturn(true);
-        when(userRolService.assignRole(any(), any(), anyBoolean())).thenReturn(saved);
-        when(readMapper.toReadDto(saved)).thenReturn(resultDto);
+    // Configurar mappers para convertir DTO a valores de dominio
+    when(writeMapper.toUserIdentityId(dto)).thenReturn(UserIdentityId.from(1L));
+    when(writeMapper.toRolId(dto)).thenReturn(RolId.of(1L));
+    when(writeMapper.toIsPrimary(dto)).thenReturn(true);
 
-        ReadAssignmentDto result = service.savePermanent(dto, mock(UserIdentityId.class), mock(RolId.class));
+    // Mock del servicio de dominio: devuelve una asignación guardada (mock)
+    UserRolAssignment savedAssignment = mock(UserRolAssignment.class);
+    when(userRolService.assignRole(any(UserIdentityId.class), any(RolId.class), anyBoolean()))
+        .thenReturn(savedAssignment);
 
-        assertThat(result).isSameAs(resultDto);
-        verify(userRolService).assignRole(any(), any(), anyBoolean());
-    }
+    // Mock del mapper de lectura
+    ReadAssignmentDto resultDto = mock(ReadAssignmentDto.class);
+    when(readMapper.toReadDto(savedAssignment)).thenReturn(resultDto);
+
+    // Ejecutar
+    ReadAssignmentDto result = service.savePermanent(dto, mock(UserIdentityId.class), mock(RolId.class));
+
+    // Verificar
+    assertThat(result).isSameAs(resultDto);
+    verify(userRolService).assignRole(any(UserIdentityId.class), any(RolId.class), anyBoolean());
+}
 
     @Test
     @DisplayName("Buscar asignación por ID existente")
@@ -106,18 +111,25 @@ class UserRolAssignmentApplicationServiceTest {
         verify(repository).save(assignment);
     }
 
-    @Test
-    @DisplayName("Buscar asignaciones por usuario devuelve página")
-    void findByUserId_returnsPage() {
-        UserIdentityId userId = UserIdentityId.from(1L);
-        Pageable pageable = Pageable.ofSize(10);
-        Page<UserRolAssignment> assignmentPage = new PageImpl<>(List.of(mock(UserRolAssignment.class)));
-        when(repository.findByUserId(eq(userId), eq(pageable))).thenReturn(assignmentPage);
-        when(readMapper.toReadDto(any())).thenReturn(mock(ReadAssignmentDto.class));
+  @Test
+@DisplayName("Buscar asignaciones por usuario devuelve página")
+void findByUserId_returnsPage() {
+    UserIdentityId userId = UserIdentityId.from(1L);
+    Pageable pageable = Pageable.ofSize(10);
+    
+    // Crear una asignación mock
+    UserRolAssignment assignmentMock = mock(UserRolAssignment.class);
+    List<UserRolAssignment> assignmentList = List.of(assignmentMock);
+    Page<UserRolAssignment> assignmentPage = new PageImpl<>(assignmentList);
+    
+    when(repository.findByUserId(eq(userId), eq(pageable))).thenReturn(assignmentPage);
+    when(readMapper.toReadDto(any(UserRolAssignment.class))).thenReturn(mock(ReadAssignmentDto.class));
 
-        Page<ReadAssignmentDto> result = service.findByUserId(userId, mock(UserIdentityId.class), mock(RolId.class),pageable);
+    Page<ReadAssignmentDto> result = service.findByUserId(userId, mock(UserIdentityId.class), mock(RolId.class), pageable);
 
-        assertThat(result).isNotNull();
-        assertThat(result.getTotalElements()).isEqualTo(1);
-    }
+    assertThat(result).isNotNull();
+    assertThat(result.getTotalElements()).isEqualTo(1);
+    assertThat(result.getContent()).hasSize(1);
+    verify(repository).findByUserId(userId, pageable);
+}
 }

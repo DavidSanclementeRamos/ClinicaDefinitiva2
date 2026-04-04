@@ -176,7 +176,7 @@ class UserIdentityApplicationServiceTest {
 void update_shouldUpdate() {
     Long id = 2L;
     // ✅ El DTO tiene la contraseña correcta
-    UpdateUserIdentityDto dto = new UpdateUserIdentityDto("new@example.com", "newpassword", "newname");
+    UpdateUserIdentityDto dto = new UpdateUserIdentityDto("new@example.com", "newname","newpassword" );
     UserIdentity user = createVerifiedUser();
     ReadUserIdentityDto expectedDto = createReadDto();
 

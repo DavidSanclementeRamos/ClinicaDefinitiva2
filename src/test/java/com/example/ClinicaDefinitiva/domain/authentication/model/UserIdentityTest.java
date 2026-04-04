@@ -278,17 +278,26 @@ class UserIdentityTest {
         assertThat(user.getLockedUntil()).isNull();
     }
 
-    @Test
-    @DisplayName("Reactivar usuario no verificado falla con ERR_USER_NOT_VERIFIED")
-    void shouldFailReactivateWhenNotVerified() {
-        UserIdentity user = createUser(); // no verificado
+  
+ @Test
+@DisplayName("Reactivar usuario no verificado e inactivo debe ser exitoso")
+void shouldAllowReactivateWhenNotVerifiedAndInactive() {
+    UserIdentity user = createUser(); // no verificado, estado ACTIVE
 
-        Outcome<UserIdentity> outcome = user.reactivate(now);
+    // Desactivar el usuario (cambiar a INACTIVE)
+    when(deactivationPolicy.validate(user)).thenReturn(Outcome.ok());
+    Outcome<UserIdentity> deactivateOutcome = user.deactivate(deactivationPolicy, now, "Razón válida");
+    assertThat(deactivateOutcome.isSuccess()).isTrue();
+    assertThat(user.getStatus().getValue()).isEqualTo(UserIdentityStatus.Status.INACTIVE);
 
-        assertThat(outcome.isFailure()).isTrue();
-        // ✅ CORREGIDO: verificar el código de error correcto
-        assertThat(outcome.getDetalles().get(0).getCode()).isEqualTo(UserIdentityError.ERR_USER_NOT_VERIFIED);
-    }
+    // Reactivar
+    Outcome<UserIdentity> reactivateOutcome = user.reactivate(now);
+
+    assertThat(reactivateOutcome.isSuccess()).isTrue();
+    assertThat(user.getStatus().getValue()).isEqualTo(UserIdentityStatus.Status.ACTIVE);
+    assertThat(user.getFailedLoginAttempts()).isZero();
+    assertThat(user.getLockedUntil()).isNull();
+}
 
     // ========== canPerformSensitiveAction ==========
     @Test

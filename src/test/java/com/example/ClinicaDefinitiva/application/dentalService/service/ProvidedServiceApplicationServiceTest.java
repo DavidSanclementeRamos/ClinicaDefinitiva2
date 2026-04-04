@@ -77,24 +77,22 @@ class ProvidedServiceApplicationServiceTest {
         verify(serviceRepository).save(any());
     }
 
-    @Test
-    @DisplayName("Actualizar tarifa con validación de política")
-    void updateRate_shouldValidateWithPolicy() {
-        ServiceId id = ServiceId.of(1L);
-        UpdateServiceRateDto dto = mock(UpdateServiceRateDto.class);
-        ProvidedService serviceEntity = mock(ProvidedService.class);
-        when(serviceRepository.findById(id)).thenReturn(Optional.of(serviceEntity));
-        when(writeMapper.toRate(dto)).thenReturn(Price.of(120_000, Currency.getInstance("COP")));
-        when(serviceEntity.getBaseRate()).thenReturn(Price.of(100_000, Currency.getInstance("COP")));
+  @Test
+@DisplayName("Actualizar tarifa con validación de política")
+void updateRate_shouldValidateWithPolicy() {
+    ServiceId id = ServiceId.of(1L);
+    UpdateServiceRateDto dto = mock(UpdateServiceRateDto.class);
+    ProvidedService serviceEntity = mock(ProvidedService.class);
+    when(serviceRepository.findById(id)).thenReturn(Optional.of(serviceEntity));
+    when(writeMapper.toRate(dto)).thenReturn(Price.of(120_000, Currency.getInstance("COP")));
+    when(serviceEntity.getBaseRate()).thenReturn(Price.of(100_000, Currency.getInstance("COP")));
 
-        // Simular que la política no lanza excepción
-        doNothing().when(ratePolicy).validateRateChange(any(), any());
 
-        service.updateRate(dto, id, mock(UserIdentityId.class), mock(RolId.class));
+    service.updateRate(dto, id, mock(UserIdentityId.class), mock(RolId.class));
 
-        verify(serviceEntity).updateRate(any(), any());
-        verify(serviceRepository).save(serviceEntity);
-    }
+    verify(serviceEntity).updateRate(any(), any());
+    verify(serviceRepository).save(serviceEntity);
+}
 
     @Test
     @DisplayName("Desactivar servicio valida ausencia de citas/facturas")

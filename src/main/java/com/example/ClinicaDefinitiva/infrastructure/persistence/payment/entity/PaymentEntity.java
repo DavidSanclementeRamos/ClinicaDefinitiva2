@@ -65,7 +65,7 @@ public class PaymentEntity {
     @Column(name = "actualizado_en")
     private LocalDateTime updatedAt;
     
-    @Column(name = "razon_ren")
+    @Column(name = "razon_reembolso")
     private String refundReason;
 
     public PaymentEntity() {}

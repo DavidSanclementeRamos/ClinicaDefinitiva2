@@ -6,9 +6,7 @@ import com.example.ClinicaDefinitiva.application.administration.authorization.dt
 import com.example.ClinicaDefinitiva.application.administration.authorization.input.UserRolAssignmentUseCase;
 import com.example.ClinicaDefinitiva.application.administration.authorization.mapper.userRolAssignment.AssignmentReadMapper;
 import com.example.ClinicaDefinitiva.application.administration.authorization.mapper.userRolAssignment.AssignmentWriteMapper;
-import com.example.ClinicaDefinitiva.application.exceptions.administration.authorization.RolNotFoundException;
 import com.example.ClinicaDefinitiva.application.exceptions.administration.authorization.UserRolAssignmentNotFoundException;
-import com.example.ClinicaDefinitiva.application.exceptions.authentication.UserIdentityNoFoundException;
 import com.example.ClinicaDefinitiva.application.shared.dto.AuthorizationContext;
 import com.example.ClinicaDefinitiva.application.shared.service.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.model.UserRolAssignment;
@@ -16,10 +14,8 @@ import com.example.ClinicaDefinitiva.domain.administration.authorization.output.
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.UserRolAssignmentService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
-import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization.UserRolAssignmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
@@ -42,24 +38,17 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
     private final AssignmentReadMapper readMapper;
     private final UserRolAssignmentRepository repository;
     private final AuthorizationHelper authorizationHelper;
-    private final RolRepository rolRepository;
-    private final UserIdentityRepository userIdentityRepository;
 
-    public UserRolAssignmentApplicationService(UserRolAssignmentService userRolService,
-                                               AssignmentWriteMapper writeMapper,
-                                               AssignmentReadMapper readMapper,
-                                               UserRolAssignmentRepository repository,
-                                               AuthorizationHelper authorizationHelper,
-                                               RolRepository rolRepository,
-                                               UserIdentityRepository userIdentityRepository) {
+    public UserRolAssignmentApplicationService(UserRolAssignmentService userRolService, AssignmentWriteMapper writeMapper, AssignmentReadMapper readMapper, UserRolAssignmentRepository repository, AuthorizationHelper authorizationHelper) {
         this.userRolService = userRolService;
         this.writeMapper = writeMapper;
         this.readMapper = readMapper;
         this.repository = repository;
         this.authorizationHelper = authorizationHelper;
-        this.rolRepository = rolRepository;
-        this.userIdentityRepository = userIdentityRepository;
     }
+   
+
+
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT, action = ActionCatalog.BasicAction.CREATE)

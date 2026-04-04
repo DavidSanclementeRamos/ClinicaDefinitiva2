@@ -1,3 +1,4 @@
+
 package com.example.ClinicaDefinitiva.application.actor.service;
 
 import com.example.ClinicaDefinitiva.application.actor.dto.patient.ReadPatientDto;
@@ -209,6 +210,7 @@ private PagePatientDto createPagePatientDto() {
         UpdatePatientContactDto dto = mock(UpdatePatientContactDto.class);
         Patient patient = createPatient();
 
+        when(patientRepository.save(any(Patient.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(patientRepository.findById(id)).thenReturn(Optional.of(patient));
         ReadPatientDto expectedDto =  createReadPatientDto();
         when(readMapper.toReadDto(patient)).thenReturn(expectedDto);
@@ -226,6 +228,7 @@ private PagePatientDto createPagePatientDto() {
         UpdatePatientSensitiveDto dto = mock(UpdatePatientSensitiveDto.class);
         Patient patient = createPatient();
 
+        when(patientRepository.save(any(Patient.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(patientRepository.findById(id)).thenReturn(Optional.of(patient));
         ReadPatientDto expectedDto =  createReadPatientDto();
         when(readMapper.toReadDto(patient)).thenReturn(expectedDto);
@@ -236,16 +239,17 @@ private PagePatientDto createPagePatientDto() {
         verify(patientRepository).save(patient);
     }
 
-    @Test
-    @DisplayName("deleteById - debe eliminar paciente")
-    void deleteById_shouldDelete() {
-        PatientId id = PatientId.of(1L);
-        Patient patient = createPatient();
-        when(patientRepository.findById(id)).thenReturn(Optional.of(patient));
+@Test
+@DisplayName("deleteById - debe eliminar paciente")
+void deleteById_shouldDelete() {
+    PatientId id = PatientId.of(1L);
+    Patient patient = mock(Patient.class);                     // ← usar mock
+    when(patient.getPatientId()).thenReturn(id);              // ← stubbear getPatientId
+    when(patientRepository.findById(id)).thenReturn(Optional.of(patient));
 
-        service.deleteById(id, requesterId, requesterRolId);
+    service.deleteById(id, requesterId, requesterRolId);
 
-        verify(patientRepository).deleteById(id);
-    }
+    verify(patientRepository).deleteById(id);                  // ← verifica con el ID correcto
+}
     
 }

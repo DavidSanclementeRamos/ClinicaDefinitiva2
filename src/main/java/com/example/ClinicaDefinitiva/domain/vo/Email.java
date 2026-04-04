@@ -23,7 +23,7 @@ public final class Email implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
-            "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$",
+            "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
             Pattern.CASE_INSENSITIVE
     );
 

@@ -1,0 +1,300 @@
+2026-04-03 17:37:46 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-04-03 17:37:46 DEBUG [background-preinit] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-03 17:37:46 DEBUG [background-preinit] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-03 17:37:46 DEBUG [background-preinit] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-03 17:37:46 DEBUG [background-preinit] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-03 17:37:46 DEBUG [background-preinit] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-03 17:37:46 DEBUG [background-preinit] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-03 17:37:46 DEBUG [background-preinit] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-03 17:37:46 INFO  [main] c.e.C.ClinicaDefinitivaApplicationTests - Starting ClinicaDefinitivaApplicationTests using Java 17.0.10 with PID 6636 (started by David in C:\Users\David\OneDrive\Documents\proyectosJava\ClinicaDefinitiva)
+2026-04-03 17:37:46 INFO  [main] c.e.C.ClinicaDefinitivaApplicationTests - The following 1 profile is active: "test"
+2026-04-03 17:37:46 DEBUG [main] o.s.w.c.s.GenericWebApplicationContext - Refreshing org.springframework.web.context.support.GenericWebApplicationContext@4db8b888
+2026-04-03 17:37:47 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-03 17:37:47 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-03 17:37:47 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-03 17:37:47 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-03 17:37:47 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-03 17:37:47 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-03 17:38:00 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-03 17:38:02 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2034 ms. Found 21 JPA repository interfaces.
+2026-04-03 17:38:08 INFO  [main] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-03 17:38:09 INFO  [main] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-04-03 17:38:09 INFO  [main] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-03 17:38:10 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-03 17:38:10 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-03 17:38:12 INFO  [main] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-04-03 17:38:12 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-03 17:38:13 WARN  [main] org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-03 17:38:13 INFO  [main] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-03 17:38:16 DEBUG [main] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-03 17:38:16 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-03 17:38:22 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-03 17:38:23 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-03 17:38:25 INFO  [main] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-03 17:38:39 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-03 17:38:39 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-03 17:38:41 INFO  [main] o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-04-03 17:38:41 WARN  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-04-03 17:38:41 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-03 17:38:42 WARN  [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-03 17:38:43 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping - 214 mappings in 'requestMappingHandlerMapping'
+2026-04-03 17:38:44 DEBUG [main] o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2026-04-03 17:38:44 INFO  [main] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-04-03 17:38:45 DEBUG [main] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-04-03 17:38:46 DEBUG [main] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.e.AbstractConfigurationImpl - Setting custom MessageInterpolator of type org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.e.AbstractConfigurationImpl - Setting custom ConstraintValidatorFactory of type org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via user class loader
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-03 17:38:46 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-03 17:38:46 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-04-03 17:38:47 DEBUG [main] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-04-03 17:38:49 INFO  [main] c.e.C.ClinicaDefinitivaApplicationTests - Started ClinicaDefinitivaApplicationTests in 66.343 seconds (process running for 103.223)
+2026-04-03 17:38:57 INFO  [main] c.e.C.d.p.s.PaymentRefundService - Payment null refunded: 50000.00 COP
+2026-04-03 17:38:57 ERROR [main] c.e.C.d.p.s.PaymentRefundService - Gateway refund failed: Error en gateway
+2026-04-03 17:38:57 INFO  [main] c.e.C.d.p.s.PaymentRefundService - Gateway refund successful: refund_123
+2026-04-03 17:38:57 INFO  [main] c.e.C.d.p.s.PaymentRefundService - Payment null refunded: 50000.00 COP
+2026-04-03 17:38:58 INFO  [main] o.testcontainers.images.PullPolicy - Image pull policy will be performed by: DefaultPullPolicy()
+2026-04-03 17:38:58 INFO  [main] o.t.utility.ImageNameSubstitutor - Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2026-04-03 17:38:58 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 17:39:00 INFO  [main] o.t.d.DockerMachineClientProviderStrategy - docker-machine executable was not found on PATH ([C:\Program Files\Common Files\Oracle\Java\javapath, C:\Program Files (x86)\Common Files\Oracle\Java\javapath, C:\Windows\system32, C:\Windows, C:\Windows\System32\Wbem, C:\Windows\System32\WindowsPowerShell\v1.0\, C:\Windows\System32\OpenSSH\, C:\Program Files\nodejs\, C:\Program Files\Git\cmd, C:\Program Files\dotnet\, C:\Users\David\AppData\Local\Microsoft\WindowsApps, C:\Users\David\AppData\Local\GitHubDesktop\bin, C:\Users\David\AppData\Roaming\npm])
+2026-04-03 17:39:00 ERROR [main] o.t.d.DockerClientProviderStrategy - Could not find a valid Docker environment. Please check configuration. Attempted configurations were:
+As no valid configuration was found, execution cannot continue.
+See https://java.testcontainers.org/on_failure.html for more details.
+2026-04-03 17:39:00 INFO  [main] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters.DentistAdapterTest]: DentistAdapterTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-04-03 17:39:00 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 17:39:00 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 17:39:00 INFO  [main] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters.GuardianAdapterTest]: GuardianAdapterTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-04-03 17:39:00 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 17:39:00 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 17:39:00 INFO  [main] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters.PatientAdapterTest]: PatientAdapterTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-04-03 17:39:00 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 17:39:00 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 17:39:00 INFO  [main] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters.ReceptionAdapterTest]: ReceptionAdapterTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-04-03 17:39:00 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 17:39:01 DEBUG [SpringApplicationShutdownHook] o.s.w.c.s.GenericWebApplicationContext - Closing org.springframework.web.context.support.GenericWebApplicationContext@4db8b888, started on Fri Apr 03 17:37:46 COT 2026
+2026-04-03 17:39:03 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-03 17:39:03 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-03 17:39:03 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-03 22:43:27 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-04-03 22:43:27 DEBUG [background-preinit] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-03 22:43:27 DEBUG [background-preinit] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-03 22:43:27 DEBUG [background-preinit] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-03 22:43:27 DEBUG [background-preinit] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-03 22:43:27 DEBUG [background-preinit] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-03 22:43:27 DEBUG [background-preinit] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-03 22:43:27 DEBUG [background-preinit] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-03 22:43:27 INFO  [main] c.e.C.ClinicaDefinitivaApplicationTests - Starting ClinicaDefinitivaApplicationTests using Java 17.0.10 with PID 11132 (started by David in C:\Users\David\OneDrive\Documents\proyectosJava\ClinicaDefinitiva)
+2026-04-03 22:43:27 INFO  [main] c.e.C.ClinicaDefinitivaApplicationTests - The following 1 profile is active: "test"
+2026-04-03 22:43:27 DEBUG [main] o.s.w.c.s.GenericWebApplicationContext - Refreshing org.springframework.web.context.support.GenericWebApplicationContext@45b244c4
+2026-04-03 22:43:28 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-03 22:43:28 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-03 22:43:28 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-03 22:43:28 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-03 22:43:28 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-03 22:43:28 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-03 22:43:38 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-03 22:43:40 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1986 ms. Found 21 JPA repository interfaces.
+2026-04-03 22:43:45 INFO  [main] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-03 22:43:46 INFO  [main] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-04-03 22:43:46 INFO  [main] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-03 22:43:47 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-03 22:43:48 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-03 22:43:49 INFO  [main] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-04-03 22:43:49 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-03 22:43:50 WARN  [main] org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-03 22:43:50 INFO  [main] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-03 22:43:53 DEBUG [main] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-03 22:43:53 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-03 22:44:00 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-03 22:44:01 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-03 22:44:03 INFO  [main] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-03 22:44:17 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-03 22:44:17 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-03 22:44:19 INFO  [main] o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-04-03 22:44:19 WARN  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-04-03 22:44:19 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-03 22:44:20 WARN  [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-03 22:44:21 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping - 214 mappings in 'requestMappingHandlerMapping'
+2026-04-03 22:44:21 DEBUG [main] o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2026-04-03 22:44:22 INFO  [main] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-04-03 22:44:23 DEBUG [main] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-04-03 22:44:24 DEBUG [main] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.e.AbstractConfigurationImpl - Setting custom MessageInterpolator of type org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.e.AbstractConfigurationImpl - Setting custom ConstraintValidatorFactory of type org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via user class loader
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-03 22:44:24 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-03 22:44:24 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-04-03 22:44:25 DEBUG [main] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-04-03 22:44:27 INFO  [main] c.e.C.ClinicaDefinitivaApplicationTests - Started ClinicaDefinitivaApplicationTests in 62.818 seconds (process running for 102.779)
+2026-04-03 22:44:34 INFO  [main] c.e.C.d.p.s.PaymentRefundService - Payment null refunded: 50000.00 COP
+2026-04-03 22:44:34 ERROR [main] c.e.C.d.p.s.PaymentRefundService - Gateway refund failed: Error en gateway
+2026-04-03 22:44:34 INFO  [main] c.e.C.d.p.s.PaymentRefundService - Gateway refund successful: refund_123
+2026-04-03 22:44:34 INFO  [main] c.e.C.d.p.s.PaymentRefundService - Payment null refunded: 50000.00 COP
+2026-04-03 22:44:36 INFO  [main] o.testcontainers.images.PullPolicy - Image pull policy will be performed by: DefaultPullPolicy()
+2026-04-03 22:44:36 INFO  [main] o.t.utility.ImageNameSubstitutor - Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2026-04-03 22:44:36 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 22:44:38 INFO  [main] o.t.d.DockerMachineClientProviderStrategy - docker-machine executable was not found on PATH ([C:\Program Files\Common Files\Oracle\Java\javapath, C:\Program Files (x86)\Common Files\Oracle\Java\javapath, C:\Windows\system32, C:\Windows, C:\Windows\System32\Wbem, C:\Windows\System32\WindowsPowerShell\v1.0\, C:\Windows\System32\OpenSSH\, C:\Program Files\nodejs\, C:\Program Files\Git\cmd, C:\Program Files\dotnet\, C:\Users\David\AppData\Local\Microsoft\WindowsApps, C:\Users\David\AppData\Local\GitHubDesktop\bin, C:\Users\David\AppData\Roaming\npm])
+2026-04-03 22:44:38 ERROR [main] o.t.d.DockerClientProviderStrategy - Could not find a valid Docker environment. Please check configuration. Attempted configurations were:
+As no valid configuration was found, execution cannot continue.
+See https://java.testcontainers.org/on_failure.html for more details.
+2026-04-03 22:44:38 INFO  [main] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters.DentistAdapterTest]: DentistAdapterTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-04-03 22:44:38 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 22:44:38 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 22:44:38 INFO  [main] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters.GuardianAdapterTest]: GuardianAdapterTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-04-03 22:44:38 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 22:44:38 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 22:44:38 INFO  [main] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters.PatientAdapterTest]: PatientAdapterTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-04-03 22:44:38 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 22:44:38 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 22:44:38 INFO  [main] o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters.ReceptionAdapterTest]: ReceptionAdapterTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-04-03 22:44:38 INFO  [main] o.testcontainers.DockerClientFactory - Testcontainers version: 1.20.4
+2026-04-03 22:44:39 DEBUG [SpringApplicationShutdownHook] o.s.w.c.s.GenericWebApplicationContext - Closing org.springframework.web.context.support.GenericWebApplicationContext@45b244c4, started on Fri Apr 03 22:43:27 COT 2026
+2026-04-03 22:44:39 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-03 22:44:41 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-03 22:44:41 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-03 23:02:03 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-04-03 23:02:03 DEBUG [background-preinit] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-03 23:02:03 DEBUG [background-preinit] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-03 23:02:03 DEBUG [background-preinit] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-03 23:02:03 DEBUG [background-preinit] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-03 23:02:03 DEBUG [background-preinit] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-03 23:02:03 DEBUG [background-preinit] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-03 23:02:03 INFO  [main] c.e.C.ClinicaDefinitivaApplicationTests - Starting ClinicaDefinitivaApplicationTests using Java 17.0.10 with PID 6312 (started by David in C:\Users\David\OneDrive\Documents\proyectosJava\ClinicaDefinitiva)
+2026-04-03 23:02:03 INFO  [main] c.e.C.ClinicaDefinitivaApplicationTests - The following 1 profile is active: "test"
+2026-04-03 23:02:03 DEBUG [background-preinit] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-03 23:02:04 DEBUG [main] o.s.w.c.s.GenericWebApplicationContext - Refreshing org.springframework.web.context.support.GenericWebApplicationContext@6f21c18f
+2026-04-03 23:02:05 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-03 23:02:05 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-03 23:02:05 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-03 23:02:05 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-03 23:02:05 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-03 23:02:05 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-03 23:02:16 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-03 23:02:18 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2248 ms. Found 21 JPA repository interfaces.
+2026-04-03 23:02:24 INFO  [main] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-03 23:02:25 INFO  [main] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-04-03 23:02:25 INFO  [main] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-03 23:02:26 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-03 23:02:26 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-03 23:02:28 INFO  [main] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-04-03 23:02:28 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-03 23:02:28 WARN  [main] org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-03 23:02:28 INFO  [main] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-03 23:02:32 DEBUG [main] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-03 23:02:32 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-03 23:02:37 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-03 23:02:38 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-03 23:02:40 INFO  [main] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-03 23:02:52 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-03 23:02:52 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-03 23:02:54 INFO  [main] o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-04-03 23:02:54 WARN  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-04-03 23:02:54 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-03 23:02:55 WARN  [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-03 23:02:56 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping - 214 mappings in 'requestMappingHandlerMapping'
+2026-04-03 23:02:57 DEBUG [main] o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2026-04-03 23:02:58 INFO  [main] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-04-03 23:02:58 DEBUG [main] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-04-03 23:02:59 DEBUG [main] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.e.AbstractConfigurationImpl - Setting custom MessageInterpolator of type org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.e.AbstractConfigurationImpl - Setting custom ConstraintValidatorFactory of type org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via user class loader
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-03 23:02:59 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-03 23:02:59 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-04-03 23:03:00 DEBUG [main] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-04-03 23:03:01 INFO  [main] c.e.C.ClinicaDefinitivaApplicationTests - Started ClinicaDefinitivaApplicationTests in 61.478 seconds (process running for 106.709)
+2026-04-03 23:03:09 INFO  [main] c.e.C.d.p.s.PaymentRefundService - Payment null refunded: 50000.00 COP
+2026-04-03 23:03:09 ERROR [main] c.e.C.d.p.s.PaymentRefundService - Gateway refund failed: Error en gateway
+2026-04-03 23:03:09 INFO  [main] c.e.C.d.p.s.PaymentRefundService - Gateway refund successful: refund_123
+2026-04-03 23:03:09 INFO  [main] c.e.C.d.p.s.PaymentRefundService - Payment null refunded: 50000.00 COP
+2026-04-03 23:03:11 DEBUG [SpringApplicationShutdownHook] o.s.w.c.s.GenericWebApplicationContext - Closing org.springframework.web.context.support.GenericWebApplicationContext@6f21c18f, started on Fri Apr 03 23:02:04 COT 2026
+2026-04-03 23:03:11 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-03 23:03:13 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-03 23:03:13 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

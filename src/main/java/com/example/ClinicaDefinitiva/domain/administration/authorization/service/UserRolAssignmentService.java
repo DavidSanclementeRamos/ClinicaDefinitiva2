@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,19 +32,20 @@ public class UserRolAssignmentService {
         this.rolRepository = rolRepository;
     }
 
+  
     public List<Rol> getActiveRoles(UserIdentityId userIdentityId) {
-        Page<UserRolAssignment> activeAssignments = (Page<UserRolAssignment>) assignmentRepository
-                .findByUserId(userIdentityId, Pageable.unpaged())
-                .stream()
-                .filter(UserRolAssignment::isCurrentlyActive)
-                .collect(Collectors.toList()); 
-        
-        return activeAssignments.stream()
-                .map(assignment -> rolRepository.findById(assignment.getRolId()))
-                .filter(java.util.Optional::isPresent)
-                .map(java.util.Optional::get)
-                .collect(Collectors.toList());
-    }
+    Page<UserRolAssignment> allAssignments = assignmentRepository
+            .findByUserId(userIdentityId, Pageable.unpaged());
+    List<UserRolAssignment> activeAssignments = allAssignments.stream()
+            .filter(UserRolAssignment::isCurrentlyActive)
+            .collect(Collectors.toList());
+
+    return activeAssignments.stream()
+            .map(assignment -> rolRepository.findById(assignment.getRolId()))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toList());
+}
 
     public Rol getPrimaryRole(UserIdentityId userIdentityId) {
         return assignmentRepository

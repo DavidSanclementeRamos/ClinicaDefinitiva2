@@ -15,13 +15,13 @@ class EmailTest {
     // ========== Pruebas para of() ==========
 
     @ParameterizedTest
-    @ValueSource(strings = {"test@example.com", "user.name@domain.co", "a@b.c"})
-    @DisplayName("of() - email válido retorna Outcome exitoso")
-    void of_shouldReturnSuccessForValidEmail(String validEmail) {
-        Outcome<Email> outcome = Email.of(validEmail);
-        assertThat(outcome.isSuccess()).isTrue();
-        assertThat(outcome.getValue().get().value()).isEqualTo(validEmail.trim().toLowerCase());
-    }
+@ValueSource(strings = {"test@example.com", "user.name@domain.co", "a@b.co"})  // ← quitamos "a@b.c"
+@DisplayName("of() - email válido retorna Outcome exitoso")
+void of_shouldReturnSuccessForValidEmail(String validEmail) {
+    Outcome<Email> outcome = Email.of(validEmail);
+    assertThat(outcome.isSuccess()).isTrue();
+    assertThat(outcome.getValue().get().value()).isEqualTo(validEmail.trim().toLowerCase());
+}
 
     @ParameterizedTest
     @NullAndEmptySource
