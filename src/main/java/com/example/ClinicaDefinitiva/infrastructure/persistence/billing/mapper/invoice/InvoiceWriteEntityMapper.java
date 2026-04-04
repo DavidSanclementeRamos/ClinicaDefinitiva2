@@ -16,9 +16,9 @@ public class InvoiceWriteEntityMapper {
 
         InvoiceEntity entity = new InvoiceEntity();
 
-       // if (invoice.getId() != null && invoice.getId().getValue() != null) {
-          //  entity.setId(invoice.getId().getValue());
-        //}
+        if (invoice.getId() != null && invoice.getId().getValue() != null) {
+           entity.setId(invoice.getId().getValue());
+        }
 
         entity.setInvoiceNumber(invoice.getNumber() != null ? invoice.getNumber().getValue() : null);
         entity.setStatus(invoice.getStatus().getValue().name());

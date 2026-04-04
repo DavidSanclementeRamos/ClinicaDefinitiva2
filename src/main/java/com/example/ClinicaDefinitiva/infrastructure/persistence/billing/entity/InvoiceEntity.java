@@ -91,6 +91,9 @@ public class InvoiceEntity {
     public String getNotes()                      { return notes; }
     public List<InvoiceItemEntity> getItems()     { return items; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setPatient(PatientEntity patient)                    { this.patient = patient; }
     public void setDentist(DentistEntity dentist)                    { this.dentist = dentist; }
     public void setProviderId(Long providerId)                       { this.providerId = providerId; }

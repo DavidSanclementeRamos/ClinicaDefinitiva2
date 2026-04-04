@@ -12,9 +12,9 @@ public class LedgerAccountWriteEntityMapper {
 
         LedgerAccountEntity entity = new LedgerAccountEntity();
 
-        /**if (account.getId() != null && account.getId().getValue() != null) {
+        if (account.getId() != null && account.getId().getValue() != null) {
             entity.setId(account.getId().getValue());
-        }*/
+        }
 
         entity.setCode(account.getCode());
         entity.setName(account.getName().getValue());

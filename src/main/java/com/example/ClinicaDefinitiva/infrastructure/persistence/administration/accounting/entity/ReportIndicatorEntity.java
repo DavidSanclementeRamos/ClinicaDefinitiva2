@@ -34,6 +34,9 @@ public class ReportIndicatorEntity {
     public String getValue()                       { return value; }
     public String getUnit()                        { return unit; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setReport(AdministrativeReportEntity report)  { this.report = report; }
     public void setName(String name)                           { this.name = name; }
     public void setValue(String value)                         { this.value = value; }

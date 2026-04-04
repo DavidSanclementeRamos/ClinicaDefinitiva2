@@ -12,9 +12,9 @@ public class ContractWriteEntityMapper {
 
         ContractEntity entity = new ContractEntity();
 
-       /** if (contract.getContractId() != null && contract.getContractId().getValue() != null) {
+        if (contract.getContractId() != null && contract.getContractId().getValue() != null) {
             entity.setId(contract.getContractId().getValue());
-        }*/
+        }
 
         entity.setName(contract.getName().getValue());
         entity.setDescription(contract.getDescription());

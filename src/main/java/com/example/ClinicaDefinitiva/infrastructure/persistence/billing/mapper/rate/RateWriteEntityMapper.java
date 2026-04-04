@@ -12,9 +12,9 @@ public class RateWriteEntityMapper {
 
         RateEntity entity = new RateEntity();
 
-      /**  if (rate.getId() != null && rate.getId().getValue() != null) {
+        if (rate.getId() != null && rate.getId().getValue() != null) {
             entity.setId(rate.getId().getValue());
-        }*/
+        }
 
         entity.setPayerType(rate.getPayerType().name());
         entity.setAmount(rate.getAmount().asBigDecimal());

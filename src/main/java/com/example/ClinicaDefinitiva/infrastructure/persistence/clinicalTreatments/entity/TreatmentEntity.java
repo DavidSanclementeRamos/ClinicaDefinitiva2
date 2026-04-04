@@ -66,6 +66,9 @@ public class TreatmentEntity {
     public String getNotes()                       { return notes; }
     public List<TreatmentPhaseEntity> getPhases()  { return phases; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setPatient(PatientEntity patient)                         { this.patient = patient; }
     public void setDentist(DentistEntity dentist)                         { this.dentist = dentist; }
     public void setDentalService(DentalServiceEntity dentalService)       { this.dentalService = dentalService; }

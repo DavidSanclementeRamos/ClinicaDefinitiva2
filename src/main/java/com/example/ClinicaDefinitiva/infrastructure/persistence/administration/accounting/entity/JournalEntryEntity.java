@@ -50,6 +50,9 @@ public class JournalEntryEntity {
     public boolean isPosted()                 { return posted; }
     public List<JournalEntryLineEntity> getLines() { return lines; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setCompany(CompanyEntity company)             { this.company = company; }
     public void setDate(LocalDate date)                       { this.date = date; }
     public void setDocumentNumber(String documentNumber)      { this.documentNumber = documentNumber; }

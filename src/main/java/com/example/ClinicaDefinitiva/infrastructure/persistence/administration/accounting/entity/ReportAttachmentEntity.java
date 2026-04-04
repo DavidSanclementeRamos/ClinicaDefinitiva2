@@ -34,6 +34,9 @@ public class ReportAttachmentEntity {
     public String getFileUrl()                     { return fileUrl; }
     public String getFileType()                    { return fileType; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setReport(AdministrativeReportEntity report)  { this.report = report; }
     public void setFileName(String fileName)                   { this.fileName = fileName; }
     public void setFileUrl(String fileUrl)                     { this.fileUrl = fileUrl; }

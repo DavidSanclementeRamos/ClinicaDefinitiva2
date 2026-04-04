@@ -58,6 +58,9 @@ public class InvoiceItemEntity {
     public int getQuantity()                       { return quantity; }
     public LocalDateTime getPerformedDate()        { return performedDate; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setInvoice(InvoiceEntity invoice)                    { this.invoice = invoice; }
     public void setDentalService(DentalServiceEntity dentalService)  { this.dentalService = dentalService; }
     public void setRate(RateEntity rate)                             { this.rate = rate; }

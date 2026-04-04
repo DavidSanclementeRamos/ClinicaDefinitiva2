@@ -46,6 +46,9 @@ public class OpeningBalanceEntity {
     public String getCurrency()                { return currency; }
     public LocalDate getDate()                 { return date; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setCompany(CompanyEntity company)                { this.company = company; }
     public void setAccount(LedgerAccountEntity account)                { this.account = account; }
     public void setThirdParty(ThirdPartyEntity thirdParty)       { this.thirdParty = thirdParty; }

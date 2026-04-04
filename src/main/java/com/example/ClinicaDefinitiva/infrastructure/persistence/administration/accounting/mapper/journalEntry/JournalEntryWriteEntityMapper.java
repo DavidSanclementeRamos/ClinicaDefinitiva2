@@ -16,9 +16,9 @@ public class JournalEntryWriteEntityMapper {
 
         JournalEntryEntity entity = new JournalEntryEntity();
 
-        /**if (entry.getId() != null && entry.getId().getValue() != null) {
+         if (entry.getId() != null && entry.getId().getValue() != null) {
             entity.setId(entry.getId().getValue());
-        }*/
+        }
 
         entity.setDate(entry.getDate());
         entity.setDocumentNumber(entry.getDocumentNumber());

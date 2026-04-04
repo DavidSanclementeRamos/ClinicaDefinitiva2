@@ -18,9 +18,9 @@ public class AdministrativeReportWriteEntityMapper {
 
         AdministrativeReportEntity entity = new AdministrativeReportEntity();
 
-       /** if (report.getId() != null && report.getId().value() != null) {
+        if (report.getId() != null && report.getId().value() != null) {
             entity.setId(report.getId().value());
-        }*/
+        }
 
         entity.setTitle(report.getTitle().getValue());
         entity.setPeriodStart(report.getPeriod().getStartDate());

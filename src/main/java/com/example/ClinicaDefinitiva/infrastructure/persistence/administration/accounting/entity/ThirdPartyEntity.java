@@ -52,6 +52,9 @@ public class ThirdPartyEntity {
     public String getEmail()              { return email; }
     public boolean isActive()             { return active; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setCompany(CompanyEntity company)        { this.company = company; }
     public void setName(String name)                     { this.name = name; }
     public void setDocumentType(String documentType)     { this.documentType = documentType; }

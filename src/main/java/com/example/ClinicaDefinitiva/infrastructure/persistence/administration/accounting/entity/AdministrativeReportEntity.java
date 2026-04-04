@@ -84,6 +84,11 @@ public class AdministrativeReportEntity {
     public List<ReportIndicatorEntity> getIndicators()  { return indicators; }
     public List<ReportAttachmentEntity> getAttachments() { return attachments; }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    
     public void setCreatedBy(UserIdentityEntity createdBy)                { this.createdBy = createdBy; }
     public void setApprovedBy(UserIdentityEntity approvedBy)              { this.approvedBy = approvedBy; }
     public void setTitle(String title)                                    { this.title = title; }

@@ -94,6 +94,10 @@ public class DentalServiceEntity {
     public ProstheticDetailEntity getProstheticDetail()     { return prostheticDetail; }
     public SurgeryDetailEntity getSurgeryDetail()           { return surgeryDetail; }
 
+    
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setName(String name)                                   { this.name = name; }
     public void setCategory(String category)                           { this.category = category; }
     public void setCode(String code)                                   { this.code = code; }

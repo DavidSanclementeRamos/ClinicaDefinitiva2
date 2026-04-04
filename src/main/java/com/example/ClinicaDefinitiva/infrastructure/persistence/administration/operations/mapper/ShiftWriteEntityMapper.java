@@ -16,9 +16,9 @@ public class ShiftWriteEntityMapper {
 
         ShiftEntity entity = new ShiftEntity();
 
-       // if (shift.getId() != null && shift.getId().value() != null) {
-          //  entity.setId(shift.getId().value());
-      //  }
+        if (shift.getId() != null && shift.getId().value() != null) {
+           entity.setId(shift.getId().value());
+        }
 
         entity.setDate(shift.getDate());
         entity.setStartTime(shift.getStartTime());

@@ -58,6 +58,9 @@ public class ShiftEntity {
     public long getVersion()                      { return version; }
     public List<ExcludedBlockEntity> getExcludedBlocks() { return excludedBlocks; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setDentist(DentistEntity dentist)              { this.dentist = dentist; }
     public void setDate(LocalDate date)                         { this.date = date; }
     public void setStartTime(LocalTime startTime)               { this.startTime = startTime; }

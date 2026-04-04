@@ -13,9 +13,9 @@ public class CompanyWriteEntityMapper {
 
         CompanyEntity entity = new CompanyEntity();
 
-       /** if (company.getId() != null && company.getId().value() != null) {
+        if (company.getId() != null && company.getId().value() != null) {
             entity.setId(company.getId().value());
-        }*/
+        }
 
         entity.setName(company.getName().getValue());
         entity.setTaxId(company.getTaxIdentificationNumber().getValue());

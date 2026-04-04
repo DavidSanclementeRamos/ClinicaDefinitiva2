@@ -56,6 +56,11 @@ public class CompanyEntity {
     public LocalDate getIncorporationDate() { return incorporationDate; }
     public String getStatus()            { return status; }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    
     public void setName(String name)                       { this.name = name; }
     public void setTaxId(String taxId)                     { this.taxId = taxId; }
     public void setLegalEntityType(String legalEntityType) { this.legalEntityType = legalEntityType; }

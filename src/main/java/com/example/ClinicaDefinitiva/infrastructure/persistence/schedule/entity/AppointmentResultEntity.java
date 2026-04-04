@@ -36,6 +36,11 @@ public class AppointmentResultEntity {
     public Integer getActualDurationMinutes()   { return actualDurationMinutes; }
     public String getNextSteps()                { return nextSteps; }
 
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+
     public void setAppointment(AppointmentEntity appointment)      { this.appointment = appointment; }
     public void setClinicalNotes(String clinicalNotes)            { this.clinicalNotes = clinicalNotes; }
     public void setDiagnosis(String diagnosis)                    { this.diagnosis = diagnosis; }

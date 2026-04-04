@@ -13,9 +13,9 @@ public class ThirdPartyWriteEntityMapper {
 
         ThirdPartyEntity entity = new ThirdPartyEntity();
 
-       /** if (thirdParty.getPartiesId() != null && thirdParty.getPartiesId().getValue() != null) {
+        if (thirdParty.getPartiesId() != null && thirdParty.getPartiesId().getValue() != null) {
             entity.setId(thirdParty.getPartiesId().getValue());
-        }*/
+        }
 
         entity.setName(thirdParty.getName().getValue());
         entity.setDocumentType(thirdParty.getTypeDocument());

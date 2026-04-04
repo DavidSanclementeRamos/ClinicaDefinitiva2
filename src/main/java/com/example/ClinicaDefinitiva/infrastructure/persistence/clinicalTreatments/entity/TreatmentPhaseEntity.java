@@ -41,6 +41,9 @@ public class TreatmentPhaseEntity {
     public LocalDate getPlannedDate()              { return plannedDate; }
     public LocalDate getCompletedDate()            { return completedDate; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setTreatment(TreatmentEntity treatment)    { this.treatment = treatment; }
     public void setName(String name)                       { this.name = name; }
     public void setDescription(String description)         { this.description = description; }

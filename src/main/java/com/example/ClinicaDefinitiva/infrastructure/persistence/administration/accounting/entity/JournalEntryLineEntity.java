@@ -52,6 +52,9 @@ public class JournalEntryLineEntity {
     public boolean isDebit()                       { return isDebit; }
     public String getDocumentReference()           { return documentReference; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setAccountingEntry(JournalEntryEntity accountingEntry) { this.accountingEntry = accountingEntry; }
     public void setAccount(LedgerAccountEntity account)                         { this.account = account; }
     public void setThirdParty(ThirdPartyEntity thirdParty)                { this.thirdParty = thirdParty; }

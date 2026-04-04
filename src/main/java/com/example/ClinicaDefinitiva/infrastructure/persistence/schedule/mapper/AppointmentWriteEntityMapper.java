@@ -14,9 +14,9 @@ public class AppointmentWriteEntityMapper {
 
         AppointmentEntity entity = new AppointmentEntity();
 
-       /** if (appointment.getId() != null && appointment.getId().getValue() != null) {
+        if (appointment.getId() != null && appointment.getId().getValue() != null) {
             entity.setId(appointment.getId().getValue());
-        }/*/
+        }
 
         entity.setStartDateTime(appointment.getStart());
         entity.setEndDateTime(appointment.getEnd());

@@ -12,9 +12,9 @@ public class OpeningBalanceWriteEntityMapper {
 
         OpeningBalanceEntity entity = new OpeningBalanceEntity();
 
-        /**if (balance.getOpeningBalanceId() != null && balance.getOpeningBalanceId().getValue() != null) {
+        if (balance.getOpeningBalanceId() != null && balance.getOpeningBalanceId().getValue() != null) {
             entity.setId(balance.getOpeningBalanceId().getValue());
-        }*/
+        }
 
         entity.setAmount(balance.getValor().asBigDecimal());
         entity.setCurrency(balance.getValor().getCurrency().getCurrencyCode());

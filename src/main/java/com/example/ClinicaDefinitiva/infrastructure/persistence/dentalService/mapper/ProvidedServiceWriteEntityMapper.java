@@ -19,9 +19,9 @@ public class ProvidedServiceWriteEntityMapper {
 
         DentalServiceEntity entity = new DentalServiceEntity();
 
-        /**if (service.getId() != null && service.getId().getId() != null) {
+        if (service.getId() != null && service.getId().getId() != null) {
             entity.setId(service.getId().getId());
-        }*/
+        }
 
         entity.setName(service.getName().getValue());
         entity.setCategory(service.getCategory().getCategory());

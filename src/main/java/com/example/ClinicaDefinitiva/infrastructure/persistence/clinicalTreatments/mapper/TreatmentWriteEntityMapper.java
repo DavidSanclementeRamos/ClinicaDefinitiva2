@@ -16,9 +16,9 @@ public class TreatmentWriteEntityMapper {
 
         TreatmentEntity entity = new TreatmentEntity();
 
-         /**if (treatment.getId() != null && treatment.getId().getValue() != null) {
+         if (treatment.getId() != null && treatment.getId().getValue() != null) {
             entity.setId(treatment.getId().getValue());
-        }*/
+        }
 
         entity.setStatus(treatment.getStatus().name());
         entity.setStartDate(treatment.getStartDate());

@@ -60,6 +60,9 @@ public class ContractEntity {
     public BigDecimal getCoverageRate()    { return coverageRate; }
     public String getStatus()              { return status; }
 
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setCompany(CompanyEntity company)                 { this.company = company; }
     public void setThirdParty(ThirdPartyEntity thirdParty)       { this.thirdParty = thirdParty; }
     public void setName(String name)                              { this.name = name; }

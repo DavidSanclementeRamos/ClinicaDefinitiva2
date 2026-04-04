@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -27,7 +28,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRolAssignmentService userRolService;
 
     public CustomUserDetailsService(UserIdentityRepository userIdentityRepository,
-                                    UserRolAssignmentRepository assignmentRepository, UserRolAssignmentService userRolService) {
+                                    UserRolAssignmentRepository assignmentRepository,
+                                    UserRolAssignmentService userRolService) {
         this.userIdentityRepository = userIdentityRepository;
         this.assignmentRepository = assignmentRepository;
         this.userRolService = userRolService;
@@ -44,24 +46,33 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (!user.isVerified()) {
             throw new DisabledException("Usuario no verificado");
         }
-        if (user.getStatus().getValue()!= UserIdentityStatus.Status.ACTIVE) {
+        if (user.getStatus().getValue() != UserIdentityStatus.Status.ACTIVE) {
             throw new DisabledException("Usuario inactivo o suspendido");
         }
 
-        Page<UserRolAssignment> assignments = assignmentRepository.findByUserId(user.getId(), Pageable.unpaged());
+        Page<UserRolAssignment> assignmentsPage = assignmentRepository.findByUserId(user.getId(), Pageable.unpaged());
 
-
-        if (assignments.isEmpty()) {
-            throw new UsernameNotFoundException("Usuario sin roles activos: " + email);
+        if (assignmentsPage.isEmpty()) {
+            throw new UsernameNotFoundException("Usuario sin asignaciones: " + email);
         }
 
-        // Obtener roles activos del usuario
+        // ✅ Filtrar solo asignaciones activas
+        List<UserRolAssignment> activeAssignments = assignmentsPage.getContent().stream()
+                .filter(UserRolAssignment::isCurrentlyActive)
+                .collect(Collectors.toList());
+
+        if (activeAssignments.isEmpty()) {
+            throw new UsernameNotFoundException("Usuario sin asignaciones activas: " + email);
+        }
+
+        // Obtener roles activos del usuario (coinciden con las asignaciones activas)
         List<Rol> activeRoles = userRolService.getActiveRoles(user.getId());
 
         if (activeRoles.isEmpty()) {
             throw new UsernameNotFoundException("User has no active roles: " + email);
         }
-        return new CustomUserDetails(user, (List<UserRolAssignment>) assignments,activeRoles, activeRoles.get(0).getId());
+
+        // Pasar solo asignaciones activas y roles activos
+        return new CustomUserDetails(user, activeAssignments, activeRoles, activeRoles.get(0).getId());
     }
 }
-

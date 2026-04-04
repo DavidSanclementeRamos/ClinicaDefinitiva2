@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+
 /**
  * Política RBAC centralizada — define permisos base por rol.
  *
@@ -20,36 +21,58 @@ import java.util.Set;
  *
  * Esta es la ÚNICA clase que debes modificar para cambios RBAC.
  *
- * MATRIZ DE PERMISOS:
- * ┌─────────────────────┬─────────────┬──────────┬─────────┬──────────┬──────────────┐--------------
- * │ Recurso             │ ADMINISTRATOR│RECEPTIONIST│ DENTIST │ PATIENT  │  GUARDIAN    │
- * ├─────────────────────┼─────────────┼──────────┼─────────┼──────────┼──────────────┤_______________
- * │ ROLE                │ CRUD + admin │   -      │   -     │    -     │      -       │
- * │ ASSIGNMENT          │ CRUD completo│   -      │   -     │    -     │      -       │
- * │ USER_IDENTITY       │ CRUD + admin │   -      │   -     │    -     │      -       │
- * │ PATIENT             │ R           │ CRU      │  R(*)   │  RU(*)   │   RU(*)      │
- * │ DENTIST             │ R          │ CRUD(*) │   -     │    -     │      -       │
- * │ GUARDIAN            │ R           │ CRU      │   -     │    -     │   RU(*)      │
- * │ RECEPTIONIST        │ R           │ R(self)  │   -     │    -     │      -       │
- * │ APPOINTMENT         │ R           │ CRUD+ops │ R+COMPL │   R      │    CR        │
- * │ AVAILABILITY        │ R           │   -      │ CRUD    │    -     │      -       │
- * │ SHIFT               │ R           │ CRU      │  RU     │    -     │      -       │
- * │ PROVIDED_SERVICE    │ R           │ RU       │ CRU(*) │   R      │      R       │
- * │ INVOICE             │ CRUD        │ CRU      │  R      │   R      │      R       │
- * │ PAYMENT             │ CRUD        │ R        │  R      │   R      │      R       │
- * │ RATE                │ CRUD        │  -       │  R      │    -     │      -       │
- * │ CONTRACT            │ CRUD        │  -       │   -     │    -     │      -       │
- * │ JOURNAL_ENTRY       │ CRUD        │  -       │   -     │    -     │      -       │
- * │ COMPANY             │ CRUD        │  -       │   -     │    -     │      -       │
- * │ ADMINISTRATIVE_REPORT│ CRUD       │ R        │  R      │    -     │      -       │
- * └─────────────────────┴─────────────┴──────────┴─────────┴──────────┴──────────────┘____________
+ * LEYENDA DE LA MATRIZ
+ * ─────────────────────────────────────────────────────────────────────────────
+ *  ✓       = permitido sin restricciones adicionales
+ *  ✓(RRHH) = permitido solo si sector == HUMAN_RESOURCES   → SectorBasedPolicy
+ *  ✓(BILL) = permitido solo si sector == BILLING           → SectorBasedPolicy
+ *  ✓(ADMI) = permitido solo si sector == ADMINISTRATION    → SectorBasedPolicy
+ *  ✓(MEDR) = permitido solo si sector == MEDICAL_RECORDS   → SectorBasedPolicy
+ *  ✓(OWN)  = permitido solo si el recurso pertenece al actor → OwnershipPolicy
+ *  ✓(ESP)  = permitido solo para servicios de su especialidad → SpecialtyBasedPolicy
+ *  -       = denegado sin excepción (no en catálogo de este rol)
  *
- * (*) Restricciones ABAC adicionales evaluadas por DefaultAuthorizationHelper:
- *   - DENTIST READ PATIENT: solo pacientes asignados (SpecialtyBasedPolicy)
- *   - PATIENT/GUARDIAN RU PATIENT: solo sus propios datos (OwnershipPolicy)
- *   - GUARDIAN RU GUARDIAN: solo sus propios datos (OwnershipPolicy)
- *   - RECEPTIONIST DELETE DENTIST: solo si es del sector RRHH (SectorBasedPolicy)
- *   - DENTIST CRU PROVIDED_SERVICE: solo servicios de su especialidad (SpecialtyBasedPolicy)
+ * ┌──────────────────────────┬─────────────┬──────────────────────────────────┬──────────┬──────────┬────────────┐
+ * │ Recurso                  │ ADMINISTRATOR│         RECEPTIONIST             │  DENTIST │  PATIENT │  GUARDIAN  │
+ * │                          │             │ (sector governs sensitive ops)   │          │          │            │
+ * ├──────────────────────────┼─────────────┼──────────────────────────────────┼──────────┼──────────┼────────────┤
+ * │ ROLE                     │ CRUD+admin  │               -                  │    -     │    -     │     -      │
+ * │ ASSIGNMENT               │ CRUD+ops    │               -                  │    -     │    -     │     -      │
+ * │ USER_IDENTITY            │ CRUD+ops    │               -                  │    -     │    -     │     -      │
+ * ├──────────────────────────┼─────────────┼──────────────────────────────────┼──────────┼──────────┼────────────┤
+ * │ PATIENT                  │ R           │ C ✓ / R ✓ / U ✓(sector*)        │ R ✓(ESP) │ RU ✓(OWN)│ RU ✓(OWN) │
+ * │ DENTIST                  │ R           │ C ✓(RRHH) / R ✓ / U ✓(RRHH)    │    -     │    -     │     -      │
+ * │                          │             │ D ✓(RRHH) / SUSPEND ✓(RRHH)     │          │          │            │
+ * │ GUARDIAN                 │ R           │ CRU ✓                            │    -     │    -     │ RU ✓(OWN)  │
+ * │ RECEPTIONIST             │ R           │ R ✓ / C ✓(RRHH) / U ✓(RRHH)    │    -     │    -     │     -      │
+ * │                          │             │ D ✓(RRHH) / SUSPEND ✓(RRHH)     │          │          │            │
+ * ├──────────────────────────┼─────────────┼──────────────────────────────────┼──────────┼──────────┼────────────┤
+ * │ APPOINTMENT              │ R           │ CRUD + CANCEL/RESCHEDULE/SCHED ✓ │ R+COMPL  │ R ✓      │ CR+CANCEL ✓│
+ * │ AVAILABILITY             │ R           │               -                  │ CRUD ✓   │    -     │     -      │
+ * │ SHIFT                    │ R           │ R ✓ / C ✓(RRHH) / U ✓(RRHH)    │ RU ✓     │    -     │     -      │
+ * │                          │             │ D ✓(RRHH)                        │          │          │            │
+ * ├──────────────────────────┼─────────────┼──────────────────────────────────┼──────────┼──────────┼────────────┤
+ * │ PROVIDED_SERVICE         │ R           │ R ✓ / U ✓(ADMI)                 │ CRU ✓(ESP)│ R ✓     │ R ✓        │
+ * ├──────────────────────────┼─────────────┼──────────────────────────────────┼──────────┼──────────┼────────────┤
+ * │ INVOICE                  │ CRUD+ops    │ R ✓ / C ✓(BILL) / U ✓(BILL)     │ R ✓      │ R ✓      │ R ✓        │
+ * │                          │             │ D ✓(BILL) / APPROVE ✓(BILL)      │          │          │            │
+ * │                          │             │ REVERSE ✓(BILL) / POST ✓(BILL)   │          │          │            │
+ * │ PAYMENT                  │ CRUD        │ R ✓ / C ✓(BILL) / U ✓(BILL)     │ R ✓      │ R ✓      │ R ✓        │
+ * │                          │             │ D ✓(BILL)                        │          │          │            │
+ * │ RATE                     │ CRUD        │ R ✓                              │ R ✓      │    -     │     -      │
+ * │ CONTRACT                 │ CRUD        │ R ✓ / C ✓(ADMI) / U ✓(ADMI)     │    -     │    -     │     -      │
+ * │                          │             │ D ✓(ADMI)                        │          │          │            │
+ * │ JOURNAL_ENTRY            │ CRUD+ops    │               -                  │    -     │    -     │     -      │
+ * ├──────────────────────────┼─────────────┼──────────────────────────────────┼──────────┼──────────┼────────────┤
+ * │ COMPANY                  │ CRUD        │ R ✓ / U ✓(ADMI)                 │    -     │    -     │     -      │
+ * │ ADMINISTRATIVE_REPORT    │ CRUD        │ R ✓ / C ✓(ADMI) / U ✓(ADMI)     │ R ✓      │    -     │     -      │
+ * │                          │             │ D ✓(ADMI)                        │          │          │            │
+ * └──────────────────────────┴─────────────┴──────────────────────────────────┴──────────┴──────────┴────────────┘
+ *
+ * (*) PATIENT UPDATE para RECEPTIONIST:
+ *   - datos básicos  (sensitiveData=false) → sector RECEPTION / CUSTOMER_SERVICE / CALL_CENTER
+ *   - datos sensibles (sensitiveData=true) → sector MEDICAL_RECORDS
+ *   Ambos casos gestionados por SectorBasedPolicy.
  */
 public class RoleBasedPolicy implements PermissionPolicy {
 
@@ -167,23 +190,62 @@ public class RoleBasedPolicy implements PermissionPolicy {
     // ─────────────────────────────────────────────────────────────────────────
     // RECEPTIONIST: opera agenda, gestiona actores del sector, facturación básica
     // ─────────────────────────────────────────────────────────────────────────
+    
+
+    /**
+     * RECEPTIONIST: rol polivalente de clínica dental.
+     *
+     * Sus permisos base cubre todas las funciones operativas posibles.
+     * Las operaciones sensibles están gateadas por SectorBasedPolicy:
+     *
+     *   HUMAN_RESOURCES → gestión de personal (dentistas, recepcionistas, turnos)
+     *   BILLING         → gestión financiera  (facturas, pagos)
+     *   ADMINISTRATION  → configuración       (empresa, contratos, servicios, reportes)
+     *   MEDICAL_RECORDS → datos clínicos      (actualización sensible de pacientes)
+     *
+     * Un recepcionista de Recepción solo puede hacer lo marcado como ✓ sin gate.
+     * Un recepcionista de RRHH puede hacer lo anterior + ops marcadas ✓(RRHH).
+     * Y así sucesivamente.
+     */
     private static void configureReceptionistPermissions() {
         Set<Permission> permissions = new HashSet<>();
 
-        // Gestión de actores
+        // ── PATIENT ────────────────────────────────────────────────────────
+        // CREATE: registro de nuevos pacientes (datos básicos) — sin gate
+        // READ:   consulta general — sin gate
+        // UPDATE: SectorBasedPolicy distingue datos básicos (RECEPTION/CS/CC)
+        //         vs. datos sensibles (MEDICAL_RECORDS) via atributo "sensitiveData"
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.CREATE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.READ)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.UPDATE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.CREATE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.READ)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.UPDATE)));
-        // DELETE DENTIST: tiene restricción ABAC → solo sector RRHH (SectorBasedPolicy)
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.DELETE)));
+
+        // ── GUARDIAN ───────────────────────────────────────────────────────
+        // Registro y gestión de tutores — sin gate
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.GUARDIAN), a(ActionCatalog.BasicAction.CREATE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.GUARDIAN), a(ActionCatalog.BasicAction.READ)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.GUARDIAN), a(ActionCatalog.BasicAction.UPDATE)));
 
-        // Gestión de agenda
+        // ── DENTIST ────────────────────────────────────────────────────────
+        // READ: cualquier recepcionista necesita ver dentistas para agendar citas
+        // CREATE/UPDATE/DELETE/SUSPEND: exclusivo de RRHH → SectorBasedPolicy
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.DELETE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.DENTIST), a(ActionCatalog.BasicAction.SUSPEND)));
+
+        // ── RECEPTIONIST ───────────────────────────────────────────────────
+        // READ: consulta de compañeros — sin gate
+        // CREATE/UPDATE/DELETE/SUSPEND: gestión de personal → SectorBasedPolicy (RRHH)
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RECEPTIONIST), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RECEPTIONIST), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RECEPTIONIST), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RECEPTIONIST), a(ActionCatalog.BasicAction.DELETE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RECEPTIONIST), a(ActionCatalog.BasicAction.SUSPEND)));
+
+        // ── APPOINTMENT ────────────────────────────────────────────────────
+        // Gestión completa de citas — función central de cualquier recepcionista
+        // Sin gate: la agenda es responsabilidad de todos en front-desk
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.CREATE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.READ)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.UPDATE)));
@@ -192,22 +254,65 @@ public class RoleBasedPolicy implements PermissionPolicy {
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.RESCHEDULE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.SCHEDULE)));
 
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.CREATE)));
+        // ── SHIFT ──────────────────────────────────────────────────────────
+        // READ: cualquier recepcionista consulta turnos para coordinar agenda
+        // CREATE/UPDATE/DELETE: gestión de turnos de personal → SectorBasedPolicy (RRHH)
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.CREATE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.DELETE)));
 
-        // Servicios (lectura y actualización administrativa)
+        // ── PROVIDED_SERVICE ───────────────────────────────────────────────
+        // READ: cualquier recepcionista informa a pacientes sobre los servicios
+        // UPDATE: solo admin puede cambiar datos/precios del catálogo → SectorBasedPolicy (ADMI)
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.READ)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.UPDATE)));
 
-        // Facturación básica
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.CREATE)));
+        // ── INVOICE ────────────────────────────────────────────────────────
+        // READ: cualquier recepcionista puede consultar facturas para informar al paciente
+        // Mutaciones: solo Facturación → SectorBasedPolicy (BILLING)
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.CREATE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.UPDATE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.DELETE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.APPROVE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.REVERSE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.INVOICE), a(ActionCatalog.BasicAction.POST)));
 
-        // Reportes administrativos (solo lectura)
+        // ── PAYMENT ────────────────────────────────────────────────────────
+        // READ: cualquier recepcionista puede verificar si un pago está registrado
+        // Mutaciones: solo Facturación → SectorBasedPolicy (BILLING)
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PAYMENT), a(ActionCatalog.BasicAction.DELETE)));
+
+        // ── RATE ───────────────────────────────────────────────────────────
+        // Solo lectura: cualquier recepcionista necesita conocer tarifas para cotizar
+        // CREATE/UPDATE/DELETE de RATE es exclusivo de ADMINISTRATOR (no en este rol)
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.RATE), a(ActionCatalog.BasicAction.READ)));
+
+        // ── CONTRACT ───────────────────────────────────────────────────────
+        // READ: consulta general de contratos — sin gate
+        // Mutaciones: exclusivo de Administración → SectorBasedPolicy (ADMINISTRATION)
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.CONTRACT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.CONTRACT), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.CONTRACT), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.CONTRACT), a(ActionCatalog.BasicAction.DELETE)));
+
+        // ── COMPANY ────────────────────────────────────────────────────────
+        // READ: cualquier recepcionista conoce los datos básicos de la empresa
+        // UPDATE: solo Administración → SectorBasedPolicy (ADMINISTRATION)
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.COMPANY), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.COMPANY), a(ActionCatalog.BasicAction.UPDATE)));
+
+        // ── ADMINISTRATIVE_REPORT ──────────────────────────────────────────
+        // READ: cualquier recepcionista puede consultar reportes
+        // Mutaciones: exclusivo de Administración → SectorBasedPolicy (ADMINISTRATION)
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.UPDATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.DELETE)));
 
         ROLE_PERMISSIONS.put(RolEnum.RECEPTIONIST, permissions);
     }

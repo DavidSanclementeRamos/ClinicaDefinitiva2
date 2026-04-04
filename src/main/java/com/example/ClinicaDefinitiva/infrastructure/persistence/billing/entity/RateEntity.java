@@ -53,6 +53,10 @@ public class RateEntity {
     public LocalDateTime getValidUntil()        { return validUntil; }
     public String getStatus()                   { return status; }
 
+    
+     public void setId(Long id) {
+        this.id = id;
+    }
     public void setDentalService(DentalServiceEntity dentalService) { this.dentalService = dentalService; }
     public void setContract(ContractEntity contract)                { this.contract = contract; }
     public void setPayerType(String payerType)                      { this.payerType = payerType; }
