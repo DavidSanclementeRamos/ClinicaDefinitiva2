@@ -124,7 +124,9 @@ public class ReceptionApplicationService implements ReceptionUseCase {
             requesterRolId,
             ResourceCatalog.BasicResource.RECEPTIONIST,
             ActionCatalog.BasicAction.CREATE,
-            AuthorizationContext.builder().build()
+            AuthorizationContext.builder()
+                    
+                    .build()
         );
 
         Receptionist receptionist = Receptionist.registerReceptionist(

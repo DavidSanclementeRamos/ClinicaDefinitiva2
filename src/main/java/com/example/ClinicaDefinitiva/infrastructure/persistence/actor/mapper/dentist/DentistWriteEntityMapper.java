@@ -41,7 +41,7 @@ public class DentistWriteEntityMapper {
         
         // AvailabilityStatus
         if (domain.getAvailabilityStatus() != null) {
-            entity.setAvailabilityStatus(domain.getAvailabilityStatus().getDescription());
+            entity.setAvailabilityStatus(domain.getAvailabilityStatus().getValue().name());
         }
         
         // Fechas

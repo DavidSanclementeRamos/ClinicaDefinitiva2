@@ -21,22 +21,30 @@ import java.time.Instant;
  * Implementación ABAC de AuthorizationHelper.
  *
  * RESPONSABILIDAD: validar políticas contextuales (ABAC).
- *   - SectorBasedPolicy: ¿Este RECEPTIONIST está en el sector correcto?
- *   - OwnershipPolicy:   ¿Este PATIENT accede solo a sus propios datos?
+ *   - SectorBasedPolicy:    ¿Este RECEPTIONIST está en el sector correcto?
+ *   - OwnershipPolicy:      ¿Este PATIENT/GUARDIAN accede solo a sus propios datos?
  *   - SpecialtyBasedPolicy: ¿Este DENTIST tiene la especialidad del servicio?
  *
- * NO hace verificación RBAC base — eso ya lo hizo @RequiresPermission (AOP).
+ * NO evalúa RBAC base — eso ya lo hizo @RequiresPermission (AOP).
  *
- * CUÁNDO CARGAR EL RECEPTIONIST:
- * Solo cuando la operación específica lo requiere según SectorBasedPolicy:
- *   → DELETE sobre DENTIST
- * Para CUALQUIER otro recurso o acción, NO se busca el receptionist.
+ * ─────────────────────────────────────────────────────────────────────────────
+ * CUÁNDO CARGAR EL RECEPTIONIST
+ * ─────────────────────────────────────────────────────────────────────────────
+ * La decisión se delega a authorizationService.requiresSectorContext(), que a su
+ * vez consulta SectorBasedPolicy.appliesTo(). De esta forma la única fuente de
+ * verdad sobre "qué operaciones necesitan sector" es SectorBasedPolicy.SECTOR_REQUIREMENTS.
  *
- * Por qué el diseño anterior estaba mal:
- * El código anterior cargaba el receptionist para TODO recurso que no fuera
- * PATIENT o GUARDIAN. Eso significaba que un ADMINISTRATOR intentando leer
- * un ROLE fallaba porque no era receptionist. El error era confundir
- * "quién es el usuario" con "qué tipo de empleado es".
+ * Añadir una nueva operación gateada por sector solo requiere agregar una entrada
+ * al mapa de SectorBasedPolicy. Este helper se actualiza automáticamente.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * IMPORTANTE: sector como nombre del enum, no como descripción
+ * ─────────────────────────────────────────────────────────────────────────────
+ * El SecurityContext almacena el sector usando Sector.toString() que devuelve
+ * el nombre del enum ("HUMAN_RESOURCES", "BILLING"…).
+ * SectorBasedPolicy lo parsea con Sector.fromString() → Type.valueOf().
+ * Usar getDescription() ("Recursos Humanos") causaría que el parse fallara
+ * silenciosamente y la política denegara toda operación de sector.
  */
 @Service
 public class DefaultAuthorizationHelper implements AuthorizationHelper {
@@ -67,9 +75,9 @@ public class DefaultAuthorizationHelper implements AuthorizationHelper {
         long startTime = System.nanoTime();
 
         try {
-            // 1. Cargar receptionist SOLO si la operación específica lo requiere
+            // 1. Cargar receptionist solo si SectorBasedPolicy aplica a esta operación
             Receptionist receptionist = null;
-            if (requiresSectorValidation(resource, action)) {
+            if (authorizationService.requiresSectorContext(resource, action)) {
                 receptionist = getReceptionistOrThrow(requesterId);
             }
 
@@ -78,7 +86,7 @@ public class DefaultAuthorizationHelper implements AuthorizationHelper {
                     requesterId, resource, action, receptionist, authContext
             );
 
-            // 3. Validar solo políticas ABAC (RBAC ya fue validado por @RequiresPermission)
+            // 3. Validar políticas ABAC (RBAC ya fue validado por @RequiresPermission)
             boolean authorized = authorizationService.isAuthorizedByContext(requesterRolId, securityContext);
 
             // 4. Auditar decisión
@@ -128,26 +136,8 @@ public class DefaultAuthorizationHelper implements AuthorizationHelper {
     // ─────────────────────────────────────────────────────────────────────────
 
     /**
-     * Determina si la operación específica requiere cargar datos del receptionist
-     * para validar sector.
-     *
-     * Regla: solo DELETE sobre DENTIST (única operación donde SectorBasedPolicy.appliesTo() = true).
-     * Para CUALQUIER otro recurso/acción, no se necesita el receptionist.
-     *
-     * Esto está alineado con SectorBasedPolicy.appliesTo():
-     *   ActionCatalog.DELETE + ResourceCatalog.DENTIST → true
-     *   todo lo demás → false
-     */
-    private boolean requiresSectorValidation(
-            ResourceCatalog.BasicResource resource,
-            ActionCatalog.BasicAction action) {
-        return resource == ResourceCatalog.BasicResource.DENTIST
-                && action == ActionCatalog.BasicAction.DELETE;
-    }
-
-    /**
-     * Obtiene el receptionist o lanza excepción de negocio.
-     * Solo se llama cuando requiresSectorValidation() == true.
+     * Obtiene el receptionist asociado al requesterId o lanza excepción de negocio.
+     * Solo se llama cuando requiresSectorContext() == true.
      */
     private Receptionist getReceptionistOrThrow(UserIdentityId requesterId) {
         return receptionRepository.findByUserId(requesterId)
@@ -160,6 +150,10 @@ public class DefaultAuthorizationHelper implements AuthorizationHelper {
     /**
      * Construye SecurityContext mapeando AuthorizationContext (capa de aplicación)
      * a SecurityContext (capa de dominio).
+     *
+     * El sector se almacena usando Sector.toString() (nombre del enum: "HUMAN_RESOURCES")
+     * porque SectorBasedPolicy lo parsea con Type.valueOf(). Usar getDescription()
+     * produciría "Recursos Humanos" que Type.valueOf() no reconoce.
      */
     private SecurityContext buildSecurityContext(
             UserIdentityId requesterId,
@@ -175,9 +169,10 @@ public class DefaultAuthorizationHelper implements AuthorizationHelper {
 
         SecurityContext.Builder builder = SecurityContext.builder(permission, requesterId);
 
-        // Agregar sector solo si se cargó el receptionist
+        // Sector: toString() devuelve el nombre del enum ("HUMAN_RESOURCES"),
+        // NO getDescription() que devuelve la descripción en español ("Recursos Humanos")
         if (receptionist != null) {
-            builder.withSector(receptionist.getSector().getDescription());
+            builder.withSector(receptionist.getSector().toString());
         }
 
         // Mapear atributos del AuthorizationContext

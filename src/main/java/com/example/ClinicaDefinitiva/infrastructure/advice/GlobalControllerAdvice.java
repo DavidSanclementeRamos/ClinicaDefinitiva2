@@ -35,15 +35,13 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.accoun
 import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.operations.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authentication.AuthenticationVoError;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.authentication.UserIdentityError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.billing.*;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments.TreatmentError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.DomainContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.billing.*;
-import com.example.ClinicaDefinitiva.domain.errors.catalog.clinicalTreatments.TreatmentError; 
-
-
 import com.example.ClinicaDefinitiva.domain.exceptions.*;
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import jakarta.validation.ConstraintViolationException;
@@ -68,13 +66,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.ClinicaDefinitiva.util.RequestIdFilter.getRequestId;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-/**
- * Manejador global de excepciones para la capa de infraestructura REST.
- * Traduce las excepciones del dominio y de infraestructura a respuestas HTTP
- * estructuradas según el catálogo de errores clínicos.
- */
 @RestControllerAdvice
 public class GlobalControllerAdvice {
 
@@ -82,21 +74,21 @@ public class GlobalControllerAdvice {
 
     // ==================== ERRORES DE DOMINIO ====================
 
-    /**
-     * Maneja violaciones de reglas de negocio simples.
-     */
     @ExceptionHandler(BusinessRuleViolationException.class)
     public ResponseEntity<ErrorResponse> handleBusinessRuleViolation(BusinessRuleViolationException ex) {
         String usuario = getCurrentUser();
         String requestId = getRequestId();
 
+        String codigoEntidad = getCodigoEntidadSeguro(ex.getContexto());
+        String nombreCodigoEntidad = getNombreCodigoEntidadSeguro(ex.getContexto());
+
         logger.warn("Regla de negocio violada [requestId={}, usuario={}, código={}, contexto={}]: {}",
-                requestId, usuario, ex.getCatalogo().getCode(), ex.getContexto().getCodeEntity().name(), ex.getMessage());
+                requestId, usuario, ex.getCatalogo().getCode(), nombreCodigoEntidad, ex.getMessage());
 
         ErrorResponse response = new ErrorResponse(
                 ex.getCatalogo().getCode(),
-                ex.getContexto().getCodeEntity().toString(),
-                ex.getContexto().getCodeEntity().name(),
+                codigoEntidad,
+                nombreCodigoEntidad,
                 usuario,
                 ex.getCatalogo().getDefaultMessage(),
                 List.of(ex.getMessage()),
@@ -108,9 +100,6 @@ public class GlobalControllerAdvice {
         return ResponseEntity.status(ex.getCatalogo().getSuggestedHttpStatus()).body(response);
     }
 
-    /**
-     * Maneja múltiples violaciones de reglas de negocio (agregadas).
-     */
     @ExceptionHandler(AggregateBusinessRuleViolationException.class)
     public ResponseEntity<ErrorResponse> handleAggregateBusinessRuleViolation(AggregateBusinessRuleViolationException ex) {
         String usuario = getCurrentUser();
@@ -120,13 +109,16 @@ public class GlobalControllerAdvice {
                 .map(detail -> detail.getCode().getCode())
                 .collect(Collectors.toList());
 
+        String codigoEntidad = getCodigoEntidadSeguro(ex.getContexto());
+        String nombreCodigoEntidad = getNombreCodigoEntidadSeguro(ex.getContexto());
+
         logger.warn("Múltiples reglas de negocio violadas [requestId={}, usuario={}, totalViolaciones={}]: {}",
                 requestId, usuario, ex.getTotalViolaciones(), detalles);
 
         ErrorResponse response = new ErrorResponse(
                 ex.getCatalogo().getCode(),
-ex.getContexto().getCodeEntity().toString(),
-                ex.getContexto().getCodeEntity().name(),
+                codigoEntidad,
+                nombreCodigoEntidad,
                 usuario,
                 ex.getCatalogo().getDefaultMessage(),
                 detalles,
@@ -138,21 +130,21 @@ ex.getContexto().getCodeEntity().toString(),
         return ResponseEntity.status(ex.getCatalogo().getSuggestedHttpStatus()).body(response);
     }
 
-    /**
-     * Maneja errores de validación de Value Objects.
-     */
     @ExceptionHandler(ValueObjectValidationException.class)
     public ResponseEntity<ErrorResponse> handleValueObjectValidation(ValueObjectValidationException ex) {
         String usuario = getCurrentUser();
         String requestId = getRequestId();
+
+        String codigoEntidad = getCodigoEntidadSeguro(ex.getContexto());
+        String nombreCodigoEntidad = getNombreCodigoEntidadSeguro(ex.getContexto());
 
         logger.warn("Validación de Value Object falló [requestId={}, usuario={}, código={}]: {}",
                 requestId, usuario, ex.getCatalogo().getCode(), ex.getMessage());
 
         ErrorResponse response = new ErrorResponse(
                 ex.getCatalogo().getCode(),
-ex.getContexto().getCodeEntity().toString(),
-                ex.getContexto().getCodeEntity().name(),
+                codigoEntidad,
+                nombreCodigoEntidad,
                 usuario,
                 ex.getCatalogo().getDefaultMessage(),
                 List.of(ex.getMessage()),
@@ -333,7 +325,7 @@ ex.getContexto().getCodeEntity().toString(),
             mensajeAmigable = info.mensaje;
             status = HttpStatus.CONFLICT;
             logger.warn("Violación de unicidad [requestId={}, usuario={}, recurso={}]: {}",
-                    requestId, usuario, context.getCodeEntity().name(), mensajeError);
+                    requestId, usuario, getNombreCodigoEntidadSeguro(context), mensajeError);
         } else if (mensajeError.contains("cannot be null") || mensajeError.contains("NOT NULL")) {
             IntegrityErrorInfo info = parseNotNullError(mensajeError);
             error = info.error;
@@ -341,7 +333,7 @@ ex.getContexto().getCodeEntity().toString(),
             mensajeAmigable = info.mensaje;
             status = HttpStatus.BAD_REQUEST;
             logger.warn("Campo obligatorio nulo [requestId={}, usuario={}, recurso={}]: {}",
-                    requestId, usuario, context.getCodeEntity().name(), mensajeError);
+                    requestId, usuario, getNombreCodigoEntidadSeguro(context), mensajeError);
         } else if (mensajeError.contains("foreign key") || mensajeError.contains("FOREIGN KEY")) {
             IntegrityErrorInfo info = parseForeignKeyError(mensajeError);
             error = info.error;
@@ -349,7 +341,7 @@ ex.getContexto().getCodeEntity().toString(),
             mensajeAmigable = info.mensaje;
             status = HttpStatus.CONFLICT;
             logger.warn("Violación de clave foránea [requestId={}, usuario={}, recurso={}]: {}",
-                    requestId, usuario, context.getCodeEntity().name(), mensajeError);
+                    requestId, usuario, getNombreCodigoEntidadSeguro(context), mensajeError);
         } else if (mensajeError.contains("Data too long")) {
             IntegrityErrorInfo info = parseDataTooLongError(mensajeError);
             error = info.error;
@@ -357,7 +349,7 @@ ex.getContexto().getCodeEntity().toString(),
             mensajeAmigable = info.mensaje;
             status = HttpStatus.BAD_REQUEST;
             logger.warn("Longitud de campo excedida [requestId={}, usuario={}, recurso={}]: {}",
-                    requestId, usuario, context.getCodeEntity().name(), mensajeError);
+                    requestId, usuario, getNombreCodigoEntidadSeguro(context), mensajeError);
         } else {
             error = new GenericErrorCatalog(
                     "ERR_DATA_INTEGRITY",
@@ -373,8 +365,8 @@ ex.getContexto().getCodeEntity().toString(),
 
         ErrorResponse response = new ErrorResponse(
                 error.getCode(),
-                context.getCodeEntity().toString(),
-                context.getCodeEntity().name(),
+                getCodigoEntidadSeguro(context),
+                getNombreCodigoEntidadSeguro(context),
                 usuario,
                 error.getDefaultMessage(),
                 List.of(mensajeAmigable),
@@ -389,12 +381,10 @@ ex.getContexto().getCodeEntity().toString(),
     // ==================== ERRORES DE RECURSO NO ENCONTRADO ====================
 
     @ExceptionHandler({
-            // Actor
             DentistNotFoundException.class,
             GuardianNoFoundException.class,
             PatientNotFoundException.class,
             ReceptionistNotFoundException.class,
-            // Accounting
             AdministrativeReportNotFoundException.class,
             CompanyNotFoundException.class,
             ContractNotFoundException.class,
@@ -402,21 +392,14 @@ ex.getContexto().getCodeEntity().toString(),
             LedgerAccountNotFoundException.class,
             OpeningBalanceNotFoundException.class,
             ThirdPartyNotFoundException.class,
-            // Authorization
             RolNotFoundException.class,
             UserRolAssignmentNotFoundException.class,
-            // Operations
             ShiftNotFoundException.class,
-            // Authentication
             UserIdentityNoFoundException.class,
-            // Billing
             InvoiceNotFoundException.class,
             RateNotFoundException.class,
-            // Clinical Treatments
             TreatmentNotFoundException.class,
-            // Dental Service
             ProvidedServiceNotFoundException.class,
-            // Schedule
             AppointmentNotFoundException.class
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(RuntimeException ex) {
@@ -431,8 +414,8 @@ ex.getContexto().getCodeEntity().toString(),
 
         ErrorResponse response = new ErrorResponse(
                 error.getCode(),
-                context.getCodeEntity().toString(),
-                context.getCodeEntity().name(),
+                getCodigoEntidadSeguro(context),
+                getNombreCodigoEntidadSeguro(context),
                 usuario,
                 error.getDefaultMessage(),
                 List.of(ex.getMessage()),
@@ -548,6 +531,22 @@ ex.getContexto().getCodeEntity().toString(),
         } catch (Exception e) {
             return "anonymous";
         }
+    }
+
+    // -------------------- Métodos auxiliares seguros para CodeEntity --------------------
+
+    private String getCodigoEntidadSeguro(DomainContext context) {
+        if (context == null || context.getCodeEntity() == null) {
+            return "N/A";
+        }
+        return context.getCodeEntity().toString();
+    }
+
+    private String getNombreCodigoEntidadSeguro(DomainContext context) {
+        if (context == null || context.getCodeEntity() == null) {
+            return "N/A";
+        }
+        return context.getCodeEntity().name();
     }
 
     // -------------------- Mapeos para DataIntegrityViolationException --------------------
@@ -735,8 +734,6 @@ ex.getContexto().getCodeEntity().toString(),
                 "El valor ingresado es demasiado largo"
         );
     }
-    
-
 
     // -------------------- Mapeos para NotFoundException --------------------
 

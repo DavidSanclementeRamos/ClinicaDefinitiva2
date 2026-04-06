@@ -19,7 +19,7 @@ public class ReceptionWriteEntityMapper {
         entity.setPerson(mapToEmbeddable(domain.getPerson()));
         
         if (domain.getSector() != null) {
-            entity.setSector(domain.getSector().getDescription());
+            entity.setSector(domain.getSector().getValue().name());
         }
         
         entity.setLastUpdate(domain.getLastUpdate());
