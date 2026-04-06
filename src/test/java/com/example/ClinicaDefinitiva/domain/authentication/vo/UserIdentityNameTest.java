@@ -40,7 +40,7 @@ class UserIdentityNameTest {
     @Test
     @DisplayName("create() - nombre muy largo retorna Outcome fallido")
     void create_shouldReturnFailureForTooLong() {
-        Outcome<UserIdentityName> outcome = UserIdentityName.create("a".repeat(16));
+        Outcome<UserIdentityName> outcome = UserIdentityName.create("a".repeat(67));
         assertThat(outcome.isFailure()).isTrue();
     }
 
@@ -71,7 +71,7 @@ class UserIdentityNameTest {
     @Test
     @DisplayName("of() - nombre muy largo lanza excepción")
     void of_shouldThrowForTooLong() {
-        assertThatThrownBy(() -> UserIdentityName.of("a".repeat(16)))
+        assertThatThrownBy(() -> UserIdentityName.of("a".repeat(67)))
                 .isInstanceOf(ValueObjectValidationException.class);
     }
 }

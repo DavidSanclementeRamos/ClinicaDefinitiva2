@@ -19,8 +19,7 @@ public class GuardianWriteEntityMapper {
         entity.setPerson(mapToEmbeddable(domain.getPerson()));
         
         if (domain.getTypeGuardian() != null) {
-            entity.setGuardianType(domain.getTypeGuardian().getDescription());
-        }
+            entity.setGuardianType(domain.getTypeGuardian().getCode());           }
         
         entity.setLastUpdate(domain.getLastUpdate());
         

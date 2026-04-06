@@ -1,17 +1,22 @@
 
 package com.example.ClinicaDefinitiva.application.actor.dto.dentist;
 
+import java.util.Optional;
 
-/**
- * DTO para actualizar información de contacto
- */
-public record UpdateDentistContactDto (
-        //Long dentistId,
-        // Address
-        String street,
-        String city,
-        String state,
-        String country,
-        String postalCode,
-        String phoneNumber
-){}
+public record UpdateDentistContactDto(
+    Optional<String> street,
+    Optional<String> city,
+    Optional<String> state,
+    Optional<String> country,
+    Optional<String> postalCode,
+    Optional<String> phoneNumber
+) {
+    public UpdateDentistContactDto {
+        street = street == null ? Optional.empty() : street;
+        city = city == null ? Optional.empty() : city;
+        state = state == null ? Optional.empty() : state;
+        country = country == null ? Optional.empty() : country;
+        postalCode = postalCode == null ? Optional.empty() : postalCode;
+        phoneNumber = phoneNumber == null ? Optional.empty() : phoneNumber;
+    }
+}

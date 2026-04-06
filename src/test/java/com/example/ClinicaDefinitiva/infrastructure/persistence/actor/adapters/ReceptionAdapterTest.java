@@ -68,7 +68,7 @@ class ReceptionAdapterTest extends RepositoryTestBase {
         Receptionist receptionist = receptionRepository.findById(savedReceptionist.getId()).get();
         Address newAddress = Address.of("Calle Nueva 456", "Medellín", "Antioquia", "Colombia", "050001");
         PhoneNumber newPhone = PhoneNumber.of("3011234567");
-        receptionist.updateContactData(newAddress, newPhone);
+        receptionist.updateContactData(Optional.of(newAddress), Optional.of( newPhone));
         Receptionist updated = receptionRepository.save(receptionist);
 
         Optional<Receptionist> found = receptionRepository.findById(updated.getId());

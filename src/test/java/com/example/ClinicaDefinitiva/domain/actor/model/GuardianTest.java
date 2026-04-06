@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -84,7 +85,7 @@ class GuardianTest {
         Address newAddress = Address.of("Calle Nueva 456", "Medellín", "Antioquia", "Colombia", "050001");
         PhoneNumber newPhone = PhoneNumber.of("3011234567");
 
-        guardian.updateContactData(newAddress, newPhone);
+        guardian.updateContactData(Optional.of(newAddress),Optional.of( newPhone));
 
         assertThat(guardian.getPerson().getAddress()).isEqualTo(newAddress);
         assertThat(guardian.getPerson().getPhoneNumber()).isEqualTo(newPhone);
@@ -101,8 +102,16 @@ class GuardianTest {
         FullName newName = FullName.of("María", "Gómez");
         TypeGuardian newType = TypeGuardian.fromCode("PAPA");
 
-        guardian.updateSensitiveData(newBlood, newDob, newDni, "EPS456", newName, newType);
 
+            guardian.updateSensitiveData(
+        Optional.of(newBlood),
+        Optional.of(newDob),
+        Optional.of(newDni),
+        Optional.of("EPS456"),
+        Optional.of(newName),
+        Optional.of(newType)
+    );
+        
         assertThat(guardian.getPerson().getBloodType()).isEqualTo(newBlood);
         assertThat(guardian.getPerson().getDateOfBirth()).isEqualTo(newDob);
         assertThat(guardian.getPerson().getDni()).isEqualTo(newDni);

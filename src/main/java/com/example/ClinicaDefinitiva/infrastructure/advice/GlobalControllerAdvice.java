@@ -68,6 +68,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.ClinicaDefinitiva.util.RequestIdFilter.getRequestId;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Manejador global de excepciones para la capa de infraestructura REST.
@@ -734,6 +735,8 @@ ex.getContexto().getCodeEntity().toString(),
                 "El valor ingresado es demasiado largo"
         );
     }
+    
+
 
     // -------------------- Mapeos para NotFoundException --------------------
 

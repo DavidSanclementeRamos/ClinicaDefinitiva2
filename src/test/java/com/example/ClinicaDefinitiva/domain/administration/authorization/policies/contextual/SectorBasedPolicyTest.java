@@ -28,7 +28,7 @@ class SectorBasedPolicyTest {
     void sectorRRHH_allowed() {
         Permission permission = Permission.of(ResourceCatalog.of(ResourceCatalog.BasicResource.DENTIST),ActionCatalog.of(ActionCatalog.BasicAction.DELETE));
         SecurityContext context = SecurityContext.builder(permission, requesterId)
-                .withSector("RECURSOS_HUMANOS")
+                .withSector("HUMAN_RESOURCES")
                 .build();
 
         assertThat(policy.isAllowed(receptionistRol, context)).isTrue();

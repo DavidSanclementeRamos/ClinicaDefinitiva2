@@ -10,6 +10,7 @@ import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class Receptionist   {
 
@@ -40,24 +41,42 @@ public class Receptionist   {
 
 
 
-    public void updateContactData(Address address, PhoneNumber phoneNumber) {
-
-        this.person = person.withContactData(address, phoneNumber);
+public void updateContactData(Optional<Address> newAddress, Optional<PhoneNumber> newPhoneNumber) {
+    Address finalAddress = newAddress.orElse(this.person.getAddress());
+    PhoneNumber finalPhoneNumber = newPhoneNumber.orElse(this.person.getPhoneNumber());
+    
+    if (newAddress.isPresent() || newPhoneNumber.isPresent()) {
+        this.person = this.person.withContactData(finalAddress, finalPhoneNumber);
         this.lastUpdate = LocalDateTime.now();
     }
+}
 
-    public void updateSensitiveData(BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
-                                    String documentoEPS, FullName fullname, Sector sector) {
-
-        this.person = person.withSensitiveData(
-                bloodType,
-                dateOfBirth,
-                dni,
-                documentoEPS,
-                fullname);
-        this.lastUpdate = LocalDateTime.now();
-        this.sector = sector;
+public void updateSensitiveData(
+        Optional<BloodType> newBloodType,
+        Optional<DateOfBirth> newDateOfBirth,
+        Optional<Document> newDni,
+        Optional<String> newDocumentoEPS,
+        Optional<FullName> newFullName,
+        Optional<Sector> newSector) {
+    
+    if (newBloodType.isPresent() || newDateOfBirth.isPresent() || newDni.isPresent()
+        || newDocumentoEPS.isPresent() || newFullName.isPresent()) {
+        
+        BloodType finalBloodType = newBloodType.orElse(this.person.getBloodType());
+        DateOfBirth finalDateOfBirth = newDateOfBirth.orElse(this.person.getDateOfBirth());
+        Document finalDni = newDni.orElse(this.person.getDni());
+        String finalDocumentoEPS = newDocumentoEPS.orElse(this.person.getDocumentoEPS());
+        FullName finalFullName = newFullName.orElse(this.person.getFullname());
+        
+        this.person = this.person.withSensitiveData(
+            finalBloodType, finalDateOfBirth, finalDni, finalDocumentoEPS, finalFullName
+        );
     }
+    
+    newSector.ifPresent(s -> this.sector = s);
+    
+    this.lastUpdate = LocalDateTime.now();
+}
 
 
 

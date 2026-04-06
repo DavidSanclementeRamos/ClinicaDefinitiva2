@@ -41,17 +41,13 @@ public final class Address {
         return city.equalsIgnoreCase(expectedCity.trim());
     }
 
-    public String fullAddress() {
-        return street + ", " + city + ", " + state + ", " + country + " - " + postalCode;
-    }
+
 
     public String postalZone() {
         return postalCode.substring(0, Math.min(3, postalCode.length()));
     }
 
-    public String asText() {
-        return fullAddress();
-    }
+
 
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
@@ -79,11 +75,10 @@ public final class Address {
         return street;
     }
 
-    // methods utility
     @Override
-    public String toString() {
-        return fullAddress();
-    }
+public String toString() {
+    return street + "|" + city + "|" + state + "|" + country + "|" + postalCode;
+}
 
     @Override
     public boolean equals(Object o) {

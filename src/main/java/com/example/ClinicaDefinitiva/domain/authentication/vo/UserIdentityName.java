@@ -18,7 +18,7 @@ public final class UserIdentityName implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final int MIN_LENGTH = 3;
-    private static final int MAX_LENGTH = 15;
+    private static final int MAX_LENGTH = 30;
 
     private final String value;
 

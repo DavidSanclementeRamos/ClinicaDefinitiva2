@@ -7,6 +7,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -33,35 +34,47 @@ public class PatientWriteMapper {
         return GuardianId.fromLong(dto.guardianId());
     }
 
-    public Age toAge(UpdatePatientSensitiveDto dto) {
-        return Age.of(DateOfBirth.of(dto.dateOfBirth()));
+    // Address y PhoneNumber para contacto
+public Optional<Address> toAddress(UpdatePatientContactDto dto) {
+    if (dto.street().isEmpty() || dto.city().isEmpty() || dto.state().isEmpty() ||
+        dto.country().isEmpty() || dto.postalCode().isEmpty()) {
+        return Optional.empty();
     }
+    return Optional.of(Address.of(
+        dto.street().get(),
+        dto.city().get(),
+        dto.state().get(),
+        dto.country().get(),
+        dto.postalCode().get()
+    ));
+}
 
-    public BloodType toBloodType(UpdatePatientSensitiveDto dto) {
-        return BloodType.fromLabel(dto.bloodType());
-    }
+public Optional<PhoneNumber> toPhoneNumber(UpdatePatientContactDto dto) {
+    return dto.phoneNumber().map(PhoneNumber::of);
+}
 
-    public DateOfBirth toDateOfBirth(UpdatePatientSensitiveDto dto) {
-        return DateOfBirth.of(dto.dateOfBirth());
-    }
+// Campos sensibles
+public Optional<BloodType> toBloodType(UpdatePatientSensitiveDto dto) {
+    return dto.bloodType().map(BloodType::fromLabel);
+}
 
-    public Document toDocument(UpdatePatientSensitiveDto dto) {
-        return Document.of(dto.dni());
-    }
+public Optional<DateOfBirth> toDateOfBirth(UpdatePatientSensitiveDto dto) {
+    return dto.dateOfBirth().map(DateOfBirth::of);
+}
 
-    public String toDocumentEPS(UpdatePatientSensitiveDto dto) {
-        return dto.documentEPS();
-    }
+public Optional<Document> toDocument(UpdatePatientSensitiveDto dto) {
+    return dto.dni().map(Document::of);
+}
 
-    public FullName toFullName(UpdatePatientSensitiveDto dto) {
-        return FullName.of(dto.first(), dto.lastName());
-    }
+public Optional<String> toDocumentEPS(UpdatePatientSensitiveDto dto) {
+    return dto.documentEPS();
+}
 
-    public Address toAddress(UpdatePatientContactDto dto) {
-        return Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode());
+public Optional<FullName> toFullName(UpdatePatientSensitiveDto dto) {
+    if (dto.first().isEmpty() || dto.lastName().isEmpty()) {
+        return Optional.empty();
     }
-
-    public PhoneNumber toPhoneNumber(UpdatePatientContactDto dto) {
-        return PhoneNumber.of(dto.phoneNumber());
-    }
+    return Optional.of(FullName.of(dto.first().get(), dto.lastName().get()));
+}
+    
 }

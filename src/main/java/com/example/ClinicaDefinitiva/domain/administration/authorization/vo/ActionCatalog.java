@@ -20,6 +20,7 @@ public final class ActionCatalog {
          MARK_DELETED,
 
         CREATE_TEMPORARY,
+        CREATE_PERMANENT,
         REVOKE_ALL,
         REVOKE,
         

@@ -94,12 +94,12 @@ class DentistApplicationServiceTest {
 
     private UpdateDentistContactDto createUpdateContactDto() {
         return new UpdateDentistContactDto(
-            "Calle Nueva 456",
-            "Medellín",
-            "Antioquia",
-            "Colombia",
-            "050001",
-            "3011234567"
+            Optional.of("Calle Nueva 456"),
+            Optional.of("Medellín"),
+            Optional.of("Antioquia"),
+           Optional.of( "Colombia"),
+            Optional.of("050001"),
+            Optional.of("3011234567")
         );
     }
 
@@ -108,15 +108,15 @@ class DentistApplicationServiceTest {
             LocalTime.of(8, 0), LocalTime.of(17, 0), DayOfWeek.MONDAY, 40
         );
         return new UpdateDentistSensitiveDto(
-            "General Dentistry",
-            whDto,
-            "87654321",
-            "María",
-            "Gómez",
-            "35",
-            LocalDate.now().minusYears(35),
-            "A+",
-            "EPS456"
+            Optional.of("General Dentistry"),
+            Optional.of(whDto),
+            Optional.of("87654321"),
+            Optional.of("María"),
+            Optional.of("Gómez"),
+            Optional.of("35"),
+            Optional.of(LocalDate.now().minusYears(35)),
+            Optional.of("A+"),
+            Optional.of("EPS456")
         );
     }
 
@@ -187,33 +187,56 @@ class DentistApplicationServiceTest {
         assertThat(result.getContent().get(0)).isEqualTo(dto);
     }
 
+
+   
+  
     @Test
-    @DisplayName("save - debe crear dentista y retornar DTO")
-    void save_shouldCreateAndReturnDto() {
-        CreateDentistDto dto = mock(CreateDentistDto.class);
-        Person person = createPerson();
-        Specialties specialties = Specialties.of(Set.of(Specialty.of("General Dentistry")));
-        UserIdentityId userId = UserIdentityId.from(2L);
-        WorkingHours workingHours = WorkingHours.of(
-                LocalTime.of(8, 0), LocalTime.of(17, 0),
-                DayOfWeek.MONDAY, 40);
+@DisplayName("save - debe crear dentista y retornar DTO")
+void save_shouldCreateAndReturnDto() {
+    // Crear un DTO real con valores predecibles
+    CreateDentistDto dto = new CreateDentistDto(
+        "General Dentistry",
+        "AVAILABLE",
+        new WorkingHoursDto(LocalTime.of(8,0), LocalTime.of(17,0), DayOfWeek.MONDAY, 40),
+        "12345678",
+        "Juan",
+        "Pérez",
+        "30",
+        "3001234567",
+        LocalDate.now().minusYears(30),
+        "O+",
+        "EPS123",
+        2L,
+        LocalDateTime.now(),
+        "Calle 123",
+        "Bogotá",
+        "Cundinamarca",
+        "Colombia",
+        "110111"
+    );
 
-        when(dentistWriteMapper.toPerson(dto)).thenReturn(person);
-        when(dentistWriteMapper.toSpecialties(any())).thenReturn(specialties);
-        when(dentistWriteMapper.toUserIdentityId(dto)).thenReturn(userId);
-        when(dentistWriteMapper.toWorkingHours(any())).thenReturn(workingHours);
+    Person person = createPerson();
+    Specialties specialties = Specialties.of(Set.of(Specialty.of("General Dentistry")));
+    UserIdentityId userId = UserIdentityId.from(2L);
+    WorkingHours workingHours = WorkingHours.of(LocalTime.of(8,0), LocalTime.of(17,0), DayOfWeek.MONDAY, 40);
 
-        Dentist dentist = Dentist.registerDentist(person, specialties, userId, workingHours);
-        ReadDentistDto expectedDto = createReadDentistDto();
+    // Stubs necesarios (solo los que el servicio realmente usa)
+    when(dentistWriteMapper.toPerson(any(CreateDentistDto.class))).thenReturn(person);
+    when(dentistWriteMapper.toSpecialties(anyString())).thenReturn(specialties);
+    when(dentistWriteMapper.toUserIdentityId(any(CreateDentistDto.class))).thenReturn(userId);
+    when(dentistWriteMapper.toWorkingHours(any(WorkingHoursDto.class))).thenReturn(workingHours);
 
-        when(dentistRepository.save(any(Dentist.class))).thenReturn(dentist);
-        when(dentistReadMapper.toReadDto(dentist)).thenReturn(expectedDto);
+    Dentist dentist = Dentist.registerDentist(person, specialties, userId, workingHours);
+    ReadDentistDto expectedDto = createReadDentistDto();
 
-        ReadDentistDto result = service.save(dto, requesterId, requesterRolId);
+    when(dentistRepository.save(any(Dentist.class))).thenReturn(dentist);
+    when(dentistReadMapper.toReadDto(dentist)).thenReturn(expectedDto);
 
-        assertThat(result).isEqualTo(expectedDto);
-        verify(dentistRepository).save(any(Dentist.class));
-    }
+    ReadDentistDto result = service.save(dto, requesterId, requesterRolId);
+
+    assertThat(result).isEqualTo(expectedDto);
+    verify(dentistRepository).save(any(Dentist.class));
+}
 
    @Test
 @DisplayName("updateContactData - debe actualizar contacto")

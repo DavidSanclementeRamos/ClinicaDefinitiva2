@@ -6,6 +6,7 @@ import com.example.ClinicaDefinitiva.application.actor.dto.guardian.UpdateGuardi
 import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.guardian.CreateGuardianRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.guardian.UpdateGuardianContactRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.guardian.UpdateGuardianSensitiveRequest;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +19,6 @@ public class GuardianRestWriteMapper {
         return new CreateGuardianDto(
                 request.code(),
                 request.description(),
-                request.patientList(),
                 request.dni(),
                 request.first(),
                 request.lastName(),
@@ -35,36 +35,36 @@ public class GuardianRestWriteMapper {
                 request.country(),
                 request.postalCode()
         );
+        
     }
 
     // De REST → DTO de aplicación (actualizar contacto)
-    public UpdateGuardianContactDto toServiceUpdateContact(UpdateGuardianContactRequest request) {
-        if (request == null) return null;
+ public UpdateGuardianContactDto toServiceUpdateContact(UpdateGuardianContactRequest request) {
+    if (request == null) return null;
 
-        return new UpdateGuardianContactDto(
-                request.street(),
-                request.city(),
-                request.state(),
-                request.country(),
-                request.postalCode(),
-                request.phoneNumber()
-        );
-    }
+    return new UpdateGuardianContactDto(
+        Optional.ofNullable(request.street()),
+        Optional.ofNullable(request.city()),
+        Optional.ofNullable(request.state()),
+        Optional.ofNullable(request.country()),
+        Optional.ofNullable(request.postalCode()),
+        Optional.ofNullable(request.phoneNumber())
+    );
+}
 
-    // De REST → DTO de aplicación (actualizar datos sensibles) - CORREGIDO
-    public UpdateGuardianSensitiveDto toServiceUpdateSensitive(UpdateGuardianSensitiveRequest request) {
-        if (request == null) return null;
+   public UpdateGuardianSensitiveDto toServiceUpdateSensitive(UpdateGuardianSensitiveRequest request) {
+    if (request == null) return null;
 
-        return new UpdateGuardianSensitiveDto(
-                request.dni(),
-                request.first(),
-                request.lastName(),
-                request.age(),
-                request.dateOfBirth(),
-                request.bloodType(),
-                request.documentEPS(),
-                request.code(), 
-                request.description()
-        );
-    }
+    return new UpdateGuardianSensitiveDto(
+        Optional.ofNullable(request.dni()),
+        Optional.ofNullable(request.first()),
+        Optional.ofNullable(request.lastName()),
+        Optional.ofNullable(request.age()),
+        Optional.ofNullable(request.dateOfBirth()),
+        Optional.ofNullable(request.bloodType()),
+        Optional.ofNullable(request.documentEPS()),
+        Optional.ofNullable(request.code()),
+        Optional.ofNullable(request.description())
+    );
+}
 }

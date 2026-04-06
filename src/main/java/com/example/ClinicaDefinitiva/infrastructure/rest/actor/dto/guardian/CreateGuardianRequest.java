@@ -12,7 +12,6 @@ public record CreateGuardianRequest(
         String code,
         String description,
 
-        Page<PagePatientDto> patientList,
         // Person
        String dni,
              String first,

@@ -12,6 +12,7 @@ import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class Dentist   {
 
@@ -65,23 +66,48 @@ public class Dentist   {
 
     }
 
-    public void updateSensitiveData( BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
-                                    String documentoEPS, FullName fullname, Specialties specialties, WorkingHours workingHours) {
+   // Dentist.java
 
+public void updateContactData(Optional<Address> newAddress, Optional<PhoneNumber> newPhoneNumber) {
+    Address finalAddress = newAddress.orElse(this.personData.getAddress());
+    PhoneNumber finalPhoneNumber = newPhoneNumber.orElse(this.personData.getPhoneNumber());
+    
+    if (newAddress.isPresent() || newPhoneNumber.isPresent()) {
+        this.personData = this.personData.withContactData(finalAddress, finalPhoneNumber);
+        this.lastUpdate = LocalDateTime.now();
+    }
+}
+
+public void updateSensitiveData(
+        Optional<BloodType> newBloodType,
+        Optional<DateOfBirth> newDateOfBirth,
+        Optional<Document> newDni,
+        Optional<String> newDocumentoEPS,
+        Optional<FullName> newFullName,
+        Optional<Specialties> newSpecialties,
+        Optional<WorkingHours> newWorkingHours) {
+    
+    // Combinar Person
+    if (newBloodType.isPresent() || newDateOfBirth.isPresent() || newDni.isPresent()
+        || newDocumentoEPS.isPresent() || newFullName.isPresent()) {
         
-
-        this.personData = personData.withSensitiveData( bloodType,
-                dateOfBirth,dni, documentoEPS, fullname);
-        this.specialties = specialties;
-        this.workingHours = workingHours;
-        this.lastUpdate = LocalDateTime.now();
+        BloodType finalBloodType = newBloodType.orElse(this.personData.getBloodType());
+        DateOfBirth finalDateOfBirth = newDateOfBirth.orElse(this.personData.getDateOfBirth());
+        Document finalDni = newDni.orElse(this.personData.getDni());
+        String finalDocumentoEPS = newDocumentoEPS.orElse(this.personData.getDocumentoEPS());
+        FullName finalFullName = newFullName.orElse(this.personData.getFullname());
+        
+        this.personData = this.personData.withSensitiveData(
+            finalBloodType, finalDateOfBirth, finalDni, finalDocumentoEPS, finalFullName
+        );
     }
-
-    public void updateContactData(Address address, PhoneNumber phoneNumber) {
-
-        this.personData = personData.withContactData(address,phoneNumber);
-        this.lastUpdate = LocalDateTime.now();
-    }
+    
+    // Actualizar especialidades y horario si están presentes
+    newSpecialties.ifPresent(spec -> this.specialties = spec);
+    newWorkingHours.ifPresent(wh -> this.workingHours = wh);
+    
+    this.lastUpdate = LocalDateTime.now();
+}
 
 
     public void applyVacation(LocalDateTime start, LocalDateTime end) {

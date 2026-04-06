@@ -93,25 +93,25 @@ class ReceptionApplicationServiceTest {
 
     private UpdateReceptionistContactDto createUpdateContactDto() {
         return new UpdateReceptionistContactDto(
-            "Calle Nueva 456",
-            "Medellín",
-            "Antioquia",
-            "Colombia",
-            "050001",
-            "3011234567"
+           Optional.of( "Calle Nueva 456"),
+           Optional.of( "Medellín"),
+           Optional.of( "Antioquia"),
+           Optional.of( "Colombia"),
+           Optional.of( "050001"),
+           Optional.of( "3011234567")
         );
     }
 
     private UpdateReceptionistSensitiveDto createUpdateSensitiveDto() {
         return new UpdateReceptionistSensitiveDto(
-            "87654321",
-            "María",
-            "Gómez",
-            "35",
-            LocalDate.now().minusYears(35),
-            "A+",
-            "EPS456",
-            "BILLING"
+          Optional.of(  "87654321"),
+           Optional.of( "María"),
+           Optional.of( "Gómez"),
+          Optional.of(  "35"),
+           Optional.of( LocalDate.now().minusYears(35)),
+           Optional.of( "A+"),
+           Optional.of( "EPS456"),
+           Optional.of( "BILLING")
         );
     }
 

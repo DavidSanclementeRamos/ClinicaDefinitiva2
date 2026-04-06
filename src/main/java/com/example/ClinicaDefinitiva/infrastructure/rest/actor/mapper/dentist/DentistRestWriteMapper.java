@@ -9,6 +9,7 @@ import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.dentist.Creat
 import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.dentist.DentistUpdateStatusRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.dentist.UpdateDentistContactRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.dentist.UpdateDentistSensitiveRequest;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -45,41 +46,32 @@ public class DentistRestWriteMapper {
         );
     }
 
-    // De REST → DTO de aplicación (actualizar contacto)
-    public UpdateDentistContactDto toServiceUpdateContact(UpdateDentistContactRequest request) {
-        if (request == null) return null;
+   public UpdateDentistContactDto toServiceUpdateContact(UpdateDentistContactRequest request) {
+    if (request == null) return null;
+    return new UpdateDentistContactDto(
+        Optional.ofNullable(request.street()),
+        Optional.ofNullable(request.city()),
+        Optional.ofNullable(request.state()),
+        Optional.ofNullable(request.country()),
+        Optional.ofNullable(request.postalCode()),
+        Optional.ofNullable(request.phoneNumber())
+    );
+}
 
-        return new UpdateDentistContactDto(
-                request.street(),
-                request.city(),
-                request.state(),
-                request.country(),
-                request.postalCode(),
-                request.phoneNumber()
-        );
-    }
-
-    // De REST → DTO de aplicación (actualizar datos sensibles) - CORREGIDO
-    public UpdateDentistSensitiveDto toServiceUpdateSensitive(UpdateDentistSensitiveRequest request) {
-        if (request == null) return null;
-
-        return new UpdateDentistSensitiveDto(
-                request.specialties(),
-                new WorkingHoursDto(
-                    request.workingHours().start(),
-                    request.workingHours().end(),
-                    request.workingHours().dayOfWeek(),
-                    request.workingHours().declaredHoursPerWeek()
-                ),
-                request.dni(),
-                request.first(),
-                request.lastName(),
-                request.age(),
-                request.dateOfBirth(),
-                request.bloodType(),
-                request.documentoEPS()
-        );
-    }
+public UpdateDentistSensitiveDto toServiceUpdateSensitive(UpdateDentistSensitiveRequest request) {
+    if (request == null) return null;
+    return new UpdateDentistSensitiveDto(
+        Optional.ofNullable(request.specialties()),
+        Optional.ofNullable(request.workingHours()).map(wh -> new WorkingHoursDto(wh.start(), wh.end(), wh.dayOfWeek(), wh.declaredHoursPerWeek())),
+        Optional.ofNullable(request.dni()),
+        Optional.ofNullable(request.first()),
+        Optional.ofNullable(request.lastName()),
+        Optional.ofNullable(request.age()),
+        Optional.ofNullable(request.dateOfBirth()),
+        Optional.ofNullable(request.bloodType()),
+        Optional.ofNullable(request.documentoEPS())
+    );
+}
     
     // De REST → DTO de aplicación (actualizar estado)
     public UpdateDentistStatusDto toUpdateStatusDto(DentistUpdateStatusRequest request) {

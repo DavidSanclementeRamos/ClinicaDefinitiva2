@@ -14,6 +14,7 @@ import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Patient  {
 
@@ -56,18 +57,25 @@ public class Patient  {
         return new Patient(null,  guardianId, data, null, userIdentityId, null);
     }
 
-    public void updatePatientContact(Address address, PhoneNumber phoneNumber) {
-
-
-        this.person = person.withContactData(address, phoneNumber);
+   
+    public void updatePatientContact(Optional<Address> newAddress, Optional<PhoneNumber> newPhoneNumber) {
+    Address finalAddress = newAddress.orElse(this.person.getAddress());
+    PhoneNumber finalPhoneNumber = newPhoneNumber.orElse(this.person.getPhoneNumber());
+    
+    if (newAddress.isPresent() || newPhoneNumber.isPresent()) {
+        this.person = this.person.withContactData(finalAddress, finalPhoneNumber);
         this.lastUpdate = LocalDateTime.now();
     }
+}
 
-    public void updateSensitiveData( BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
-                                    String documentoEPS, FullName fullname) {
-
-
-        /** NOTA: Validación comentada intencionalmente.
+public void updateSensitiveData(
+        Optional<BloodType> newBloodType,
+        Optional<DateOfBirth> newDateOfBirth,
+        Optional<Document> newDni,
+        Optional<String> newDocumentoEPS,
+        Optional<FullName> newFullName) {
+    
+            /** NOTA: Validación comentada intencionalmente.
          * Regla propuesta: impedir que paciente/guardián modifiquen datos sensibles
          * si tienen cita en las próximas 24h.
          * Decisión actual: NO implementar aún, porque puede ser demasiado rígido.
@@ -77,20 +85,29 @@ public class Patient  {
          if (this.schedule != null && this.schedule.hasAppointmentsWithin(2)) {
          throw new BusinessRuleViolationException(ErrorCatalogXD.ERR_PATIENT_ACTIVE_SERVICES, EntityContext.PATIENT);
          }**/
-
-
-
-        this.person = person.withSensitiveData(
-                bloodType,
-                dateOfBirth,
-                dni,
-                documentoEPS,
-                fullname
-
+    
+    if (newBloodType.isPresent() || newDateOfBirth.isPresent() || newDni.isPresent()
+        || newDocumentoEPS.isPresent() || newFullName.isPresent()) {
+        
+        BloodType finalBloodType = newBloodType.orElse(this.person.getBloodType());
+        DateOfBirth finalDateOfBirth = newDateOfBirth.orElse(this.person.getDateOfBirth());
+        Document finalDni = newDni.orElse(this.person.getDni());
+        String finalDocumentoEPS = newDocumentoEPS.orElse(this.person.getDocumentoEPS());
+        FullName finalFullName = newFullName.orElse(this.person.getFullname());
+        
+        this.person = this.person.withSensitiveData(
+            finalBloodType, finalDateOfBirth, finalDni, finalDocumentoEPS, finalFullName
         );
-
         this.lastUpdate = LocalDateTime.now();
     }
+}
+
+
+
+
+
+
+      
 
     public void assignContract(ContractId contractId) {
         this.contractId = Objects.requireNonNull(contractId, "ContractId cannot be null");

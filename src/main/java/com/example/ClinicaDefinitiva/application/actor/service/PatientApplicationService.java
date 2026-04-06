@@ -15,12 +15,14 @@ import com.example.ClinicaDefinitiva.application.shared.service.AuthorizationHel
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.actor.vo.FullName;
 import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -234,12 +236,23 @@ public class PatientApplicationService implements PatientUseCase {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Not found"));
 
+          // Construir FullName combinando valores parciales
+    Optional<FullName> finalFullName;
+    if (dto.first().isPresent() || dto.lastName().isPresent()) {
+        String currentFirst = patient.getPerson().getFullname().getFirstName();
+        String currentLast = patient.getPerson().getFullname().getLastName();
+        String newFirst = dto.first().orElse(currentFirst);
+        String newLast = dto.lastName().orElse(currentLast);
+        finalFullName = Optional.of(FullName.of(newFirst, newLast));
+    } else {
+        finalFullName = Optional.empty();
+    }
         patient.updateSensitiveData(
             writeMapper.toBloodType(dto),
             writeMapper.toDateOfBirth(dto),
             writeMapper.toDocument(dto),
             writeMapper.toDocumentEPS(dto),
-            writeMapper.toFullName(dto)
+            finalFullName
         );
 
         Patient updated = patientRepository.save(patient);

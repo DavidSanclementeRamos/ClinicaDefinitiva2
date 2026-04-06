@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
@@ -92,7 +93,7 @@ void shouldUpdateContactData() {
     PhoneNumber newPhone = PhoneNumber.of("3011234567");
 
 LocalDateTime originalLastUpdate = dentist.getLastUpdate();
-    dentist.updateContactData(newAddress, newPhone);
+    dentist.updateContactData(Optional.of(newAddress),Optional.of( newPhone));
 
     assertThat(dentist.getPersonData().getAddress()).isEqualTo(newAddress);
     assertThat(dentist.getPersonData().getPhoneNumber()).isEqualTo(newPhone);
@@ -112,8 +113,18 @@ LocalDateTime originalLastUpdate = dentist.getLastUpdate();
         Specialties newSpecialties = Specialties.of(Set.of(Specialty.of("Orthodontics")));
         WorkingHours newHours = WorkingHours.of(LocalTime.of(9, 0), LocalTime.of(18, 0), DayOfWeek.TUESDAY, 35);
 
-        dentist.updateSensitiveData(newBlood, newDob, newDni, "EPS456", newName, newSpecialties, newHours);
 
+            dentist.updateSensitiveData(
+        Optional.of(newBlood),
+        Optional.of(newDob),
+        Optional.of(newDni),
+        Optional.of("EPS456"),
+        Optional.of(newName),
+        Optional.of(newSpecialties),
+        Optional.of(newHours)
+    );
+
+        
         assertThat(dentist.getPersonData().getBloodType()).isEqualTo(newBlood);
         assertThat(dentist.getPersonData().getDateOfBirth()).isEqualTo(newDob);
         assertThat(dentist.getPersonData().getDni()).isEqualTo(newDni);

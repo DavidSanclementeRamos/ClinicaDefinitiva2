@@ -109,6 +109,7 @@ public class RoleBasedPolicy implements PermissionPolicy {
 
         // Asignaciones
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.CREATE_TEMPORARY)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.CREATE_PERMANENT)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.REVOKE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.REVOKE_ALL)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ASSIGNMENT), a(ActionCatalog.BasicAction.EXTEND)));

@@ -13,7 +13,6 @@ public record CreateGuardianDto(
         String code,
         String description,
 
-        Page<PagePatientDto> patientList,
         // Person
         String dni,
         String first,

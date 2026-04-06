@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -99,7 +100,7 @@ class PatientTest {
         Address newAddress = Address.of("Calle Nueva 456", "Medellín", "Antioquia", "Colombia", "050001");
         PhoneNumber newPhone = PhoneNumber.of("3011234567");
 
-        patient.updatePatientContact(newAddress, newPhone);
+        patient.updatePatientContact(Optional.of(newAddress),Optional.of( newPhone));
 
         assertThat(patient.getPerson().getAddress()).isEqualTo(newAddress);
         assertThat(patient.getPerson().getPhoneNumber()).isEqualTo(newPhone);
@@ -115,8 +116,15 @@ class PatientTest {
         Document newDni = Document.of("87654321");
         FullName newName = FullName.of("María", "Gómez");
 
-        patient.updateSensitiveData(newBlood, newDob, newDni, "EPS456", newName);
 
+        patient.updateSensitiveData(
+        Optional.of(newBlood),
+        Optional.of(newDob),
+        Optional.of(newDni),
+        Optional.of("EPS456"),
+        Optional.of(newName)
+    );
+        
         assertThat(patient.getPerson().getBloodType()).isEqualTo(newBlood);
         assertThat(patient.getPerson().getDateOfBirth()).isEqualTo(newDob);
         assertThat(patient.getPerson().getDni()).isEqualTo(newDni);

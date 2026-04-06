@@ -41,29 +41,47 @@ public class PatientReadEntityMapper {
         );
     }
     
-    private Person mapToPerson(PersonEmbeddable embeddable) {
-        if (embeddable == null) return null;
-        
-        Address address = Address.of(embeddable.getAddress(), "", "", "", "");
-        PhoneNumber phoneNumber = PhoneNumber.of(embeddable.getPhoneNumber());
-        DateOfBirth dateOfBirth = DateOfBirth.of(embeddable.getBirthDate());
-        Age age = Age.of(dateOfBirth);
-        BloodType bloodType = BloodType.fromLabel(embeddable.getBloodType());
-        Document document = Document.of(embeddable.getDocumentNumber());
-        FullName fullName = FullName.of(
-            embeddable.getFullName().split(" ")[0],
-            embeddable.getFullName().substring(embeddable.getFullName().indexOf(" ") + 1)
-        );
-        
-        return Person.of(
-            address,
-            age,
-            bloodType,
-            dateOfBirth,
-            document,
-            embeddable.getEpsDocument(),
-            fullName,
-            phoneNumber
-        );
+private Person mapToPerson(PersonEmbeddable embeddable) {
+    if (embeddable == null) return null;
+
+    String addressStr = embeddable.getAddress();
+       String[] parts = addressStr.split("\\|");
+        Address address = Address.of(
+        parts[0].trim(),
+        parts[1].trim(),
+        parts[2].trim(),
+        parts[3].trim(),
+        parts[4].trim()
+    );
+
+    PhoneNumber phoneNumber = PhoneNumber.of(embeddable.getPhoneNumber());
+    DateOfBirth dateOfBirth = DateOfBirth.of(embeddable.getBirthDate());
+    Age age = Age.of(dateOfBirth);
+    BloodType bloodType = BloodType.fromLabel(embeddable.getBloodType());
+    Document document = Document.of(embeddable.getDocumentNumber());
+
+    // --- CORRECCIÓN DEL NOMBRE COMPLETO ---
+    String fullNameStr = embeddable.getFullName();
+    String firstName, lastName;
+    int spaceIdx = fullNameStr.indexOf(' ');
+    if (spaceIdx > 0) {
+        firstName = fullNameStr.substring(0, spaceIdx);
+        lastName = fullNameStr.substring(spaceIdx + 1);
+    } else {
+        firstName = fullNameStr;
+        lastName = "";
     }
+    FullName fullName = FullName.of(firstName, lastName);
+
+    return Person.of(
+        address,
+        age,
+        bloodType,
+        dateOfBirth,
+        document,
+        embeddable.getEpsDocument(),
+        fullName,
+        phoneNumber
+    );
+}   
 }

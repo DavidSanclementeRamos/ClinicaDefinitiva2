@@ -11,6 +11,7 @@ import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class Guardian  {
 
@@ -49,15 +50,26 @@ public class Guardian  {
                 userIdentityId);
     }
 
-    public void updateContactData(Address address, PhoneNumber phoneNumber
-                                   ) {
-
-        this.person = person.withContactData(address, phoneNumber);
-         this.lastUpdate = LocalDateTime.now();
+    public void updateContactData(Optional<Address> newAddress, Optional<PhoneNumber> newPhoneNumber) {
+    Person currentPerson = this.person;
+    
+    Address finalAddress = newAddress.orElse(currentPerson.getAddress());
+    PhoneNumber finalPhoneNumber = newPhoneNumber.orElse(currentPerson.getPhoneNumber());
+    
+    if (newAddress.isPresent() || newPhoneNumber.isPresent()) {
+        this.person = currentPerson.withContactData(finalAddress, finalPhoneNumber);
     }
+    
+    this.lastUpdate = LocalDateTime.now();
+}
 
-    public void updateSensitiveData( BloodType bloodType, DateOfBirth dateOfBirth, Document dni,
-                                    String documentoEPS, FullName fullname, TypeGuardian typeGuardian) {
+    public void updateSensitiveData( 
+     Optional<BloodType> newBloodType,
+        Optional<DateOfBirth> newDateOfBirth,
+        Optional<Document> newDni,
+        Optional<String> newDocumentoEPS,
+        Optional<FullName> newFullName,
+        Optional<TypeGuardian> newTypeGuardian){
 
 
         /** NOTA: Validación comentada intencionalmente.
@@ -75,19 +87,32 @@ public class Guardian  {
             );
         }*/
 
+    if (newBloodType.isPresent() || newDateOfBirth.isPresent() || newDni.isPresent()
+        || newDocumentoEPS.isPresent() || newFullName.isPresent()) {
+
+        BloodType finalBloodType = newBloodType.orElse(this.person.getBloodType());
+        DateOfBirth finalDateOfBirth = newDateOfBirth.orElse(this.person.getDateOfBirth());
+        Document finalDni = newDni.orElse(this.person.getDni());
+        String finalDocumentoEPS = newDocumentoEPS.orElse(this.person.getDocumentoEPS());
+        FullName finalFullName = newFullName.orElse(this.person.getFullname());
 
             
-            this.person = person.withSensitiveData(
-                    bloodType,
-                    dateOfBirth,
-                    dni,
-                    documentoEPS,
-                    fullname
-            );
+  this.person = this.person.withSensitiveData(
+            finalBloodType,
+            finalDateOfBirth,
+            finalDni,
+            finalDocumentoEPS,
+            finalFullName
+        );
+    
+    }
 
-            this.typeGuardian = typeGuardian;
-            this.lastUpdate = LocalDateTime.now();
-        }
+    // Actualizar TypeGuardian si está presente
+    newTypeGuardian.ifPresent(tg -> this.typeGuardian = tg);
+
+    this.lastUpdate = LocalDateTime.now();
+}
+        
 
 
         public Outcome<Void> validateDeactivation() {

@@ -70,7 +70,7 @@ class PatientAdapterTest extends RepositoryTestBase {
         Patient patient = patientRepository.findById(savedPatient.getPatientId()).get();
         Address newAddress = Address.of("Calle Nueva 456", "Medellín", "Antioquia", "Colombia", "050001");
         PhoneNumber newPhone = PhoneNumber.of("3011234567");
-        patient.updatePatientContact(newAddress, newPhone);
+        patient.updatePatientContact(Optional.of(newAddress),Optional.of( newPhone));
         Patient updated = patientRepository.save(patient);
 
         Optional<Patient> found = patientRepository.findById(updated.getPatientId());

@@ -6,6 +6,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,39 +33,52 @@ public class GuardianWriteMapper {
         return TypeGuardian.of(dto.code(), dto.description());
     }
 
-    public Age toAge(UpdateGuardianSensitiveDto dto) {
-        return Age.of(DateOfBirth.of(dto.dateOfBirth()));
+    public Optional<BloodType> toBloodType(UpdateGuardianSensitiveDto dto) {
+        return dto.bloodType().map(BloodType::fromLabel);
     }
 
-    public BloodType toBloodType(UpdateGuardianSensitiveDto dto) {
-        return BloodType.fromLabel(dto.bloodType());
+    public Optional<DateOfBirth> toDateOfBirth(UpdateGuardianSensitiveDto dto) {
+        return dto.dateOfBirth().map(DateOfBirth::of);
     }
 
-    public DateOfBirth toDateOfBirth(UpdateGuardianSensitiveDto dto) {
-        return DateOfBirth.of(dto.dateOfBirth());
+    public Optional<Document> toDocument(UpdateGuardianSensitiveDto dto) {
+        return dto.dni().map(Document::of);
     }
 
-    public Document toDocument(UpdateGuardianSensitiveDto dto) {
-        return Document.of(dto.dni());
-    }
-
-    public String toDocumentEPS(UpdateGuardianSensitiveDto dto) {
+    public Optional<String> toDocumentEPS(UpdateGuardianSensitiveDto dto) {
         return dto.documentEPS();
     }
 
-    public FullName toFullName(UpdateGuardianSensitiveDto dto) {
-        return FullName.of(dto.first(), dto.lastName());
+    public Optional<FullName> toFullName(UpdateGuardianSensitiveDto dto) {
+        if (dto.first().isEmpty() || dto.lastName().isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(FullName.of(dto.first().get(), dto.lastName().get()));
     }
 
-    public TypeGuardian toTypeGuardian(UpdateGuardianSensitiveDto dto) {
-        return TypeGuardian.of(dto.code(), dto.description());
+    public Optional<TypeGuardian> toTypeGuardian(UpdateGuardianSensitiveDto dto) {
+        if (dto.code().isEmpty() || dto.description().isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(TypeGuardian.of(dto.code().get(), dto.description().get()));
     }
 
-    public Address toAddress(UpdateGuardianContactDto dto) {
-        return Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode());
+  
+public Optional<Address> toAddress(UpdateGuardianContactDto dto) {
+    if (dto.street().isEmpty() || dto.city().isEmpty() || dto.state().isEmpty() ||
+        dto.country().isEmpty() || dto.postalCode().isEmpty()) {
+        return Optional.empty();
     }
+    return Optional.of(Address.of(
+        dto.street().get(),
+        dto.city().get(),
+        dto.state().get(),
+        dto.country().get(),
+        dto.postalCode().get()
+    ));
+}
 
-    public PhoneNumber toPhoneNumber(UpdateGuardianContactDto dto) {
-        return PhoneNumber.of(dto.phoneNumber());
-    }
+public Optional<PhoneNumber> toPhoneNumber(UpdateGuardianContactDto dto) {
+    return dto.phoneNumber().map(PhoneNumber::of);
+}
 }

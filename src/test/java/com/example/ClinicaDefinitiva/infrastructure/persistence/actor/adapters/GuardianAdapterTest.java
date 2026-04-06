@@ -68,7 +68,7 @@ class GuardianAdapterTest extends RepositoryTestBase {
         Guardian guardian = guardianRepository.findById(savedGuardian.getGuardianId()).get();
         Address newAddress = Address.of("Calle Nueva 456", "Medellín", "Antioquia", "Colombia", "050001");
         PhoneNumber newPhone = PhoneNumber.of("3011234567");
-        guardian.updateContactData(newAddress, newPhone);
+        guardian.updateContactData(Optional.of(newAddress), Optional.of(newPhone));
         Guardian updated = guardianRepository.save(guardian);
 
         Optional<Guardian> found = guardianRepository.findById(updated.getGuardianId());

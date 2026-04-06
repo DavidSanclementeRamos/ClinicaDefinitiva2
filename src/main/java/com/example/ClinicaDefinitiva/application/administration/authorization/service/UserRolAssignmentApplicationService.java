@@ -51,7 +51,7 @@ public class UserRolAssignmentApplicationService implements UserRolAssignmentUse
 
 
     @Override
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT, action = ActionCatalog.BasicAction.CREATE)
+    @RequiresPermission(resource = ResourceCatalog.BasicResource.ASSIGNMENT, action = ActionCatalog.BasicAction.CREATE_PERMANENT)
     public ReadAssignmentDto savePermanent(CreateAssignmentPermanentDto dto,
                                            UserIdentityId requesterId,
                                            RolId requesterRolId) {

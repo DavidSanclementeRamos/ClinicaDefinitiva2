@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 /**
@@ -186,10 +187,10 @@ public class DentistApplicationService implements DentistUseCase {
         
 
         dentist.updateContactData(
-    Address.of(dto.street(), dto.city(), dto.state(), dto.country(), dto.postalCode()),
-    PhoneNumber.of(dto.phoneNumber())
-);
-        Dentist updated = dentistRepository.save(dentist);
+        dentistWriteMapper.toAddress(dto),
+        dentistWriteMapper.toPhoneNumber(dto)
+    );
+                Dentist updated = dentistRepository.save(dentist);
 
         return dentistReadMapper.toReadDto(updated);
     }
@@ -218,16 +219,28 @@ public class DentistApplicationService implements DentistUseCase {
                 .orElseThrow(() -> new DentistNotFoundException("Not found"));
 
 
-        dentist.updateSensitiveData(
-    BloodType.fromLabel(dto.bloodType()),
-    DateOfBirth.of(dto.dateOfBirth()),
-    Document.of(dto.dni()),
-    dto.documentEPS(),
-    FullName.of(dto.first(), dto.lastName()),
-    dentistWriteMapper.toSpecialties(dto.specialties()),
-    dentistWriteMapper.toWorkingHours(dto.workingHoursDto())
-);
-        Dentist updated = dentistRepository.save(dentist);
+           // Construir FullName combinando valores parciales
+    Optional<FullName> finalFullName;
+    if (dto.first().isPresent() || dto.lastName().isPresent()) {
+        String currentFirst = dentist.getPersonData().getFullname().getFirstName();
+        String currentLast = dentist.getPersonData().getFullname().getLastName();
+        String newFirst = dto.first().orElse(currentFirst);
+        String newLast = dto.lastName().orElse(currentLast);
+        finalFullName = Optional.of(FullName.of(newFirst, newLast));
+    } else {
+        finalFullName = Optional.empty();
+    }
+      
+      dentist.updateSensitiveData(
+        dentistWriteMapper.toBloodType(dto),
+        dentistWriteMapper.toDateOfBirth(dto),
+        dentistWriteMapper.toDocument(dto),
+        dentistWriteMapper.toDocumentEPS(dto),
+        finalFullName,  // ← combinado
+        dentistWriteMapper.toSpecialties(dto),
+        dentistWriteMapper.toWorkingHours(dto)
+    );
+    Dentist updated = dentistRepository.save(dentist);
 
         return dentistReadMapper.toReadDto(updated);
     }

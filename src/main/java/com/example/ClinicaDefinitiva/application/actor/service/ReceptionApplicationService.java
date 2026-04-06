@@ -13,10 +13,12 @@ import com.example.ClinicaDefinitiva.application.shared.dto.AuthorizationContext
 import com.example.ClinicaDefinitiva.application.shared.service.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.actor.vo.FullName;
 import com.example.ClinicaDefinitiva.domain.actor.vo.ReceptionId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -192,12 +194,23 @@ public class ReceptionApplicationService implements ReceptionUseCase {
                 .orElseThrow(() -> new  ReceptionistNotFoundException("Not found"));
 
 
+         // Construir FullName combinando valores parciales
+    Optional<FullName> finalFullName;
+    if (dto.first().isPresent() || dto.lastName().isPresent()) {
+        String currentFirst = receptionist.getPerson().getFullname().getFirstName();
+        String currentLast = receptionist.getPerson().getFullname().getLastName();
+        String newFirst = dto.first().orElse(currentFirst);
+        String newLast = dto.lastName().orElse(currentLast);
+        finalFullName = Optional.of(FullName.of(newFirst, newLast));
+    } else {
+        finalFullName = Optional.empty();
+    }
         receptionist.updateSensitiveData(
             writeMapper.toBloodType(dto),
             writeMapper.toDateOfBirth(dto),
             writeMapper.toDocument(dto),
             writeMapper.toDocumentEPS(dto),
-            writeMapper.toFullName(dto),
+            finalFullName,
             writeMapper.toSector(dto)
         );
         Receptionist updated = receptionRepository.save(receptionist);

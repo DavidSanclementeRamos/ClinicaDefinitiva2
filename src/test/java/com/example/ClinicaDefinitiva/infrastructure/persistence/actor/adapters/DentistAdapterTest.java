@@ -79,7 +79,7 @@ class DentistAdapterTest extends RepositoryTestBase {
         Dentist dentist = dentistRepository.findById(savedDentist.getDentistId()).get();
         Address newAddress = Address.of("Calle Nueva 456", "Medellín", "Antioquia", "Colombia", "050001");
         PhoneNumber newPhone = PhoneNumber.of("3011234567");
-        dentist.updateContactData(newAddress, newPhone);
+        dentist.updateContactData(Optional.of(newAddress), Optional.of(newPhone));
 
         Dentist updated = dentistRepository.save(dentist);
 
