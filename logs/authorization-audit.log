@@ -32,3 +32,6 @@ Authorization decision: {"timestamp":"2026-04-05T17:52:33.690691500Z","userId":4
 Authorization decision: {"timestamp":"2026-04-05T18:57:41.566534500Z","userId":40,"rolId":1,"resource":"GUARDIAN","action":"UPDATE","decision":"ALLOW","durationMs":14,"context":{"resourceId":22}}
 Authorization decision: {"timestamp":"2026-04-05T18:59:07.323953600Z","userId":40,"rolId":1,"resource":"GUARDIAN","action":"UPDATE","decision":"ALLOW","durationMs":10,"context":{"resourceId":22}}
 Authorization decision: {"timestamp":"2026-04-05T19:08:10.512106400Z","userId":40,"rolId":1,"resource":"GUARDIAN","action":"UPDATE","decision":"ALLOW","durationMs":26,"context":{"resourceId":22}}
+Authorization decision: {"timestamp":"2026-04-06T00:32:37.839643900Z","userId":40,"rolId":1,"resource":"GUARDIAN","action":"UPDATE","decision":"ALLOW","durationMs":11,"context":{"resourceId":22,"resourceOwnerId":68}}
+Authorization DENIED: {"timestamp":"2026-04-06T00:54:54.548290600Z","userId":40,"rolId":1,"resource":"RECEPTIONIST","action":"CREATE","decision":"DENY","durationMs":9,"denyReason":"ABAC policy evaluation failed"}
+Authorization DENIED: {"timestamp":"2026-04-06T00:55:11.331113900Z","userId":40,"rolId":1,"resource":"RECEPTIONIST","action":"CREATE","decision":"DENY","durationMs":68,"denyReason":"ABAC policy evaluation failed"}
