@@ -55,7 +55,9 @@ public enum VoActorError implements ErrorCatalog {
     ERR_DENTIST_INVALID_SPECIALTY("RN-ACTOR-VO-024","error.dentist.invalidSpecialty","La especialidad del dentista especificada no es válida",
             HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
     ERR_DENTIST_STATUS_NULL("RN-ACTOR-VO-025","error.dentist.status.null","El estado del dentista no puede ser nulo",
-            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
+            HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
+    ERR_SERVICE_EMPTY_SPECIALTIES("RN-ACTOR-VO-026","error.service.empty.specialties","El conjunto de especialidades no puede estar vacío",
+        HttpStatus.BAD_REQUEST, ErrorSeverity.WARN);
 
     private final String code;
     private final String messageKey;

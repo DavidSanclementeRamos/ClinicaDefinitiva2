@@ -123,7 +123,7 @@ class DentistApplicationServiceTest {
     // Helper para crear un dentista de prueba
     private Dentist createDentist() {
         Person person = createPerson();
-        Specialties specialties = Specialties.of(Set.of(Specialty.of("General Dentistry")));
+        Specialties specialties = Specialties.of(Set.of(Specialty.GENERAL_DENTISTRY));
         UserIdentityId userId = UserIdentityId.from(2L);
         WorkingHours workingHours = WorkingHours.of(
                 LocalTime.of(8, 0), LocalTime.of(17, 0),
@@ -216,7 +216,7 @@ void save_shouldCreateAndReturnDto() {
     );
 
     Person person = createPerson();
-    Specialties specialties = Specialties.of(Set.of(Specialty.of("General Dentistry")));
+    Specialties specialties = Specialties.of(Set.of(Specialty.ORTHODONTICS));
     UserIdentityId userId = UserIdentityId.from(2L);
     WorkingHours workingHours = WorkingHours.of(LocalTime.of(8,0), LocalTime.of(17,0), DayOfWeek.MONDAY, 40);
 

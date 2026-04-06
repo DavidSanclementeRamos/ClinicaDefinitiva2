@@ -13,13 +13,10 @@ class SpecialtiesTest {
     @Test
     @DisplayName("Crear Specialties con conjunto válido")
     void shouldCreateSpecialties() {
-        Set<Specialty> specialtiesSet = Set.of(
-                Specialty.of("Orthodontics"),
-                Specialty.of("Endodontics")
-        );
+        Set<Specialty> specialtiesSet = Set.of(Specialty.ORTHODONTICS, Specialty.ENDODONTICS);
         Specialties specialties = Specialties.of(specialtiesSet);
         assertThat(specialties.asSet()).containsExactlyInAnyOrderElementsOf(specialtiesSet);
-        assertThat(specialties.contains(Specialty.of("Orthodontics"))).isTrue();
+        assertThat(specialties.contains(Specialty.ORTHODONTICS)).isTrue();
         assertThat(specialties.isMultidisciplinary()).isTrue();
     }
 
@@ -33,14 +30,11 @@ class SpecialtiesTest {
     @Test
     @DisplayName("allowsSurgicalProcedures() retorna true si incluye Oral Surgery")
     void testAllowsSurgicalProcedures() {
-        Set<Specialty> withSurgery = Set.of(
-                Specialty.of("Oral Surgery"),
-                Specialty.of("Orthodontics")
-        );
+        Set<Specialty> withSurgery = Set.of(Specialty.ORAL_SURGERY, Specialty.ORTHODONTICS);
         Specialties specialties = Specialties.of(withSurgery);
         assertThat(specialties.allowsSurgicalProcedures()).isTrue();
 
-        Set<Specialty> withoutSurgery = Set.of(Specialty.of("Orthodontics"));
+        Set<Specialty> withoutSurgery = Set.of(Specialty.ORTHODONTICS);
         Specialties noSurgery = Specialties.of(withoutSurgery);
         assertThat(noSurgery.allowsSurgicalProcedures()).isFalse();
     }

@@ -64,19 +64,12 @@ public class DentistReadEntityMapper {
         );
     }
     
-    private Specialties mapToSpecialties(String specialtiesStr) {
-        if (specialtiesStr == null || specialtiesStr.isBlank()) {
-            return null;
-        }
-        
-        // Asumiendo que viene como "ORTHODONTICS,ENDODONTICS,SURGERY"
-        Set<Specialty> specialtySet = Arrays.stream(specialtiesStr.split(","))
-                .map(String::trim)
-                .map(Specialty::of)
-                .collect(Collectors.toSet());
-        
-        return Specialties.of(specialtySet);
+   private Specialties mapToSpecialties(String specialtiesStr) {
+    if (specialtiesStr == null || specialtiesStr.isBlank()) {
+        return null;
     }
+    return Specialties.fromString(specialtiesStr);
+}
     
     private WorkingHours mapToWorkingHours(String workHoursJson) {
         if (workHoursJson == null || workHoursJson.isBlank()) {

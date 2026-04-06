@@ -34,7 +34,7 @@ class DentistAdapterTest extends RepositoryTestBase {
 
         // Crear y guardar un dentista de prueba
         Person person = createPerson();
-        Specialties specialties = Specialties.of(Set.of(Specialty.of("General Dentistry")));
+        Specialties specialties = Specialties.of(Set.of(Specialty.GENERAL_DENTISTRY));
         UserIdentityId userId = UserIdentityId.from(100L);
         WorkingHours workingHours = WorkingHours.of(LocalTime.of(8, 0), LocalTime.of(17, 0),
                 java.time.DayOfWeek.MONDAY, 40);

@@ -1,69 +1,59 @@
 package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-
 import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class Specialties {
-    private final Set<Specialty> values;
+    private final Set<Specialty> specialties;
 
-    private Specialties(Set<Specialty> values) {
-        if (values == null || values.isEmpty()){
-            throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.ACTORS  );
+    private Specialties(Set<Specialty> specialties) {
+        if (specialties == null || specialties.isEmpty()) {
+            throw new ValueObjectValidationException(VoActorError.ERR_SERVICE_EMPTY_SPECIALTIES, VOContext.ACTORS);
         }
-
-        this.values = Collections.unmodifiableSet(new HashSet<>(values));
-    }
-    public static Specialties of(Set<Specialty> values){return new Specialties(values);}
-
-    // methods semantic
-    public boolean contains(Specialty specialty) {
-        return values.contains(specialty);
+        this.specialties = Collections.unmodifiableSet(new HashSet<>(specialties));
     }
 
-    public boolean isMultidisciplinary() {
-        return values.size() > 1;
-    }
-
-    public boolean allowsSurgicalProcedures() {
-        return contains( Specialty.of("Oral Surgery"));
+    public static Specialties of(Set<Specialty> specialties) {
+        return new Specialties(specialties);
     }
 
     public Set<Specialty> asSet() {
-        return values;
+        return specialties;
     }
 
-    // methods access
-    public Set<Specialty> Values() {
-        return values;
+    public boolean contains(Specialty specialty) {
+        return specialties.contains(specialty);
     }
 
-    // methods utility
+    public boolean isMultidisciplinary() {
+        return specialties.size() > 1;
+    }
+
+    public boolean allowsSurgicalProcedures() {
+        return specialties.contains(Specialty.ORAL_SURGERY);
+    }
+
+    public static Specialties fromString(String concatenated) {
+        if (concatenated == null || concatenated.isBlank()) {
+            throw new ValueObjectValidationException(VoActorError.ERR_SERVICE_EMPTY_SPECIALTIES, VOContext.ACTORS);
+        }
+        Set<Specialty> set = java.util.Arrays.stream(concatenated.split(","))
+                .map(String::trim)
+                .map(Specialty::fromString)
+                .collect(Collectors.toSet());
+        return new Specialties(set);
+    }
+
     @Override
     public String toString() {
-        return "Specialties: " + values;
+        return specialties.stream()
+                .map(Specialty::getCode)
+                .collect(Collectors.joining(","));
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Specialties)) return false;
-        Specialties that = (Specialties) o;
-        return values.equals(that.values);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(values);
-    }
-
-
-
-
 }

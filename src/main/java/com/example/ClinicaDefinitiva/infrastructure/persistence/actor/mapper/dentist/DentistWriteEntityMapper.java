@@ -26,13 +26,10 @@ public class DentistWriteEntityMapper {
         // Person
         entity.setPerson(mapToEmbeddable(domain.getPersonData()));
         
-        // Specialties - convertir Set<Specialty> a String
-        if (domain.getSpecialties() != null) {
-            String specialtiesStr = domain.getSpecialties().Values().stream()
-                    .map(Specialty::Value)
-                    .collect(Collectors.joining(","));
-            entity.setSpecialties(specialtiesStr);
-        }
+String specialtiesStr = domain.getSpecialties().asSet().stream()
+        .map(Specialty::getCode)
+        .collect(Collectors.joining(","));
+entity.setSpecialties(specialtiesStr);
         
         // WorkingHours - convertir a JSON
         if (domain.getWorkingHours() != null) {

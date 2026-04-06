@@ -1,80 +1,58 @@
 package com.example.ClinicaDefinitiva.domain.actor.vo;
 
-
 import com.example.ClinicaDefinitiva.domain.errors.catalog.actor.VoActorError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.ValueObjectValidationException;
 
-import java.util.Objects;
-import java.util.Set;
+public enum Specialty {
+    ORTHODONTICS("Ortodoncia"),
+    ENDODONTICS("Endodoncia"),
+    PERIODONTICS("Periodoncia"),
+    PROSTHODONTICS("Prótesis dental"),
+    PEDIATRIC_DENTISTRY("Odontopediatría"),
+    ORAL_SURGERY("Cirugía oral"),
+    GENERAL_DENTISTRY("Odontología general");
 
-public final class Specialty {
-    private static final Set<String> VALID_SPECIALTIES = Set.of(
-            "Orthodontics",
-            "Endodontics",
-            "Periodontics",
-            "Prosthodontics",
-            "Pediatric Dentistry",
-            "Oral Surgery",
-            "General Dentistry"
-    );
+    private final String displayName;
 
-    private final String value;
+    Specialty(String displayName) {
+        this.displayName = displayName;
+    }
 
-    private   Specialty(String value) {
-        if (isBlank(value)) {
-            throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY,VOContext.ACTORS);
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getCode() {
+        return this.name();
+    }
+
+    /**
+     * Convierte un string (case-insensitive) en la constante del enum correspondiente.
+     * Acepta tanto el nombre técnico (ej. "ORTHODONTICS") como la descripción (ej. "Ortodoncia").
+     */
+    public static Specialty fromString(String value) {
+        if (value == null || value.isBlank()) {
+            throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.ACTORS);
         }
-        String normalized = value.trim();
-        if (VALID_SPECIALTIES.stream().noneMatch(s -> s.equalsIgnoreCase(normalized))) {
-          throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.ACTORS);
-
+        String trimmed = value.trim();
+        // Buscar por nombre técnico (case-insensitive)
+        for (Specialty spec : values()) {
+            if (spec.name().equalsIgnoreCase(trimmed)) {
+                return spec;
+            }
         }
-        this.value = normalized;
+        // Buscar por displayName (case-insensitive)
+        for (Specialty spec : values()) {
+            if (spec.getDisplayName().equalsIgnoreCase(trimmed)) {
+                return spec;
+            }
+        }
+        throw new ValueObjectValidationException(VoActorError.ERR_DENTIST_INVALID_SPECIALTY, VOContext.ACTORS);
     }
 
-
-    public static Specialty of(String value){return new Specialty(value);}
-
-    // methods semantic
-    public boolean is(String expected) {
-        return value.equalsIgnoreCase(expected.trim());
-    }
-
-    public String asText() {
-        return value;
-    }
-
-    private boolean isBlank(String input) {
-        return input == null || input.trim().isEmpty();
-    }
-
-    // methods access
-    public String Value() {
-        return value;
-    }
-
-    // methods utility
     @Override
     public String toString() {
-        return value;
+        return this.name();
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Specialty)) return false;
-        Specialty that = (Specialty) o;
-        return value.equalsIgnoreCase(that.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value.toLowerCase());
-    }
-
-
-
-
-
 }

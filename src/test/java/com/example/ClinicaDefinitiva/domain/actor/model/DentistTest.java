@@ -38,7 +38,7 @@ class DentistTest {
 
         validPerson = Person.of(address, age, blood, dob, dni, "EPS123", name, phone);
 
-        specialties = Specialties.of(Set.of(Specialty.of("General Dentistry")));
+        specialties = Specialties.of(Set.of(Specialty.GENERAL_DENTISTRY));
         userId = UserIdentityId.from(1L);
         workingHours = WorkingHours.of(LocalTime.of(8, 0), LocalTime.of(17, 0), DayOfWeek.MONDAY, 40);
     }
@@ -73,7 +73,7 @@ void shouldThrowWhenAgeInvalid() {
     Person underAge = Person.of(address, age, blood, dob, dni, eps, name, phone);
 
     // Crear especialidades, userId, workingHours (si no existen ya)
-    Specialties specialties = Specialties.of(Set.of(Specialty.of("General Dentistry")));
+    Specialties specialties = Specialties.of(Set.of(Specialty.GENERAL_DENTISTRY));
     UserIdentityId userId = UserIdentityId.from(1L);
     WorkingHours workingHours = WorkingHours.of(
         LocalTime.of(8, 0), LocalTime.of(17, 0), DayOfWeek.MONDAY, 40
@@ -110,7 +110,7 @@ LocalDateTime originalLastUpdate = dentist.getLastUpdate();
         DateOfBirth newDob = DateOfBirth.of(LocalDate.now().minusYears(35));
         Document newDni = Document.of("87654321");
         FullName newName = FullName.of("Pedro", "Gómez");
-        Specialties newSpecialties = Specialties.of(Set.of(Specialty.of("Orthodontics")));
+        Specialties newSpecialties = Specialties.of(Set.of(Specialty.ORTHODONTICS));
         WorkingHours newHours = WorkingHours.of(LocalTime.of(9, 0), LocalTime.of(18, 0), DayOfWeek.TUESDAY, 35);
 
 

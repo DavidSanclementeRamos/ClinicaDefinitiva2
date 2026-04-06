@@ -11,33 +11,33 @@ import static org.assertj.core.api.Assertions.*;
 class SpecialtyTest {
 
     @ParameterizedTest
-    @ValueSource(strings = {"Orthodontics", "Endodontics", "Periodontics", "Prosthodontics",
-            "Pediatric Dentistry", "Oral Surgery", "General Dentistry"})
-    @DisplayName("Crear Specialty válida")
+    @ValueSource(strings = {"ORTHODONTICS", "Endodontics", "periodontics", "Prosthodontics",
+            "PEDIATRIC_DENTISTRY", "Oral Surgery", "GENERAL_DENTISTRY"})
+    @DisplayName("Crear Specialty válida desde string (case-insensitive)")
     void shouldCreateValidSpecialty(String value) {
-        Specialty specialty = Specialty.of(value);
-        assertThat(specialty.asText()).isEqualTo(value);
-        assertThat(specialty.is(value)).isTrue();
+        Specialty specialty = Specialty.fromString(value);
+        assertThat(specialty).isNotNull();
+        assertThat(specialty.getCode()).isEqualTo(value.toUpperCase().replace(" ", "_"));
     }
 
     @Test
     @DisplayName("Specialty inválida lanza excepción")
     void shouldThrowForInvalidSpecialty() {
-        assertThatThrownBy(() -> Specialty.of("Invalid"))
+        assertThatThrownBy(() -> Specialty.fromString("Invalid"))
                 .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
     @DisplayName("Specialty null lanza excepción")
     void shouldThrowForNull() {
-        assertThatThrownBy(() -> Specialty.of(null))
+        assertThatThrownBy(() -> Specialty.fromString(null))
                 .isInstanceOf(ValueObjectValidationException.class);
     }
 
     @Test
     @DisplayName("Specialty vacía lanza excepción")
     void shouldThrowForBlank() {
-        assertThatThrownBy(() -> Specialty.of("   "))
+        assertThatThrownBy(() -> Specialty.fromString("   "))
                 .isInstanceOf(ValueObjectValidationException.class);
     }
 }
