@@ -4799,3 +4799,406 @@ org.springframework.security.web.firewall.RequestRejectedException: The request 
 2026-04-06 21:43:44 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.ClinicaDefinitiva.infrastructure.advice.ErrorResponse@5da2c06d]
 2026-04-06 21:43:44 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException: El rol no tiene el permiso requerido en la matriz RBAC]
 2026-04-06 21:43:44 DEBUG [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet - Completed 403 FORBIDDEN
+2026-04-06 22:00:32 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-04-06 22:00:32 DEBUG [background-preinit] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-06 22:00:32 DEBUG [background-preinit] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-06 22:00:32 DEBUG [background-preinit] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-06 22:00:32 DEBUG [background-preinit] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-06 22:00:32 DEBUG [background-preinit] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-06 22:00:32 DEBUG [background-preinit] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-06 22:00:32 DEBUG [background-preinit] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-06 22:00:32 INFO  [main] c.e.C.ClinicaDefinitivaApplication - Starting ClinicaDefinitivaApplication using Java 17.0.10 with PID 20980 (C:\Users\David\OneDrive\Documents\proyectosJava\ClinicaDefinitiva\target\classes started by David in C:\Users\David\OneDrive\Documents\proyectosJava\ClinicaDefinitiva)
+2026-04-06 22:00:32 INFO  [main] c.e.C.ClinicaDefinitivaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-04-06 22:00:33 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-06 22:00:33 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-06 22:00:33 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-06 22:00:33 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-06 22:00:33 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-06 22:00:33 DEBUG [background-preinit] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-06 22:00:38 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-06 22:00:40 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1259 ms. Found 21 JPA repository interfaces.
+2026-04-06 22:00:43 INFO  [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-04-06 22:00:43 INFO  [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-04-06 22:00:43 INFO  [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-06 22:00:43 INFO  [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.41]
+2026-04-06 22:00:43 INFO  [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-04-06 22:00:43 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 10323 ms
+2026-04-06 22:00:44 DEBUG [main] o.s.w.f.ServerHttpObservationFilter - Filter 'webMvcObservationFilter' configured for use
+2026-04-06 22:00:45 INFO  [main] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-06 22:00:45 INFO  [main] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-04-06 22:00:45 INFO  [main] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-06 22:00:47 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-06 22:00:47 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-06 22:00:48 INFO  [main] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6c4d0224
+2026-04-06 22:00:48 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-06 22:00:49 WARN  [main] org.hibernate.dialect.Dialect - HHH000511: The 5.5.5 version for [org.hibernate.dialect.MySQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 8.0.0. Check the community dialects project for available legacy versions.
+2026-04-06 22:00:49 WARN  [main] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-06 22:00:49 INFO  [main] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 5.5.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-06 22:00:51 DEBUG [main] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-06 22:00:51 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-06 22:00:56 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-06 22:00:57 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-06 22:01:00 INFO  [main] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-06 22:01:08 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-06 22:01:08 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-06 22:01:09 INFO  [main] o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-04-06 22:01:09 WARN  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-04-06 22:01:09 INFO  [main] c.e.C.i.r.p.s.StripePaymentGateway - ? Stripe payment gateway initialized
+2026-04-06 22:01:09 WARN  [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-06 22:01:09 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping - 216 mappings in 'requestMappingHandlerMapping'
+2026-04-06 22:01:10 DEBUG [main] o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2026-04-06 22:01:10 INFO  [main] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-04-06 22:01:10 DEBUG [main] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-04-06 22:01:11 DEBUG [main] o.h.v.m.ResourceBundleMessageInterpolator - Loaded expression factory via original TCCL
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.e.AbstractConfigurationImpl - Setting custom MessageInterpolator of type org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.e.AbstractConfigurationImpl - Setting custom ConstraintValidatorFactory of type org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - Trying to load META-INF/validation.xml for XML based Validator configuration.
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via user class loader
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via TCCL
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.x.c.ResourceLoaderHelper - Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.x.config.ValidationXmlParser - No META-INF/validation.xml found. Using annotation based configuration only.
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Found jakarta.persistence.Persistence on classpath containing 'getPersistenceUtil'. Assuming JPA 2 environment. Trying to instantiate JPA aware TraversableResolver
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.e.r.TraversableResolvers - Instantiated JPA aware TraversableResolver of type org.hibernate.validator.internal.engine.resolver.JPATraversableResolver.
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000252: Using org.hibernate.validator.internal.engine.DefaultPropertyNodeNameProvider as property node name provider.
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator as ValidatorFactory-scoped message interpolator.
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.resolver.JPATraversableResolver as ValidatorFactory-scoped traversable resolver.
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.util.ExecutableParameterNameProvider as ValidatorFactory-scoped parameter name provider.
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.DefaultClockProvider as ValidatorFactory-scoped clock provider.
+2026-04-06 22:01:11 DEBUG [main] o.h.v.i.e.ValidatorFactoryConfigurationHelper - HV000234: Using org.hibernate.validator.internal.engine.scripting.DefaultScriptEvaluatorFactory as ValidatorFactory-scoped script evaluator factory.
+2026-04-06 22:01:11 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-04-06 22:01:11 DEBUG [main] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-04-06 22:01:12 INFO  [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-04-06 22:01:12 INFO  [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-04-06 22:01:12 INFO  [main] c.e.C.ClinicaDefinitivaApplication - Started ClinicaDefinitivaApplication in 42.1 seconds (process running for 43.668)
+2026-04-06 22:01:12 INFO  [main] c.e.C.ClinicaDefinitivaApplication - Logger funciona correctamente
+2026-04-06 22:01:46 INFO  [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-06 22:01:46 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-06 22:01:46 DEBUG [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+2026-04-06 22:01:46 DEBUG [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+2026-04-06 22:01:46 DEBUG [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+2026-04-06 22:01:46 DEBUG [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@25ff482a
+2026-04-06 22:01:46 DEBUG [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@4bb9b98d
+2026-04-06 22:01:46 DEBUG [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2026-04-06 22:01:46 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 15 ms
+2026-04-06 22:01:46 DEBUG [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy - Securing PATCH /api/v1/patients/3/sensitive
+2026-04-06 22:01:46 TRACE [http-nio-8080-exec-1] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:01:46 TRACE [http-nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to AnonymousAuthenticationToken [Principal=anonymousUser, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_ANONYMOUS]]
+2026-04-06 22:01:47 DEBUG [http-nio-8080-exec-1] o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
+2026-04-06 22:01:47 DEBUG [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy - Securing PATCH /error
+2026-04-06 22:01:47 TRACE [http-nio-8080-exec-1] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:01:47 TRACE [http-nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to AnonymousAuthenticationToken [Principal=anonymousUser, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_ANONYMOUS]]
+2026-04-06 22:01:47 DEBUG [http-nio-8080-exec-1] o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
+2026-04-06 22:01:52 DEBUG [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy - Securing PATCH /api/v1/patients/3/sensitive
+2026-04-06 22:01:52 TRACE [http-nio-8080-exec-3] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:01:52 TRACE [http-nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to AnonymousAuthenticationToken [Principal=anonymousUser, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_ANONYMOUS]]
+2026-04-06 22:01:52 DEBUG [http-nio-8080-exec-3] o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
+2026-04-06 22:01:52 DEBUG [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy - Securing PATCH /error
+2026-04-06 22:01:52 TRACE [http-nio-8080-exec-3] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:01:52 TRACE [http-nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to AnonymousAuthenticationToken [Principal=anonymousUser, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_ANONYMOUS]]
+2026-04-06 22:01:52 DEBUG [http-nio-8080-exec-3] o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
+2026-04-06 22:02:04 DEBUG [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy - Securing POST /api/v1/auth/login
+2026-04-06 22:02:04 TRACE [http-nio-8080-exec-4] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:02:04 TRACE [http-nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to AnonymousAuthenticationToken [Principal=anonymousUser, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_ANONYMOUS]]
+2026-04-06 22:02:04 DEBUG [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy - Secured POST /api/v1/auth/login
+2026-04-06 22:02:04 DEBUG [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet - POST "/api/v1/auth/login", parameters={}
+2026-04-06 22:02:04 DEBUG [http-nio-8080-exec-4] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.ClinicaDefinitiva.infrastructure.rest.authentication.controller.AuthController#login(LoginRequest)
+2026-04-06 22:02:04 DEBUG [http-nio-8080-exec-4] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest[email=hancock@hr.com, password=perfume]]
+2026-04-06 22:02:06 DEBUG [http-nio-8080-exec-4] o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2026-04-06 22:02:06 DEBUG [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-04-06 22:02:06 DEBUG [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3 (truncated)...]
+2026-04-06 22:02:06 DEBUG [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-04-06 22:02:43 DEBUG [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy - Securing PATCH /api/v1/patients/6/contact
+2026-04-06 22:02:43 TRACE [http-nio-8080-exec-5] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:02:43 TRACE [http-nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter - Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails@3642313d, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[SUSPEND_DENTIST, UPDATE_COMPANY, UPDATE_INVOICE, CREATE_RECEPTIONIST, UPDATE_GUARDIAN, DELETE_RECEPTIONIST, CANCEL_APPOINTMENT, CREATE_CONTRACT, DELETE_APPOINTMENT, RESCHEDULE_APPOINTMENT, CREATE_PATIENT, READ_RATE, READ_APPOINTMENT, DELETE_SHIFT, READ_DENTIST, SCHEDULE_APPOINTMENT, ROLE_RECEPTIONIST, DELETE_INVOICE, UPDATE_PAYMENT, CREATE_DENTIST, READ_PATIENT, READ_ADMINISTRATIVE_REPORT, READ_CONTRACT, CREATE_APPOINTMENT, DELETE_ADMINISTRATIVE_REPORT, REVERSE_INVOICE, APPROVE_INVOICE, READ_PROVIDED_SERVICE, READ_RECEPTIONIST, UPDATE_DENTIST, DELETE_CONTRACT, DELETE_PAYMENT, SUSPEND_RECEPTIONIST, READ_COMPANY, UPDATE_ADMINISTRATIVE_REPORT, CREATE_PAYMENT, READ_GUARDIAN, UPDATE_CONTRACT, DELETE_DENTIST, POST_INVOICE, CREATE_ADMINISTRATIVE_REPORT, READ_SHIFT, CREATE_GUARDIAN, READ_PAYMENT, READ_INVOICE, UPDATE_APPOINTMENT, CREATE_SHIFT, UPDATE_RECEPTIONIST, CREATE_INVOICE, UPDATE_SHIFT, UPDATE_PATIENT, UPDATE_PROVIDED_SERVICE]]
+2026-04-06 22:02:43 TRACE [http-nio-8080-exec-5] o.s.s.w.a.s.CompositeSessionAuthenticationStrategy - Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-06 22:02:43 DEBUG [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy - Secured PATCH /api/v1/patients/6/contact
+2026-04-06 22:02:43 DEBUG [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet - PATCH "/api/v1/patients/6/contact", parameters={}
+2026-04-06 22:02:43 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.ClinicaDefinitiva.infrastructure.rest.actor.controller.PatientController#updateContact(Long, UpdatePatientContactRequest, CustomUserDetails)
+2026-04-06 22:02:43 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UpdatePatientContactRequest[street=Carrera 15 # 45-67, city=Medellín, state=Antioquia, country=Colom (truncated)...]
+2026-04-06 22:02:44 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.ClinicaDefinitiva.infrastructure.advice.GlobalControllerAdvice#handleBusinessRuleViolation(BusinessRuleViolationException)
+2026-04-06 22:02:44 WARN  [http-nio-8080-exec-5] c.e.C.i.a.GlobalControllerAdvice - Regla de negocio violada [requestId=35bab9e5-b091-43cd-8f67-5c367489f11d, usuario=hancock@hr.com, código=RN-AUTH-005, contexto=AUTHORIZATION]: El rol no tiene el permiso requerido en la matriz RBAC
+2026-04-06 22:02:44 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-04-06 22:02:44 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.ClinicaDefinitiva.infrastructure.advice.ErrorResponse@30ad15f9]
+2026-04-06 22:02:44 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException: El rol no tiene el permiso requerido en la matriz RBAC]
+2026-04-06 22:02:44 DEBUG [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet - Completed 403 FORBIDDEN
+2026-04-06 22:21:15 DEBUG [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy - Securing POST /api/v1/auth/login
+2026-04-06 22:21:15 TRACE [http-nio-8080-exec-8] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:21:15 TRACE [http-nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to AnonymousAuthenticationToken [Principal=anonymousUser, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=null], Granted Authorities=[ROLE_ANONYMOUS]]
+2026-04-06 22:21:15 DEBUG [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy - Secured POST /api/v1/auth/login
+2026-04-06 22:21:15 DEBUG [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet - POST "/api/v1/auth/login", parameters={}
+2026-04-06 22:21:15 DEBUG [http-nio-8080-exec-8] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.ClinicaDefinitiva.infrastructure.rest.authentication.controller.AuthController#login(LoginRequest)
+2026-04-06 22:21:15 DEBUG [http-nio-8080-exec-8] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest[email=hancock@hr.com, password=perfume]]
+2026-04-06 22:21:16 DEBUG [http-nio-8080-exec-8] o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2026-04-06 22:21:16 DEBUG [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-04-06 22:21:16 DEBUG [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3 (truncated)...]
+2026-04-06 22:21:16 DEBUG [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-04-06 22:21:34 DEBUG [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy - Securing POST /api/v1/shifts
+2026-04-06 22:21:34 TRACE [http-nio-8080-exec-9] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:21:35 TRACE [http-nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter - Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails@67efff21, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[SUSPEND_DENTIST, UPDATE_COMPANY, UPDATE_INVOICE, CREATE_RECEPTIONIST, UPDATE_GUARDIAN, DELETE_RECEPTIONIST, CANCEL_APPOINTMENT, CREATE_CONTRACT, DELETE_APPOINTMENT, RESCHEDULE_APPOINTMENT, CREATE_PATIENT, READ_RATE, READ_APPOINTMENT, DELETE_SHIFT, READ_DENTIST, SCHEDULE_APPOINTMENT, ROLE_RECEPTIONIST, DELETE_INVOICE, UPDATE_PAYMENT, CREATE_DENTIST, READ_PATIENT, READ_ADMINISTRATIVE_REPORT, READ_CONTRACT, CREATE_APPOINTMENT, DELETE_ADMINISTRATIVE_REPORT, REVERSE_INVOICE, APPROVE_INVOICE, READ_PROVIDED_SERVICE, READ_RECEPTIONIST, UPDATE_DENTIST, DELETE_CONTRACT, DELETE_PAYMENT, SUSPEND_RECEPTIONIST, READ_COMPANY, UPDATE_ADMINISTRATIVE_REPORT, CREATE_PAYMENT, READ_GUARDIAN, UPDATE_CONTRACT, DELETE_DENTIST, POST_INVOICE, CREATE_ADMINISTRATIVE_REPORT, READ_SHIFT, CREATE_GUARDIAN, READ_PAYMENT, READ_INVOICE, UPDATE_APPOINTMENT, CREATE_SHIFT, UPDATE_RECEPTIONIST, CREATE_INVOICE, UPDATE_SHIFT, UPDATE_PATIENT, UPDATE_PROVIDED_SERVICE]]
+2026-04-06 22:21:35 TRACE [http-nio-8080-exec-9] o.s.s.w.a.s.CompositeSessionAuthenticationStrategy - Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-06 22:21:35 DEBUG [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy - Secured POST /api/v1/shifts
+2026-04-06 22:21:35 DEBUG [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet - POST "/api/v1/shifts", parameters={}
+2026-04-06 22:21:35 DEBUG [http-nio-8080-exec-9] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.controller.ShiftController#assignShift(AssignShiftRequest, CustomUserDetails)
+2026-04-06 22:21:35 DEBUG [http-nio-8080-exec-9] o.s.web.method.HandlerMethod - Could not resolve parameter [0] in public org.springframework.http.ResponseEntity<com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.dto.ReadShiftResponse> com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.controller.ShiftController.assignShift(com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.dto.AssignShiftRequest,com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails): JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String "2026-04-8": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '2026-04-8' could not be parsed at index 8
+2026-04-06 22:21:35 DEBUG [http-nio-8080-exec-9] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.ClinicaDefinitiva.infrastructure.advice.GlobalControllerAdvice#handleHttpMessageNotReadable(HttpMessageNotReadableException)
+2026-04-06 22:21:35 WARN  [http-nio-8080-exec-9] c.e.C.i.a.GlobalControllerAdvice - JSON mal formado [requestId=1504ea4d-e622-4234-bdd1-404a53b93804, usuario=hancock@hr.com]: JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String "2026-04-8": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '2026-04-8' could not be parsed at index 8
+2026-04-06 22:21:35 DEBUG [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-04-06 22:21:35 DEBUG [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.ClinicaDefinitiva.infrastructure.advice.ErrorResponse@2800f19d]
+2026-04-06 22:21:35 DEBUG [http-nio-8080-exec-9] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String "2026-04-8": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '2026-04-8' could not be parsed at index 8]
+2026-04-06 22:21:35 DEBUG [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet - Completed 400 BAD_REQUEST
+2026-04-06 22:23:36 DEBUG [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy - Securing POST /api/v1/shifts
+2026-04-06 22:23:36 TRACE [http-nio-8080-exec-2] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:23:36 TRACE [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter - Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails@3b829813, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[SUSPEND_DENTIST, UPDATE_COMPANY, UPDATE_INVOICE, CREATE_RECEPTIONIST, UPDATE_GUARDIAN, DELETE_RECEPTIONIST, CANCEL_APPOINTMENT, CREATE_CONTRACT, DELETE_APPOINTMENT, RESCHEDULE_APPOINTMENT, CREATE_PATIENT, READ_RATE, READ_APPOINTMENT, DELETE_SHIFT, READ_DENTIST, SCHEDULE_APPOINTMENT, ROLE_RECEPTIONIST, DELETE_INVOICE, UPDATE_PAYMENT, CREATE_DENTIST, READ_PATIENT, READ_ADMINISTRATIVE_REPORT, READ_CONTRACT, CREATE_APPOINTMENT, DELETE_ADMINISTRATIVE_REPORT, REVERSE_INVOICE, APPROVE_INVOICE, READ_PROVIDED_SERVICE, READ_RECEPTIONIST, UPDATE_DENTIST, DELETE_CONTRACT, DELETE_PAYMENT, SUSPEND_RECEPTIONIST, READ_COMPANY, UPDATE_ADMINISTRATIVE_REPORT, CREATE_PAYMENT, READ_GUARDIAN, UPDATE_CONTRACT, DELETE_DENTIST, POST_INVOICE, CREATE_ADMINISTRATIVE_REPORT, READ_SHIFT, CREATE_GUARDIAN, READ_PAYMENT, READ_INVOICE, UPDATE_APPOINTMENT, CREATE_SHIFT, UPDATE_RECEPTIONIST, CREATE_INVOICE, UPDATE_SHIFT, UPDATE_PATIENT, UPDATE_PROVIDED_SERVICE]]
+2026-04-06 22:23:36 TRACE [http-nio-8080-exec-2] o.s.s.w.a.s.CompositeSessionAuthenticationStrategy - Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-06 22:23:36 DEBUG [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy - Secured POST /api/v1/shifts
+2026-04-06 22:23:36 DEBUG [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - POST "/api/v1/shifts", parameters={}
+2026-04-06 22:23:36 DEBUG [http-nio-8080-exec-2] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.controller.ShiftController#assignShift(AssignShiftRequest, CustomUserDetails)
+2026-04-06 22:23:36 DEBUG [http-nio-8080-exec-2] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [AssignShiftRequest[dentistId=3, date=2026-04-08, startTime=08:00, endTime=17:00, type=MORNING]]
+2026-04-06 22:23:37 DEBUG [http-nio-8080-exec-2] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.ClinicaDefinitiva.infrastructure.advice.GlobalControllerAdvice#handleGenericException(Exception)
+2026-04-06 22:23:37 ERROR [http-nio-8080-exec-2] c.e.C.i.a.GlobalControllerAdvice - Error interno no manejado [requestId=36e541fe-166a-4ac9-874e-13df251efcff, usuario=hancock@hr.com]
+java.lang.IllegalArgumentException: No enum constant com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftType.MORNING
+	at java.base/java.lang.Enum.valueOf(Enum.java:273)
+	at com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftType.valueOf(ShiftType.java:3)
+	at com.example.ClinicaDefinitiva.application.administration.operations.service.ShiftApplicationService.assignShift(ShiftApplicationService.java:137)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89)
+	at com.example.ClinicaDefinitiva.infrastructure.security.config.AuthorizationAspect.checkPermission(AuthorizationAspect.java:76)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:642)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:632)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:71)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:173)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:380)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)
+	at com.example.ClinicaDefinitiva.application.administration.operations.service.ShiftApplicationService$$SpringCGLIB$$0.assignShift(<generated>)
+	at com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.controller.ShiftController.assignShift(ShiftController.java:80)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at com.example.ClinicaDefinitiva.util.RequestIdFilter.doFilterInternal(RequestIdFilter.java:76)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:479)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:340)
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:82)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:128)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at com.example.ClinicaDefinitiva.infrastructure.security.filter.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:40)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:114)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+2026-04-06 22:23:37 DEBUG [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-04-06 22:23:37 DEBUG [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.ClinicaDefinitiva.infrastructure.advice.ErrorResponse@6beb860c]
+2026-04-06 22:23:37 DEBUG [http-nio-8080-exec-2] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.IllegalArgumentException: No enum constant com.example.ClinicaDefinitiva.domain.administration.operations.enu.ShiftType.MORNING]
+2026-04-06 22:23:37 DEBUG [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Completed 500 INTERNAL_SERVER_ERROR
+2026-04-06 22:28:44 DEBUG [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy - Securing POST /api/v1/shifts
+2026-04-06 22:28:44 TRACE [http-nio-8080-exec-1] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:28:44 TRACE [http-nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter - Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails@434da603, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[SUSPEND_DENTIST, UPDATE_COMPANY, UPDATE_INVOICE, CREATE_RECEPTIONIST, UPDATE_GUARDIAN, DELETE_RECEPTIONIST, CANCEL_APPOINTMENT, CREATE_CONTRACT, DELETE_APPOINTMENT, RESCHEDULE_APPOINTMENT, CREATE_PATIENT, READ_RATE, READ_APPOINTMENT, DELETE_SHIFT, READ_DENTIST, SCHEDULE_APPOINTMENT, ROLE_RECEPTIONIST, DELETE_INVOICE, UPDATE_PAYMENT, CREATE_DENTIST, READ_PATIENT, READ_ADMINISTRATIVE_REPORT, READ_CONTRACT, CREATE_APPOINTMENT, DELETE_ADMINISTRATIVE_REPORT, REVERSE_INVOICE, APPROVE_INVOICE, READ_PROVIDED_SERVICE, READ_RECEPTIONIST, UPDATE_DENTIST, DELETE_CONTRACT, DELETE_PAYMENT, SUSPEND_RECEPTIONIST, READ_COMPANY, UPDATE_ADMINISTRATIVE_REPORT, CREATE_PAYMENT, READ_GUARDIAN, UPDATE_CONTRACT, DELETE_DENTIST, POST_INVOICE, CREATE_ADMINISTRATIVE_REPORT, READ_SHIFT, CREATE_GUARDIAN, READ_PAYMENT, READ_INVOICE, UPDATE_APPOINTMENT, CREATE_SHIFT, UPDATE_RECEPTIONIST, CREATE_INVOICE, UPDATE_SHIFT, UPDATE_PATIENT, UPDATE_PROVIDED_SERVICE]]
+2026-04-06 22:28:44 TRACE [http-nio-8080-exec-1] o.s.s.w.a.s.CompositeSessionAuthenticationStrategy - Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-06 22:28:44 DEBUG [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy - Secured POST /api/v1/shifts
+2026-04-06 22:28:44 DEBUG [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - POST "/api/v1/shifts", parameters={}
+2026-04-06 22:28:44 DEBUG [http-nio-8080-exec-1] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.controller.ShiftController#assignShift(AssignShiftRequest, CustomUserDetails)
+2026-04-06 22:28:44 DEBUG [http-nio-8080-exec-1] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [AssignShiftRequest[dentistId=3, date=2026-04-08, startTime=08:00, endTime=17:00, type=CLINICAL]]
+2026-04-06 22:28:45 DEBUG [http-nio-8080-exec-1] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.ClinicaDefinitiva.infrastructure.advice.GlobalControllerAdvice#handleBusinessRuleViolation(BusinessRuleViolationException)
+2026-04-06 22:28:45 WARN  [http-nio-8080-exec-1] c.e.C.i.a.GlobalControllerAdvice - Regla de negocio violada [requestId=a913f08e-f8c2-4915-9481-92f668116d4c, usuario=hancock@hr.com, código=RN-SHIFT-008, contexto=SHI07]: El dentista no tiene turno activo en ese horario
+2026-04-06 22:28:45 DEBUG [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-04-06 22:28:45 DEBUG [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.ClinicaDefinitiva.infrastructure.advice.ErrorResponse@51fdfe25]
+2026-04-06 22:28:45 DEBUG [http-nio-8080-exec-1] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException: El dentista no tiene turno activo en ese horario]
+2026-04-06 22:28:45 DEBUG [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed 422 UNPROCESSABLE_ENTITY
+2026-04-06 22:29:53 DEBUG [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy - Securing POST /api/v1/shifts
+2026-04-06 22:29:53 TRACE [http-nio-8080-exec-5] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:29:53 TRACE [http-nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter - Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails@2dc68129, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[SUSPEND_DENTIST, UPDATE_COMPANY, UPDATE_INVOICE, CREATE_RECEPTIONIST, UPDATE_GUARDIAN, DELETE_RECEPTIONIST, CANCEL_APPOINTMENT, CREATE_CONTRACT, DELETE_APPOINTMENT, RESCHEDULE_APPOINTMENT, CREATE_PATIENT, READ_RATE, READ_APPOINTMENT, DELETE_SHIFT, READ_DENTIST, SCHEDULE_APPOINTMENT, ROLE_RECEPTIONIST, DELETE_INVOICE, UPDATE_PAYMENT, CREATE_DENTIST, READ_PATIENT, READ_ADMINISTRATIVE_REPORT, READ_CONTRACT, CREATE_APPOINTMENT, DELETE_ADMINISTRATIVE_REPORT, REVERSE_INVOICE, APPROVE_INVOICE, READ_PROVIDED_SERVICE, READ_RECEPTIONIST, UPDATE_DENTIST, DELETE_CONTRACT, DELETE_PAYMENT, SUSPEND_RECEPTIONIST, READ_COMPANY, UPDATE_ADMINISTRATIVE_REPORT, CREATE_PAYMENT, READ_GUARDIAN, UPDATE_CONTRACT, DELETE_DENTIST, POST_INVOICE, CREATE_ADMINISTRATIVE_REPORT, READ_SHIFT, CREATE_GUARDIAN, READ_PAYMENT, READ_INVOICE, UPDATE_APPOINTMENT, CREATE_SHIFT, UPDATE_RECEPTIONIST, CREATE_INVOICE, UPDATE_SHIFT, UPDATE_PATIENT, UPDATE_PROVIDED_SERVICE]]
+2026-04-06 22:29:53 TRACE [http-nio-8080-exec-5] o.s.s.w.a.s.CompositeSessionAuthenticationStrategy - Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-06 22:29:53 DEBUG [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy - Secured POST /api/v1/shifts
+2026-04-06 22:29:53 DEBUG [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet - POST "/api/v1/shifts", parameters={}
+2026-04-06 22:29:53 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.controller.ShiftController#assignShift(AssignShiftRequest, CustomUserDetails)
+2026-04-06 22:29:53 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [AssignShiftRequest[dentistId=3, date=2026-04-08, startTime=09:00, endTime=17:00, type=CLINICAL]]
+2026-04-06 22:29:53 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.ClinicaDefinitiva.infrastructure.advice.GlobalControllerAdvice#handleBusinessRuleViolation(BusinessRuleViolationException)
+2026-04-06 22:29:53 WARN  [http-nio-8080-exec-5] c.e.C.i.a.GlobalControllerAdvice - Regla de negocio violada [requestId=62966dfb-2de9-483b-a88d-b66efcfc5c06, usuario=hancock@hr.com, código=RN-SHIFT-008, contexto=SHI07]: El dentista no tiene turno activo en ese horario
+2026-04-06 22:29:53 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-04-06 22:29:53 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.ClinicaDefinitiva.infrastructure.advice.ErrorResponse@5cf2c89e]
+2026-04-06 22:29:53 DEBUG [http-nio-8080-exec-5] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException: El dentista no tiene turno activo en ese horario]
+2026-04-06 22:29:53 DEBUG [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet - Completed 422 UNPROCESSABLE_ENTITY
+2026-04-06 22:30:38 DEBUG [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy - Securing POST /api/v1/shifts
+2026-04-06 22:30:38 TRACE [http-nio-8080-exec-7] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:30:38 TRACE [http-nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter - Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails@18399b8d, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[SUSPEND_DENTIST, UPDATE_COMPANY, UPDATE_INVOICE, CREATE_RECEPTIONIST, UPDATE_GUARDIAN, DELETE_RECEPTIONIST, CANCEL_APPOINTMENT, CREATE_CONTRACT, DELETE_APPOINTMENT, RESCHEDULE_APPOINTMENT, CREATE_PATIENT, READ_RATE, READ_APPOINTMENT, DELETE_SHIFT, READ_DENTIST, SCHEDULE_APPOINTMENT, ROLE_RECEPTIONIST, DELETE_INVOICE, UPDATE_PAYMENT, CREATE_DENTIST, READ_PATIENT, READ_ADMINISTRATIVE_REPORT, READ_CONTRACT, CREATE_APPOINTMENT, DELETE_ADMINISTRATIVE_REPORT, REVERSE_INVOICE, APPROVE_INVOICE, READ_PROVIDED_SERVICE, READ_RECEPTIONIST, UPDATE_DENTIST, DELETE_CONTRACT, DELETE_PAYMENT, SUSPEND_RECEPTIONIST, READ_COMPANY, UPDATE_ADMINISTRATIVE_REPORT, CREATE_PAYMENT, READ_GUARDIAN, UPDATE_CONTRACT, DELETE_DENTIST, POST_INVOICE, CREATE_ADMINISTRATIVE_REPORT, READ_SHIFT, CREATE_GUARDIAN, READ_PAYMENT, READ_INVOICE, UPDATE_APPOINTMENT, CREATE_SHIFT, UPDATE_RECEPTIONIST, CREATE_INVOICE, UPDATE_SHIFT, UPDATE_PATIENT, UPDATE_PROVIDED_SERVICE]]
+2026-04-06 22:30:38 TRACE [http-nio-8080-exec-7] o.s.s.w.a.s.CompositeSessionAuthenticationStrategy - Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-06 22:30:38 DEBUG [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy - Secured POST /api/v1/shifts
+2026-04-06 22:30:38 DEBUG [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet - POST "/api/v1/shifts", parameters={}
+2026-04-06 22:30:38 DEBUG [http-nio-8080-exec-7] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.controller.ShiftController#assignShift(AssignShiftRequest, CustomUserDetails)
+2026-04-06 22:30:38 DEBUG [http-nio-8080-exec-7] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [AssignShiftRequest[dentistId=3, date=2026-04-08, startTime=09:00, endTime=18:00, type=CLINICAL]]
+2026-04-06 22:30:38 DEBUG [http-nio-8080-exec-7] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.ClinicaDefinitiva.infrastructure.advice.GlobalControllerAdvice#handleBusinessRuleViolation(BusinessRuleViolationException)
+2026-04-06 22:30:38 WARN  [http-nio-8080-exec-7] c.e.C.i.a.GlobalControllerAdvice - Regla de negocio violada [requestId=d623dde2-3edb-45a2-b350-c2b0856db35d, usuario=hancock@hr.com, código=RN-SHIFT-008, contexto=SHI07]: El dentista no tiene turno activo en ese horario
+2026-04-06 22:30:38 DEBUG [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-04-06 22:30:38 DEBUG [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.ClinicaDefinitiva.infrastructure.advice.ErrorResponse@2644e879]
+2026-04-06 22:30:38 DEBUG [http-nio-8080-exec-7] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException: El dentista no tiene turno activo en ese horario]
+2026-04-06 22:30:38 DEBUG [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet - Completed 422 UNPROCESSABLE_ENTITY
+2026-04-06 22:30:53 DEBUG [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy - Securing POST /api/v1/shifts
+2026-04-06 22:30:53 TRACE [http-nio-8080-exec-8] o.s.s.w.a.logout.LogoutFilter - Did not match request to Or [Ant [pattern='/logout', GET], Ant [pattern='/logout', POST], Ant [pattern='/logout', PUT], Ant [pattern='/logout', DELETE]]
+2026-04-06 22:30:53 TRACE [http-nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter - Did not set SecurityContextHolder since already authenticated UsernamePasswordAuthenticationToken [Principal=com.example.ClinicaDefinitiva.infrastructure.security.adapter.CustomUserDetails@6469f5f0, Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[SUSPEND_DENTIST, UPDATE_COMPANY, UPDATE_INVOICE, CREATE_RECEPTIONIST, UPDATE_GUARDIAN, DELETE_RECEPTIONIST, CANCEL_APPOINTMENT, CREATE_CONTRACT, DELETE_APPOINTMENT, RESCHEDULE_APPOINTMENT, CREATE_PATIENT, READ_RATE, READ_APPOINTMENT, DELETE_SHIFT, READ_DENTIST, SCHEDULE_APPOINTMENT, ROLE_RECEPTIONIST, DELETE_INVOICE, UPDATE_PAYMENT, CREATE_DENTIST, READ_PATIENT, READ_ADMINISTRATIVE_REPORT, READ_CONTRACT, CREATE_APPOINTMENT, DELETE_ADMINISTRATIVE_REPORT, REVERSE_INVOICE, APPROVE_INVOICE, READ_PROVIDED_SERVICE, READ_RECEPTIONIST, UPDATE_DENTIST, DELETE_CONTRACT, DELETE_PAYMENT, SUSPEND_RECEPTIONIST, READ_COMPANY, UPDATE_ADMINISTRATIVE_REPORT, CREATE_PAYMENT, READ_GUARDIAN, UPDATE_CONTRACT, DELETE_DENTIST, POST_INVOICE, CREATE_ADMINISTRATIVE_REPORT, READ_SHIFT, CREATE_GUARDIAN, READ_PAYMENT, READ_INVOICE, UPDATE_APPOINTMENT, CREATE_SHIFT, UPDATE_RECEPTIONIST, CREATE_INVOICE, UPDATE_SHIFT, UPDATE_PATIENT, UPDATE_PROVIDED_SERVICE]]
+2026-04-06 22:30:53 TRACE [http-nio-8080-exec-8] o.s.s.w.a.s.CompositeSessionAuthenticationStrategy - Preparing session with ChangeSessionIdAuthenticationStrategy (1/1)
+2026-04-06 22:30:53 DEBUG [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy - Secured POST /api/v1/shifts
+2026-04-06 22:30:53 DEBUG [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet - POST "/api/v1/shifts", parameters={}
+2026-04-06 22:30:53 DEBUG [http-nio-8080-exec-8] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.ClinicaDefinitiva.infrastructure.rest.administration.operations.controller.ShiftController#assignShift(AssignShiftRequest, CustomUserDetails)
+2026-04-06 22:30:53 DEBUG [http-nio-8080-exec-8] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [AssignShiftRequest[dentistId=3, date=2026-04-08, startTime=10:00, endTime=18:00, type=CLINICAL]]
+2026-04-06 22:30:53 DEBUG [http-nio-8080-exec-8] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.ClinicaDefinitiva.infrastructure.advice.GlobalControllerAdvice#handleBusinessRuleViolation(BusinessRuleViolationException)
+2026-04-06 22:30:53 WARN  [http-nio-8080-exec-8] c.e.C.i.a.GlobalControllerAdvice - Regla de negocio violada [requestId=729daede-f524-43a2-850f-74065ac401fd, usuario=hancock@hr.com, código=RN-SHIFT-008, contexto=SHI07]: El dentista no tiene turno activo en ese horario
+2026-04-06 22:30:53 DEBUG [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2026-04-06 22:30:53 DEBUG [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.ClinicaDefinitiva.infrastructure.advice.ErrorResponse@819dff8]
+2026-04-06 22:30:53 DEBUG [http-nio-8080-exec-8] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException: El dentista no tiene turno activo en ese horario]
+2026-04-06 22:30:53 DEBUG [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet - Completed 422 UNPROCESSABLE_ENTITY

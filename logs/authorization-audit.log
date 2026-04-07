@@ -97,3 +97,9 @@ Authorization decision: {"timestamp":"2026-04-07T02:31:55.448748600Z","userId":4
 Authorization decision: {"timestamp":"2026-04-07T02:32:50.873013300Z","userId":40,"rolId":1,"resource":"PATIENT","action":"READ","decision":"ALLOW","durationMs":18,"context":{"guardianId":15}}
 Authorization DENIED: {"timestamp":"2026-04-07T02:34:02.407679300Z","userId":40,"rolId":1,"resource":"PATIENT","action":"UPDATE","decision":"DENY","durationMs":96,"context":{"resourceId":6,"resourceOwnerId":55},"denyReason":"ABAC policy evaluation failed"}
 Authorization DENIED: {"timestamp":"2026-04-07T02:43:44.734688Z","userId":40,"rolId":1,"resource":"PATIENT","action":"UPDATE","decision":"DENY","durationMs":34,"context":{"resourceId":3},"denyReason":"ABAC policy evaluation failed"}
+Authorization DENIED: {"timestamp":"2026-04-07T03:02:44.231171100Z","userId":40,"rolId":1,"resource":"PATIENT","action":"UPDATE","decision":"DENY","durationMs":69,"context":{"resourceId":6,"resourceOwnerId":55},"denyReason":"ABAC policy evaluation failed"}
+Authorization decision: {"timestamp":"2026-04-07T03:23:37.220292900Z","userId":40,"rolId":1,"resource":"SHIFT","action":"CREATE","decision":"ALLOW","durationMs":48}
+Authorization decision: {"timestamp":"2026-04-07T03:28:44.730170100Z","userId":40,"rolId":1,"resource":"SHIFT","action":"CREATE","decision":"ALLOW","durationMs":19}
+Authorization decision: {"timestamp":"2026-04-07T03:29:53.635955900Z","userId":40,"rolId":1,"resource":"SHIFT","action":"CREATE","decision":"ALLOW","durationMs":21}
+Authorization decision: {"timestamp":"2026-04-07T03:30:38.219328700Z","userId":40,"rolId":1,"resource":"SHIFT","action":"CREATE","decision":"ALLOW","durationMs":25}
+Authorization decision: {"timestamp":"2026-04-07T03:30:53.843637100Z","userId":40,"rolId":1,"resource":"SHIFT","action":"CREATE","decision":"ALLOW","durationMs":17}

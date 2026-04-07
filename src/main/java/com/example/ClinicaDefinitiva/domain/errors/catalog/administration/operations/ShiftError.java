@@ -79,7 +79,9 @@ public enum ShiftError implements ErrorCatalog {
     ERR_SHIFT_NOT_FOUND(
     "RN-SHIFT-016", "error.shift.not.found",
     "El turno solicitado no existe",
-    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR);
+    HttpStatus.NOT_FOUND, ErrorSeverity.ERROR),
+    ERR_SHIFT_DATE_IN_PAST("RN-SHIFT-017","error.shift.date.past","No se puede crear un turno en una fecha pasada", HttpStatus.BAD_REQUEST, ErrorSeverity.WARN),
+ERR_SHIFT_OVERLAP("RN-SHIFT-018","error.shift.overlap","El horario solicitado se solapa con otro turno activo", HttpStatus.CONFLICT, ErrorSeverity.ERROR),;
 
     private final String code;
     private final String messageKey;

@@ -310,6 +310,8 @@ public class Shift {
 /**
  * Método de fábrica para reconstruir desde persistencia
  */
+  
+
 public static Shift reconstruct(
         ShiftId id,
         DentistId dentistId,
@@ -321,10 +323,13 @@ public static Shift reconstruct(
         String cancellationReason,
         List<ExcludedBlock> excludedBlocks,
         Long version) {
-    
+
     Shift shift = new Shift(id, dentistId, date, startTime, endTime, type);
-    
-   
+    //  Asignar campos que no se inicializan en el constructor
+    shift.status = status;
+    shift.cancellationReason = cancellationReason;
+    shift.excludedBlocks = new ArrayList<>(excludedBlocks);
+    shift.version = version;
     return shift;
 }
 
