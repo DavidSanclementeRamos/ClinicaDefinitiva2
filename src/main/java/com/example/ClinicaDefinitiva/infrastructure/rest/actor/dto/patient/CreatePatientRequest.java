@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 
 public record CreatePatientRequest(
         Long guardianId,
-        Long contractId,
         // Person
         String dni,
         String first,

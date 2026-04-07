@@ -26,6 +26,9 @@ public interface PatientUseCase {
     ReadPatientDto save(CreatePatientDto createPatientDto, UserIdentityId requesterId, RolId requesterRolId);
     ReadPatientDto updateContactData(UpdatePatientContactDto updatePatientDto, PatientId id, UserIdentityId requesterId, RolId requesterRolId);
     ReadPatientDto updateSensitiveData(UpdatePatientSensitiveDto updatePatientDto, PatientId id, UserIdentityId requesterId, RolId requesterRolId);
+    
+    void assignContract(PatientId patientId, ContractId contractId, UserIdentityId requesterId, RolId requesterRolId);
+    void removeContract(PatientId patientId, UserIdentityId requesterId, RolId requesterRolId);
 
 
     void deleteById(PatientId id, UserIdentityId requesterId, RolId requesterRolId);

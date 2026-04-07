@@ -15,6 +15,7 @@ import com.example.ClinicaDefinitiva.application.shared.service.AuthorizationHel
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.actor.service.ContractAssignmentService;
 import com.example.ClinicaDefinitiva.domain.actor.vo.FullName;
 import com.example.ClinicaDefinitiva.domain.actor.vo.GuardianId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
@@ -42,18 +43,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class PatientApplicationService implements PatientUseCase {
 
     private final PatientRepository patientRepository;
-    private final ReceptionRepository receptionRepository;
+    private final ContractAssignmentService contractAssignmentService;
     private final PatientReadMapper readMapper;
     private final PatientWriteMapper writeMapper;
     private final AuthorizationHelper authorizationHelper;
 
     public PatientApplicationService(PatientRepository patientRepository,
-                                     ReceptionRepository receptionRepository,
+                                     ContractAssignmentService contractAssignmentService,
                                      PatientReadMapper readMapper,
                                      PatientWriteMapper writeMapper,
                                      AuthorizationHelper authorizationHelper) {
         this.patientRepository = patientRepository;
-        this.receptionRepository = receptionRepository;
+        this.contractAssignmentService = contractAssignmentService;
         this.readMapper = readMapper;
         this.writeMapper = writeMapper;
         this.authorizationHelper = authorizationHelper;
@@ -259,6 +260,47 @@ public class PatientApplicationService implements PatientUseCase {
 
         return readMapper.toReadDto(updated);
     }
+    
+    @Override
+//@RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+        //action = ActionCatalog.BasicAction.ASSIGN)
+public void assignContract(PatientId patientId, ContractId contractId,
+                           UserIdentityId requesterId, RolId requesterRolId) {
+    // Autorización: similar a updateContactData (ownership/guardianship no aplica porque es operación administrativa)
+    // Usamos SectorBasedPolicy: solo receptionist puede asignar contratos
+    authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.PATIENT,
+            ActionCatalog.BasicAction.ASSIGN,
+            AuthorizationContext.builder()
+                    .withResourceId(patientId.value())
+                    .build()
+    );
+
+    // Usar el servicio de dominio existente
+    contractAssignmentService.assignContractToPatient(patientId, contractId);
+}
+
+@Override
+//@RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+       // action = ActionCatalog.BasicAction.REMOVE)
+public void removeContract(PatientId patientId, UserIdentityId requesterId, RolId requesterRolId) {
+    authorizationHelper.authorize(
+            requesterId,
+            requesterRolId,
+            ResourceCatalog.BasicResource.PATIENT,
+            ActionCatalog.BasicAction.REMOVE,
+            AuthorizationContext.builder()
+                    .withResourceId(patientId.value())
+                    .build()
+    );
+
+    Patient patient = patientRepository.findById(patientId)
+            .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
+    patient.removeContract();
+    patientRepository.save(patient);
+}
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,

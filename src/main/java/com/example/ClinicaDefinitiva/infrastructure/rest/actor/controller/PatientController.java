@@ -11,6 +11,7 @@ import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
 import com.example.ClinicaDefinitiva.domain.administration.accounting.vo.ContractId;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.patient.AssignContractRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.patient.CreatePatientRequest;
 import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.patient.PagePatientResponse;
 import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.patient.ReadPatientResponse;
@@ -178,6 +179,37 @@ public class PatientController {
 
         return ResponseEntity.ok(readMapper.toRest(updated));
     }
+    
+    /**
+ * Asignar un contrato a un paciente
+ */
+@PostMapping("/{id}/contract")
+@ResponseStatus(HttpStatus.NO_CONTENT)
+public void assignContract(
+        @PathVariable Long id,
+        @Valid @RequestBody AssignContractRequest request,
+        @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+    UserIdentityId requesterId = userDetails.getId();
+    RolId requesterRolId = userDetails.getActiveRolId();
+
+    useCase.assignContract(PatientId.of(id), ContractId.of(request.contractId()), requesterId, requesterRolId);
+}
+
+/**
+ * Remover el contrato de un paciente
+ */
+@DeleteMapping("/{id}/contract")
+@ResponseStatus(HttpStatus.NO_CONTENT)
+public void removeContract(
+        @PathVariable Long id,
+        @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+    UserIdentityId requesterId = userDetails.getId();
+    RolId requesterRolId = userDetails.getActiveRolId();
+
+    useCase.removeContract(PatientId.of(id), requesterId, requesterRolId);
+}
 
     /**
      * Eliminar patient (solo RECEPTIONIST)

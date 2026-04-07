@@ -18,7 +18,6 @@ public class PatientRestWriteMapper {
 
         return new CreatePatientDto(
                 request.guardianId(),
-                request.contractId(),
                 request.user(),
                 request.dni(),
                 request.first(),

@@ -1,5 +1,7 @@
 package com.example.ClinicaDefinitiva.domain.actor.service;
 
+import com.example.ClinicaDefinitiva.application.exceptions.actor.PatientNotFoundException;
+import com.example.ClinicaDefinitiva.application.exceptions.administration.accounting.ContractNotFoundException;
 import com.example.ClinicaDefinitiva.domain.actor.model.Patient;
 import com.example.ClinicaDefinitiva.domain.actor.output.PatientRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.PatientId;
@@ -24,18 +26,20 @@ public class ContractAssignmentService {
         this.patientRepository = patientRepository;
     }
 
-    public void assignContractToPatient(PatientId patientId, ContractId contractId) {
-        Patient patient = patientRepository.findById(patientId).orElseThrow();
-        Contract contract = contractRepository.findById(contractId).orElseThrow();
+public void assignContractToPatient(PatientId patientId, ContractId contractId) {
+    Patient patient = patientRepository.findById(patientId)
+            .orElseThrow(() -> new PatientNotFoundException("Patient not found"));
+    Contract contract = contractRepository.findById(contractId)
+            .orElseThrow(() -> new ContractNotFoundException("Contract not found"));
 
-        if (!contract.isActiveAndValid()) {
-            throw new BusinessRuleViolationException(
-                    PatientError.ERR_PATIENT_CONTRACT_INVALID, EntityContext.PATIENT
-            );
-        }
-
-        patient.assignContract(contractId);
-        patientRepository.save(patient);
+    if (!contract.isActiveAndValid()) {
+        throw new BusinessRuleViolationException(
+                PatientError.ERR_PATIENT_CONTRACT_INVALID, EntityContext.PATIENT
+        );
     }
+
+    patient.assignContract(contractId);
+    patientRepository.save(patient);
+}
 }
 

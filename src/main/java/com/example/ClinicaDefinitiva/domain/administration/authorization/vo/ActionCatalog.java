@@ -8,6 +8,8 @@ public final class ActionCatalog {
         DEACTIVATE, ASSIGN, SCHEDULE,
         RESCHEDULE, POST, REVERSE,SUSPEND,
         MARK_AS_NO_SHOW, ACTIVATE,
+        APPLY_INCAPACITY,
+        APPLY_VACATION,
 
         AUTHENTICATE,
 

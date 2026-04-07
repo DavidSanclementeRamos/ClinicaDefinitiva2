@@ -14,15 +14,10 @@ import com.example.ClinicaDefinitiva.application.shared.dto.AuthorizationContext
 import com.example.ClinicaDefinitiva.application.shared.service.AuthorizationHelper;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
-import com.example.ClinicaDefinitiva.domain.actor.vo.BloodType;
-import com.example.ClinicaDefinitiva.domain.actor.vo.DateOfBirth;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
-import com.example.ClinicaDefinitiva.domain.actor.vo.Document;
 import com.example.ClinicaDefinitiva.domain.actor.vo.FullName;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
-import com.example.ClinicaDefinitiva.domain.vo.Address;
-import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -247,21 +242,20 @@ public class DentistApplicationService implements DentistUseCase {
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
-            action = ActionCatalog.BasicAction.UPDATE)
+            action = ActionCatalog.BasicAction.APPLY_VACATION)
     public void applyVacation(LocalDateTime start,
                               LocalDateTime end,
                               UserIdentityId requesterId,
                               RolId requesterRolId) {
 
         Dentist dentist = dentistRepository.findByUserId(requesterId)
-                .orElseThrow(() -> new DentistNotFoundException("Not found"));
-
+                .orElseThrow(() -> new DentistNotFoundException("No dentist profile found for the authenticated user"));
           // OwnershipPolicy: Solo el dentista puede aplicar vacaciones a sí mismo
         authorizationHelper.authorize(
             requesterId,
             requesterRolId,
             ResourceCatalog.BasicResource.DENTIST,
-            ActionCatalog.BasicAction.UPDATE,
+            ActionCatalog.BasicAction.APPLY_VACATION,
             AuthorizationContext.builder()
                 .withOwnership(dentist.getUserId()) // ← CRÍTICO: Solo su propio recurso
                 .build()
@@ -274,7 +268,7 @@ public class DentistApplicationService implements DentistUseCase {
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
-            action = ActionCatalog.BasicAction.UPDATE)
+            action = ActionCatalog.BasicAction.APPLY_INCAPACITY)
     public void applyIncapacity(LocalDateTime start,
                                 LocalDateTime end,
                                 String note,
@@ -289,7 +283,7 @@ public class DentistApplicationService implements DentistUseCase {
             requesterId,
             requesterRolId,
             ResourceCatalog.BasicResource.DENTIST,
-            ActionCatalog.BasicAction.UPDATE,
+            ActionCatalog.BasicAction.APPLY_INCAPACITY,
             AuthorizationContext.builder()
                 .withOwnership(dentist.getUserId())
                 .build()

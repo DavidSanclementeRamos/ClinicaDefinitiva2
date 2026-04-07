@@ -102,7 +102,11 @@ public class SectorBasedPolicy implements PermissionPolicy {
         entry("PROVIDED_SERVICE:UPDATE",           ADMINISTRATION),
         entry("ADMINISTRATIVE_REPORT:CREATE",      ADMINISTRATION),
         entry("ADMINISTRATIVE_REPORT:UPDATE",      ADMINISTRATION),
-        entry("ADMINISTRATIVE_REPORT:DELETE",      ADMINISTRATION)
+        entry("ADMINISTRATIVE_REPORT:DELETE",      ADMINISTRATION),
+        entry("PATIENT:REMOVE",      ADMINISTRATION),
+        entry("PATIENT:ASSIGN",      ADMINISTRATION)
+
+
     );
 
     /**
