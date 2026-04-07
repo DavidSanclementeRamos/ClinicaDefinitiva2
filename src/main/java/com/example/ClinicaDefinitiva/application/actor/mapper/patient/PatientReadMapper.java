@@ -12,8 +12,9 @@ public class PatientReadMapper {
     public ReadPatientDto toReadDto(Patient patient) {
         return new ReadPatientDto(
                 patient.getPatientId().value(),
-                patient.getGuardianId().value(),
-                patient.getContractId().getValue(),
+                 patient.getGuardianId() != null ? patient.getGuardianId().value() : null,  
+            patient.getContractId() != null ? patient.getContractId().getValue() : null,
+            
                 patient.getPerson().getDni().toString(),
                 patient.getPerson().getFullname().getFirstName(),
                 patient.getPerson().getFullname().getLastName(),
@@ -36,7 +37,8 @@ public class PatientReadMapper {
     public PagePatientDto toPageDto(Patient patient) {
         return new PagePatientDto(
                 patient.getPatientId().value(),
-                patient.getContractId().getValue(),
+                            patient.getContractId() != null ? patient.getContractId().getValue() : null,
+
                 patient.getUser().value(),
                 patient.getPerson().getDni().toString(),
                 patient.getPerson().getFullname().getFirstName(),

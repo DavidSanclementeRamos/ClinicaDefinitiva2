@@ -66,3 +66,7 @@ Authorization decision: {"timestamp":"2026-04-06T20:50:09.142782100Z","userId":4
 Authorization decision: {"timestamp":"2026-04-06T20:50:57.595781400Z","userId":40,"rolId":1,"resource":"DENTIST","action":"UPDATE","decision":"ALLOW","durationMs":235,"context":{"resourceId":3,"resourceOwnerId":1}}
 Authorization decision: {"timestamp":"2026-04-06T20:51:28.284498700Z","userId":40,"rolId":1,"resource":"DENTIST","action":"UPDATE","decision":"ALLOW","durationMs":362,"context":{"resourceId":3,"resourceOwnerId":1}}
 Authorization decision: {"timestamp":"2026-04-06T20:55:10.834765Z","userId":40,"rolId":1,"resource":"DENTIST","action":"UPDATE","decision":"ALLOW","durationMs":18,"context":{"resourceId":3}}
+Authorization decision: {"timestamp":"2026-04-06T22:43:24.193278300Z","userId":40,"rolId":1,"resource":"PATIENT","action":"CREATE","decision":"ALLOW","durationMs":13}
+Authorization decision: {"timestamp":"2026-04-06T22:44:00.092346700Z","userId":40,"rolId":1,"resource":"PATIENT","action":"CREATE","decision":"ALLOW","durationMs":13}
+Authorization decision: {"timestamp":"2026-04-07T00:49:32.113459500Z","userId":40,"rolId":1,"resource":"PATIENT","action":"CREATE","decision":"ALLOW","durationMs":37}
+Authorization decision: {"timestamp":"2026-04-07T01:10:03.095851200Z","userId":40,"rolId":1,"resource":"PATIENT","action":"CREATE","decision":"ALLOW","durationMs":11}

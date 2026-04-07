@@ -30,9 +30,11 @@ public class PatientWriteMapper {
         return UserIdentityId.from(dto.userId());
     }
 
+   
+    
     public GuardianId toGuardianId(CreatePatientDto dto) {
-        return GuardianId.fromLong(dto.guardianId());
-    }
+    return dto.guardianId() != null ? GuardianId.fromLong(dto.guardianId()) : null;
+}
 
     // Address y PhoneNumber para contacto
 public Optional<Address> toAddress(UpdatePatientContactDto dto) {
