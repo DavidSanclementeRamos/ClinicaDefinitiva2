@@ -42,6 +42,7 @@ import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.*;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.schedule.AppointmentError;
 import com.example.ClinicaDefinitiva.domain.errors.context.DomainContext;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
+import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.*;
 import com.example.ClinicaDefinitiva.domain.util.ErrorSeverity;
 import jakarta.validation.ConstraintViolationException;
@@ -536,14 +537,28 @@ public class GlobalControllerAdvice {
     // -------------------- Métodos auxiliares seguros para CodeEntity --------------------
 
     private String getCodigoEntidadSeguro(DomainContext context) {
-        if (context == null || context.getCodeEntity() == null) {
+        if (context == null) {
+            return "N/A";
+        }
+        // Si es un VOContext, usar su código interno (ej. "ACTORS")
+        if (context instanceof VOContext) {
+            return ((VOContext) context).getCode();
+        }
+        if (context.getCodeEntity() == null) {
             return "N/A";
         }
         return context.getCodeEntity().toString();
     }
 
     private String getNombreCodigoEntidadSeguro(DomainContext context) {
-        if (context == null || context.getCodeEntity() == null) {
+        if (context == null) {
+            return "N/A";
+        }
+        // Si es un VOContext, usar el nombre del enum (ej. "ACTORS")
+        if (context instanceof VOContext) {
+            return ((VOContext) context).name();
+        }
+        if (context.getCodeEntity() == null) {
             return "N/A";
         }
         return context.getCodeEntity().name();
