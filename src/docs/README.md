@@ -1,38 +1,26 @@
-# Documentación del Sistema Odontológico
+# Documentación del proyecto Clínica Odontológica
 
-Este directorio contiene toda la documentación estratégica y táctica del sistema odontológico.  
-El objetivo es guiar al lector desde la visión arquitectónica general hasta los detalles del dominio clínico y los diagramas técnicos.
+Bienvenido a la documentación. Este proyecto es un sistema de gestión clínica desarrollado con arquitectura hexagonal, Domain-Driven Design y buenas prácticas para entornos de salud.
 
-## Estructura General
+## 📁 Estructura de la documentación
 
-- **Arquitectura (`arquitectura/`)**  
-  Documenta las decisiones arquitectónicas y las vistas del sistema según el modelo C4.
-    - `contexto/`: muestra actores externos (pacientes, odontólogos, proveedores de pago, servicios de notificación).
-    - `contenedores/`: descompone el sistema en módulos principales (citas, pagos, facturación, contabilidad, permisos).
-    - `componentes/`: detalla responsabilidades internas de cada módulo.
-    - `adr/`: catálogo de *Architecture Decision Records* que justifican las decisiones clave.
+- [`STORY.md`](../../STORY.md) – Origen, motivación y evolución del proyecto (léelo primero).
+- [`architecture/`](./architecture/) – Decisiones arquitectónicas, diagramas C4 y ADRs.
+- [`domain/`](./domain/) – Modelo de dominio, reglas de negocio vigentes y glosario.
+- [`guides/`](./guides/) – Guías para desarrolladores (setup, contribución, pruebas).
+- [`support/`](./support/) – Material complementario (catálogo de errores, etc.).
+- [`evolution/`](./evolution/) – Material histórico: aprendizajes iniciales, ADRs obsoletos.
 
-- **Dominio (`dominio/`)**  
-  Documenta las reglas de negocio, excepciones y conceptos semánticos del sistema clínico.
-    - `reglas-de-negocio/`: catálogo vigente de reglas que gobiernan los agregados.
-    - `exploraciones/`: histórico de descubrimientos y aprendizajes durante el modelado.
-    - `catalogo-de-error/`: justificación de excepciones del dominio con contexto clínico.
-    - `glosario-semantico/`: diferenciación de conceptos clínicos similares (ej. factura vs recibo).
-    - `vo/`: documentación de Value Objects con propósito, reglas encapsuladas y proyección.
+## 🚀 Para empezar
 
-- **PlantUML (`plantUml/`)**  
-  Código fuente de los diagramas de contexto, contenedores y componentes.  
-  Permite regenerar las imágenes arquitectónicas de forma reproducible.
+1. Lee [`STORY.md`](../../STORY.md) para entender el contexto.
+2. Consulta [`architecture/overview.md`](./architecture/overview.md) para una visión general de la arquitectura.
+3. Revisa los ADRs en [`architecture/decisions/`](./architecture/decisions/) para conocer las decisiones clave.
+4. Si quieres contribuir, lee [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
-## Cómo navegar la documentación
+## 📌 Nota sobre material histórico
 
-1. **Empieza por `arquitectura/`** para entender la visión general del sistema.
-2. **Explora `dominio/`** para comprender las reglas clínicas y las justificaciones semánticas.
-3. **Consulta `plantUml/`** si deseas regenerar o modificar los diagramas.
-4. Usa los **ADR** como referencia para entender las decisiones estratégicas y su impacto.
+Parte de la documentación refleja el aprendizaje y la evolución del proyecto.  
+El contenido en `evolution/` no representa el estado actual, sino el proceso de maduración.  
+Se conserva para mostrar el pensamiento crítico y la capacidad de refactorización.
 
-## Convenciones
-
-- Archivos en formato Markdown (`.md`) para decisiones y reglas.
-- Diagramas generados con [PlantUML](https://plantuml.com/).
-- Cada carpeta incluye un `README.md` que explica su propósito y cómo leerla.  

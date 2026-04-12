@@ -1,0 +1,490 @@
+@startuml ClinicaDefinitiva_DB
+
+!define PK <color:#DAA520><b>PK</b></color>
+!define FK <color:#4682B4><i>FK</i></color>
+!define PK_FK <color:#8B008B><b>PK/FK</b></color>
+
+!define PERSON_ATTRS \
+    full_name: VARCHAR(200), \
+    document_type: VARCHAR(20), \
+    document_number: VARCHAR(30), \
+    blood_type: VARCHAR(5), \
+    date_of_birth: DATE, \
+    eps_document: VARCHAR(50), \
+    phone_number: VARCHAR(20), \
+    address: TEXT
+
+skinparam linetype polyline
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam defaultFontSize 11
+
+' =====================================================
+package "Authentication" #EAF4FB {
+    entity "USER_IDENTITY" as USER_IDENTITY {
+        PK id: BIGINT
+        --
+        email: VARCHAR(255)
+        hashed_password: VARCHAR(255)
+        name: VARCHAR(150)
+        status: VARCHAR(30)
+        verified: BOOLEAN
+        failed_login_attempts: INT
+        locked_until: TIMESTAMP
+        created_at: TIMESTAMP
+        last_login_at: TIMESTAMP
+        version: BIGINT
+    }
+}
+
+package "Actors" #EAF7EA {
+    entity "DENTIST" as DENTIST {
+        PK dentist_id: BIGINT
+        --
+        FK user_identity_id: BIGINT
+        FK shift_id: BIGINT
+        + PERSON_ATTRS
+        availability_status: VARCHAR(30)
+        specialties: VARCHAR(200)
+        last_update: TIMESTAMP
+        vacation_start: TIMESTAMP
+        vacation_end: TIMESTAMP
+        incapacity_start: TIMESTAMP
+        incapacity_end: TIMESTAMP
+        incapacity_note: TEXT
+    }
+
+    entity "PATIENT" as PATIENT {
+        PK patient_id: BIGINT
+        --
+        FK user_identity_id: BIGINT
+        FK guardian_id: BIGINT
+        FK contract_id: BIGINT
+        + PERSON_ATTRS
+        last_update: TIMESTAMP
+    }
+
+    entity "GUARDIAN" as GUARDIAN {
+        PK guardian_id: BIGINT
+        --
+        FK user_identity_id: BIGINT
+        + PERSON_ATTRS
+        type_guardian: VARCHAR(30)
+        last_update: TIMESTAMP
+    }
+
+    entity "RECEPTIONIST" as RECEPTIONIST {
+        PK id: BIGINT
+        --
+        FK user_identity_id: BIGINT
+        + PERSON_ATTRS
+        sector: VARCHAR(50)
+        last_update: TIMESTAMP
+    }
+}
+
+package "Authorization" #FEF9E7 {
+    entity "ROL" as ROL {
+        PK id: BIGINT
+        --
+        rol_enum: VARCHAR(50)
+        description: VARCHAR(255)
+        is_default: BOOLEAN
+        is_editable: BOOLEAN
+        is_deletable: BOOLEAN
+        status_rol: VARCHAR(30)
+    }
+    entity "ROL_PERMISSION" as ROL_PERMISSION {
+        FK rol_id: BIGINT
+        permission: VARCHAR(100)
+    }
+    entity "USER_ROL_ASSIGNMENT" as USER_ROL_ASSIGNMENT {
+        PK id: BIGINT
+        --
+        FK user_identity_id: BIGINT
+        FK rol_id: BIGINT
+        valid_from: DATE
+        valid_to: DATE
+        is_primary: BOOLEAN
+    }
+}
+
+package "Operations" #FDF2F8 {
+    entity "SHIFT" as SHIFT {
+        PK id: BIGINT
+        --
+        FK dentist_id: BIGINT
+        date: DATE
+        start_time: TIME
+        end_time: TIME
+        type: VARCHAR(30)
+        status: VARCHAR(30)
+        cancellation_reason: TEXT
+        version: BIGINT
+    }
+    entity "SHIFT_EXCLUDED_BLOCK" as SHIFT_EXCLUDED_BLOCK {
+        PK id: BIGINT
+        --
+        FK shift_id: BIGINT
+        block_start: TIME
+        block_end: TIME
+        reason: VARCHAR(255)
+    }
+}
+
+package "Accounting" #FFF3E0 {
+    entity "COMPANY" as COMPANY {
+        PK id: BIGINT
+        --
+        name: VARCHAR(200)
+        nit: VARCHAR(20)
+        type_person: VARCHAR(20)
+        tax_regime: VARCHAR(30)
+        legal_representative: VARCHAR(150)
+        address: TEXT
+        phone_number: VARCHAR(20)
+        email: VARCHAR(255)
+        incorporation_date: DATE
+        status: VARCHAR(30)
+    }
+    entity "THIRD_PARTIES" as THIRD_PARTIES {
+        PK parties_id: BIGINT
+        --
+        FK company_id: BIGINT
+        name: VARCHAR(200)
+        type_document: VARCHAR(20)
+        document_number: VARCHAR(20)
+        type_third_parties: VARCHAR(30)
+        address: TEXT
+        phone_number: VARCHAR(20)
+        email: VARCHAR(255)
+        active: BOOLEAN
+    }
+    entity "CONTRACT" as CONTRACT {
+        PK contract_id: BIGINT
+        --
+        FK company_id: BIGINT
+        FK third_parties_id: BIGINT
+        name: VARCHAR(200)
+        description: TEXT
+        origin: VARCHAR(100)
+        start_date: DATE
+        end_date: DATE
+        coverage_type: VARCHAR(50)
+        coverage_rate: DECIMAL(5,2)
+        status: VARCHAR(20)
+    }
+    entity "LEDGER_ACCOUNT" as LEDGER_ACCOUNT {
+        PK id: BIGINT
+        --
+        FK company_id: BIGINT
+        code: VARCHAR(8)
+        name: VARCHAR(200)
+        nature: VARCHAR(20)
+        requires_third_party: BOOLEAN
+        requires_document: BOOLEAN
+        active: BOOLEAN
+    }
+    entity "JOURNAL_ENTRY" as JOURNAL_ENTRY {
+        PK id: BIGINT
+        --
+        FK company_id: BIGINT
+        date: DATE
+        document_number: VARCHAR(50)
+        description: TEXT
+        balanced: BOOLEAN
+        posted: BOOLEAN
+    }
+    entity "JOURNAL_ENTRY_LINE" as JOURNAL_ENTRY_LINE {
+        PK id: BIGINT
+        --
+        FK journal_entry_id: BIGINT
+        FK ledger_account_id: BIGINT
+        FK third_parties_id: BIGINT
+        description: TEXT
+        amount: DECIMAL(19,4)
+        is_debit: BOOLEAN
+        document_reference: VARCHAR(100)
+    }
+    entity "OPENING_BALANCE" as OPENING_BALANCE {
+        PK id: BIGINT
+        --
+        FK company_id: BIGINT
+        FK ledger_account_id: BIGINT
+        FK third_parties_id: BIGINT
+        amount: DECIMAL(19,4)
+        date: DATE
+    }
+    entity "ADMINISTRATIVE_REPORT" as ADMINISTRATIVE_REPORT {
+        PK id: BIGINT
+        --
+        FK created_by: BIGINT
+        FK approved_by: BIGINT
+        title: VARCHAR(200)
+        period_start: DATE
+        period_end: DATE
+        status: VARCHAR(30)
+        notes: TEXT
+        created_at: TIMESTAMP
+        last_update: TIMESTAMP
+    }
+    entity "ADMIN_REPORT_JOURNAL_REF" as ADMIN_REPORT_JOURNAL_REF {
+        FK report_id: BIGINT
+        FK journal_entry_id: BIGINT
+    }
+    entity "ADMIN_REPORT_INDICATOR" as ADMIN_REPORT_INDICATOR {
+        PK id: BIGINT
+        --
+        FK report_id: BIGINT
+        name: VARCHAR(100)
+        value: VARCHAR(100)
+        unit: VARCHAR(30)
+    }
+    entity "ADMIN_REPORT_ATTACHMENT" as ADMIN_REPORT_ATTACHMENT {
+        PK id: BIGINT
+        --
+        FK report_id: BIGINT
+        file_name: VARCHAR(255)
+        file_url: TEXT
+        file_type: VARCHAR(50)
+    }
+}
+
+package "Dental Service" #F3E5F5 {
+    entity "PROVIDED_SERVICE" as PROVIDED_SERVICE {
+        PK id: BIGINT
+        --
+        name: VARCHAR(150)
+        category: VARCHAR(50)
+        code: VARCHAR(20)
+        base_rate: DECIMAL(19,4)
+        duration_minutes: INT
+        requires_authorization: BOOLEAN
+        description: TEXT
+        status: VARCHAR(20)
+        service_type: VARCHAR(30)
+    }
+    entity "SVC_DETAIL_AESTHETIC" as SVC_DETAIL_AESTHETIC {
+        PK_FK provided_service_id: BIGINT
+        aesthetic_type: VARCHAR(30)
+        material_used: VARCHAR(100)
+        expected_result: TEXT
+    }
+    entity "SVC_DETAIL_IMPLANTOLOGY" as SVC_DETAIL_IMPLANTOLOGY {
+        PK_FK provided_service_id: BIGINT
+        healing_time_months: INT
+        implant_type: VARCHAR(100)
+        placement_site: VARCHAR(100)
+        requires_bone_graft: BOOLEAN
+    }
+    entity "SVC_DETAIL_ORTHODONTIC" as SVC_DETAIL_ORTHODONTIC {
+        PK_FK provided_service_id: BIGINT
+        appliance_type: VARCHAR(30)
+        treatment_duration_months: INT
+        requires_followup: BOOLEAN
+    }
+    entity "SVC_DETAIL_PEDIATRIC" as SVC_DETAIL_PEDIATRIC {
+        PK_FK provided_service_id: BIGINT
+        age_range_min: INT
+        age_range_max: INT
+        behavior_management: VARCHAR(200)
+        pediatric_materials: TEXT
+    }
+    entity "SVC_DETAIL_PROSTHETIC" as SVC_DETAIL_PROSTHETIC {
+        PK_FK provided_service_id: BIGINT
+        fixed_or_removable: VARCHAR(10)
+        material: VARCHAR(100)
+        prosthetic_type: VARCHAR(100)
+        units: INT
+    }
+    entity "SVC_DETAIL_SURGICAL" as SVC_DETAIL_SURGICAL {
+        PK_FK provided_service_id: BIGINT
+        surgery_type: VARCHAR(100)
+        complexity_level: VARCHAR(10)
+        requires_anesthesia: BOOLEAN
+        operating_room_needed: BOOLEAN
+    }
+}
+
+package "Billing" #FFEBEE {
+    entity "RATE" as RATE {
+        PK id: BIGINT
+        --
+        FK service_id: BIGINT
+        FK contract_id: BIGINT
+        payer_type: VARCHAR(30)
+        amount: DECIMAL(19,4)
+        currency: VARCHAR(3)
+        valid_from: TIMESTAMP
+        valid_to: TIMESTAMP
+        status: VARCHAR(20)
+    }
+    entity "INVOICE" as INVOICE {
+        PK id: BIGINT
+        --
+        FK patient_id: BIGINT
+        FK dentist_id: BIGINT
+        provider_id: BIGINT
+        FK contract_id: BIGINT
+        number: VARCHAR(30)
+        status: VARCHAR(20)
+        currency: VARCHAR(3)
+        subtotal: DECIMAL(19,4)
+        tax: DECIMAL(19,4)
+        total: DECIMAL(19,4)
+        total_paid: DECIMAL(19,4)
+        due_date: TIMESTAMP
+        updated_at: TIMESTAMP
+        notes: TEXT
+    }
+    entity "INVOICE_ITEM" as INVOICE_ITEM {
+        PK id: BIGINT
+        --
+        FK invoice_id: BIGINT
+        FK service_id: BIGINT
+        FK rate_id: BIGINT
+        service_code: VARCHAR(20)
+        service_description: TEXT
+        unit_price: DECIMAL(19,4)
+        currency: VARCHAR(3)
+        quantity: INT
+        performed_at: TIMESTAMP
+    }
+}
+
+package "Payment" #E8F5E9 {
+    entity "PAYMENT" as PAYMENT {
+        PK id: BIGINT
+        --
+        FK invoice_id: BIGINT
+        amount: DECIMAL(19,4)
+        currency: VARCHAR(3)
+        payment_method: VARCHAR(30)
+        payer_type: VARCHAR(30)
+        payer_reference_id: BIGINT
+        status: VARCHAR(20)
+        transaction_ref: VARCHAR(100)
+        gateway_payment_id: VARCHAR(100)
+        error_message: TEXT
+        refunded_amount: DECIMAL(19,4)
+        payment_date: TIMESTAMP
+        created_at: TIMESTAMP
+        updated_at: TIMESTAMP
+    }
+}
+
+package "Clinical Treatments" #E8EAF6 {
+    entity "TREATMENT" as TREATMENT {
+        PK id: BIGINT
+        --
+        FK patient_id: BIGINT
+        FK dentist_id: BIGINT
+        FK service_id: BIGINT
+        FK rate_id: BIGINT
+        status: VARCHAR(20)
+        start_date: DATE
+        expected_end_date: DATE
+        actual_end_date: DATE
+        notes: TEXT
+    }
+    entity "TREATMENT_PHASE" as TREATMENT_PHASE {
+        PK id: BIGINT
+        --
+        FK treatment_id: BIGINT
+        name: VARCHAR(100)
+        description: TEXT
+        status: VARCHAR(20)
+        planned_date: DATE
+        completed_date: DATE
+    }
+}
+
+package "Appointments" #FBE9E7 {
+    entity "APPOINTMENT" as APPOINTMENT {
+        PK id: BIGINT
+        --
+        FK dentist_id: BIGINT
+        FK patient_id: BIGINT
+        FK service_id: BIGINT
+        start: TIMESTAMP
+        end: TIMESTAMP
+        status: VARCHAR(30)
+        reason: TEXT
+        appointment_type: VARCHAR(30)
+        creation_date: TIMESTAMP
+        last_updated: TIMESTAMP
+    }
+    entity "APPOINTMENT_COMPLETION" as APPOINTMENT_COMPLETION {
+        PK id: BIGINT
+        --
+        FK appointment_id: BIGINT
+        clinical_notes: TEXT
+        diagnosis: TEXT
+        actual_duration_min: INT
+        next_steps: TEXT
+    }
+}
+
+' ========== RELACIONES ==========
+USER_IDENTITY ||--o{ DENTIST
+USER_IDENTITY ||--o{ PATIENT
+USER_IDENTITY ||--o{ GUARDIAN
+USER_IDENTITY ||--o{ RECEPTIONIST
+
+USER_IDENTITY ||--o{ USER_ROL_ASSIGNMENT
+ROL ||--o{ USER_ROL_ASSIGNMENT
+ROL ||--o{ ROL_PERMISSION
+
+GUARDIAN ||--o{ PATIENT
+PATIENT }o--o| CONTRACT
+
+DENTIST ||--o{ SHIFT
+SHIFT ||--o{ SHIFT_EXCLUDED_BLOCK
+
+COMPANY ||--o{ THIRD_PARTIES
+COMPANY ||--o{ CONTRACT
+COMPANY ||--o{ LEDGER_ACCOUNT
+COMPANY ||--o{ JOURNAL_ENTRY
+COMPANY ||--o{ OPENING_BALANCE
+CONTRACT }o--|| THIRD_PARTIES
+JOURNAL_ENTRY ||--|{ JOURNAL_ENTRY_LINE
+JOURNAL_ENTRY_LINE }o--|| LEDGER_ACCOUNT
+JOURNAL_ENTRY_LINE }o--o| THIRD_PARTIES
+OPENING_BALANCE }o--|| LEDGER_ACCOUNT
+OPENING_BALANCE }o--o| THIRD_PARTIES
+ADMINISTRATIVE_REPORT ||--o{ ADMIN_REPORT_JOURNAL_REF
+JOURNAL_ENTRY ||--o{ ADMIN_REPORT_JOURNAL_REF
+ADMINISTRATIVE_REPORT ||--o{ ADMIN_REPORT_INDICATOR
+ADMINISTRATIVE_REPORT ||--o{ ADMIN_REPORT_ATTACHMENT
+USER_IDENTITY ||--o{ ADMINISTRATIVE_REPORT
+
+PROVIDED_SERVICE ||--o| SVC_DETAIL_AESTHETIC
+PROVIDED_SERVICE ||--o| SVC_DETAIL_IMPLANTOLOGY
+PROVIDED_SERVICE ||--o| SVC_DETAIL_ORTHODONTIC
+PROVIDED_SERVICE ||--o| SVC_DETAIL_PEDIATRIC
+PROVIDED_SERVICE ||--o| SVC_DETAIL_PROSTHETIC
+PROVIDED_SERVICE ||--o| SVC_DETAIL_SURGICAL
+
+PROVIDED_SERVICE ||--o{ RATE
+CONTRACT ||--o{ RATE
+PATIENT ||--o{ INVOICE
+DENTIST ||--o{ INVOICE
+CONTRACT ||--o{ INVOICE
+INVOICE ||--|{ INVOICE_ITEM
+INVOICE_ITEM }o--|| PROVIDED_SERVICE
+INVOICE_ITEM }o--|| RATE
+
+INVOICE ||--o{ PAYMENT
+
+PATIENT ||--o{ TREATMENT
+DENTIST ||--o{ TREATMENT
+PROVIDED_SERVICE ||--o{ TREATMENT
+RATE ||--o{ TREATMENT
+TREATMENT ||--|{ TREATMENT_PHASE
+
+PATIENT ||--o{ APPOINTMENT
+DENTIST ||--o{ APPOINTMENT
+PROVIDED_SERVICE ||--o{ APPOINTMENT
+APPOINTMENT ||--o| APPOINTMENT_COMPLETION
+
+@enduml
