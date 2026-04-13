@@ -249,15 +249,15 @@ ServiceType type = (details != null) ? details.serviceType() : ServiceType.GENER
     ServiceType type = details.serviceType();
 
     // Mapeo explícito entre ServiceType y categorías aceptadas
-    Map<ServiceType, Set<String>> allowed = Map.of(
-        ServiceType.SURGERY, Set.of("SURGERY", "Surgery"),
-        ServiceType.IMPLANTOLOGY, Set.of("IMPLANT", "Implantology"),
-        ServiceType.GENERAL, Set.of("GENERAL", "General"),
-        ServiceType.ORTHODONTIC, Set.of("ORTHODONTIC", "Orthodontics"),
-        ServiceType.PEDIATRICS, Set.of("PEDIATRICS", "Pediatrics"),
-        ServiceType.AESTHETICS, Set.of("AESTHETICS", "Aesthetics"),
-        ServiceType.PROSTHETICS, Set.of("PROSTHETICS", "Prosthetics")
-    );
+   Map<ServiceType, Set<String>> allowed = Map.of(
+    ServiceType.SURGERY, Set.of("SURGERY"),
+    ServiceType.IMPLANTOLOGY, Set.of("IMPLANT", "IMPLANTOLOGY"),
+    ServiceType.GENERAL, Set.of("GENERAL"),
+    ServiceType.ORTHODONTIC, Set.of("ORTHODONTIC", "ORTHODONTICS"),
+    ServiceType.PEDIATRICS, Set.of("PEDIATRICS"),
+    ServiceType.AESTHETICS, Set.of("AESTHETICS"),
+    ServiceType.PROSTHETICS, Set.of("PROSTHETICS")
+);
 
     boolean matches = allowed.getOrDefault(type, Set.of())
                              .contains(categoryName);

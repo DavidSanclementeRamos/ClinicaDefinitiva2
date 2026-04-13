@@ -8,3 +8,12 @@ Authorization decision: {"timestamp":"2026-04-13T16:19:13.794193Z","userId":1,"r
 Authorization decision: {"timestamp":"2026-04-13T16:56:18.848733300Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":55}
 Authorization decision: {"timestamp":"2026-04-13T16:56:45.427698700Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":26}
 Authorization decision: {"timestamp":"2026-04-13T17:29:59.783241800Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":45}
+Authorization decision: {"timestamp":"2026-04-13T18:00:54.717251100Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":70}
+Authorization decision: {"timestamp":"2026-04-13T18:55:42.628368900Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":18}
+Authorization decision: {"timestamp":"2026-04-13T19:08:27.097078700Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":17}
+Authorization decision: {"timestamp":"2026-04-13T19:12:37.712797700Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":13}
+Authorization decision: {"timestamp":"2026-04-13T20:26:42.262998600Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":43}
+Authorization decision: {"timestamp":"2026-04-13T20:30:43.545168Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":114}
+Authorization decision: {"timestamp":"2026-04-13T20:31:26.558039800Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":49}
+Authorization decision: {"timestamp":"2026-04-13T20:31:58.656577200Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":356}
+Authorization decision: {"timestamp":"2026-04-13T20:35:05.488074700Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":25}
