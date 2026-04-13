@@ -30,6 +30,10 @@ public final class ActionCatalog {
         EXTEND,
         IS_ACTIVE_AT,
         IS_CURRENTLY_ACTIVE,
+        UPDATE_DETAILS,
+        UPDATE_INFORMATION, 
+        UPDATE_PRICE,
+        
 
     }
 

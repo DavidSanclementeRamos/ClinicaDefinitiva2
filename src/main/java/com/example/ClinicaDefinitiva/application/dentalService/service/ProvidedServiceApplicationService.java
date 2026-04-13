@@ -189,9 +189,9 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
         );
 
         ServiceDetails details = null;
-        if (dto.serviceType() != null && dto.detailsMap() != null) {
+        if (dto.serviceType() != null && dto.details()!= null) {
             // Usar factory para crear el tipo correcto de ServiceDetails
-            details = ServiceDetailsFactory.fromMap(ServiceType.valueOf(dto.serviceType() ), (Map<String, Object>) dto.detailsMap());
+            details = ServiceDetailsFactory.fromMap(ServiceType.valueOf(dto.serviceType() ), (Map<String, Object>) dto.details());
         }
 
         // Crear servicio con todos los campos
@@ -212,7 +212,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PROVIDED_SERVICE,
-            action = ActionCatalog.BasicAction.UPDATE)
+            action = ActionCatalog.BasicAction.UPDATE_INFORMATION)
     public ReadServiceDto updateInformation(UpdateServiceInfoDto dto,
                                             ServiceId id,
                                             UserIdentityId requesterId,
@@ -245,7 +245,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PROVIDED_SERVICE,
-            action = ActionCatalog.BasicAction.UPDATE)
+            action = ActionCatalog.BasicAction.UPDATE_PRICE)
     public ReadServiceDto updateRate(UpdateServiceRateDto dto,
                                      ServiceId id,
                                      UserIdentityId requesterId,
@@ -277,7 +277,7 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
 
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.PROVIDED_SERVICE,
-            action = ActionCatalog.BasicAction.UPDATE)
+            action = ActionCatalog.BasicAction.UPDATE_DETAILS)
     public ReadServiceDto updateDetails(UpdateServiceDetailsDto dto,
                                         ServiceId id,
                                         UserIdentityId requesterId,
@@ -296,13 +296,12 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
         ProvidedService service = serviceRepository.findById(id)
                 .orElseThrow(() -> new ProvidedServiceNotFoundException("No found"));
 
-        // ⭐ IMPLEMENTADO: Actualizar detalles usando factory si viene en el DTO
         ServiceDetails newDetails = null;
-        if (dto.serviceType() != null && dto.detailsMap() != null) {
-            newDetails = ServiceDetailsFactory.fromMap(ServiceType.valueOf(dto.serviceType())   , (Map<String, Object>) dto.detailsMap());
-        } else if (dto.detailsMap() != null && service.getDetails().isPresent()) {
+        if (dto.serviceType() != null && dto.details()!= null) {
+            newDetails = ServiceDetailsFactory.fromMap(ServiceType.valueOf(dto.serviceType())   , (Map<String, Object>) dto.details());
+        } else if (dto.details()!= null && service.getDetails().isPresent()) {
             // Si no viene serviceType pero sí detailsMap, usar el tipo actual del servicio
-            newDetails = ServiceDetailsFactory.fromMap(service.getDetails().get().serviceType(), (Map<String, Object>) dto.detailsMap());
+            newDetails = ServiceDetailsFactory.fromMap(service.getDetails().get().serviceType(), (Map<String, Object>) dto.details());
         }
 
         if (newDetails != null) {

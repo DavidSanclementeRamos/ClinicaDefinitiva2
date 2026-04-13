@@ -38,6 +38,8 @@ public class ProvidedServiceWriteEntityMapper {
             entity.setServiceType(details.serviceType().name());
             mapDetailsToEntity(entity, details);
         });
+        
+        entity.setServiceType(service.getServiceType().name());
 
         return entity;
     }

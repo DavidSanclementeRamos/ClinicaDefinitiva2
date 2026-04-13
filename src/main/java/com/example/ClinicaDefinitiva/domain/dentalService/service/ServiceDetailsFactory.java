@@ -138,6 +138,7 @@ public class ServiceDetailsFactory {
                     (String) fields.get("prostheticType"),
                     (Integer) fields.get("units")
             );
+            case GENERAL -> null;   
             default -> throw new IllegalArgumentException("Tipo de servicio desconocido: " + type);
         };
     }

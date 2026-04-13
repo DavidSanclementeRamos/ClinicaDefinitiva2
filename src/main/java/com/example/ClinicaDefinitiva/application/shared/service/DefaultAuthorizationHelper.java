@@ -1,14 +1,19 @@
 package com.example.ClinicaDefinitiva.application.shared.service;
 
+import com.example.ClinicaDefinitiva.application.exceptions.administration.authorization.RolNotFoundException;
 import com.example.ClinicaDefinitiva.application.shared.dto.AuthorizationContext;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.enu.RolEnum;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.event.AuthorizationAuditEvent;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.model.Rol;
+import com.example.ClinicaDefinitiva.domain.administration.authorization.output.RolRepository;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuditLogger;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.service.AuthorizationService;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization.AuthorizationError;
+import com.example.ClinicaDefinitiva.domain.errors.catalog.administration.authorization.RolError;
 import com.example.ClinicaDefinitiva.domain.errors.context.VOContext;
 import com.example.ClinicaDefinitiva.domain.exceptions.BusinessRuleViolationException;
 import org.slf4j.Logger;
@@ -54,14 +59,17 @@ public class DefaultAuthorizationHelper implements AuthorizationHelper {
     private final ReceptionRepository receptionRepository;
     private final AuthorizationService authorizationService;
     private final AuditLogger auditLogger;
+    private final RolRepository rolRepository;
 
     public DefaultAuthorizationHelper(
             ReceptionRepository receptionRepository,
             AuthorizationService authorizationService,
-            AuditLogger auditLogger) {
+            AuditLogger auditLogger,
+            RolRepository rolRepository) {
         this.receptionRepository = receptionRepository;
         this.authorizationService = authorizationService;
         this.auditLogger = auditLogger;
+        this.rolRepository = rolRepository;
     }
 
     @Override
@@ -78,7 +86,14 @@ public class DefaultAuthorizationHelper implements AuthorizationHelper {
             // 1. Cargar receptionist solo si SectorBasedPolicy aplica a esta operación
             Receptionist receptionist = null;
             if (authorizationService.requiresSectorContext(resource, action)) {
-                receptionist = getReceptionistOrThrow(requesterId);
+               // receptionist = getReceptionistOrThrow(requesterId);
+                
+                // Verificar el rol del usuario antes de intentar cargar el receptionist
+    Rol rol = rolRepository.findById(requesterRolId)
+            .orElseThrow(() -> new  RolNotFoundException("Rol not found"));
+    if (rol.getRolEnum() == RolEnum.RECEPTIONIST) {
+        receptionist = getReceptionistOrThrow(requesterId);
+    }
             }
 
             // 2. Construir SecurityContext con atributos ABAC

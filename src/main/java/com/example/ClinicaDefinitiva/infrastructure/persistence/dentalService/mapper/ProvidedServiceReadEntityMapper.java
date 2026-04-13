@@ -38,6 +38,7 @@ public class ProvidedServiceReadEntityMapper {
                 .description(ServiceDescription.of(entity.getDescription()))
                 .status(ServiceStatus.of(ServiceStatus.State.valueOf(entity.getStatus())))
                 .details(details)
+                .serviceType( ServiceType.valueOf(entity.getServiceType()))
                 .build();
     }
 

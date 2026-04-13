@@ -52,6 +52,7 @@ public class ProvidedService {
     private boolean requiresAuthorization;
     private ServiceDescription description;
     private ServiceStatus status;
+    private ServiceType serviceType;
 
 
     private ServiceDetails details;
@@ -67,6 +68,7 @@ public class ProvidedService {
         this.status = builder.status;
         this.requiresAuthorization = builder.requiresAuthorization;
         this.details = builder.details;
+        this.serviceType = builder.serviceType;
 
 
         validateCategoryMatch(this.category, this.details);
@@ -93,7 +95,7 @@ public class ProvidedService {
             ServiceDescription description,
             ServiceDetails details,
             boolean requiresAuthorization) {
-
+ServiceType type = (details != null) ? details.serviceType() : ServiceType.GENERAL;
         return builder()
                 .name(name)
                 .category(category)
@@ -101,6 +103,7 @@ public class ProvidedService {
                 .baseRate(baseRate)
                 .duration(duration)
                 .description(description)
+                .serviceType(type)
                 .details(details)
                 .requiresAuthorization(requiresAuthorization)
                 .status(ServiceStatus.of(ServiceStatus.State.ACTIVE))
@@ -313,7 +316,7 @@ private String normalizeCategory(String raw) {
         return Optional.ofNullable(details);
     }
 
-
+    public ServiceType getServiceType() { return serviceType; }
 
     public static class Builder {
         private ServiceId id;
@@ -326,6 +329,7 @@ private String normalizeCategory(String raw) {
         private ServiceDescription description;
         private ServiceStatus status = ServiceStatus.of(ServiceStatus.State.ACTIVE);
         private ServiceDetails details;
+        private ServiceType serviceType;
 
         private Builder() {}
 
@@ -378,13 +382,18 @@ private String normalizeCategory(String raw) {
             this.details = details;
             return this;
         }
+        
+        public Builder serviceType(ServiceType serviceType){
+            this.serviceType = serviceType;
+            return this;
+        }
 
         public ProvidedService build() {
             return new ProvidedService(this);
         }
+        
     }
     
-    // Añadir en ProvidedService.java
 public static ProvidedService reconstruct(
         ServiceId id,
         ServiceName name,

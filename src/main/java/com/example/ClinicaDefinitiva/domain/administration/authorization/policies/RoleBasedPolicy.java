@@ -52,7 +52,7 @@ import java.util.Set;
  * │ SHIFT                    │ R           │ R ✓ / C ✓(RRHH) / U ✓(RRHH)    │ RU ✓     │    -     │     -      │
  * │                          │             │ D ✓(RRHH)                        │          │          │            │
  * ├──────────────────────────┼─────────────┼──────────────────────────────────┼──────────┼──────────┼────────────┤
- * │ PROVIDED_SERVICE         │ R           │ R ✓ / U ✓(ADMI)                 │ CRU ✓(ESP)│ R ✓     │ R ✓        │
+ * │ PROVIDED_SERVICE         │ CRU+ops           │ R ✓ / CRU ✓(ADMI)                 │  R✓│ R ✓     │ R ✓        │
  * ├──────────────────────────┼─────────────┼──────────────────────────────────┼──────────┼──────────┼────────────┤
  * │ INVOICE                  │ CRUD+ops    │ R ✓ / C ✓(BILL) / U ✓(BILL)     │ R ✓      │ R ✓      │ R ✓        │
  * │                          │             │ D ✓(BILL) / APPROVE ✓(BILL)      │          │          │            │
@@ -179,11 +179,21 @@ public class RoleBasedPolicy implements PermissionPolicy {
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.UPDATE)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.ADMINISTRATIVE_REPORT), a(ActionCatalog.BasicAction.DELETE)));
 
+        // PROVIDED_SERVICE
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.CREATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.READ)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.UPDATE_INFORMATION)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.DEACTIVATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.ACTIVATE)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.UPDATE_DETAILS)));
+        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.UPDATE_PRICE)));
+
+
+        
         // ── Agenda (solo lectura; la opera RECEPTIONIST) ───────────────────
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.READ)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.SHIFT), a(ActionCatalog.BasicAction.READ)));
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.AVAILABILITY), a(ActionCatalog.BasicAction.READ)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.READ)));
 
         ROLE_PERMISSIONS.put(RolEnum.ADMINISTRATOR, permissions);
     }

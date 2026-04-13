@@ -93,13 +93,17 @@ public class SectorBasedPolicy implements PermissionPolicy {
         entry("PAYMENT:CREATE",        BILLING),
         entry("PAYMENT:UPDATE",        BILLING),
         entry("PAYMENT:DELETE",        BILLING),
+        entry("PROVIDED_SERVICE:UPDATE_PRICE", BILLING),     
 
         // ── ADMINISTRATION: configuración y contratos ──────────────────────
         entry("COMPANY:UPDATE",                    ADMINISTRATION),
         entry("CONTRACT:CREATE",                   ADMINISTRATION),
         entry("CONTRACT:UPDATE",                   ADMINISTRATION),
         entry("CONTRACT:DELETE",                   ADMINISTRATION),
-        entry("PROVIDED_SERVICE:UPDATE",           ADMINISTRATION),
+        entry("PROVIDED_SERVICE:CREATE",           ADMINISTRATION),
+        entry("PROVIDED_SERVICE:UPDATE_DETAILS",           ADMINISTRATION),
+        entry("PROVIDED_SERVICE:UPDATE_INFORMATION",           ADMINISTRATION),
+        
         entry("ADMINISTRATIVE_REPORT:CREATE",      ADMINISTRATION),
         entry("ADMINISTRATIVE_REPORT:UPDATE",      ADMINISTRATION),
         entry("ADMINISTRATIVE_REPORT:DELETE",      ADMINISTRATION),
