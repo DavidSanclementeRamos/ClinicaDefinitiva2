@@ -44,7 +44,7 @@ public enum ProvidedServiceError implements ErrorCatalog {
 
     ERR_SERVICE_RATE_CHANGE_OUT_OF_RANGE(
             "RN-SERVICE-008","error.service.rate.outofrange",
-            "El cambio de tarifa debe estar dentro del rango razonable (50%-300% del valor actual)",
+            "El cambio de tarifa debe estar dentro del rango razonable (80% – 120% del valor actual)",
             HttpStatus.UNPROCESSABLE_ENTITY, ErrorSeverity.ERROR),
 
     ERR_SERVICE_HAS_PENDING_INVOICES(

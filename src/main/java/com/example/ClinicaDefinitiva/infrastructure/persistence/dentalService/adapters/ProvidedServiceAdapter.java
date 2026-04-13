@@ -42,11 +42,20 @@ public class ProvidedServiceAdapter implements ProvidedServiceRepository {
                 .map(readMapper::toDomain);
     }
 
+    
     @Override
     public ProvidedService save(ProvidedService providedService) {
         if (providedService == null) return null;
 
-        DentalServiceEntity entity = writeMapper.toEntity(providedService);
+        DentalServiceEntity entity;
+        if (providedService.getId() != null && providedService.getId().getId() != null) {
+            entity = dentalServiceJpaRepository.findById(providedService.getId().getId())
+                    .orElseGet(() -> writeMapper.toEntity(providedService));
+            writeMapper.updateEntity(entity, providedService);
+        } else {
+            entity = writeMapper.toEntity(providedService);
+        }
+
         DentalServiceEntity savedEntity = dentalServiceJpaRepository.save(entity);
         return readMapper.toDomain(savedEntity);
     }

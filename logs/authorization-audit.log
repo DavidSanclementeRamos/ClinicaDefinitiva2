@@ -17,3 +17,13 @@ Authorization decision: {"timestamp":"2026-04-13T20:30:43.545168Z","userId":1,"r
 Authorization decision: {"timestamp":"2026-04-13T20:31:26.558039800Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":49}
 Authorization decision: {"timestamp":"2026-04-13T20:31:58.656577200Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":356}
 Authorization decision: {"timestamp":"2026-04-13T20:35:05.488074700Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":25}
+Authorization decision: {"timestamp":"2026-04-13T21:41:26.976845800Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"CREATE","decision":"ALLOW","durationMs":30}
+Authorization decision: {"timestamp":"2026-04-13T21:42:17.983235Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"READ","decision":"ALLOW","durationMs":31,"context":{"resourceId":1}}
+Authorization decision: {"timestamp":"2026-04-13T21:43:15.398271100Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"READ","decision":"ALLOW","durationMs":18}
+Authorization decision: {"timestamp":"2026-04-13T21:44:00.783213600Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"READ","decision":"ALLOW","durationMs":97}
+Authorization decision: {"timestamp":"2026-04-13T21:44:37.499114500Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"READ","decision":"ALLOW","durationMs":14}
+Authorization decision: {"timestamp":"2026-04-13T21:45:19.176955800Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"READ","decision":"ALLOW","durationMs":19}
+Authorization decision: {"timestamp":"2026-04-13T21:48:05.309785400Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"UPDATE","decision":"ALLOW","durationMs":20,"context":{"resourceId":1}}
+Authorization decision: {"timestamp":"2026-04-13T21:59:38.662982400Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"UPDATE","decision":"ALLOW","durationMs":24,"context":{"resourceId":1}}
+Authorization decision: {"timestamp":"2026-04-13T22:00:00.914724600Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"UPDATE","decision":"ALLOW","durationMs":16,"context":{"resourceId":1}}
+Authorization decision: {"timestamp":"2026-04-13T22:01:40.836429Z","userId":1,"rolId":2,"resource":"PROVIDED_SERVICE","action":"DEACTIVATE","decision":"ALLOW","durationMs":14,"context":{"resourceId":5}}

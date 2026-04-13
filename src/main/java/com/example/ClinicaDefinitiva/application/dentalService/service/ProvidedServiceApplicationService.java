@@ -250,7 +250,6 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                      ServiceId id,
                                      UserIdentityId requesterId,
                                      RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -282,7 +281,6 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
                                         ServiceId id,
                                         UserIdentityId requesterId,
                                         RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
