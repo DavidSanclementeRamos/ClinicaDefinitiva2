@@ -40,5 +40,4 @@ public interface ProvidedServiceUseCase {
 
     void deactivate(ServiceId id, String reason, UserIdentityId requesterId, RolId requesterRolId);
     ReadServiceDto reactivate(ServiceId id, UserIdentityId requesterId, RolId requesterRolId);
-    void deleteById(ServiceId id, UserIdentityId requesterId, RolId requesterRolId);
 }

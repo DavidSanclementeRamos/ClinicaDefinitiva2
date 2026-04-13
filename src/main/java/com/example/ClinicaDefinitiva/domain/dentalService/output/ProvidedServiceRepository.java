@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ProvidedServiceRepository {
     Optional<ProvidedService> findById(ServiceId id);
     ProvidedService save(ProvidedService providedService);
-    void deleteById(ServiceId id);
+    
     boolean existsByCode(String code);
 
     Page<ProvidedService> findAll(Pageable pageable);

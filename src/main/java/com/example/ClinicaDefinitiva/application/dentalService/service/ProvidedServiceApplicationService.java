@@ -365,26 +365,4 @@ public class ProvidedServiceApplicationService implements ProvidedServiceUseCase
         return readMapper.toReadDto(reactivated);
     }
 
-    @Override
-    @RequiresPermission(resource = ResourceCatalog.BasicResource.PROVIDED_SERVICE,
-            action = ActionCatalog.BasicAction.DELETE)
-    public void deleteById(ServiceId id,
-                           UserIdentityId requesterId,
-                           RolId requesterRolId) {
-
-        authorizationHelper.authorize(
-                requesterId,
-                requesterRolId,
-                ResourceCatalog.BasicResource.PROVIDED_SERVICE,
-                ActionCatalog.BasicAction.DELETE,              
-                AuthorizationContext.builder()
-                        .withResourceId(id.getId())
-                        .build()
-        );
-
-        ProvidedService service = serviceRepository.findById(id)
-                .orElseThrow(() -> new ProvidedServiceNotFoundException("Not found"));
-
-        serviceRepository.deleteById(service.getId());
-    }
-}
+   }

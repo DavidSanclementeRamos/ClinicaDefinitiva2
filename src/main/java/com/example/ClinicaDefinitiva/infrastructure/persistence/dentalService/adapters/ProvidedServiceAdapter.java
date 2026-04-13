@@ -51,12 +51,7 @@ public class ProvidedServiceAdapter implements ProvidedServiceRepository {
         return readMapper.toDomain(savedEntity);
     }
 
-    @Override
-    public void deleteById(ServiceId id) {
-        if (id != null && id.getId() != null) {
-            dentalServiceJpaRepository.deleteById(id.getId());
-        }
-    }
+   
 
     @Override
     @Transactional(readOnly = true)

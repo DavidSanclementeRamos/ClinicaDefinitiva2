@@ -394,29 +394,5 @@ private String normalizeCategory(String raw) {
         
     }
     
-public static ProvidedService reconstruct(
-        ServiceId id,
-        ServiceName name,
-        ServiceCatalog category,
-        ServiceCode code,
-        Price baseRate,
-        ServiceDuration duration,
-        boolean requiresAuthorization,
-        ServiceDescription description,
-        ServiceStatus status,
-        ServiceDetails details) {
 
-    return ProvidedService.builder()
-            .id(id)
-            .name(name)
-            .category(category)
-            .code(code)
-            .baseRate(baseRate)
-            .duration(duration)
-            .requiresAuthorization(requiresAuthorization)
-            .description(description)
-            .status(status)
-            .details(details)
-            .build();
-}
 }

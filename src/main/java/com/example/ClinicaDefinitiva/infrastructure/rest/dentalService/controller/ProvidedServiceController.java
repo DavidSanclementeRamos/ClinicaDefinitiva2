@@ -251,19 +251,4 @@ public class ProvidedServiceController {
         return ResponseEntity.ok(readMapper.toRest(reactivated));
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(
-            @PathVariable Long id,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        UserIdentityId requesterId = userDetails.getId();
-        RolId requesterRolId = userDetails.getActiveRolId();
-
-        useCase.deleteById(
-                ServiceId.of(id),
-                requesterId,
-                requesterRolId
-        );
-    }
-}
+   }
