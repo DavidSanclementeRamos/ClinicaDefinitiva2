@@ -108,9 +108,14 @@ cd ClinicaDefinitiva2
 # Ejecutar con Maven
 ./mvnw spring-boot:run
 ```
+## 🗄️ Base de datos
 
-La API estará disponible en `http://localhost:8080`.  
-Puedes explorar los endpoints con Swagger (si está habilitado) en `/swagger-ui.html`.
+El script de creación del esquema se encuentra en [`src/main/resources/database/clinica.sql`](src/main/resources/database/clinica.sql).  
+Puedes ejecutarlo en tu servidor MySQL/PostgreSQL para inicializar las tablas necesarias.
+
+## 🧪 Probar la API
+
+Puedes importar la colección de Postman desde [`ClinicaDefinitiva.postman_collection.json`](src/docs/api/postman/collections/ClinicaDefinitiva) para explorar todos los endpoints disponibles.
 
 ---
 

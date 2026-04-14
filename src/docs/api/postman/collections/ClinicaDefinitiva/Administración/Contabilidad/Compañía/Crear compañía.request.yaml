@@ -1,0 +1,37 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/companies"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"Clínica Dental Ejemplo SAS\",\r
+
+    \    \"taxIdentificationNumber\": \"900123456-7\",\r
+
+    \    \"typePerson\": \"JURIDICAL\",\r
+
+    \    \"taxRegime\": \"GRAN_CONTRIBUYENTE\",\r
+
+    \    \"legalRepresentative\": \"Juan Pérez\",\r
+
+    \    \"street\": \"Calle Falsa 123\",\r
+
+    \    \"city\": \"Bogotá\",\r
+
+    \    \"state\": \"Cundinamarca\",\r
+
+    \    \"country\": \"Colombia\",\r
+
+    \    \"postalCode\": \"110111\",\r
+
+    \    \"phoneNumber\": \"6012345678\",\r
+
+    \    \"email\": \"contacto@clinicadental.com\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzUzMzE3MjYsImV4cCI6MTc3NTMzODkyNn0.PUe5A8dceAju-T6QWduSBLtoxxTidLFIW4bw_HIYmc4
+order: 1000

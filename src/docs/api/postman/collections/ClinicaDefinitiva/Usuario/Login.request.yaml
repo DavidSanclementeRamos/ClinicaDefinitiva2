@@ -1,0 +1,41 @@
+$kind: http-request
+url: http://localhost:8080/api/v1/auth/login
+method: POST
+body:
+  type: json
+  content: "        \r
+
+    \r
+
+    \        {\"email\": \"admin@test.com\",\r
+
+    \         \"password\": \"admin123\"\r
+
+    \         \r
+
+    \         }\r\n"
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: "// Guardar token en variable GLOBAL (para usar en todos los requests)\r
+
+      // En el request LOGIN, pestaña TESTS\r
+
+      if (pm.response.code === 200) {\r
+
+      \    const token = pm.response.json().token;\r
+
+      \    pm.environment.set(\"token\", token);  // ← ENVIRONMENT\r
+
+      \    console.log(\"✅ Token guardado en ENVIRONMENT\");\r
+
+      }\r
+
+      \r
+
+      \r
+
+      console.log(\"Token guardado:\", pm.environment.get(\"token\"));"
+    language: text/javascript
+order: 6000

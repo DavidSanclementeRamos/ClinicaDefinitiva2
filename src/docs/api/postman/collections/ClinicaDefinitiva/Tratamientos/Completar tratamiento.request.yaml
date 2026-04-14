@@ -1,0 +1,57 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/treatments/5/complete?actualEndDate=2026-04-20"
+method: PATCH
+queryParams:
+  actualEndDate: 2026-04-20
+body:
+  type: text
+  content: "{\r
+
+    \    \"patientId\": {{patientId}},\r
+
+    \    \"dentistId\": {{dentistId}},\r
+
+    \    \"serviceId\": {{serviceId}},\r
+
+    \    \"startDate\": \"2026-03-25\",\r
+
+    \    \"expectedEndDate\": \"2026-04-25\",\r
+
+    \    \"phases\": [\r
+
+    \        {\r
+
+    \            \"name\": \"Diagnóstico\",\r
+
+    \            \"startDate\": \"2026-03-25\",\r
+
+    \            \"status\": \"PENDING\",\r
+
+    \            \"description\": \"Evaluación inicial\"\r
+
+    \        },\r
+
+    \        {\r
+
+    \            \"name\": \"Tratamiento\",\r
+
+    \            \"startDate\": \"2026-04-01\",\r
+
+    \            \"status\": \"PENDING\",\r
+
+    \            \"description\": \"Procedimiento principal\"\r
+
+    \        }\r
+
+    \    ],\r
+
+    \    \"notes\": \"Tratamiento de ortodoncia\",\r
+
+    \    \"rateId\": {{rateId}}\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNzYyNzAsImV4cCI6MTc3NDM4MzQ3MH0.rnR1c5smCrzPGf_9z6Wp2awarAYK2W-reVRvIjUQj9k
+order: 5000

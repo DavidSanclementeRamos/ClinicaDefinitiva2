@@ -1,0 +1,37 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/payments"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"invoiceId\": {{invoiceId}},\r
+
+    \    \"amount\": 120.00,\r
+
+    \    \"currency\": \"COP\",\r
+
+    \    \"paymentMethod\": \"CASH\",\r
+
+    \    \"customerEmail\": \"cliente@example.com\",\r
+
+    \    \"customerName\": \"Cliente Ejemplo\",\r
+
+    \    \"payer\": {\r
+
+    \        \"type\": \"PATIENT\",\r
+
+    \        \"documentType\": \"CC\",\r
+
+    \        \"documentNumber\": \"12345678\",\r
+
+    \        \"name\": \"Cliente Ejemplo\"\r
+
+    \    }\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNzYyNzAsImV4cCI6MTc3NDM4MzQ3MH0.rnR1c5smCrzPGf_9z6Wp2awarAYK2W-reVRvIjUQj9k
+order: 1000

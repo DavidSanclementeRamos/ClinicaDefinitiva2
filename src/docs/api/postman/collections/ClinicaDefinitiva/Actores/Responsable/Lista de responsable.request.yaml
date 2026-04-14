@@ -1,0 +1,79 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/guardians"
+method: GET
+body:
+  type: text
+  content: "{\r
+
+    \    \"code\": \"PADRE\",\r
+
+    \    \"description\": \"Padre/Madre del paciente\",\r
+
+    \    \"patientList\": {\r
+
+    \        \"content\": [],\r
+
+    \        \"pageable\": {\r
+
+    \            \"pageNumber\": 0,\r
+
+    \            \"pageSize\": 10,\r
+
+    \            \"sort\": []\r
+
+    \        },\r
+
+    \        \"totalElements\": 0,\r
+
+    \        \"totalPages\": 0,\r
+
+    \        \"last\": true,\r
+
+    \        \"first\": true,\r
+
+    \        \"numberOfElements\": 0,\r
+
+    \        \"size\": 10,\r
+
+    \        \"number\": 0,\r
+
+    \        \"empty\": true\r
+
+    \    },\r
+
+    \    \"dni\": \"87654321\",\r
+
+    \    \"first\": \"María\",\r
+
+    \    \"lastName\": \"López\",\r
+
+    \    \"age\": \"45\",\r
+
+    \    \"phoneNumber\": \"555-4321\",\r
+
+    \    \"dateOfBirth\": \"1981-05-15\",\r
+
+    \    \"bloodType\": \"A+\",\r
+
+    \    \"documentoEPS\": \"EPS456\",\r
+
+    \    \"user\": 4,\r
+
+    \    \"lastUpdate\": null,\r
+
+    \    \"street\": \"Calle del Bosque 789\",\r
+
+    \    \"city\": \"Bogotá\",\r
+
+    \    \"state\": \"Cundinamarca\",\r
+
+    \    \"country\": \"Colombia\",\r
+
+    \    \"postalCode\": \"110221\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU0MDUxNTMsImV4cCI6MTc3NTQxMjM1M30.pYe02NzNI90ehWnARDQLe0sa63xvZwcaOCyWXKHq-3Y
+order: 2000

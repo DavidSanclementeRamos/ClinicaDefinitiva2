@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/user-assignments/4/extend?newValidTo=2026-05-31"
+method: PUT
+queryParams:
+  newValidTo: 2026-05-31
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNjU4OTMsImV4cCI6MTc3NDM3MzA5M30.h04Akp9lUgm6UMCAzCtA50vHpmMv2oSX2n14hripBcE
+order: 9000

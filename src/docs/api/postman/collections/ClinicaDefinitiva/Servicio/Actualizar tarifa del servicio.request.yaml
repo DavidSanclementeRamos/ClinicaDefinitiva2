@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/services/1/rate"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"newRate\": 90.00,\r
+
+    \    \"currency\": \"COP\",\r
+
+    \    \"justification\": \"Ajuste por costo de insumos y actualización de
+    tarifario\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzYxMTY0NjEsImV4cCI6MTc3NjEyMzY2MX0.o6hRhEnMJ87FC4zzfPK3kuCiDNp1x1o7eRcc6QfcMSM
+order: 8000

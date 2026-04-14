@@ -1,0 +1,20 @@
+$kind: http-request
+url: http://localhost:8080/api/v1/users/register
+method: POST
+headers:
+  Authorization: ""
+body:
+  type: json
+  content: "\r
+
+    \r
+
+    \r
+
+    {\"email\": \"ragyo@revocs.com\", \"password\": \"life fibers\", \"name\":
+    \"Ragyo Kiryuin\"}"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzUzNDUwMjksImV4cCI6MTc3NTM1MjIyOX0.p11UiabvSO_HVO8I_K5sPfqgaryRQKyozBXMZHBu8lI
+order: 4000

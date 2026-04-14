@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/user-assignments/4/active-at?date=2026-03-23"
+method: GET
+queryParams:
+  date: 2026-03-23
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzMjUwNjcsImV4cCI6MTc3NDMzMjI2N30.zVBco6IH4-ZX1Tz00LT79Wf7D3Odam1S9ICSBOsxEcQ
+order: 7000

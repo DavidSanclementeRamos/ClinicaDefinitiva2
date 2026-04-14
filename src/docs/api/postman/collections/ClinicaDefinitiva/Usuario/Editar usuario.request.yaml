@@ -1,0 +1,72 @@
+$kind: http-request
+url: http://localhost:8080/api/v1/users/5
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \    \"email\": \"YUA@gmail.com\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQyODk2OTcsImV4cCI6MTc3NDI5Njg5N30.s6ehkqcml7lmUmgc1bRAnwFVeKXmJwBAqY4PjT_zFsc
+scripts:
+  - type: afterResponse
+    code: "// Generar username válido (alfanumérico, 8 caracteres máx.)\r
+
+      const username = Math.random().toString(36).replace(/[^a-zA-Z0-9]/g,
+      '').substring(0, 8);\r
+
+      pm.environment.set(\"usuarioValido\", username);\r
+
+      \r
+
+      // Generar contraseña válida (mínimo 8 caracteres con mayúscula, minúscula
+      y símbolo especial)\r
+
+      function generarContrasena() {\r
+
+      \    const mayus = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\";\r
+
+      \    const minus = \"abcdefghijklmnopqrstuvwxyz\";\r
+
+      \    const simbolos = \"@$!%*?&\";\r
+
+      \    const resto =
+      \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$!%*?&\";\
+      \r
+
+      \r
+
+      \    let contrasena = \"\";\r
+
+      \    contrasena += mayus[Math.floor(Math.random() * mayus.length)];\r
+
+      \    contrasena += minus[Math.floor(Math.random() * minus.length)];\r
+
+      \    contrasena += simbolos[Math.floor(Math.random() *
+      simbolos.length)];\r
+
+      \r
+
+      \    for (let i = 0; i < 5; i++) {\r
+
+      \        contrasena += resto[Math.floor(Math.random() * resto.length)];\r
+
+      \    }\r
+
+      \r
+
+      \    return contrasena;\r
+
+      }\r
+
+      \r
+
+      pm.environment.set(\"contrasenaValida\", generarContrasena());\r
+
+      \r\n"
+    language: text/javascript
+order: 3000

@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/services/5/deactivate?reason=Descontinuación temporal"
+method: PATCH
+queryParams:
+  reason: Descontinuación temporal
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzYxMTY0NjEsImV4cCI6MTc3NjEyMzY2MX0.o6hRhEnMJ87FC4zzfPK3kuCiDNp1x1o7eRcc6QfcMSM
+order: 10000

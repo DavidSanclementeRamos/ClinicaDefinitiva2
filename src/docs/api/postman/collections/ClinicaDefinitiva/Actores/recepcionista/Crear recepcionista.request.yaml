@@ -1,0 +1,49 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/receptionists"
+method: POST
+body:
+  type: json
+  content: "\r
+
+    \r
+
+    {\r
+
+    \  \"sector\": \"DENTAL_TECHNICIAN_SUPPORT\",\r
+
+    \  \"dni\": \"16161616\",\r
+
+    \  \"first\": \"Usopp\",\r
+
+    \  \"lastName\": \"Naris\",\r
+
+    \  \"age\": \"30\",\r
+
+    \  \"phoneNumber\": \"5552016\",\r
+
+    \  \"dateOfBirth\": \"1996-04-01\",\r
+
+    \  \"bloodType\": \"AB-\",\r
+
+    \  \"documentEPS\": \"EPS_ONE\",\r
+
+    \  \"user\": 39,\r
+
+    \  \"lastUpdate\": null,\r
+
+    \  \"street\": \"Thousand Sunny\",\r
+
+    \  \"city\": \"Mar\",\r
+
+    \  \"state\": \"Grand Line\",\r
+
+    \  \"country\": \"One Piece World\",\r
+
+    \  \"postalCode\": \"ONE004\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU0OTAwNzEsImV4cCI6MTc3NTQ5NzI3MX0.glFWJbPa9gQC_z4WVRn-ywuAqx7cDyRlmOnXiFD04rQ
+order: 1000

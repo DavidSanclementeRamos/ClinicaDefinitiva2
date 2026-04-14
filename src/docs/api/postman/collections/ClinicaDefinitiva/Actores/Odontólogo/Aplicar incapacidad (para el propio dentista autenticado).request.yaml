@@ -1,0 +1,30 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/dentists/me/incapacity?start=2026-04-15T00:00:00&en\
+  d=2026-04-18T23:59:59&note=Gripe"
+method: POST
+queryParams:
+  start: 2026-04-15T00:00:00
+  end: 2026-04-18T23:59:59
+  note: Gripe
+body:
+  type: text
+  content: "{\r
+
+    \    \"phoneNumber\": \"555-5678\",\r
+
+    \    \"street\": \"Calle Nueva 456\",\r
+
+    \    \"city\": \"Medellín\",\r
+
+    \    \"state\": \"Antioquia\",\r
+
+    \    \"country\": \"Colombia\",\r
+
+    \    \"postalCode\": \"050001\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNzYyNzAsImV4cCI6MTc3NDM4MzQ3MH0.rnR1c5smCrzPGf_9z6Wp2awarAYK2W-reVRvIjUQj9k
+order: 8000

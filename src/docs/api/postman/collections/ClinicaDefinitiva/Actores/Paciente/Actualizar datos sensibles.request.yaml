@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/patients/3/sensitive"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"dni\": \"87654321\",\r
+
+    \    \"first\": \"Carlos Andrés\",\r
+
+    \    \"lastName\": \"Pérez Gómez\",\r
+
+    \    \r
+
+    \    \"bloodType\": \"A-\",\r
+
+    \    \"documentEPS\": \"EPS456\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU1MjI4ODEsImV4cCI6MTc3NTUzMDA4MX0.1_svwcLi3VYd1S8xvVbQk0ZX3P9O1TI6_PTJPugpt2Q
+order: 7000

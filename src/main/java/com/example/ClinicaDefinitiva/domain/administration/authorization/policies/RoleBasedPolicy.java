@@ -337,10 +337,7 @@ public class RoleBasedPolicy implements PermissionPolicy {
         // Lectura de pacientes asignados (ABAC: SpecialtyBasedPolicy filtrará por asignación)
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PATIENT), a(ActionCatalog.BasicAction.READ)));
 
-        // Servicios clínicos propios (ABAC: SpecialtyBasedPolicy valida especialidad)
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.CREATE)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.READ)));
-        permissions.add(Permission.of(r(ResourceCatalog.BasicResource.PROVIDED_SERVICE), a(ActionCatalog.BasicAction.UPDATE)));
+       
 
         // Gestión de citas y disponibilidad propia
         permissions.add(Permission.of(r(ResourceCatalog.BasicResource.APPOINTMENT), a(ActionCatalog.BasicAction.READ)));

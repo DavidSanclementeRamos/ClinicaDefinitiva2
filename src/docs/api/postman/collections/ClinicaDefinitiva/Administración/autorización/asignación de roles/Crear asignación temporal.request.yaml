@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/user-assignments/temporary"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"userId\": 4,\r
+
+    \    \"rolId\": 8,\r
+
+    \    \"validFrom\": \"2026-03-23\",\r
+
+    \    \"validTo\": \"2026-04-30\",\r
+
+    \    \"isPrimary\": false\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzMjE5NzQsImV4cCI6MTc3NDMyOTE3NH0.pXGATDIn3HJ0vMYfdLACzgpg56XMvoS9JbzSonliwWQ
+order: 2000

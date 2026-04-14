@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/user-assignments/user/1"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzYwOTIxMjIsImV4cCI6MTc3NjA5OTMyMn0.SyUSyK1mbm1KP4PGoVY-vOw-B33P4lIbvbsK1hNE3-w
+order: 4000

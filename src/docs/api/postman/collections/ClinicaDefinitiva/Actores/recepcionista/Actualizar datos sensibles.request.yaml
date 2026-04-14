@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/receptionists/5/sensitive"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"bloodType\": \"A-\",\r
+
+    \    \"documentEPS\": \"EPS456\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU0OTkxMjMsImV4cCI6MTc3NTUwNjMyM30.J9goitzNN1dsecSr3i6ttlCxv2q6lkriTyvF1wHhB90
+order: 6000

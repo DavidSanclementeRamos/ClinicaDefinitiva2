@@ -19,8 +19,8 @@ Esta guía te ayudará a poner en marcha el proyecto localmente, tanto para ejec
 ## 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/clinica-odontologica.git
-cd clinica-odontologica
+git clone https://github.com/DavidSanclementeRamos/ClinicaDefinitiva2.git
+cd ClinicaDefinitiva2
 ```
 
 ---

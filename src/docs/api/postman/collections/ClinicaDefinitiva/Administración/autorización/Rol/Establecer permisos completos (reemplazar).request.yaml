@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/roles/76"
+method: PUT
+body:
+  type: json
+  content: "[\r
+
+    \    { \"permission\": \"READ_USER_IDENTITY\" },\r
+
+    \    { \"permission\": \"CREATE_USER_IDENTITY\" }\r
+
+    ]"
+order: 7000

@@ -196,6 +196,9 @@ Estos huecos se documentan en [ADR-53 (abandono del historial de catálogos y nu
 ## 🔍 Cómo leer este índice
 
 - **Si eres nuevo en el proyecto**: empieza por [ADR-01 (hexagonal)](decisions/arch/ADR-%28Arquitectura%29-01-Migraci%C3%B3n%20progresiva%20a%20arquitectura%20hexagonal.md),  [ADR-40 (errores híbridos)](decisions/arch/ADR-%28Arquitectura%29-40-Estrategia%20H%C3%ADbrida%20de%20Manejo%20de%20Errores%20-%20Outcome.md) y [ADR-47 (autorización)](decisions/arch/ADR-%28Arquitectura%29-47-Modelo%20h%C3%ADbrido%20RBAC%20y%20ABAC%20para%20autorizaci%C3%B3n.md).  
+ 
+> [Matriz de permisos por rol](../guides/authorization/Gu%C3%ADa%20de%20autorizaci%C3%B3n%20%E2%80%94%20Referencia%20de%20permisos%20por%20rol.md)) – Fuente de verdad de la autorización del sistema. y [guia-estrategia-autorización-security context.md](../guides/authorization/guia-estrategia-autorizaci%C3%B3n-security%20context.md) 
+
 - **Si te interesa un área concreta**: usa las tablas por categoría.  
 - **Si quieres entender la evolución**: consulta los ADRs históricos en `../evolution/lessons-learned/`.
 

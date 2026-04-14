@@ -1,0 +1,31 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/users/2/reactivate?reason=Prueba"
+method: PATCH
+queryParams:
+  reason: Prueba
+body:
+  type: text
+  content: "{\r
+
+    \  \"nombreUsuario\": \"pepe\",\r
+
+    \  \"correoEletronico\": \"@gbg\",\r
+
+    \  \"contrasena\": \"2345\",\r
+
+    \  \"estado\": \"ACTIVO\",\r
+
+    \  \"rol\": \"Odontologo\"\r
+
+    }\r
+
+    \r
+
+    \r
+
+    \r\n"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQyODQ3NTQsImV4cCI6MTc3NDI5MTk1NH0.W9a3vR727VpLj-1NbtpGif2C7YrQGZVpYsNZCdLDWvA
+order: 7000

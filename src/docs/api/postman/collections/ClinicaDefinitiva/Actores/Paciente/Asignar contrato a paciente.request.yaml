@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/patients/45/contract"
+method: POST
+order: 9000

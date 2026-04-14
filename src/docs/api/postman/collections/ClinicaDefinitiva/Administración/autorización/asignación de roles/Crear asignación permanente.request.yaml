@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/user-assignments/permanent"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"userId\": 72,\r
+
+    \    \"rolId\": 5,\r
+
+    \    \"isPrimary\": true\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzUzNTE5MTIsImV4cCI6MTc3NTM1OTExMn0.DkdGx4VP-5k-6vbN_LMIZaBZ2cwJDMeuse39YOLQ3d0
+order: 1000

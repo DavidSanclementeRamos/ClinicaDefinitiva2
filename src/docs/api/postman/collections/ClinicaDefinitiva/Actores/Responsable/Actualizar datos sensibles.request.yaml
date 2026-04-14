@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/guardians/22/sensitive"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \r
+
+    \    \"lastName\": \"López Rodríguez\"\r
+
+    \   \r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU0MTU0MzIsImV4cCI6MTc3NTQyMjYzMn0.TeGG5y3yVBB4yO6KovDHajjrs49Yv1YY8nMjzxXvkJ8
+order: 6000

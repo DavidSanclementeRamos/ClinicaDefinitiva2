@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/guardians/22/contact"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"street\": \"Carrera 15 # 45-67\",\r
+
+    \    \"city\": \"Medellín\",\r
+
+    \    \"state\": \"Antioquia\",\r
+
+    \    \"country\": \"Colombia\",\r
+
+    \    \"postalCode\": \"050001\",\r
+
+    \    \"phoneNumber\": \"555876789\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU0MzU0NTUsImV4cCI6MTc3NTQ0MjY1NX0.-OonNnIPfRuhhZTn6E8Ke5hg5aiOWmR3PDgL9qEuBr8
+order: 3000

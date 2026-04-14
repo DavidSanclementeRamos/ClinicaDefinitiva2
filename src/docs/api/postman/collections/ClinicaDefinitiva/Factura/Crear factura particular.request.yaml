@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/invoices/particular"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"patientId\": {{patientId}},\r
+
+    \    \"dentistId\": {{dentistId}},\r
+
+    \    \"providerId\": null,\r
+
+    \    \"currency\": \"COP\",\r
+
+    \    \"dueDate\": \"2026-04-10T00:00:00\",\r
+
+    \    \"notes\": \"Consulta de ortodoncia\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNzYyNzAsImV4cCI6MTc3NDM4MzQ3MH0.rnR1c5smCrzPGf_9z6Wp2awarAYK2W-reVRvIjUQj9k
+order: 1000

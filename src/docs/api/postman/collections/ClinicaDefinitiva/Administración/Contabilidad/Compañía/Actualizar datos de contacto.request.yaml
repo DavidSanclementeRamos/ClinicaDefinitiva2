@@ -1,0 +1,31 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/companies/1/contact"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"Clínica Dental Ejemplo SAS (Actualizada)\",\r
+
+    \    \"legalRepresentative\": \"María Gómez\",\r
+
+    \    \"street\": \"Carrera 15 # 45-67\",\r
+
+    \    \"city\": \"Medellín\",\r
+
+    \    \"state\": \"Antioquia\",\r
+
+    \    \"country\": \"Colombia\",\r
+
+    \    \"postalCode\": \"050001\",\r
+
+    \    \"phoneNumber\": \"6018765432\",\r
+
+    \    \"email\": \"nuevo.contacto@clinicadental.com\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzUzMzE3MjYsImV4cCI6MTc3NTMzODkyNn0.PUe5A8dceAju-T6QWduSBLtoxxTidLFIW4bw_HIYmc4
+order: 6000

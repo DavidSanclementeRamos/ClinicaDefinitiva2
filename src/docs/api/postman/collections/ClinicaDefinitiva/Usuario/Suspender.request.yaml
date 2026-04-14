@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/users/4/suspend?reason=Prueba"
+method: PATCH
+queryParams:
+  reason: Prueba
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzMDM0ODcsImV4cCI6MTc3NDMxMDY4N30.eFaShnkD_DZq5j6MdheUTkc03wqjayPqs0Ca4nLDA54
+order: 9000

@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/dentists/3/contact"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"phoneNumber\": \"5555678\",\r
+
+    \    \"street\": \"Calle Nueva 456\",\r
+
+    \    \"city\": \"Medellín\",\r
+
+    \    \"state\": \"Antioquia\",\r
+
+    \    \"country\": \"Colombia\",\r
+
+    \    \"postalCode\": \"050001\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU1MDY1NDksImV4cCI6MTc3NTUxMzc0OX0.cDvxCQOISSE9DQnavEfwwrCLYExzqNLLcho6BOHlOHA
+order: 5000

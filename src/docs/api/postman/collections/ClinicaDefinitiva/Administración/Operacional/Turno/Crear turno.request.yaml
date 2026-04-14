@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/shifts"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"dentistId\": 5,\r
+
+    \    \"date\": \"2026-04-14\",\r
+
+    \    \"startTime\": \"10:00:00\",\r
+
+    \    \"endTime\": \"17:00:00\",\r
+
+    \    \"type\": \"CLINICAL\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU1MzA5MjYsImV4cCI6MTc3NTUzODEyNn0.wAI45Hvsuxwd907Q6CyEsAYatcnZu3D-jU5ssDHbun8
+order: 1000

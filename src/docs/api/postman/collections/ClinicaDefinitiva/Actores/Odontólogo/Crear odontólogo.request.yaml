@@ -1,0 +1,61 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/dentists"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"specialties\": \"ENDODONCIA\",\r
+
+    \  \"availabilityStatus\": \"AVAILABLE\",\r
+
+    \  \"WorkingHours\": {\r
+
+    \    \"start\": \"08:00:00\",\r
+
+    \    \"end\": \"17:00:00\",\r
+
+    \    \"dayOfWeek\": \"TUESDAY\",\r
+
+    \    \"declaredHoursPerWeek\": 40\r
+
+    \  },\r
+
+    \  \"dni\": \"99999999\",\r
+
+    \  \"first\": \"Medusa\",\r
+
+    \  \"lastName\": \"Gorgon\",\r
+
+    \  \"age\": \"41\",\r
+
+    \  \"phoneNumber\": \"5551009\",\r
+
+    \  \"dateOfBirth\": \"1985-08-15\",\r
+
+    \  \"bloodType\": \"A-\",\r
+
+    \  \"documentoEPS\": \"EPS_VECTOR\",\r
+
+    \  \"user\": 23,\r
+
+    \  \"lastUpdate\": null,\r
+
+    \  \"street\": \"Laboratorio subterráneo\",\r
+
+    \  \"city\": \"Shibusen\",\r
+
+    \  \"state\": \"Death City\",\r
+
+    \  \"country\": \"Soul Eater World\",\r
+
+    \r
+
+    \  \"postalCode\": \"SE100\"\r
+
+    }\r\n"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU1MDY1NDksImV4cCI6MTc3NTUxMzc0OX0.cDvxCQOISSE9DQnavEfwwrCLYExzqNLLcho6BOHlOHA
+order: 1000

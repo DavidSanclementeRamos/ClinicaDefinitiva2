@@ -1,0 +1,47 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/guardians"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"code\": \"PAPA\",\r
+
+    \    \"description\": \"Capitán del Sexto Escuadrón, noble y estricto\",\r
+
+    \    \"dni\": \"33333333\",\r
+
+    \    \"first\": \"Byakuya\",\r
+
+    \    \"lastName\": \"Kuchiki\",\r
+
+    \    \"age\": \"59\",\r
+
+    \    \"phoneNumber\": \"5559873002\",\r
+
+    \    \"dateOfBirth\": \"1967-01-31\",\r
+
+    \    \"bloodType\": \"AB+\",\r
+
+    \    \"documentoEPS\": \"EPS_SOUL\",\r
+
+    \    \"user\": 68,\r
+
+    \    \"lastUpdate\": null,\r
+
+    \    \"street\": \"Mansión Kuchiki\",\r
+
+    \    \"city\": \"Seireitei\",\r
+
+    \    \"state\": \"Soul Society\",\r
+
+    \    \"country\": \"Japón\",\r
+
+    \    \"postalCode\": \"000-0003\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU0MDUxNTMsImV4cCI6MTc3NTQxMjM1M30.pYe02NzNI90ehWnARDQLe0sa63xvZwcaOCyWXKHq-3Y
+order: 4000

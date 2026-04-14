@@ -1,0 +1,14 @@
+$kind: http-request
+name: Desactivar
+url: http://localhost:8080/api/v1/users/2/deactivate?reason=Prueba
+method: PATCH
+queryParams:
+  reason: Prueba
+body:
+  type: json
+  content: ""
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQyMjk4NzQsImV4cCI6MTc3NDIzNzA3NH0.hDPy3HZsJU5jN_BJiQyKQUn5QaVFNGpbbWVu-XpYAp0
+order: 10000

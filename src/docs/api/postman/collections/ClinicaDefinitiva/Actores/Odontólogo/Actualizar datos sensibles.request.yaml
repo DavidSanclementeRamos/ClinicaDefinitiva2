@@ -1,0 +1,37 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/dentists/44/sensitive"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"specialties\": \"ENDODONCIA\",\r
+
+    \    \"workingHours\": {\r
+
+    \        \"start\": \"09:00:00\",\r
+
+    \        \"end\": \"18:00:00\",\r
+
+    \        \"dayOfWeek\": \"TUESDAY\",\r
+
+    \        \"declaredHoursPerWeek\": 40\r
+
+    \    },\r
+
+    \    \"dni\": \"87654321\",\r
+
+    \    \"first\": \"Luis\",\r
+
+    \    \"lastName\": \"Fernández\",\r
+
+    \    \"age\": \"35\",\r
+
+    \    \"dateOfBirth\": \"1989-03-24\",\r
+
+    \    \"bloodType\": \"A-\",\r
+
+    \    \"documentoEPS\": \"EPS456\"\r
+
+    }"
+order: 6000

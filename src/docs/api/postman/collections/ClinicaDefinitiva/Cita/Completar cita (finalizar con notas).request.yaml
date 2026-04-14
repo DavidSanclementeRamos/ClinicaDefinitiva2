@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/appointments/45/complete"
+method: PATCH
+body:
+  type: text
+  content: "{\r
+
+    \    \"attendedBy\": {{dentistId}},\r
+
+    \    \"actualDurationMinutes\": 45,\r
+
+    \    \"clinicalNotes\": \"Se realizó limpieza dental, paciente en buen
+    estado\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNzYyNzAsImV4cCI6MTc3NDM4MzQ3MH0.rnR1c5smCrzPGf_9z6Wp2awarAYK2W-reVRvIjUQj9k
+order: 12000

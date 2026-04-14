@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/shifts/5/cancel?reason=Personal"
+method: POST
+queryParams:
+  reason: Personal
+body:
+  type: text
+  content: ""
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU1MzIwNzYsImV4cCI6MTc3NTUzOTI3Nn0.PQL4j0IcGto6GKk7hgsGj9jzwsvIXp6LtxOCQ8lsSK8
+order: 7000

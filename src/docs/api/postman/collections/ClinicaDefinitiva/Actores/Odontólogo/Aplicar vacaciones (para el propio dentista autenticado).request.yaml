@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/dentists/me/vacation?start=2026-04-01T00:00:00&end=\
+  2026-04-10T23:59:59"
+method: POST
+queryParams:
+  start: 2026-04-01T00:00:00
+  end: 2026-04-10T23:59:59
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU1MDY1NDksImV4cCI6MTc3NTUxMzc0OX0.cDvxCQOISSE9DQnavEfwwrCLYExzqNLLcho6BOHlOHA
+order: 7000

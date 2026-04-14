@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/receptionists/5/contact"
+method: PATCH
+body:
+  type: json
+  content: "{\"street\": \"Amazon Lily\",\r
+
+    \  \"city\": \"Amazon Lily\",\r
+
+    \  \"state\": \"Calm Belt\",\r
+
+    \  \"country\": \"One Piece World\",\r
+
+    \  \"postalCode\": \"ONE005\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU0OTkxMjMsImV4cCI6MTc3NTUwNjMyM30.J9goitzNN1dsecSr3i6ttlCxv2q6lkriTyvF1wHhB90
+order: 5000

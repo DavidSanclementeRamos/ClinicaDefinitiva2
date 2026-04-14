@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/rates/45/end-validity?endDate=2026-06-30T23:59:59"
+method: PATCH
+queryParams:
+  endDate: 2026-06-30T23:59:59
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNzYyNzAsImV4cCI6MTc3NDM4MzQ3MH0.rnR1c5smCrzPGf_9z6Wp2awarAYK2W-reVRvIjUQj9k
+order: 9000

@@ -1,0 +1,24 @@
+$kind: collection
+scripts:
+  - type: http:beforeRequest
+    code: "const token = pm.environment.get(\"token\");\r
+
+      if (token) {\r
+
+      \    pm.request.headers.add({\r
+
+      \        key: \"Authorization\",\r
+
+      \        value: `Bearer ${token}`\r
+
+      \    });\r
+
+      }"
+    language: text/javascript
+auth:
+  - id: a126d771-a7ae-49fd-9929-c1e5656c7ca3
+    type: bearer
+    name: bearer auth
+    credentials:
+      token: tpken
+order: 1000

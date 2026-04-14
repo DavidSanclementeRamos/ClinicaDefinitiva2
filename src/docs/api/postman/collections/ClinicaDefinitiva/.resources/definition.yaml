@@ -1,0 +1,28 @@
+$kind: collection
+variables:
+  ClinicaDeFinitiva: ""
+  eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzM2MTI5NDMsImV4cCI6MTc3MzYyMDE0M30.05PyTmmQrhR221pnqy9I2ziYnX5j-FokvPsg2MCbIKo: ""
+scripts:
+  - type: http:beforeRequest
+    code: "// En la colección → Edit → Pre-request Script\r
+
+      const token = pm.environment.get(\"token\");  // ← ENVIRONMENT\r
+
+      console.log(\"🔍 Token existe?\", token ? \"SÍ\" : \"NO\");\r
+
+      if (token) {\r
+
+      \    pm.request.headers.add({\r
+
+      \        key: \"Authorization\",\r
+
+      \        value: `Bearer ${token}`\r
+
+      \    });\r
+
+      }"
+    language: text/javascript
+auth:
+  - id: 7325f797-9881-4cb1-aaf2-a34f5226b676
+    type: bearer
+    name: bearer auth

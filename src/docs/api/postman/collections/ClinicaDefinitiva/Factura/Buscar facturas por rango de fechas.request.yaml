@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/invoices/date-range?startDate=2026-03-01&endDate=20\
+  26-03-31"
+method: GET
+queryParams:
+  startDate: 2026-03-01
+  endDate: 2026-03-31
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNzYyNzAsImV4cCI6MTc3NDM4MzQ3MH0.rnR1c5smCrzPGf_9z6Wp2awarAYK2W-reVRvIjUQj9k
+order: 9000

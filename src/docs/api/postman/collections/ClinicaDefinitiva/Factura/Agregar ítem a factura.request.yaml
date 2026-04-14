@@ -1,0 +1,31 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/invoices/54/items"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"item\": 1,\r
+
+    \    \"serviceId\": {{serviceId}},\r
+
+    \    \"serviceCode\": \"SERV-001\",\r
+
+    \    \"serviceDescription\": \"Limpieza dental\",\r
+
+    \    \"rateId\": {{rateId}},\r
+
+    \    \"unitPrice\": 120.00,\r
+
+    \    \"currency\": \"COP\",\r
+
+    \    \"quantity\": 1,\r
+
+    \    \"performedAt\": \"2026-03-25T10:00:00\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNzYyNzAsImV4cCI6MTc3NDM4MzQ3MH0.rnR1c5smCrzPGf_9z6Wp2awarAYK2W-reVRvIjUQj9k
+order: 10000

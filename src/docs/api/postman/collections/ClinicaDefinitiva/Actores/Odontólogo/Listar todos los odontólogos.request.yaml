@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/dentists"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU1MDY1NDksImV4cCI6MTc3NTUxMzc0OX0.cDvxCQOISSE9DQnavEfwwrCLYExzqNLLcho6BOHlOHA
+order: 3000

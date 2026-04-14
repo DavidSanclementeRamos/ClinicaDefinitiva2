@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/services/status/ACTIVE"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzYxMTY0NjEsImV4cCI6MTc3NjEyMzY2MX0.o6hRhEnMJ87FC4zzfPK3kuCiDNp1x1o7eRcc6QfcMSM
+order: 4000

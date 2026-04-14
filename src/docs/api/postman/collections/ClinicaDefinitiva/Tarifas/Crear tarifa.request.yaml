@@ -1,0 +1,27 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/rates"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"serviceId\": {{serviceId}},\r
+
+    \    \"payerType\": \"PARTICULAR\",\r
+
+    \    \"contractId\": null,\r
+
+    \    \"amount\": 120.00,\r
+
+    \    \"currency\": \"COP\",\r
+
+    \    \"validFrom\": \"2026-03-25T00:00:00\",\r
+
+    \    \"validTo\": \"2026-12-31T23:59:59\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNzYyNzAsImV4cCI6MTc3NDM4MzQ3MH0.rnR1c5smCrzPGf_9z6Wp2awarAYK2W-reVRvIjUQj9k
+order: 1000

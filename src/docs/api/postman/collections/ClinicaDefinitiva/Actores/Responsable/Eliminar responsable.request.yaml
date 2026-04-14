@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/guardians/22"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU0MzU0NTUsImV4cCI6MTc3NTQ0MjY1NX0.-OonNnIPfRuhhZTn6E8Ke5hg5aiOWmR3PDgL9qEuBr8
+order: 7000

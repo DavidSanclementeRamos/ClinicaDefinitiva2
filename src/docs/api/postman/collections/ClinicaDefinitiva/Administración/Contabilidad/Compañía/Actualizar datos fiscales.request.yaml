@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/companies/1/tax"
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"taxIdentificationNumber\": \"900123456-7\",\r
+
+    \    \"taxRegime\": \"GRAN_CONTRIBUYENTE\",\r
+
+    \    \"typePerson\": \"JURIDICAL\",\r
+
+    \    \"incorporationDate\": \"2010-05-20\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzUzMzE3MjYsImV4cCI6MTc3NTMzODkyNn0.PUe5A8dceAju-T6QWduSBLtoxxTidLFIW4bw_HIYmc4
+order: 7000

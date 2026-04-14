@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/roles/by-enum/ADMINISTRATOR"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzMTA4NTQsImV4cCI6MTc3NDMxODA1NH0.yjY66dLUTM-1ZjSe-6KJVaePPO6Zh2buRVxFWYduLPo
+order: 4000

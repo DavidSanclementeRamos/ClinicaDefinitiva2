@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/receptionists/1"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU0OTAwNzEsImV4cCI6MTc3NTQ5NzI3MX0.glFWJbPa9gQC_z4WVRn-ywuAqx7cDyRlmOnXiFD04rQ
+order: 7000

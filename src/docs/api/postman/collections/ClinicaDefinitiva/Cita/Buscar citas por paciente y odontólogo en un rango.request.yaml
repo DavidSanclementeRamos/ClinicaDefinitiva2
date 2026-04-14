@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/appointments/patient/2/dentist/5?start=2026-03-25&e\
+  nd=2026-03-26&page=0&size=10"
+method: GET
+queryParams:
+  start: 2026-03-25
+  end: 2026-03-26
+  page: "0"
+  size: "10"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzNzYyNzAsImV4cCI6MTc3NDM4MzQ3MH0.rnR1c5smCrzPGf_9z6Wp2awarAYK2W-reVRvIjUQj9k
+order: 9000

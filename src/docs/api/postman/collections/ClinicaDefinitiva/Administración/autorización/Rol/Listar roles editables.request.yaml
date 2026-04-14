@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/roles/editable?editable=true"
+method: GET
+queryParams:
+  editable: "true"
+order: 3000

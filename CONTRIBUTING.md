@@ -128,6 +128,118 @@ Para ADR-02, se necesitan implementar `AuthenticationFailureHandler` y `Authenti
 
 ---
 
+## 🧩 Tareas específicas: Implementar actualizaciones parciales (PATCH) en módulos pendientes
+
+### Problema identificado
+
+Actualmente, varios módulos del sistema (especialmente aquellos cuyos endpoints no han sido probados a fondo) no soportan correctamente el verbo HTTP **PATCH**, es decir, actualizaciones parciales donde solo se envían los campos que se desean modificar.
+
+En una API REST bien diseñada, un endpoint `PATCH /recursos/{id}` debe permitir actualizar **solo los campos incluidos en la solicitud**, dejando el resto sin cambios. Sin embargo, en nuestro código ocurre lo siguiente:
+
+- Los **DTOs** de actualización incluyen todos los campos (no opcionales).
+- Los **métodos del agregado** esperan todos los parámetros (no usan `Optional`).
+- Los **mappers de escritura** convierten directamente el DTO a valores, sin distinguir qué campos fueron enviados.
+
+Esto obliga al cliente a enviar **el objeto completo** cada vez que quiere modificar un solo atributo, lo cual es ineficiente, propenso a errores y viola el principio de “partial update”.
+
+### ¿Dónde está implementado correctamente?
+
+El módulo de **Usuario (UserIdentity)** ya resuelve este problema de manera ejemplar. Observa su patrón:
+
+```java
+// DTO con campos opcionales (usando Optional o simplemente campos nullable)
+public record UpdateUserIdentityDto(
+    String name,      // puede ser null → no se actualiza
+    String email,     // puede ser null → no se actualiza
+    String password   // puede ser null → no se actualiza
+) {}
+
+// Método de dominio que recibe Optional
+public Outcome<UserIdentity> update(
+    Optional<UserIdentityName> newName,
+    Optional<Email> newEmail,
+    Optional<HashedPassword> newPassword,
+    Instant now
+) { ... }
+
+// Mapper que convierte DTO a Optional (solo si el campo vino en la request)
+public Optional<UserIdentityName> toUserName(UpdateUserIdentityDto dto) {
+    return Optional.ofNullable(dto.name())
+            .map(UserIdentityName::of);
+}
+```
+
+**Este patrón debe replicarse en todos los módulos que aún no lo tienen.**
+
+### Módulos afectados (prioridad alta)
+
+| Módulo | Agregado(s) | Operaciones de actualización que necesitan soporte PATCH |
+|--------|-------------|----------------------------------------------------------|
+| **Facturación (Billing)** | `Invoice`, `Rate` | `updateInformation`, `updateRate` (actualmente requieren todos los campos) |
+| **Servicios Odontológicos (DentalService)** | `ProvidedService` | `updateInformation`, `updateRate`, `updateDetails` (ya se está trabajando, pero falta migrar completamente) |
+| **Contabilidad (Accounting)** | `Company`, `Contract`, `JournalEntry`, `LedgerAccount`, `ThirdParties` | Múltiples métodos `update*` que actualmente exigen el objeto completo |
+| **Operaciones (Operations)** | `Shift` | `reschedule`, `excludeBlock` (solo ciertos campos) |
+| **Tratamientos Clínicos (ClinicalTreatments)** | `Treatment`, `TreatmentPhase` | `updatePhase`, `updateTreatment` |
+
+### ¿Qué hay que hacer?
+
+Para cada agregado y su correspondiente caso de uso de actualización, se deben seguir estos pasos:
+
+1. **Modificar el DTO**:
+    - Convertir todos los campos a `nullable` (usar tipos simples como `String`, `Integer`, `Boolean`, etc., y permitir `null`).
+    - **No** usar `Optional` en los DTO (no es serializable amigable). El `null` significará "no actualizar".
+
+2. **Modificar el método del agregado**:
+    - Cambiar los parámetros para que reciban `Optional<T>`.
+    - Solo aplicar el cambio si el `Optional` está presente.
+
+3. **Modificar el mapper de escritura**:
+    - Crear métodos que conviertan el DTO a `Optional<VO>`.
+    - Usar `Optional.ofNullable(dto.campo()).map(VO::of)`.
+
+4. **Modificar el Application Service**:
+    - Invocar el mapper para obtener los `Optional`s.
+    - Llamar al método del agregado con esos `Optional`s.
+
+5. **Actualizar los tests**:
+    - Asegurar que se pueda actualizar un campo individual sin enviar los demás.
+
+### Criterios de aceptación
+
+- [ ] El endpoint `PATCH` permite enviar solo un subconjunto de campos.
+- [ ] Los campos no enviados permanecen con su valor original.
+- [ ] Los campos enviados con valor `null` se interpretan como "no actualizar" (no se asigna `null` a menos que el negocio lo requiera).
+- [ ] Los tests unitarios y de integración cubren escenarios de actualización parcial.
+
+### Ejemplo de implementación esperada
+
+```java
+// DTO
+public record UpdateInvoiceDto(
+    LocalDateTime dueDate,   // null = no actualizar
+    String notes,            // null = no actualizar
+    InvoiceStatus status     // null = no actualizar
+) {}
+
+// Método del agregado
+public void update(Optional<LocalDateTime> newDueDate, Optional<String> newNotes, Optional<InvoiceStatus> newStatus) {
+    newDueDate.ifPresent(d -> this.dueDate = d);
+    newNotes.ifPresent(n -> this.notes = Notes.of(n));
+    newStatus.ifPresent(s -> this.status = this.status.transitionTo(s));
+}
+```
+
+### ¿Dónde empezar?
+
+Te recomendamos comenzar con los módulos más pequeños o los que ya están medianamente avanzados (ej. `DentalService` o `Shift`) para luego abordar `Accounting` y `Billing`. Si tienes dudas, revisa la implementación de `UserIdentity` como referencia.
+
+¡Toda contribución en esta área es bienvenida y ayudará a que la API sea más profesional y fácil de consumir!
+
+
+
+
+---
+
 ## 🔧 Convenciones de código
 
 - **Java 17** – usa records para DTOs y VOs cuando sea apropiado.

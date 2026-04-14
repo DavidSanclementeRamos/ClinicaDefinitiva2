@@ -1,0 +1,45 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/patients"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"guardianId\": \"15\",\r
+
+    \  \"dni\": \"33333333\",\r
+
+    \  \"first\": \"Prushka\",\r
+
+    \  \"lastName\": \"XD\",\r
+
+    \  \"age\": \"25\",\r
+
+    \  \"phoneNumber\": \"5554003\",\r
+
+    \  \"dateOfBirth\": \"2012-12-31\",\r
+
+    \  \"bloodType\": \"AB-\",\r
+
+    \  \"documentoEPS\": \"EPS_ABYSS\",\r
+
+    \  \"user\": 45,\r
+
+    \  \"lastUpdate\": null,\r
+
+    \  \"street\": \"Estación de Ida\",\r
+
+    \  \"city\": \"Orth\",\r
+
+    \  \"state\": \"Abismo\",\r
+
+    \  \"country\": \"Made in Abyss World\",\r
+
+    \  \"postalCode\": \"ABY001\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU1MjI4ODEsImV4cCI6MTc3NTUzMDA4MX0.1_svwcLi3VYd1S8xvVbQk0ZX3P9O1TI6_PTJPugpt2Q
+order: 2000

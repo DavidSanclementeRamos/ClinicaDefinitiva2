@@ -1,0 +1,14 @@
+$kind: http-request
+url: http://localhost:8080/api/v1/users
+method: GET
+headers:
+  Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzM2MTI5NDMsImV4cCI6MTc3MzYyMDE0M30.05PyTmmQrhR221pnqy9I2ziYnX5j-FokvPsg2MCbIKo
+queryParams:
+  - key: ""
+    value: null
+    disabled: true
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzUzNTAyMTUsImV4cCI6MTc3NTM1NzQxNX0.DklTcxXNpgj6wUEOBX-Ez_w5FpwMGlk1V9prrjVxtsM
+order: 5000

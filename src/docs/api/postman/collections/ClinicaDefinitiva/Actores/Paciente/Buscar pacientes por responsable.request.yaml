@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/patients/guardian/15"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYW5jb2NrQGhyLmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzU1MjI4ODEsImV4cCI6MTc3NTUzMDA4MX0.1_svwcLi3VYd1S8xvVbQk0ZX3P9O1TI6_PTJPugpt2Q
+order: 6000

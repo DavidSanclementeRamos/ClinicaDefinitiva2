@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/roles/3/suspend"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"reason\": \"Suspensión por pruebas\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzQzMjE5NzQsImV4cCI6MTc3NDMyOTE3NH0.pXGATDIn3HJ0vMYfdLACzgpg56XMvoS9JbzSonliwWQ
+order: 12000

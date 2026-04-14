@@ -1,0 +1,47 @@
+$kind: http-request
+url: "{{ClinicaDeFinitiva}}/services"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"name\": \"Implante Dental Unitario\",\r
+
+    \  \"categoryId\": 11,\r
+
+    \  \"categoryName\": \"Implantología\",\r
+
+    \  \"categoryType\": \"IMPLANTOLOGY\",\r
+
+    \  \"code\": \"IMP-001\",\r
+
+    \  \"baseRateAmount\": 2800000.00,\r
+
+    \  \"currency\": \"COP\",\r
+
+    \  \"durationMinutes\": 120,\r
+
+    \  \"requiresAuthorization\": true,\r
+
+    \  \"description\": \"Colocación de implante dental de titanio.\",\r
+
+    \  \"serviceType\": \"IMPLANTOLOGY\",\r
+
+    \  \"details\": {\r
+
+    \    \"healingTimeMonths\": 6,\r
+
+    \    \"implantType\": \"TITANIO\",\r
+
+    \    \"placementSite\": \"Maxilar superior\",\r
+
+    \    \"requiresBoneGraft\": false\r
+
+    \  }\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE3NzYxMTY0NjEsImV4cCI6MTc3NjEyMzY2MX0.o6hRhEnMJ87FC4zzfPK3kuCiDNp1x1o7eRcc6QfcMSM
+order: 1000
