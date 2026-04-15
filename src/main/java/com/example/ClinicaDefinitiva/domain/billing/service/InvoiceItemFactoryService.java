@@ -7,7 +7,6 @@ import com.example.ClinicaDefinitiva.domain.billing.vo.*;
 import com.example.ClinicaDefinitiva.domain.dentalService.model.ProvidedService;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import org.springframework.stereotype.Service;
 
 /**

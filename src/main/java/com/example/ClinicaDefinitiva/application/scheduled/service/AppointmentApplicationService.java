@@ -63,7 +63,7 @@ public class AppointmentApplicationService implements AppointmentUseCase {
     public ReadAppointmentDto findById(AppointmentId appointmentId,
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
-        // ⭐ CORREGIDO: Usar AuthorizationHelper
+        //  CORREGIDO: Usar AuthorizationHelper
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -86,7 +86,6 @@ public class AppointmentApplicationService implements AppointmentUseCase {
     public Page<ReadAppointmentDto> findAll(Pageable pageable,
                                             UserIdentityId requesterId,
                                             RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -106,7 +105,6 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                     Pageable pageable,
                                                     UserIdentityId requesterId,
                                                     RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -129,7 +127,6 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                     Pageable pageable,
                                                     UserIdentityId requesterId,
                                                     RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -149,7 +146,6 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                     Pageable pageable,
                                                     UserIdentityId requesterId,
                                                     RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -171,7 +167,6 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                     Pageable pageable,
                                                     UserIdentityId requesterId,
                                                     RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -193,7 +188,6 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                  Pageable pageable,
                                                  UserIdentityId requesterId,
                                                  RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -216,7 +210,6 @@ public class AppointmentApplicationService implements AppointmentUseCase {
                                                             Pageable pageable,
                                                             UserIdentityId requesterId,
                                                             RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,

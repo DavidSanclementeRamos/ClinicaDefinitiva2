@@ -2,10 +2,7 @@ package com.example.ClinicaDefinitiva.domain.exceptions;
 
 import com.example.ClinicaDefinitiva.domain.errors.catalog.ErrorCatalog;
 import com.example.ClinicaDefinitiva.domain.errors.context.DomainContext;
-import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;
-import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 
-import java.util.List;
 
 
 /**

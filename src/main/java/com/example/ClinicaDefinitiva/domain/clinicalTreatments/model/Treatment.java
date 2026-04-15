@@ -187,7 +187,7 @@ public class Treatment {
         public Treatment build() { return new Treatment(this); }
     }
     
-    // Añadir en Treatment.java
+    //Para persistencia 
 public static Treatment reconstruct(
         TreatmentId id,
         PatientId patientId,
@@ -212,6 +212,6 @@ public static Treatment reconstruct(
             .withNotes(notes)
             .withRateId(tarifaId)
             .build();
-    // Nota: Necesitas un setter para status o modificar el builder
+    
 }
 }

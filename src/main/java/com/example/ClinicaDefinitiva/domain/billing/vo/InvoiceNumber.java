@@ -113,13 +113,12 @@ public final class InvoiceNumber {
         return this.getPrefix().equals(prefix.toUpperCase());
     }
 
-    // ========== CONVERSIÓN ==========
-
+    
     public String getValue() {
         return value;
     }
 
-    // ========== IGUALDAD DE VO ==========
+    
 
     @Override
     public boolean equals(Object o) {

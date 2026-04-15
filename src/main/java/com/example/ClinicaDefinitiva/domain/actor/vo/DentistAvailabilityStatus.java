@@ -35,11 +35,9 @@ public final class DentistAvailabilityStatus {
         return new DentistAvailabilityStatus(status);
     }
 
-    // Queries semánticas
     public boolean isAvailable() { return value == Status.AVAILABLE; }
     public boolean isAbsent() { return value == Status.SICK_LEAVE || value == Status.VACATION; }
 
-    // Reglas de negocio
     public enum Priority { NOT_ASSIGNABLE, HIGH }
     public Priority getPriority() {
         return isAvailable() ? Priority.HIGH : Priority.NOT_ASSIGNABLE;

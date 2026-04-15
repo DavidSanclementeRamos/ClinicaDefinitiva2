@@ -114,7 +114,7 @@ public class UserRolAssignment {
     public boolean isPrimary() { return isPrimary; }
     public void setId(UserRolAssignmentId id) { this.id = id; }
     
-    // Agregar en UserRolAssignment.java
+    
 public static UserRolAssignment reconstruct(
         UserRolAssignmentId id,
         UserIdentityId userIdentityId,

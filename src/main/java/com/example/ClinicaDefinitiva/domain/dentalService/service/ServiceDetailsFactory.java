@@ -10,7 +10,6 @@ import com.example.ClinicaDefinitiva.domain.dentalService.model.SurgicalDetails;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.AgeRange;
 
 import java.util.Map;
-import org.springframework.stereotype.Service;
 
 /**
  * Fábrica para crear instancias de ServiceDetails.

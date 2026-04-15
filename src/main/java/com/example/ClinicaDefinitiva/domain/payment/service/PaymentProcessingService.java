@@ -17,7 +17,6 @@ import com.example.ClinicaDefinitiva.domain.payment.output.PaymentGatewayResult;
 import com.example.ClinicaDefinitiva.domain.payment.output.PaymentRepository;
 import com.example.ClinicaDefinitiva.domain.payment.output.PaymentRequest;
 import com.example.ClinicaDefinitiva.domain.payment.vo.Payer;
-import com.example.ClinicaDefinitiva.domain.payment.vo.PaymentId;
 import com.example.ClinicaDefinitiva.domain.payment.vo.PaymentMethod;
 import com.example.ClinicaDefinitiva.domain.vo.Price;
 import org.springframework.context.ApplicationEventPublisher;

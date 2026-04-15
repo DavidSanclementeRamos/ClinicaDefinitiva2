@@ -353,7 +353,7 @@ public final class Payment {
         }
     }
     
-    // En Payment.java agregar:
+    //Para persistencia 
 public static Payment reconstruct(
         PaymentId id,
         InvoiceId invoiceId,
@@ -370,7 +370,6 @@ public static Payment reconstruct(
         String refundReason
 ) {
 
-    // Usar el builder para construir el objeto
     Payment payment = Payment.builder()
         .id(id)
         .invoiceId(invoiceId)
@@ -380,9 +379,7 @@ public static Payment reconstruct(
         .paymentDate(paymentDate)
         .build();
 
-    // Luego asignar los campos privados (necesitarás setters o usar reflexión)
-    // Por simplicidad, puedes añadir métodos package-private para asignar estos campos.
-    // Aquí asumo que tienes un método interno para ello.
+    
     payment.status = status;
     payment.transactionReference = transactionReference;
     payment.errorMessage = errorMessage;

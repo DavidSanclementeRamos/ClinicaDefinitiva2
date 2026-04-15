@@ -34,7 +34,7 @@ public class ShiftAssignmentService {
             LocalTime endTime,
             ShiftType type) {
 
-        // ✅ Validar que la fecha no sea pasada
+        //  Validar que la fecha no sea pasada
         if (date.isBefore(LocalDate.now())) {
             throw new BusinessRuleViolationException(
                     ShiftError.ERR_SHIFT_DATE_IN_PAST, EntityContext.SHIFT

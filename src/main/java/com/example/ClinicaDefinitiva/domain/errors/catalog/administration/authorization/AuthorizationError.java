@@ -9,7 +9,7 @@ public enum AuthorizationError implements ErrorCatalog {
 
     ERR_AUTH_SECTOR_REQUIRED(
             "RN-AUTH-001","error.auth.sector.required",
-            "DELETE DENTIST solo por RECEPTIONIST del sector RECURSOS_HUMANOS",
+            "Esta operación requiere un sector específico que el usuario no posee",
             HttpStatus.FORBIDDEN, ErrorSeverity.ERROR),
 
     ERR_AUTH_OWNERSHIP_REQUIRED(

@@ -196,12 +196,7 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                         EntityContext.USER_IDENTITY
                 ));
         
-         // 🔍 LOGS DE DEBUG
-    System.out.println("=== ANTES DE UPDATE ===");
-    System.out.println("Nombre actual: " + userIdentity.getName());
-    System.out.println("Email actual: " + userIdentity.getEmail());
-    System.out.println("DTO name: " + dto.name());
-    System.out.println("DTO email: " + dto.email());
+      
 
         // Si se está actualizando el email, verificar que no exista
         if (dto.email() != null) {
@@ -226,7 +221,7 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
         );
 
         // Si se está actualizando la contraseña, encriptarla
-        // ✅ CORREGIDO: usar la contraseña del DTO, no el nombre
+        //  CORREGIDO: usar la contraseña del DTO, no el nombre
     if (dto.password() != null && !dto.password().isEmpty()) {
         String encodedPassword = passwordEncoder.encode(dto.password());  // ← CORREGIDO
         userIdentity.setPassword(encodedPassword);
@@ -243,7 +238,7 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                           String reason,
                                           UserIdentityId requesterId,
                                           RolId requesterRolId) {
-        // ⭐ CORREGIDO
+        //  CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -277,7 +272,6 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                        String reason,
                                        UserIdentityId requesterId,
                                        RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,
@@ -306,7 +300,6 @@ public class UserIdentityApplicationService implements UserIdentityUseCase {
                                             String rawPassword,
                                             UserIdentityId requesterId,
                                             RolId requesterRolId) {
-        // ⭐ CORREGIDO
         authorizationHelper.authorize(
                 requesterId,
                 requesterRolId,

@@ -54,7 +54,7 @@ public final class Invoice {
     private Price subtotal;
     private Price tax;
     private Price total;
-    private Price totalPaid;   // ← acumula los pagos confirmados recibidos
+    private Price totalPaid;   //  acumula los pagos confirmados recibidos
 
     private final Notes notes;
 
@@ -327,7 +327,7 @@ public final class Invoice {
         public Invoice build() { return new Invoice(this); }
     }
     
-    // Añadir en Invoice.java
+    
 public static Invoice reconstruct(
         InvoiceId id,
         PatientId patientId,
@@ -362,7 +362,7 @@ public static Invoice reconstruct(
             .dueDate(dueDate)
             .build();
 
-    // Establecer campos adicionales
+    
     invoice.number = number;
     invoice.status = status;
     invoice.subtotal = subtotal;

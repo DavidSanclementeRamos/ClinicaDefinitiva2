@@ -5,7 +5,6 @@ import com.example.ClinicaDefinitiva.domain.errors.context.DomainContext;
 import com.example.ClinicaDefinitiva.domain.util.OutcomeDetail;
 
 import java.util.List;
-import java.util.Map;
 
 public class AggregateBusinessRuleViolationException extends DomainAggregateException {
 

@@ -1,7 +1,6 @@
 package com.example.ClinicaDefinitiva.domain.dentalService.service;
 
 import com.example.ClinicaDefinitiva.domain.billing.output.InvoiceRepository;
-import com.example.ClinicaDefinitiva.domain.billing.vo.InvoiceId;
 import com.example.ClinicaDefinitiva.domain.dentalService.vo.ServiceId;
 import com.example.ClinicaDefinitiva.domain.errors.catalog.dentalService.ProvidedServiceError;
 import com.example.ClinicaDefinitiva.domain.errors.context.EntityContext;

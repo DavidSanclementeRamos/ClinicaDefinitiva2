@@ -26,17 +26,14 @@ public final class DateOfBirth {
     }
     public static DateOfBirth of(LocalDate value) { return new DateOfBirth(value); }
 
-    // methods semantic
     public LocalDate asDate() {
         return value;
     }
 
-    // methods access
     public LocalDate Value() {
         return value;
     }
 
-    // methods utility
     @Override
     public String toString() {
         return "Date of birth: " + value;

@@ -159,7 +159,7 @@ public static Rol createCustom(RolEnum baseType, String description) {
     public void setId(RolId targetRoleId) {
     }
     
-    // Agregar en Rol.java
+   
 public static Rol reconstruct(
         RolId id,
         RolEnum rolEnum,

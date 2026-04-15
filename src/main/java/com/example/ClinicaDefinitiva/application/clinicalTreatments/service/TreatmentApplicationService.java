@@ -87,10 +87,10 @@ public class TreatmentApplicationService implements TreatmentUseCase {
                 ActionCatalog.BasicAction.READ,
                 AuthorizationContext.builder()
                         .withResourceId(id.getValue())
-                        .withOwnership(patient.getUser()) // ← OwnershipPolicy: Paciente ve sus tratamientos
+                        .withOwnership(patient.getUser()) //  OwnershipPolicy: Paciente ve sus tratamientos
                         .withPatientGuardianId(patient.getGuardianId() != null ?
-                                patient.getGuardianId().value() : null) // ← GuardianshipPolicy: Tutor ve tratamientos de tutelados
-                        .withAssignedDentist(destist.getUserId()) // ← AssignmentPolicy: Dentista ve tratamientos asignados
+                                patient.getGuardianId().value() : null) //  GuardianshipPolicy: Tutor ve tratamientos de tutelados
+                        .withAssignedDentist(destist.getUserId()) //  AssignmentPolicy: Dentista ve tratamientos asignados
                         .build()
         );
         

@@ -262,8 +262,8 @@ public class PatientApplicationService implements PatientUseCase {
     }
     
     @Override
-//@RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
-        //action = ActionCatalog.BasicAction.ASSIGN)
+@RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+        action = ActionCatalog.BasicAction.ASSIGN)
 public void assignContract(PatientId patientId, ContractId contractId,
                            UserIdentityId requesterId, RolId requesterRolId) {
     // Autorización: similar a updateContactData (ownership/guardianship no aplica porque es operación administrativa)
@@ -283,8 +283,8 @@ public void assignContract(PatientId patientId, ContractId contractId,
 }
 
 @Override
-//@RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
-       // action = ActionCatalog.BasicAction.REMOVE)
+@RequiresPermission(resource = ResourceCatalog.BasicResource.PATIENT,
+        action = ActionCatalog.BasicAction.REMOVE)
 public void removeContract(PatientId patientId, UserIdentityId requesterId, RolId requesterRolId) {
     authorizationHelper.authorize(
             requesterId,
