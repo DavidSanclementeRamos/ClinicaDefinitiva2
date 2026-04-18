@@ -16,6 +16,7 @@ import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
 import com.example.ClinicaDefinitiva.domain.actor.vo.FullName;
+import com.example.ClinicaDefinitiva.domain.actor.vo.Specialty;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.*;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.security.config.RequiresPermission;
@@ -109,7 +110,7 @@ public class DentistApplicationService implements DentistUseCase {
     @Override
     @RequiresPermission(resource = ResourceCatalog.BasicResource.DENTIST,
             action = ActionCatalog.BasicAction.READ)
-    public Page<PageDentistDto> findBySpecialty(String specialty,
+    public Page<PageDentistDto> findBySpecialty(Specialty specialty,
                                                 Pageable pageable,
                                                 UserIdentityId requesterId,
                                                 RolId requesterRolId) {

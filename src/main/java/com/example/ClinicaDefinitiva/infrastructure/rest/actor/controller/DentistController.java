@@ -7,6 +7,7 @@ import com.example.ClinicaDefinitiva.application.actor.dto.dentist.UpdateDentist
 import com.example.ClinicaDefinitiva.application.actor.dto.dentist.UpdateDentistSensitiveDto;
 import com.example.ClinicaDefinitiva.application.actor.portsInput.DentistUseCase;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.Specialty;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.rest.actor.dto.dentist.CreateDentistRequest;
@@ -94,7 +95,7 @@ public class DentistController {
         RolId requesterRolId = userDetails.getActiveRolId();
 
         Page<PageDentistDto> dentists = useCase.findBySpecialty(
-                specialty,
+                Specialty.fromString(specialty),
                 pageable,
                 requesterId,
                 requesterRolId

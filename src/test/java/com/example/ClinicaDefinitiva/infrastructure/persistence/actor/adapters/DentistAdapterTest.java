@@ -3,16 +3,21 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 import java.util.Set;
@@ -24,6 +29,9 @@ class DentistAdapterTest extends RepositoryTestBase {
 
     @Autowired
     private DentistRepository dentistRepository;
+    
+    @Autowired
+    private UserIdentityRepository userIdentityRepository;
 
     private Dentist savedDentist;
 
@@ -31,16 +39,27 @@ class DentistAdapterTest extends RepositoryTestBase {
     void setUp() {
         // Limpiar datos previos (si es necesario)
         dentistRepository.findAll(Pageable.unpaged()).forEach(d -> dentistRepository.deleteById(d.getDentistId()));
-
+        userIdentityRepository.findAll(Pageable.unpaged()).forEach(u -> userIdentityRepository.deleteById(u.getId()));
+        
+        UserIdentity userIdentity = createIdentity();
+        userIdentity = userIdentityRepository.save(userIdentity);
         // Crear y guardar un dentista de prueba
         Person person = createPerson();
         Specialties specialties = Specialties.of(Set.of(Specialty.GENERAL_DENTISTRY));
-        UserIdentityId userId = UserIdentityId.from(100L);
         WorkingHours workingHours = WorkingHours.of(LocalTime.of(8, 0), LocalTime.of(17, 0),
                 java.time.DayOfWeek.MONDAY, 40);
 
-        Dentist dentist = Dentist.registerDentist(person, specialties, userId, workingHours);
+        Dentist dentist = Dentist.registerDentist(person, specialties, userIdentity.getId(), workingHours);
         savedDentist = dentistRepository.save(dentist);
+    }
+
+    private UserIdentity createIdentity() {
+        return UserIdentity.register(
+                Email.of("test@test.com").getValue().get(),
+                HashedPassword.of("testHashedPassword"),
+                UserIdentityName.of("testUser"),
+                Instant.parse("2007-12-03T10:15:30.00Z")
+        );
     }
 
     private Person createPerson() {
@@ -94,7 +113,7 @@ class DentistAdapterTest extends RepositoryTestBase {
     @DisplayName("Buscar dentistas por especialidad")
     void findBySpecialty() {
         Pageable pageable = Pageable.unpaged();
-        var result = dentistRepository.findBySpecialty("General Dentistry", pageable);
+        var result = dentistRepository.findBySpecialty(Specialty.GENERAL_DENTISTRY, pageable);
         assertThat(result.getTotalElements()).isGreaterThanOrEqualTo(1);
         // Si tuvieras otro dentista con otra especialidad, lo validarías
     }

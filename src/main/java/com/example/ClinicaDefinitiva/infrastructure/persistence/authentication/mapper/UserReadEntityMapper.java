@@ -40,8 +40,7 @@ public class UserReadEntityMapper {
             entity.getFailedAttempts(),
             entity.getLockedUntil(),
             entity.isVerified(),
-            status,
-            entity.getVersion()
+            status
         );
     }
 }

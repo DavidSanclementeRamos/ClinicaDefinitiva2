@@ -3,6 +3,7 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters;
 import com.example.ClinicaDefinitiva.domain.actor.model.Dentist;
 import com.example.ClinicaDefinitiva.domain.actor.output.DentistRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.Specialty;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.actor.entity.DentistEntity;
 import com.example.ClinicaDefinitiva.infrastructure.persistence.actor.jpaRepository.DentistJpaRepository;
@@ -73,8 +74,8 @@ public class DentistAdapters implements DentistRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Dentist> findBySpecialty(String specialty, Pageable pageable) {
-        return dentistJpaRepository.findBySpecialties(specialty, pageable)
+    public Page<Dentist> findBySpecialty(Specialty specialty, Pageable pageable) {
+        return dentistJpaRepository.findBySpecialties(specialty.name(), pageable)
                 .map(readEntityMapper::toDomain);
     }
 
