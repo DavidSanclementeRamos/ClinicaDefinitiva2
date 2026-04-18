@@ -38,7 +38,7 @@ public enum Specialty {
         String trimmed = value.trim();
         // Buscar por nombre técnico (case-insensitive)
         for (Specialty spec : values()) {
-            if (spec.name().equalsIgnoreCase(trimmed)) {
+            if (spec.name().equalsIgnoreCase(trimmed) || spec.name().replace("_", " ").equalsIgnoreCase(trimmed)) {
                 return spec;
             }
         }
