@@ -13,6 +13,7 @@ import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
 import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
+import com.example.ClinicaDefinitiva.infrastructure.integrationtests.ClinicaDefinitivaIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.data.domain.Pageable;
 
-class PatientAdapterTest extends RepositoryTestBase {
+@ClinicaDefinitivaIntegrationTest
+class PatientAdapterTest {
 
     @Autowired
     private PatientRepository patientRepository;
