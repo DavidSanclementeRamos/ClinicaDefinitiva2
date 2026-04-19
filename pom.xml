@@ -20,7 +20,7 @@
 
 	<properties>
 		<java.version>17</java.version>
-                <testcontainers.version>2.0.4</testcontainers.version>
+		<testcontainers.version>2.0.4</testcontainers.version>
 	</properties>
 
 	<dependencyManagement>
@@ -275,11 +275,6 @@
                         <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-surefire-plugin</artifactId>
-    <configuration>
-        <excludes>
-            <exclude>**/*AdapterTest.java</exclude>
-        </excludes>
-    </configuration>
 </plugin>
 		</plugins>
 	</build>
