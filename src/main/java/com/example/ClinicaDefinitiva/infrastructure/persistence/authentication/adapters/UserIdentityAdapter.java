@@ -73,4 +73,11 @@ public class UserIdentityAdapter implements UserIdentityRepository {
         return userJpaRepository.findByStatus( status,pageable)
                 .map(readMapper::toDomain);
     }
+    
+    @Override
+    public void deleteById(UserIdentityId id) {
+        if (id != null && id.value() != null) {
+            userJpaRepository.deleteById(id.value());
+        }
+    }
 }

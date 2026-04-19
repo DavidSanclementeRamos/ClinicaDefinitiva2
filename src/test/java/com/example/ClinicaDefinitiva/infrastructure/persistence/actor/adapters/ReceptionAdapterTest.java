@@ -3,36 +3,58 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters;
 import com.example.ClinicaDefinitiva.domain.actor.model.Receptionist;
 import com.example.ClinicaDefinitiva.domain.actor.output.ReceptionRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
+import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
+import com.example.ClinicaDefinitiva.infrastructure.integrationtests.ClinicaDefinitivaIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.data.domain.Pageable;
 
-class ReceptionAdapterTest extends RepositoryTestBase {
+@ClinicaDefinitivaIntegrationTest
+class ReceptionAdapterTest{
 
     @Autowired
     private ReceptionRepository receptionRepository;
+    
+    @Autowired
+    private UserIdentityRepository userIdentityRepository;
 
     private Receptionist savedReceptionist;
 
     @BeforeEach
     void setUp() {
         receptionRepository.findAll(Pageable.unpaged()).forEach(r -> receptionRepository.deleteById(r.getId()));
+        userIdentityRepository.findAll(Pageable.unpaged()).forEach(u -> userIdentityRepository.deleteById(u.getId()));
 
+        UserIdentity userIdentity = createIdentity();
+        userIdentity = userIdentityRepository.save(userIdentity);
         Person person = createPerson();
-        UserIdentityId userId = UserIdentityId.from(400L);
         Sector sector = Sector.of(Sector.Type.RECEPTION);
-        Receptionist receptionist = Receptionist.registerReceptionist(person, userId, sector);
+        Receptionist receptionist = Receptionist.registerReceptionist(person, userIdentity.getId(), sector);
         savedReceptionist = receptionRepository.save(receptionist);
+    }
+
+    private UserIdentity createIdentity() {
+        return UserIdentity.register(
+                Email.of("test@test.com").getValue().get(),
+                HashedPassword.of("testHashedPassword"),
+                UserIdentityName.of("testUser"),
+                Instant.parse("2007-12-03T10:15:30.00Z")
+        );
     }
 
     private Person createPerson() {

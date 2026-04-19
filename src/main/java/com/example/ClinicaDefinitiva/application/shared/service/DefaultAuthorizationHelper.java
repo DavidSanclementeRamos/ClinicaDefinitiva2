@@ -89,11 +89,11 @@ public class DefaultAuthorizationHelper implements AuthorizationHelper {
                // receptionist = getReceptionistOrThrow(requesterId);
                 
                 // Verificar el rol del usuario antes de intentar cargar el receptionist
-    Rol rol = rolRepository.findById(requesterRolId)
-            .orElseThrow(() -> new  RolNotFoundException("Rol not found"));
-    if (rol.getRolEnum() == RolEnum.RECEPTIONIST) {
-        receptionist = getReceptionistOrThrow(requesterId);
-    }
+                Rol rol = rolRepository.findById(requesterRolId)
+                        .orElseThrow(() -> new  RolNotFoundException("Rol not found"));
+                if (rol.getRolEnum().equals(RolEnum.RECEPTIONIST)) {
+                    receptionist = getReceptionistOrThrow(requesterId);
+                }
             }
 
             // 2. Construir SecurityContext con atributos ABAC

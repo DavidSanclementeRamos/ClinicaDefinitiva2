@@ -3,36 +3,55 @@ package com.example.ClinicaDefinitiva.infrastructure.persistence.actor.adapters;
 import com.example.ClinicaDefinitiva.domain.actor.model.Guardian;
 import com.example.ClinicaDefinitiva.domain.actor.output.GuardianRepository;
 import com.example.ClinicaDefinitiva.domain.actor.vo.*;
-import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
+import com.example.ClinicaDefinitiva.domain.authentication.UserIdentityRepository;
+import com.example.ClinicaDefinitiva.domain.authentication.model.UserIdentity;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.HashedPassword;
+import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityName;
 import com.example.ClinicaDefinitiva.domain.vo.Address;
+import com.example.ClinicaDefinitiva.domain.vo.Email;
 import com.example.ClinicaDefinitiva.domain.vo.PhoneNumber;
+import com.example.ClinicaDefinitiva.infrastructure.integrationtests.ClinicaDefinitivaIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.data.domain.Pageable;
 
-class GuardianAdapterTest extends RepositoryTestBase {
+@ClinicaDefinitivaIntegrationTest
+class GuardianAdapterTest{
 
     @Autowired
     private GuardianRepository guardianRepository;
-
+    
+    @Autowired
+    private UserIdentityRepository userIdentityRepository;
     private Guardian savedGuardian;
 
     @BeforeEach
     void setUp() {
         guardianRepository.findAll(Pageable.unpaged()).forEach(g -> guardianRepository.deleteById(g.getGuardianId()));
-
+        userIdentityRepository.findAll(Pageable.unpaged()).forEach(u -> userIdentityRepository.deleteById(u.getId()));
         Person person = createGuardianPerson();
-        UserIdentityId userId = UserIdentityId.from(300L);
+        UserIdentity userIdentity = createIdentity();
+        userIdentity = userIdentityRepository.save(userIdentity);
         TypeGuardian type = TypeGuardian.fromCode("MAMA");
-        Guardian guardian = Guardian.registerGuardian(person, userId, type);
+        Guardian guardian = Guardian.registerGuardian(person, userIdentity.getId(), type);
         savedGuardian = guardianRepository.save(guardian);
+    }
+
+    private UserIdentity createIdentity() {
+        return UserIdentity.register(
+                Email.of("test@test.com").getValue().get(),
+                HashedPassword.of("testHashedPassword"),
+                UserIdentityName.of("testUser"),
+                Instant.parse("2007-12-03T10:15:30.00Z")
+        );
     }
 
     private Person createGuardianPerson() {

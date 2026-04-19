@@ -256,13 +256,13 @@ Te recomendamos comenzar con los módulos más pequeños o los que ya están med
 
 ```bash
 # Todas las pruebas (unitarias + integración)
-./mvnw clean verify
+./mvnw clean test
 
 # Solo pruebas unitarias
-./mvnw test
+./mvnw test -DexcludeGroups=integration
 
 # Solo pruebas de integración (requieren Docker para Testcontainers)
-./mvnw verify -DskipUnitTests
+./mvnw test -Dgroups=integration
 ```
 
 > **Nota:** Los tests de integración JPA están actualmente excluidos en `pom.xml`. Para habilitarlos, elimina el `<exclude>` correspondiente. Necesitarás Docker para ejecutar Testcontainers.

@@ -2,6 +2,7 @@ package com.example.ClinicaDefinitiva.application.actor.portsInput;
 
 import com.example.ClinicaDefinitiva.application.actor.dto.dentist.*;
 import com.example.ClinicaDefinitiva.domain.actor.vo.DentistId;
+import com.example.ClinicaDefinitiva.domain.actor.vo.Specialty;
 import com.example.ClinicaDefinitiva.domain.administration.authorization.vo.RolId;
 import com.example.ClinicaDefinitiva.domain.authentication.vo.UserIdentityId;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ public interface DentistUseCase {
 
     ReadDentistDto findById(DentistId id, UserIdentityId requesterId, RolId requesterRolId);
     Page<PageDentistDto> findAll(Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
-    Page<PageDentistDto> findBySpecialty(String specialty, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
+    Page<PageDentistDto> findBySpecialty(Specialty specialty, Pageable pageable, UserIdentityId requesterId, RolId requesterRolId);
 
 
     ReadDentistDto save(CreateDentistDto createDentistDto, UserIdentityId requesterId, RolId requesterRolId);

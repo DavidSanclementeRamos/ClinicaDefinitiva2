@@ -17,7 +17,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 public class UserIdentity {
-    private final UserIdentityId id;
+    private UserIdentityId id;
     private Email email;
     private HashedPassword hashedPassword;
     private UserIdentityName name;
@@ -27,7 +27,6 @@ public class UserIdentity {
     private Instant lockedUntil;
     private boolean verified;
     private UserIdentityStatus status;
-    private long version;
 
     private UserIdentity(UserIdentityId id, Email email, HashedPassword hashedPassword,
                          UserIdentityName name, Instant createdAt) {
@@ -174,15 +173,13 @@ public class UserIdentity {
                                            HashedPassword hashedPassword, UserIdentityName name,
                                            Instant createdAt, Instant lastLoginAt,
                                            int failedLoginAttempts, Instant lockedUntil,
-                                           boolean verified, UserIdentityStatus status,
-                                           long version) {
+                                           boolean verified, UserIdentityStatus status) {
         UserIdentity user = new UserIdentity(id, email, hashedPassword, name, createdAt);
         user.lastLoginAt = lastLoginAt;
         user.failedLoginAttempts = failedLoginAttempts;
         user.lockedUntil = lockedUntil;
         user.verified = verified;
         user.status = status;
-        user.version = version;
         return user;
     }
 
@@ -209,7 +206,5 @@ public class UserIdentity {
     public Instant getCreatedAt()              { return createdAt; }
     public int getFailedLoginAttempts()        { return failedLoginAttempts; }
     public Instant getLockedUntil()            { return lockedUntil; }
-    public long getVersion()                   { return version; }
     public UserIdentityStatus getStatus()      { return status; }
-    public void setVersion(long version)       { this.version = version; }
 }

@@ -30,6 +30,7 @@ class UserIdentityTest {
     @Mock
     private UserDeactivationPolicy deactivationPolicy;
 
+    private UserIdentityId id;
     private Email email;
     private HashedPassword hashedPassword;
     private UserIdentityName name;

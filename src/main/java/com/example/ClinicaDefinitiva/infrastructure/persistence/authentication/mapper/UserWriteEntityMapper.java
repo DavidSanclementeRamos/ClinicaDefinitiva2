@@ -37,9 +37,6 @@ public class UserWriteEntityMapper {
         entity.setLockedUntil(domain.getLockedUntil());
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setLastAccess(domain.getLastLoginAt());
-        
-        // Versión para optimistic locking
-        entity.setVersion(domain.getVersion());
 
         return entity;
     }

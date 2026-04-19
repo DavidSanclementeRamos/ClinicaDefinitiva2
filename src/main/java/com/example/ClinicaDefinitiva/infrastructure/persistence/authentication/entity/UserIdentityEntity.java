@@ -42,7 +42,7 @@ public class UserIdentityEntity {
 
     @Version
     @Column(name = "version", nullable = false)
-    private long version;
+    private Long version;
 
     public UserIdentityEntity() {}
 
@@ -56,7 +56,7 @@ public class UserIdentityEntity {
     public Instant getLockedUntil()   { return lockedUntil; }
     public Instant getCreatedAt()     { return createdAt; }
     public Instant getLastAccess()    { return lastAccess; }
-    public long getVersion()          { return version; }
+    public Long getVersion()          { return version; }
 
     public void setId(Long id) {
         this.id = id;

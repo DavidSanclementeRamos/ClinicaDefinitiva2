@@ -14,6 +14,7 @@ public interface UserIdentityRepository {
     UserIdentity save(UserIdentity user);
 
     Page<UserIdentity>   findByStatus(String status, Pageable pageable);
-
+    
+    void deleteById(UserIdentityId id);
 
 }
